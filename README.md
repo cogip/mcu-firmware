@@ -8,6 +8,9 @@ Its firmware intends to run on stm32f4xx MCU family and rely on
 As this firmware and RIOT-OS are both evolving, two git repositories lives next to each other, and
 both are required to generate the firwmare binaries.
 
+## Build status
+[![Build Status](https://travis-ci.org/cogip/mcu-firmware.svg?branch=master)](https://travis-ci.org/cogip/mcu-firmware)
+
 # Cloning repositories
 
 ```bash
