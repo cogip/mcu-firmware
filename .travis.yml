@@ -1,0 +1,21 @@
+---
+language: c
+before_install:
+      - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+      - sudo add-apt-repository -y ppa:team-gcc-arm-embedded/ppa
+      - sudo apt-get update -qq
+install:
+      - uname -a
+#      - sudo apt-get install -qq gcc-5 gcc-arm-none-eabi libc6-dev gcc-5-multilib
+      - sudo apt-get install -qq gcc-5 gcc-arm-embedded libc6-dev gcc-5-multilib
+      - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1
+      - gcc --version
+      - arm-none-eabi-gcc --version
+before_script:
+      - git clone https://github.com/cogip/RIOT.git -b firmware-dependencies --depth 1
+script:
+      - RIOTBASE=$(pwd)/RIOT BOARD=native make -j4
+      - RIOTBASE=$(pwd)/RIOT BOARD=native make clean
+
+      - RIOTBASE=$(pwd)/RIOT CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make -j4
+      - RIOTBASE=$(pwd)/RIOT CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make clean
