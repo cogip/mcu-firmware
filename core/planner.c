@@ -1,7 +1,6 @@
 #include "planner.h"
 
 #include <stdio.h>
-#include "sensors/analog_sensor.h"
 #include "avoidance.h"
 #include "controller.h"
 //#include "console.h"
@@ -127,7 +126,7 @@ static pose_t mach_trajectory_get_route_update(void)
 
 void *task_planner(void *arg)
 {
-	analog_sensor_zone_t zone;
+	//analog_sensor_zone_t zone;
 	func_cb_t pfn_evtloop_end_of_game = mach_get_end_of_game_pfn();
 	pose_t	pose_order		= { 0, 0, 0 };
 	polar_t	speed_order		= { 0, 0 };
@@ -199,7 +198,7 @@ void *task_planner(void *arg)
 		/* ===== speed ===== */
 
 		/* collision detection */
-		if (controller_is_in_reverse(&controller))
+		/*if (controller_is_in_reverse(&controller))
 			zone = AS_ZONE_REAR;
 		else
 			zone = AS_ZONE_FRONT;
@@ -207,12 +206,12 @@ void *task_planner(void *arg)
 		if (mach_is_zone_obscured(zone)) {
 			speed_order.distance = 0;
 			speed_order.angle = 0;
-		} else {
+		} else {*/
 			/* max speed order in pulse_linear per ctrl period (20ms) */
 			speed_order.distance = 150;
 			/* max speed order in pulse_angular per ctrl period (20ms) */
 			speed_order.angle = 150 / 2;
-		}
+		//}
 
 		controller_set_speed_order(&controller, speed_order);
 
