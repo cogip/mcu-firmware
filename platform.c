@@ -42,103 +42,104 @@
  * use TCE1, TCF0 and TCF1 timers to decode quadrature
  */
 
-#ifdef CONFIG_ANALOG_SENSORS
-analog_sensors_t ana_sensors = {
-	.adc = &ADCA,
-
-	.sensors_nb = 8,
-	.sensors = {
-		/* Rear right: [10...80] cm - GP2Y0A21 - cal done */
-		[0] = {
-			.pin_id = PIN0_bp,
-
-			.coeff_volts = 0.022,
-			.const_volts = 0.010,
-			.const_dist = -5.0,
-			.dist_cm_max = 50,
-
-			.zone = (AS_ZONE_REAR | AS_ZONE_RIGHT),
-		},
-		/* Front left: [10...80] cm - GP2Y0A21 - cal done */
-		[1] = {
-			.pin_id = PIN1_bp,
-
-			.coeff_volts = 0.03,
-			.const_volts = 0.009,
-			.const_dist = 1.0,
-			.dist_cm_max = 80,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
-		},
-		/* Front right: [10...60] cm - GP2D12 - cal done*/
-		[2] = {
-			.pin_id = PIN2_bp,
-
-			.coeff_volts = 0.045,
-			.const_volts = 0.027,
-			.const_dist = 5.0,
-			.dist_cm_max = 50,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_RIGHT),
-		},
-		/* *************** Front Side left: [4...30] cm - GP2YD120X - cal NOT done */
-		[3] = {
-			.pin_id = PIN3_bp,
-
-			.coeff_volts = 0.052,
-			.const_volts = 0.007,
-			.const_dist = 0,
-			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_REAR | AS_ZONE_LEFT),
-		},
-		/* *************** Front Side right: [4...30] cm - GP2YD120X - cal NOT done */
-		[4] = {
-			.pin_id = PIN4_bp,
-
-			.coeff_volts = 0.052,
-			.const_volts = 0.007,
-			.const_dist = 0,
-			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_REAR | AS_ZONE_RIGHT),
-		},
-		/* Front Side left: [4...30] cm - GP2YD120X - cal done */
-		[5] = {
-			.pin_id = PIN5_bp,
-
-			.coeff_volts = 0.052,
-			.const_volts = 0.007,
-			.const_dist = 0,
-			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
-		},
-		/* Front Side right: [4...30] cm - GP2YD120X - cal done */
-		[6] = {
-			.pin_id = PIN6_bp,
-
-			.coeff_volts = 0.052,
-			.const_volts = 0.007,
-			.const_dist = 0,
-			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_RIGHT),
-		},
-		/* Rear left: [10...80] cm - GP2Y0A21 - cal done  */
-		[7] = {
-			.pin_id = PIN7_bp,
-
-			.coeff_volts = 0.03,
-			.const_volts = 0.009,
-			.const_dist = 1.0,
-			.dist_cm_max = 80,
-
-			.zone = (AS_ZONE_REAR | AS_ZONE_LEFT),
-		},
-	}
-};
-#endif /* CONFIG_ANALOG_SENSORS */
+/* TODO: To activate when included in RIOT */
+//#ifdef CONFIG_ANALOG_SENSORS
+//analog_sensors_t ana_sensors = {
+//	.adc = &ADCA,
+//
+//	.sensors_nb = 8,
+//	.sensors = {
+//		/* Rear right: [10...80] cm - GP2Y0A21 - cal done */
+//		[0] = {
+//			.pin_id = PIN0_bp,
+//
+//			.coeff_volts = 0.022,
+//			.const_volts = 0.010,
+//			.const_dist = -5.0,
+//			.dist_cm_max = 50,
+//
+//			.zone = (AS_ZONE_REAR | AS_ZONE_RIGHT),
+//		},
+//		/* Front left: [10...80] cm - GP2Y0A21 - cal done */
+//		[1] = {
+//			.pin_id = PIN1_bp,
+//
+//			.coeff_volts = 0.03,
+//			.const_volts = 0.009,
+//			.const_dist = 1.0,
+//			.dist_cm_max = 80,
+//
+//			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+//		},
+//		/* Front right: [10...60] cm - GP2D12 - cal done*/
+//		[2] = {
+//			.pin_id = PIN2_bp,
+//
+//			.coeff_volts = 0.045,
+//			.const_volts = 0.027,
+//			.const_dist = 5.0,
+//			.dist_cm_max = 50,
+//
+//			.zone = (AS_ZONE_FRONT | AS_ZONE_RIGHT),
+//		},
+//		/* *************** Front Side left: [4...30] cm - GP2YD120X - cal NOT done */
+//		[3] = {
+//			.pin_id = PIN3_bp,
+//
+//			.coeff_volts = 0.052,
+//			.const_volts = 0.007,
+//			.const_dist = 0,
+//			.dist_cm_max = 40,
+//
+//			.zone = (AS_ZONE_REAR | AS_ZONE_LEFT),
+//		},
+//		/* *************** Front Side right: [4...30] cm - GP2YD120X - cal NOT done */
+//		[4] = {
+//			.pin_id = PIN4_bp,
+//
+//			.coeff_volts = 0.052,
+//			.const_volts = 0.007,
+//			.const_dist = 0,
+//			.dist_cm_max = 40,
+//
+//			.zone = (AS_ZONE_REAR | AS_ZONE_RIGHT),
+//		},
+//		/* Front Side left: [4...30] cm - GP2YD120X - cal done */
+//		[5] = {
+//			.pin_id = PIN5_bp,
+//
+//			.coeff_volts = 0.052,
+//			.const_volts = 0.007,
+//			.const_dist = 0,
+//			.dist_cm_max = 40,
+//
+//			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+//		},
+//		/* Front Side right: [4...30] cm - GP2YD120X - cal done */
+//		[6] = {
+//			.pin_id = PIN6_bp,
+//
+//			.coeff_volts = 0.052,
+//			.const_volts = 0.007,
+//			.const_dist = 0,
+//			.dist_cm_max = 40,
+//
+//			.zone = (AS_ZONE_FRONT | AS_ZONE_RIGHT),
+//		},
+//		/* Rear left: [10...80] cm - GP2Y0A21 - cal done  */
+//		[7] = {
+//			.pin_id = PIN7_bp,
+//
+//			.coeff_volts = 0.03,
+//			.const_volts = 0.009,
+//			.const_dist = 1.0,
+//			.dist_cm_max = 80,
+//
+//			.zone = (AS_ZONE_REAR | AS_ZONE_LEFT),
+//		},
+//	}
+//};
+//#endif /* CONFIG_ANALOG_SENSORS */
 
 #if 0
 qdec_t encoders[] = {
@@ -332,7 +333,8 @@ datalog_t datalog;
 static void mach_post_ctrl_loop_func(void)
 {
 #ifdef CONFIG_ANALOG_SENSORS
-	analog_sensor_refresh_all(&ana_sensors);
+    /* TODO: To activate when included in RIOT */
+	//analog_sensor_refresh_all(&ana_sensors);
 #endif
 }
 
@@ -356,15 +358,16 @@ path_t * mach_get_path_yellow(void)
 	return &path_homologation_yellow;
 }
 
-uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone)
-{
-#ifdef CONFIG_ANALOG_SENSORS
-	return analog_sensor_detect_obstacle(&ana_sensors, zone);
-#else
-	(void)zone;
-	return 0;
-#endif
-}
+/* TODO: To activate when included in RIOT */
+//uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone)
+//{
+//#ifdef CONFIG_ANALOG_SENSORS
+//   return analog_sensor_detect_obstacle(&ana_sensors, zone);
+//#else
+//   (void)zone;
+//   return 0;
+//#endif
+//}
 //FIXME: stub to remove
 #define gpio_get_input(...) 0
 #define gpio_set_direction(...)
@@ -455,7 +458,8 @@ void mach_setup(void)
 
 #ifdef CONFIG_ANALOG_SENSORS
 	/* setup analog conversion */
-	analog_sensor_setup(&ana_sensors);
+    /* TODO: To activate when included in RIOT */
+	/* analog_sensor_setup(&ana_sensors); */
 #endif
 
 #if defined(CONFIG_SD21)

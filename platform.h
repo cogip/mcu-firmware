@@ -1,7 +1,6 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
-#include "sensors/analog_sensor.h"
 #include "core/controller.h"
 //#include "hbridge.h"
 #include "system/log.h"
@@ -50,7 +49,7 @@
 
 #define USART_CONSOLE			USARTC0
 
-extern analog_sensors_t ana_sensors;
+//extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
 //extern sd21_t sd21;
 //extern hbridge_t hbridges;
@@ -62,7 +61,7 @@ func_cb_t mach_get_ctrl_loop_pre_pfn(void);
 func_cb_t mach_get_ctrl_loop_post_pfn(void);
 func_cb_t mach_get_end_of_game_pfn(void);
 path_t * mach_get_path_yellow(void);
-uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone);
+//uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone);
 uint8_t mach_is_game_launched(void);
 uint8_t mach_is_camp_yellow(void);
 

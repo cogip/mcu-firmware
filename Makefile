@@ -19,12 +19,8 @@ CFLAGS += -DCONFIG_CALIBRATION
 DEVELHELP ?= 1
 
 BIN_DIRS += core
-BIN_DIRS += actuators
-BIN_DIRS += sensors
 BIN_DIRS += system
 BIN_USEMODULE += core                   # include "core" module
-BIN_USEMODULE += actuators
-BIN_USEMODULE += sensors
 BIN_USEMODULE += system
 BIN_USEMODULE += $(APPLICATION_MODULE)  # include application module
 
