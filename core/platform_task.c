@@ -8,7 +8,7 @@
 //#include "kos.h"
 //#include "log.h"
 //#include "mcurses.h"
-#include "core/planner.h"
+#include "planner.h"
 #include "platform.h"
 #include "platform_task.h"
 #include "thread.h"

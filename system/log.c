@@ -5,7 +5,7 @@
 
 //#include "console.h"
 #include "log.h"
-#include "core/utils.h"
+#include "utils.h"
 
 #if 0
 /* #ifdef CONFIG_LOGGING_TIME */

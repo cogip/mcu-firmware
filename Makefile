@@ -29,4 +29,6 @@ FEATURES_REQUIRED += periph_timer
 FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
 
+INCLUDES += -I$(APPDIR)/core/include/ -I$(APPDIR)/system/include/
+
 include $(RIOTBASE)/Makefile.include

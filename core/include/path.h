@@ -2,8 +2,8 @@
 #define PATH_H_
 
 #include "action.h"
-#include "core/odometry.h"
-#include "core/planner.h"
+#include "odometry.h"
+#include "planner.h"
 
 
 extern path_t path_homologation_yellow;
