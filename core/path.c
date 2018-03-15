@@ -2,7 +2,7 @@
 
 #include "path.h"
 
-#include "core/utils.h"
+#include "utils.h"
 
 // TODO: do not use Rear gear.
 static path_pose_t poses_homologation_yellow[] = {

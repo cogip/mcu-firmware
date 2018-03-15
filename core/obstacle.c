@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "core/avoidance.h"
+#include "avoidance.h"
 
 /* Init all known fixed obstacles on map */
 void mach_fixed_obstacles_init(void)

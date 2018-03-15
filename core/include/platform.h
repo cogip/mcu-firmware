@@ -1,14 +1,14 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
-#include "core/controller.h"
+#include "controller.h"
 //#include "hbridge.h"
 #include "system/log.h"
-#include "core/odometry.h"
+#include "odometry.h"
 #include "path.h"
 #include "periph/qdec.h"
 //#include "sd21.h"
-#include "core/utils.h"
+#include "utils.h"
 
 /*
  * Machine parameters
