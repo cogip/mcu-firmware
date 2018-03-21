@@ -20,8 +20,6 @@ void *motion_control_thread(void *arg)
 #ifdef MOTOR_DRIVER_NUMOF
     uint16_t duty_cycle = 0;
     uint16_t count = 0;
-    uint32_t freq = 20000U;
-    uint16_t res = 2000U;
 #endif
     xtimer_ticks32_t last_wakeup/*, start*/;
 
@@ -34,20 +32,15 @@ void *motion_control_thread(void *arg)
     for (;;)
         xtimer_periodic_wakeup(&last_wakeup, INTERVAL);
 #else
-    motor_t left_motor;
-    motor_t right_motor;
 
-    motor_pwm_init(0, freq, res);
-
-    motor_init(&left_motor, 0, 0, 0, 1);
-    motor_init(&right_motor, 0, 1, 2, 3);
+    motor_driver_init(0);
 
     while (1) {
         //printf("MOTION CONTROL  : slept until %" PRIu32 "\n", xtimer_usec_from_ticks(last_wakeup) - xtimer_usec_from_ticks(start));
         if (count < 500)
         {
-            motor_set(&left_motor, 1, duty_cycle);
-            motor_set(&right_motor, 0, duty_cycle++);
+            motor_set(0, HBRIDGE_MOTOR_LEFT, 1, duty_cycle);
+            motor_set(0, HBRIDGE_MOTOR_RIGHT, 0, duty_cycle++);
             count++;
         }
         else if (duty_cycle == 0) {
@@ -55,8 +48,8 @@ void *motion_control_thread(void *arg)
         }
         else
         {
-            motor_set(&left_motor, 1, duty_cycle);
-            motor_set(&right_motor, 0, duty_cycle--);
+            motor_set(0, HBRIDGE_MOTOR_LEFT, 1, duty_cycle);
+            motor_set(0, HBRIDGE_MOTOR_RIGHT, 0, duty_cycle++);
         }
         //printf("QDEC_VALUE      : %d\n", qdec_read(0));
         xtimer_periodic_wakeup(&last_wakeup, INTERVAL);
