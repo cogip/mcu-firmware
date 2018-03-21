@@ -21,8 +21,6 @@ typedef enum {
 } controller_regul_t;
 
 typedef struct {
-	double wheels_distance;
-
 	PID_t linear_speed_pid;
 	PID_t angular_speed_pid;
 	PID_t linear_pose_pid;

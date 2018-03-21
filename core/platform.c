@@ -282,8 +282,6 @@ controller_mode_t controller_modes[] = {
 };
 
 controller_t controller = {
-	.wheels_distance = WHEELS_DISTANCE,
-
 #if defined(__AVR__)
 	.linear_speed_pid = {
 		.kp = 2.0,
