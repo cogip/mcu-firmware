@@ -111,12 +111,12 @@ polar_t speed_controller(controller_t *ctrl,
 }
 
 polar_t controller_update(controller_t *ctrl,
-			  pose_t pose_order,
 			  const pose_t *pose_current,
-			  polar_t speed_order,
 			  polar_t speed_current)
 {
 	polar_t command = {0, 0};
+	pose_t  pose_order              = { 0, 0, 0 };
+	polar_t speed_order             = { 0, 0 };
 	polar_t speed;
 	/* ******************** position pid controller ******************** */
 
@@ -126,6 +126,15 @@ polar_t controller_update(controller_t *ctrl,
 	if (controller_is_pose_reached(&controller)) {
 		return command;
 	}
+
+	/* get next pose_t to reach */
+	pose_order = controller_get_pose_to_reach(&controller);
+
+	pose_order.x *= PULSE_PER_MM;
+	pose_order.y *= PULSE_PER_MM;
+
+	/* get speed order */
+	speed_order = controller_get_speed_order(&controller);
 
 	position_error = compute_error(ctrl, pose_order, pose_current);
 
