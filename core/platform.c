@@ -525,9 +525,7 @@ void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command)
 
 void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
 {
-	pose_t	pose_order		= { 0, 0, 0 };
 	polar_t	robot_speed		= { 0, 0 };
-	polar_t	speed_order		= { 0, 0 };
 
 	/* catch speed */
 	//FIXME! robot_speed = encoder_read();
@@ -538,20 +536,9 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
 	/* convert pulse to degree */
 	robot_pose->O /= PULSE_PER_DEGREE;
 
-	/* get next pose_t to reach */
-	pose_order = controller_get_pose_to_reach(&controller);
-
-	pose_order.x *= PULSE_PER_MM;
-	pose_order.y *= PULSE_PER_MM;
-
-	/* get speed order */
-	speed_order = controller_get_speed_order(&controller);
-
 	/* PID / feedback control */
 	*motor_command = controller_update(&controller,
-					  pose_order,
 					  robot_pose,
-					  speed_order,
 					  robot_speed);
 
 	/* convert degree to pulse */

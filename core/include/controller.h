@@ -53,8 +53,8 @@ polar_t speed_controller(controller_t *ctrl,
 			 polar_t speed_setpoint, polar_t real_speed);
 
 polar_t controller_update(controller_t *ctrl,
-			  pose_t pose_setpoint, const pose_t *current_pose,
-			  polar_t speed_setpoint, polar_t current_speed);
+			  const pose_t *current_pose,
+			  polar_t current_speed);
 
 void controller_set_pose_intermediate(controller_t *ctrl, uint8_t intermediate);
 uint8_t controller_is_in_reverse(controller_t *ctrl);
