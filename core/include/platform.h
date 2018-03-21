@@ -49,11 +49,22 @@
 
 #define USART_CONSOLE			USARTC0
 
+enum {
+	CTRL_STATE_STOP = 0,
+	CTRL_STATE_IDLE,
+	CTRL_STATE_INGAME,
+#if defined(CONFIG_CALIBRATION)
+	CTRL_STATE_CALIB_MODE1,
+	CTRL_STATE_CALIB_MODE2,
+	CTRL_STATE_CALIB_MODE3,
+#endif
+};
+
 //extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
 //extern sd21_t sd21;
-//extern hbridge_t hbridges;
 extern controller_t controller;
+extern controller_mode_t controller_modes[];
 
 extern datalog_t datalog;
 
@@ -65,7 +76,15 @@ path_t * mach_get_path_yellow(void);
 uint8_t mach_is_game_launched(void);
 uint8_t mach_is_camp_yellow(void);
 
+void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command);
+void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command);
+void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command);
 #if defined(CONFIG_CALIBRATION)
+void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command);
+void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command);
+void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command);
+
+void controller_enter_calibration(void);
 void mach_check_calibration_mode(void);
 #endif
 

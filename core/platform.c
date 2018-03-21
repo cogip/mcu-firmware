@@ -275,6 +275,12 @@ hbridge_t hbridges = {
 };
 #endif
 
+controller_mode_t controller_modes[] = {
+	{ "STOP", ctrl_state_stop_cb, },	/* CTRL_STATE_STOP */
+	{ "IDLE", ctrl_state_idle_cb, },	/* CTRL_STATE_IDLE */
+	{ "INGAME", ctrl_state_ingame_cb, },	/* CTRL_STATE_INGAME */
+};
+
 controller_t controller = {
 	.wheels_distance = WHEELS_DISTANCE,
 
@@ -325,6 +331,9 @@ controller_t controller = {
 	//.min_distance_for_angular_switch = 500,
 	.min_distance_for_angular_switch = 100,
 	.min_angle_for_pose_reached = 100,
+	.regul = CTRL_REGUL_POSE_DIST,
+	.allow_reverse = TRUE,
+	.mode = &controller_modes[CTRL_STATE_INGAME],
 };
 
 /* This global object contains all numerical logs references (vectors, etc.) */
@@ -497,3 +506,55 @@ void mach_setup(void)
 			//COL_DOUBLE, "speed_order.angle",
 			COL_END);
 }
+
+void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command)
+{
+	(void)robot_pose; 
+	/* final position */
+	motor_command->distance = 0;
+	motor_command->angle = 0;
+}
+
+void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command)
+{
+	(void)motor_command;
+	(void)robot_pose;
+
+	//FIXME: read encoders
+}
+
+void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
+{
+	pose_t	pose_order		= { 0, 0, 0 };
+	polar_t	robot_speed		= { 0, 0 };
+	polar_t	speed_order		= { 0, 0 };
+
+	/* catch speed */
+	//FIXME! robot_speed = encoder_read();
+
+	/* convert to position */
+	odometry_update(robot_pose, &robot_speed, SEGMENT);
+
+	/* convert pulse to degree */
+	robot_pose->O /= PULSE_PER_DEGREE;
+
+	/* get next pose_t to reach */
+	pose_order = controller_get_pose_to_reach(&controller);
+
+	pose_order.x *= PULSE_PER_MM;
+	pose_order.y *= PULSE_PER_MM;
+
+	/* get speed order */
+	speed_order = controller_get_speed_order(&controller);
+
+	/* PID / feedback control */
+	*motor_command = controller_update(&controller,
+					  pose_order,
+					  robot_pose,
+					  speed_order,
+					  robot_speed);
+
+	/* convert degree to pulse */
+	robot_pose->O *= PULSE_PER_DEGREE;
+}
+
