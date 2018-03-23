@@ -47,6 +47,7 @@ typedef struct {
 } controller_t;
 
 
+void motor_drive(polar_t *command);
 polar_t speed_controller(controller_t *ctrl,
 			 polar_t speed_setpoint, polar_t real_speed);
 
