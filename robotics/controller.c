@@ -289,11 +289,11 @@ void controller_set_mode(controller_t *ctrl, controller_mode_t *new_mode)
 	printf("new_mode = %s\n", new_mode->name);
 }
 
-static void motor_drive(polar_t command)
+void motor_drive(polar_t *command)
 {
 	/************************ commandes moteur ************************/
-	int16_t right_command = (int16_t) (command.distance + command.angle);
-	int16_t left_command = (int16_t) (command.distance - command.angle);
+	int16_t right_command = (int16_t) (command->distance + command->angle);
+	int16_t left_command = (int16_t) (command->distance - command->angle);
 (void)right_command;//FIXME: remove
 (void)left_command;//FIXME: remove
 
@@ -331,7 +331,7 @@ void *task_controller_update(void *arg)
 		if ((controller.mode) && (controller.mode->state_cb))
 			controller.mode->state_cb(&robot_pose, &motor_command);
 
-		motor_drive(motor_command);
+		motor_drive(&motor_command);
 
 		/* Machine specific stuff, if required */
 		if (pfn_evtloop_postfunc)
