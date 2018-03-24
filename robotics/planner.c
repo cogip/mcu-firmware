@@ -17,8 +17,8 @@
 /* Object variables (singleton) */
 static uint16_t game_time = 0;
 static uint8_t game_started = FALSE;
-static path_t * path = NULL;
-static uint8_t in_calibration = FALSE;
+path_t * path = NULL;
+uint8_t in_calibration = FALSE;
 
 /* periodic task */
 /* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
@@ -35,7 +35,7 @@ static void pose_yellow_to_blue(pose_t *pose)
 	pose->O = limit_angle_deg(180 - pose->O);
 }
 
-static inline void increment_current_pose_idx(void)
+inline void increment_current_pose_idx(void)
 {
 	if (path->current_pose_idx < path->nb_pose - 1)
 		path->current_pose_idx += 1;

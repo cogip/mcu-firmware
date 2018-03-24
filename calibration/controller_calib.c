@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "platform.h"
 #include "system/log.h"
 
 //FIXME: removestub
@@ -13,6 +14,7 @@ extern uint16_t tempo;
 
 void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 {
+	(void)robot_pose;
 	/*
 	 * First calibration test:
 	 * Perform two PWM sweeps to characterize encoders.
@@ -31,29 +33,29 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 	 * 1. [-pwm ... +pwm] for 400 cycles (0.02 = 8s)
 	 * 2. [+pwm ... -pwm] for 400 cycles
 	 */
-	motor_command.angle = 0;
+	motor_command->angle = 0;
 	if (tempo < 50)
-		motor_command.distance = -200;
+		motor_command->distance = -200;
 	else if (tempo >= 50 && tempo < 400 - 50)
-		motor_command.distance = (int16_t)((double)(tempo - 50) * 4./3.) - 200;
+		motor_command->distance = (int16_t)((double)(tempo - 50) * 4./3.) - 200;
 	else if (tempo >= 400 - 50 && tempo < 400 + 50)
-		motor_command.distance = 200;
+		motor_command->distance = 200;
 	else if (tempo >= 450 && tempo < 800 - 50)
-		motor_command.distance = -((int16_t)((double)(tempo - 450) * 4./3.) - 200);
+		motor_command->distance = -((int16_t)((double)(tempo - 450) * 4./3.) - 200);
 	else if (tempo >= 800 - 50)
-		motor_command.distance = -200;
+		motor_command->distance = -200;
 
 	motor_drive(motor_command);
 
 	/* catch speed */
-	robot_speed = encoder_read();
+	//robot_speed = encoder_read();
 
 	log_vect_display_line(&datalog);
 
 	tempo ++;
 	if (tempo == 400) {
-		//motor_command.distance = 0;
-		//motor_command.angle = 0;
+		//motor_command->distance = 0;
+		//motor_command->angle = 0;
 		//motor_drive(motor_command);
 
 		log_vect_display_last_line(&datalog);
@@ -65,8 +67,8 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 				LOG_IDX_MOTOR_R,
 				-1);
 	} else if (tempo == 800) {
-		motor_command.distance = 0;
-		motor_command.angle = 0;
+		motor_command->distance = 0;
+		motor_command->angle = 0;
 		motor_drive(motor_command);
 
 		log_vect_display_last_line(&datalog);
@@ -78,6 +80,9 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 
 void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 {
+	(void)robot_pose;
+	polar_t	robot_speed		= { 0, 0 };
+	polar_t	speed_order		= { 0, 0 };
 	/*
 	 * Second calibration test:
 	 * Perform a speed command to tune Kp, Ki (& Kd).
@@ -112,8 +117,8 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 	log_vect_setvalue(&datalog, LOG_IDX_SPEED_ORDER_D, (void *) &speed_order.distance);
 
 	/* catch speed */
-	robot_speed = encoder_read();
-	motor_command = speed_controller(&controller,
+	//robot_speed = encoder_read();
+	*motor_command = speed_controller(&controller,
 					 speed_order,
 					 robot_speed);
 
@@ -125,8 +130,8 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 
 	tempo ++;
 	if (tempo == 400) {
-		motor_command.distance = 0;
-		motor_command.angle = 0;
+		motor_command->distance = 0;
+		motor_command->angle = 0;
 		motor_drive(motor_command);
 
 		log_vect_display_last_line(&datalog);
@@ -138,6 +143,9 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 
 void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command)
 {
+	(void)robot_pose;
+	polar_t	robot_speed		= { 0, 0 };
+	polar_t	speed_order		= { 0, 0 };
 	/*
 	 * Third calibration test:
 	 * Perform a speed command to tune Kp, Ki (& Kd).
@@ -176,7 +184,7 @@ void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command)
 
 	/* catch speed */
 	robot_speed = encoder_read();
-	motor_command = speed_controller(&controller,
+	*motor_command = speed_controller(&controller,
 					 speed_order,
 					 robot_speed);
 
@@ -188,8 +196,8 @@ void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command)
 
 	tempo ++;
 	if (tempo == 400) {
-		motor_command.distance = 0;
-		motor_command.angle = 0;
+		motor_command->distance = 0;
+		motor_command->angle = 0;
 		motor_drive(motor_command);
 
 		log_vect_display_last_line(&datalog);
@@ -288,13 +296,13 @@ void controller_enter_calibration(void)
 
 		switch (c) {
 		case '1':
-			controller_set_mode(&controller, CTRL_STATE_CALIB_MODE1);
+			controller_set_mode(&controller, &controller_modes[CTRL_STATE_CALIB_MODE1]);
 			break;
 		case '2':
-			controller_set_mode(&controller, CTRL_STATE_CALIB_MODE2);
+			controller_set_mode(&controller, &controller_modes[CTRL_STATE_CALIB_MODE2]);
 			break;
 		case '3':
-			controller_set_mode(&controller, CTRL_STATE_CALIB_MODE3);
+			controller_set_mode(&controller, &controller_modes[CTRL_STATE_CALIB_MODE3]);
 			break;
 		case 'p':
 			scanf_update_val("Kp", &cur_pid->kp);
