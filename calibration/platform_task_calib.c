@@ -1,6 +1,10 @@
+#include "planner.h"
 #include "platform.h"
+#include "platform_task.h"
+#include <thread.h>
 
-char calib_thread_stack[THREAD_STACKSIZE_DEFAULT];
+//FIXME:
+#define kos_task_exit()
 
 static void mach_calibration_usage(void)
 {
@@ -22,7 +26,7 @@ static void mach_calibration_usage(void)
 	cons_printf("\n");
 }
 
-static void *task_calibration_entry(void *arg)
+void *task_calibration_entry(void *arg)
 {
 //	int16_t autoboot_ms = 3000;
 	int c;
@@ -104,7 +108,3 @@ static void *task_calibration_entry(void *arg)
 
 	return 0;
 }
-
-/*
- * Tasks registration
- */

@@ -7,6 +7,7 @@
 #include "motor_driver.h"
 #endif
 #include "platform.h"
+#include "platform_task.h"
 #include "shell.h"
 #include "shell_commands.h"
 
