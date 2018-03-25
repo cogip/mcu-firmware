@@ -12,7 +12,7 @@ install:
       - gcc --version
       - arm-none-eabi-gcc --version
 before_script:
-      - git clone https://github.com/cogip/RIOT.git -b firmware-dependencies --depth 1
+      - git clone https://github.com/cogip/RIOT.git -b cogip2018-next --depth 1
 script:
       - RIOTBASE=$(pwd)/RIOT BOARD=native make -j4
       - RIOTBASE=$(pwd)/RIOT BOARD=native make clean
