@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 //#include "console.h"
 //#include "encoder.h"
@@ -17,7 +18,6 @@
 uint16_t tempo;
 
 //FIXME: removestub
-#define hbridge_engine_update(...)
 #define log_vect_setvalue(...)
 //#define kos_set_next_schedule_delay_ms(...)
 //#define kos_yield(...)
@@ -292,11 +292,9 @@ void motor_drive(polar_t *command)
 	/************************ commandes moteur ************************/
 	int16_t right_command = (int16_t) (command->distance + command->angle);
 	int16_t left_command = (int16_t) (command->distance - command->angle);
-(void)right_command;//FIXME: remove
-(void)left_command;//FIXME: remove
 
-	hbridge_engine_update(&hbridges, HBRIDGE_MOTOR_RIGHT, right_command);
-	hbridge_engine_update(&hbridges, HBRIDGE_MOTOR_LEFT,  left_command);
+        motor_set(0, HBRIDGE_MOTOR_LEFT, (left_command < 0) , abs(left_command));
+        motor_set(0, HBRIDGE_MOTOR_RIGHT, (right_command < 0) , abs(right_command));
 
 	log_vect_setvalue(&datalog, LOG_IDX_MOTOR_L, (void *) &left_command);
 	log_vect_setvalue(&datalog, LOG_IDX_MOTOR_R, (void *) &right_command);
