@@ -360,9 +360,9 @@ inline func_cb_t mach_get_end_of_game_pfn(void)
 	return NULL;
 }
 
-path_t * mach_get_path_yellow(void)
+path_t * mach_get_path(void)
 {
-	return &path_homologation_yellow;
+	return &robot_path;
 }
 
 /* TODO: To activate when included in RIOT */
