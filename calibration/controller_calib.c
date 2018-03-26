@@ -8,13 +8,13 @@
 //#define kos_set_next_schedule_delay_ms(...)
 //#define kos_yield(...)
 #define encoder_reset()
-#define encoder_read() (polar_t){0.0,0.0}
 
 extern uint16_t tempo;
 
 void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 {
 	(void)robot_pose;
+	polar_t	robot_speed		= { 0, 0 };
 	/*
 	 * First calibration test:
 	 * Perform two PWM sweeps to characterize encoders.
@@ -48,7 +48,8 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 	motor_drive(motor_command);
 
 	/* catch speed */
-	//robot_speed = encoder_read();
+	//TODO: control return
+	encoder_read(&robot_speed);
 
 	log_vect_display_line(&datalog);
 
@@ -117,7 +118,8 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 	log_vect_setvalue(&datalog, LOG_IDX_SPEED_ORDER_D, (void *) &speed_order.distance);
 
 	/* catch speed */
-	//robot_speed = encoder_read();
+	// TODO: control return
+	encoder_read(&robot_speed);
 	*motor_command = speed_controller(&controller,
 					 speed_order,
 					 robot_speed);
@@ -183,7 +185,8 @@ void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command)
 	log_vect_setvalue(&datalog, LOG_IDX_SPEED_ORDER_D, (void *) &speed_order.distance);
 
 	/* catch speed */
-	robot_speed = encoder_read();
+	// TODO: control return
+	encoder_read(&robot_speed);
 	*motor_command = speed_controller(&controller,
 					 speed_order,
 					 robot_speed);
