@@ -21,6 +21,6 @@ typedef struct {
 } path_t;
 
 
-extern path_t path_homologation_yellow;
+extern path_t robot_path;
 
 #endif /* PATH_H_ */

@@ -137,7 +137,7 @@ void *task_planner(void *arg)
 	printf("Game planner started\n");
 	printf("%s camp\n", camp_yellow ? "YELLOW" : "BLUE");
 
-	path = mach_get_path_yellow();
+	path = mach_get_path();
 	if (!path) {
 		printf("machine has no path\n");
 		kos_task_exit();
