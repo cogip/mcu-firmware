@@ -9,6 +9,7 @@
 //#include "msched.h"
 #include "platform.h"
 #include "platform_task.h"
+#include <periph/qdec.h>
 
 /**
  * PORTA : ANA input
@@ -380,7 +381,6 @@ path_t * mach_get_path(void)
 #define gpio_set_direction(...)
 #define gpio_set_output(...)
 #define hbridge_setup(...)
-#define qdec_setup(...)
 #define msched_init(...)
 #define log_vect_init(...)
 #define kos_run(...)
@@ -479,8 +479,10 @@ void mach_setup(void)
 	hbridge_setup(&hbridges);
 
 	/* setup qdec */
-	qdec_setup(&encoders[0]);
-	qdec_setup(&encoders[1]);
+        int32_t error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
+        error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X4, NULL, NULL);
+	if (error)
+		puts("QDEC not initialized !!!");
 
 	/* controller setup */
 	odometry_setup(WHEELS_DISTANCE);
@@ -526,7 +528,7 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
 	polar_t	robot_speed		= { 0, 0 };
 
 	/* catch speed */
-	//FIXME! robot_speed = encoder_read();
+	encoder_read(&robot_speed);
 
 	/* convert to position */
 	odometry_update(robot_pose, &robot_speed, SEGMENT);
@@ -543,3 +545,14 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
 	robot_pose->O *= PULSE_PER_DEGREE;
 }
 
+int encoder_read(polar_t *robot_speed)
+{
+	int32_t left_speed = qdec_read_and_reset(HBRIDGE_MOTOR_LEFT);
+	int32_t right_speed = qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
+
+	/* update speed */
+	robot_speed->distance = (right_speed + left_speed) / 2.0;
+	robot_speed->angle = right_speed - left_speed;
+
+	return 0;
+}
