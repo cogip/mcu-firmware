@@ -33,6 +33,12 @@ void planner_enter_calibration(void)
 
 	planner_calibration_usage();
 
+	path = mach_get_path();
+	if (!path) {
+		printf("machine has no path\n");
+		return;
+	}
+
 	in_calibration = TRUE;
 	controller_set_mode(&controller, &controller_modes[CTRL_STATE_INGAME]);
 
