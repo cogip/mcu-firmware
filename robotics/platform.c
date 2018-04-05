@@ -561,3 +561,9 @@ int encoder_read(polar_t *robot_speed)
 
 	return 0;
 }
+
+void encoder_reset(void)
+{
+	qdec_read_and_reset(HBRIDGE_MOTOR_LEFT);
+	qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
+}
