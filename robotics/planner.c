@@ -50,7 +50,7 @@ static void show_game_time(void)
 	if (! --_secs) {
 		_secs = TASK_FREQ_HZ;
 		printf ("Game time = %d\n",
-			    game_time / TASK_FREQ_HZ);
+				game_time / TASK_FREQ_HZ);
 	}
 }
 
@@ -182,12 +182,12 @@ void *task_planner(void *arg)
 			if (!game_time) {
 				cons_printf("<<<< polar_simu.csv\n");
 				cons_printf("pose_order_x,pose_order_y,pose_order_a,"
-					    "pose_current_x,pose_current_y,pose_current_a,"
-					    "position_error_l,position_error_a,"
-					    "speed_order_l,speed_order_a,"
-					    "speed_current_l,speed_current_a,"
-					    "game_time,"
-					    "\n");
+						"pose_current_x,pose_current_y,pose_current_a,"
+						"position_error_l,position_error_a,"
+						"speed_order_l,speed_order_a,"
+						"speed_current_l,speed_current_a,"
+						"game_time,"
+						"\n");
 			}
 
 			game_time++;
@@ -233,7 +233,7 @@ void *task_planner(void *arg)
 
 yield_point:
 		//kos_yield();
-        	xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
+			xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
 	}
 
 //	controller.mode = CTRL_STATE_INGAME;

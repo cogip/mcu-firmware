@@ -80,10 +80,10 @@ void planner_enter_calibration(void)
 			for (i = 0; i < path->nb_pose; i++) {
 				pose_t *p = &path->poses[i].pos;
 				cons_printf("%02d %c\t"
-				       "X = %+.2f\tY = %+.2f\tO = %+.2f\n",
-				       i,
-				       i == path->current_pose_idx ? '<' : ' ',
-				       p->x, p->y, p->O);
+					   "X = %+.2f\tY = %+.2f\tO = %+.2f\n",
+					   i,
+					   i == path->current_pose_idx ? '<' : ' ',
+					   p->x, p->y, p->O);
 			}
 			break;
 		case 'h':

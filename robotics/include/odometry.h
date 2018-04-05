@@ -37,7 +37,7 @@ void odometry_setup(double d);
  * \param approximation : SEGMENT (default) or ARC
  */
 void odometry_update(pose_t *p,
-		     polar_t *robot_speed,
-		     const uint8_t approximation);
+			 polar_t *robot_speed,
+			 const uint8_t approximation);
 
 #endif /* ODOMETRY_H_ */

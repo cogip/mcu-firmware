@@ -38,7 +38,7 @@ static void set_pose_reached(controller_t *ctrl)
  * \return distance and angle errors between 2 poses
  */
 static polar_t compute_error(controller_t *ctrl,
-			     const pose_t pose_order, const pose_t *pose_current)
+			 const pose_t pose_order, const pose_t *pose_current)
 {
 	polar_t error;
 	double x, y, O;
@@ -102,7 +102,7 @@ polar_t speed_controller(controller_t *ctrl,
 	command.distance = pid_controller(&ctrl->linear_speed_pid,
 					  speed_error.distance);
 	command.angle = pid_controller(&ctrl->angular_speed_pid,
-				       speed_error.angle);
+					   speed_error.angle);
 
 	return command;
 }
@@ -111,9 +111,9 @@ polar_t controller_update(controller_t *ctrl,
 			  const pose_t *pose_current,
 			  polar_t speed_current)
 {
-	polar_t command = {0, 0};
-	pose_t  pose_order              = { 0, 0, 0 };
-	polar_t speed_order             = { 0, 0 };
+	polar_t command 		= {0, 0};
+	pose_t	pose_order		= { 0, 0, 0 };
+	polar_t speed_order		= { 0, 0 };
 	polar_t speed;
 	/* ******************** position pid controller ******************** */
 
@@ -136,11 +136,11 @@ polar_t controller_update(controller_t *ctrl,
 	position_error = compute_error(ctrl, pose_order, pose_current);
 
 	cons_printf("%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,"
-		    "%+.0f,%+.0f,"
-		    "%+.0f,%+.0f,"
-		    "%+.0f,%+.0f,"
-		    "%d,"
-		    "\n",
+			"%+.0f,%+.0f,"
+			"%+.0f,%+.0f,"
+			"%+.0f,%+.0f,"
+			"%d,"
+			"\n",
 			  pose_order.x / PULSE_PER_MM,
 			  pose_order.y / PULSE_PER_MM,
 			  pose_order.O,
@@ -157,7 +157,7 @@ polar_t controller_update(controller_t *ctrl,
 
 	/* position correction */
 	if (ctrl->regul != CTRL_REGUL_POSE_ANGL
-	    && fabs(position_error.distance) > ctrl->min_distance_for_angular_switch) {
+		&& fabs(position_error.distance) > ctrl->min_distance_for_angular_switch) {
 
 		/* should we go reverse? */
 		if (ctrl->allow_reverse && fabs(position_error.angle) > 90) {
@@ -206,13 +206,13 @@ polar_t controller_update(controller_t *ctrl,
 	command.distance = pid_controller(&ctrl->linear_pose_pid,
 					  position_error.distance);
 	command.angle = pid_controller(&ctrl->angular_pose_pid,
-				       position_error.angle);
+					   position_error.angle);
 
 
 	/* limit speed command */
 	speed.distance = limit_speed_command(command.distance,
-					     speed_order.distance,
-					     speed_current.distance);
+						 speed_order.distance,
+						 speed_current.distance);
 	speed.angle = limit_speed_command(command.angle,
 					  speed_order.angle,
 					  speed_current.angle);
@@ -292,8 +292,8 @@ void motor_drive(polar_t *command)
 	int16_t right_command = (int16_t) (command->distance + command->angle);
 	int16_t left_command = (int16_t) (command->distance - command->angle);
 
-        motor_set(0, HBRIDGE_MOTOR_LEFT, (left_command < 0) , abs(left_command));
-        motor_set(0, HBRIDGE_MOTOR_RIGHT, (right_command < 0) , abs(right_command));
+	motor_set(0, HBRIDGE_MOTOR_LEFT, (left_command < 0) , abs(left_command));
+	motor_set(0, HBRIDGE_MOTOR_RIGHT, (right_command < 0) , abs(right_command));
 
 	log_vect_setvalue(&datalog, LOG_IDX_MOTOR_L, (void *) &left_command);
 	log_vect_setvalue(&datalog, LOG_IDX_MOTOR_R, (void *) &right_command);
@@ -302,7 +302,7 @@ void motor_drive(polar_t *command)
 void *task_controller_update(void *arg)
 {
 	/* bot position on the 'table' (absolute position): */
-	pose_t	robot_pose		= { 0, 0, 0 };
+	pose_t	robot_pose			= { 0, 0, 0 };
 	polar_t motor_command		= { 0, 0 };
 	func_cb_t pfn_evtloop_prefunc  = mach_get_ctrl_loop_pre_pfn();
 	func_cb_t pfn_evtloop_postfunc = mach_get_ctrl_loop_post_pfn();
@@ -332,7 +332,7 @@ void *task_controller_update(void *arg)
 		if (pfn_evtloop_postfunc)
 			(*pfn_evtloop_postfunc)();
 
-        	xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
+		xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
 	}
 
 	return 0;
