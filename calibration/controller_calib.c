@@ -260,11 +260,11 @@ static void controller_calibration_usage(const uint8_t pid_idx)
 	cons_printf("\n");
 (void)pid_idx;
 //	cons_printf("\%s:\t"
-//	       "Kp = %+.2f\tKi = %+.2f\tKd = %+.2f\n",
-//	       controller_get_pid_name_from_idx(pid_idx),
-//	       controller_get_pid_from_idx(pid_idx)->kp,
-//	       controller_get_pid_from_idx(pid_idx)->ki,
-//	       controller_get_pid_from_idx(pid_idx)->kd);
+//		   "Kp = %+.2f\tKi = %+.2f\tKd = %+.2f\n",
+//		   controller_get_pid_name_from_idx(pid_idx),
+//		   controller_get_pid_from_idx(pid_idx)->kp,
+//		   controller_get_pid_from_idx(pid_idx)->ki,
+//		   controller_get_pid_from_idx(pid_idx)->kd);
 	cons_printf("\t'p' to tune Kp\n");
 	cons_printf("\t'i' to tune Ki\n");
 	cons_printf("\t'd' to tune Kd\n");
@@ -335,11 +335,11 @@ void controller_enter_calibration(void)
 		case 'v':
 			for (i = 0; i < 4; i++) {
 //				cons_printf("\%s:\t"
-//				       "Kp = %+.2f\tKi = %+.2f\tKd = %+.2f\n",
-//				       controller_get_pid_name_from_idx(i),
-//				       controller_get_pid_from_idx(i)->kp,
-//				       controller_get_pid_from_idx(i)->ki,
-//				       controller_get_pid_from_idx(i)->kd);
+//					   "Kp = %+.2f\tKi = %+.2f\tKd = %+.2f\n",
+//					   controller_get_pid_name_from_idx(i),
+//					   controller_get_pid_from_idx(i)->kp,
+//					   controller_get_pid_from_idx(i)->ki,
+//					   controller_get_pid_from_idx(i)->kd);
 			}
 			break;
 		case 'h':

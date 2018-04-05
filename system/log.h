@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-#define LOG_LEVEL_ERROR    0
-#define LOG_LEVEL_WARNING  1
-#define LOG_LEVEL_INFO     2
-#define LOG_LEVEL_DEBUG    3
+#define LOG_LEVEL_ERROR		0
+#define LOG_LEVEL_WARNING	1
+#define LOG_LEVEL_INFO		2
+#define LOG_LEVEL_DEBUG		3
 
 #ifdef CONFIG_ENABLE_LOGGING
 void print_log(int level, const char *function, const char *format, ...);
