@@ -399,7 +399,8 @@ uint8_t mach_is_game_launched(void)
 uint8_t mach_is_camp_yellow(void)
 {
 	/* Color switch for coords translations */
-	return gpio_get_input(&PORTF, PIN2_bp);
+    //FIXME: correct mirror
+	return TRUE; //gpio_get_input(&PORTF, PIN2_bp);
 }
 
 static void mach_pinmux_setup(void)
