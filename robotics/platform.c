@@ -289,7 +289,7 @@ controller_mode_t controller_modes[] = {
 };
 
 controller_t controller = {
-#if defined(__AVR__)
+#if 0
 	.linear_speed_pid = {
 		.kp = 2.0,
 		.ki = 0.1,
@@ -312,29 +312,29 @@ controller_t controller = {
 	},
 #else
 	.linear_speed_pid = {
-		.kp = 2.9,
-		.ki = 0.15,
-		.kd = 0,
+		.kp = 5.,
+		.ki = 1.,
+		.kd = 0.,
 	},
 	.angular_speed_pid = {
-		.kp = 2,
-		.ki = 0.05,
-		.kd = 0,
+		.kp = 3,
+		.ki = 1.,
+		.kd = 0.,
 	},
 	.linear_pose_pid = {
-		.kp = 0.050,
-		.ki = 0,
-		.kd = 0.4,
+		.kp = 0.0335,
+		.ki = 0.,
+		.kd = 0.,
 	},
 	.angular_pose_pid = {
-		.kp = 0.050,
-		.ki = 0,
-		.kd = 0.4,
+		.kp = 0.1,
+		.ki = 0.,
+		.kd = 0.,
 	},
 #endif
 
 	//.min_distance_for_angular_switch = 500,
-	.min_distance_for_angular_switch = 100,
+	.min_distance_for_angular_switch = 50,
 	.min_angle_for_pose_reached = 100,
 	.regul = CTRL_REGUL_POSE_DIST,
 	.allow_reverse = TRUE,

@@ -22,7 +22,7 @@ uint8_t in_calibration = FALSE;
 
 /* periodic task */
 /* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
-#define TASK_PERIOD_MS		(20 * 5)
+#define TASK_PERIOD_MS		(20)
 
 #define TASK_FREQ_HZ		(1000 / TASK_PERIOD_MS)
 #define GAME_DURATION_SEC	90
@@ -208,9 +208,9 @@ void *task_planner(void *arg)
 			speed_order.angle = 0;
 		} else {*/
 			/* max speed order in pulse_linear per ctrl period (20ms) */
-			speed_order.distance = 150;
+			speed_order.distance = 500;
 			/* max speed order in pulse_angular per ctrl period (20ms) */
-			speed_order.angle = 150 / 2;
+			speed_order.angle = 250 / 2;
 		//}
 
 		controller_set_speed_order(&controller, speed_order);
