@@ -18,7 +18,6 @@
 uint16_t tempo;
 
 //FIXME: removestub
-#define log_vect_setvalue(...)
 //#define kos_set_next_schedule_delay_ms(...)
 //#define kos_yield(...)
 

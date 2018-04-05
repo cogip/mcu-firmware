@@ -37,6 +37,7 @@ void print_log(int level, const char *function, const char *format, ...);
 
 typedef enum {
 	COL_INT16,
+	COL_INT32,
 	COL_DOUBLE,
 	COL_END = -1,
 } datalog_col_t;
@@ -65,6 +66,7 @@ typedef struct {
 	/* datas are the active row */
 	union {
 		int16_t as_int16;
+		int32_t as_int32;
 		double as_double;
 	} datas[COL_MAX];
 } datalog_t;

@@ -145,6 +145,9 @@ void log_vect_setvalue(datalog_t *d, uint8_t idx, void * value)
 	case COL_INT16:
 		d->datas[idx].as_int16 = *((int16_t *)value);
 		break;
+	case COL_INT32:
+		d->datas[idx].as_int32 = *((int32_t *)value);
+		break;
 	case COL_DOUBLE:
 		d->datas[idx].as_double = *((double *)value);
 		break;
@@ -179,6 +182,9 @@ void log_vect_display_line(datalog_t *d)
 			switch(d->columns[c].type) {
 			case COL_INT16:
 				cons_printf("%d,", d->datas[c].as_int16);
+				break;
+			case COL_INT32:
+				cons_printf("%ld,", d->datas[c].as_int32);
 				break;
 			case COL_DOUBLE:
 				cons_printf("%+.2f,", d->datas[c].as_double);
