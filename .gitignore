@@ -30,6 +30,8 @@ cachegrind.out*
 tags
 # GDB initialization scripts
 .gdbinit
+# vim configuration file
+.vimrc
 
 # Eclipse symbol file (output from make eclipsesym)
 eclipsesym.xml
