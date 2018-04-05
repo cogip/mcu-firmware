@@ -277,9 +277,14 @@ hbridge_t hbridges = {
 #endif
 
 controller_mode_t controller_modes[] = {
-	{ "STOP", ctrl_state_stop_cb, },	/* CTRL_STATE_STOP */
-	{ "IDLE", ctrl_state_idle_cb, },	/* CTRL_STATE_IDLE */
-	{ "INGAME", ctrl_state_ingame_cb, },	/* CTRL_STATE_INGAME */
+	{ "STOP", ctrl_state_stop_cb, },		/* CTRL_STATE_STOP */
+	{ "IDLE", ctrl_state_idle_cb, },		/* CTRL_STATE_IDLE */
+	{ "INGAME", ctrl_state_ingame_cb, },		/* CTRL_STATE_INGAME */
+#if defined(MODULE_CALIBRATION)
+	{ "CALIB1", ctrl_state_calib_mode1_cb, },	/* CTRL_STATE_CALIB_MODE1 */
+	{ "CALIB2", ctrl_state_calib_mode2_cb, },	/* CTRL_STATE_CALIB_MODE2 */
+	{ "CALIB3", ctrl_state_calib_mode3_cb, },	/* CTRL_STATE_CALIB_MODE3 */
+#endif /* MODULE_CALIBRATION */
 };
 
 controller_t controller = {

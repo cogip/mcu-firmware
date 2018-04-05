@@ -71,8 +71,8 @@ int main(void)
 //                  0, 0,
 //                  motion_control_thread, NULL, "motion_ctrl");
 
-    char line_buf[SHELL_DEFAULT_BUFSIZE];
-    shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
+    /*char line_buf[SHELL_DEFAULT_BUFSIZE];
+    shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);*/
 
     return 0;
 }

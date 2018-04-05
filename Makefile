@@ -8,6 +8,7 @@ USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += schedstatistics
 USEMODULE += ps
+USEMODULE += printf_float
 
 QUIET ?= 1
 

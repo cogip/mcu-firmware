@@ -29,10 +29,11 @@ static void mach_calibration_usage(void)
 void *task_calibration_entry(void *arg)
 {
 //	int16_t autoboot_ms = 3000;
-	int c;
+	int c = 0;
 	uint8_t quit = 0;
 
 	(void)arg;
+	controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
 
 //	/* wait for keypress, or schedule */
 //	while (!usart_is_data_arrived(&USART_CONSOLE)) {

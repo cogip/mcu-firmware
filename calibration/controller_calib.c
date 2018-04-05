@@ -4,10 +4,12 @@
 
 //FIXME: removestub
 #define hbridge_engine_update(...)
-#define log_vect_setvalue(...)
+//#define log_vect_setvalue(...)
 //#define kos_set_next_schedule_delay_ms(...)
 //#define kos_yield(...)
 #define encoder_reset()
+
+#define PWM_RANGE 500
 
 extern uint16_t tempo;
 
@@ -35,15 +37,15 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 	 */
 	motor_command->angle = 0;
 	if (tempo < 50)
-		motor_command->distance = -200;
+		motor_command->distance = -PWM_RANGE;
 	else if (tempo >= 50 && tempo < 400 - 50)
-		motor_command->distance = (int16_t)((double)(tempo - 50) * 4./3.) - 200;
+		motor_command->distance = (int16_t)((double)(tempo - 50) * 2*PWM_RANGE/300.) - PWM_RANGE;
 	else if (tempo >= 400 - 50 && tempo < 400 + 50)
-		motor_command->distance = 200;
+		motor_command->distance = PWM_RANGE;
 	else if (tempo >= 450 && tempo < 800 - 50)
-		motor_command->distance = -((int16_t)((double)(tempo - 450) * 4./3.) - 200);
+		motor_command->distance = -((int16_t)((double)(tempo - 450) * 2*PWM_RANGE/300.) - PWM_RANGE);
 	else if (tempo >= 800 - 50)
-		motor_command->distance = -200;
+		motor_command->distance = -PWM_RANGE;
 
 	motor_drive(motor_command);
 
@@ -74,7 +76,7 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 
 		log_vect_display_last_line(&datalog);
 
-		controller_set_mode(&controller, CTRL_STATE_STOP);
+		controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
 		tempo = 0;
 	}
 }
@@ -97,8 +99,8 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 				/*LOG_IDX_ROBOT_SPEED_A,*/
 				LOG_IDX_SPEED_ORDER_D,
 				/*LOG_IDX_SPEED_ORDER_A,*/
-				LOG_IDX_MOTOR_L,
-				LOG_IDX_MOTOR_R,
+				LOG_IDX_SPEED_L,
+				LOG_IDX_SPEED_R,
 				-1);
 	}
 	/*
@@ -138,7 +140,7 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 
 		log_vect_display_last_line(&datalog);
 
-		controller_set_mode(&controller, CTRL_STATE_STOP);
+		controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
 		tempo = 0;
 	}
 }
@@ -205,7 +207,7 @@ void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command)
 
 		log_vect_display_last_line(&datalog);
 
-		controller_set_mode(&controller, CTRL_STATE_STOP);
+		controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
 		tempo = 0;
 	}
 }
