@@ -111,7 +111,7 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 	if (tempo < 50)
 		speed_order.distance = 0;
 	else if (tempo >= 50 && tempo < 400 - 50)
-		speed_order.distance = 15;
+		speed_order.distance = 50;
 	else if (tempo >= 400 - 50)
 		speed_order.distance = 0;
 
