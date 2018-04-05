@@ -93,5 +93,6 @@ void mach_sched_init(void);
 void mach_sched_run(void);
 
 int encoder_read(polar_t *robot_speed);
+void encoder_reset(void);
 
 #endif /* PLATFORM_H_ */
