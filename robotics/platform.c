@@ -10,6 +10,7 @@
 #include "platform.h"
 #include "platform_task.h"
 #include <periph/qdec.h>
+#include <motor_driver.h>
 
 /**
  * PORTA : ANA input
@@ -480,7 +481,7 @@ void mach_setup(void)
 
 	//action_setup(); /* TODO: commenter pour debug */
 
-	hbridge_setup(&hbridges);
+    motor_driver_init(0);
 
 	/* setup qdec */
     int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
