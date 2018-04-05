@@ -387,7 +387,6 @@ path_t * mach_get_path(void)
 #define gpio_set_output(...)
 #define hbridge_setup(...)
 #define msched_init(...)
-#define log_vect_init(...)
 #define kos_run(...)
 
 uint8_t mach_is_game_launched(void)
@@ -501,8 +500,8 @@ void mach_setup(void)
 #endif
 
 	log_vect_init(&datalog, NULL, /*400,*/
-			COL_INT16, "left_speed",
-			COL_INT16, "right_speed",
+			COL_INT32, "left_speed",
+			COL_INT32, "right_speed",
 			COL_INT16, "left_command",
 			COL_INT16, "right_command",
 			COL_DOUBLE, "robot_speed.distance",
@@ -558,6 +557,9 @@ int encoder_read(polar_t *robot_speed)
 	/* update speed */
 	robot_speed->distance = (right_speed + left_speed) / 2.0;
 	robot_speed->angle = right_speed - left_speed;
+
+	log_vect_setvalue(&datalog, LOG_IDX_SPEED_L, (void *) &left_speed);
+	log_vect_setvalue(&datalog, LOG_IDX_SPEED_R, (void *) &right_speed);
 
 	return 0;
 }
