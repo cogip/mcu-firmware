@@ -21,6 +21,7 @@ void *motion_control_thread(void *arg)
 #ifdef MOTOR_DRIVER_NUMOF
     uint16_t duty_cycle = 0;
     uint16_t count = 0;
+    uint8_t dir = 0;
 #endif
     xtimer_ticks32_t last_wakeup/*, start*/;
 
@@ -34,23 +35,32 @@ void *motion_control_thread(void *arg)
         xtimer_periodic_wakeup(&last_wakeup, INTERVAL);
 #else
 
-    motor_driver_init(0);
+    while (motor_driver_init(0))
+    {
+        puts("ERROR Initializing motor driver !!!");
+        xtimer_periodic_wakeup(&last_wakeup, INTERVAL*10);
+    }
 
     while (1) {
         //printf("MOTION CONTROL  : slept until %" PRIu32 "\n", xtimer_usec_from_ticks(last_wakeup) - xtimer_usec_from_ticks(start));
         if (count < 500)
         {
-            motor_set(0, HBRIDGE_MOTOR_LEFT, 1, duty_cycle);
-            motor_set(0, HBRIDGE_MOTOR_RIGHT, 0, duty_cycle++);
+            if (motor_set(0, HBRIDGE_MOTOR_LEFT, dir, duty_cycle))
+                printf("Cannot set PWM duty cycle for motor %u\n", HBRIDGE_MOTOR_LEFT);
+            if (motor_set(0, HBRIDGE_MOTOR_RIGHT, dir, duty_cycle++))
+                printf("Cannot set PWM duty cycle for motor %u\n", HBRIDGE_MOTOR_RIGHT);
             count++;
         }
         else if (duty_cycle == 0) {
             count = 0;
+            dir = dir ? 0 : 1;
         }
         else
         {
-            motor_set(0, HBRIDGE_MOTOR_LEFT, 1, duty_cycle);
-            motor_set(0, HBRIDGE_MOTOR_RIGHT, 0, duty_cycle++);
+            if (motor_set(0, HBRIDGE_MOTOR_LEFT, dir, duty_cycle))
+                printf("Cannot set PWM duty cycle for motor %u\n", HBRIDGE_MOTOR_LEFT);
+            if (motor_set(0, HBRIDGE_MOTOR_RIGHT, dir, duty_cycle--))
+                printf("Cannot set PWM duty cycle for motor %u\n", HBRIDGE_MOTOR_RIGHT);
         }
         //printf("QDEC_VALUE      : %d\n", qdec_read(0));
         xtimer_periodic_wakeup(&last_wakeup, INTERVAL);
