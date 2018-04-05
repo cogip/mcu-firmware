@@ -94,8 +94,8 @@ void log_vect_init(datalog_t *d, const char *log_name, ...)
 	va_start (args, log_name);
 
 	for (t = va_arg(args, int);
-	     t != COL_END;
-	     d->col_nb++, t = va_arg(args, int))
+		 t != COL_END;
+		 d->col_nb++, t = va_arg(args, int))
 	{
 		d->columns[d->col_nb].visible = FALSE;
 
@@ -128,8 +128,8 @@ void log_vect_reset(datalog_t *d, const char *log_name, ...)
 
 	/* Each refered column index in arg list will be displayed */
 	for (c = va_arg(args, int);
-	     c != -1;
-	     c = va_arg(args, int))
+		 c != -1;
+		 c = va_arg(args, int))
 	{
 		d->columns[c].visible = TRUE;
 	}

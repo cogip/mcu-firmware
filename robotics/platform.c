@@ -347,7 +347,7 @@ datalog_t datalog;
 static void mach_post_ctrl_loop_func(void)
 {
 #ifdef CONFIG_ANALOG_SENSORS
-    /* TODO: To activate when included in RIOT */
+	/* TODO: To activate when included in RIOT */
 	//analog_sensor_refresh_all(&ana_sensors);
 #endif
 }
@@ -399,7 +399,7 @@ uint8_t mach_is_game_launched(void)
 uint8_t mach_is_camp_yellow(void)
 {
 	/* Color switch for coords translations */
-    //FIXME: correct mirror
+	//FIXME: correct mirror
 	return TRUE; //gpio_get_input(&PORTF, PIN2_bp);
 }
 
@@ -471,7 +471,7 @@ void mach_setup(void)
 
 #ifdef CONFIG_ANALOG_SENSORS
 	/* setup analog conversion */
-    /* TODO: To activate when included in RIOT */
+	/* TODO: To activate when included in RIOT */
 	/* analog_sensor_setup(&ana_sensors); */
 #endif
 
@@ -482,13 +482,13 @@ void mach_setup(void)
 
 	//action_setup(); /* TODO: commenter pour debug */
 
-    motor_driver_init(0);
+	motor_driver_init(0);
 
 	/* setup qdec */
-    int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
+	int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
 	if (error)
 		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_LEFT, error);
-    error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X4, NULL, NULL);
+	error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X4, NULL, NULL);
 	if (error)
 		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
 

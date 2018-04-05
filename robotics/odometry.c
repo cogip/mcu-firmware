@@ -34,7 +34,7 @@ static void limit_angle(pose_t *p)
 /**
  * \fn void odometry_by_segment (const double distance, const double angle)
  * \brief update new robot pose_t (x, y, O) approximated by straight line
- *        segments
+ *		segments
  * \param distance : delta value for distance [pulse]
  * \param angle : delta value for angle [pulse]
  */
@@ -91,5 +91,5 @@ odometry_update(pose_t *p, polar_t *robot_speed, const uint8_t approximation)
 		odometry_by_arc(p, robot_speed->distance, robot_speed->angle);
 	else
 		odometry_by_segment(p,
-				    robot_speed->distance, robot_speed->angle);
+					robot_speed->distance, robot_speed->angle);
 }
