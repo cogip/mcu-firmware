@@ -483,10 +483,12 @@ void mach_setup(void)
 	hbridge_setup(&hbridges);
 
 	/* setup qdec */
-        int32_t error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
-        error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X4, NULL, NULL);
+    int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
 	if (error)
-		puts("QDEC not initialized !!!");
+		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_LEFT, error);
+    error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X4, NULL, NULL);
+	if (error)
+		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
 
 	/* controller setup */
 	odometry_setup(WHEELS_DISTANCE);
