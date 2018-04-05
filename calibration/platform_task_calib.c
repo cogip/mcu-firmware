@@ -1,6 +1,7 @@
 #include "planner.h"
 #include "platform.h"
 #include "platform_task.h"
+#include "xtimer.h"
 #include <thread.h>
 
 //FIXME:
@@ -58,6 +59,7 @@ void *task_calibration_entry(void *arg)
 	mach_calibration_usage();
 
 	while (!quit) {
+		xtimer_ticks32_t loop_start_time = xtimer_now();
 
 		/* display prompt */
 		cons_printf("$ ");
@@ -100,6 +102,8 @@ void *task_calibration_entry(void *arg)
 			cons_printf("\n");
 			break;
 		}
+
+		xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
 	}
 
 //exit_point:
