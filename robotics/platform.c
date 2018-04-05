@@ -551,8 +551,8 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
 
 int encoder_read(polar_t *robot_speed)
 {
-	int32_t left_speed = qdec_read_and_reset(HBRIDGE_MOTOR_LEFT);
-	int32_t right_speed = qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
+	int32_t left_speed = qdec_read_and_reset(HBRIDGE_MOTOR_LEFT) * QDEC_LEFT_POLARITY;
+	int32_t right_speed = qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
 
 	/* update speed */
 	robot_speed->distance = (right_speed + left_speed) / 2.0;

@@ -42,6 +42,9 @@
 #define HBRIDGE_MOTOR_LEFT		0
 #define HBRIDGE_MOTOR_RIGHT		1
 
+#define QDEC_LEFT_POLARITY		-1
+#define QDEC_RIGHT_POLARITY		1
+
 #define GPIO_ID_PUMP_FR			PIN0_bp
 #define GPIO_ID_PUMP_RR			PIN1_bp
 #define GPIO_ID_PUMP_FL			PIN4_bp
