@@ -1,6 +1,5 @@
 APPLICATION = cortex
 RIOTBASE ?= $(CURDIR)/../RIOT
-CFLAGS += -DCOGIP2018_CPU=401
 BOARD ?= cogip2018-f4xx
 #BOARD ?= native
 USEMODULE += xtimer
