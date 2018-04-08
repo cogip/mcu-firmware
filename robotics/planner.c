@@ -54,16 +54,6 @@ static void show_game_time(void)
 	}
 }
 
-pose_t planner_get_path_pose_initial(void)
-{
-	pose_t pose = { 0, 0, 0 };
-
-	if (path && path->poses && path->nb_pose)
-		pose = path->poses[0].pos;
-
-	return pose;
-}
-
 void planner_start_game(void)
 {
 	/* TODO: send pose_initial, pose_order & speed_order to controller */
