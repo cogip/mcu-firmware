@@ -15,7 +15,7 @@ before_script:
       - git clone https://github.com/cogip/RIOT.git -b cogip2018-next --depth 1
 script:
       - RIOTBASE=$(pwd)/RIOT BOARD=native make -j4
-      - RIOTBASE=$(pwd)/RIOT BOARD=native make clean
+      - RIOTBASE=$(pwd)/RIOT BOARD=native make distclean
 
       - RIOTBASE=$(pwd)/RIOT CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make -j4
-      - RIOTBASE=$(pwd)/RIOT CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make clean
+      - RIOTBASE=$(pwd)/RIOT CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make distclean
