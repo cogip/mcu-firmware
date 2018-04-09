@@ -52,20 +52,17 @@ void *task_calibration_entry(void *arg)
 //			 * and continue to game mode. */
 //			goto exit_point;
 //	}
-	cons_printf("\n\n");
-	getchar();
 
 //	mcurses_init();
 	mach_calibration_usage();
 
 	while (!quit) {
-		xtimer_ticks32_t loop_start_time = xtimer_now();
 
 		/* display prompt */
 		cons_printf("$ ");
 
 		/* wait for command */
-		c = cons_getchar();
+		c = getchar();
 		cons_printf("%c\n", c);
 
 		switch (c) {
@@ -103,7 +100,6 @@ void *task_calibration_entry(void *arg)
 			break;
 		}
 
-		xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
 	}
 
 //exit_point:
