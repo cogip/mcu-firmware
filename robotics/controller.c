@@ -134,7 +134,7 @@ polar_t controller_update(controller_t *ctrl,
 
 	position_error = compute_error(ctrl, pose_order, pose_current);
 
-	cons_printf("%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,"
+	cons_printf("@c@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,"
 			"%+.0f,%+.0f,"
 			"%+.0f,%+.0f,"
 			"%+.0f,%+.0f,"
