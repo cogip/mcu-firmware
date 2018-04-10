@@ -177,7 +177,7 @@ void *task_planner(void *arg)
 
 			if (!game_time) {
 				cons_printf("<<<< polar_simu.csv\n");
-				cons_printf("pose_order_x,pose_order_y,pose_order_a,"
+				cons_printf("@command@,pose_order_x,pose_order_y,pose_order_a,"
 						"pose_current_x,pose_current_y,pose_current_a,"
 						"position_error_l,position_error_a,"
 						"speed_order_l,speed_order_a,"
