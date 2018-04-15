@@ -1,6 +1,7 @@
 #include "controller.h"
 #include "planner.h"
 #include "platform.h"
+#include "avoidance.h"
 
 static void planner_calibration_usage(void)
 {
@@ -54,10 +55,20 @@ void planner_enter_calibration(void)
 		switch (c) {
 		case 'n':
 			increment_current_pose_idx();
+			if (path->current_pose_idx)
+			{
+				set_start_finish(&(path->poses[path->current_pose_idx-1].pos), &(path->poses[path->current_pose_idx].pos));
+				update_graph();
+			}
 			break;
 		case 'p':
 			if (path->current_pose_idx)
+			{
 				path->current_pose_idx--;
+				set_start_finish(&(path->poses[path->current_pose_idx+1].pos), &(path->poses[path->current_pose_idx].pos));
+				update_graph();
+			}
+			break;
 			break;
 		case 'a':
 			if (path->poses[path->current_pose_idx].act)
