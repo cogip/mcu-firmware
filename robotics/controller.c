@@ -185,6 +185,10 @@ polar_t controller_update(controller_t *ctrl,
 		{
 			position_error.angle = limit_angle_deg(pose_order.O - pose_current->O);
 		}
+		else
+		{
+			position_error.angle = 0;
+		}
 
 		position_error.distance = 0;
 		pid_reset(&ctrl->linear_pose_pid);
