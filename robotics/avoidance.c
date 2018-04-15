@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "avoidance.h"
 //#include "kos.h"
@@ -34,7 +35,7 @@ pose_t avoidance(uint8_t index)
 	return dijkstra(1,index);
 }
 
-void update_graph(void)
+int update_graph(void)
 {
 	/* Init all obstacles */
 	if (nb_polygons == 0)
@@ -54,7 +55,7 @@ void update_graph(void)
 			|| is_point_in_polygon(&polygons[j], finish))
 		{
 			/* TODO: Add return code */
-			break;
+			goto update_graph_error;
 		}
 	}
 
@@ -63,6 +64,11 @@ void update_graph(void)
 	valid_points[valid_points_count++] = finish;
 
 	build_avoidance_graph();
+
+	return 0;
+
+update_graph_error:
+	return -1;
 }
 
 /* Add a polygon to obstacle list */
@@ -303,6 +309,7 @@ pose_t dijkstra(uint16_t target, uint16_t index)
 				weight *= (valid_points[v].x - valid_points[i].x);
 				weight += (valid_points[v].y - valid_points[i].y)
 					* (valid_points[v].y - valid_points[i].y);
+				weight = sqrt(weight);
 				if ((weight >= 0 ) && (distance[i] > (distance[v] + weight)))
 				{
 					distance[i] = distance[v] + weight;

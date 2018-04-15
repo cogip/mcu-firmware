@@ -8,6 +8,7 @@
 #include "xtimer.h"
 #include "platform.h"
 #include "trigonometry.h"
+#include "irq.h"
 
 //FIXME: remove stub
 #define kos_task_exit()
@@ -61,58 +62,71 @@ void planner_start_game(void)
 	game_started = TRUE;
 }
 
-/* NOTE: TO INTEGRATE & REMOVE */
-#if 0
-static pose_t mach_trajectory_get_route_update(void)
+static int trajectory_get_route_update(pose_t *pose_to_reach)
 {
-	static pose_t pose_reached = POSE_INITIAL;
-	static pose_t pose_to_reach;
-	static int8_t latest_pos_idx = -1;
+	static pose_t pose_reached;
+	//static pose_t pose_to_reach;
 	static uint8_t index = 1;
 
-	if (latest_pos_idx == -1)
+	irq_disable();
+	if (path->current_pose_idx == 0)
 	{
-		latest_pos_idx = 0;
-		pose_to_reach = path_game_yellow[latest_pos_idx].pos;
-		set_start_finish(&pose_reached, &pose_to_reach);
-		update_graph();
+		pose_reached = path->poses[path->current_pose_idx].pos;
+		*pose_to_reach = path->poses[path->current_pose_idx].pos;
+		set_start_finish(&pose_reached, pose_to_reach);
+		if (update_graph() == -1)
+			goto trajectory_get_route_update_error;
 	}
 
 	if (controller_is_pose_reached(&controller))
 	{
-		if ((pose_to_reach.x == path_game_yellow[latest_pos_idx].pos.x)
-			&& (pose_to_reach.y == path_game_yellow[latest_pos_idx].pos.y))
+		pose_reached = *pose_to_reach;
+
+		if ((pose_to_reach->x == path->poses[path->current_pose_idx].pos.x)
+			&& (pose_to_reach->y == path->poses[path->current_pose_idx].pos.y))
 		{
-			if (latest_pos_idx + 1 < path_game_yellow_nb)
+
+			if (!in_calibration)
 			{
-				latest_pos_idx++;
+				if (path->poses[path->current_pose_idx].act)
+					path->poses[path->current_pose_idx].act();
+
+				increment_current_pose_idx();
 			}
-			set_start_finish(&pose_reached, &(path_game_yellow[latest_pos_idx].pos));
-			update_graph();
+
+			set_start_finish(&pose_reached, &(path->poses[path->current_pose_idx].pos));
+			while ((update_graph() == -1) && (!in_calibration))
+			{
+				increment_current_pose_idx();
+				set_start_finish(&pose_reached, &(path->poses[path->current_pose_idx].pos));
+			}
+
 			index = 1;
 		}
 		else
 		{
 			index++;
 		}
-		pose_reached = pose_to_reach;
 	}
 
-	pose_to_reach = avoidance(index);
-	if ((pose_to_reach.x == path_game_yellow[latest_pos_idx].pos.x)
-		&& (pose_to_reach.y == path_game_yellow[latest_pos_idx].pos.y))
+	*pose_to_reach = avoidance(index);
+	if ((pose_to_reach->x == path->poses[path->current_pose_idx].pos.x)
+		&& (pose_to_reach->y == path->poses[path->current_pose_idx].pos.y))
 	{
+		pose_to_reach->O = path->poses[path->current_pose_idx].pos.O;
 		controller_set_pose_intermediate(&controller, FALSE);
 	}
 	else
 	{
 		controller_set_pose_intermediate(&controller, TRUE);
 	}
+	irq_enable();
 
-	return pose_to_reach;
+	return 0;
+
+trajectory_get_route_update_error:
+	return -1;
 }
-#endif
-/* NOTE: TO INTEGRATE & REMOVE */
 
 void *task_planner(void *arg)
 {
@@ -215,15 +229,10 @@ void *task_planner(void *arg)
 		controller_set_allow_reverse(&controller, path->poses[path->current_pose_idx].allow_reverse);
 
 		/* ===== position ===== */
-		if (!in_calibration && controller_is_pose_reached(&controller)) {
-
-			if (path->poses[path->current_pose_idx].act)
-				path->poses[path->current_pose_idx].act();
-
-			increment_current_pose_idx();
+		if (trajectory_get_route_update(&pose_order) == -1)
+		{
+			controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
 		}
-
-		pose_order = path->poses[path->current_pose_idx].pos;
 
 		controller_set_pose_to_reach(&controller, pose_order);
 
