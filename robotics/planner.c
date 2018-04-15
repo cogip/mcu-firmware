@@ -29,13 +29,6 @@ uint8_t in_calibration = FALSE;
 #define GAME_DURATION_SEC	90
 #define GAME_DURATION_TICKS	(GAME_DURATION_SEC * TASK_FREQ_HZ)
 
-static void pose_yellow_to_blue(pose_t *pose)
-{
-	pose->x = 3000 - pose->x;
-	pose->y = pose->y;
-	pose->O = limit_angle_deg(180 - pose->O);
-}
-
 inline void increment_current_pose_idx(void)
 {
 	if (path->current_pose_idx < path->nb_pose - 1)
@@ -153,7 +146,9 @@ void *task_planner(void *arg)
 		path->current_pose_idx = path->nb_pose;
 		do {
 			path->current_pose_idx -= 1;
-			pose_yellow_to_blue(&path->poses[path->current_pose_idx].pos);
+			path->poses[path->current_pose_idx].pos.x *= -1;
+			path->poses[path->current_pose_idx].pos.O += 180;
+			path->poses[path->current_pose_idx].pos.O = ((int)path->poses[path->current_pose_idx].pos.O) % 360;
 		}
 		while (path->current_pose_idx);
 	}
