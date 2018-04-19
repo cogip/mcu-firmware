@@ -173,8 +173,12 @@ polar_t controller_update(controller_t *ctrl,
 
 		/* if target point direction angle is too important, bot rotates on its starting point */
 		if (fabs(position_error.angle) > ctrl->min_angle_for_pose_reached / PULSE_PER_DEGREE) {
+			ctrl->regul = CTRL_REGUL_POSE_PRE_ANGL;
 			position_error.distance = 0;
 			pid_reset(&ctrl->linear_pose_pid);
+		}
+		else {
+			ctrl->regul = CTRL_REGUL_POSE_DIST;
 		}
 	} else {
 		/* orientation correction (position is reached) */
