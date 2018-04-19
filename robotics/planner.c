@@ -8,7 +8,9 @@
 #include "xtimer.h"
 #include "platform.h"
 #include "trigonometry.h"
-#include "irq.h"
+#include "obstacle.h"
+#include <irq.h>
+#include <periph/adc.h>
 
 //FIXME: remove stub
 #define kos_task_exit()
@@ -55,15 +57,24 @@ void planner_start_game(void)
 	game_started = TRUE;
 }
 
-static int trajectory_get_route_update(pose_t *pose_to_reach)
+static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to_reach)
 {
 	static pose_t pose_reached;
-	//static pose_t pose_to_reach;
+	pose_t robot_pose_tmp;
 	static uint8_t index = 1;
+	static int first_boot = 0;
+	int test = 0;
+	uint8_t need_update = 0;
+	(void) robot_pose;
+	robot_pose_tmp =  *robot_pose;
 
-	irq_disable();
-	if (path->current_pose_idx == 0)
+	robot_pose_tmp.O /= PULSE_PER_DEGREE;
+	robot_pose_tmp.x /= PULSE_PER_MM;
+	robot_pose_tmp.y /= PULSE_PER_MM;
+
+	if (first_boot == 0)
 	{
+		first_boot = 1;
 		pose_reached = path->poses[path->current_pose_idx].pos;
 		*pose_to_reach = path->poses[path->current_pose_idx].pos;
 		set_start_finish(&pose_reached, pose_to_reach);
@@ -83,23 +94,36 @@ static int trajectory_get_route_update(pose_t *pose_to_reach)
 			{
 				if (path->poses[path->current_pose_idx].act)
 					path->poses[path->current_pose_idx].act();
-
-				increment_current_pose_idx();
 			}
 
-			set_start_finish(&pose_reached, &(path->poses[path->current_pose_idx].pos));
-			while ((update_graph() == -1) && (!in_calibration))
-			{
-				increment_current_pose_idx();
-				set_start_finish(&pose_reached, &(path->poses[path->current_pose_idx].pos));
-			}
-
-			index = 1;
+			increment_current_pose_idx();
+			robot_pose_tmp = pose_reached;
+			need_update = 1;
 		}
 		else
 		{
 			index++;
 		}
+	}
+
+	if ((adc_sample(ADC_LINE(0), ADC_RES_10BIT) > 200) && (controller.regul != CTRL_REGUL_POSE_PRE_ANGL))
+	{
+		add_dyn_obstacle(robot_pose);
+		need_update = 1;
+	}
+
+	if (need_update)
+	{
+		set_start_finish(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
+		test = update_graph();
+		while ((test < 0) && (!in_calibration))
+		{
+			if (test == -1)
+				increment_current_pose_idx();
+			set_start_finish(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
+			test = update_graph();
+		}
+		index = 1;
 	}
 
 	*pose_to_reach = avoidance(index);
@@ -222,8 +246,10 @@ void *task_planner(void *arg)
 		/* reverse gear selection is granted per point to reach, in path */
 		controller_set_allow_reverse(&controller, path->poses[path->current_pose_idx].allow_reverse);
 
+		pose_t pose_current = controller.pose_current;
+
 		/* ===== position ===== */
-		if (trajectory_get_route_update(&pose_order) == -1)
+		if (trajectory_get_route_update(&pose_current, &pose_order) == -1)
 		{
 			controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
 		}
@@ -232,7 +258,7 @@ void *task_planner(void *arg)
 
 yield_point:
 		//kos_yield();
-			xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
+		xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
 	}
 
 //	controller.mode = CTRL_STATE_INGAME;
