@@ -17,6 +17,7 @@ typedef enum {
 	CTRL_REGUL_IDLE = 0,
 	CTRL_REGUL_POSE_DIST,
 	CTRL_REGUL_POSE_ANGL,
+	CTRL_REGUL_POSE_PRE_ANGL,
 	//CTRL_REGUL_SPEED, /* time for actions */
 } controller_regul_t;
 
