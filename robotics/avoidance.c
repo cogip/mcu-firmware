@@ -11,6 +11,8 @@
 static polygon_t polygons[POLY_MAX];
 /* Number of polygons */
 static int nb_polygons = 0;
+/* Number of dynamic polygons */
+static int nb_dyn_polygons = 0;
 
 /* List of visible points */
 static pose_t valid_points[MAX_POINTS];
@@ -29,8 +31,6 @@ void set_start_finish(const pose_t *s, const pose_t *f)
 
 pose_t avoidance(uint8_t index)
 {
-
-
 	/* Build path graph */
 	return dijkstra(1,index);
 }
@@ -42,20 +42,33 @@ int update_graph(void)
 	{
 		mach_fixed_obstacles_init();
 	}
-	/* TODO: to implement */
-	/*mach_dynamic_obstacles_init();*/
-	if (nb_polygons == 0)
-	{
-		mach_fixed_obstacles_init();
-	}
+
 	/* Check that start and destination point are not in a polygon */
-	for (int j = 0; j < nb_polygons; j++)
+	for (int i = 0; i < (nb_polygons + nb_dyn_polygons); i++)
 	{
-		if (is_point_in_polygon(&polygons[j], start)
-			|| is_point_in_polygon(&polygons[j], finish))
+		if (is_point_in_polygon(&polygons[i], finish))
 		{
-			/* TODO: Add return code */
-			goto update_graph_error;
+			// TODO: Add return code
+			goto update_graph_error_finish;
+		}
+		if (is_point_in_polygon(&polygons[i], start))
+		{
+			// TODO: Add return code
+			//goto update_graph_error_start;
+			// find nearest polygon point
+			double min = DIJKSTRA_MAX_DISTANCE;
+			pose_t *pose_tmp = &start;
+			for (int j = 0; j < polygons[i].count; j++)
+			{
+				double distance = distance_points(&start, &polygons[i].points[j]);
+				if (distance < min)
+				{
+					min = distance;
+					pose_tmp = &polygons[i].points[j];
+				}
+			}
+
+			start = *pose_tmp;
 		}
 	}
 
@@ -67,8 +80,14 @@ int update_graph(void)
 
 	return 0;
 
-update_graph_error:
+update_graph_error_finish:
 	return -1;
+}
+
+double distance_points(pose_t *a, pose_t *b)
+{
+	return sqrt((b->x - a->x) * (b->x - a->x)
+		+ (b->y - a->y) * (b->y - a->y));
 }
 
 /* Add a polygon to obstacle list */
@@ -85,20 +104,41 @@ int add_polygon(polygon_t *polygon)
 	}
 }
 
+/* Add a dynamic polygon to obstacle list */
+int add_dyn_polygon(polygon_t *polygon)
+{
+	if ((nb_polygons + nb_dyn_polygons) < POLY_MAX)
+	{
+		nb_dyn_polygons = 0;
+		polygons[nb_polygons + nb_dyn_polygons] = *polygon;
+		nb_dyn_polygons = 1;
+		return 0;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+void reset_dyn_polygons(void)
+{
+	nb_dyn_polygons = 0;
+}
+
 /* Build obstacle graph
  * Each obstacle is a polygon.
  * List all  visible points : all points not contained in a polygon */
 void build_avoidance_graph(void)
 {
 	/* For each polygon */
-	for (int i = 0; i < nb_polygons; i++)
+	for (int i = 0; i < (nb_polygons + nb_dyn_polygons); i++)
 	{
 		/* and for each vertice of that polygon */
 		for (int p = 0; p < polygons[i].count; p++)
 		{
 			uint8_t collide = FALSE;
-			/* we check thios vertice is not inside an other polygon */
-			for (int j = 0; j < nb_polygons; j++)
+			/* we check this vertice is not inside an other polygon */
+			for (int j = 0; j < (nb_polygons + nb_dyn_polygons); j++)
 			{
 				if (i == j)
 				{
@@ -127,7 +167,7 @@ void build_avoidance_graph(void)
 			if (p != p2)
 			{
 				/* Check if that segment crosses a polygon */
-				for (int i = 0; i < nb_polygons; i++)
+				for (int i = 0; i < (nb_polygons + nb_dyn_polygons); i++)
 				{
 					for (int v = 0; v < polygons[i].count; v++)
 					{
@@ -178,6 +218,10 @@ void build_avoidance_graph(void)
 			}
 		}
 	}
+	/*for (int i = 0; i < 6; i++)
+	{
+		printf("graph[%d] = %llx\n", i, graph[i]);
+	}*/
 }
 
 uint8_t is_point_on_segment(pose_t a, pose_t b, pose_t o)
@@ -327,7 +371,7 @@ pose_t dijkstra(uint16_t target, uint16_t index)
 		}
 	}
 
-	/* Build reverse path (from start to finish */
+	/* Build reverse path (from start to finish) */
 	i = 1;
 	while (parent[i] >= 0)
 	{
