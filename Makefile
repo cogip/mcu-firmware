@@ -33,5 +33,6 @@ FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
 
 INCLUDES += -I$(APPDIR)/robotics/include/ -I$(APPDIR)/
+CFLAGS += -DCONFIG_SD21
 
 include $(RIOTBASE)/Makefile.include

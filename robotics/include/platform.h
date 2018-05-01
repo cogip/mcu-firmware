@@ -7,7 +7,7 @@
 #include "odometry.h"
 #include "path.h"
 #include "periph/qdec.h"
-//#include "sd21.h"
+#include "actuators/sd21.h"
 #include "utils.h"
 
 /*
@@ -65,7 +65,7 @@ enum {
 
 //extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
-//extern sd21_t sd21;
+extern sd21_t sd21;
 extern controller_t controller;
 extern controller_mode_t controller_modes[];
 

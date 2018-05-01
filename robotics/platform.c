@@ -12,6 +12,8 @@
 #include <periph/qdec.h>
 #include <motor_driver.h>
 
+#include "actuators/sd21.h"
+
 /**
  * PORTA : ANA input
  *	PA0 - PA7 : IR
@@ -170,14 +172,14 @@ qdec_t encoders[] = {
 
 #if defined(CONFIG_SD21)
 sd21_t sd21 = {
-	.twi = &TWIC,
-	.twi_speed_khz = 100,
+	.bus_id = I2C_0, /* I2C3 bus (cf. board.h) */
+	.twi_speed_khz = I2C_SPEED_FAST,
 
 	.servos_nb = 8,
 	.servos = {
 		/* Front-Left */
 		[0] = {
-			.value_init = 550/*1500*/,
+			.value_init = 1500,
 			.value_open = 1850,
 			.value_close = 550,
 		},
