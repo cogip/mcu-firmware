@@ -2,15 +2,15 @@
 #define SD21_H_
 
 #include <stdint.h>
-//#include <twi.h>
-#define twi_t void
+
+#include "periph/i2c.h"
 
 #define SD21_SERVO_OPEN		0
 #define SD21_SERVO_CLOSE	1
 
 typedef struct {
-	twi_t *twi;
-	uint16_t twi_speed_khz;
+	i2c_t bus_id;
+	i2c_speed_t twi_speed_khz;
 
 	uint8_t servos_nb;
 	struct {
@@ -26,7 +26,7 @@ double sd21_battery_voltage(sd21_t *obj);
 
 void sd21_control_servo(sd21_t * obj, uint8_t servo_id, uint8_t position);
 
-#if defined(CONFIG_CALIBRATION)
+#if defined(MODULE_CALIBRATION)
 void sd21_enter_calibration(sd21_t *obj);
 #endif
 
