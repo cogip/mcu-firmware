@@ -1,12 +1,7 @@
 #include <stdio.h>
 
-//#include "console.h"
-#include "system/log.h"
 #include "platform.h"
 #include "sd21.h"
-//FIXME: remove stub
-#define twi_read(a,b,c,d,e) {(void)(a);(void)(c);(void)(d);}
-#define twi_write(a,b,c,d) {(void)(a);(void)(c);}
 
 #define SD21_ADDRESS	(0xC2 >> 1)
 
@@ -17,35 +12,6 @@
 #define CAL_RST 1600
 #define CAL_MIN 600
 #define CAL_MAX 2600
-
-/**
- * Register 64 is the software revision number
- */
-uint8_t sd21_version(sd21_t *obj)
-{
-	uint8_t reg = REG_VERSION;
-	uint8_t data = 0x00;
-
-	twi_read(obj->twi, SD21_ADDRESS, &reg, &data, 1);
-
-	return data;
-}
-
-/**
- * Register 65 contains the servo battery voltage in 39mV units up to
- * a maximum of 10V.
- */
-double sd21_battery_voltage(sd21_t *obj)
-{
-	uint8_t reg = REG_VOLTAGE;
-	uint8_t data = 0x00;
-
-	twi_read(obj->twi, SD21_ADDRESS, &reg, &data, 1);
-
-	double voltage = data * 0.039;
-
-	return voltage;
-}
 
 /**
  * Blue : min = 800 - max = 2400
@@ -59,22 +25,26 @@ double sd21_battery_voltage(sd21_t *obj)
  * \param speed : servo speed (0 is the maximum speed)
  * \param position : pulse width in us
  */
-static void sd21_send_twi_cmd(twi_t *twi, uint8_t servo, uint8_t speed, uint16_t position)
+static void sd21_send_twi_cmd(i2c_t dev_id, uint8_t servo, uint8_t speed, uint16_t position)
 {
 	uint8_t reg = (servo) * 3;
 	uint8_t data[2];
 
+	i2c_acquire(dev_id);
+
 	data[0] = reg;
 	data[1] = speed;
-	twi_write(twi, SD21_ADDRESS, data, 2);
+	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2);
 
 	data[0] = reg + 1;
 	data[1] = (uint8_t) (position & 0x00ff);
-	twi_write(twi, SD21_ADDRESS, data, 2);
+	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2);
 
 	data[0] = reg + 2;
 	data[1] = position >> 8;
-	twi_write(twi, SD21_ADDRESS, data, 2);
+	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2);
+
+	i2c_release(dev_id);
 }
 
 void sd21_control_servo(sd21_t * obj, uint8_t servo_id, uint8_t position)
@@ -93,10 +63,10 @@ void sd21_control_servo(sd21_t * obj, uint8_t servo_id, uint8_t position)
 		return;
 	}
 
-	sd21_send_twi_cmd(obj->twi, servo_id, 0, value);
+	sd21_send_twi_cmd(obj->bus_id, servo_id, 0, value);
 }
 
-#if defined(CONFIG_CALIBRATION)
+#if defined(MODULE_CALIBRATION)
 static void sd21_calibration_usage(sd21_t *obj)
 {
 	cons_printf("\n>>> Entering sd21 calibration\n\n");
@@ -196,22 +166,22 @@ void sd21_enter_calibration(sd21_t *obj)
 			break;
 		case 'r':
 			*cur = CAL_RST;
-			sd21_send_twi_cmd(obj->twi, servo_id, 0, *cur);
+			sd21_send_twi_cmd(obj->bus_id, servo_id, 0, *cur);
 			break;
 		case '+':
 			*cur = *cur + 25 > CAL_MAX ? CAL_MAX : *cur + 25;
-			sd21_send_twi_cmd(obj->twi, servo_id, 0, *cur);
+			sd21_send_twi_cmd(obj->bus_id, servo_id, 0, *cur);
 			break;
 		case '-':
 			*cur = *cur - 25 < CAL_MIN ? CAL_MIN : *cur - 25;
-			sd21_send_twi_cmd(obj->twi, servo_id, 0, *cur);
+			sd21_send_twi_cmd(obj->bus_id, servo_id, 0, *cur);
 			break;
 		case 'O':
 			for (i = 0; i < obj->servos_nb; i++) {
 				uint16_t value = obj->servos[i].value_open;
 
 				if (value)
-					sd21_send_twi_cmd(obj->twi, i, 0, value);
+					sd21_send_twi_cmd(obj->bus_id, i, 0, value);
 			}
 			break;
 		case 'C':
@@ -219,7 +189,7 @@ void sd21_enter_calibration(sd21_t *obj)
 				uint16_t value = obj->servos[i].value_close;
 
 				if (value)
-					sd21_send_twi_cmd(obj->twi, i, 0, value);
+					sd21_send_twi_cmd(obj->bus_id, i, 0, value);
 			}
 			break;
 		case 'h':
@@ -234,21 +204,20 @@ void sd21_enter_calibration(sd21_t *obj)
 		}
 	}
 }
-#endif /* CONFIG_CALIBRATION */
+#endif /* MODULE_CALIBRATION */
 
 /**
  */
 void sd21_setup(sd21_t *obj)
 {
-(void)obj;
-	//twi_master_setup(obj->twi, obj->twi_speed_khz);
+	i2c_init_master(obj->bus_id, obj->twi_speed_khz);
 
-#if defined(CONFIG_SD21_INIT_AT_STARTUP)
+//#if defined(CONFIG_SD21_INIT_AT_STARTUP)
 	for (uint8_t i = 0; i < obj->servos_nb; i++) {
 		uint16_t value_init = obj->servos[i].value_init;
 
 		if (value_init)
-			sd21_send_twi_cmd(obj->twi, i, 0, value_init);
+			sd21_send_twi_cmd(obj->bus_id, i, 0, value_init);
 	}
-#endif
+//#endif
 }
