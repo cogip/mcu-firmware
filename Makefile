@@ -19,14 +19,17 @@ CFLAGS += -DCONFIG_CALIBRATION
 # development process:
 DEVELHELP ?= 1
 
+BIN_DIRS += actuators
 BIN_DIRS += calibration
 BIN_DIRS += robotics
 BIN_DIRS += system
+BIN_USEMODULE += actuators
 BIN_USEMODULE += calibration             # include "core" module
 BIN_USEMODULE += robotics             # include "core" module
 BIN_USEMODULE += system
 BIN_USEMODULE += $(APPLICATION_MODULE)  # include application module
 
+FEATURES_REQUIRED += periph_i2c
 FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
 
