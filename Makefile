@@ -33,6 +33,9 @@ FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
 
 INCLUDES += -I$(APPDIR)/robotics/include/ -I$(APPDIR)/
+ifeq ($(BOARD),native)
+CFLAGS += -DNATIVE -Wno-pedantic -Wno-unused-parameter -Wno-sign-compare
+endif
 CFLAGS += -DCONFIG_SD21
 
 include $(RIOTBASE)/Makefile.include
