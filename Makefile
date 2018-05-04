@@ -32,6 +32,7 @@ BIN_USEMODULE += $(APPLICATION_MODULE)  # include application module
 FEATURES_REQUIRED += periph_i2c
 FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
+FEATURES_REQUIRED += periph_adc
 
 INCLUDES += -I$(APPDIR)/robotics/include/ -I$(APPDIR)/
 ifeq ($(BOARD),native)
