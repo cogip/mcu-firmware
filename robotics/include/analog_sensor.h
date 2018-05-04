@@ -2,6 +2,7 @@
 #define ANALOG_SENSOR_H_
 
 #include <periph/adc.h>
+#include <stdint.h>
 
 typedef uint8_t dist_cm_t;
 
