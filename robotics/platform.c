@@ -12,6 +12,8 @@
 #include "platform_task.h"
 #include <periph/qdec.h>
 #include <motor_driver.h>
+#include "analog_sensor.h"
+#include <periph/adc.h>
 
 #include "actuators/sd21.h"
 #if defined(CONFIG_MOTOR_PAP)
@@ -53,22 +55,19 @@
 
 /* TODO: To activate when included in RIOT */
 //#ifdef CONFIG_ANALOG_SENSORS
-//analog_sensors_t ana_sensors = {
-//	.adc = &ADCA,
-//
-//	.sensors_nb = 8,
-//	.sensors = {
-//		/* Rear right: [10...80] cm - GP2Y0A21 - cal done */
-//		[0] = {
-//			.pin_id = PIN0_bp,
-//
-//			.coeff_volts = 0.022,
-//			.const_volts = 0.010,
-//			.const_dist = -5.0,
-//			.dist_cm_max = 50,
-//
-//			.zone = (AS_ZONE_REAR | AS_ZONE_RIGHT),
-//		},
+analog_sensors_t ana_sensors = {
+	.sensors_nb = 1,
+	.sensors = {
+		/* Rear right: [10...80] cm - GP2Y0A21 - cal done */
+		[0] = {
+			.adc = 0,
+			.coeff_volts = 0.022,
+			.const_volts = 0.010,
+			.const_dist = -5.0,
+			.dist_cm_max = 100,
+
+			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+		},
 //		/* Front left: [10...80] cm - GP2Y0A21 - cal done */
 //		[1] = {
 //			.pin_id = PIN1_bp,
@@ -146,8 +145,8 @@
 //
 //			.zone = (AS_ZONE_REAR | AS_ZONE_LEFT),
 //		},
-//	}
-//};
+	}
+};
 //#endif /* CONFIG_ANALOG_SENSORS */
 
 #if 0
@@ -326,10 +325,7 @@ datalog_t datalog;
 
 static void mach_post_ctrl_loop_func(void)
 {
-#ifdef CONFIG_ANALOG_SENSORS
-	/* TODO: To activate when included in RIOT */
 	//analog_sensor_refresh_all(&ana_sensors);
-#endif
 }
 
 inline func_cb_t mach_get_ctrl_loop_pre_pfn(void)
@@ -453,11 +449,7 @@ void mach_setup(void)
 	console_init(&usartc0_console);
 #endif
 
-#ifdef CONFIG_ANALOG_SENSORS
-	/* setup analog conversion */
-	/* TODO: To activate when included in RIOT */
-	/* analog_sensor_setup(&ana_sensors); */
-#endif
+	analog_sensor_setup(&ana_sensors);
 
 #if defined(CONFIG_SD21)
 	/* setup TWI communication with SD21 */
