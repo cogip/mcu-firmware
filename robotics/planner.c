@@ -237,9 +237,9 @@ void *task_planner(void *arg)
 			speed_order.angle = 0;
 		} else {*/
 			/* max speed order in pulse_linear per ctrl period (20ms) */
-			speed_order.distance = 500;
+			speed_order.distance = MAX_SPEED;
 			/* max speed order in pulse_angular per ctrl period (20ms) */
-			speed_order.angle = 250 / 2;
+			speed_order.angle = MAX_SPEED / 2;
 		//}
 
 		controller_set_speed_order(&controller, speed_order);
