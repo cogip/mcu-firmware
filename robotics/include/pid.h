@@ -1,7 +1,8 @@
 #ifndef PID_H_
 #define PID_H_
 
-#define INTEGRAL_LIMIT		500000
+/* Set integral limit to PWM max (check in RIOT) for integrator windup */
+#define INTEGRAL_LIMIT		2000
 
 /**
  * \struct PID
