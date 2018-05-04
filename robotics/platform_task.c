@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "planner.h"
+#include "analog_sensor.h"
 #include "platform.h"
 #include "platform_task.h"
 #include "xtimer.h"
@@ -10,8 +11,11 @@
 //FIXME:
 #define kos_task_exit()
 
+extern analog_sensors_t ana_sensors;
+
 char controller_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_thread_stack[THREAD_STACKSIZE_DEFAULT];
+char analog_sensors_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 #if defined(MODULE_CALIBRATION)
 #define CALIBRATION_BOOT_DELAY 3
@@ -82,6 +86,9 @@ void mach_tasks_init(void)
 	thread_create(planner_thread_stack, sizeof(planner_thread_stack),
 				  0, 0,
 				  task_planner, NULL, "game_planner");
+	thread_create(analog_sensors_thread_stack, sizeof(analog_sensors_thread_stack),
+				  10, 0,
+				  task_analog_sensors, (void *)&ana_sensors, "analog_sensors");
 #if defined(MODULE_CALIBRATION)
 	thread_create(calib_wait_thread_stack, sizeof(calib_wait_thread_stack),
 		0, 0,
