@@ -1,18 +1,17 @@
 #ifndef ACTION_H_
 
-//typedef struct {
-//	pose_t pos;
-//	action_t action;
-//} action_t;
-
 #include "utils.h"
 
-typedef func_cb_t action_t;
+/* Actions functions must be of type "func_cb_t" */
 
-/* catch lunar modules */
-void act_catch_module_front_right(void);
-void act_catch_module_rear_right(void);
-void act_catch_module_front_left(void);
-void act_catch_module_rear_left(void);
+void action_init(void); // call at boot time once
+
+void act_catch_same_color_water(void);
+void act_launch_same_color_water(void);
+void act_catch_interleaved_water(void);
+void act_launch_interleaved_water(void);
+void act_drop_recycled_water(void);
+void act_open_bee_pusher(void);
+void act_close_bee_pusher(void);
 
 #endif /* ACTION_H_ */
