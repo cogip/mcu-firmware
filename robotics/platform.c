@@ -271,21 +271,21 @@ controller_t controller = {
 #ifdef BOARD_NATIVE
 	.linear_speed_pid = {
 		.kp = 1.,
-		.ki = 0.1,
+		.ki = 0.01,
 		.kd = 0,
 	},
 	.angular_speed_pid = {
 		.kp = 1.,
-		.ki = 0.1,
+		.ki = 0.01,
 		.kd = 0,
 	},
 	.linear_pose_pid = {
-		.kp = 0.05,
+		.kp = 0.04,
 		.ki = 0.,
 		.kd = 0,
 	},
 	.angular_pose_pid = {
-		.kp = 0.0335,
+		.kp = 0.04,
 		.ki = 0.,
 		.kd = 0.,
 	},
