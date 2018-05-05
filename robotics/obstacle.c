@@ -25,10 +25,10 @@ void mach_fixed_obstacles_init(void)
 	nb_vertices = 4;
 	if (nb_vertices < POLY_MAX_POINTS)
 	{
-		polygon.points[polygon.count++] = (pose_t){.x = -200, .y = 600};
-		polygon.points[polygon.count++] = (pose_t){.x =  200, .y = 600};
-		polygon.points[polygon.count++] = (pose_t){.x =  200, .y = 1000};
-		polygon.points[polygon.count++] = (pose_t){.x = -200, .y = 1000};
+		polygon.points[polygon.count++] = (pose_t){.x = -800, .y = 1550};
+		polygon.points[polygon.count++] = (pose_t){.x =  800, .y = 1550};
+		polygon.points[polygon.count++] = (pose_t){.x =  800, .y = 2200};
+		polygon.points[polygon.count++] = (pose_t){.x = -800, .y = 2200};
 		add_polygon(&polygon);
 	}
 }
