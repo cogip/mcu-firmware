@@ -372,14 +372,18 @@ path_t * mach_get_path(void)
 uint8_t mach_is_game_launched(void)
 {
 	/* Starter switch */
-	return 1;//return gpio_get_input(&PORTF, PIN3_bp);
+#if defined(CONFIG_USE_STARTER) && !defined(BOARD_NATIVE)
+	return gpio_read(GPIO_PIN(PORT_B, 2));
+#else
+	return 1;
+#endif
 }
 
 uint8_t mach_is_camp_yellow(void)
 {
 	/* Color switch for coords translations */
 	//FIXME: correct mirror
-	return TRUE; //gpio_get_input(&PORTF, PIN2_bp);
+	return gpio_read(GPIO_PIN(PORT_B, 10));
 }
 
 static void mach_pinmux_setup(void)
