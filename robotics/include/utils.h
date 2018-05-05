@@ -8,7 +8,12 @@ typedef void (*func_cb_t)(void);
 
 #include <stdio.h>
 #define cons_printf printf
+#if !defined(NATIVE)
+#define cons_scanf custom_scanf
+int custom_scanf(const char *format, ...);
+#else
 #define cons_scanf scanf
+#endif
 #define cons_getchar getchar
 
 /* set interval to 20 milli-second */
