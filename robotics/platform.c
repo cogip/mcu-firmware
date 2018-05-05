@@ -14,6 +14,9 @@
 #include <motor_driver.h>
 
 #include "actuators/sd21.h"
+#if defined(CONFIG_MOTOR_PAP)
+#include "actuators/motor_pap.h"
+#endif
 #include <thread.h>
 
 /**
@@ -466,6 +469,9 @@ void mach_setup(void)
 	//action_setup(); /* TODO: commenter pour debug */
 
 	motor_driver_init(0);
+#if defined(CONFIG_MOTOR_PAP)
+	motor_pap_init();
+#endif
 
 	/* setup qdec */
 #ifdef BOARD_NATIVE
