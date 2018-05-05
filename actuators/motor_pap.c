@@ -79,6 +79,7 @@ void motor_pap_init(void)
 
 uint8_t motor_pap_turn_next_storage(void)
 {
+#if 0
 	uint8_t retval = 0;
 	uint8_t sharp_initial = FALSE;
 
@@ -110,6 +111,10 @@ retry:
 	_stepper_en(FALSE);
 
 	return retval;
+#else
+	motor_pap_calib();
+	return 0;
+#endif
 }
 
 #if defined(MODULE_CALIBRATION)
