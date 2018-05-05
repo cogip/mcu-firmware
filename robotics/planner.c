@@ -138,7 +138,6 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	{
 		controller_set_pose_intermediate(&controller, TRUE);
 	}
-	irq_enable();
 
 	return 0;
 
