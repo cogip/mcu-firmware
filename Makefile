@@ -40,5 +40,6 @@ CFLAGS += -Wno-pedantic -Wno-unused-parameter -Wno-sign-compare
 endif
 CFLAGS += -DCONFIG_SD21
 #CFLAGS += -DCONFIG_USE_STARTER
+CFLAGS += -DCONFIG_MOTOR_PAP
 
 include $(RIOTBASE)/Makefile.include

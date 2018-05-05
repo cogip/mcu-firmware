@@ -4,6 +4,10 @@
 #include "xtimer.h"
 #include <thread.h>
 
+#if defined(CONFIG_MOTOR_PAP)
+#include "actuators/motor_pap.h"
+#endif
+
 //FIXME:
 #define kos_task_exit()
 
@@ -15,7 +19,9 @@ static void mach_calibration_usage(void)
 	cons_printf("\t'a' to calibrate analogs sensors\n");
 #endif
 	//cons_printf("\t'o' to calibrate odometry\n");
-	//cons_printf("\t'p' to calibrate hbridge & PWM ctrl\n");
+#if defined(CONFIG_MOTOR_PAP)
+	cons_printf("\t'p' to calibrate PAP motor\n");
+#endif
 #if defined(CONFIG_SD21)
 	cons_printf("\t's' to calibrate servos (sd21 card)\n");
 #endif
@@ -75,9 +81,11 @@ void *task_calibration_entry(void *arg)
 //			//encoder_enter_calibration();
 //			/* TODO; odometry_enter_calibration */
 //			break;
-//		case 'p':
-//			//hbridge_enter_calibration(&hbridges);
-//			break;
+#if defined(CONFIG_MOTOR_PAP)
+		case 'p':
+			motor_pap_calib();
+			break;
+#endif
 #if defined(CONFIG_SD21)
 		case 's':
 			sd21_enter_calibration(&sd21);
