@@ -181,71 +181,42 @@ sd21_t sd21 = {
 #endif
 	.twi_speed_khz = I2C_SPEED_FAST,
 
-	.servos_nb = 8,
+	.servos_nb = SERVO_COUNT,
 	.servos = {
-		/* Front-Left */
-		[0] = {
+		[SERVO_ID_VALVE_LAUNCHER] = {
 			.value_init = 1500,
-			.value_open = 1850,
-			.value_close = 550,
+			.value_open = 1500,
+			.value_close = 1500,
 		},
 
 		/* Bottom-Left */
-		[1] = {
-			.value_init = 2400/*1500*/,
-			.value_open = 1075,
-			.value_close = 2400,
+		[SERVO_ID_VALVE_RECYCLER] = {
+			.value_init = 1500,
+			.value_open = 1500,
+			.value_close = 1500,
 		},
 
 		/* Bottom-Right */
-		[2] = {
-			.value_init = 600/*1500*/,
-			.value_open = 1925,
-			.value_close = 600,
+		[SERVO_ID_RECYCLER] = {
+			.value_init = 1500,
+			.value_open = 1500,
+			.value_close = 1500,
 		},
 
 		/* Front-Right */
-		[3] = {
-			.value_init = 2500/*1500*/,
-			.value_open = 1150,
-			.value_close = 2500,
+		[SERVO_ID_BEE_L] = {
+			.value_init = 1500,
+			.value_open = 1500,
+			.value_close = 1500,
 		},
 
 		/* Glasses right arm */
-		[4] = {
-			.value_init = 0,//1500,//600,
-			.value_open = 600,
-			.value_close = 2450,
+		[SERVO_ID_BEE_R] = {
+			.value_init = 1500,
+			.value_open = 1500,
+			.value_close = 1500,
 		},
 
-		/* Glasses left arm */
-		[5] = {
-			.value_init = 0,//1500,//2600,
-			.value_open = 2600,
-			.value_close = 800,
-		},
-
-
-		/* Left arm */
-		[6] = {
-			.value_init = 1850,
-			.value_open = 800,
-			.value_close = 1850,
-		},
-
-		/* Right arm */
-		[7] = {
-			.value_init = 950,
-			.value_open = 1975,
-			.value_close = 950,
-		},
-
-		///* Clamp */
-		//[8] = {
-		//	.value_init = 1700,
-		//	.value_open = 2120,
-		//	.value_close = 1700,
-		//},
 	},
 };
 #endif /* CONFIG_SD21 */
