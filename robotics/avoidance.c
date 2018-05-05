@@ -37,10 +37,19 @@ pose_t avoidance(uint8_t index)
 
 int update_graph(void)
 {
+    polygon_t borders;
+
 	/* Init all obstacles */
 	if (nb_polygons == 0)
 	{
 		mach_fixed_obstacles_init();
+	}
+
+    borders_init(&borders);
+
+	if (!is_point_in_polygon(&borders, finish))
+	{
+		goto update_graph_error_finish;
 	}
 
 	/* Check that start and destination point are not in a polygon */
@@ -48,7 +57,6 @@ int update_graph(void)
 	{
 		if (is_point_in_polygon(&polygons[i], finish))
 		{
-			// TODO: Add return code
 			goto update_graph_error_finish;
 		}
 		if (is_point_in_polygon(&polygons[i], start))

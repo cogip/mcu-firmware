@@ -5,6 +5,16 @@
 #include "obstacle.h"
 #include <math.h>
 
+/* Init borders */
+void borders_init(polygon_t *polygon)
+{
+	polygon->count = 0;
+	polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MIN, .y = AVOIDANCE_BORDER_Y_MIN};
+	polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MAX, .y = AVOIDANCE_BORDER_Y_MIN};
+	polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MAX, .y = AVOIDANCE_BORDER_Y_MAX};
+	polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MIN, .y = AVOIDANCE_BORDER_Y_MAX};
+}
+
 /* Init all known fixed obstacles on map */
 void mach_fixed_obstacles_init(void)
 {
@@ -23,7 +33,7 @@ void mach_fixed_obstacles_init(void)
 	}
 }
 
-/* Init all known fixed obstacles on map */
+/* Add a dynamic obstacle */
 void add_dyn_obstacle(const pose_t *robot_pose/*, analog_sensor_zone_t zone*/)
 {
 	static polygon_t polygon;
