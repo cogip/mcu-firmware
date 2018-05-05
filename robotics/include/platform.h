@@ -33,9 +33,9 @@
  */
 #define PULSE_PER_MM			10.61
 /* WHEELS_DISTANCE = WHEELS_DISTANCE_MM * PULSE_PER_MM */
-#define WHEELS_DISTANCE			2965.5
+#define WHEELS_DISTANCE			2962.312
 /* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
-#define PULSE_PER_DEGREE		51.76
+#define PULSE_PER_DEGREE		51.70
 
 #define MAX_ACC				25
 #define MAX_SPEED			250
