@@ -464,18 +464,11 @@ void mach_setup(void)
 #endif
 
 	/* setup qdec */
-#ifdef BOARD_NATIVE
-	int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X1, NULL, NULL);
-#else
-	int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
-#endif
+//#ifdef BOARD_NATIVE
+	int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_MODE, NULL, NULL);
 	if (error)
 		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_LEFT, error);
-#ifdef BOARD_NATIVE
-	error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X1, NULL, NULL);
-#else
-	error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X4, NULL, NULL);
-#endif
+	error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
 	if (error)
 		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
 
