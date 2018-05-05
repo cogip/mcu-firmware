@@ -28,7 +28,7 @@ uint8_t in_calibration = FALSE;
 #define TASK_PERIOD_MS		(20)
 
 #define TASK_FREQ_HZ		(1000 / TASK_PERIOD_MS)
-#define GAME_DURATION_SEC	90
+#define GAME_DURATION_SEC	100
 #define GAME_DURATION_TICKS	(GAME_DURATION_SEC * TASK_FREQ_HZ)
 
 inline void increment_current_pose_idx(void)
