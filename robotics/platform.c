@@ -174,7 +174,7 @@ qdec_t encoders[] = {
 
 #if defined(CONFIG_SD21)
 sd21_t sd21 = {
-#ifdef NATIVE
+#ifdef BOARD_NATIVE
 	.bus_id = 0,
 #else
 	.bus_id = I2C_0, /* I2C3 bus (cf. board.h) */
@@ -297,7 +297,7 @@ controller_mode_t controller_modes[] = {
 };
 
 controller_t controller = {
-#if 0
+#ifdef BOARD_NATIVE
 	.linear_speed_pid = {
 		.kp = 2.0,
 		.ki = 0.1,
@@ -493,10 +493,18 @@ void mach_setup(void)
 	motor_driver_init(0);
 
 	/* setup qdec */
+#ifdef BOARD_NATIVE
+	int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X1, NULL, NULL);
+#else
 	int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_X4, NULL, NULL);
+#endif
 	if (error)
 		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_LEFT, error);
+#ifdef BOARD_NATIVE
+	error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X1, NULL, NULL);
+#else
 	error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_X4, NULL, NULL);
+#endif
 	if (error)
 		printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
 
