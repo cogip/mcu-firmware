@@ -2,89 +2,166 @@
 
 #include <stdint.h>
 #include "periph/gpio.h"
-//#include "kos.h"
-//#include "platform.h"
-//#include "sd21.h"
-#define sd21_control_servo(...)
-#define gpio_set_output(...)
-#define kos_yield()
+#include "xtimer.h"
+#include "platform.h"
+#include "actuators/sd21.h"
 
-#define SERVO_ID_VENT_FL	0
-#define SERVO_ID_VENT_FR	3
-#define SERVO_ID_VENT_RL	1
-#define SERVO_ID_VENT_RR	2
-#define SERVO_ID_WEDGE_L	6
-#define SERVO_ID_WEDGE_R	7
+#include "actuators/motor_pap.h"
 
-#define CATCH_MODULE_PAUSE_MS		(500 / 20 /* ms (sched value) */)
+/* Nb water balls in a pipe */
+#define PIPE_WATER_NB			8
+
+static void _ball_launcher_motor_enable(uint8_t enable)
+{
+	gpio_write(GPIO_PIN(PORT_B, 15), enable);
+}
 
 /*
  * public
  */
-void act_catch_module_front_right(void)
+
+void action_init(void)
 {
-	uint8_t pause_ms = CATCH_MODULE_PAUSE_MS;
+	// initial positions in case of transient reboot
+	gpio_init(GPIO_PIN(PORT_B, 15), GPIO_OUT); // FIXME: put elsewhere
 
-	/* ventouse front right open */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_FR, SD21_SERVO_OPEN);
-
-	/* pump front right on */
-	gpio_set_output(&PORTB, GPIO_ID_PUMP_FR, 1);
-
-	while (pause_ms--)
-		kos_yield();
-
-	/* ventouse front right close */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_FR, SD21_SERVO_CLOSE);
 }
 
-void act_catch_module_rear_right(void)
+// before: wheel empty
+// after:  wheel full
+void act_catch_same_color_water(void)
 {
-	uint8_t pause_ms = CATCH_MODULE_PAUSE_MS;
-
-	/* ventouse rear right open */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_RR, SD21_SERVO_OPEN);
-
-	/* pump rear right on */
-	gpio_set_output(&PORTB, GPIO_ID_PUMP_RR, 1);
-
-	while (pause_ms--)
-		kos_yield();
-
-	/* ventouse rear right close */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_RR, SD21_SERVO_CLOSE);
+	for (int i = 0; i < PIPE_WATER_NB/*-1*/; i++)
+		motor_pap_turn_next_storage();
 }
 
-void act_catch_module_front_left(void)
+// before: wheel full
+// after:  wheel empty
+void act_launch_same_color_water(void)
 {
-	uint8_t pause_ms = CATCH_MODULE_PAUSE_MS;
+	for (int i = 0; i < PIPE_WATER_NB; i++) {
 
-	/* ventouse front left open */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_FL, SD21_SERVO_OPEN);
+		sd21_control_servo(&sd21, SERVO_ID_VALVE_RECYCLER, SD21_SERVO_OPEN);
 
-	/* pump front left on */
-	gpio_set_output(&PORTB, GPIO_ID_PUMP_FL, 1);
+		// wait 500ms
+		xtimer_usleep(500*1000/* US */);
 
-	while (pause_ms--)
-		kos_yield();
+		sd21_control_servo(&sd21, SERVO_ID_RECYCLER, SD21_SERVO_CLOSE);
+		// wait 300ms
+		xtimer_usleep(300*1000/* US */);
 
-	/* ventouse front left close */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_FL, SD21_SERVO_CLOSE);
+		sd21_control_servo(&sd21, SERVO_ID_RECYCLER, SD21_SERVO_OPEN);
+		/// wait 300ms
+		//xtimer_usleep(300*1000/* US */);
+
+		sd21_control_servo(&sd21, SERVO_ID_VALVE_RECYCLER, SD21_SERVO_CLOSE);
+
+		// wait 500ms (on first trial only)
+		xtimer_usleep(500*1000/* US */);
+
+		// turn the wheel, by 2 steps (except for the last storage)
+		if (i < PIPE_WATER_NB-1) {
+			motor_pap_turn_next_storage();
+			motor_pap_turn_next_storage();
+		}
+	}
+
 }
 
-void act_catch_module_rear_left(void)
+// wheel entry point is 2 storage before valve's one, thus same color
+
+// before: wheel empty
+// after:  wheel full
+void act_catch_interleaved_water(void)
 {
-	uint8_t pause_ms = CATCH_MODULE_PAUSE_MS;
+	for (int i = 0; i < PIPE_WATER_NB; i++)
+		motor_pap_turn_next_storage();
+}
 
-	/* ventouse rear left open */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_RL, SD21_SERVO_OPEN);
+// before: wheel full
+// after:  wheel half, lefting opponent color
+void act_launch_interleaved_water(void)
+{
+	for (int i = 0; i < PIPE_WATER_NB; i++) {
 
-	/* pump rear left on */
-	gpio_set_output(&PORTB, GPIO_ID_PUMP_RL, 1);
+		_ball_launcher_motor_enable(TRUE);
 
-	while (pause_ms--)
-		kos_yield();
+		// wait 100ms
+		xtimer_usleep(100*1000/* US */);
 
-	/* ventouse rear left close */
-	sd21_control_servo(&sd21, SERVO_ID_VENT_RL, SD21_SERVO_CLOSE);
+		// Two trials in case ball is stuck?
+		for (uint8_t j = 0; j < 2; j++) {
+			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_OPEN);
+
+			// wait 500ms
+			xtimer_usleep(500*1000/* US */);
+
+			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_CLOSE);
+
+			// wait 500ms (on first trial only)
+			if (!j)
+				xtimer_usleep(500*1000/* US */);
+		}
+
+		_ball_launcher_motor_enable(FALSE);
+
+		// turn the wheel, by 2 steps (including the last storage)
+		if (i < PIPE_WATER_NB/*-1*/) {
+			motor_pap_turn_next_storage();
+			motor_pap_turn_next_storage();
+		}
+	}
+
+}
+
+// before: wheel half, lefting opponent color
+// after:  wheel empty
+void act_drop_recycled_water(void)
+{
+	for (int i = 0; i < PIPE_WATER_NB; i++) {
+
+		//_ball_launcher_motor_enable(TRUE);
+
+		// wait 500ms
+		//xtimer_usleep(100*1000/* US */);
+
+		// Two trials in case ball is stuck?
+		for (uint8_t j = 0; j < 2; j++) {
+			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_OPEN);
+
+			// wait 500ms
+			xtimer_usleep(500*1000/* US */);
+
+			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_CLOSE);
+
+			// wait 500ms (on first trial only)
+			if (!j)
+				xtimer_usleep(500*1000/* US */);
+		}
+
+		_ball_launcher_motor_enable(FALSE);
+
+		// turn the wheel, by 2 steps (excluding the last storage)
+		if (i < PIPE_WATER_NB-1) {
+			motor_pap_turn_next_storage();
+			motor_pap_turn_next_storage();
+		}
+	}
+
+}
+
+void act_open_bee_pusher(void)
+{
+	if (mach_is_camp_yellow())
+		sd21_control_servo(&sd21, SERVO_ID_BEE_L, SD21_SERVO_OPEN);
+	else
+		sd21_control_servo(&sd21, SERVO_ID_BEE_R, SD21_SERVO_OPEN);
+}
+
+void act_close_bee_pusher(void)
+{
+	if (mach_is_camp_yellow())
+		sd21_control_servo(&sd21, SERVO_ID_BEE_L, SD21_SERVO_CLOSE);
+	else
+		sd21_control_servo(&sd21, SERVO_ID_BEE_R, SD21_SERVO_CLOSE);
 }
