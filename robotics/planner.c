@@ -94,9 +94,8 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 			{
 				if (path->poses[path->current_pose_idx].act)
 					path->poses[path->current_pose_idx].act();
+				increment_current_pose_idx();
 			}
-
-			increment_current_pose_idx();
 			robot_pose_tmp = pose_reached;
 			need_update = 1;
 		}
@@ -139,7 +138,6 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	{
 		controller_set_pose_intermediate(&controller, TRUE);
 	}
-	irq_enable();
 
 	return 0;
 
