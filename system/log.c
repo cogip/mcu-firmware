@@ -185,7 +185,7 @@ void log_vect_display_line(datalog_t *d)
 				cons_printf("%d,", d->datas[c].as_int16);
 				break;
 			case COL_INT32:
-				cons_printf("%"PRId32, d->datas[c].as_int32);
+				cons_printf("%"PRId32",", d->datas[c].as_int32);
 				break;
 			case COL_DOUBLE:
 				cons_printf("%+.2f,", d->datas[c].as_double);
