@@ -10,6 +10,7 @@ USEMODULE += shell_commands
 USEMODULE += schedstatistics
 USEMODULE += ps
 USEMODULE += printf_float
+LINKFLAGS += -u _scanf_float
 
 QUIET ?= 1
 
