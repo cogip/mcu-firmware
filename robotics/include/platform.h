@@ -45,10 +45,12 @@
 #define QDEC_LEFT_POLARITY		-1
 #define QDEC_RIGHT_POLARITY		1
 
-#define GPIO_ID_PUMP_FR			PIN0_bp
-#define GPIO_ID_PUMP_RR			PIN1_bp
-#define GPIO_ID_PUMP_FL			PIN4_bp
-#define GPIO_ID_PUMP_RL			PIN5_bp
+#define SERVO_ID_VALVE_LAUNCHER		0
+#define SERVO_ID_VALVE_RECYCLER		1
+#define SERVO_ID_RECYCLER		2
+#define SERVO_ID_BEE_L			3
+#define SERVO_ID_BEE_R			4
+#define SERVO_COUNT			5
 
 #define USART_CONSOLE			USARTC0
 
