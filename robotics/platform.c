@@ -270,13 +270,13 @@ controller_mode_t controller_modes[] = {
 controller_t controller = {
 #ifdef BOARD_NATIVE
 	.linear_speed_pid = {
-		.kp = 5.,
-		.ki = 1.,
+		.kp = 1.,
+		.ki = 0.1,
 		.kd = 0,
 	},
 	.angular_speed_pid = {
-		.kp = 3.,
-		.ki = 1.,
+		.kp = 1.,
+		.ki = 0.1,
 		.kd = 0,
 	},
 	.linear_pose_pid = {
