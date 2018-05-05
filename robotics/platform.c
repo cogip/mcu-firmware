@@ -187,37 +187,35 @@ sd21_t sd21 = {
 	.servos_nb = SERVO_COUNT,
 	.servos = {
 		[SERVO_ID_VALVE_LAUNCHER] = {
-			.value_init = 1500,
-			.value_open = 1500,
-			.value_close = 1500,
+			.value_init = 1350,
+			.value_open = 2400,
+			.value_close = 1350,
 		},
 
-		/* Bottom-Left */
+		/* TODO */
 		[SERVO_ID_VALVE_RECYCLER] = {
 			.value_init = 1500,
 			.value_open = 1500,
 			.value_close = 1500,
 		},
 
-		/* Bottom-Right */
+		/* TODO */
 		[SERVO_ID_RECYCLER] = {
 			.value_init = 1500,
 			.value_open = 1500,
 			.value_close = 1500,
 		},
 
-		/* Front-Right */
 		[SERVO_ID_BEE_L] = {
-			.value_init = 1500,
-			.value_open = 1500,
-			.value_close = 1500,
+			.value_init = 2125,
+			.value_open = 1225,
+			.value_close = 2125,
 		},
 
-		/* Glasses right arm */
 		[SERVO_ID_BEE_R] = {
-			.value_init = 1500,
-			.value_open = 1500,
-			.value_close = 1500,
+			.value_init = 925,
+			.value_open = 1700,
+			.value_close = 925,
 		},
 
 	},
