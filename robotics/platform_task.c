@@ -88,7 +88,7 @@ void mach_tasks_init(void)
 		calib_wait, NULL, "wait_calibration");
 
 	puts("Press a key to enter calibration...");
-	getchar();
+	cons_getchar();
 	/* Calibration is ready */
 	calib_flag = CALIBRATION_READY;
 	/* Wait for calibration to be started */

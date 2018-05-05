@@ -62,7 +62,7 @@ void *task_calibration_entry(void *arg)
 		cons_printf("$ ");
 
 		/* wait for command */
-		c = getchar();
+		c = cons_getchar();
 		cons_printf("%c\n", c);
 
 		switch (c) {
