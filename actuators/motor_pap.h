@@ -6,6 +6,11 @@
 
 void motor_pap_init(void);
 uint8_t motor_pap_turn_next_storage(void);
+
+#if defined(MODULE_CALIBRATION)
+void motor_pap_calib(void);
+#endif
+
 void motor_pap_unit_test(void);
 
 #endif /* MOTOR_PAP_H_ */

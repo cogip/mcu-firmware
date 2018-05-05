@@ -73,6 +73,8 @@ void motor_pap_init(void)
 	gpio_init(GPIO_STEPPER_EN, GPIO_OUT);
 	gpio_init(GPIO_STEPPER_DIR, GPIO_OUT);
 	gpio_init(GPIO_STEPPER_STEP, GPIO_OUT);
+
+	_stepper_en(FALSE);
 }
 
 uint8_t motor_pap_turn_next_storage(void)
@@ -84,9 +86,9 @@ uint8_t motor_pap_turn_next_storage(void)
 	_stepper_dir_set_ccw();
 
 retry:
-	for (;;) {
-		sharp_initial = _sharp_detects_hole();
+	sharp_initial = _sharp_detects_hole();
 
+	for (;;) {
 #if defined(MEASUREMENT_ON_EACH_STEP)
 		_bitbanging_do_one_step();
 #else
@@ -109,6 +111,51 @@ retry:
 
 	return retval;
 }
+
+#if defined(MODULE_CALIBRATION)
+void motor_pap_calib(void)
+{
+	uint8_t sharp_initial = FALSE;
+
+	_stepper_en(TRUE);
+	_stepper_dir_set_ccw();
+
+	sharp_initial = _sharp_detects_hole();
+
+	/* First ensure the value is logic 1 */
+	if (! sharp_initial) {
+		for (uint8_t i = 0; i < 100; i++) {
+#if defined(MEASUREMENT_ON_EACH_STEP)
+			_bitbanging_do_one_step();
+#else
+			_turn_unconditionally(MEASUREMENT_GRANULARITY);
+#endif
+
+			printf("[%03d]\tTOR = %d\n", i, _sharp_detects_hole());
+
+			if (_sharp_detects_hole() != sharp_initial)
+				break;
+		}
+	}
+
+	sharp_initial = _sharp_detects_hole();
+
+	/* move till next storage location */
+	for (uint8_t i = 0; i < 100; i++) {
+#if defined(MEASUREMENT_ON_EACH_STEP)
+		_bitbanging_do_one_step();
+#else
+		_turn_unconditionally(MEASUREMENT_GRANULARITY);
+#endif
+
+		printf("[%03d]\tTOR = %d\n", i, _sharp_detects_hole());
+
+		if (_sharp_detects_hole() != sharp_initial)
+			break;
+	}
+	_stepper_en(FALSE);
+}
+#endif
 
 void motor_pap_unit_test(void)
 {
