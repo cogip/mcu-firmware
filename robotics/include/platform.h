@@ -91,7 +91,7 @@ func_cb_t mach_get_end_of_game_pfn(void);
 path_t * mach_get_path(void);
 //uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone);
 uint8_t mach_is_game_launched(void);
-uint8_t mach_is_camp_yellow(void);
+uint8_t mach_is_camp_left(void);
 
 void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command);

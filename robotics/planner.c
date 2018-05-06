@@ -152,12 +152,13 @@ void *task_planner(void *arg)
 	pose_t	pose_order		= { 0, 0, 0 };
 	pose_t	initial_pose		= { 0, 0, 0 };
 	polar_t	speed_order		= { 0, 0 };
-	const uint8_t camp_yellow	= mach_is_camp_yellow();
+	const uint8_t camp_left	= mach_is_camp_left();
 
 	(void)arg;
 
 	printf("Game planner started\n");
-	printf("%s camp\n", camp_yellow ? "YELLOW" : "BLUE");
+	/* 2018: Camp left is orange, right is green */
+	printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
 
 	path = mach_get_path();
 	if (!path) {
@@ -165,8 +166,8 @@ void *task_planner(void *arg)
 		kos_task_exit();
 	}
 
-	/* mirror the points in place if selected camp is blue */
-	if (!camp_yellow) {
+	/* mirror the points in place if selected camp is right */
+	if (!camp_left) {
 		path->current_pose_idx = path->nb_pose;
 		do {
 			path->current_pose_idx -= 1;
