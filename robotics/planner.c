@@ -172,7 +172,7 @@ void *task_planner(void *arg)
 		do {
 			path->current_pose_idx -= 1;
 			path->poses[path->current_pose_idx].pos.x *= -1;
-			path->poses[path->current_pose_idx].pos.O += 180;
+			path->poses[path->current_pose_idx].pos.O = 180 - path->poses[path->current_pose_idx].pos.O;
 			path->poses[path->current_pose_idx].pos.O = ((int)path->poses[path->current_pose_idx].pos.O) % 360;
 		}
 		while (path->current_pose_idx);
