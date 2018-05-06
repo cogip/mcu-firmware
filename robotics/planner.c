@@ -92,8 +92,10 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 
 			if (!in_calibration)
 			{
+#ifndef BOARD_NATIVE
 				if (path->poses[path->current_pose_idx].act)
 					path->poses[path->current_pose_idx].act();
+#endif
 				increment_current_pose_idx();
 			}
 			robot_pose_tmp = pose_reached;
