@@ -301,22 +301,22 @@ controller_t controller = {
 	},
 #else
 	.linear_speed_pid = {
-		.kp = 15.,
+		.kp = 5.,
 		.ki = 1.,
 		.kd = 0.,
 	},
 	.angular_speed_pid = {
-		.kp = 15,
+		.kp = 3.,
 		.ki = 1.,
 		.kd = 0.,
 	},
 	.linear_pose_pid = {
-		.kp = 0.0335,
+		.kp = 0.030,
 		.ki = 0.,
 		.kd = 0,
 	},
 	.angular_pose_pid = {
-		.kp = 0.2,
+		.kp = 0.05,
 		.ki = 0.,
 		.kd = 0.,
 	},
@@ -482,6 +482,8 @@ void mach_setup(void)
 	gpio_init(GPIO_PIN(PORT_A, 1), GPIO_IN_PU);
 	gpio_init(GPIO_PIN(PORT_B, 2), GPIO_IN_PU);
 	gpio_init(GPIO_PIN(PORT_B, 10), GPIO_IN);
+
+	action_init();
 
 	/* setup qdec */
 //#ifdef BOARD_NATIVE
