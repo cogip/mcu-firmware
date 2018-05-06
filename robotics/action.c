@@ -24,15 +24,16 @@ void action_init(void)
 {
 	// initial positions in case of transient reboot
 	gpio_init(GPIO_PIN(PORT_B, 15), GPIO_OUT); // FIXME: put elsewhere
-
 }
 
 // before: wheel empty
 // after:  wheel full
 void act_catch_same_color_water(void)
 {
-	for (int i = 0; i < PIPE_WATER_NB/*-1*/; i++)
+	for (int i = 0; i < PIPE_WATER_NB/*-1*/; i++) {
 		motor_pap_turn_next_storage();
+		xtimer_usleep(500*1000/* US */);
+	}
 }
 
 // before: wheel full
@@ -99,8 +100,7 @@ void act_launch_interleaved_water(void)
 			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_CLOSE);
 
 			// wait 500ms (on first trial only)
-			if (!j)
-				xtimer_usleep(500*1000/* US */);
+			xtimer_usleep(500*1000/* US */);
 		}
 
 		_ball_launcher_motor_enable(FALSE);
