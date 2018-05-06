@@ -376,7 +376,7 @@ uint8_t mach_is_game_launched(void)
 #endif
 }
 
-uint8_t mach_is_camp_yellow(void)
+uint8_t mach_is_camp_left(void)
 {
 	/* Color switch for coords translations */
 	//FIXME: correct mirror
