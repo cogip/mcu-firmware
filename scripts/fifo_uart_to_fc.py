@@ -7,7 +7,7 @@ import subprocess
 import os, sys, time
 
 # default serial port
-port = '/dev/ttyACM0'
+port = '/dev/ttyUSB0'
 baud = 115200
 
 serial = serial.Serial(
