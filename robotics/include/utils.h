@@ -8,7 +8,7 @@ typedef void (*func_cb_t)(void);
 
 #include <stdio.h>
 #define cons_printf printf
-#if !defined(NATIVE)
+#if !defined(BOARD_NATIVE)
 #define cons_scanf custom_scanf
 int custom_scanf(const char *format, ...);
 #else
