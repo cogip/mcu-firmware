@@ -56,11 +56,12 @@
 /* TODO: To activate when included in RIOT */
 //#ifdef CONFIG_ANALOG_SENSORS
 analog_sensors_t ana_sensors = {
-	.sensors_nb = 1,
+	.sensors_nb = 6,
 	.sensors = {
-		/* Rear right: [10...80] cm - GP2Y0A21 - cal done */
+		/* Front: [10...80] cm - GP2Y0A21 - cal done */
 		[0] = {
 			.adc = 0,
+
 			.coeff_volts = 0.022,
 			.const_volts = 0.010,
 			.const_dist = -5.0,
@@ -68,20 +69,64 @@ analog_sensors_t ana_sensors = {
 
 			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
 		},
-//		/* Front left: [10...80] cm - GP2Y0A21 - cal done */
-//		[1] = {
-//			.pin_id = PIN1_bp,
-//
-//			.coeff_volts = 0.03,
-//			.const_volts = 0.009,
-//			.const_dist = 1.0,
-//			.dist_cm_max = 80,
-//
-//			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
-//		},
-//		/* Front right: [10...60] cm - GP2D12 - cal done*/
-//		[2] = {
-//			.pin_id = PIN2_bp,
+		/* Rear: [10...80] cm - GP2Y0A21 - cal done */
+		[1] = {
+			.adc = 1,
+
+			.coeff_volts = 0.022,
+			.const_volts = 0.010,
+			.const_dist = -5.0,
+			.dist_cm_max = 100,
+
+			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+		},
+		/* Front Side left: [4...30] cm - GP2YD120X - cal done */
+		[2] = {
+			.adc = 2,
+
+			.coeff_volts = 0.052,
+			.const_volts = 0.007,
+			.const_dist = 0,
+			.dist_cm_max = 40,
+
+			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+		},
+		/* Front Side right: [4...30] cm - GP2YD120X - cal done */
+		[3] = {
+			.adc = 3,
+
+			.coeff_volts = 0.052,
+			.const_volts = 0.007,
+			.const_dist = 0,
+			.dist_cm_max = 40,
+
+			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+		},
+		/* Rear Side left: [4...30] cm - GP2YD120X - cal done */
+		[4] = {
+			.adc = 4,
+
+			.coeff_volts = 0.052,
+			.const_volts = 0.007,
+			.const_dist = 0,
+			.dist_cm_max = 40,
+
+			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+		},
+		/* Rear Side right: [4...30] cm - GP2YD120X - cal done */
+		[5] = {
+			.adc = 5,
+
+			.coeff_volts = 0.052,
+			.const_volts = 0.007,
+			.const_dist = 0,
+			.dist_cm_max = 40,
+
+			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
+		},
+//		/* -- Spare one (keep for calib value): [10...60] cm - GP2D12 - cal done */
+//		[X] = {
+//			.adc = X,
 //
 //			.coeff_volts = 0.045,
 //			.const_volts = 0.027,
@@ -89,61 +134,6 @@ analog_sensors_t ana_sensors = {
 //			.dist_cm_max = 50,
 //
 //			.zone = (AS_ZONE_FRONT | AS_ZONE_RIGHT),
-//		},
-//		/* *************** Front Side left: [4...30] cm - GP2YD120X - cal NOT done */
-//		[3] = {
-//			.pin_id = PIN3_bp,
-//
-//			.coeff_volts = 0.052,
-//			.const_volts = 0.007,
-//			.const_dist = 0,
-//			.dist_cm_max = 40,
-//
-//			.zone = (AS_ZONE_REAR | AS_ZONE_LEFT),
-//		},
-//		/* *************** Front Side right: [4...30] cm - GP2YD120X - cal NOT done */
-//		[4] = {
-//			.pin_id = PIN4_bp,
-//
-//			.coeff_volts = 0.052,
-//			.const_volts = 0.007,
-//			.const_dist = 0,
-//			.dist_cm_max = 40,
-//
-//			.zone = (AS_ZONE_REAR | AS_ZONE_RIGHT),
-//		},
-//		/* Front Side left: [4...30] cm - GP2YD120X - cal done */
-//		[5] = {
-//			.pin_id = PIN5_bp,
-//
-//			.coeff_volts = 0.052,
-//			.const_volts = 0.007,
-//			.const_dist = 0,
-//			.dist_cm_max = 40,
-//
-//			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
-//		},
-//		/* Front Side right: [4...30] cm - GP2YD120X - cal done */
-//		[6] = {
-//			.pin_id = PIN6_bp,
-//
-//			.coeff_volts = 0.052,
-//			.const_volts = 0.007,
-//			.const_dist = 0,
-//			.dist_cm_max = 40,
-//
-//			.zone = (AS_ZONE_FRONT | AS_ZONE_RIGHT),
-//		},
-//		/* Rear left: [10...80] cm - GP2Y0A21 - cal done  */
-//		[7] = {
-//			.pin_id = PIN7_bp,
-//
-//			.coeff_volts = 0.03,
-//			.const_volts = 0.009,
-//			.const_dist = 1.0,
-//			.dist_cm_max = 80,
-//
-//			.zone = (AS_ZONE_REAR | AS_ZONE_LEFT),
 //		},
 	}
 };
