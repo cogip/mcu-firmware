@@ -66,6 +66,9 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.010,
 			.const_dist = -5.0,
 			.dist_cm_max = 100,
+
+			.dist_robot_offset_cm = 14,
+			.angle_robot_offset = 0,
 		},
 		/* Rear: [10...80] cm - GP2Y0A21 - cal done */
 		[1] = {
@@ -75,6 +78,9 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.010,
 			.const_dist = -5.0,
 			.dist_cm_max = 100,
+
+			.dist_robot_offset_cm = 14,
+			.angle_robot_offset = 180,
 		},
 		/* Front Side left: [4...30] cm - GP2YD120X - cal done */
 		[2] = {
@@ -84,6 +90,9 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
+
+			.dist_robot_offset_cm = 16,
+			.angle_robot_offset = 45,
 		},
 		/* Front Side right: [4...30] cm - GP2YD120X - cal done */
 		[3] = {
@@ -93,6 +102,9 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
+
+			.dist_robot_offset_cm = 16,
+			.angle_robot_offset = 315,
 		},
 		/* Rear Side left: [4...30] cm - GP2YD120X - cal done */
 		[4] = {
@@ -102,6 +114,9 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
+
+			.dist_robot_offset_cm = 16,
+			.angle_robot_offset = 135,
 		},
 		/* Rear Side right: [4...30] cm - GP2YD120X - cal done */
 		[5] = {
@@ -111,6 +126,9 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
+
+			.dist_robot_offset_cm = 16,
+			.angle_robot_offset = 225,
 		},
 //		/* -- Spare one (keep for calib value): [10...60] cm - GP2D12 - cal done */
 //		[X] = {
@@ -120,6 +138,9 @@ analog_sensors_t ana_sensors = {
 //			.const_volts = 0.027,
 //			.const_dist = 5.0,
 //			.dist_cm_max = 50,
+//
+//			.dist_robot_offset_cm = ,
+//			.angle_robot_offset = ,
 //		},
 	}
 };

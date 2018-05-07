@@ -26,8 +26,8 @@ typedef struct {
 
 		uint8_t dist_cm_max;
 
-		/* TODO: dist_from_robot_center_cm; */
-		/* TODO: angl_relative_to_robot; */
+		uint8_t dist_robot_offset_cm;
+		double angle_robot_offset;
 
 		/* acquisition context */
 		uint8_t raw_values[ANALOG_SENSOR_NB_SAMPLES]; /* keep acquired distances */
