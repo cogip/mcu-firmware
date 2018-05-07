@@ -4,12 +4,35 @@
 #include "periph/gpio.h"
 #include "xtimer.h"
 #include "platform.h"
-#include "actuators/sd21.h"
 
 #include "actuators/motor_pap.h"
+#include "actuators/sd21.h"
+
 
 /* Nb water balls in a pipe */
 #define PIPE_WATER_NB			8
+
+
+/* 500ms between valves positions */
+#define DELAY_VALVE_US			(500UL * US_PER_MS)
+
+/* 500ms between 2 storages positions of the wheel */
+#define DELAY_BETWEEN_STORAGE_US	(500UL * US_PER_MS)
+
+/* 100ms for launcher to start */
+#define DELAY_LAUNCHER_US		(100UL * US_PER_MS)
+
+/* 300 to let the recycler to push the ball */
+#define DELAY_RECYCLER_US		(300UL * US_PER_MS)
+
+
+/* Number of valve per ball (multiple trials in case ball are blocked ?) */
+/* Set 1 if confirmed Ok !! */
+#define VALVE_TRIAL_NB			2
+
+/*
+ * private
+ */
 
 static void _ball_launcher_motor_enable(uint8_t enable)
 {
@@ -32,7 +55,7 @@ void act_catch_same_color_water(void)
 {
 	for (int i = 0; i < PIPE_WATER_NB/*-1*/; i++) {
 		motor_pap_turn_next_storage();
-		xtimer_usleep(500*1000/* US */);
+		xtimer_usleep(DELAY_BETWEEN_STORAGE_US);
 	}
 }
 
@@ -42,31 +65,32 @@ void act_launch_same_color_water(void)
 {
 	for (int i = 0; i < PIPE_WATER_NB; i++) {
 
-		sd21_control_servo(&sd21, SERVO_ID_VALVE_RECYCLER, SD21_SERVO_OPEN);
+		_ball_launcher_motor_enable(TRUE);
 
-		// wait 500ms
-		xtimer_usleep(500*1000/* US */);
+		// Wait launcher to start
+		xtimer_usleep(DELAY_LAUNCHER_US);
 
-		sd21_control_servo(&sd21, SERVO_ID_RECYCLER, SD21_SERVO_CLOSE);
-		// wait 300ms
-		xtimer_usleep(300*1000/* US */);
+		// Two trials in case ball is stuck?
+		for (uint8_t j = 0; j < VALVE_TRIAL_NB; j++) {
+			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_OPEN);
 
-		sd21_control_servo(&sd21, SERVO_ID_RECYCLER, SD21_SERVO_OPEN);
-		/// wait 300ms
-		//xtimer_usleep(300*1000/* US */);
+			// wait 500ms
+			xtimer_usleep(DELAY_VALVE_US);
 
-		sd21_control_servo(&sd21, SERVO_ID_VALVE_RECYCLER, SD21_SERVO_CLOSE);
+			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_CLOSE);
 
-		// wait 500ms (on first trial only)
-		xtimer_usleep(500*1000/* US */);
+			// wait 500ms (on first trial only)
+			xtimer_usleep(DELAY_VALVE_US);
+		}
 
-		// turn the wheel, by 2 steps (except for the last storage)
+		_ball_launcher_motor_enable(FALSE);
+
+		// turn the wheel, by 1 step (excluding the last storage)
 		if (i < PIPE_WATER_NB-1) {
 			motor_pap_turn_next_storage();
-			motor_pap_turn_next_storage();
+			xtimer_usleep(DELAY_BETWEEN_STORAGE_US);
 		}
 	}
-
 }
 
 // wheel entry point is 2 storage before valve's one, thus same color
@@ -75,8 +99,10 @@ void act_launch_same_color_water(void)
 // after:  wheel full
 void act_catch_interleaved_water(void)
 {
-	for (int i = 0; i < PIPE_WATER_NB; i++)
+	for (int i = 0; i < PIPE_WATER_NB; i++) {
 		motor_pap_turn_next_storage();
+		xtimer_usleep(DELAY_BETWEEN_STORAGE_US);
+	}
 }
 
 // before: wheel full
@@ -87,20 +113,20 @@ void act_launch_interleaved_water(void)
 
 		_ball_launcher_motor_enable(TRUE);
 
-		// wait 100ms
-		xtimer_usleep(100*1000/* US */);
+		// Wait launcher to start
+		xtimer_usleep(DELAY_LAUNCHER_US);
 
 		// Two trials in case ball is stuck?
-		for (uint8_t j = 0; j < 2; j++) {
+		for (uint8_t j = 0; j < VALVE_TRIAL_NB; j++) {
 			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_OPEN);
 
 			// wait 500ms
-			xtimer_usleep(500*1000/* US */);
+			xtimer_usleep(DELAY_VALVE_US);
 
 			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_CLOSE);
 
 			// wait 500ms (on first trial only)
-			xtimer_usleep(500*1000/* US */);
+			xtimer_usleep(DELAY_VALVE_US);
 		}
 
 		_ball_launcher_motor_enable(FALSE);
@@ -109,6 +135,7 @@ void act_launch_interleaved_water(void)
 		if (i < PIPE_WATER_NB/*-1*/) {
 			motor_pap_turn_next_storage();
 			motor_pap_turn_next_storage();
+			xtimer_usleep(DELAY_BETWEEN_STORAGE_US);
 		}
 	}
 
@@ -120,33 +147,28 @@ void act_drop_recycled_water(void)
 {
 	for (int i = 0; i < PIPE_WATER_NB; i++) {
 
-		//_ball_launcher_motor_enable(TRUE);
+		/* Open valve */
+		sd21_control_servo(&sd21, SERVO_ID_VALVE_RECYCLER, SD21_SERVO_OPEN);
+		xtimer_usleep(DELAY_VALVE_US);
 
-		// wait 500ms
-		//xtimer_usleep(100*1000/* US */);
+		/* Push the ball */
+		sd21_control_servo(&sd21, SERVO_ID_RECYCLER, SD21_SERVO_CLOSE);
+		xtimer_usleep(DELAY_RECYCLER_US);
 
-		// Two trials in case ball is stuck?
-		for (uint8_t j = 0; j < 2; j++) {
-			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_OPEN);
+		sd21_control_servo(&sd21, SERVO_ID_RECYCLER, SD21_SERVO_OPEN);
+		//xtimer_usleep(DELAY_RECYCLER_US);
 
-			// wait 500ms
-			xtimer_usleep(500*1000/* US */);
+		/* Close valve */
+		sd21_control_servo(&sd21, SERVO_ID_VALVE_RECYCLER, SD21_SERVO_CLOSE);
+		xtimer_usleep(DELAY_VALVE_US);
 
-			sd21_control_servo(&sd21, SERVO_ID_VALVE_LAUNCHER, SD21_SERVO_CLOSE);
-
-			// wait 500ms (on first trial only)
-			xtimer_usleep(500*1000/* US */);
-		}
-
-		_ball_launcher_motor_enable(FALSE);
-
-		// turn the wheel, by 2 steps (excluding the last storage)
+		// turn the wheel, by 2 steps (except for the last storage)
 		if (i < PIPE_WATER_NB-1) {
 			motor_pap_turn_next_storage();
 			motor_pap_turn_next_storage();
+			xtimer_usleep(DELAY_BETWEEN_STORAGE_US);
 		}
 	}
-
 }
 
 void act_open_bee_pusher(void)
