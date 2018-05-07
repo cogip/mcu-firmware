@@ -62,37 +62,28 @@ static dist_cm_t analog_sensor_adc2cm(uint16_t adc,
 	float distance = 1 / d + const_dist;
 
 	if (distance >= dist_max)
-		distance = UINT8_MAX;
+		distance = AS_DIST_MAX;
 
 	return (dist_cm_t) distance;
 }
 
-/*
- * FIXME: following should be put elsewhere...
- */
-dist_cm_t analog_sensor_detect_obstacle(analog_sensors_t *as,
-					analog_sensor_zone_t zone)
+dist_cm_t analog_sensor_check_obstacle(analog_sensors_t *as,
+				       uint8_t id)
 {
-	uint8_t i;
-	dist_cm_t dist;
-	dist_cm_t min_dist = AS_DIST_MAX;
+	dist_cm_t dist = AS_DIST_MAX;
 
-	for (i = 0; i < as->sensors_nb; i++) {
-		if (as->sensors[i].zone & zone) {
-			uint8_t raw = as->sensors[i].raw_values[ANALOG_SENSOR_NB_SAMPLES-1];
+	if (id < as->sensors_nb) {
+		uint8_t raw;
 
-			dist = analog_sensor_adc2cm(raw,
-						    as->sensors[i].coeff_volts,
-						    as->sensors[i].const_volts,
-						    as->sensors[i].const_dist,
-						    as->sensors[i].dist_cm_max);
-
-			if (dist < min_dist)
-				min_dist = dist;
-		}
+		raw = as->sensors[id].raw_values[ANALOG_SENSOR_NB_SAMPLES-1];
+		dist = analog_sensor_adc2cm(raw,
+					    as->sensors[id].coeff_volts,
+					    as->sensors[id].const_volts,
+					    as->sensors[id].const_dist,
+					    as->sensors[id].dist_cm_max);
 	}
 
-	return min_dist;
+	return dist;
 }
 
 #if defined(MODULE_CALIBRATION)
