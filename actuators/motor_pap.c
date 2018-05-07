@@ -58,13 +58,11 @@ static inline void _bitbanging_do_one_step(void)
 	xtimer_usleep(HALF_PERIOD_WAIT_US);
 }
 
-#if !defined(MEASUREMENT_ON_EACH_STEP)
 static void _turn_unconditionally(uint16_t nb_steps)
 {
 	for (uint16_t steps = 0; steps < nb_steps; steps ++)
 		_bitbanging_do_one_step();
 }
-#endif
 
 /*
  * Public functions
@@ -139,36 +137,55 @@ exit_point:
 }
 
 #if defined(MODULE_CALIBRATION)
+static void motor_pap_calibration_usage(void)
+{
+	cons_printf("\n>>> Entering motor_pap calibration\n\n");
+
+	cons_printf("\t'n' to move wheel to next position\n");
+	cons_printf("\t't' to test max angle before BLOCKED state\n");
+	cons_printf("\n");
+	cons_printf("\t'h' to display this help\n");
+	cons_printf("\t'q' to quit\n");
+	cons_printf("\n");
+}
+
+
 void motor_pap_calib(void)
 {
-	motor_pap_turn_next_storage();
+	int c;
+	uint8_t quit = 0;
+
+	motor_pap_calibration_usage();
+
+	while (!quit) {
+		/* display prompt */
+		cons_printf("$ ");
+
+		/* wait for command */
+		c = cons_getchar();
+		cons_printf("%c\n", c);
+
+		switch (c) {
+		case 'n':
+			motor_pap_turn_next_storage();
+			break;
+		case 't':
+			cons_printf("Turn %d steps\n", STEP_MAX_BEFORE_BLOCKED);
+			_stepper_en(TRUE);
+			_turn_unconditionally(STEP_MAX_BEFORE_BLOCKED);
+			_stepper_en(FALSE);
+			cons_printf("Done\n");
+			break;
+		case 'h':
+			motor_pap_calibration_usage();
+			break;
+		case 'q':
+			quit = 1;
+			break;
+		default:
+			cons_printf("\n");
+			break;
+		}
+	}
 }
 #endif
-
-void motor_pap_unit_test(void)
-{
-	_stepper_en(TRUE);
-	_stepper_dir_set_ccw();
-
-	// wait 5s
-	//for (uint16_t steps = 0; steps < 1000 / 4; steps ++) {
-	for (uint16_t steps = 0; steps < 1000 / 6; steps ++) {
-//	for (uint16_t steps = 0; steps < 1000 / (6*2); steps ++) {
-		xtimer_ticks32_t current_time;
-
-		gpio_write(GPIO_PIN(PORT_A, 11), 1);
-		current_time = xtimer_now();
-		//xtimer_periodic_wakeup(&current_time, (3333 / 2) * 4); // 300Hz / 4 (vitesse max)
-		xtimer_periodic_wakeup(&current_time, (3333 / 2) * 6); // 300Hz
-//		xtimer_periodic_wakeup(&current_time, (3333 / 2) * 6 * 2); // 300Hz
-
-		gpio_write(GPIO_PIN(PORT_A, 11), 0);
-		current_time = xtimer_now();
-		//xtimer_periodic_wakeup(&current_time, (3333 / 2) * 4); // 300Hz / 4 (vitesse max)
-		xtimer_periodic_wakeup(&current_time, (3333 / 2) * 6); // 300Hz
-//		xtimer_periodic_wakeup(&current_time, (3333 / 2) * 6 * 2); // 300Hz
-	}
-
-	_stepper_en(FALSE);
-}
-
