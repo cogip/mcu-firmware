@@ -53,7 +53,7 @@ static void show_game_time(void)
 void planner_start_game(void)
 {
 	/* TODO: send pose_initial, pose_order & speed_order to controller */
-	controller_set_mode(&controller, &controller_modes[CTRL_STATE_INGAME]);
+	controller_set_mode(&controller, CTRL_STATE_INGAME);
 	game_started = TRUE;
 }
 
@@ -207,7 +207,7 @@ void *task_planner(void *arg)
 
 			if (game_time >= GAME_DURATION_TICKS) {
 				cons_printf(">>>>\n");
-				controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
+				controller_set_mode(&controller, CTRL_STATE_STOP);
 				break;
 			}
 
@@ -255,7 +255,7 @@ void *task_planner(void *arg)
 		/* ===== position ===== */
 		if (trajectory_get_route_update(&pose_current, &pose_order) == -1)
 		{
-			controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
+			controller_set_mode(&controller, CTRL_STATE_STOP);
 		}
 
 		controller_set_pose_to_reach(&controller, pose_order);

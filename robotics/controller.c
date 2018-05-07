@@ -305,10 +305,10 @@ inline polar_t controller_get_speed_order(controller_t *ctrl)
 	return speed_order;
 }
 
-void controller_set_mode(controller_t *ctrl, controller_mode_t *new_mode)
+void controller_set_mode(controller_t *ctrl, controller_mode_id_t new_mode)
 {
-	ctrl->mode = new_mode;
-	printf("new_mode = %s\n", new_mode->name);
+	ctrl->mode = &controller_modes[new_mode];
+	printf("new_mode = %s\n", ctrl->mode->name);
 }
 
 void motor_drive(polar_t *command)

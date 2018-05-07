@@ -66,16 +66,14 @@
 #define AVOIDANCE_BORDER_X_MAX    1318
 #define AVOIDANCE_BORDER_Y_MIN    182
 #define AVOIDANCE_BORDER_Y_MAX    1818
-enum {
-	CTRL_STATE_STOP = 0,
-	CTRL_STATE_IDLE,
-	CTRL_STATE_INGAME,
+
 #if defined(MODULE_CALIBRATION)
-	CTRL_STATE_CALIB_MODE1,
+typedef enum {
+	CTRL_STATE_CALIB_MODE1 = CTRL_STATE_INGAME + 1,
 	CTRL_STATE_CALIB_MODE2,
 	CTRL_STATE_CALIB_MODE3,
+} controller_mode_id_calib_t;
 #endif /* MODULE_CALIBRATION */
-};
 
 //extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
