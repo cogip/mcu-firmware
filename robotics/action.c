@@ -97,7 +97,7 @@ void act_launch_same_color_water(void)
 
 // before: wheel empty
 // after:  wheel full
-void act_catch_interleaved_water(void)
+void act_catch_mixed_water(void)
 {
 	for (int i = 0; i < PIPE_WATER_NB; i++) {
 		motor_pap_turn_next_storage();
@@ -107,7 +107,7 @@ void act_catch_interleaved_water(void)
 
 // before: wheel full
 // after:  wheel half, lefting opponent color
-void act_launch_interleaved_water(void)
+void act_launch_mixed_water(void)
 {
 	for (int i = 0; i < PIPE_WATER_NB; i++) {
 
