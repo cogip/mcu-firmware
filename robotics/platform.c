@@ -66,8 +66,6 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.010,
 			.const_dist = -5.0,
 			.dist_cm_max = 100,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
 		},
 		/* Rear: [10...80] cm - GP2Y0A21 - cal done */
 		[1] = {
@@ -77,8 +75,6 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.010,
 			.const_dist = -5.0,
 			.dist_cm_max = 100,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
 		},
 		/* Front Side left: [4...30] cm - GP2YD120X - cal done */
 		[2] = {
@@ -88,8 +84,6 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
 		},
 		/* Front Side right: [4...30] cm - GP2YD120X - cal done */
 		[3] = {
@@ -99,8 +93,6 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
 		},
 		/* Rear Side left: [4...30] cm - GP2YD120X - cal done */
 		[4] = {
@@ -110,8 +102,6 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
 		},
 		/* Rear Side right: [4...30] cm - GP2YD120X - cal done */
 		[5] = {
@@ -121,8 +111,6 @@ analog_sensors_t ana_sensors = {
 			.const_volts = 0.007,
 			.const_dist = 0,
 			.dist_cm_max = 40,
-
-			.zone = (AS_ZONE_FRONT | AS_ZONE_LEFT),
 		},
 //		/* -- Spare one (keep for calib value): [10...60] cm - GP2D12 - cal done */
 //		[X] = {
@@ -132,8 +120,6 @@ analog_sensors_t ana_sensors = {
 //			.const_volts = 0.027,
 //			.const_dist = 5.0,
 //			.dist_cm_max = 50,
-//
-//			.zone = (AS_ZONE_FRONT | AS_ZONE_RIGHT),
 //		},
 	}
 };
