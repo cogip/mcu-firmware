@@ -15,6 +15,7 @@ typedef struct {
 typedef enum {
 	CTRL_STATE_STOP = 0,
 	CTRL_STATE_IDLE,
+	CTRL_STATE_BLOCKED,
 	CTRL_STATE_INGAME,
 } controller_mode_id_t;
 

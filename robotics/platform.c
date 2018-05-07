@@ -268,6 +268,7 @@ hbridge_t hbridges = {
 controller_mode_t controller_modes[] = {
 	{ "STOP", ctrl_state_stop_cb, },		/* CTRL_STATE_STOP */
 	{ "IDLE", ctrl_state_idle_cb, },		/* CTRL_STATE_IDLE */
+	{ "BLOCKED", ctrl_state_stop_cb, },		/* CTRL_STATE_BLOCKED */
 	{ "INGAME", ctrl_state_ingame_cb, },		/* CTRL_STATE_INGAME */
 #if defined(MODULE_CALIBRATION)
 	{ "CALIB1", ctrl_state_calib_mode1_cb, },	/* CTRL_STATE_CALIB_MODE1 */
