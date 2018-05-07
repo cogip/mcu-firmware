@@ -13,7 +13,9 @@
 
 #define GPIO_SHARP_SENSOR1	GPIO_PIN(PORT_A, 7)
 
-#define HALF_PERIOD_WAIT_US	(10000)
+#define HALF_PERIOD_WAIT_US	(10UL * US_PER_MS)
+
+#define STEP_MAX_BEFORE_BLOCKED	50
 
 /* If following is defined, use sharp measurement on each stepper motor steps */
 #define MEASUREMENT_ON_EACH_STEP
@@ -79,47 +81,8 @@ void motor_pap_init(void)
 
 uint8_t motor_pap_turn_next_storage(void)
 {
-#if 0
+	uint8_t i = 0;
 	uint8_t retval = 0;
-	uint8_t sharp_initial = FALSE;
-
-	_stepper_en(TRUE);
-	_stepper_dir_set_ccw();
-
-retry:
-	sharp_initial = _sharp_detects_hole();
-
-	for (;;) {
-#if defined(MEASUREMENT_ON_EACH_STEP)
-		_bitbanging_do_one_step();
-#else
-		_turn_unconditionally(MEASUREMENT_GRANULARITY);
-#endif
-
-		if (_sharp_detects_hole() != sharp_initial)
-			break;
-	}
-
-	/* Check sharp few time in case of false detection */
-	for (uint8_t i = 0; i < 3; i++) {
-		xtimer_usleep(100000/* US */);
-
-		if (_sharp_detects_hole() == sharp_initial)
-			goto retry;
-	}
-
-	_stepper_en(FALSE);
-
-	return retval;
-#else
-	motor_pap_calib();
-	return 0;
-#endif
-}
-
-#if defined(MODULE_CALIBRATION)
-void motor_pap_calib(void)
-{
 	uint8_t sharp_initial = FALSE;
 
 	_stepper_en(TRUE);
@@ -129,7 +92,7 @@ void motor_pap_calib(void)
 
 	/* First ensure the value is logic 1 */
 	if (! sharp_initial) {
-		for (uint8_t i = 0; i < 100; i++) {
+		for (i = 0; i < STEP_MAX_BEFORE_BLOCKED; i++) {
 #if defined(MEASUREMENT_ON_EACH_STEP)
 			_bitbanging_do_one_step();
 #else
@@ -143,10 +106,16 @@ void motor_pap_calib(void)
 		}
 	}
 
+	/* PAP is blocked, mechanical issue, should invalidate all actions ! */
+	if (i == STEP_MAX_BEFORE_BLOCKED) {
+		retval = 1;
+		goto exit_point;
+	}
+
 	sharp_initial = _sharp_detects_hole();
 
 	/* move till next storage location */
-	for (uint8_t i = 0; i < 100; i++) {
+	for (i = 0; i < STEP_MAX_BEFORE_BLOCKED; i++) {
 #if defined(MEASUREMENT_ON_EACH_STEP)
 		_bitbanging_do_one_step();
 #else
@@ -158,7 +127,21 @@ void motor_pap_calib(void)
 		if (_sharp_detects_hole() != sharp_initial)
 			break;
 	}
+
+	/* PAP is blocked, mechanical issue, should invalidate all actions ! */
+	if (i == STEP_MAX_BEFORE_BLOCKED)
+		retval = 1;
+
+exit_point:
 	_stepper_en(FALSE);
+
+	return retval;
+}
+
+#if defined(MODULE_CALIBRATION)
+void motor_pap_calib(void)
+{
+	motor_pap_turn_next_storage();
 }
 #endif
 
