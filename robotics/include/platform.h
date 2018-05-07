@@ -2,7 +2,7 @@
 #define PLATFORM_H_
 
 #include "controller.h"
-//#include "hbridge.h"
+#include "analog_sensor.h"
 #include "system/log.h"
 #include "odometry.h"
 #include "path.h"
@@ -75,7 +75,7 @@ typedef enum {
 } controller_mode_id_calib_t;
 #endif /* MODULE_CALIBRATION */
 
-//extern analog_sensors_t ana_sensors;
+extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
 extern sd21_t sd21;
 extern controller_t controller;
