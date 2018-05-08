@@ -105,15 +105,20 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 		{
 			index++;
 		}
+
 	}
 
 	reset_dyn_polygons();
 
 #if defined(CONFIG_ANALOG_SENSORS)
-	if ((adc_sample(ADC_LINE(0), ADC_RES_10BIT) > 200) && (controller.regul != CTRL_REGUL_POSE_PRE_ANGL))
-	{
-		add_dyn_obstacle(robot_pose);
-		need_update = 1;
+	if(controller.regul != CTRL_REGUL_POSE_PRE_ANGL) {
+		for (int i = 0; i < ana_sensors.sensors_nb; i++) {
+			double dist = analog_sensor_check_obstacle(&ana_sensors, i);
+			if (dist < AS_DIST_LIMIT) {
+				if (add_dyn_obstacle(robot_pose, &ana_sensors.sensors[i], dist*10) == 0)
+					need_update = 1;
+			}
+		}
 	}
 #endif
 
