@@ -20,13 +20,13 @@ static uint8_t valid_points_count = 0;
 
 static uint64_t graph[GRAPH_MAX_VERTICES];
 
-static pose_t start = {.x = 0, .y = 0};
-static pose_t finish = {.x = 0, .y = 0};
+static pose_t start_position = {.x = 0, .y = 0};
+static pose_t finish_position = {.x = 0, .y = 0};
 
-void set_start_finish(const pose_t *s, const pose_t *f)
+void set_start_position_finish_position(const pose_t *s, const pose_t *f)
 {
-	start = *s;
-	finish = *f;
+	start_position = *s;
+	finish_position = *f;
 }
 
 pose_t avoidance(uint8_t index)
@@ -55,20 +55,20 @@ int update_graph(void)
 	/* Check that start and destination point are not in a polygon */
 	for (int i = 0; i < (nb_polygons + nb_dyn_polygons); i++)
 	{
-		if (is_point_in_polygon(&polygons[i], finish))
+		if (is_point_in_polygon(&polygons[i], finish_position))
 		{
-			goto update_graph_error_finish;
+			goto update_graph_error_finish_position;
 		}
-		if (is_point_in_polygon(&polygons[i], start))
+		if (is_point_in_polygon(&polygons[i], start_position))
 		{
 			// TODO: Add return code
-			//goto update_graph_error_start;
+			//goto update_graph_error_start_position;
 			// find nearest polygon point
 			double min = DIJKSTRA_MAX_DISTANCE;
-			pose_t *pose_tmp = &start;
+			pose_t *pose_tmp = &start_position;
 			for (int j = 0; j < polygons[i].count; j++)
 			{
-				double distance = distance_points(&start, &polygons[i].points[j]);
+				double distance = distance_points(&start_position, &polygons[i].points[j]);
 				if (distance < min)
 				{
 					min = distance;
@@ -76,19 +76,19 @@ int update_graph(void)
 				}
 			}
 
-			start = *pose_tmp;
+			start_position = *pose_tmp;
 		}
 	}
 
 	valid_points_count = 0;
-	valid_points[valid_points_count++] = start;
-	valid_points[valid_points_count++] = finish;
+	valid_points[valid_points_count++] = start_position;
+	valid_points[valid_points_count++] = finish_position;
 
 	build_avoidance_graph();
 
 	return 0;
 
-update_graph_error_finish:
+update_graph_error_finish_position:
 	return -1;
 }
 

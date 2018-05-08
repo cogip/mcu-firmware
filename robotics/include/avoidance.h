@@ -31,7 +31,7 @@ pose_t dijkstra(uint16_t target, uint16_t index);
 pose_t avoidance(uint8_t index);
 double distance_points(pose_t *a, pose_t *b);
 int update_graph(void/*const pose_t *start, const pose_t *finish*/);
-void set_start_finish(const pose_t *s, const pose_t *f);
+void set_start_position_finish_position(const pose_t *s, const pose_t *f);
 void init_polygons(void);
 void build_avoidance_graph(void);
 int add_polygon(polygon_t *polygon);
