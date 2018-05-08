@@ -14,9 +14,9 @@ void *task_analog_sensors(void *arg)
 	{
 		uint8_t j, i;
 #if defined(AVERAGING)
-		uint32_t sum = 0;
+		int sum = 0;
 #endif
-		uint16_t value = 0;
+		int value = 0;
 
 		/* current index acquisition */
 		i = as->sensor_index;
@@ -25,8 +25,8 @@ void *task_analog_sensors(void *arg)
 
 		value = adc_sample(as->sensors[i].adc, ADC_RES);
 
-		/* 10-bits to 8-bits conversion */
-		value >>= 2;
+		/* TODO: Understand why *2 */
+		value <<= 1;
 
 #if defined(AVERAGING)
 		/* save raw value in context */
@@ -62,7 +62,7 @@ void analog_sensor_setup(analog_sensors_t *as)
 	}
 }
 
-static dist_cm_t analog_sensor_adc2cm(uint16_t adc,
+static dist_cm_t analog_sensor_adc2cm(int adc,
 				    float coeff_volts, float const_volts,
 				    float const_dist, uint8_t dist_max)
 {
@@ -70,12 +70,7 @@ static dist_cm_t analog_sensor_adc2cm(uint16_t adc,
 	float d = voltage * coeff_volts - const_volts;
 	float distance = 1 / d + const_dist;
 
-	/* 2018 hack: on STM, all converted values, seems * by 2 ! */
-	distance /= 2;
-	distance = distance * 4.0 / 5.0;
-	/* 2018 hack: on STM, all converted values, seems * by 2 ! */
-
-	if (distance >= dist_max)
+	if ((distance >= dist_max) || (distance < 0))
 		distance = AS_DIST_MAX;
 
 	return (dist_cm_t) distance;
@@ -87,7 +82,7 @@ dist_cm_t analog_sensor_check_obstacle(analog_sensors_t *as,
 	dist_cm_t dist = AS_DIST_MAX;
 
 	if (id < as->sensors_nb) {
-		uint8_t raw;
+		int raw;
 
 		raw = as->sensors[id].raw_values[ANALOG_SENSOR_NB_SAMPLES-1];
 		dist = analog_sensor_adc2cm(raw,
