@@ -93,12 +93,10 @@ class Reader(QtCore.QObject):
         self.robot.Placement.Rotation = FreeCAD.Rotation(self.O, 0, 0)
 
         # Update obstacle list
-        self.obstacles_list[self.current_obstacle_id].Placement.Base = 
-                                    FreeCAD.Vector(self.obstacle_x, self.obstacle_y, 10)
-        self.obstacles_list[self.current_obstacle_id].Placement.Rotation =
-                                    FreeCAD.Rotation(self.obstacle_O, 0, 0)
+        self.obstacles_list[self.current_obstacle_id].Placement.Base = FreeCAD.Vector(self.obstacle_x, self.obstacle_y, 10)
+        self.obstacles_list[self.current_obstacle_id].Placement.Rotation = FreeCAD.Rotation(self.obstacle_O, 0, 0)
 
-        if self.current_obstacle_id <= len(self.obstacles_list):
+        if self.current_obstacle_id < len(self.obstacles_list):
             self.current_obstacle_id = self.current_obstacle_id + 1
         else:
             self.current_obstacle_id = 0
@@ -112,7 +110,7 @@ class Reader(QtCore.QObject):
         fifo = None
         while not os.path.exists(FIFO_PATH):
             pass
-        fifo = open(path, "r")
+        fifo = open(FIFO_PATH, "r")
 
         l=''
         while True:
@@ -138,7 +136,7 @@ class Reader(QtCore.QObject):
                 break
         self.timer.stop()
         fifo.close()
-        os.remove(path)
+        os.remove(FIFO_PATH)
         print "That's all folks !'"
 
     def stop(self):
