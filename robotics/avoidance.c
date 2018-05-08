@@ -23,6 +23,8 @@ static uint64_t graph[GRAPH_MAX_VERTICES];
 static pose_t start_position = {.x = 0, .y = 0};
 static pose_t finish_position = {.x = 0, .y = 0};
 
+static polygon_t borders = { .count = 0, };
+
 void set_start_position_finish_position(const pose_t *s, const pose_t *f)
 {
 	start_position = *s;
@@ -37,7 +39,6 @@ pose_t avoidance(uint8_t index)
 
 int update_graph(void)
 {
-    polygon_t borders;
 
 	/* Init all obstacles */
 	if (nb_polygons == 0)
@@ -45,11 +46,12 @@ int update_graph(void)
 		mach_fixed_obstacles_init();
 	}
 
-    borders_init(&borders);
+	if (borders.count == 0)
+		borders_init(&borders);
 
-	if (!is_point_in_polygon(&borders, finish))
+	if (!is_point_in_polygon(&borders, finish_position))
 	{
-		goto update_graph_error_finish;
+		goto update_graph_error_finish_position;
 	}
 
 	/* Check that start and destination point are not in a polygon */
@@ -145,7 +147,12 @@ void build_avoidance_graph(void)
 		for (int p = 0; p < polygons[i].count; p++)
 		{
 			uint8_t collide = FALSE;
-			/* we check this vertice is not inside an other polygon */
+			/* Check if point is inside borders */
+			if (!is_point_in_polygon(&borders, polygons[i].points[p])) {
+				continue;
+			}
+
+			/* Check if this vertice is not inside an other polygon */
 			for (int j = 0; j < (nb_polygons + nb_dyn_polygons); j++)
 			{
 				if (i == j)
