@@ -4,15 +4,20 @@
 #include "platform.h"
 #include "xtimer.h"
 
+#define AVERAGING
+
 void *task_analog_sensors(void *arg)
 {
 	analog_sensors_t *as = (analog_sensors_t *)arg;
-	uint8_t j, i;
-	uint16_t sum = 0;
-	uint16_t value = 0;
 
 	for (;;)
 	{
+		uint8_t j, i;
+#if defined(AVERAGING)
+		uint32_t sum = 0;
+#endif
+		uint16_t value = 0;
+
 		/* current index acquisition */
 		i = as->sensor_index;
 
@@ -22,14 +27,18 @@ void *task_analog_sensors(void *arg)
 
 		/* 10-bits to 8-bits conversion */
 		value >>= 2;
-		value &= 0xff;
 
+#if defined(AVERAGING)
 		/* save raw value in context */
 		for (j = 0; j < ANALOG_SENSOR_NB_SAMPLES - 1; j++) {
 			sum += as->sensors[i].raw_values[j];
 			as->sensors[i].raw_values[j] = as->sensors[i].raw_values[j+1];
 		}
 		as->sensors[i].raw_values[j] = (value + sum) / ANALOG_SENSOR_NB_SAMPLES;
+#else
+		for (j = 0; j < ANALOG_SENSOR_NB_SAMPLES; j++)
+			as->sensors[i].raw_values[j] = value;
+#endif
 
 		/* round robin acquisition using 1 ADC channel */
 		as->sensor_index += 1;
