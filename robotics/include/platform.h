@@ -58,7 +58,7 @@
 #define SERVO_ID_BEE_R			4
 #define SERVO_COUNT			5
 
-#define ADC_RES					ADC_RES_10BIT
+#define ADC_RES					ADC_RES_8BIT
 
 #define USART_CONSOLE			USARTC0
 
