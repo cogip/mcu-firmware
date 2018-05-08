@@ -57,7 +57,7 @@ void planner_start_game(void)
 	game_started = TRUE;
 }
 
-static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to_reach)
+static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to_reach, polar_t *speed_order)
 {
 	static pose_t pose_reached;
 	pose_t robot_pose_tmp;
@@ -145,6 +145,12 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	}
 	else
 	{
+		/* Update speed order to max speed defined value in the new point to reach */
+		if (path->poses[path->current_pose_idx].max_speed <= MAX_SPEED)
+			speed_order->distance = path->poses[path->current_pose_idx].max_speed;
+		else
+			speed_order->distance = MAX_SPEED;
+		speed_order->angle = speed_order->distance / 2;
 		controller_set_pose_intermediate(&controller, TRUE);
 	}
 
@@ -246,12 +252,17 @@ void *task_planner(void *arg)
 			speed_order.angle = 0;
 		} else {*/
 			/* max speed order in pulse_linear per ctrl period (20ms) */
-			speed_order.distance = MAX_SPEED;
+			//speed_order.distance = path->poses[path->current_pose_idx].max_speed;
 			/* max speed order in pulse_angular per ctrl period (20ms) */
-			speed_order.angle = MAX_SPEED / 2;
+			//speed_order.angle = speed_order.distance / 2;
 		//}
 
-		controller_set_speed_order(&controller, speed_order);
+		/* Update speed order to max speed defined value in the new point to reach */
+		if (path->poses[path->current_pose_idx].max_speed <= MAX_SPEED)
+			speed_order->distance = path->poses[path->current_pose_idx].max_speed;
+		else
+			speed_order->distance = MAX_SPEED;
+		speed_order->angle = speed_order->distance / 2;
 
 		/* reverse gear selection is granted per point to reach, in path */
 		controller_set_allow_reverse(&controller, path->poses[path->current_pose_idx].allow_reverse);
@@ -259,10 +270,12 @@ void *task_planner(void *arg)
 		pose_t pose_current = controller.pose_current;
 
 		/* ===== position ===== */
-		if (trajectory_get_route_update(&pose_current, &pose_order) == -1)
+		if (trajectory_get_route_update(&pose_current, &pose_order, &speed_order) == -1)
 		{
 			controller_set_mode(&controller, CTRL_STATE_STOP);
 		}
+
+		controller_set_speed_order(&controller, speed_order);
 
 		controller_set_pose_to_reach(&controller, pose_order);
 
