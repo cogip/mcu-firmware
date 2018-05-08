@@ -354,6 +354,10 @@ pose_t dijkstra(uint16_t target, uint16_t index)
 
 	distance[start] = 0;
 	v = start;
+	if (graph[v] == 0)
+	{
+		goto dijkstra_error_no_destination;
+	}
 
 	while ((v != target) && (checked[v] == FALSE))
 	{
@@ -404,4 +408,7 @@ pose_t dijkstra(uint16_t target, uint16_t index)
 
 	/* Return point */
 	return valid_points[i];
+
+dijkstra_error_no_destination:
+	return start_position;
 }
