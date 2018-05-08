@@ -28,7 +28,7 @@
 
 /* Number of valve per ball (multiple trials in case ball are blocked ?) */
 /* Set 1 if confirmed Ok !! */
-#define VALVE_TRIAL_NB			2
+#define VALVE_TRIAL_NB			1
 
 /*
  * private
