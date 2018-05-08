@@ -119,9 +119,8 @@ int add_dyn_polygon(polygon_t *polygon)
 {
 	if ((nb_polygons + nb_dyn_polygons) < POLY_MAX)
 	{
-		nb_dyn_polygons = 0;
 		polygons[nb_polygons + nb_dyn_polygons] = *polygon;
-		nb_dyn_polygons = 1;
+		nb_dyn_polygons++;
 		return 0;
 	}
 	else
