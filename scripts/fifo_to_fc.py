@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import subprocess
-import os, sys, time
+import os, os.path, sys, time
+
+CORTEX_BIN_PATH = "/bin/native/cortex.elf"
 
 storing = False
 
@@ -30,4 +32,6 @@ except OSError:
 os.mkfifo(path, 0644)
 fifo = open(path, "w")
 time.sleep(2)
-myrun('/home/gdo/Developpement/Informatique/Personnel/mcu-firmware/bin/native/cortex.elf')
+#myrun('/home/gdo/Developpement/Informatique/Personnel/mcu-firmware/bin/native/cortex.elf'
+run_command = os.path.abspath(os.pardir) + CORTEX_BIN_PATH
+myrun(run_command)
