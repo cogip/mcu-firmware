@@ -13,9 +13,11 @@
 
 #define GPIO_SHARP_SENSOR1	GPIO_PIN(PORT_A, 7)
 
-#define HALF_PERIOD_WAIT_US	(10UL * US_PER_MS)
+#define HALF_PERIOD_WAIT_US	(20UL * US_PER_MS)
 
 #define STEP_MAX_BEFORE_BLOCKED	50
+
+#define STEP_MIN_STEPS		4
 
 /* If following is defined, use sharp measurement on each stepper motor steps */
 #define MEASUREMENT_ON_EACH_STEP
@@ -86,10 +88,15 @@ uint8_t motor_pap_turn_next_storage(void)
 	_stepper_en(TRUE);
 	_stepper_dir_set_ccw();
 
+	_bitbanging_do_one_step();
+	_bitbanging_do_one_step();
+
 	sharp_initial = _sharp_detects_hole();
 
 	/* First ensure the value is logic 1 */
 	if (! sharp_initial) {
+		printf("PAP: started while sharp at 0, going to 1 first !\n");
+
 		for (i = 0; i < STEP_MAX_BEFORE_BLOCKED; i++) {
 #if defined(MEASUREMENT_ON_EACH_STEP)
 			_bitbanging_do_one_step();
@@ -98,6 +105,9 @@ uint8_t motor_pap_turn_next_storage(void)
 #endif
 
 			printf("[%03d]\tTOR = %d\n", i, _sharp_detects_hole());
+
+			if (i < STEP_MIN_STEPS)
+				continue;
 
 			if (_sharp_detects_hole() != sharp_initial)
 				break;
@@ -122,6 +132,9 @@ uint8_t motor_pap_turn_next_storage(void)
 
 		printf("[%03d]\tTOR = %d\n", i, _sharp_detects_hole());
 
+		if (i < STEP_MIN_STEPS)
+			continue;
+
 		if (_sharp_detects_hole() != sharp_initial)
 			break;
 	}
@@ -131,6 +144,7 @@ uint8_t motor_pap_turn_next_storage(void)
 		retval = 1;
 
 exit_point:
+	xtimer_usleep(200 * US_PER_MS); // Wait 200ms before power off (wheel stop)
 	_stepper_en(FALSE);
 
 	return retval;
