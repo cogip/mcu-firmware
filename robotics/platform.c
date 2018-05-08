@@ -62,6 +62,8 @@ analog_sensors_t ana_sensors = {
 		[0] = {
 			.adc = 0,
 
+			.pos_str = "F",
+
 			.coeff_volts = 0.022,
 			.const_volts = 0.010,
 			.const_dist = -5.0,
@@ -73,6 +75,8 @@ analog_sensors_t ana_sensors = {
 		/* Rear: [10...80] cm - GP2Y0A21 - cal done */
 		[1] = {
 			.adc = 1,
+
+			.pos_str = "R",
 
 			.coeff_volts = 0.022,
 			.const_volts = 0.010,
@@ -86,6 +90,8 @@ analog_sensors_t ana_sensors = {
 		[2] = {
 			.adc = 2,
 
+			.pos_str = "FL",
+
 			.coeff_volts = 0.052,
 			.const_volts = 0.007,
 			.const_dist = 0,
@@ -97,6 +103,8 @@ analog_sensors_t ana_sensors = {
 		/* Front Side right: [4...30] cm - GP2YD120X - cal done */
 		[3] = {
 			.adc = 3,
+
+			.pos_str = "FR",
 
 			.coeff_volts = 0.052,
 			.const_volts = 0.007,
@@ -110,6 +118,8 @@ analog_sensors_t ana_sensors = {
 		[4] = {
 			.adc = 4,
 
+			.pos_str = "RL",
+
 			.coeff_volts = 0.052,
 			.const_volts = 0.007,
 			.const_dist = 0,
@@ -121,6 +131,8 @@ analog_sensors_t ana_sensors = {
 		/* Rear Side right: [4...30] cm - GP2YD120X - cal done */
 		[5] = {
 			.adc = 5,
+
+			.pos_str = "RR",
 
 			.coeff_volts = 0.052,
 			.const_volts = 0.007,

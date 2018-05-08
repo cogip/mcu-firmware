@@ -94,13 +94,14 @@ static void analog_sensor_dump_all(analog_sensors_t *as)
 	cons_printf("\n");
 
 	/* Header line */
-	cons_printf("\tid\t#adc\traw\tdist_cm\n");
+	cons_printf("\tid\t#adc\tloc\traw\tdist_cm\n");
 
 	for (i = 0; i < as->sensors_nb; i++) {
 		uint8_t raw = as->sensors[i].raw_values[ANALOG_SENSOR_NB_SAMPLES-1];
 		dist_cm_t dist;
 
-		cons_printf("\t%d\t%d\t%d", i, as->sensors[i].adc, raw >> 2);
+		cons_printf("\t%d\t%d\t%d\t%s",
+			    i, as->sensors[i].adc, raw, as->sensors[i].pos_str);
 
 		dist = analog_sensor_adc2cm(raw,
 					    as->sensors[i].coeff_volts,
