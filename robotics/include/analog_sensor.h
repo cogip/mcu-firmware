@@ -19,6 +19,8 @@ typedef struct {
 	struct {
 		adc_t adc;
 
+		const char *pos_str;
+
 		/* for ADC value to distance (cm) conversion */
 		float coeff_volts;
 		float const_volts;
