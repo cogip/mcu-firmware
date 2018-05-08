@@ -200,18 +200,16 @@ sd21_t sd21 = {
 			.value_close = 1350,
 		},
 
-		/* TODO */
 		[SERVO_ID_VALVE_RECYCLER] = {
-			.value_init = 1500,
-			.value_open = 1500,
-			.value_close = 1500,
+			.value_init = 1050,
+			.value_open = 1925,
+			.value_close = 1050,
 		},
 
-		/* TODO */
 		[SERVO_ID_RECYCLER] = {
-			.value_init = 1500,
-			.value_open = 1500,
-			.value_close = 1500,
+			.value_init = 1750,
+			.value_open = 1750,
+			.value_close = 1200,
 		},
 
 		[SERVO_ID_BEE_L] = {
@@ -221,9 +219,9 @@ sd21_t sd21 = {
 		},
 
 		[SERVO_ID_BEE_R] = {
-			.value_init = 925,
+			.value_init = 875,
 			.value_open = 1700,
-			.value_close = 925,
+			.value_close = 875,
 		},
 
 	},
