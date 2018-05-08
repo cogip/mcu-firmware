@@ -21,6 +21,8 @@
 #endif
 #include <thread.h>
 
+#include "xtimer.h"
+
 /**
  * PORTA : ANA input
  *	PA0 - PA7 : IR
@@ -377,7 +379,8 @@ uint8_t mach_is_game_launched(void)
 {
 	/* Starter switch */
 #if defined(CONFIG_USE_STARTER) && !defined(BOARD_NATIVE)
-	return gpio_read(GPIO_PIN(PORT_B, 2));
+	/* read 4 when the bar is NOT yet removed */
+	return gpio_read(GPIO_PIN(PORT_B, 2)) ? 0 : 1;
 #else
 	return 1;
 #endif
@@ -386,8 +389,11 @@ uint8_t mach_is_game_launched(void)
 uint8_t mach_is_camp_left(void)
 {
 	/* Color switch for coords translations */
-	//FIXME: correct mirror
-	return gpio_read(GPIO_PIN(PORT_B, 10));
+	gpio_init(GPIO_PIN(PORT_B, 10), GPIO_IN);
+
+	xtimer_usleep(100 * US_PER_MS); // Wait 100ms (debounce)
+
+	return gpio_read(GPIO_PIN(PORT_B, 10)) ? 1 : 0;
 }
 
 static void mach_pinmux_setup(void)
@@ -469,6 +475,12 @@ void mach_setup(void)
 #if defined(CONFIG_MOTOR_PAP)
 	motor_pap_init();
 #endif
+
+	/* Starter, orig 1 & 2, color */
+	gpio_init(GPIO_PIN(PORT_A, 0), GPIO_IN_PU);
+	gpio_init(GPIO_PIN(PORT_A, 1), GPIO_IN_PU);
+	gpio_init(GPIO_PIN(PORT_B, 2), GPIO_IN_PU);
+	gpio_init(GPIO_PIN(PORT_B, 10), GPIO_IN);
 
 	/* setup qdec */
 //#ifdef BOARD_NATIVE
