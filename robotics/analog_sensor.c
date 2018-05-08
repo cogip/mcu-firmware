@@ -70,6 +70,11 @@ static dist_cm_t analog_sensor_adc2cm(uint16_t adc,
 	float d = voltage * coeff_volts - const_volts;
 	float distance = 1 / d + const_dist;
 
+	/* 2018 hack: on STM, all converted values, seems * by 2 ! */
+	distance /= 2;
+	distance = distance * 4.0 / 5.0;
+	/* 2018 hack: on STM, all converted values, seems * by 2 ! */
+
 	if (distance >= dist_max)
 		distance = AS_DIST_MAX;
 
