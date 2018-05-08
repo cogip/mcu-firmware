@@ -57,7 +57,7 @@ void planner_enter_calibration(void)
 			increment_current_pose_idx();
 			if (path->current_pose_idx)
 			{
-				set_start_finish(&(path->poses[path->current_pose_idx-1].pos), &(path->poses[path->current_pose_idx].pos));
+				set_start_position_finish_position(&(path->poses[path->current_pose_idx-1].pos), &(path->poses[path->current_pose_idx].pos));
 				update_graph();
 			}
 			break;
@@ -65,7 +65,7 @@ void planner_enter_calibration(void)
 			if (path->current_pose_idx)
 			{
 				path->current_pose_idx--;
-				set_start_finish(&(path->poses[path->current_pose_idx+1].pos), &(path->poses[path->current_pose_idx].pos));
+				set_start_position_finish_position(&(path->poses[path->current_pose_idx+1].pos), &(path->poses[path->current_pose_idx].pos));
 				update_graph();
 			}
 			break;

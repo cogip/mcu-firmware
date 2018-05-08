@@ -77,7 +77,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 		first_boot = 1;
 		pose_reached = path->poses[path->current_pose_idx].pos;
 		*pose_to_reach = path->poses[path->current_pose_idx].pos;
-		set_start_finish(&pose_reached, pose_to_reach);
+		set_start_position_finish_position(&pose_reached, pose_to_reach);
 		if (update_graph() == -1)
 			goto trajectory_get_route_update_error;
 	}
@@ -117,13 +117,13 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 
 	if (need_update)
 	{
-		set_start_finish(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
+		set_start_position_finish_position(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
 		test = update_graph();
 		while ((test < 0) && (!in_calibration))
 		{
 			if (test == -1)
 				increment_current_pose_idx();
-			set_start_finish(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
+			set_start_position_finish_position(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
 			test = update_graph();
 		}
 		index = 1;
