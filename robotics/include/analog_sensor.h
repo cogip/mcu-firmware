@@ -8,7 +8,7 @@
 #define AS_DIST_MAX	UINT8_MAX
 typedef int dist_cm_t;
 
-#define AS_DIST_LIMIT	30 /*cm*/
+#define AS_DIST_LIMIT	50 /*cm*/
 
 /* Average measurement over time */
 #define ANALOG_SENSOR_NB_SAMPLES	3
