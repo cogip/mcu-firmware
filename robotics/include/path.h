@@ -25,5 +25,6 @@ typedef struct {
 extern path_t robot_path;
 
 path_pose_t * path_get_current_path_pos(const path_t *path);
+void path_horizontal_mirror_all_pos(const path_t *path);
 
 #endif /* PATH_H_ */
