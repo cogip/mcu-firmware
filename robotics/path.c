@@ -16,6 +16,16 @@
 
 // TODO: do not use Rear gear.
 static path_pose_t poses[] = {
+	/*{	.pos = {.x = 0, .y = 200, .O = 0, },
+		.allow_reverse = FALSE,
+		.max_speed = MAX_SPEED,
+		.act = NULL, },
+	{	.pos = {.x = 0, .y = 200, .O = 180, },
+		.allow_reverse = FALSE,
+		.max_speed = MAX_SPEED,
+		.act = NULL, },*/
+
+	 /* ********************************************************* */
 	 /* POSE_INITIAL */
 	{	.pos = {.x = -1500 +160 +10 +22, .y = 160 +22 +1, .O = 90, },
 		.allow_reverse = TRUE,
@@ -23,43 +33,49 @@ static path_pose_t poses[] = {
 		.act = NULL, },
 
 	/* Debug position for the same color water distributor */
-	{	.pos = {.x = -1450 +160 +10 +22, .y = 850, .O = 90, },
+	/*{	.pos = {.x = -1450 +160 +10 +22, .y = 850, .O = 90, },
 		.allow_reverse = TRUE,
 		.max_speed = MAX_SPEED,
-		.act = NULL, },
+		.act = NULL, },*/
 
 	/* Goes to same color water distributor and start catching action */
-	//{	.pos = {.x = -1500 +160 +10 +22, .y = 850, .O = 90, },
-	//	.allow_reverse = TRUE,
-	//	.max_speed = MAX_SPEED,
-	//	.act = NULL, }, //callback : act_catch_same_color_water
+	{	.pos = {.x = -1500 +160 +10 +22, .y = 865, .O = 90, },
+		.allow_reverse = TRUE,
+		.max_speed = MAX_SPEED/2,
+		.act = act_launch_same_color_water, }, //callback : act_catch_same_color_water
 
 	/* Launch water into water tower */
-	//{	.pos = {.x = -1500 +160 +10 +22, .y = 850, .O = 90, },
-	//	.allow_reverse = TRUE,
-	//	.max_speed = MAX_SPEED,
-	//	.act = NULL, }, //callback : act_launch_same_color_water
+	{	.pos = {.x = -1500 +160 +10 +22, .y = 865, .O = 90, },
+		.allow_reverse = TRUE,
+		.max_speed = MAX_SPEED,
+		.act = act_launch_same_color_water, }, //callback : act_launch_same_color_water
+
+	/* Goes to position to deploy arm for the bee */
+	{	.pos = {.x = -1500 +160 +100 +22, .y = 2000 -160 -40, .O = 90, },
+		.allow_reverse = TRUE,
+		.max_speed = MAX_SPEED,
+		.act = act_open_bee_pusher, }, //callback : bras abeille en position de poussée
 
 	/* Goes to position to push the bee */
-	{	.pos = {.x = -1500 +160 +10 +22, .y = 2000 -160 -100, .O = 90, },
+	{	.pos = {.x = -1500 +160 +100 +22 +200, .y = 2000 -160 -40, .O = 0, },
 		.allow_reverse = TRUE,
 		.max_speed = MAX_SPEED,
 		.act = NULL, }, //callback : bras abeille en position de poussée
 
-	/* Turn in order to push the bee */
-	{	.pos = {.x = -1500 +160 +10 +22, .y = 2000 -160 -100, .O = 0, },
+	/* Goes to position to close arm for the bee */
+	{	.pos = {.x = -1500 +160 +100 +22 +200, .y = 2000 -160 -40, .O = 0, },
 		.allow_reverse = TRUE,
 		.max_speed = MAX_SPEED,
-		.act = NULL, }, //callback : bras abeille en position initiale
+		.act = act_close_bee_pusher, }, //callback : bras abeille en position initiale
 
 	/* Intermediate point to domotic pannel interruptor */
-	{	.pos = {.x = -770, .y = 160 + 22, .O = 0, },
+	{	.pos = {.x = -770, .y = 160 + 22 + 1, .O = 0, },
 		.allow_reverse = TRUE,
 		.max_speed = MAX_SPEED,
 		.act = NULL, },
 
 	/* Goes to domotic pannel interruptor */
-	{	.pos = {.x = -370, .y = 160 + 22, .O = 0, },
+	{	.pos = {.x = -370, .y = 160 + 22 + 1, .O = 0, },
 		.allow_reverse = TRUE,
 		.max_speed = MAX_SPEED,
 		.act = NULL, },
@@ -84,7 +100,7 @@ static path_pose_t poses[] = {
 path_t robot_path = {
 	/* static cfg */
 	.play_in_loop = FALSE,
-	.nb_pose = 8, //9
+	.nb_pose = 9, //10
 	.poses = poses,
 };
 
