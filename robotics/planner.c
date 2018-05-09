@@ -64,6 +64,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	static uint8_t index = 1;
 	static int first_boot = 0;
 	int test = 0;
+	int control_loop = 0;
 	uint8_t need_update = 0;
 	(void) robot_pose;
 	robot_pose_tmp =  *robot_pose;
@@ -126,12 +127,18 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	{
 		set_start_position_finish_position(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
 		test = update_graph();
-		while ((test < 0) && (!in_calibration))
+
+		control_loop = path->nb_pose;
+		while ((test < 0) && (!in_calibration) && (control_loop-- > 0))
 		{
 			if (test == -1)
 				increment_current_pose_idx();
 			set_start_position_finish_position(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
 			test = update_graph();
+		}
+		if (control_loop == 0)
+		{
+			goto trajectory_get_route_update_error;
 		}
 		index = 1;
 	}
