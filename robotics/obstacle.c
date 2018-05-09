@@ -76,12 +76,12 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, sensor_t *sensor, double dist)
 	if (nb_vertices < POLY_MAX_POINTS)
 	{
 		/* Right reference*/
-		pose_t ref_pos_right = (pose_t){.x = robot_pose_tmp.x + OBSTACLE_DYN_SIZE * cos(angle - M_PI/2),
-							 .y = robot_pose_tmp.y + OBSTACLE_DYN_SIZE * sin(angle - M_PI/2),
+		pose_t ref_pos_right = (pose_t){.x = robot_pose_tmp.x + OBSTACLE_DYN_SIZE/2 * cos(angle - M_PI/2),
+							 .y = robot_pose_tmp.y + OBSTACLE_DYN_SIZE/2 * sin(angle - M_PI/2),
 							 .O = angle /* + direction * M_PI/2 */};
 		/* Left reference */
-		pose_t ref_pos_left = (pose_t){.x = robot_pose_tmp.x + OBSTACLE_DYN_SIZE * cos(angle + M_PI/2),
-							 .y = robot_pose_tmp.y + OBSTACLE_DYN_SIZE * sin(angle + M_PI/2),
+		pose_t ref_pos_left = (pose_t){.x = robot_pose_tmp.x + OBSTACLE_DYN_SIZE/2 * cos(angle + M_PI/2),
+							 .y = robot_pose_tmp.y + OBSTACLE_DYN_SIZE/2 * sin(angle + M_PI/2),
 							 .O = angle /* + direction * M_PI/2 */};
 
 		/* Right points */

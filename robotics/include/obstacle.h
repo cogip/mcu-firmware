@@ -4,7 +4,7 @@
 #include "analog_sensor.h"
 
 #define OBSTACLE_DYN_LENGTH 300
-#define OBSTACLE_DYN_SIZE   400
+#define OBSTACLE_DYN_SIZE   800
 
 void borders_init(polygon_t *polygon);
 void mach_fixed_obstacles_init(void);
