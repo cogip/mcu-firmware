@@ -164,6 +164,13 @@ inline path_pose_t * path_get_current_path_pos(const path_t *path)
 	return &path->poses[path->current_pose_idx];
 }
 
+inline uint8_t path_get_current_max_speed(const path_t *path)
+{
+	path_pose_t *current_path_pos = &path->poses[path->current_pose_idx];
+
+	return MIN(current_path_pos->max_speed, MAX_SPEED);
+}
+
 void path_horizontal_mirror_all_pos(const path_t *path)
 {
 	for (int i = 0; i < path->nb_pose; i++) {
