@@ -94,13 +94,12 @@ polar_t speed_controller(controller_t *ctrl,
 {
 	polar_t speed_error;
 	polar_t command;
-	double d = 0;
 	static uint8_t error_blocking = 0;
 
 	speed_error.distance = speed_order.distance - speed_current.distance;
 	speed_error.angle = speed_order.angle - speed_current.angle;
 
-	d = ctrl->linear_speed_pid.previous_error - speed_error.distance;
+	double d = fabs(ctrl->linear_speed_pid.previous_error) - fabs(speed_error.distance);
 	if (d < 0)
 		error_blocking++;
 	else
