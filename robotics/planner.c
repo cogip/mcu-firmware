@@ -163,10 +163,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	else
 	{
 		/* Update speed order to max speed defined value in the new point to reach */
-		if (current_path_pos->max_speed <= MAX_SPEED)
-			speed_order->distance = current_path_pos->max_speed;
-		else
-			speed_order->distance = MAX_SPEED;
+		speed_order->distance = path_get_current_max_speed(path);
 		speed_order->angle = speed_order->distance / 2;
 		controller_set_pose_intermediate(&controller, TRUE);
 	}
@@ -276,10 +273,7 @@ void *task_planner(void *arg)
 		//}
 
 		/* Update speed order to max speed defined value in the new point to reach */
-		if (current_path_pos->max_speed <= MAX_SPEED)
-			speed_order.distance = current_path_pos->max_speed;
-		else
-			speed_order.distance = MAX_SPEED;
+		speed_order.distance = path_get_current_max_speed(path);
 		speed_order.angle = speed_order.distance / 2;
 
 		/* reverse gear selection is granted per point to reach, in path */
