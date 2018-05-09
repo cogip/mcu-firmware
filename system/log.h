@@ -1,5 +1,5 @@
-#ifndef LOG_H
-#define LOG_H
+#ifndef _LOG_H
+#define _LOG_H
 
 #include <stdint.h>
 
@@ -96,4 +96,4 @@ void log_vect_display_line(datalog_t *d);
 /* Same as before, and also print the footer */
 void log_vect_display_last_line(datalog_t *d);
 
-#endif /* LOG_H */
+#endif /* _LOG_H */
