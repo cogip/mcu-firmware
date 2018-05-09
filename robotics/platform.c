@@ -301,29 +301,29 @@ controller_t controller = {
 	},
 #else
 	.linear_speed_pid = {
-		.kp = 5.,
-		.ki = 1.,
+		.kp = 15.,
+		.ki = 2.,
 		.kd = 0.,
 	},
 	.angular_speed_pid = {
-		.kp = 3.,
-		.ki = 1.,
+		.kp = 15.,
+		.ki = 2.,
 		.kd = 0.,
 	},
 	.linear_pose_pid = {
-		.kp = 0.030,
+		.kp = 0.05,
 		.ki = 0.,
 		.kd = 0,
 	},
 	.angular_pose_pid = {
-		.kp = 0.05,
+		.kp = 0.1,
 		.ki = 0.,
 		.kd = 0.,
 	},
 #endif
 
 	//.min_distance_for_angular_switch = 500,
-	.min_distance_for_angular_switch = 50,
+	.min_distance_for_angular_switch = 30,
 	.min_angle_for_pose_reached = 100,
 	.regul = CTRL_REGUL_POSE_DIST,
 	.allow_reverse = TRUE,
