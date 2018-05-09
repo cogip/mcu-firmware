@@ -265,10 +265,10 @@ void *task_planner(void *arg)
 
 		/* Update speed order to max speed defined value in the new point to reach */
 		if (path->poses[path->current_pose_idx].max_speed <= MAX_SPEED)
-			speed_order->distance = path->poses[path->current_pose_idx].max_speed;
+			speed_order.distance = path->poses[path->current_pose_idx].max_speed;
 		else
-			speed_order->distance = MAX_SPEED;
-		speed_order->angle = speed_order->distance / 2;
+			speed_order.distance = MAX_SPEED;
+		speed_order.angle = speed_order.distance / 2;
 
 		/* reverse gear selection is granted per point to reach, in path */
 		controller_set_allow_reverse(&controller, path->poses[path->current_pose_idx].allow_reverse);
