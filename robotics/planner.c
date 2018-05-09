@@ -200,17 +200,8 @@ void *task_planner(void *arg)
 	}
 
 	/* mirror the points in place if selected camp is right */
-	if (!camp_left) {
-		path->current_pose_idx = path->nb_pose;
-		do {
-			path->current_pose_idx -= 1;
-			current_path_pos = path_get_current_path_pos(path);
-			current_path_pos->pos.x *= -1;
-			current_path_pos->pos.O = 180 - current_path_pos->pos.O;
-			current_path_pos->pos.O = ((int)current_path_pos->pos.O) % 360;
-		}
-		while (path->current_pose_idx);
-	}
+	if (!camp_left)
+		path_horizontal_mirror_all_pos(path);
 
 	/* object context initialisation */
 	path->current_pose_idx = 0;

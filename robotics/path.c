@@ -163,3 +163,14 @@ inline path_pose_t * path_get_current_path_pos(const path_t *path)
 {
 	return &path->poses[path->current_pose_idx];
 }
+
+void path_horizontal_mirror_all_pos(const path_t *path)
+{
+	for (int i = 0; i < path->nb_pose; i++) {
+		pose_t *pos = &path->poses[i].pos;
+
+		pos->x *= -1;
+		pos->O = 180 - pos->O;
+		pos->O = ((int)pos->O) % 360;
+	}
+}
