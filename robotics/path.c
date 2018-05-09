@@ -164,6 +164,14 @@ inline path_pose_t * path_get_current_path_pos(const path_t *path)
 	return &path->poses[path->current_pose_idx];
 }
 
+inline void path_increment_current_pose_idx(path_t *path)
+{
+	if (path->current_pose_idx < path->nb_pose - 1)
+		path->current_pose_idx += 1;
+	else if (path->play_in_loop)
+		path->current_pose_idx = 0;
+}
+
 inline uint8_t path_get_current_max_speed(const path_t *path)
 {
 	path_pose_t *current_path_pos = &path->poses[path->current_pose_idx];

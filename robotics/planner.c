@@ -31,14 +31,6 @@ uint8_t in_calibration = FALSE;
 #define GAME_DURATION_SEC	100
 #define GAME_DURATION_TICKS	(GAME_DURATION_SEC * TASK_FREQ_HZ)
 
-inline void increment_current_pose_idx(void)
-{
-	if (path->current_pose_idx < path->nb_pose - 1)
-		path->current_pose_idx += 1;
-	else if (path->play_in_loop)
-		path->current_pose_idx = 0;
-}
-
 static void show_game_time(void)
 {
 	static uint8_t _secs = TASK_FREQ_HZ;
@@ -98,7 +90,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 				if (current_path_pos->act)
 					current_path_pos->act();
 #endif
-				increment_current_pose_idx();
+				path_increment_current_pose_idx(path);
 				current_path_pos = path_get_current_path_pos(path);
 			}
 			robot_pose_tmp = pose_reached;
@@ -126,7 +118,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 
 	if (controller.mode == &controller_modes[CTRL_STATE_BLOCKED])
 	{
-		increment_current_pose_idx();
+		path_increment_current_pose_idx(path);
 		controller_set_mode(&controller, CTRL_STATE_INGAME);
 		need_update = 1;
 	}
@@ -140,7 +132,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 		while ((test < 0) && (!in_calibration) && (control_loop-- > 0))
 		{
 			if (test == -1) {
-				increment_current_pose_idx();
+				path_increment_current_pose_idx(path);
 				current_path_pos = path_get_current_path_pos(path);
 			}
 			set_start_position_finish_position(&robot_pose_tmp, &(current_path_pos->pos));
