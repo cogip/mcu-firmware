@@ -4,7 +4,7 @@
 #include "platform.h"
 #include "xtimer.h"
 
-#define AVERAGING
+/*#define AVERAGING*/
 
 void *task_analog_sensors(void *arg)
 {
