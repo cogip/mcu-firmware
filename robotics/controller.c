@@ -99,8 +99,9 @@ polar_t speed_controller(controller_t *ctrl,
 	speed_error.distance = speed_order.distance - speed_current.distance;
 	speed_error.angle = speed_order.angle - speed_current.angle;
 
-	double d = fabs(ctrl->linear_speed_pid.previous_error) - fabs(speed_error.distance);
-	if (d < 0)
+	//double d = fabs(ctrl->linear_speed_pid.previous_error) - fabs(speed_error.distance);
+	if (((speed_current.distance < (0.05 * speed_order.distance)) && (ctrl->regul == CTRL_REGUL_POSE_DIST))
+		|| ((speed_current.angle < (0.05 * speed_order.angle)) && (ctrl->regul != CTRL_REGUL_POSE_DIST)))
 		error_blocking++;
 	else
 		error_blocking = 0;

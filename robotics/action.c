@@ -109,7 +109,7 @@ void act_catch_mixed_water(void)
 // after:  wheel half, lefting opponent color
 void act_launch_mixed_water(void)
 {
-	for (int i = 0; i < PIPE_WATER_NB; i++) {
+	for (int i = 0; i < PIPE_WATER_NB; i+=2) {
 
 		_ball_launcher_motor_enable(TRUE);
 
@@ -138,6 +138,7 @@ void act_launch_mixed_water(void)
 			xtimer_usleep(DELAY_BETWEEN_STORAGE_US);
 		}
 	}
+	motor_pap_turn_next_storage();
 
 }
 
@@ -145,7 +146,7 @@ void act_launch_mixed_water(void)
 // after:  wheel empty
 void act_drop_recycled_water(void)
 {
-	for (int i = 0; i < PIPE_WATER_NB; i++) {
+	for (int i = 0; i < PIPE_WATER_NB; i+=2) {
 
 		/* Open valve */
 		sd21_control_servo(&sd21, SERVO_ID_VALVE_RECYCLER, SD21_SERVO_OPEN);

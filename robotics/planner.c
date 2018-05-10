@@ -25,7 +25,7 @@ uint8_t in_calibration = FALSE;
 
 /* periodic task */
 /* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
-#define TASK_PERIOD_MS		(200)
+#define TASK_PERIOD_MS		(50)
 
 #define TASK_FREQ_HZ		(1000 / TASK_PERIOD_MS)
 #define GAME_DURATION_SEC	100
@@ -95,7 +95,9 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 			{
 #ifndef BOARD_NATIVE
 				if (path->poses[path->current_pose_idx].act)
+				{
 					path->poses[path->current_pose_idx].act();
+				}
 #endif
 				increment_current_pose_idx();
 			}
@@ -106,9 +108,9 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 		{
 			index++;
 		}
-
-		reset_dyn_polygons();
 	}
+
+	reset_dyn_polygons();
 
 #if defined(CONFIG_ANALOG_SENSORS)
 	if(controller.regul != CTRL_REGUL_POSE_PRE_ANGL) {
@@ -121,6 +123,13 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 		}
 	}
 #endif
+
+	if (controller.mode == &controller_modes[CTRL_STATE_BLOCKED])
+	{
+		increment_current_pose_idx();
+		controller_set_mode(&controller, CTRL_STATE_INGAME);
+		need_update = 1;
+	}
 
 	if (need_update)
 	{
@@ -156,7 +165,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 			speed_order->distance = path->poses[path->current_pose_idx].max_speed;
 		else
 			speed_order->distance = MAX_SPEED;
-		speed_order->angle = speed_order->distance / 2;
+		speed_order->angle = speed_order->distance * 2;
 		controller_set_pose_intermediate(&controller, TRUE);
 	}
 
@@ -207,6 +216,8 @@ void *task_planner(void *arg)
 	initial_pose.O *= PULSE_PER_DEGREE;
 	controller_set_pose_current(&controller, initial_pose);
 
+	uint32_t game_start_time = xtimer_now_usec();
+
 	for (;;)
 	{
 		xtimer_ticks32_t loop_start_time = xtimer_now();		
@@ -222,9 +233,13 @@ void *task_planner(void *arg)
 
 			/* while starter switch is not release we wait */
 			if (!mach_is_game_launched())
+			{
+				game_start_time = xtimer_now_usec();
 				goto yield_point;
+			}
 
-			if (game_time >= GAME_DURATION_TICKS) {
+			//if (game_time >= GAME_DURATION_TICKS) {
+			if (xtimer_now_usec() - game_start_time >= GAME_DURATION_SEC * US_PER_SEC) {
 				cons_printf(">>>>\n");
 				controller_set_mode(&controller, CTRL_STATE_STOP);
 				break;
@@ -269,7 +284,7 @@ void *task_planner(void *arg)
 			speed_order.distance = path->poses[path->current_pose_idx].max_speed;
 		else
 			speed_order.distance = MAX_SPEED;
-		speed_order.angle = speed_order.distance / 2;
+		speed_order.angle = speed_order.distance*2;
 
 		/* reverse gear selection is granted per point to reach, in path */
 		controller_set_allow_reverse(&controller, path->poses[path->current_pose_idx].allow_reverse);

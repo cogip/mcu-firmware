@@ -6,12 +6,12 @@
 #include <limits.h>
 
 #define AS_DIST_MAX	UINT8_MAX
-typedef int dist_cm_t;
+typedef uint8_t dist_cm_t;
 
-#define AS_DIST_LIMIT	50 /*cm*/
+#define AS_DIST_LIMIT	20 /*cm*/
 
 /* Average measurement over time */
-#define ANALOG_SENSOR_NB_SAMPLES	3
+#define ANALOG_SENSOR_NB_SAMPLES	10
 
 typedef struct {
 	adc_t adc;
@@ -29,7 +29,7 @@ typedef struct {
 	double angle_robot_offset;
 
 	/* acquisition context */
-	int raw_values[ANALOG_SENSOR_NB_SAMPLES]; /* keep acquired distances */
+	uint8_t raw_values[ANALOG_SENSOR_NB_SAMPLES]; /* keep acquired distances */
 } sensor_t;
 
 typedef struct {

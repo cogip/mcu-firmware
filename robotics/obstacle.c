@@ -85,8 +85,9 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, sensor_t *sensor, double dist)
 							 .O = angle /* + direction * M_PI/2 */};
 
 		/* Right points */
-		polygon.points[polygon.count] = (pose_t){.x = ref_pos_right.x + dist * cos(ref_pos_right.O),
-							   .y = ref_pos_right.y + dist * sin(ref_pos_right.O)};
+		/*polygon.points[polygon.count] = (pose_t){.x = ref_pos_right.x + dist * cos(ref_pos_right.O),
+							   .y = ref_pos_right.y + dist * sin(ref_pos_right.O)};*/
+		polygon.points[polygon.count] = ref_pos_right;
 		polygon.count++;
 		polygon.points[polygon.count] = (pose_t){.x = ref_pos_right.x + (dist + OBSTACLE_DYN_SIZE) * cos(ref_pos_right.O),
 							 .y = ref_pos_right.y + (dist + OBSTACLE_DYN_SIZE) * sin(ref_pos_right.O)};
@@ -96,11 +97,12 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, sensor_t *sensor, double dist)
 		polygon.points[polygon.count] = (pose_t){.x = ref_pos_left.x + (dist + OBSTACLE_DYN_SIZE) * cos(ref_pos_left.O),
 							 .y = ref_pos_left.y + (dist + OBSTACLE_DYN_SIZE) * sin(ref_pos_left.O)};
 		polygon.count++;
-		polygon.points[polygon.count] = (pose_t){.x = ref_pos_left.x + dist * cos(ref_pos_left.O),
-							 .y = ref_pos_left.y + dist * sin(ref_pos_left.O)};
+		/*polygon.points[polygon.count] = (pose_t){.x = ref_pos_left.x + dist * cos(ref_pos_left.O),
+							 .y = ref_pos_left.y + dist * sin(ref_pos_left.O)};*/
+		polygon.points[polygon.count] = ref_pos_left;
 		polygon.count++;
-		cons_printf("@o@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f\n", polygon.points[0].x, polygon.points[0].y, polygon.points[1].x, polygon.points[1].y, polygon.points[2].x, polygon.points[2].y, polygon.points[3].x, polygon.points[3].y, robot_pose_tmp.O);
-		cons_printf("@t@,%+.0f,%+.0f,%+.0f,%+.0f\n", ref_pos_right.x, ref_pos_right.y, ref_pos_left.x, ref_pos_left.y);
+		//cons_printf("@o@,%+.0lf,%+.0lf,%+.0lf,%+.0lf,%+.0lf,%+.0lf,%+.0lf,%+.0lf,%+.0lf\n", polygon.points[0].x, polygon.points[0].y, polygon.points[1].x, polygon.points[1].y, polygon.points[2].x, polygon.points[2].y, polygon.points[3].x, polygon.points[3].y, robot_pose_tmp.O);
+		//cons_printf("@t@,%+.0lf,%+.0lf,%+.0lf,%+.0lf\n", ref_pos_right.x, ref_pos_right.y, ref_pos_left.x, ref_pos_left.y);
 		add_dyn_polygon(&polygon);
 	}
 	else

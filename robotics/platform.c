@@ -59,6 +59,7 @@
 //#ifdef CONFIG_ANALOG_SENSORS
 analog_sensors_t ana_sensors = {
 	.sensors_nb = 6,
+	.sensor_index = 0,
 	.sensors = {
 		/* Front: [10...80] cm - GP2Y0A21 - cal done */
 		[0] = {

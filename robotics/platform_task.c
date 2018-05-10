@@ -84,7 +84,7 @@ void mach_tasks_init(void)
 				  0, 0,
 				  task_controller_update, NULL, "motion_ctrl");
 	thread_create(planner_thread_stack, sizeof(planner_thread_stack),
-				  0, 0,
+				  5, 0,
 				  task_planner, NULL, "game_planner");
 	thread_create(analog_sensors_thread_stack, sizeof(analog_sensors_thread_stack),
 				  10, 0,
