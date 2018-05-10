@@ -26,7 +26,7 @@ void *task_analog_sensors(void *arg)
 		value = adc_sample(as->sensors[i].adc, ADC_RES);
 
 		/* TODO: Understand why *2 */
-		value <<= 1;
+		//value <<= 1;
 
 #if defined(AVERAGING)
 		/* save raw value in context */
@@ -66,9 +66,10 @@ static dist_cm_t analog_sensor_adc2cm(int adc,
 				    float coeff_volts, float const_volts,
 				    float const_dist, uint8_t dist_max)
 {
-	float voltage = adc * 3.3 / 255; /* 8-bits conversion, Vcc ADC = 3.3V */
+	float voltage = (((float)adc) * 3.3) / 255.0; /* 8-bits conversion, Vcc ADC = 3.3V */
 	float d = voltage * coeff_volts - const_volts;
 	float distance = 1 / d + const_dist;
+	distance /= 2.0;
 
 	if ((distance >= dist_max) || (distance < 0))
 		distance = AS_DIST_MAX;
