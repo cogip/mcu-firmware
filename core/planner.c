@@ -67,7 +67,7 @@ pose_t planner_get_path_pose_initial(void)
 void planner_start_game(void)
 {
 	/* TODO: send pose_initial, pose_order & speed_order to controller */
-	controller_set_mode(&controller, CTRL_STATE_INGAME);
+	controller_set_mode(&controller, &controller_modes[CTRL_STATE_INGAME]);
 	game_started = TRUE;
 }
 
@@ -175,7 +175,7 @@ void *task_planner(void *arg)
 
 			if (game_time >= GAME_DURATION_TICKS) {
 				cons_printf(">>>>\n");
-				controller_set_mode(&controller, CTRL_STATE_STOP);
+				controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
 				break;
 			}
 
