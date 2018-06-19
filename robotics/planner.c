@@ -129,6 +129,7 @@ void *task_planner(void *arg)
 	//analog_sensor_zone_t zone;
 	func_cb_t pfn_evtloop_end_of_game = mach_get_end_of_game_pfn();
 	pose_t	pose_order		= { 0, 0, 0 };
+	pose_t	initial_pose		= { 0, 0, 0 };
 	polar_t	speed_order		= { 0, 0 };
 	const uint8_t camp_yellow	= mach_is_camp_yellow();
 
@@ -155,6 +156,11 @@ void *task_planner(void *arg)
 
 	/* object context initialisation */
 	path->current_pose_idx = 0;
+	initial_pose = path->poses[path->current_pose_idx].pos;
+	initial_pose.x *= PULSE_PER_MM;
+	initial_pose.y *= PULSE_PER_MM;
+	initial_pose.O *= PULSE_PER_DEGREE;
+	controller_set_pose_current(&controller, initial_pose);
 
 	for (;;)
 	{

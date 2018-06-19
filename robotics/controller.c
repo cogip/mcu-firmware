@@ -9,7 +9,6 @@
 #include "xtimer.h"
 #include "system/log.h"
 #include "odometry.h"
-#include "planner.h"
 #include "platform.h"
 #include "trigonometry.h"
 
@@ -320,19 +319,12 @@ void motor_drive(polar_t *command)
 void *task_controller_update(void *arg)
 {
 	/* bot position on the 'table' (absolute position): */
-	pose_t	robot_pose			= { 0, 0, 0 };
 	polar_t motor_command		= { 0, 0 };
 	func_cb_t pfn_evtloop_prefunc  = mach_get_ctrl_loop_pre_pfn();
 	func_cb_t pfn_evtloop_postfunc = mach_get_ctrl_loop_post_pfn();
 
 	(void)arg;
 	printf("Controller started\n");
-
-	/* object context initialisation */
-	/*robot_pose = planner_get_path_pose_initial();
-	robot_pose.x *= PULSE_PER_MM;
-	robot_pose.y *= PULSE_PER_MM;
-	robot_pose.O *= PULSE_PER_DEGREE;*/
 
 	for (;;) {
 		xtimer_ticks32_t loop_start_time = xtimer_now();		
@@ -342,7 +334,7 @@ void *task_controller_update(void *arg)
 			(*pfn_evtloop_prefunc)();
 
 		if ((controller.mode) && (controller.mode->state_cb))
-			controller.mode->state_cb(&robot_pose, &motor_command);
+			controller.mode->state_cb(&controller.pose_current, &motor_command);
 
 		motor_drive(&motor_command);
 
