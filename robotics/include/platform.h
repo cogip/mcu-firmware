@@ -33,39 +33,25 @@
  */
 #define PULSE_PER_MM			10.61
 /* WHEELS_DISTANCE = WHEELS_DISTANCE_MM * PULSE_PER_MM */
-#define WHEELS_DISTANCE			2962.312
+#define WHEELS_DISTANCE			2965.5
 /* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
-#define PULSE_PER_DEGREE		51.70
+#define PULSE_PER_DEGREE		51.76
 
 #define MAX_ACC				25
-#define MAX_SPEED			250
 
 #define HBRIDGE_MOTOR_LEFT		0
 #define HBRIDGE_MOTOR_RIGHT		1
 
-#if defined(BOARD_NATIVE)
-#define QDEC_MODE				QDEC_X1
-#else
-#define QDEC_MODE				QDEC_X4
-#endif
 #define QDEC_LEFT_POLARITY		-1
 #define QDEC_RIGHT_POLARITY		1
 
-#define SERVO_ID_VALVE_LAUNCHER		0
-#define SERVO_ID_VALVE_RECYCLER		1
-#define SERVO_ID_RECYCLER		2
-#define SERVO_ID_BEE_L			3
-#define SERVO_ID_BEE_R			4
-#define SERVO_COUNT			5
-
-#define ADC_RES					ADC_RES_10BIT
+#define GPIO_ID_PUMP_FR			PIN0_bp
+#define GPIO_ID_PUMP_RR			PIN1_bp
+#define GPIO_ID_PUMP_FL			PIN4_bp
+#define GPIO_ID_PUMP_RL			PIN5_bp
 
 #define USART_CONSOLE			USARTC0
 
-#define AVOIDANCE_BORDER_X_MIN    -1318
-#define AVOIDANCE_BORDER_X_MAX    1318
-#define AVOIDANCE_BORDER_Y_MIN    182
-#define AVOIDANCE_BORDER_Y_MAX    1818
 enum {
 	CTRL_STATE_STOP = 0,
 	CTRL_STATE_IDLE,
@@ -91,7 +77,7 @@ func_cb_t mach_get_end_of_game_pfn(void);
 path_t * mach_get_path(void);
 //uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone);
 uint8_t mach_is_game_launched(void);
-uint8_t mach_is_camp_left(void);
+uint8_t mach_is_camp_yellow(void);
 
 void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command);
