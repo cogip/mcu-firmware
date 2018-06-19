@@ -21,8 +21,6 @@ uint16_t tempo;
 #define log_vect_setvalue(...)
 //#define kos_set_next_schedule_delay_ms(...)
 //#define kos_yield(...)
-#define encoder_reset()
-#define encoder_read() (polar_t){0.0,0.0}
 
 static void set_pose_reached(controller_t *ctrl)
 {
