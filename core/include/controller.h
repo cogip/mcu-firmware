@@ -6,15 +6,11 @@
 #include "odometry.h"
 #include "pid.h"
 
-typedef enum {
-	CTRL_STATE_STOP = 0,
-	CTRL_STATE_IDLE,
-	CTRL_STATE_INGAME,
-#if defined(CONFIG_CALIBRATION)
-	CTRL_STATE_CALIB_MODE1,
-	CTRL_STATE_CALIB_MODE2,
-	CTRL_STATE_CALIB_MODE3,
-#endif
+typedef void (*state_cb_t)(pose_t *, polar_t *);
+
+typedef struct {
+	char *name;
+	state_cb_t state_cb;
 } controller_mode_t;
 
 typedef enum {

@@ -14,7 +14,7 @@
 
 #include "controller.h"
 
-static uint16_t tempo;
+uint16_t tempo;
 
 //FIXME: removestub
 #define hbridge_engine_update(...)
@@ -274,41 +274,10 @@ inline polar_t controller_get_speed_order(controller_t *ctrl)
 	return speed_order;
 }
 
-void controller_set_mode(controller_t *ctrl, controller_mode_t new_mode)
+void controller_set_mode(controller_t *ctrl, controller_mode_t *new_mode)
 {
-	char *new_mode_str;
-
-	if (new_mode == ctrl->mode)
-		return;
-
-	switch(new_mode) {
-	case CTRL_STATE_STOP:
-		new_mode_str = "STOP";
-		break;
-	case CTRL_STATE_IDLE:
-		new_mode_str = "IDLE";
-		break;
-	case CTRL_STATE_INGAME:
-		new_mode_str = "INGAME";
-		break;
-#if defined(CONFIG_CALIBRATION)
-	case CTRL_STATE_CALIB_MODE1:
-		new_mode_str = "CALIB_MODE1";
-		break;
-	case CTRL_STATE_CALIB_MODE2:
-		new_mode_str = "CALIB_MODE2";
-		break;
-	case CTRL_STATE_CALIB_MODE3:
-		new_mode_str = "CALIB_MODE3";
-		break;
-#endif
-	default:
-		new_mode_str = "Invalid!";
-		break;
-	};
-
 	ctrl->mode = new_mode;
-	printf("new_mode = %s\n", new_mode_str);
+	printf("new_mode = %s\n", new_mode->name);
 }
 
 static void motor_drive(polar_t command)
@@ -328,12 +297,9 @@ static void motor_drive(polar_t command)
 
 void *task_controller_update(void *arg)
 {
-	polar_t	robot_speed;
 	/* bot position on the 'table' (absolute position): */
 	pose_t	robot_pose		= { 0, 0, 0 };
-	pose_t	pose_order		= { 0, 0, 0 };
-	polar_t	speed_order		= { 0, 0 };
-	polar_t	motor_command		= { 0, 0 };
+	polar_t motor_command		= { 0, 0 };
 	func_cb_t pfn_evtloop_prefunc  = mach_get_ctrl_loop_pre_pfn();
 	func_cb_t pfn_evtloop_postfunc = mach_get_ctrl_loop_post_pfn();
 
@@ -341,80 +307,20 @@ void *task_controller_update(void *arg)
 	printf("Controller started\n");
 
 	/* object context initialisation */
-	robot_pose = planner_get_path_pose_initial();
+	/*robot_pose = planner_get_path_pose_initial();
 	robot_pose.x *= PULSE_PER_MM;
 	robot_pose.y *= PULSE_PER_MM;
-	robot_pose.O *= PULSE_PER_DEGREE;
-	controller.regul = CTRL_REGUL_POSE_DIST;
-	controller.allow_reverse = FALSE;
+	robot_pose.O *= PULSE_PER_DEGREE;*/
 
 	for (;;) {
 		xtimer_ticks32_t loop_start_time = xtimer_now();		
-		//kos_set_next_schedule_delay_ms(20);
 
 		/* Machine specific stuff, if required */
 		if (pfn_evtloop_prefunc)
 			(*pfn_evtloop_prefunc)();
 
-		switch(controller.mode) {
-		default:
-		case CTRL_STATE_STOP:
-		{
-			/* final position */
-			motor_command.distance = 0;
-			motor_command.angle = 0;
-			motor_drive(motor_command);
-
-			//kos_yield();
-			goto yield_point;
-		}
-		break;
-
-		case CTRL_STATE_IDLE:
-		{
-			//FIXME! robot_speed = encoder_read();
-
-			/* No motor control at all (PMW unit tests). */
-
-			//kos_yield();
-			goto yield_point;
-		}
-		break;
-
-		case CTRL_STATE_INGAME:
-		{
-			/* catch speed */
-			//FIXME! robot_speed = encoder_read();
-
-			/* convert to position */
-			odometry_update(&robot_pose, &robot_speed, SEGMENT);
-
-			/* convert pulse to degree */
-			robot_pose.O /= PULSE_PER_DEGREE;
-
-			/* get next pose_t to reach */
-			pose_order = controller_get_pose_to_reach(&controller);
-
-			pose_order.x *= PULSE_PER_MM;
-			pose_order.y *= PULSE_PER_MM;
-
-			/* get speed order */
-			speed_order = controller_get_speed_order(&controller);
-
-			/* PID / feedback control */
-			motor_command = controller_update(&controller,
-							  pose_order,
-							  robot_pose,
-							  speed_order,
-							  robot_speed);
-
-			/* convert degree to pulse */
-			robot_pose.O *= PULSE_PER_DEGREE;
-
-			/* set speed to wheels */
-			motor_drive(motor_command);
-		}
-		break;
+		if ((controller.mode) && (controller.mode->state_cb))
+			controller.mode->state_cb(&robot_pose, &motor_command);
 
 #if defined(CONFIG_CALIBRATION)
 		case CTRL_STATE_CALIB_MODE1:
@@ -608,16 +514,12 @@ void *task_controller_update(void *arg)
 		}
 		break;
 #endif /* defined(CONFIG_CALIBRATION) */
-
-		} /* switch(controller.mode) */
+		motor_drive(motor_command);
 
 		/* Machine specific stuff, if required */
 		if (pfn_evtloop_postfunc)
 			(*pfn_evtloop_postfunc)();
 
-yield_point:
-		/* this task is called every scheduler tick (20ms) */
-		//kos_yield();
         	xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
 	}
 
