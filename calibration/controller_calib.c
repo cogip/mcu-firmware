@@ -76,7 +76,7 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 
 		log_vect_display_last_line(&datalog);
 
-		controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
+		controller_set_mode(&controller, CTRL_STATE_STOP);
 		tempo = 0;
 	}
 }
@@ -140,7 +140,7 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
 
 		log_vect_display_last_line(&datalog);
 
-		controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
+		controller_set_mode(&controller, CTRL_STATE_STOP);
 		tempo = 0;
 	}
 }
@@ -207,7 +207,7 @@ void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command)
 
 		log_vect_display_last_line(&datalog);
 
-		controller_set_mode(&controller, &controller_modes[CTRL_STATE_STOP]);
+		controller_set_mode(&controller, CTRL_STATE_STOP);
 		tempo = 0;
 	}
 }
@@ -300,13 +300,13 @@ void controller_enter_calibration(void)
 
 		switch (c) {
 		case '1':
-			controller_set_mode(&controller, &controller_modes[CTRL_STATE_CALIB_MODE1]);
+			controller_set_mode(&controller, CTRL_STATE_CALIB_MODE1);
 			break;
 		case '2':
-			controller_set_mode(&controller, &controller_modes[CTRL_STATE_CALIB_MODE2]);
+			controller_set_mode(&controller, CTRL_STATE_CALIB_MODE2);
 			break;
 		case '3':
-			controller_set_mode(&controller, &controller_modes[CTRL_STATE_CALIB_MODE3]);
+			controller_set_mode(&controller, CTRL_STATE_CALIB_MODE3);
 			break;
 		case 'p':
 			scanf_update_val("Kp", &cur_pid->kp);
