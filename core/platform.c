@@ -331,6 +331,9 @@ controller_t controller = {
 	//.min_distance_for_angular_switch = 500,
 	.min_distance_for_angular_switch = 100,
 	.min_angle_for_pose_reached = 100,
+	.regul = CTRL_REGUL_POSE_DIST,
+	.allow_reverse = TRUE,
+	.mode = &controller_modes[CTRL_STATE_INGAME],
 };
 
 /* This global object contains all numerical logs references (vectors, etc.) */
