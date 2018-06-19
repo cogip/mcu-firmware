@@ -81,6 +81,11 @@ void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command);
 #if defined(CONFIG_CALIBRATION)
+void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command);
+void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command);
+void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command);
+
+void controller_enter_calibration(void);
 void mach_check_calibration_mode(void);
 #endif
 

@@ -1,6 +1,204 @@
 #include "controller.h"
+#include "system/log.h"
 
-#if defined(CONFIG_CALIBRATION)
+//FIXME: removestub
+#define hbridge_engine_update(...)
+#define log_vect_setvalue(...)
+//#define kos_set_next_schedule_delay_ms(...)
+//#define kos_yield(...)
+#define encoder_reset()
+#define encoder_read() (polar_t){0.0,0.0}
+
+extern uint16_t tempo;
+
+void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
+{
+	/*
+	 * First calibration test:
+	 * Perform two PWM sweeps to characterize encoders.
+	 */
+
+	/* first entry, we reset the datalog */
+	if (!tempo)
+		log_vect_reset(&datalog, "cal1_up",
+				LOG_IDX_SPEED_L,
+				LOG_IDX_SPEED_R,
+				LOG_IDX_MOTOR_L,
+				LOG_IDX_MOTOR_R,
+				-1);
+	/*
+	 * Two ramps :
+	 * 1. [-pwm ... +pwm] for 400 cycles (0.02 = 8s)
+	 * 2. [+pwm ... -pwm] for 400 cycles
+	 */
+	motor_command.angle = 0;
+	if (tempo < 50)
+		motor_command.distance = -200;
+	else if (tempo >= 50 && tempo < 400 - 50)
+		motor_command.distance = (int16_t)((double)(tempo - 50) * 4./3.) - 200;
+	else if (tempo >= 400 - 50 && tempo < 400 + 50)
+		motor_command.distance = 200;
+	else if (tempo >= 450 && tempo < 800 - 50)
+		motor_command.distance = -((int16_t)((double)(tempo - 450) * 4./3.) - 200);
+	else if (tempo >= 800 - 50)
+		motor_command.distance = -200;
+
+	motor_drive(motor_command);
+
+	/* catch speed */
+	robot_speed = encoder_read();
+
+	log_vect_display_line(&datalog);
+
+	tempo ++;
+	if (tempo == 400) {
+		//motor_command.distance = 0;
+		//motor_command.angle = 0;
+		//motor_drive(motor_command);
+
+		log_vect_display_last_line(&datalog);
+		/* prepare next log */
+		log_vect_reset(&datalog, "cal1_down",
+				LOG_IDX_SPEED_L,
+				LOG_IDX_SPEED_R,
+				LOG_IDX_MOTOR_L,
+				LOG_IDX_MOTOR_R,
+				-1);
+	} else if (tempo == 800) {
+		motor_command.distance = 0;
+		motor_command.angle = 0;
+		motor_drive(motor_command);
+
+		log_vect_display_last_line(&datalog);
+
+		controller_set_mode(&controller, CTRL_STATE_STOP);
+		tempo = 0;
+	}
+}
+
+void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command)
+{
+	/*
+	 * Second calibration test:
+	 * Perform a speed command to tune Kp, Ki (& Kd).
+	 */
+
+	/* first entry, we reset the datalog */
+	if (!tempo) {
+		encoder_reset();
+		log_vect_reset(&datalog, "cal2",
+				LOG_IDX_ROBOT_SPEED_D,
+				/*LOG_IDX_ROBOT_SPEED_A,*/
+				LOG_IDX_SPEED_ORDER_D,
+				/*LOG_IDX_SPEED_ORDER_A,*/
+				LOG_IDX_MOTOR_L,
+				LOG_IDX_MOTOR_R,
+				-1);
+	}
+	/*
+	 * t[0s..1s] : speed is set to 0
+	 * t[1s..7s] : speed is set to full
+	 * t[7s..8s] : speed is set to 0
+	 */
+	if (tempo < 50)
+		speed_order.distance = 0;
+	else if (tempo >= 50 && tempo < 400 - 50)
+		speed_order.distance = 15;
+	else if (tempo >= 400 - 50)
+		speed_order.distance = 0;
+
+	speed_order.angle = 0;
+
+	log_vect_setvalue(&datalog, LOG_IDX_SPEED_ORDER_D, (void *) &speed_order.distance);
+
+	/* catch speed */
+	robot_speed = encoder_read();
+	motor_command = speed_controller(&controller,
+					 speed_order,
+					 robot_speed);
+
+	log_vect_setvalue(&datalog, LOG_IDX_ROBOT_SPEED_D, (void *) &robot_speed.distance);
+
+	motor_drive(motor_command);
+
+	log_vect_display_line(&datalog);
+
+	tempo ++;
+	if (tempo == 400) {
+		motor_command.distance = 0;
+		motor_command.angle = 0;
+		motor_drive(motor_command);
+
+		log_vect_display_last_line(&datalog);
+
+		controller_set_mode(&controller, CTRL_STATE_STOP);
+		tempo = 0;
+	}
+}
+
+void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command)
+{
+	/*
+	 * Third calibration test:
+	 * Perform a speed command to tune Kp, Ki (& Kd).
+	 */
+
+	/* first entry, we reset the datalog */
+	if (!tempo) {
+		encoder_reset();
+		log_vect_reset(&datalog, "cal3",
+				LOG_IDX_ROBOT_SPEED_D,
+				/*LOG_IDX_ROBOT_SPEED_A,*/
+				LOG_IDX_SPEED_ORDER_D,
+				/*LOG_IDX_SPEED_ORDER_A,*/
+				LOG_IDX_MOTOR_L,
+				LOG_IDX_MOTOR_R,
+				-1);
+	}
+	/*
+	 * t[0s..2s] : angular speed is set to +15
+	 * t[2s..4s] : angular speed is set to -30
+	 * t[4s..6s] : angular speed is set to +30
+	 * t[6s..8s] : angular speed is set to -15
+	 */
+	if (tempo < 100)
+		speed_order.angle = +15;
+	else if (tempo >= 100 && tempo < 200)
+		speed_order.angle = -30;
+	else if (tempo >= 200 && tempo < 300)
+		speed_order.angle = +30;
+	else if (tempo >= 300 && tempo < 400)
+		speed_order.angle = -15;
+
+	speed_order.distance = 0;
+
+	log_vect_setvalue(&datalog, LOG_IDX_SPEED_ORDER_D, (void *) &speed_order.distance);
+
+	/* catch speed */
+	robot_speed = encoder_read();
+	motor_command = speed_controller(&controller,
+					 speed_order,
+					 robot_speed);
+
+	log_vect_setvalue(&datalog, LOG_IDX_ROBOT_SPEED_D, (void *) &robot_speed.distance);
+
+	motor_drive(motor_command);
+
+	log_vect_display_line(&datalog);
+
+	tempo ++;
+	if (tempo == 400) {
+		motor_command.distance = 0;
+		motor_command.angle = 0;
+		motor_drive(motor_command);
+
+		log_vect_display_last_line(&datalog);
+
+		controller_set_mode(&controller, CTRL_STATE_STOP);
+		tempo = 0;
+	}
+}
+
 static PID_t *controller_get_pid_from_idx(const uint8_t i)
 {
 	switch(i) {
@@ -143,5 +341,3 @@ void controller_enter_calibration(void)
 		}
 	}
 }
-#endif /* CONFIG_CALIBRATION */
-
