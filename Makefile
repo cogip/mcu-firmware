@@ -25,7 +25,6 @@ BIN_USEMODULE += robotics             # include "core" module
 BIN_USEMODULE += system
 BIN_USEMODULE += $(APPLICATION_MODULE)  # include application module
 
-FEATURES_REQUIRED += periph_timer
 FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
 
