@@ -241,6 +241,24 @@ inline uint8_t controller_is_pose_reached(controller_t *ctrl)
 	return ctrl->pose_reached;
 }
 
+inline void controller_set_pose_current(controller_t *ctrl, const pose_t pose)
+{
+	irq_disable();
+	ctrl->pose_current = pose;
+	irq_enable();
+}
+
+inline pose_t controller_get_pose_current(controller_t *ctrl)
+{
+	pose_t pose_current;
+
+	irq_disable();
+	pose_current = ctrl->pose_current;
+	irq_enable();
+
+	return pose_current;
+}
+
 inline void controller_set_pose_to_reach(controller_t *ctrl, const pose_t pose_order)
 {
 	irq_disable();
