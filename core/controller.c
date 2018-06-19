@@ -41,17 +41,17 @@ static void set_pose_reached(controller_t *ctrl)
  * \return distance and angle errors between 2 poses
  */
 static polar_t compute_error(controller_t *ctrl,
-			     const pose_t pose_order, const pose_t pose_current)
+			     const pose_t pose_order, const pose_t *pose_current)
 {
 	polar_t error;
 	double x, y, O;
 
 	(void)ctrl;
 
-	x = pose_order.x - pose_current.x;
-	y = pose_order.y - pose_current.y;
+	x = pose_order.x - pose_current->x;
+	y = pose_order.y - pose_current->y;
 
-	O = limit_angle_rad(atan2(y, x) - DEG2RAD(pose_current.O));
+	O = limit_angle_rad(atan2(y, x) - DEG2RAD(pose_current->O));
 
 	error.angle = RAD2DEG(O);
 	error.distance = sqrt(square(x) + square(y));
@@ -112,7 +112,7 @@ polar_t speed_controller(controller_t *ctrl,
 
 polar_t controller_update(controller_t *ctrl,
 			  pose_t pose_order,
-			  pose_t pose_current,
+			  const pose_t *pose_current,
 			  polar_t speed_order,
 			  polar_t speed_current)
 {
@@ -138,9 +138,9 @@ polar_t controller_update(controller_t *ctrl,
 			  pose_order.x / PULSE_PER_MM,
 			  pose_order.y / PULSE_PER_MM,
 			  pose_order.O,
-			  pose_current.x / PULSE_PER_MM,
-			  pose_current.y / PULSE_PER_MM,
-			  pose_current.O,
+			  pose_current->x / PULSE_PER_MM,
+			  pose_current->y / PULSE_PER_MM,
+			  pose_current->O,
 			  position_error.distance / PULSE_PER_MM,
 			  position_error.angle,
 			  speed_order.distance / PULSE_PER_MM,
@@ -178,7 +178,7 @@ polar_t controller_update(controller_t *ctrl,
 		/* final orientation error */
 		if (!ctrl->pose_intermediate)
 		{
-			position_error.angle = limit_angle_deg(pose_order.O - pose_current.O);
+			position_error.angle = limit_angle_deg(pose_order.O - pose_current->O);
 		}
 
 		position_error.distance = 0;
