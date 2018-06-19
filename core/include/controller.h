@@ -71,8 +71,4 @@ void controller_set_mode(controller_t *ctrl, controller_mode_t new_mode);
 
 void *task_controller_update(void *arg);
 
-#if defined(CONFIG_CALIBRATION)
-void controller_enter_calibration(void);
-#endif
-
 #endif /* CONTROLLER_H_ */
