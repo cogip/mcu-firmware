@@ -106,9 +106,9 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 		{
 			index++;
 		}
-
-		reset_dyn_polygons();
 	}
+
+	reset_dyn_polygons();
 
 #if defined(CONFIG_ANALOG_SENSORS)
 	if(controller.regul != CTRL_REGUL_POSE_PRE_ANGL) {
