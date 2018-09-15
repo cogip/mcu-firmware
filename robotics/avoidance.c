@@ -70,6 +70,9 @@ int update_graph(void)
 			pose_t *pose_tmp = &start_position;
 			for (int j = 0; j < polygons[i].count; j++)
 			{
+				if (!is_point_in_polygon(&borders, polygons[i].points[j]))
+					continue;
+
 				double distance = distance_points(&start_position, &polygons[i].points[j]);
 				if (distance < min)
 				{
