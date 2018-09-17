@@ -206,6 +206,8 @@ void *task_planner(void *arg)
 	initial_pose.O *= PULSE_PER_DEGREE;
 	controller_set_pose_current(&controller, initial_pose);
 
+	uint32_t game_start_time = xtimer_now_usec();
+
 	for (;;)
 	{
 		xtimer_ticks32_t loop_start_time = xtimer_now();		
@@ -221,9 +223,12 @@ void *task_planner(void *arg)
 
 			/* while starter switch is not release we wait */
 			if (!mach_is_game_launched())
+			{
+				game_start_time = xtimer_now_usec();
 				goto yield_point;
+			}
 
-			if (game_time >= GAME_DURATION_TICKS) {
+			if (xtimer_now_usec() - game_start_time >= GAME_DURATION_SEC * US_PER_SEC) {
 				cons_printf(">>>>\n");
 				controller_set_mode(&controller, CTRL_STATE_STOP);
 				break;
