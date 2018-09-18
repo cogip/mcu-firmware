@@ -122,6 +122,13 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	}
 #endif
 
+	if (controller.mode == &controller_modes[CTRL_STATE_BLOCKED])
+	{
+		increment_current_pose_idx();
+		controller_set_mode(&controller, CTRL_STATE_INGAME);
+		need_update = 1;
+	}
+
 	if (need_update)
 	{
 		set_start_position_finish_position(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
