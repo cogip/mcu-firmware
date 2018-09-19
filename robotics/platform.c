@@ -188,11 +188,7 @@ qdec_t encoders[] = {
 
 #if defined(CONFIG_SD21)
 sd21_t sd21 = {
-#ifdef BOARD_NATIVE
 	.bus_id = 0,
-#else
-	.bus_id = I2C_0, /* I2C3 bus (cf. board.h) */
-#endif
 	.twi_speed_khz = I2C_SPEED_FAST,
 
 	.servos_nb = SERVO_COUNT,
