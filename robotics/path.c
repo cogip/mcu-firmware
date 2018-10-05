@@ -159,3 +159,7 @@ path_t robot_path = {
 	.poses = poses,
 };
 
+inline path_pose_t * path_get_current_path_pos(const path_t *path)
+{
+	return &path->poses[path->current_pose_idx];
+}
