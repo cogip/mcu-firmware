@@ -34,15 +34,15 @@ static void sd21_send_twi_cmd(i2c_t dev_id, uint8_t servo, uint8_t speed, uint16
 
 	data[0] = reg;
 	data[1] = speed;
-	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2);
+	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2, 0);
 
 	data[0] = reg + 1;
 	data[1] = (uint8_t) (position & 0x00ff);
-	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2);
+	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2, 0);
 
 	data[0] = reg + 2;
 	data[1] = position >> 8;
-	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2);
+	i2c_write_bytes(dev_id, SD21_ADDRESS, data, 2, 0);
 
 	i2c_release(dev_id);
 }
@@ -210,7 +210,7 @@ void sd21_enter_calibration(sd21_t *obj)
  */
 void sd21_setup(sd21_t *obj)
 {
-	i2c_init_master(obj->bus_id, obj->twi_speed_khz);
+	i2c_init(obj->bus_id);
 
 //#if defined(CONFIG_SD21_INIT_AT_STARTUP)
 	for (uint8_t i = 0; i < obj->servos_nb; i++) {
