@@ -54,7 +54,7 @@ void planner_enter_calibration(void)
 
 		switch (c) {
 		case 'n':
-			increment_current_pose_idx();
+			path_increment_current_pose_idx(path);
 			if (path->current_pose_idx)
 			{
 				set_start_position_finish_position(&(path->poses[path->current_pose_idx-1].pos), &(path->poses[path->current_pose_idx].pos));

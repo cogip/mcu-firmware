@@ -31,14 +31,6 @@ uint8_t in_calibration = FALSE;
 #define GAME_DURATION_SEC	100
 #define GAME_DURATION_TICKS	(GAME_DURATION_SEC * TASK_FREQ_HZ)
 
-inline void increment_current_pose_idx(void)
-{
-	if (path->current_pose_idx < path->nb_pose - 1)
-		path->current_pose_idx += 1;
-	else if (path->play_in_loop)
-		path->current_pose_idx = 0;
-}
-
 static void show_game_time(void)
 {
 	static uint8_t _secs = TASK_FREQ_HZ;
@@ -60,6 +52,7 @@ void planner_start_game(void)
 static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to_reach, polar_t *speed_order)
 {
 	static pose_t pose_reached;
+	path_pose_t *current_path_pos = path_get_current_path_pos(path);
 	pose_t robot_pose_tmp;
 	static uint8_t index = 1;
 	static int first_boot = 0;
@@ -76,8 +69,8 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	if (first_boot == 0)
 	{
 		first_boot = 1;
-		pose_reached = path->poses[path->current_pose_idx].pos;
-		*pose_to_reach = path->poses[path->current_pose_idx].pos;
+		pose_reached = current_path_pos->pos;
+		*pose_to_reach = current_path_pos->pos;
 		set_start_position_finish_position(&pose_reached, pose_to_reach);
 		if (update_graph() == -1)
 			goto trajectory_get_route_update_error;
@@ -87,17 +80,18 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	{
 		pose_reached = *pose_to_reach;
 
-		if ((pose_to_reach->x == path->poses[path->current_pose_idx].pos.x)
-			&& (pose_to_reach->y == path->poses[path->current_pose_idx].pos.y))
+		if ((pose_to_reach->x == current_path_pos->pos.x)
+			&& (pose_to_reach->y == current_path_pos->pos.y))
 		{
 
 			if (!in_calibration)
 			{
 #ifndef BOARD_NATIVE
-				if (path->poses[path->current_pose_idx].act)
-					path->poses[path->current_pose_idx].act();
+				if (current_path_pos->act)
+					current_path_pos->act();
 #endif
-				increment_current_pose_idx();
+				path_increment_current_pose_idx(path);
+				current_path_pos = path_get_current_path_pos(path);
 			}
 			robot_pose_tmp = pose_reached;
 			need_update = 1;
@@ -124,22 +118,24 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 
 	if (controller.mode == &controller_modes[CTRL_STATE_BLOCKED])
 	{
-		increment_current_pose_idx();
+		path_increment_current_pose_idx(path);
 		controller_set_mode(&controller, CTRL_STATE_INGAME);
 		need_update = 1;
 	}
 
 	if (need_update)
 	{
-		set_start_position_finish_position(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
+		set_start_position_finish_position(&robot_pose_tmp, &(current_path_pos->pos));
 		test = update_graph();
 
 		control_loop = path->nb_pose;
 		while ((test < 0) && (!in_calibration) && (control_loop-- > 0))
 		{
-			if (test == -1)
-				increment_current_pose_idx();
-			set_start_position_finish_position(&robot_pose_tmp, &(path->poses[path->current_pose_idx].pos));
+			if (test == -1) {
+				path_increment_current_pose_idx(path);
+				current_path_pos = path_get_current_path_pos(path);
+			}
+			set_start_position_finish_position(&robot_pose_tmp, &(current_path_pos->pos));
 			test = update_graph();
 		}
 		if (control_loop == 0)
@@ -150,19 +146,16 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
 	}
 
 	*pose_to_reach = avoidance(index);
-	if ((pose_to_reach->x == path->poses[path->current_pose_idx].pos.x)
-		&& (pose_to_reach->y == path->poses[path->current_pose_idx].pos.y))
+	if ((pose_to_reach->x == current_path_pos->pos.x)
+		&& (pose_to_reach->y == current_path_pos->pos.y))
 	{
-		pose_to_reach->O = path->poses[path->current_pose_idx].pos.O;
+		pose_to_reach->O = current_path_pos->pos.O;
 		controller_set_pose_intermediate(&controller, FALSE);
 	}
 	else
 	{
 		/* Update speed order to max speed defined value in the new point to reach */
-		if (path->poses[path->current_pose_idx].max_speed <= MAX_SPEED)
-			speed_order->distance = path->poses[path->current_pose_idx].max_speed;
-		else
-			speed_order->distance = MAX_SPEED;
+		speed_order->distance = path_get_current_max_speed(path);
 		speed_order->angle = speed_order->distance / 2;
 		controller_set_pose_intermediate(&controller, TRUE);
 	}
@@ -181,6 +174,7 @@ void *task_planner(void *arg)
 	pose_t	initial_pose		= { 0, 0, 0 };
 	polar_t	speed_order		= { 0, 0 };
 	const uint8_t camp_left	= mach_is_camp_left();
+	path_pose_t *current_path_pos = NULL;
 
 	(void)arg;
 
@@ -195,19 +189,13 @@ void *task_planner(void *arg)
 	}
 
 	/* mirror the points in place if selected camp is right */
-	if (!camp_left) {
-		path->current_pose_idx = path->nb_pose;
-		do {
-			path->current_pose_idx -= 1;
-			path->poses[path->current_pose_idx].pos.x *= -1;
-			path->poses[path->current_pose_idx].pos.O = limit_angle_deg(180 - path->poses[path->current_pose_idx].pos.O);
-		}
-		while (path->current_pose_idx);
-	}
+	if (!camp_left)
+		path_horizontal_mirror_all_pos(path);
 
 	/* object context initialisation */
 	path->current_pose_idx = 0;
-	initial_pose = path->poses[path->current_pose_idx].pos;
+	current_path_pos = path_get_current_path_pos(path);
+	initial_pose = current_path_pos->pos;
 	initial_pose.x *= PULSE_PER_MM;
 	initial_pose.y *= PULSE_PER_MM;
 	initial_pose.O *= PULSE_PER_DEGREE;
@@ -259,6 +247,7 @@ void *task_planner(void *arg)
 
 		/* ===== speed ===== */
 
+		current_path_pos = path_get_current_path_pos(path);
 		/* collision detection */
 		/*if (controller_is_in_reverse(&controller))
 			zone = AS_ZONE_REAR;
@@ -270,20 +259,17 @@ void *task_planner(void *arg)
 			speed_order.angle = 0;
 		} else {*/
 			/* max speed order in pulse_linear per ctrl period (20ms) */
-			//speed_order.distance = path->poses[path->current_pose_idx].max_speed;
+			//speed_order.distance = current_path_pos->max_speed;
 			/* max speed order in pulse_angular per ctrl period (20ms) */
 			//speed_order.angle = speed_order.distance / 2;
 		//}
 
 		/* Update speed order to max speed defined value in the new point to reach */
-		if (path->poses[path->current_pose_idx].max_speed <= MAX_SPEED)
-			speed_order.distance = path->poses[path->current_pose_idx].max_speed;
-		else
-			speed_order.distance = MAX_SPEED;
+		speed_order.distance = path_get_current_max_speed(path);
 		speed_order.angle = speed_order.distance / 2;
 
 		/* reverse gear selection is granted per point to reach, in path */
-		controller_set_allow_reverse(&controller, path->poses[path->current_pose_idx].allow_reverse);
+		controller_set_allow_reverse(&controller, current_path_pos->allow_reverse);
 
 		pose_t pose_current = controller.pose_current;
 

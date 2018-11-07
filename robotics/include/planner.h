@@ -9,7 +9,6 @@ extern path_t * path;
 extern uint8_t in_calibration;
 
 void planner_start_game(void);
-void increment_current_pose_idx(void);
 
 void *task_planner(void *arg);
 
