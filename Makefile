@@ -1,6 +1,7 @@
 APPLICATION = cortex
 RIOTBASE ?= $(CURDIR)/../RIOT
-BOARD ?= cogip2018-f4xx
+RIOTBOARD ?= boards/
+BOARD ?= cogip2018-cortex
 #BOARD ?= native
 USEMODULE += xtimer
 USEMODULE += motor_driver
