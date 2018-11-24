@@ -76,11 +76,11 @@ extern "C" {
  */
 static const timer_conf_t timer_config[] = {
     {
-        .dev      = TIM5,
-        .max      = 0xffffffff,
+        .dev = TIM5,
+        .max = 0xffffffff,
         .rcc_mask = RCC_APB1ENR_TIM5EN,
-        .bus      = APB1,
-        .irqn     = TIM5_IRQn
+        .bus = APB1,
+        .irqn = TIM5_IRQn
     }
 };
 
@@ -95,31 +95,31 @@ static const timer_conf_t timer_config[] = {
  */
 static const uart_conf_t uart_config[] = {
     {
-        .dev        = USART2,
-        .rcc_mask   = RCC_APB1ENR_USART2EN,
-        .rx_pin     = GPIO_PIN(PORT_A, 3),
-        .tx_pin     = GPIO_PIN(PORT_A, 2),
-        .rx_af      = GPIO_AF7,
-        .tx_af      = GPIO_AF7,
-        .bus        = APB1,
-        .irqn       = USART2_IRQn,
+        .dev = USART2,
+        .rcc_mask = RCC_APB1ENR_USART2EN,
+        .rx_pin = GPIO_PIN(PORT_A, 3),
+        .tx_pin = GPIO_PIN(PORT_A, 2),
+        .rx_af = GPIO_AF7,
+        .tx_af = GPIO_AF7,
+        .bus = APB1,
+        .irqn = USART2_IRQn,
 #ifdef UART_USE_DMA
         .dma_stream = 6,
-        .dma_chan   = 4
+        .dma_chan = 4
 #endif
     },
     {
-        .dev        = USART6,
-        .rcc_mask   = RCC_APB2ENR_USART6EN,
-        .rx_pin     = GPIO_PIN(PORT_A, 12),
-        .tx_pin     = GPIO_PIN(PORT_A, 11),
-        .rx_af      = GPIO_AF8,
-        .tx_af      = GPIO_AF8,
-        .bus        = APB2,
-        .irqn       = USART6_IRQn,
+        .dev = USART6,
+        .rcc_mask = RCC_APB2ENR_USART6EN,
+        .rx_pin = GPIO_PIN(PORT_A, 12),
+        .tx_pin = GPIO_PIN(PORT_A, 11),
+        .rx_af = GPIO_AF8,
+        .tx_af = GPIO_AF8,
+        .bus = APB2,
+        .irqn = USART6_IRQn,
 #ifdef UART_USE_DMA
         .dma_stream = 6,
-        .dma_chan   = 4
+        .dma_chan = 4
 #endif
     }
 };
@@ -138,24 +138,24 @@ static const uart_conf_t uart_config[] = {
  */
 static const pwm_conf_t pwm_config[] = {
     {
-        .dev      = TIM2,
+        .dev = TIM2,
         .rcc_mask = RCC_APB1ENR_TIM2EN,
-        .chan     = { { .pin = GPIO_PIN(PORT_A, 5), .cc_chan = 0},
-                      { .pin = GPIO_PIN(PORT_B, 9), .cc_chan = 1},
-                      { .pin = GPIO_UNDEF,          .cc_chan = 2},
-                      { .pin = GPIO_UNDEF,          .cc_chan = 3} },
-        .af       = GPIO_AF1,
-        .bus      = APB1
+        .chan = { { .pin = GPIO_PIN(PORT_A, 5), .cc_chan = 0 },
+                  { .pin = GPIO_PIN(PORT_B, 9), .cc_chan = 1 },
+                  { .pin = GPIO_UNDEF,          .cc_chan = 2 },
+                  { .pin = GPIO_UNDEF,          .cc_chan = 3 } },
+        .af = GPIO_AF1,
+        .bus = APB1
     },
     {
-        .dev      = TIM1,
+        .dev = TIM1,
         .rcc_mask = RCC_APB2ENR_TIM1EN,
-        .chan     = { { .pin = GPIO_UNDEF,          .cc_chan = 0},
-                      { .pin = GPIO_UNDEF,          .cc_chan = 1},
-                      { .pin = GPIO_UNDEF,          .cc_chan = 2},
-                      { .pin = GPIO_PIN(PORT_A, 11),.cc_chan = 3} },
-        .af       = GPIO_AF1,
-        .bus      = APB2
+        .chan = { { .pin = GPIO_UNDEF,           .cc_chan = 0 },
+                  { .pin = GPIO_UNDEF,           .cc_chan = 1 },
+                  { .pin = GPIO_UNDEF,           .cc_chan = 2 },
+                  { .pin = GPIO_PIN(PORT_A, 11), .cc_chan = 3 } },
+        .af = GPIO_AF1,
+        .bus = APB2
     },
 };
 
@@ -168,24 +168,24 @@ static const pwm_conf_t pwm_config[] = {
  */
 static const qdec_conf_t qdec_config[] = {
     {
-        .dev      = TIM3,
-        .max      = 0xffffffff,
+        .dev = TIM3,
+        .max = 0xffffffff,
         .rcc_mask = RCC_APB1ENR_TIM3EN,
-        .chan     = { { .pin = GPIO_PIN(PORT_C, 6), .cc_chan = 0 },
-                      { .pin = GPIO_PIN(PORT_C, 7), .cc_chan = 1 } },
-        .af       = GPIO_AF2,
-        .bus      = APB1,
-        .irqn     = TIM3_IRQn
+        .chan = { { .pin = GPIO_PIN(PORT_C, 6), .cc_chan = 0 },
+                  { .pin = GPIO_PIN(PORT_C, 7), .cc_chan = 1 } },
+        .af = GPIO_AF2,
+        .bus = APB1,
+        .irqn = TIM3_IRQn
     },
     {
-        .dev      = TIM4,
-        .max      = 0xffffffff,
+        .dev = TIM4,
+        .max = 0xffffffff,
         .rcc_mask = RCC_APB1ENR_TIM4EN,
-        .chan     = { { .pin = GPIO_PIN(PORT_B, 6), .cc_chan = 0 },
-                      { .pin = GPIO_PIN(PORT_B, 7), .cc_chan = 1 } },
-        .af       = GPIO_AF2,
-        .bus      = APB1,
-        .irqn     = TIM4_IRQn
+        .chan = { { .pin = GPIO_PIN(PORT_B, 6), .cc_chan = 0 },
+                  { .pin = GPIO_PIN(PORT_B, 7), .cc_chan = 1 } },
+        .af = GPIO_AF2,
+        .bus = APB1,
+        .irqn = TIM4_IRQn
     },
 };
 
@@ -201,16 +201,16 @@ static const qdec_conf_t qdec_config[] = {
  */
 static const i2c_conf_t i2c_config[] = {
     {
-        .dev            = I2C3,
-        .speed          = I2C_SPEED_NORMAL,
-        .scl_pin        = GPIO_PIN(PORT_A, 8),
-        .sda_pin        = GPIO_PIN(PORT_C, 9),
-        .scl_af         = GPIO_AF4,
-        .sda_af         = GPIO_AF4,
-        .bus            = APB1,
-        .rcc_mask       = RCC_APB1ENR_I2C3EN,
-        .clk            = CLOCK_APB1,
-        .irqn           = I2C1_EV_IRQn
+        .dev = I2C3,
+        .speed = I2C_SPEED_NORMAL,
+        .scl_pin = GPIO_PIN(PORT_A, 8),
+        .sda_pin = GPIO_PIN(PORT_C, 9),
+        .scl_af = GPIO_AF4,
+        .sda_af = GPIO_AF4,
+        .bus = APB1,
+        .rcc_mask = RCC_APB1ENR_I2C3EN,
+        .clk = CLOCK_APB1,
+        .irqn = I2C1_EV_IRQn
     }
 };
 
@@ -229,14 +229,14 @@ static const i2c_conf_t i2c_config[] = {
  */
 #define ADC_NUMOF          (8U)
 #define ADC_CONFIG {             \
-    {GPIO_PIN(PORT_B, 0), 0, 8}, \
-    {GPIO_PIN(PORT_B, 1), 0, 9}, \
-    {GPIO_PIN(PORT_C, 0), 0, 10}, \
-    {GPIO_PIN(PORT_C, 1), 0, 11}, \
-    {GPIO_PIN(PORT_C, 2), 0, 12}, \
-    {GPIO_PIN(PORT_C, 3), 0, 13}, \
-    {GPIO_PIN(PORT_C, 4), 0, 14}, \
-    {GPIO_PIN(PORT_C, 5), 0, 15}, \
+        { GPIO_PIN(PORT_B, 0), 0, 8 }, \
+        { GPIO_PIN(PORT_B, 1), 0, 9 }, \
+        { GPIO_PIN(PORT_C, 0), 0, 10 }, \
+        { GPIO_PIN(PORT_C, 1), 0, 11 }, \
+        { GPIO_PIN(PORT_C, 2), 0, 12 }, \
+        { GPIO_PIN(PORT_C, 3), 0, 13 }, \
+        { GPIO_PIN(PORT_C, 4), 0, 14 }, \
+        { GPIO_PIN(PORT_C, 5), 0, 15 }, \
 }
 /** @} */
 

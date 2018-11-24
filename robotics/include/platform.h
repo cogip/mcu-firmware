@@ -27,40 +27,40 @@
  *  - WHEELS_ENCODER_RESOLUTION	: Number of pulses by turn of coding wheels
  */
 
-#define WHEELS_ENCODER_RESOLUTION	2000
+#define WHEELS_ENCODER_RESOLUTION   2000
 /* WHEELS_PERIMETER = pi*WHEELS_DIAMETER
  * PULSE_PER_MM = WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
  */
-#define PULSE_PER_MM			10.61
+#define PULSE_PER_MM            10.61
 /* WHEELS_DISTANCE = WHEELS_DISTANCE_MM * PULSE_PER_MM */
-#define WHEELS_DISTANCE			2962.312
+#define WHEELS_DISTANCE         2962.312
 /* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
-#define PULSE_PER_DEGREE		51.70
+#define PULSE_PER_DEGREE        51.70
 
-#define MAX_ACC				25
-#define MAX_SPEED			150
+#define MAX_ACC             25
+#define MAX_SPEED           150
 
-#define HBRIDGE_MOTOR_LEFT		0
-#define HBRIDGE_MOTOR_RIGHT		1
+#define HBRIDGE_MOTOR_LEFT      0
+#define HBRIDGE_MOTOR_RIGHT     1
 
 #if defined(BOARD_NATIVE)
-#define QDEC_MODE				QDEC_X1
+#define QDEC_MODE               QDEC_X1
 #else
-#define QDEC_MODE				QDEC_X4
+#define QDEC_MODE               QDEC_X4
 #endif
-#define QDEC_LEFT_POLARITY		-1
-#define QDEC_RIGHT_POLARITY		1
+#define QDEC_LEFT_POLARITY      -1
+#define QDEC_RIGHT_POLARITY     1
 
-#define SERVO_ID_VALVE_LAUNCHER		0
-#define SERVO_ID_VALVE_RECYCLER		1
-#define SERVO_ID_RECYCLER		2
-#define SERVO_ID_BEE_L			3
-#define SERVO_ID_BEE_R			4
-#define SERVO_COUNT			5
+#define SERVO_ID_VALVE_LAUNCHER     0
+#define SERVO_ID_VALVE_RECYCLER     1
+#define SERVO_ID_RECYCLER       2
+#define SERVO_ID_BEE_L          3
+#define SERVO_ID_BEE_R          4
+#define SERVO_COUNT         5
 
-#define ADC_RES					ADC_RES_8BIT
+#define ADC_RES                 ADC_RES_8BIT
 
-#define USART_CONSOLE			USARTC0
+#define USART_CONSOLE           USARTC0
 
 #define AVOIDANCE_BORDER_X_MIN    -1340
 #define AVOIDANCE_BORDER_X_MAX    1340
@@ -72,13 +72,13 @@
 #define OBSTACLE_BORDER_Y_MIN    200
 #define OBSTACLE_BORDER_Y_MAX    1800
 
-#define CTRL_BLOCKING_NB_ITERATIONS	200
+#define CTRL_BLOCKING_NB_ITERATIONS 200
 
 #if defined(MODULE_CALIBRATION)
 typedef enum {
-	CTRL_STATE_CALIB_MODE1 = CTRL_STATE_INGAME + 1,
-	CTRL_STATE_CALIB_MODE2,
-	CTRL_STATE_CALIB_MODE3,
+    CTRL_STATE_CALIB_MODE1 = CTRL_STATE_INGAME + 1,
+    CTRL_STATE_CALIB_MODE2,
+    CTRL_STATE_CALIB_MODE3,
 } controller_mode_id_calib_t;
 #endif /* MODULE_CALIBRATION */
 
@@ -93,7 +93,7 @@ extern datalog_t datalog;
 func_cb_t mach_get_ctrl_loop_pre_pfn(void);
 func_cb_t mach_get_ctrl_loop_post_pfn(void);
 func_cb_t mach_get_end_of_game_pfn(void);
-path_t * mach_get_path(void);
+path_t *mach_get_path(void);
 //uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone);
 uint8_t mach_is_game_launched(void);
 uint8_t mach_is_camp_left(void);
