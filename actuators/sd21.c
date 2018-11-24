@@ -5,8 +5,8 @@
 
 #define SD21_ADDRESS    (0xC2 >> 1)
 
-#define REG_VERSION 64
-#define REG_VOLTAGE 65
+#define REG_VERSION     64
+#define REG_VOLTAGE     65
 
 /* calibration constants */
 #define CAL_RST 1600
@@ -210,8 +210,6 @@ void sd21_enter_calibration(sd21_t *obj)
 }
 #endif /* MODULE_CALIBRATION */
 
-/**
- */
 void sd21_setup(sd21_t *obj)
 {
     i2c_init(obj->bus_id);

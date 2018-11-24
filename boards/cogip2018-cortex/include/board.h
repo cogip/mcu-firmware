@@ -78,7 +78,7 @@ static const motor_driver_config_t motor_driver_config[] = {
     },
 };
 
-#define MOTOR_DRIVER_NUMOF           (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
+#define MOTOR_DRIVER_NUMOF      (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
 
 /**
  * @brief   Initialize board specific hardware, including clock, LEDs and std-IO

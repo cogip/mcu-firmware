@@ -29,15 +29,14 @@ static void print_logtime(FILE *stream)
     now.tv_sec -= first.tv_sec;
     now.tv_usec -= first.tv_usec;
 
-    fprintf(stream, "[%d.%06d]",
-            (int)now.tv_sec, (int)now.tv_usec);
+    fprintf(stream, "[%d.%06d]", (int)now.tv_sec, (int)now.tv_usec);
 }
+
 #else
 #define print_logtime(stream) do { (void)(stream); } while (0)
 #endif
 
-static void print_log_v(int level, const char *function, const char *format,
-                        va_list args)
+static void print_log_v(int level, const char *function, const char *format, va_list args)
 {
     FILE *stream = stdout;
     const char *prefix;
@@ -96,9 +95,7 @@ void log_vect_init(datalog_t *d, const char *log_name, ...)
 
     va_start(args, log_name);
 
-    for (t = va_arg(args, int);
-         t != COL_END;
-         d->col_nb++, t = va_arg(args, int)) {
+    for (t = va_arg(args, int); t != COL_END; d->col_nb++, t = va_arg(args, int)) {
         d->columns[d->col_nb].visible = FALSE;
 
         /* 1st var arg is column type */
@@ -131,9 +128,7 @@ void log_vect_reset(datalog_t *d, const char *log_name, ...)
     va_start(args, log_name);
 
     /* Each refered column index in arg list will be displayed */
-    for (c = va_arg(args, int);
-         c != -1;
-         c = va_arg(args, int)) {
+    for (c = va_arg(args, int); c != -1; c = va_arg(args, int)) {
         d->columns[c].visible = TRUE;
     }
     va_end(args);

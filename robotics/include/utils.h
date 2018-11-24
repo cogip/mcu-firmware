@@ -6,8 +6,8 @@ typedef void (*func_cb_t)(void);
 #define FALSE   (0)
 #define TRUE    (!FALSE)
 
-#define MIN(a, b)    (((a) < (b)) ? (a) : (b))
-#define MAX(a, b)    (((a) > (b)) ? (a) : (b))
+#define MIN(a, b)   (((a) < (b)) ? (a) : (b))
+#define MAX(a, b)   (((a) > (b)) ? (a) : (b))
 
 #include <stdio.h>
 #define cons_printf printf
@@ -21,6 +21,5 @@ int custom_scanf(const char *format, ...);
 
 /* set interval to 20 milli-second */
 #define THREAD_PERIOD_INTERVAL (20U * US_PER_MS)
-
 
 #endif /* UTILS_H_ */

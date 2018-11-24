@@ -10,25 +10,23 @@
 
 
 /* Nb water balls in a pipe */
-#define PIPE_WATER_NB           8
-
+#define PIPE_WATER_NB   8
 
 /* 500ms between valves positions */
-#define DELAY_VALVE_US          (500UL * US_PER_MS)
+#define DELAY_VALVE_US  (500UL * US_PER_MS)
 
 /* 500ms between 2 storages positions of the wheel */
 #define DELAY_BETWEEN_STORAGE_US    (500UL * US_PER_MS)
 
 /* 100ms for launcher to start */
-#define DELAY_LAUNCHER_US       (100UL * US_PER_MS)
+#define DELAY_LAUNCHER_US   (100UL * US_PER_MS)
 
 /* 300 to let the recycler to push the ball */
-#define DELAY_RECYCLER_US       (300UL * US_PER_MS)
-
+#define DELAY_RECYCLER_US   (300UL * US_PER_MS)
 
 /* Number of valve per ball (multiple trials in case ball are blocked ?) */
 /* Set 1 if confirmed Ok !! */
-#define VALVE_TRIAL_NB          1
+#define VALVE_TRIAL_NB  1
 
 /*
  * private

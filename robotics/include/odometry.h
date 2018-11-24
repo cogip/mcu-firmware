@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define SEGMENT     0
+#define SEGMENT 0
 #define ARC     1
 
 /**
