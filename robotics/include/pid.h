@@ -2,17 +2,17 @@
 #define PID_H_
 
 /* Set integral limit to PWM max (check in RIOT) for integrator windup */
-#define INTEGRAL_LIMIT		2000
+#define INTEGRAL_LIMIT      2000
 
 /**
  * \struct PID
  */
 typedef struct {
-	double kp; /*!< proportional gain */
-	double ki; /*!< integral gain */
-	double kd; /*!< derivative gain */
-	double ti; /*!< error sum */
-	double previous_error; /*!< previous sum */
+    double kp;              /*!< proportional gain */
+    double ki;              /*!< integral gain */
+    double kd;              /*!< derivative gain */
+    double ti;              /*!< error sum */
+    double previous_error;  /*!< previous sum */
 } PID_t;
 
 /**

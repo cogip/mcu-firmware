@@ -3,16 +3,16 @@
 
 #include <stdint.h>
 
-#define LOG_LEVEL_ERROR		0
-#define LOG_LEVEL_WARNING	1
-#define LOG_LEVEL_INFO		2
-#define LOG_LEVEL_DEBUG		3
+#define LOG_LEVEL_ERROR     0
+#define LOG_LEVEL_WARNING   1
+#define LOG_LEVEL_INFO      2
+#define LOG_LEVEL_DEBUG     3
 
 #ifdef CONFIG_ENABLE_LOGGING
 void print_log(int level, const char *function, const char *format, ...);
 #define _print_log(level, ...) print_log(level, __FUNCTION__, __VA_ARGS__)
 #else
-#define _print_log(level, ...) do {} while(0)
+#define _print_log(level, ...) do {} while (0)
 #endif
 
 #define print_dbg(...) _print_log(LOG_LEVEL_DEBUG, __VA_ARGS__)
@@ -24,22 +24,22 @@ void print_log(int level, const char *function, const char *format, ...);
  * elsewhere.
  */
 /* Encoders wheel speeds */
-#define LOG_IDX_SPEED_L			0
-#define LOG_IDX_SPEED_R			1
+#define LOG_IDX_SPEED_L         0
+#define LOG_IDX_SPEED_R         1
 /* Engine pwm commands */
-#define LOG_IDX_MOTOR_L			2
-#define LOG_IDX_MOTOR_R			3
+#define LOG_IDX_MOTOR_L         2
+#define LOG_IDX_MOTOR_R         3
 /* Pid polar_t variales */
-#define LOG_IDX_ROBOT_SPEED_D		4
+#define LOG_IDX_ROBOT_SPEED_D       4
 //#define LOG_IDX_ROBOT_SPEED_A		5
-#define LOG_IDX_SPEED_ORDER_D		5/*6*/
+#define LOG_IDX_SPEED_ORDER_D       5/*6*/
 //#define LOG_IDX_SPEED_ORDER_A		7
 
 typedef enum {
-	COL_INT16,
-	COL_INT32,
-	COL_DOUBLE,
-	COL_END = -1,
+    COL_INT16,
+    COL_INT32,
+    COL_DOUBLE,
+    COL_END = -1,
 } datalog_col_t;
 
 /* The logs are consuming time when sent on UART
@@ -52,23 +52,23 @@ typedef enum {
 #define LOGNAME_MAX 20
 
 typedef struct {
-	uint16_t line_cur;		/* current line "timestamp" */
+    uint16_t line_cur;          /* current line "timestamp" */
 
-	char log_name[LOGNAME_MAX];	/* to store CSV basename */
+    char log_name[LOGNAME_MAX]; /* to store CSV basename */
 
-	uint8_t col_nb;
-	struct {
-		datalog_col_t	type;
-		const char *	name;
-		uint8_t		visible;
-	} columns[COL_MAX];
+    uint8_t col_nb;
+    struct {
+        datalog_col_t type;
+        const char *name;
+        uint8_t visible;
+    } columns[COL_MAX];
 
-	/* datas are the active row */
-	union {
-		int16_t as_int16;
-		int32_t as_int32;
-		double as_double;
-	} datas[COL_MAX];
+    /* datas are the active row */
+    union {
+        int16_t as_int16;
+        int32_t as_int32;
+        double as_double;
+    } datas[COL_MAX];
 } datalog_t;
 
 /*
@@ -87,7 +87,7 @@ void log_vect_init(datalog_t *d, const char *log_name, ...);
 void log_vect_reset(datalog_t *d, const char *log_name, ...);
 
 /* Set value for a cell (ie. using column id) for the current line */
-void log_vect_setvalue(datalog_t *d, uint8_t idx, void * value);
+void log_vect_setvalue(datalog_t *d, uint8_t idx, void *value);
 
 /* Print line and move timestamp to next line for further data storage */
 /* On first call line displayed, the header is also printed */

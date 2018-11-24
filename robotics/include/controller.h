@@ -8,60 +8,58 @@
 typedef void (*state_cb_t)(pose_t *, polar_t *);
 
 typedef struct {
-	char *name;
-	state_cb_t state_cb;
+    char *name;
+    state_cb_t state_cb;
 } controller_mode_t;
 
 typedef enum {
-	CTRL_STATE_STOP = 0,
-	CTRL_STATE_IDLE,
-	CTRL_STATE_BLOCKED,
-	CTRL_STATE_INGAME,
+    CTRL_STATE_STOP = 0,
+    CTRL_STATE_IDLE,
+    CTRL_STATE_BLOCKED,
+    CTRL_STATE_INGAME,
 } controller_mode_id_t;
 
 typedef enum {
-	CTRL_REGUL_IDLE = 0,
-	CTRL_REGUL_POSE_DIST,
-	CTRL_REGUL_POSE_ANGL,
-	CTRL_REGUL_POSE_PRE_ANGL,
-	//CTRL_REGUL_SPEED, /* time for actions */
+    CTRL_REGUL_IDLE = 0,
+    CTRL_REGUL_POSE_DIST,
+    CTRL_REGUL_POSE_ANGL,
+    CTRL_REGUL_POSE_PRE_ANGL,
+    //CTRL_REGUL_SPEED, /* time for actions */
 } controller_regul_t;
 
 typedef struct {
-	PID_t linear_speed_pid;
-	PID_t angular_speed_pid;
-	PID_t linear_pose_pid;
-	PID_t angular_pose_pid;
+    PID_t linear_speed_pid;
+    PID_t angular_speed_pid;
+    PID_t linear_pose_pid;
+    PID_t angular_pose_pid;
 
-	/* Distance approximation to switch to angular correction */
-	uint16_t min_distance_for_angular_switch;
+    /* Distance approximation to switch to angular correction */
+    uint16_t min_distance_for_angular_switch;
 
-	/* Angle approximation to switch to position reached state */
-	uint16_t min_angle_for_pose_reached;
+    /* Angle approximation to switch to position reached state */
+    uint16_t min_angle_for_pose_reached;
 
+    /* Dynamics variables */
+    controller_mode_t *mode;
 
-	/* Dynamics variables */
-	controller_mode_t *mode;
+    pose_t pose_order;
+    pose_t pose_current;
+    polar_t speed_order;
+    uint8_t allow_reverse;
 
-	pose_t pose_order;
-	pose_t	pose_current;
-	polar_t	speed_order;
-	uint8_t allow_reverse;
-
-	controller_regul_t regul;
-	uint8_t pose_reached;
-	uint8_t pose_intermediate;
-	uint8_t in_reverse;
+    controller_regul_t regul;
+    uint8_t pose_reached;
+    uint8_t pose_intermediate;
+    uint8_t in_reverse;
 } controller_t;
-
 
 void motor_drive(polar_t *command);
 polar_t speed_controller(controller_t *ctrl,
-			 polar_t speed_setpoint, polar_t real_speed);
+                         polar_t speed_setpoint, polar_t real_speed);
 
 polar_t controller_update(controller_t *ctrl,
-			  const pose_t *current_pose,
-			  polar_t current_speed);
+                          const pose_t *current_pose,
+                          polar_t current_speed);
 
 void controller_set_pose_intermediate(controller_t *ctrl, uint8_t intermediate);
 uint8_t controller_is_in_reverse(controller_t *ctrl);

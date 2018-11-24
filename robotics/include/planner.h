@@ -5,7 +5,7 @@
 #include "path.h"
 #include "utils.h"
 
-extern path_t * path;
+extern path_t *path;
 extern uint8_t in_calibration;
 
 void planner_start_game(void);

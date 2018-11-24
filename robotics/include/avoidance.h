@@ -14,17 +14,15 @@
 
 /* Vector */
 /* TODO: should it be generic to all core functions ? */
-typedef struct
-{
-	double x,y;
+typedef struct {
+    double x, y;
 } vector_t;
 
 /* Polygon */
 /* TODO: should it be generic to all core functions ? */
-typedef struct
-{
-	uint8_t count;
-	pose_t points[POLY_MAX_POINTS];
+typedef struct {
+    uint8_t count;
+    pose_t points[POLY_MAX_POINTS];
 } polygon_t;
 
 pose_t dijkstra(uint16_t target, uint16_t index);
@@ -37,10 +35,10 @@ void build_avoidance_graph(void);
 int add_polygon(polygon_t *polygon);
 int add_dyn_polygon(polygon_t *polygon);
 void reset_dyn_polygons(void);
-uint8_t is_point_in_polygon(const polygon_t *polygons,pose_t p);
-int8_t get_point_index_in_polygon(const polygon_t *polygons,pose_t p);
+uint8_t is_point_in_polygon(const polygon_t *polygons, pose_t p);
+int8_t get_point_index_in_polygon(const polygon_t *polygons, pose_t p);
 uint8_t is_segment_crossing_line(pose_t a, pose_t b, pose_t o, pose_t p);
-uint8_t is_segment_crossing_segment(pose_t a,pose_t b,pose_t o,pose_t p);
+uint8_t is_segment_crossing_segment(pose_t a, pose_t b, pose_t o, pose_t p);
 uint8_t is_point_on_segment(pose_t a, pose_t b, pose_t o);
 
 #endif /* AVOIDANCE_H_ */

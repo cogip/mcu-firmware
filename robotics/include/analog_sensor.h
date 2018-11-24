@@ -5,37 +5,37 @@
 #include <stdint.h>
 #include <limits.h>
 
-#define AS_DIST_MAX	UINT8_MAX
+#define AS_DIST_MAX UINT8_MAX
 typedef uint8_t dist_cm_t;
 
-#define AS_DIST_LIMIT	50 /*cm*/
+#define AS_DIST_LIMIT   50 /*cm*/
 
 /* Average measurement over time */
-#define ANALOG_SENSOR_NB_SAMPLES	3
+#define ANALOG_SENSOR_NB_SAMPLES    3
 
 typedef struct {
-	adc_t adc;
+    adc_t adc;
 
-	const char *pos_str;
+    const char *pos_str;
 
-	/* for ADC value to distance (cm) conversion */
-	float coeff_volts;
-	float const_volts;
-	float const_dist;
+    /* for ADC value to distance (cm) conversion */
+    float coeff_volts;
+    float const_volts;
+    float const_dist;
 
-	uint8_t dist_cm_max;
+    uint8_t dist_cm_max;
 
-	uint8_t dist_robot_offset_cm;
-	double angle_robot_offset;
+    uint8_t dist_robot_offset_cm;
+    double angle_robot_offset;
 
-	/* acquisition context */
-	uint16_t raw_values[ANALOG_SENSOR_NB_SAMPLES]; /* keep acquired distances */
+    /* acquisition context */
+    uint16_t raw_values[ANALOG_SENSOR_NB_SAMPLES]; /* keep acquired distances */
 } sensor_t;
 
 typedef struct {
-	uint8_t sensor_index;  /* current sensor in acquisition */
-	uint8_t sensors_nb;
-	sensor_t sensors[];
+    uint8_t sensor_index;  /* current sensor in acquisition */
+    uint8_t sensors_nb;
+    sensor_t sensors[];
 } analog_sensors_t;
 
 void analog_sensor_refresh_all(analog_sensors_t *as);

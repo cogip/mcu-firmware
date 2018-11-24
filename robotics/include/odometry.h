@@ -3,21 +3,21 @@
 
 #include <stdint.h>
 
-#define SEGMENT		0
-#define ARC		1
+#define SEGMENT     0
+#define ARC     1
 
 /**
  * \struct pose
  */
 typedef struct {
-	double x; /*!< x-position [pulse] */
-	double y; /*!< y-position [pulse] */
-	double O; /*!< 0-orientation [pulse] */
+    double x;   /*!< x-position [pulse] */
+    double y;   /*!< y-position [pulse] */
+    double O;   /*!< 0-orientation [pulse] */
 } pose_t;
 
 typedef struct {
-	double distance;
-	double angle;
+    double distance;
+    double angle;
 } polar_t;
 
 uint8_t pose_equal(const pose_t *p1, const pose_t *p2);
@@ -37,7 +37,7 @@ void odometry_setup(double d);
  * \param approximation : SEGMENT (default) or ARC
  */
 void odometry_update(pose_t *p,
-			 polar_t *robot_speed,
-			 const uint8_t approximation);
+                     polar_t *robot_speed,
+                     const uint8_t approximation);
 
 #endif /* ODOMETRY_H_ */
