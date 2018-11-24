@@ -24,16 +24,16 @@ void print_log(int level, const char *function, const char *format, ...);
  * elsewhere.
  */
 /* Encoders wheel speeds */
-#define LOG_IDX_SPEED_L         0
-#define LOG_IDX_SPEED_R         1
+#define LOG_IDX_SPEED_L     0
+#define LOG_IDX_SPEED_R     1
 /* Engine pwm commands */
-#define LOG_IDX_MOTOR_L         2
-#define LOG_IDX_MOTOR_R         3
+#define LOG_IDX_MOTOR_L     2
+#define LOG_IDX_MOTOR_R     3
 /* Pid polar_t variales */
-#define LOG_IDX_ROBOT_SPEED_D       4
-//#define LOG_IDX_ROBOT_SPEED_A		5
-#define LOG_IDX_SPEED_ORDER_D       5/*6*/
-//#define LOG_IDX_SPEED_ORDER_A		7
+#define LOG_IDX_ROBOT_SPEED_D   4
+//#define LOG_IDX_ROBOT_SPEED_A     5
+#define LOG_IDX_SPEED_ORDER_D   5/*6*/
+//#define LOG_IDX_SPEED_ORDER_A     7
 
 typedef enum {
     COL_INT16,
@@ -52,7 +52,7 @@ typedef enum {
 #define LOGNAME_MAX 20
 
 typedef struct {
-    uint16_t line_cur;          /* current line "timestamp" */
+    uint16_t line_cur; /* current line "timestamp" */
 
     char log_name[LOGNAME_MAX]; /* to store CSV basename */
 

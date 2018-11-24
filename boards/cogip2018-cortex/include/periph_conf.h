@@ -84,9 +84,9 @@ static const timer_conf_t timer_config[] = {
     }
 };
 
-#define TIMER_0_ISR         isr_tim5
+#define TIMER_0_ISR     isr_tim5
 
-#define TIMER_NUMOF         (sizeof(timer_config) / sizeof(timer_config[0]))
+#define TIMER_NUMOF     (sizeof(timer_config) / sizeof(timer_config[0]))
 /** @} */
 
 /**
@@ -124,12 +124,12 @@ static const uart_conf_t uart_config[] = {
     }
 };
 
-#define UART_0_ISR          (isr_usart2)
-#define UART_0_DMA_ISR      (isr_dma1_stream6)
-#define UART_1_ISR          (isr_usart6)
-#define UART_1_DMA_ISR      (isr_dma1_stream6)
+#define UART_0_ISR      (isr_usart2)
+#define UART_0_DMA_ISR  (isr_dma1_stream6)
+#define UART_1_ISR      (isr_usart6)
+#define UART_1_DMA_ISR  (isr_dma1_stream6)
 
-#define UART_NUMOF          (sizeof(uart_config) / sizeof(uart_config[0]))
+#define UART_NUMOF      (sizeof(uart_config) / sizeof(uart_config[0]))
 /** @} */
 
 /**
@@ -159,7 +159,7 @@ static const pwm_conf_t pwm_config[] = {
     },
 };
 
-#define PWM_NUMOF           (sizeof(pwm_config) / sizeof(pwm_config[0]))
+#define PWM_NUMOF   (sizeof(pwm_config) / sizeof(pwm_config[0]))
 /** @} */
 
 /**
@@ -189,10 +189,10 @@ static const qdec_conf_t qdec_config[] = {
     },
 };
 
-#define QDEC_0_ISR         isr_tim3
-#define QDEC_1_ISR         isr_tim4
+#define QDEC_0_ISR  isr_tim3
+#define QDEC_1_ISR  isr_tim4
 
-#define QDEC_NUMOF           (sizeof(qdec_config) / sizeof(qdec_config[0]))
+#define QDEC_NUMOF  (sizeof(qdec_config) / sizeof(qdec_config[0]))
 /** @} */
 
 /**
@@ -214,9 +214,9 @@ static const i2c_conf_t i2c_config[] = {
     }
 };
 
-#define I2C_0_ISR           isr_i2c1_ev
+#define I2C_0_ISR   isr_i2c1_ev
 
-#define I2C_NUMOF           (sizeof(i2c_config) / sizeof(i2c_config[0]))
+#define I2C_NUMOF   (sizeof(i2c_config) / sizeof(i2c_config[0]))
 /** @} */
 
 /**
@@ -227,10 +227,10 @@ static const i2c_conf_t i2c_config[] = {
  *
  * @{
  */
-#define ADC_NUMOF          (8U)
-#define ADC_CONFIG {             \
-        { GPIO_PIN(PORT_B, 0), 0, 8 }, \
-        { GPIO_PIN(PORT_B, 1), 0, 9 }, \
+#define ADC_NUMOF       (8U)
+#define ADC_CONFIG {    \
+        { GPIO_PIN(PORT_B, 0), 0, 8 },  \
+        { GPIO_PIN(PORT_B, 1), 0, 9 },  \
         { GPIO_PIN(PORT_C, 0), 0, 10 }, \
         { GPIO_PIN(PORT_C, 1), 0, 11 }, \
         { GPIO_PIN(PORT_C, 2), 0, 12 }, \

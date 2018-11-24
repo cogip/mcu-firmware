@@ -26,7 +26,6 @@ uint8_t in_calibration = FALSE;
 /* periodic task */
 /* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
 #define TASK_PERIOD_MS      (200)
-
 #define TASK_FREQ_HZ        (1000 / TASK_PERIOD_MS)
 #define GAME_DURATION_SEC   100
 #define GAME_DURATION_TICKS (GAME_DURATION_SEC * TASK_FREQ_HZ)

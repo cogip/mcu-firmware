@@ -9,7 +9,7 @@
 //#define kos_yield(...)
 //#define encoder_reset()
 
-#define PWM_RANGE 500
+#define PWM_RANGE   500
 
 extern uint16_t tempo;
 
@@ -31,6 +31,7 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
                        LOG_IDX_MOTOR_R,
                        -1);
     }
+
     /*
      * Two ramps :
      * 1. [-pwm ... +pwm] for 400 cycles (0.02 = 8s)
@@ -41,13 +42,15 @@ void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
         motor_command->distance = -PWM_RANGE;
     }
     else if (tempo >= 50 && tempo < 400 - 50) {
-        motor_command->distance = (int16_t)((double)(tempo - 50) * 2 * PWM_RANGE / 300.) - PWM_RANGE;
+        motor_command->distance = 
+                    (int16_t)((double)(tempo - 50) * 2 * PWM_RANGE / 300.) - PWM_RANGE;
     }
     else if (tempo >= 400 - 50 && tempo < 400 + 50) {
         motor_command->distance = PWM_RANGE;
     }
     else if (tempo >= 450 && tempo < 800 - 50) {
-        motor_command->distance = -((int16_t)((double)(tempo - 450) * 2 * PWM_RANGE / 300.) - PWM_RANGE);
+        motor_command->distance = 
+                    -((int16_t)((double)(tempo - 450) * 2 * PWM_RANGE / 300.) - PWM_RANGE);
     }
     else if (tempo >= 800 - 50) {
         motor_command->distance = -PWM_RANGE;
