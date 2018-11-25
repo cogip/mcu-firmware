@@ -41,7 +41,7 @@ void planner_enter_calibration(void)
     }
 
     in_calibration = TRUE;
-    controller_set_mode(&controller, CTRL_STATE_INGAME);
+    ctrl_set_mode(&controller, CTRL_STATE_INGAME);
 
     while (!quit) {
 
@@ -116,6 +116,6 @@ void planner_enter_calibration(void)
     }
 
     path->current_pose_idx = 0;
-    controller_set_mode(&controller, CTRL_STATE_IDLE);
+    ctrl_set_mode(&controller, CTRL_STATE_IDLE);
     in_calibration = FALSE;
 }

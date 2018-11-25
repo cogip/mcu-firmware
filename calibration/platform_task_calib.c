@@ -40,7 +40,7 @@ void *task_calibration_entry(void *arg)
     uint8_t quit = 0;
 
     (void)arg;
-    controller_set_mode(&controller, CTRL_STATE_STOP);
+    ctrl_set_mode(&controller, CTRL_STATE_STOP);
 
 //	/* wait for keypress, or schedule */
 //	while (!usart_is_data_arrived(&USART_CONSOLE)) {

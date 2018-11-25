@@ -20,7 +20,7 @@ uint16_t tempo;
 //#define kos_set_next_schedule_delay_ms(...)
 //#define kos_yield(...)
 
-static void set_pose_reached(controller_t *ctrl)
+static void set_pose_reached(ctrl_t *ctrl)
 {
     if (ctrl->pose_reached) {
         return;
@@ -37,7 +37,7 @@ static void set_pose_reached(controller_t *ctrl)
  * \param p2 : measure pose
  * \return distance and angle errors between 2 poses
  */
-static polar_t compute_error(controller_t *ctrl,
+static polar_t compute_error(ctrl_t *ctrl,
                              const pose_t pose_order, const pose_t *pose_current)
 {
     polar_t error;
@@ -94,7 +94,7 @@ static double limit_speed_command(double command,
 /**
  *
  */
-polar_t speed_controller(controller_t *ctrl,
+polar_t speed_ctrl(ctrl_t *ctrl,
                          polar_t speed_order, polar_t speed_current)
 {
     polar_t speed_error;
@@ -115,18 +115,18 @@ polar_t speed_controller(controller_t *ctrl,
     if (error_blocking >= CTRL_BLOCKING_NB_ITERATIONS) {
         command.distance = 0;
         command.angle = 0;
-        controller_set_mode(ctrl, CTRL_STATE_BLOCKED);
+        ctrl_set_mode(ctrl, CTRL_STATE_BLOCKED);
     }
 
-    command.distance = pid_controller(&ctrl->linear_speed_pid,
+    command.distance = pid_ctrl(&ctrl->linear_speed_pid,
                                       speed_error.distance);
-    command.angle = pid_controller(&ctrl->angular_speed_pid,
+    command.angle = pid_ctrl(&ctrl->angular_speed_pid,
                                    speed_error.angle);
 
     return command;
 }
 
-polar_t controller_update(controller_t *ctrl,
+polar_t ctrl_update(ctrl_t *ctrl,
                           const pose_t *pose_current,
                           polar_t speed_current)
 {
@@ -134,23 +134,23 @@ polar_t controller_update(controller_t *ctrl,
     pose_t pose_order = { 0, 0, 0 };
     polar_t speed_order = { 0, 0 };
     polar_t speed;
-    /* ******************** position pid controller ******************** */
+    /* ******************** position pid ctrl ******************** */
 
     /* compute position error */
     polar_t position_error;
 
-    if (controller_is_pose_reached(&controller)) {
+    if (ctrl_is_pose_reached(ctrl)) {
         return command;
     }
 
     /* get next pose_t to reach */
-    pose_order = controller_get_pose_to_reach(&controller);
+    pose_order = ctrl_get_pose_to_reach(ctrl);
 
     pose_order.x *= PULSE_PER_MM;
     pose_order.y *= PULSE_PER_MM;
 
     /* get speed order */
-    speed_order = controller_get_speed_order(&controller);
+    speed_order = ctrl_get_speed_order(ctrl);
 
     position_error = compute_error(ctrl, pose_order, pose_current);
 
@@ -225,7 +225,7 @@ polar_t controller_update(controller_t *ctrl,
             position_error.angle = 0;
             pid_reset(&ctrl->angular_pose_pid);
 
-            set_pose_reached(&controller);
+            set_pose_reached(ctrl);
             ctrl->regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
         }
     }
@@ -233,9 +233,9 @@ polar_t controller_update(controller_t *ctrl,
     position_error.angle *= PULSE_PER_DEGREE;
 
     /* compute speed command with position pid controller */
-    command.distance = pid_controller(&ctrl->linear_pose_pid,
+    command.distance = pid_ctrl(&ctrl->linear_pose_pid,
                                       position_error.distance);
-    command.angle = pid_controller(&ctrl->angular_pose_pid,
+    command.angle = pid_ctrl(&ctrl->angular_pose_pid,
                                    position_error.angle);
 
 
@@ -248,37 +248,37 @@ polar_t controller_update(controller_t *ctrl,
                                       speed_current.angle);
 
     /* ********************** speed pid controller ********************* */
-    return speed_controller(ctrl, speed, speed_current);
+    return speed_ctrl(ctrl, speed, speed_current);
 }
 
-inline void controller_set_pose_intermediate(controller_t *ctrl, uint8_t intermediate)
+inline void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate)
 {
     ctrl->pose_intermediate = intermediate;
 }
 
-inline uint8_t controller_is_in_reverse(controller_t *ctrl)
+inline uint8_t ctrl_is_in_reverse(ctrl_t *ctrl)
 {
     return ctrl->in_reverse;
 }
 
-inline void controller_set_allow_reverse(controller_t *ctrl, uint8_t allow)
+inline void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow)
 {
     ctrl->allow_reverse = allow;
 }
 
-inline uint8_t controller_is_pose_reached(controller_t *ctrl)
+inline uint8_t ctrl_is_pose_reached(ctrl_t *ctrl)
 {
     return ctrl->pose_reached;
 }
 
-inline void controller_set_pose_current(controller_t *ctrl, const pose_t pose)
+inline void ctrl_set_pose_current(ctrl_t *ctrl, const pose_t pose)
 {
     irq_disable();
     ctrl->pose_current = pose;
     irq_enable();
 }
 
-inline pose_t controller_get_pose_current(controller_t *ctrl)
+inline pose_t ctrl_get_pose_current(ctrl_t *ctrl)
 {
     pose_t pose_current;
 
@@ -289,7 +289,7 @@ inline pose_t controller_get_pose_current(controller_t *ctrl)
     return pose_current;
 }
 
-inline void controller_set_pose_to_reach(controller_t *ctrl, const pose_t pose_order)
+inline void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order)
 {
     irq_disable();
     if (!pose_equal(&ctrl->pose_order, &pose_order)) {
@@ -299,7 +299,7 @@ inline void controller_set_pose_to_reach(controller_t *ctrl, const pose_t pose_o
     irq_enable();
 }
 
-inline pose_t controller_get_pose_to_reach(controller_t *ctrl)
+inline pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl)
 {
     pose_t pose_order;
 
@@ -310,14 +310,14 @@ inline pose_t controller_get_pose_to_reach(controller_t *ctrl)
     return pose_order;
 }
 
-inline void controller_set_speed_order(controller_t *ctrl, const polar_t speed_order)
+inline void ctrl_set_speed_order(ctrl_t *ctrl, const polar_t speed_order)
 {
     irq_disable();
     ctrl->speed_order = speed_order;
     irq_enable();
 }
 
-inline polar_t controller_get_speed_order(controller_t *ctrl)
+inline polar_t ctrl_get_speed_order(ctrl_t *ctrl)
 {
     polar_t speed_order;
 
@@ -328,9 +328,9 @@ inline polar_t controller_get_speed_order(controller_t *ctrl)
     return speed_order;
 }
 
-void controller_set_mode(controller_t *ctrl, controller_mode_id_t new_mode)
+void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_id_t new_mode)
 {
-    ctrl->mode = &controller_modes[new_mode];
+    ctrl->mode = &ctrl_modes[new_mode];
     printf("new_mode = %s\n", ctrl->mode->name);
 }
 
@@ -347,14 +347,14 @@ void motor_drive(polar_t *command)
     log_vect_setvalue(&datalog, LOG_IDX_MOTOR_R, (void *) &right_command);
 }
 
-void *task_controller_update(void *arg)
+void *task_ctrl_update(void *arg)
 {
     /* bot position on the 'table' (absolute position): */
     polar_t motor_command = { 0, 0 };
     func_cb_t pfn_evtloop_prefunc = mach_get_ctrl_loop_pre_pfn();
     func_cb_t pfn_evtloop_postfunc = mach_get_ctrl_loop_post_pfn();
 
-    (void)arg;
+    ctrl_t *ctrl = (ctrl_t*)arg;
     printf("Controller started\n");
 
     for (;;) {
@@ -365,8 +365,8 @@ void *task_controller_update(void *arg)
             (*pfn_evtloop_prefunc)();
         }
 
-        if ((controller.mode) && (controller.mode->state_cb)) {
-            controller.mode->state_cb(&controller.pose_current, &motor_command);
+        if ((ctrl->mode) && (ctrl->mode->state_cb)) {
+            ctrl->mode->state_cb(&ctrl->pose_current, &motor_command);
         }
 
         motor_drive(&motor_command);
