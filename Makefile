@@ -13,6 +13,9 @@ USEMODULE += ps
 USEMODULE += printf_float
 LINKFLAGS += -u _scanf_float
 
+USEMODULE += quadpid
+DIRS += controllers
+
 QUIET ?= 1
 
 CFLAGS += -DCONFIG_CALIBRATION
@@ -37,6 +40,8 @@ FEATURES_REQUIRED += periph_pwm
 FEATURES_REQUIRED += periph_adc
 
 INCLUDES += -I$(APPDIR)/robotics/include/ -I$(APPDIR)/
+INCLUDES += -I$(APPDIR)/controllers/include/
+
 ifeq ($(BOARD),native)
 CFLAGS += -Wno-pedantic -Wno-unused-parameter -Wno-sign-compare
 endif
