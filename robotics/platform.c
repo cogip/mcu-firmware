@@ -262,7 +262,7 @@ hbridge_t hbridges = {
 };
 #endif
 
-controller_mode_t controller_modes[] = {
+ctrl_mode_t ctrl_modes[] = {
     { "STOP", ctrl_state_stop_cb, },            /* CTRL_STATE_STOP */
     { "IDLE", ctrl_state_idle_cb, },            /* CTRL_STATE_IDLE */
     { "BLOCKED", ctrl_state_stop_cb, },         /* CTRL_STATE_BLOCKED */
@@ -274,7 +274,7 @@ controller_mode_t controller_modes[] = {
 #endif /* MODULE_CALIBRATION */
 };
 
-controller_t controller = {
+ctrl_t controller = {
 #ifdef BOARD_NATIVE
     .linear_speed_pid = {
         .kp = 5,
@@ -324,7 +324,7 @@ controller_t controller = {
     .min_angle_for_pose_reached = 100,
     .regul = CTRL_REGUL_POSE_DIST,
     .allow_reverse = TRUE,
-    .mode = &controller_modes[CTRL_STATE_INGAME],
+    .mode = &ctrl_modes[CTRL_STATE_INGAME],
 };
 
 /* This global object contains all numerical logs references (vectors, etc.) */
@@ -546,7 +546,7 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
     robot_pose->O /= PULSE_PER_DEGREE;
 
     /* PID / feedback control */
-    *motor_command = controller_update(&controller,
+    *motor_command = ctrl_update(&controller,
                                        robot_pose,
                                        robot_speed);
 

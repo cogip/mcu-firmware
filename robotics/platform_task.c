@@ -81,7 +81,7 @@ void mach_tasks_init(void)
 /* FIXME: Launch calibration task */
     thread_create(controller_thread_stack, sizeof(controller_thread_stack),
                   0, 0,
-                  task_controller_update, NULL, "motion_ctrl");
+                  task_ctrl_update, &controller, "motion_ctrl");
     thread_create(planner_thread_stack, sizeof(planner_thread_stack),
                   5, 0,
                   task_planner, NULL, "game_planner");

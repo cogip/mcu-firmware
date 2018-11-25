@@ -39,6 +39,6 @@ void pid_reset(PID_t *pid);
  * \param error
  * \return the variable that will be adjusted by the pid
  */
-double pid_controller(PID_t *pid, const double error);
+double pid_ctrl(PID_t *pid, const double error);
 
 #endif /* PID_H_ */

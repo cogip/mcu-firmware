@@ -44,7 +44,7 @@ static void show_game_time(void)
 void planner_start_game(void)
 {
     /* TODO: send pose_initial, pose_order & speed_order to controller */
-    controller_set_mode(&controller, CTRL_STATE_INGAME);
+    ctrl_set_mode(&controller, CTRL_STATE_INGAME);
     game_started = TRUE;
 }
 
@@ -76,7 +76,7 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
         }
     }
 
-    if (controller_is_pose_reached(&controller)) {
+    if (ctrl_is_pose_reached(&controller)) {
         pose_reached = *pose_to_reach;
 
         if ((pose_to_reach->x == current_path_pos->pos.x)
@@ -114,9 +114,9 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
     }
 #endif
 
-    if (controller.mode == &controller_modes[CTRL_STATE_BLOCKED]) {
+    if (controller.mode == &ctrl_modes[CTRL_STATE_BLOCKED]) {
         path_increment_current_pose_idx(path);
-        controller_set_mode(&controller, CTRL_STATE_INGAME);
+        ctrl_set_mode(&controller, CTRL_STATE_INGAME);
         need_update = 1;
     }
 
@@ -143,13 +143,13 @@ static int trajectory_get_route_update(const pose_t *robot_pose, pose_t *pose_to
     if ((pose_to_reach->x == current_path_pos->pos.x)
         && (pose_to_reach->y == current_path_pos->pos.y)) {
         pose_to_reach->O = current_path_pos->pos.O;
-        controller_set_pose_intermediate(&controller, FALSE);
+        ctrl_set_pose_intermediate(&controller, FALSE);
     }
     else {
         /* Update speed order to max speed defined value in the new point to reach */
         speed_order->distance = path_get_current_max_speed(path);
         speed_order->angle = speed_order->distance / 2;
-        controller_set_pose_intermediate(&controller, TRUE);
+        ctrl_set_pose_intermediate(&controller, TRUE);
     }
 
     return 0;
@@ -192,7 +192,7 @@ void *task_planner(void *arg)
     initial_pose.x *= PULSE_PER_MM;
     initial_pose.y *= PULSE_PER_MM;
     initial_pose.O *= PULSE_PER_DEGREE;
-    controller_set_pose_current(&controller, initial_pose);
+    ctrl_set_pose_current(&controller, initial_pose);
 
     uint32_t game_start_time = xtimer_now_usec();
 
@@ -218,7 +218,7 @@ void *task_planner(void *arg)
 
             if (xtimer_now_usec() - game_start_time >= GAME_DURATION_SEC * US_PER_SEC) {
                 cons_printf(">>>>\n");
-                controller_set_mode(&controller, CTRL_STATE_STOP);
+                ctrl_set_mode(&controller, CTRL_STATE_STOP);
                 break;
             }
 
@@ -242,7 +242,7 @@ void *task_planner(void *arg)
 
         current_path_pos = path_get_current_path_pos(path);
         /* collision detection */
-        /*if (controller_is_in_reverse(&controller))
+        /*if (ctrl_is_in_reverse(&controller))
             zone = AS_ZONE_REAR;
            else
             zone = AS_ZONE_FRONT;
@@ -262,18 +262,18 @@ void *task_planner(void *arg)
         speed_order.angle = speed_order.distance / 2;
 
         /* reverse gear selection is granted per point to reach, in path */
-        controller_set_allow_reverse(&controller, current_path_pos->allow_reverse);
+        ctrl_set_allow_reverse(&controller, current_path_pos->allow_reverse);
 
         pose_t pose_current = controller.pose_current;
 
         /* ===== position ===== */
         if (trajectory_get_route_update(&pose_current, &pose_order, &speed_order) == -1) {
-            controller_set_mode(&controller, CTRL_STATE_STOP);
+            ctrl_set_mode(&controller, CTRL_STATE_STOP);
         }
 
-        controller_set_speed_order(&controller, speed_order);
+        ctrl_set_speed_order(&controller, speed_order);
 
-        controller_set_pose_to_reach(&controller, pose_order);
+        ctrl_set_pose_to_reach(&controller, pose_order);
 
 yield_point:
         //kos_yield();
