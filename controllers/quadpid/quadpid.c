@@ -22,13 +22,13 @@ static void set_pose_reached(ctrl_t *ctrl)
 }
 
 /**
- * \fn polar_t compute_error(const pose_t p1, const pose_t p2)
+ * \fn polar_t compute_position_error(const pose_t p1, const pose_t p2)
  * \brief compute error between 2 poses
  * \param p1 : setpoint pose
  * \param p2 : measure pose
  * \return distance and angle errors between 2 poses
  */
-static polar_t compute_error(ctrl_t *ctrl,
+static polar_t compute_position_error(ctrl_t *ctrl,
                              const pose_t pose_order, const pose_t *pose_current)
 {
     polar_t error;
@@ -143,7 +143,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
     /* get speed order */
     speed_order = ctrl_get_speed_order(ctrl);
 
-    pos_err = compute_error(ctrl, pose_order, pose_current);
+    pos_err = compute_position_error(ctrl, pose_order, pose_current);
 
     cons_printf("@c@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,"
                 "%+.0f,%+.0f,"
