@@ -2,10 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#include "console.h"
-//#include "encoder.h"
 #include "irq.h"
-//#include "kos.h"
 #include "xtimer.h"
 #include "system/log.h"
 #include "odometry.h"
@@ -13,10 +10,6 @@
 #include "trigonometry.h"
 
 #include "controller.h"
-
-//FIXME: removestub
-//#define kos_set_next_schedule_delay_ms(...)
-//#define kos_yield(...)
 
 static void set_pose_reached(ctrl_t *ctrl)
 {

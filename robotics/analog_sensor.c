@@ -1,10 +1,6 @@
 #include "analog_sensor.h"
-//#include "console.h"
-//#include "kos.h"
 #include "platform.h"
 #include "xtimer.h"
-
-/*#define AVERAGING*/
 
 void *task_analog_sensors(void *arg)
 {
@@ -133,8 +129,6 @@ static void analog_sensor_calibration_usage(analog_sensors_t *obj)
     cons_printf("sensors_nb = %d\n\n", obj->sensors_nb);
     analog_sensor_dump_all(obj);
 
-//	cons_printf("\n");
-//	cons_printf("\t'S' to start/stop measurements dumps\n");
     cons_printf("\n");
     cons_printf("\t'a','h' to display this help\n");
     cons_printf("\t'q' to quit\n");
@@ -149,35 +143,13 @@ void analog_sensor_enter_calibration(analog_sensors_t *obj)
     analog_sensor_calibration_usage(obj);
 
     while (!quit) {
-//		if (! display_dbg) {
         /* display prompt */
         cons_printf("$ ");
 
         /* wait for command, or schedule */
         c = cons_getchar();
         cons_printf("%c\n", c);
-//		} else {
-//			/* poll for command if arrived, or dump values
-//			 * periodically */
-//			kos_set_next_schedule_delay_ms(200);
-//
-//			if (cons_is_data_arrived())
-//				c = cons_getchar();
-//			else
-//				c = -1;
-//
-//			analog_sensor_dump_all(obj);
-//		}
-
         switch (c) {
-//		case -1:
-//			kos_yield();
-//			break;
-//		case 'S':
-//			display_dbg = !display_dbg;
-//
-//			cons_printf("display_dbg = %s\n", display_dbg ? "True" : "False");
-//			break;
             case 'a':
             case 'h':
                 analog_sensor_calibration_usage(obj);

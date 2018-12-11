@@ -8,9 +8,6 @@
 #include "xtimer.h"
 #include <thread.h>
 
-//FIXME:
-#define kos_task_exit()
-
 extern analog_sensors_t ana_sensors;
 
 char controller_thread_stack[THREAD_STACKSIZE_DEFAULT];

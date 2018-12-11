@@ -3,7 +3,6 @@
 #include <math.h>
 
 #include "avoidance.h"
-//#include "kos.h"
 #include "obstacle.h"
 #include "utils.h"
 
