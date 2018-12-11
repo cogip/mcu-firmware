@@ -128,7 +128,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
     /* ******************** position pid ctrl ******************** */
 
     /* compute position error */
-    polar_t position_error;
+    polar_t pos_err;
 
     if (ctrl_is_pose_reached(ctrl)) {
         return command;
@@ -143,7 +143,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
     /* get speed order */
     speed_order = ctrl_get_speed_order(ctrl);
 
-    position_error = compute_error(ctrl, pose_order, pose_current);
+    pos_err = compute_error(ctrl, pose_order, pose_current);
 
     cons_printf("@c@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,"
                 "%+.0f,%+.0f,"
@@ -156,8 +156,8 @@ polar_t ctrl_update(ctrl_t *ctrl,
                 pose_current->x / PULSE_PER_MM,
                 pose_current->y / PULSE_PER_MM,
                 pose_current->O,
-                position_error.distance / PULSE_PER_MM,
-                position_error.angle,
+                pos_err.distance / PULSE_PER_MM,
+                pos_err.angle,
                 speed_order.distance / PULSE_PER_MM,
                 speed_order.angle,
                 speed_current.distance / PULSE_PER_MM,
@@ -165,19 +165,19 @@ polar_t ctrl_update(ctrl_t *ctrl,
 
     /* position correction */
     if (ctrl->regul != CTRL_REGUL_POSE_ANGL
-        && fabs(position_error.distance) > ctrl->min_distance_for_angular_switch) {
+        && fabs(pos_err.distance) > ctrl->min_distance_for_angular_switch) {
 
         /* should we go reverse? */
-        if (ctrl->allow_reverse && fabs(position_error.angle) > 90) {
+        if (ctrl->allow_reverse && fabs(pos_err.angle) > 90) {
             ctrl->in_reverse = TRUE;
 
-            position_error.distance = -position_error.distance;
+            pos_err.distance = -pos_err.distance;
 
-            if (position_error.angle < 0) {
-                position_error.angle += 180;
+            if (pos_err.angle < 0) {
+                pos_err.angle += 180;
             }
             else {
-                position_error.angle -= 180;
+                pos_err.angle -= 180;
             }
         }
         else {
@@ -185,9 +185,9 @@ polar_t ctrl_update(ctrl_t *ctrl,
         }
 
         /* if target point direction angle is too important, bot rotates on its starting point */
-        if (fabs(position_error.angle) > ctrl->min_angle_for_pose_reached / PULSE_PER_DEGREE) {
+        if (fabs(pos_err.angle) > ctrl->min_angle_for_pose_reached / PULSE_PER_DEGREE) {
             ctrl->regul = CTRL_REGUL_POSE_PRE_ANGL;
-            position_error.distance = 0;
+            pos_err.distance = 0;
             pid_reset(&ctrl->linear_pose_pid);
         }
         else {
@@ -200,18 +200,18 @@ polar_t ctrl_update(ctrl_t *ctrl,
 
         /* final orientation error */
         if (!ctrl->pose_intermediate) {
-            position_error.angle = limit_angle_deg(pose_order.O - pose_current->O);
+            pos_err.angle = limit_angle_deg(pose_order.O - pose_current->O);
         }
         else {
-            position_error.angle = 0;
+            pos_err.angle = 0;
         }
 
-        position_error.distance = 0;
+        pos_err.distance = 0;
         pid_reset(&ctrl->linear_pose_pid);
 
         /* orientation is reached */
-        if (fabs(position_error.angle) < ctrl->min_angle_for_pose_reached / PULSE_PER_DEGREE) {
-            position_error.angle = 0;
+        if (fabs(pos_err.angle) < ctrl->min_angle_for_pose_reached / PULSE_PER_DEGREE) {
+            pos_err.angle = 0;
             pid_reset(&ctrl->angular_pose_pid);
 
             set_pose_reached(ctrl);
@@ -219,13 +219,13 @@ polar_t ctrl_update(ctrl_t *ctrl,
         }
     }
 
-    position_error.angle *= PULSE_PER_DEGREE;
+    pos_err.angle *= PULSE_PER_DEGREE;
 
     /* compute speed command with position pid controller */
     command.distance = pid_ctrl(&ctrl->linear_pose_pid,
-                                      position_error.distance);
+                                      pos_err.distance);
     command.angle = pid_ctrl(&ctrl->angular_pose_pid,
-                                   position_error.angle);
+                                   pos_err.angle);
 
 
     /* limit speed command */
