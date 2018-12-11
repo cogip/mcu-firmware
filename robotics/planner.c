@@ -3,19 +3,12 @@
 #include <stdio.h>
 #include "avoidance.h"
 #include "controller.h"
-//#include "console.h"
-//#include "kos.h"
 #include "xtimer.h"
 #include "platform.h"
 #include "trigonometry.h"
 #include "obstacle.h"
 #include <irq.h>
 #include <periph/adc.h>
-
-//FIXME: remove stub
-#define kos_task_exit()
-//#define kos_set_next_schedule_delay_ms(...)
-//#define kos_yield()
 
 /* Object variables (singleton) */
 static uint16_t game_time = 0;
@@ -177,7 +170,6 @@ void *task_planner(void *arg)
     path = mach_get_path();
     if (!path) {
         printf("machine has no path\n");
-        kos_task_exit();
     }
 
     /* mirror the points in place if selected camp is right */
@@ -202,8 +194,6 @@ void *task_planner(void *arg)
         if (!game_started && !in_calibration) {
             goto yield_point;
         }
-
-        //kos_set_next_schedule_delay_ms(20);
 
         if (!in_calibration) {
             if (pfn_evtloop_end_of_game && game_time >= GAME_DURATION_TICKS) {
@@ -241,21 +231,6 @@ void *task_planner(void *arg)
         /* ===== speed ===== */
 
         current_path_pos = path_get_current_path_pos(path);
-        /* collision detection */
-        /*if (ctrl_is_in_reverse(&controller))
-            zone = AS_ZONE_REAR;
-           else
-            zone = AS_ZONE_FRONT;
-
-           if (mach_is_zone_obscured(zone)) {
-            speed_order.distance = 0;
-            speed_order.angle = 0;
-           } else {*/
-        /* max speed order in pulse_linear per ctrl period (20ms) */
-        //speed_order.distance = current_path_pos->max_speed;
-        /* max speed order in pulse_angular per ctrl period (20ms) */
-        //speed_order.angle = speed_order.distance / 2;
-        //}
 
         /* Update speed order to max speed defined value in the new point to reach */
         speed_order.distance = path_get_current_max_speed(path);
@@ -276,13 +251,8 @@ void *task_planner(void *arg)
         ctrl_set_pose_to_reach(&controller, pose_order);
 
 yield_point:
-        //kos_yield();
         xtimer_periodic_wakeup(&loop_start_time, TASK_PERIOD_MS * US_PER_MS);
     }
-
-//	controller.mode = CTRL_STATE_INGAME;
-//	cons_printf("calibration ended\n");
-    kos_task_exit();
 
     return 0;
 }

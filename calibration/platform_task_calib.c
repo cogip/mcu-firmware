@@ -8,9 +8,6 @@
 #include "actuators/motor_pap.h"
 #endif
 
-//FIXME:
-#define kos_task_exit()
-
 static void mach_calibration_usage(void)
 {
     cons_printf("\n>>> Entering calibration mode\n\n");
@@ -18,7 +15,6 @@ static void mach_calibration_usage(void)
 #if defined(CONFIG_ANALOG_SENSORS)
     cons_printf("\t'a' to calibrate analogs sensors\n");
 #endif
-    //cons_printf("\t'o' to calibrate odometry\n");
 #if defined(CONFIG_MOTOR_PAP)
     cons_printf("\t'p' to calibrate PAP motor\n");
 #endif
@@ -42,24 +38,6 @@ void *task_calibration_entry(void *arg)
     (void)arg;
     ctrl_set_mode(&controller, CTRL_STATE_STOP);
 
-//	/* wait for keypress, or schedule */
-//	while (!usart_is_data_arrived(&USART_CONSOLE)) {
-//
-//		cons_printf("Press a key to enter calibration... %ds remaining\r",
-//			autoboot_ms / 1000);
-//
-//		kos_set_next_schedule_delay_ms(250);
-//		autoboot_ms -= 250;
-//
-//		if (autoboot_ms > 0)
-//			kos_yield();
-//		else
-//			/* time elapsed, we bypass calibration
-//			 * and continue to game mode. */
-//			goto exit_point;
-//	}
-
-//	mcurses_init();
     mach_calibration_usage();
 
     while (!quit) {
@@ -77,10 +55,7 @@ void *task_calibration_entry(void *arg)
                 analog_sensor_enter_calibration(&ana_sensors);
                 break;
 #endif
-//		case 'o':
-//			//encoder_enter_calibration();
-//			/* TODO; odometry_enter_calibration */
-//			break;
+			/* TODO; odometry_enter_calibration */
 #if defined(CONFIG_MOTOR_PAP)
             case 'p':
                 motor_pap_calib();
@@ -113,7 +88,6 @@ void *task_calibration_entry(void *arg)
 //exit_point:
     cons_printf("calibration ended\n");
     planner_start_game();
-    kos_task_exit();
 
     return 0;
 }
