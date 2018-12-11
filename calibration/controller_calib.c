@@ -11,7 +11,7 @@
 
 #define PWM_RANGE   500
 
-extern uint16_t tempo;
+static uint16_t tempo;
 
 void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command)
 {

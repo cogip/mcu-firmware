@@ -14,8 +14,6 @@
 
 #include "controller.h"
 
-uint16_t tempo;
-
 //FIXME: removestub
 //#define kos_set_next_schedule_delay_ms(...)
 //#define kos_yield(...)
@@ -158,7 +156,6 @@ polar_t ctrl_update(ctrl_t *ctrl,
                 "%+.0f,%+.0f,"
                 "%+.0f,%+.0f,"
                 "%+.0f,%+.0f,"
-                "%d,"
                 "\n",
                 pose_order.x / PULSE_PER_MM,
                 pose_order.y / PULSE_PER_MM,
@@ -171,8 +168,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
                 speed_order.distance / PULSE_PER_MM,
                 speed_order.angle,
                 speed_current.distance / PULSE_PER_MM,
-                speed_current.angle,
-                tempo);
+                speed_current.angle);
 
     /* position correction */
     if (ctrl->regul != CTRL_REGUL_POSE_ANGL
