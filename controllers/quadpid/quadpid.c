@@ -340,8 +340,8 @@ void motor_drive(polar_t *command)
     int16_t right_command = (int16_t) (command->distance + command->angle);
     int16_t left_command = (int16_t) (command->distance - command->angle);
 
-    motor_set(0, HBRIDGE_MOTOR_LEFT, (left_command < 0), abs(left_command));
-    motor_set(0, HBRIDGE_MOTOR_RIGHT, (right_command < 0), abs(right_command));
+    motor_set(0, HBRIDGE_MOTOR_LEFT, left_command);
+    motor_set(0, HBRIDGE_MOTOR_RIGHT, right_command);
 
     log_vect_setvalue(&datalog, LOG_IDX_MOTOR_L, (void *) &left_command);
     log_vect_setvalue(&datalog, LOG_IDX_MOTOR_R, (void *) &right_command);
