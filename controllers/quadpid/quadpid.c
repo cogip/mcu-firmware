@@ -260,22 +260,16 @@ inline uint8_t ctrl_is_pose_reached(ctrl_t *ctrl)
     return ctrl->pose_reached;
 }
 
-inline void ctrl_set_pose_current(ctrl_t *ctrl, const pose_t pose)
+inline void ctrl_set_pose_current(ctrl_t* ctrl, pose_t* pose_current)
 {
     irq_disable();
-    ctrl->pose_current = pose;
+    ctrl->pose_current = pose_current;
     irq_enable();
 }
 
-inline pose_t ctrl_get_pose_current(ctrl_t *ctrl)
+inline pose_t* ctrl_get_pose_current(ctrl_t* ctrl)
 {
-    pose_t pose_current;
-
-    irq_disable();
-    pose_current = ctrl->pose_current;
-    irq_enable();
-
-    return pose_current;
+    return ctrl->pose_current;
 }
 
 inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
@@ -349,7 +343,7 @@ void *task_ctrl_update(void *arg)
         }
 
         if ((ctrl->mode) && (ctrl->mode->state_cb)) {
-            ctrl->mode->state_cb(&ctrl->pose_current, &motor_command);
+            ctrl->mode->state_cb(ctrl->pose_current, &motor_command);
         }
 
         motor_drive(&motor_command);

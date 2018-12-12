@@ -184,7 +184,7 @@ void *task_planner(void *arg)
     initial_pose.x *= PULSE_PER_MM;
     initial_pose.y *= PULSE_PER_MM;
     initial_pose.O *= PULSE_PER_DEGREE;
-    ctrl_set_pose_current(&controller, initial_pose);
+    ctrl_set_pose_current(&controller, &initial_pose);
 
     uint32_t game_start_time = xtimer_now_usec();
 
@@ -239,10 +239,10 @@ void *task_planner(void *arg)
         /* reverse gear selection is granted per point to reach, in path */
         ctrl_set_allow_reverse(&controller, current_path_pos->allow_reverse);
 
-        pose_t pose_current = controller.pose_current;
+        pose_t* pose_current = controller.pose_current;
 
         /* ===== position ===== */
-        if (trajectory_get_route_update(&pose_current, &pose_order, &speed_order) == -1) {
+        if (trajectory_get_route_update(pose_current, &pose_order, &speed_order) == -1) {
             ctrl_set_mode(&controller, CTRL_STATE_STOP);
         }
 
