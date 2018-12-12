@@ -42,7 +42,7 @@ typedef struct {
     /* Dynamics variables */
     ctrl_mode_t *mode;
 
-    pose_t pose_order;
+    pose_t* pose_order;
     pose_t pose_current;
     polar_t speed_order;
     uint8_t allow_reverse;
@@ -65,9 +65,9 @@ void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate);
 uint8_t ctrl_is_in_reverse(ctrl_t *ctrl);
 void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow);
 
-uint8_t ctrl_is_pose_reached(ctrl_t *ctrl);
-void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order);
-pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl);
+uint8_t ctrl_is_pose_reached(ctrl_t* ctrl);
+void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order);
+pose_t* ctrl_get_pose_to_reach(ctrl_t *ctrl);
 void ctrl_set_pose_current(ctrl_t *ctrl, const pose_t pose);
 pose_t ctrl_get_pose_current(ctrl_t *ctrl);
 

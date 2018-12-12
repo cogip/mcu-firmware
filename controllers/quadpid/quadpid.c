@@ -29,15 +29,15 @@ static void set_pose_reached(ctrl_t *ctrl)
  * \return distance and angle errors between 2 poses
  */
 static polar_t compute_position_error(ctrl_t *ctrl,
-                             const pose_t pose_order, const pose_t *pose_current)
+                             const pose_t *pose_order, const pose_t *pose_current)
 {
     polar_t error;
     double x, y, O;
 
     (void)ctrl;
 
-    x = pose_order.x - pose_current->x;
-    y = pose_order.y - pose_current->y;
+    x = pose_order->x - pose_current->x;
+    y = pose_order->y - pose_current->y;
 
     O = limit_angle_rad(atan2(y, x) - DEG2RAD(pose_current->O));
 
@@ -122,7 +122,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
                           polar_t speed_current)
 {
     polar_t command = { 0, 0 };
-    pose_t pose_order = { 0, 0, 0 };
+    pose_t* pose_order = NULL;
     polar_t speed_order = { 0, 0 };
     polar_t speed;
     /* ******************** position pid ctrl ******************** */
@@ -137,8 +137,8 @@ polar_t ctrl_update(ctrl_t *ctrl,
     /* get next pose_t to reach */
     pose_order = ctrl_get_pose_to_reach(ctrl);
 
-    pose_order.x *= PULSE_PER_MM;
-    pose_order.y *= PULSE_PER_MM;
+    pose_order->x *= PULSE_PER_MM;
+    pose_order->y *= PULSE_PER_MM;
 
     /* get speed order */
     speed_order = ctrl_get_speed_order(ctrl);
@@ -150,9 +150,9 @@ polar_t ctrl_update(ctrl_t *ctrl,
                 "%+.0f,%+.0f,"
                 "%+.0f,%+.0f,"
                 "\n",
-                pose_order.x / PULSE_PER_MM,
-                pose_order.y / PULSE_PER_MM,
-                pose_order.O,
+                pose_order->x / PULSE_PER_MM,
+                pose_order->y / PULSE_PER_MM,
+                pose_order->O,
                 pose_current->x / PULSE_PER_MM,
                 pose_current->y / PULSE_PER_MM,
                 pose_current->O,
@@ -200,7 +200,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
 
         /* final orientation error */
         if (!ctrl->pose_intermediate) {
-            pos_err.angle = limit_angle_deg(pose_order.O - pose_current->O);
+            pos_err.angle = limit_angle_deg(pose_order->O - pose_current->O);
         }
         else {
             pos_err.angle = 0;
@@ -278,25 +278,19 @@ inline pose_t ctrl_get_pose_current(ctrl_t *ctrl)
     return pose_current;
 }
 
-inline void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order)
+inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
 {
     irq_disable();
-    if (!pose_equal(&ctrl->pose_order, &pose_order)) {
+    if (!pose_equal(ctrl->pose_order, pose_order)) {
         ctrl->pose_order = pose_order;
         ctrl->pose_reached = FALSE;
     }
     irq_enable();
 }
 
-inline pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl)
+inline pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
 {
-    pose_t pose_order;
-
-    irq_disable();
-    pose_order = ctrl->pose_order;
-    irq_enable();
-
-    return pose_order;
+    return ctrl->pose_order;
 }
 
 inline void ctrl_set_speed_order(ctrl_t *ctrl, const polar_t speed_order)
