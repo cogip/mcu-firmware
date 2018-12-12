@@ -248,7 +248,7 @@ void *task_planner(void *arg)
 
         ctrl_set_speed_order(&controller, speed_order);
 
-        ctrl_set_pose_to_reach(&controller, pose_order);
+        ctrl_set_pose_to_reach(&controller, &pose_order);
 
 yield_point:
         xtimer_periodic_wakeup(&loop_start_time, TASK_PERIOD_MS * US_PER_MS);
