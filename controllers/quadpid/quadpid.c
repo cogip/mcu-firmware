@@ -123,7 +123,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
 {
     polar_t command = { 0, 0 };
     pose_t* pose_order = NULL;
-    polar_t speed_order = { 0, 0 };
+    polar_t* speed_order = NULL;
     polar_t speed;
     /* ******************** position pid ctrl ******************** */
 
@@ -158,8 +158,8 @@ polar_t ctrl_update(ctrl_t *ctrl,
                 pose_current->O,
                 pos_err.distance / PULSE_PER_MM,
                 pos_err.angle,
-                speed_order.distance / PULSE_PER_MM,
-                speed_order.angle,
+                speed_order->distance / PULSE_PER_MM,
+                speed_order->angle,
                 speed_current.distance / PULSE_PER_MM,
                 speed_current.angle);
 
@@ -230,10 +230,10 @@ polar_t ctrl_update(ctrl_t *ctrl,
 
     /* limit speed command */
     speed.distance = limit_speed_command(command.distance,
-                                         speed_order.distance,
+                                         speed_order->distance,
                                          speed_current.distance);
     speed.angle = limit_speed_command(command.angle,
-                                      speed_order.angle,
+                                      speed_order->angle,
                                       speed_current.angle);
 
     /* ********************** speed pid controller ********************* */
@@ -287,22 +287,16 @@ inline pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
     return ctrl->pose_order;
 }
 
-inline void ctrl_set_speed_order(ctrl_t *ctrl, const polar_t speed_order)
+inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
 {
     irq_disable();
     ctrl->speed_order = speed_order;
     irq_enable();
 }
 
-inline polar_t ctrl_get_speed_order(ctrl_t *ctrl)
+inline polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
 {
-    polar_t speed_order;
-
-    irq_disable();
-    speed_order = ctrl->speed_order;
-    irq_enable();
-
-    return speed_order;
+    return ctrl->speed_order;
 }
 
 void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_id_t new_mode)

@@ -246,7 +246,7 @@ void *task_planner(void *arg)
             ctrl_set_mode(&controller, CTRL_STATE_STOP);
         }
 
-        ctrl_set_speed_order(&controller, speed_order);
+        ctrl_set_speed_order(&controller, &speed_order);
 
         ctrl_set_pose_to_reach(&controller, &pose_order);
 
