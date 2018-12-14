@@ -1,15 +1,18 @@
+/* Standard includes */
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+/* RIOT includes */
 #include "irq.h"
 #include "xtimer.h"
-#include "system/log.h"
+
+/* Project includes */
+#include "controller.h"
 #include "odometry.h"
 #include "platform.h"
 #include "trigonometry.h"
-
-#include "controller.h"
+#include "system/log.h"
 
 static void set_pose_reached(ctrl_t *ctrl)
 {
