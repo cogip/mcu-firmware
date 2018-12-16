@@ -7,6 +7,7 @@
 #include <motor_driver.h>
 #include "analog_sensor.h"
 #include <periph/adc.h>
+#include "ctrl/quadpid.h"
 
 #include "actuators/sd21.h"
 #if defined(CONFIG_MOTOR_PAP)
@@ -37,6 +38,61 @@ typedef enum {
 /* Calibration flag to launch or not calibration thread */
 static volatile calibration_state_t calib_flag = 0;
 #endif /* MODULE_CALIBRATION */
+
+
+static ctrl_quadpid_t controller = {
+    .common = {
+        .allow_reverse = TRUE,
+        .current_mode = NULL,
+        .modes = {
+            {
+                .mode_id = CTRL_STATE_STOP,
+                .name = "STOP",
+                .mode_cb = ctrl_state_stop_cb
+            },
+            {
+                .mode_id = CTRL_STATE_IDLE,
+                .name = "IDLE",
+                .mode_cb = ctrl_state_idle_cb
+            },
+            {
+                .mode_id = CTRL_STATE_BLOCKED,
+                .name = "BLOCKED",
+                .mode_cb = ctrl_state_stop_cb
+            },
+            {
+                .mode_id = CTRL_STATE_INGAME,
+                .name = "INGAME",
+                .mode_cb = ctrl_state_ingame_cb
+            },
+        },
+    },
+    .linear_speed_pid = {
+        .kp = 15.,
+        .ki = 2.,
+        .kd = 0.,
+    },
+    .angular_speed_pid = {
+        .kp = 15.,
+        .ki = 2.,
+        .kd = 0.,
+    },
+    .linear_pose_pid = {
+        .kp = 0.05,
+        .ki = 0.,
+        .kd = 0,
+    },
+    .angular_pose_pid = {
+        .kp = 0.1,
+        .ki = 0.,
+        .kd = 0.,
+    },
+
+    //.min_distance_for_angular_switch = 500,
+    .min_distance_for_angular_switch = 30,
+    .min_angle_for_pose_reached = 100,
+    .regul = CTRL_REGUL_POSE_DIST,
+};
 
 /* TODO: To activate when included in RIOT */
 analog_sensors_t ana_sensors = {
@@ -175,71 +231,6 @@ sd21_t sd21 = {
 /* Counter set to 200 for 20KHz output */
 #define TC_MOTOR_PRESCALER      TC_CLKSEL_DIV8_gc
 #define TC_MOTOR_PER_VALUE      200
-
-ctrl_mode_t ctrl_modes[] = {
-    { "STOP", ctrl_state_stop_cb, },            /* CTRL_STATE_STOP */
-    { "IDLE", ctrl_state_idle_cb, },            /* CTRL_STATE_IDLE */
-    { "BLOCKED", ctrl_state_stop_cb, },         /* CTRL_STATE_BLOCKED */
-    { "INGAME", ctrl_state_ingame_cb, },        /* CTRL_STATE_INGAME */
-#if defined(MODULE_CALIBRATION)
-    { "CALIB1", ctrl_state_calib_mode1_cb, },   /* CTRL_STATE_CALIB_MODE1 */
-    { "CALIB2", ctrl_state_calib_mode2_cb, },   /* CTRL_STATE_CALIB_MODE2 */
-    { "CALIB3", ctrl_state_calib_mode3_cb, },   /* CTRL_STATE_CALIB_MODE3 */
-#endif /* MODULE_CALIBRATION */
-};
-
-ctrl_t controller = {
-#ifdef BOARD_NATIVE
-    .linear_speed_pid = {
-        .kp = 5,
-        .ki = 0.02,
-        .kd = 0,
-    },
-    .angular_speed_pid = {
-        .kp = 5,
-        .ki = 0.02,
-        .kd = 0,
-    },
-    .linear_pose_pid = {
-        .kp = 0.5,
-        .ki = 0.,
-        .kd = 0,
-    },
-    .angular_pose_pid = {
-        .kp = 0.5,
-        .ki = 0.,
-        .kd = 0.,
-    },
-#else
-    .linear_speed_pid = {
-        .kp = 15.,
-        .ki = 2.,
-        .kd = 0.,
-    },
-    .angular_speed_pid = {
-        .kp = 15.,
-        .ki = 2.,
-        .kd = 0.,
-    },
-    .linear_pose_pid = {
-        .kp = 0.05,
-        .ki = 0.,
-        .kd = 0,
-    },
-    .angular_pose_pid = {
-        .kp = 0.1,
-        .ki = 0.,
-        .kd = 0.,
-    },
-#endif
-
-    //.min_distance_for_angular_switch = 500,
-    .min_distance_for_angular_switch = 30,
-    .min_angle_for_pose_reached = 100,
-    .regul = CTRL_REGUL_POSE_DIST,
-    .allow_reverse = TRUE,
-    .mode = &ctrl_modes[CTRL_STATE_INGAME],
-};
 
 /* This global object contains all numerical logs references (vectors, etc.) */
 datalog_t datalog;

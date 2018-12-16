@@ -11,16 +11,17 @@
 #include "controller.h"
 #include "odometry.h"
 #include "platform.h"
+#include "ctrl/quadpid.h"
 #include "trigonometry.h"
 #include "system/log.h"
 
-static void set_pose_reached(ctrl_t *ctrl)
+static void set_pose_reached(ctrl_quadpid_t *ctrl)
 {
-    if (ctrl->pose_reached) {
+    if (ctrl->common.pose_reached) {
         return;
     }
 
-    ctrl->pose_reached = TRUE;
+    ctrl->common.pose_reached = TRUE;
     printf("pose reached\n");
 }
 
@@ -31,7 +32,7 @@ static void set_pose_reached(ctrl_t *ctrl)
  * \param p2 : measure pose
  * \return distance and angle errors between 2 poses
  */
-static polar_t compute_position_error(ctrl_t *ctrl,
+static polar_t compute_position_error(const ctrl_quadpid_t* ctrl,
                              const pose_t *pose_order, const pose_t *pose_current)
 {
     polar_t error;
@@ -88,7 +89,7 @@ static double limit_speed_command(double command,
 /**
  *
  */
-polar_t speed_ctrl(ctrl_t *ctrl,
+polar_t speed_ctrl(ctrl_quadpid_t *ctrl,
                          polar_t speed_order, polar_t speed_current)
 {
     polar_t speed_error;
@@ -109,7 +110,7 @@ polar_t speed_ctrl(ctrl_t *ctrl,
     if (error_blocking >= CTRL_BLOCKING_NB_ITERATIONS) {
         command.distance = 0;
         command.angle = 0;
-        ctrl_set_mode(ctrl, CTRL_STATE_BLOCKED);
+        ctrl_set_mode((ctrl_t*)ctrl, CTRL_STATE_BLOCKED);
     }
 
     command.distance = pid_ctrl(&ctrl->linear_speed_pid,
@@ -120,7 +121,7 @@ polar_t speed_ctrl(ctrl_t *ctrl,
     return command;
 }
 
-polar_t ctrl_update(ctrl_t *ctrl,
+polar_t ctrl_update(ctrl_quadpid_t* ctrl,
                           const pose_t *pose_current,
                           polar_t speed_current)
 {
@@ -128,23 +129,24 @@ polar_t ctrl_update(ctrl_t *ctrl,
     pose_t* pose_order = NULL;
     polar_t* speed_order = NULL;
     polar_t speed;
+
     /* ******************** position pid ctrl ******************** */
 
     /* compute position error */
     polar_t pos_err;
 
-    if (ctrl_is_pose_reached(ctrl)) {
+    if (ctrl_is_pose_reached((ctrl_t*)ctrl)) {
         return command;
     }
 
     /* get next pose_t to reach */
-    pose_order = ctrl_get_pose_to_reach(ctrl);
+    pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl);
 
     pose_order->x *= PULSE_PER_MM;
     pose_order->y *= PULSE_PER_MM;
 
     /* get speed order */
-    speed_order = ctrl_get_speed_order(ctrl);
+    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
 
     pos_err = compute_position_error(ctrl, pose_order, pose_current);
 
@@ -171,7 +173,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
         && fabs(pos_err.distance) > ctrl->min_distance_for_angular_switch) {
 
         /* should we go reverse? */
-        if (ctrl->allow_reverse && fabs(pos_err.angle) > 90) {
+        if (ctrl->common.allow_reverse && fabs(pos_err.angle) > 90) {
             pos_err.distance = -pos_err.distance;
 
             if (pos_err.angle < 0) {
@@ -197,7 +199,7 @@ polar_t ctrl_update(ctrl_t *ctrl,
         ctrl->regul = CTRL_REGUL_POSE_ANGL;
 
         /* final orientation error */
-        if (!ctrl->pose_intermediate) {
+        if (!ctrl->common.pose_intermediate) {
             pos_err.angle = limit_angle_deg(pose_order->O - pose_current->O);
         }
         else {
@@ -238,64 +240,64 @@ polar_t ctrl_update(ctrl_t *ctrl,
     return speed_ctrl(ctrl, speed, speed_current);
 }
 
-inline void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate)
+inline void ctrl_set_pose_intermediate(ctrl_t* ctrl, uint8_t intermediate)
 {
-    ctrl->pose_intermediate = intermediate;
+    ctrl->common.pose_intermediate = intermediate;
 }
 
-inline void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow)
+inline void ctrl_set_allow_reverse(ctrl_t* ctrl, uint8_t allow)
 {
-    ctrl->allow_reverse = allow;
+    ctrl->common.allow_reverse = allow;
 }
 
-inline uint8_t ctrl_is_pose_reached(ctrl_t *ctrl)
+inline uint8_t ctrl_is_pose_reached(ctrl_t* ctrl)
 {
-    return ctrl->pose_reached;
+    return ctrl->common.pose_reached;
 }
 
 inline void ctrl_set_pose_current(ctrl_t* ctrl, pose_t* pose_current)
 {
     irq_disable();
-    ctrl->pose_current = pose_current;
+    ctrl->common.pose_current = pose_current;
     irq_enable();
 }
 
 inline pose_t* ctrl_get_pose_current(ctrl_t* ctrl)
 {
-    return ctrl->pose_current;
+    return ctrl->common.pose_current;
 }
 
 inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
 {
     irq_disable();
-    if (!pose_equal(ctrl->pose_order, pose_order)) {
-        ctrl->pose_order = pose_order;
-        ctrl->pose_reached = FALSE;
+    if (!pose_equal(ctrl->common.pose_order, pose_order)) {
+        ctrl->common.pose_order = pose_order;
+        ctrl->common.pose_reached = FALSE;
     }
     irq_enable();
 }
 
 inline pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
 {
-    return ctrl->pose_order;
+    return ctrl->common.pose_order;
 }
 
 inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
 {
     irq_disable();
-    ctrl->speed_order = speed_order;
+    ctrl->common.speed_order = speed_order;
     irq_enable();
 }
 
 inline polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
 {
-    return ctrl->speed_order;
+    return ctrl->common.speed_order;
 }
 
-void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_id_t new_mode)
+void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_id_t new_mode)
 {
-    ctrl->mode = &ctrl_modes[new_mode];
-    printf("new_mode = %s\n", ctrl->mode->name);
+    ctrl->common.current_mode = &ctrl->common.modes[new_mode];
+    printf("new_mode = %s\n", ctrl->common.current_mode->name);
 }
 
 void motor_drive(polar_t *command)
@@ -318,7 +320,7 @@ void *task_ctrl_update(void *arg)
     func_cb_t pfn_evtloop_prefunc = pf_get_ctrl_loop_pre_pfn();
     func_cb_t pfn_evtloop_postfunc = pf_get_ctrl_loop_post_pfn();
 
-    ctrl_t *ctrl = (ctrl_t*)arg;
+    ctrl_quadpid_t *ctrl = (ctrl_quadpid_t*)arg;
     printf("Controller started\n");
 
     for (;;) {
@@ -329,8 +331,8 @@ void *task_ctrl_update(void *arg)
             (*pfn_evtloop_prefunc)();
         }
 
-        if ((ctrl->mode) && (ctrl->mode->state_cb)) {
-            ctrl->mode->state_cb(ctrl->pose_current, &motor_command);
+        if ((ctrl->common.current_mode) && (ctrl->common.current_mode->mode_cb)) {
+            ctrl->common.current_mode->mode_cb(ctrl->common.pose_current, &motor_command);
         }
 
         motor_drive(&motor_command);
