@@ -172,8 +172,6 @@ polar_t ctrl_update(ctrl_t *ctrl,
 
         /* should we go reverse? */
         if (ctrl->allow_reverse && fabs(pos_err.angle) > 90) {
-            ctrl->in_reverse = TRUE;
-
             pos_err.distance = -pos_err.distance;
 
             if (pos_err.angle < 0) {
@@ -182,9 +180,6 @@ polar_t ctrl_update(ctrl_t *ctrl,
             else {
                 pos_err.angle -= 180;
             }
-        }
-        else {
-            ctrl->in_reverse = FALSE;
         }
 
         /* if target point direction angle is too important, bot rotates on its starting point */
@@ -246,11 +241,6 @@ polar_t ctrl_update(ctrl_t *ctrl,
 inline void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate)
 {
     ctrl->pose_intermediate = intermediate;
-}
-
-inline uint8_t ctrl_is_in_reverse(ctrl_t *ctrl)
-{
-    return ctrl->in_reverse;
 }
 
 inline void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow)
