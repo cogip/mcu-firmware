@@ -60,12 +60,14 @@ static inline void _bitbanging_do_one_step(void)
     xtimer_usleep(HALF_PERIOD_WAIT_US);
 }
 
+#if defined(MODULE_CALIBRATION)
 static void _turn_unconditionally(uint16_t nb_steps)
 {
     for (uint16_t steps = 0; steps < nb_steps; steps++) {
         _bitbanging_do_one_step();
     }
 }
+#endif
 
 /*
  * Public functions
