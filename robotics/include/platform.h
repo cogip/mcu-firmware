@@ -86,7 +86,6 @@ extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
 extern sd21_t sd21;
 extern ctrl_t controller;
-extern ctrl_mode_t ctrl_modes[];
 
 extern datalog_t datalog;
 
