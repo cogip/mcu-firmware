@@ -53,7 +53,6 @@ typedef struct {
     ctrl_regul_t regul;
     uint8_t pose_reached;
     uint8_t pose_intermediate;
-    uint8_t in_reverse;
 } ctrl_t;
 
 void motor_drive(polar_t *command);
@@ -65,7 +64,6 @@ polar_t ctrl_update(ctrl_t *ctrl,
                           polar_t current_speed);
 
 void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate);
-uint8_t ctrl_is_in_reverse(ctrl_t *ctrl);
 void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow);
 
 uint8_t ctrl_is_pose_reached(ctrl_t* ctrl);
