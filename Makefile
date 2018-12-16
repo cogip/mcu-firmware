@@ -18,18 +18,18 @@ DIRS += controllers
 
 QUIET ?= 1
 
-CFLAGS += -DCONFIG_CALIBRATION
+#CFLAGS += -DCONFIG_CALIBRATION
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
 DEVELHELP ?= 1
 
 DIRS += actuators
-DIRS += calibration
+#DIRS += calibration
 DIRS += robotics
 DIRS += system
 USEMODULE += actuators
-USEMODULE += calibration             # include "core" module
+#USEMODULE += calibration             # include "core" module
 USEMODULE += robotics             # include "core" module
 USEMODULE += system
 USEMODULE += $(APPLICATION_MODULE)  # include application module
