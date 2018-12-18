@@ -113,6 +113,11 @@ void mach_check_calibration_mode(void);
 void mach_setup(void);
 void mach_sched_init(void);
 void mach_sched_run(void);
+void mach_tasks_init(void);
+
+#if defined(MODULE_CALIBRATION)
+extern void *task_calibration_entry(void *arg);
+#endif  /* MODULE_CALIBRATION */
 
 int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
