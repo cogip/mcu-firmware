@@ -90,13 +90,13 @@ extern ctrl_mode_t ctrl_modes[];
 
 extern datalog_t datalog;
 
-func_cb_t mach_get_ctrl_loop_pre_pfn(void);
-func_cb_t mach_get_ctrl_loop_post_pfn(void);
-func_cb_t mach_get_end_of_game_pfn(void);
-path_t *mach_get_path(void);
-//uint8_t mach_is_zone_obscured(analog_sensor_zone_t zone);
-uint8_t mach_is_game_launched(void);
-uint8_t mach_is_camp_left(void);
+func_cb_t pf_get_ctrl_loop_pre_pfn(void);
+func_cb_t pf_get_ctrl_loop_post_pfn(void);
+func_cb_t pf_get_end_of_game_pfn(void);
+path_t *pf_get_path(void);
+//uint8_t pf_is_zone_obscured(analog_sensor_zone_t zone);
+uint8_t pf_is_game_launched(void);
+uint8_t pf_is_camp_left(void);
 
 void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command);
@@ -107,13 +107,13 @@ void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command);
 
 void controller_enter_calibration(void);
-void mach_check_calibration_mode(void);
+void pf_check_calibration_mode(void);
 #endif /* MODULE_CALIBRATION */
 
-void mach_setup(void);
-void mach_sched_init(void);
-void mach_sched_run(void);
-void mach_tasks_init(void);
+void pf_setup(void);
+void pf_sched_init(void);
+void pf_sched_run(void);
+void pf_tasks_init(void);
 
 #if defined(MODULE_CALIBRATION)
 extern void *task_calibration_entry(void *arg);

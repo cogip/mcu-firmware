@@ -4,9 +4,9 @@
 
 int main(void)
 {
-    mach_setup();
+    pf_setup();
 
-    mach_tasks_init();
+    pf_tasks_init();
 
     return 0;
 }

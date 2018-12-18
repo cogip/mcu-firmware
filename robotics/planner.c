@@ -154,11 +154,11 @@ trajectory_get_route_update_error:
 void *task_planner(void *arg)
 {
     //analog_sensor_zone_t zone;
-    func_cb_t pfn_evtloop_end_of_game = mach_get_end_of_game_pfn();
+    func_cb_t pfn_evtloop_end_of_game = pf_get_end_of_game_pfn();
     pose_t pose_order = { 0, 0, 0 };
     pose_t initial_pose = { 0, 0, 0 };
     polar_t speed_order = { 0, 0 };
-    const uint8_t camp_left = mach_is_camp_left();
+    const uint8_t camp_left = pf_is_camp_left();
     path_pose_t *current_path_pos = NULL;
 
     (void)arg;
@@ -167,7 +167,7 @@ void *task_planner(void *arg)
     /* 2018: Camp left is orange, right is green */
     printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
 
-    path = mach_get_path();
+    path = pf_get_path();
     if (!path) {
         printf("machine has no path\n");
     }
@@ -201,7 +201,7 @@ void *task_planner(void *arg)
             }
 
             /* while starter switch is not release we wait */
-            if (!mach_is_game_launched()) {
+            if (!pf_is_game_launched()) {
                 game_start_time = xtimer_now_usec();
                 goto yield_point;
             }

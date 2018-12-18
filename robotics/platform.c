@@ -244,32 +244,32 @@ ctrl_t controller = {
 /* This global object contains all numerical logs references (vectors, etc.) */
 datalog_t datalog;
 
-static void mach_post_ctrl_loop_func(void)
+static void pf_post_ctrl_loop_func(void)
 {
     //analog_sensor_refresh_all(&ana_sensors);
 }
 
-inline func_cb_t mach_get_ctrl_loop_pre_pfn(void)
+inline func_cb_t pf_get_ctrl_loop_pre_pfn(void)
 {
     return NULL;
 }
 
-inline func_cb_t mach_get_ctrl_loop_post_pfn(void)
+inline func_cb_t pf_get_ctrl_loop_post_pfn(void)
 {
-    return mach_post_ctrl_loop_func;
+    return pf_post_ctrl_loop_func;
 }
 
-inline func_cb_t mach_get_end_of_game_pfn(void)
+inline func_cb_t pf_get_end_of_game_pfn(void)
 {
     return NULL;
 }
 
-path_t *mach_get_path(void)
+path_t *pf_get_path(void)
 {
     return &robot_path;
 }
 
-uint8_t mach_is_game_launched(void)
+uint8_t pf_is_game_launched(void)
 {
     /* Starter switch */
 #if defined(CONFIG_USE_STARTER) && !defined(BOARD_NATIVE)
@@ -280,7 +280,7 @@ uint8_t mach_is_game_launched(void)
 #endif
 }
 
-uint8_t mach_is_camp_left(void)
+uint8_t pf_is_camp_left(void)
 {
     /* Color switch for coords translations */
     gpio_init(GPIO_PIN(PORT_B, 10), GPIO_IN);
@@ -290,7 +290,7 @@ uint8_t mach_is_camp_left(void)
     return gpio_read(GPIO_PIN(PORT_B, 10)) ? 1 : 0;
 }
 
-void mach_setup(void)
+void pf_setup(void)
 {
 #if F_CPU == 32000000UL
     clksys_intrc_32MHz_setup();
@@ -481,7 +481,7 @@ static void *calib_wait(void *arg)
 }
 #endif /* MODULE_CALIBRATION */
 
-void mach_tasks_init(void)
+void pf_tasks_init(void)
 {
 /* FIXME: Launch calibration task */
     thread_create(controller_thread_stack, sizeof(controller_thread_stack),

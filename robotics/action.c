@@ -172,7 +172,7 @@ void act_drop_recycled_water(void)
 
 void act_open_bee_pusher(void)
 {
-    if (mach_is_camp_left()) {
+    if (pf_is_camp_left()) {
         sd21_control_servo(&sd21, SERVO_ID_BEE_L, SD21_SERVO_OPEN);
     }
     else {
@@ -182,7 +182,7 @@ void act_open_bee_pusher(void)
 
 void act_close_bee_pusher(void)
 {
-    if (mach_is_camp_left()) {
+    if (pf_is_camp_left()) {
         sd21_control_servo(&sd21, SERVO_ID_BEE_L, SD21_SERVO_CLOSE);
     }
     else {
