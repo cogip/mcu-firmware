@@ -315,8 +315,8 @@ void *task_ctrl_update(void *arg)
 {
     /* bot position on the 'table' (absolute position): */
     polar_t motor_command = { 0, 0 };
-    func_cb_t pfn_evtloop_prefunc = mach_get_ctrl_loop_pre_pfn();
-    func_cb_t pfn_evtloop_postfunc = mach_get_ctrl_loop_post_pfn();
+    func_cb_t pfn_evtloop_prefunc = pf_get_ctrl_loop_pre_pfn();
+    func_cb_t pfn_evtloop_postfunc = pf_get_ctrl_loop_post_pfn();
 
     ctrl_t *ctrl = (ctrl_t*)arg;
     printf("Controller started\n");
