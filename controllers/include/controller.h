@@ -20,6 +20,7 @@ typedef enum {
     CTRL_STATE_IDLE,
     CTRL_STATE_BLOCKED,
     CTRL_STATE_INGAME,
+    CTRL_STATE_NUMOF,
 } ctrl_mode_id_t;
 
 typedef enum {
