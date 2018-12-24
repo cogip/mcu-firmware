@@ -1,6 +1,7 @@
 #ifndef PLANNER_H_
 #define PLANNER_H_
 
+#include "controller.h"
 #include "odometry.h"
 #include "path.h"
 #include "utils.h"
@@ -8,7 +9,7 @@
 extern path_t *path;
 extern uint8_t in_calibration;
 
-void planner_start_game(void);
+void planner_start_game(ctrl_t*);
 
 void *task_planner(void *arg);
 

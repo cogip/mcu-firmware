@@ -480,7 +480,7 @@ void pf_tasks_init(void)
                   task_ctrl_update, &controller, "motion_ctrl");
     thread_create(planner_thread_stack, sizeof(planner_thread_stack),
                   5, 0,
-                  task_planner, NULL, "game_planner");
+                  task_planner, &controller, "game_planner");
     thread_create(analog_sensors_thread_stack, sizeof(analog_sensors_thread_stack),
                   10, 0,
                   task_analog_sensors, (void *)&ana_sensors, "analog_sensors");
@@ -498,6 +498,6 @@ void pf_tasks_init(void)
     /* Launch calibration function */
     task_calibration_entry(NULL);
 #else
-    planner_start_game();
+    planner_start_game((ctrl_t*)&controller);
 #endif /* MODULE_CALIBRATION */
 }
