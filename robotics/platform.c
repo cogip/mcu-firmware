@@ -299,8 +299,6 @@ void pf_setup(void)
     sd21_setup(&sd21);
 #endif /* CONFIG_SD21 */
 
-    //action_setup(); /* TODO: commenter pour debug */
-
     motor_driver_init(0);
 #if defined(CONFIG_MOTOR_PAP)
     motor_pap_init();
@@ -311,8 +309,6 @@ void pf_setup(void)
     gpio_init(GPIO_PIN(PORT_A, 1), GPIO_IN_PU);
     gpio_init(GPIO_PIN(PORT_B, 2), GPIO_IN_PU);
     gpio_init(GPIO_PIN(PORT_B, 10), GPIO_IN);
-
-    action_init();
 
     /* setup qdec */
     int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_MODE, NULL, NULL);
