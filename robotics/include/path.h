@@ -1,7 +1,7 @@
 #ifndef PATH_H_
 #define PATH_H_
 
-#include "action.h"
+#include "utils.h"
 #include "odometry.h"
 
 typedef struct {
