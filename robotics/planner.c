@@ -83,17 +83,6 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
 
     reset_dyn_polygons();
 
-#if defined(CONFIG_ANALOG_SENSORS)
-    for (int i = 0; i < ana_sensors.sensors_nb; i++) {
-        double dist = analog_sensor_check_obstacle(&ana_sensors, i);
-        if (dist < AS_DIST_LIMIT) {
-            if (add_dyn_obstacle(robot_pose, &ana_sensors.sensors[i], dist * 10) == 0) {
-                need_update = 1;
-            }
-        }
-    }
-#endif
-
     if (ctrl->common.current_mode->mode_id == CTRL_STATE_BLOCKED) {
         path_increment_current_pose_idx(path);
         ctrl_set_mode(ctrl, CTRL_STATE_INGAME);
@@ -140,7 +129,6 @@ trajectory_get_route_update_error:
 
 void *task_planner(void *arg)
 {
-    //analog_sensor_zone_t zone;
     func_cb_t pfn_evtloop_end_of_game = pf_get_end_of_game_pfn();
     pose_t pose_order = { 0, 0, 0 };
     pose_t initial_pose = { 0, 0, 0 };
