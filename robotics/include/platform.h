@@ -74,14 +74,6 @@
 
 #define CTRL_BLOCKING_NB_ITERATIONS 200
 
-#if defined(MODULE_CALIBRATION)
-typedef enum {
-    CTRL_STATE_CALIB_MODE1 = CTRL_STATE_INGAME + 1,
-    CTRL_STATE_CALIB_MODE2,
-    CTRL_STATE_CALIB_MODE3,
-} controller_mode_id_calib_t;
-#endif /* MODULE_CALIBRATION */
-
 extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
 
@@ -98,23 +90,10 @@ uint8_t pf_is_camp_left(void);
 void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command);
 void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command);
-#if defined(MODULE_CALIBRATION)
-void ctrl_state_calib_mode1_cb(pose_t *robot_pose, polar_t *motor_command);
-void ctrl_state_calib_mode2_cb(pose_t *robot_pose, polar_t *motor_command);
-void ctrl_state_calib_mode3_cb(pose_t *robot_pose, polar_t *motor_command);
-
-void controller_enter_calibration(void);
-void pf_check_calibration_mode(void);
-#endif /* MODULE_CALIBRATION */
-
 void pf_setup(void);
 void pf_sched_init(void);
 void pf_sched_run(void);
 void pf_tasks_init(void);
-
-#if defined(MODULE_CALIBRATION)
-extern void *task_calibration_entry(void *arg);
-#endif  /* MODULE_CALIBRATION */
 
 int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
