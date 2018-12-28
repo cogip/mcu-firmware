@@ -43,7 +43,7 @@ void mach_fixed_obstacles_init(void)
 }
 
 /* Add a dynamic obstacle */
-int8_t add_dyn_obstacle(const pose_t *robot_pose, sensor_t *sensor, double dist)
+int8_t add_dyn_obstacle(const pose_t *robot_pose, double angle_offset, double distance_offset, double dist)
 {
     static polygon_t obstacle_borders;
     polygon_t polygon;
@@ -55,13 +55,13 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, sensor_t *sensor, double dist)
 
     pose_t robot_pose_tmp = *robot_pose;
     robot_pose_tmp.O /= PULSE_PER_DEGREE;
-    robot_pose_tmp.O += sensor->angle_robot_offset;
+    robot_pose_tmp.O += angle_offset;
     robot_pose_tmp.O = (int16_t)robot_pose_tmp.O % 360;
     double angle = DEG2RAD(robot_pose_tmp.O);
     robot_pose_tmp.x /= PULSE_PER_MM;
     robot_pose_tmp.y /= PULSE_PER_MM;
 
-    dist += sensor->dist_robot_offset_cm * 10;
+    dist += distance_offset;
 
     pose_t obstacle_point = (pose_t){.x = robot_pose_tmp.x + dist * cos(angle),
                                      .y = robot_pose_tmp.y + dist * sin(angle),

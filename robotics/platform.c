@@ -5,23 +5,15 @@
 #include "planner.h"
 #include <periph/qdec.h>
 #include <motor_driver.h>
-#include "analog_sensor.h"
 #include <periph/adc.h>
 #include "ctrl/quadpid.h"
 
-#include "actuators/sd21.h"
-#if defined(CONFIG_MOTOR_PAP)
-#include "actuators/motor_pap.h"
-#endif
 #include <thread.h>
 
 #include "xtimer.h"
 
-extern analog_sensors_t ana_sensors;
-
 char controller_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_thread_stack[THREAD_STACKSIZE_DEFAULT];
-char analog_sensors_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static ctrl_quadpid_t controller = {
     .common = {
@@ -77,139 +69,6 @@ static ctrl_quadpid_t controller = {
     .regul = CTRL_REGUL_POSE_DIST,
 };
 
-/* TODO: To activate when included in RIOT */
-analog_sensors_t ana_sensors = {
-    .sensors_nb = 6,
-    .sensor_index = 0,
-    .sensors = {
-        /* Front: [10...80] cm - GP2Y0A21 - cal done */
-        [0] = {
-            .adc = 0,
-
-            .pos_str = "F",
-
-            .coeff_volts = 0.022,
-            .const_volts = 0.010,
-            .const_dist = -5.0,
-            .dist_cm_max = 100,
-
-            .dist_robot_offset_cm = 14,
-            .angle_robot_offset = 0,
-        },
-        /* Rear: [10...80] cm - GP2Y0A21 - cal done */
-        [1] = {
-            .adc = 1,
-
-            .pos_str = "R",
-
-            .coeff_volts = 0.022,
-            .const_volts = 0.010,
-            .const_dist = -5.0,
-            .dist_cm_max = 100,
-
-            .dist_robot_offset_cm = 14,
-            .angle_robot_offset = 180,
-        },
-        /* Front Side left: [4...30] cm - GP2YD120X - cal done */
-        [2] = {
-            .adc = 2,
-
-            .pos_str = "FL",
-
-            .coeff_volts = 0.052,
-            .const_volts = 0.007,
-            .const_dist = 0,
-            .dist_cm_max = 40,
-
-            .dist_robot_offset_cm = 16,
-            .angle_robot_offset = 45,
-        },
-        /* Front Side right: [4...30] cm - GP2YD120X - cal done */
-        [3] = {
-            .adc = 3,
-
-            .pos_str = "FR",
-
-            .coeff_volts = 0.052,
-            .const_volts = 0.007,
-            .const_dist = 0,
-            .dist_cm_max = 40,
-
-            .dist_robot_offset_cm = 16,
-            .angle_robot_offset = 315,
-        },
-        /* Rear Side left: [4...30] cm - GP2YD120X - cal done */
-        [4] = {
-            .adc = 4,
-
-            .pos_str = "RL",
-
-            .coeff_volts = 0.052,
-            .const_volts = 0.007,
-            .const_dist = 0,
-            .dist_cm_max = 40,
-
-            .dist_robot_offset_cm = 16,
-            .angle_robot_offset = 135,
-        },
-        /* Rear Side right: [4...30] cm - GP2YD120X - cal done */
-        [5] = {
-            .adc = 5,
-
-            .pos_str = "RR",
-
-            .coeff_volts = 0.052,
-            .const_volts = 0.007,
-            .const_dist = 0,
-            .dist_cm_max = 40,
-
-            .dist_robot_offset_cm = 16,
-            .angle_robot_offset = 225,
-        },
-    }
-};
-
-#if defined(CONFIG_SD21)
-sd21_t sd21 = {
-    .bus_id = 0,
-    .twi_speed_khz = I2C_SPEED_FAST,
-
-    .servos_nb = SERVO_COUNT,
-    .servos = {
-        [SERVO_ID_VALVE_LAUNCHER] = {
-            .value_init = 1350,
-            .value_open = 2400,
-            .value_close = 1350,
-        },
-
-        [SERVO_ID_VALVE_RECYCLER] = {
-            .value_init = 1050,
-            .value_open = 1925,
-            .value_close = 1050,
-        },
-
-        [SERVO_ID_RECYCLER] = {
-            .value_init = 1750,
-            .value_open = 1750,
-            .value_close = 1200,
-        },
-
-        [SERVO_ID_BEE_L] = {
-            .value_init = 2125,
-            .value_open = 1225,
-            .value_close = 2125,
-        },
-
-        [SERVO_ID_BEE_R] = {
-            .value_init = 875,
-            .value_open = 1700,
-            .value_close = 875,
-        },
-
-    },
-};
-#endif /* CONFIG_SD21 */
-
 /* TCE0 ClkIn == ClkPer / 8 == 4000 KHz */
 /* Counter set to 200 for 20KHz output */
 #define TC_MOTOR_PRESCALER      TC_CLKSEL_DIV8_gc
@@ -220,7 +79,6 @@ datalog_t datalog;
 
 static void pf_post_ctrl_loop_func(void)
 {
-    //analog_sensor_refresh_all(&ana_sensors);
 }
 
 inline func_cb_t pf_get_ctrl_loop_pre_pfn(void)
@@ -275,17 +133,7 @@ void pf_setup(void)
     console_init(&usartc0_console);
 #endif
 
-    analog_sensor_setup(&ana_sensors);
-
-#if defined(CONFIG_SD21)
-    /* setup TWI communication with SD21 */
-    sd21_setup(&sd21);
-#endif /* CONFIG_SD21 */
-
     motor_driver_init(0);
-#if defined(CONFIG_MOTOR_PAP)
-    motor_pap_init();
-#endif
 
     /* Starter, orig 1 & 2, color */
     gpio_init(GPIO_PIN(PORT_A, 0), GPIO_IN_PU);
@@ -414,8 +262,5 @@ void pf_tasks_init(void)
     thread_create(planner_thread_stack, sizeof(planner_thread_stack),
                   5, 0,
                   task_planner, &controller, "game_planner");
-    thread_create(analog_sensors_thread_stack, sizeof(analog_sensors_thread_stack),
-                  10, 0,
-                  task_analog_sensors, (void *)&ana_sensors, "analog_sensors");
     planner_start_game((ctrl_t*)&controller);
 }

@@ -2,7 +2,6 @@
 #define PLATFORM_H_
 
 #include "controller.h"
-#include "analog_sensor.h"
 #include "system/log.h"
 #include "odometry.h"
 #include "path.h"
@@ -74,7 +73,6 @@
 
 #define CTRL_BLOCKING_NB_ITERATIONS 200
 
-extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
 
 extern datalog_t datalog;
@@ -83,7 +81,6 @@ func_cb_t pf_get_ctrl_loop_pre_pfn(void);
 func_cb_t pf_get_ctrl_loop_post_pfn(void);
 func_cb_t pf_get_end_of_game_pfn(void);
 path_t *pf_get_path(void);
-//uint8_t pf_is_zone_obscured(analog_sensor_zone_t zone);
 uint8_t pf_is_game_launched(void);
 uint8_t pf_is_camp_left(void);
 
