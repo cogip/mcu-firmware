@@ -14,7 +14,6 @@
 static uint16_t game_time = 0;
 static uint8_t game_started = FALSE;
 path_t *path = NULL;
-uint8_t in_calibration = FALSE;
 
 /* periodic task */
 /* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
@@ -74,16 +73,6 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
 
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
-
-            if (!in_calibration) {
-#ifndef BOARD_NATIVE
-                if (current_path_pos->act) {
-                    current_path_pos->act();
-                }
-#endif
-                path_increment_current_pose_idx(path);
-                current_path_pos = path_get_current_path_pos(path);
-            }
             robot_pose_tmp = pose_reached;
             need_update = 1;
         }
@@ -116,7 +105,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
         test = update_graph();
 
         control_loop = path->nb_pose;
-        while ((test < 0) && (!in_calibration) && (control_loop-- > 0)) {
+        while ((test < 0) && (control_loop-- > 0)) {
             if (test == -1) {
                 path_increment_current_pose_idx(path);
                 current_path_pos = path_get_current_path_pos(path);
@@ -189,45 +178,41 @@ void *task_planner(void *arg)
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
 
-        if (!game_started && !in_calibration) {
+        if (!game_started) {
             goto yield_point;
         }
 
-        if (!in_calibration) {
-            if (pfn_evtloop_end_of_game && game_time >= GAME_DURATION_TICKS) {
-                (*pfn_evtloop_end_of_game)();
-            }
-
-            /* while starter switch is not release we wait */
-            if (!pf_is_game_launched()) {
-                game_start_time = xtimer_now_usec();
-                goto yield_point;
-            }
-
-            if (xtimer_now_usec() - game_start_time >= GAME_DURATION_SEC * US_PER_SEC) {
-                cons_printf(">>>>\n");
-                ctrl_set_mode(ctrl, CTRL_STATE_STOP);
-                break;
-            }
-
-            if (!game_time) {
-                cons_printf("<<<< polar_simu.csv\n");
-                cons_printf("@command@,pose_order_x,pose_order_y,pose_order_a,"
-                            "pose_current_x,pose_current_y,pose_current_a,"
-                            "position_error_l,position_error_a,"
-                            "speed_order_l,speed_order_a,"
-                            "speed_current_l,speed_current_a,"
-                            "game_time,"
-                            "\n");
-            }
-
-            game_time++;
-            show_game_time();
+        if (pfn_evtloop_end_of_game && game_time >= GAME_DURATION_TICKS) {
+            (*pfn_evtloop_end_of_game)();
         }
 
+        /* while starter switch is not release we wait */
+        if (!pf_is_game_launched()) {
+            game_start_time = xtimer_now_usec();
+            goto yield_point;
+        }
+
+        if (xtimer_now_usec() - game_start_time >= GAME_DURATION_SEC * US_PER_SEC) {
+            cons_printf(">>>>\n");
+            ctrl_set_mode(ctrl, CTRL_STATE_STOP);
+            break;
+        }
+
+        if (!game_time) {
+            cons_printf("<<<< polar_simu.csv\n");
+            cons_printf("@command@,pose_order_x,pose_order_y,pose_order_a,"
+                        "pose_current_x,pose_current_y,pose_current_a,"
+                        "position_error_l,position_error_a,"
+                        "speed_order_l,speed_order_a,"
+                        "speed_current_l,speed_current_a,"
+                        "game_time,"
+                        "\n");
+        }
+
+        game_time++;
+        show_game_time();
 
         /* ===== speed ===== */
-
         current_path_pos = path_get_current_path_pos(path);
 
         /* Update speed order to max speed defined value in the new point to reach */

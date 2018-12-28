@@ -42,10 +42,6 @@ void analog_sensor_refresh_all(analog_sensors_t *as);
 void analog_sensor_setup(analog_sensors_t *as);
 dist_cm_t analog_sensor_check_obstacle(analog_sensors_t *as, uint8_t id);
 
-#if defined(MODULE_CALIBRATION)
-void analog_sensor_enter_calibration(analog_sensors_t *obj);
-#endif
-
 void *task_analog_sensors(void *arg);
 
 #endif /* ANALOG_SENSOR_H_ */

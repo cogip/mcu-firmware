@@ -7,14 +7,9 @@
 #include "utils.h"
 
 extern path_t *path;
-extern uint8_t in_calibration;
 
 void planner_start_game(ctrl_t*);
 
 void *task_planner(void *arg);
-
-#if defined(MODULE_CALIBRATION)
-void planner_enter_calibration(void);
-#endif /* MODULE_CALIBRATION */
 
 #endif /* PLANNER_H_ */
