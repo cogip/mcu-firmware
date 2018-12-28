@@ -7,7 +7,6 @@
 #include "odometry.h"
 #include "path.h"
 #include "periph/qdec.h"
-#include "actuators/sd21.h"
 #include "utils.h"
 #include "ctrl/quadpid.h"
 
@@ -85,7 +84,6 @@ typedef enum {
 
 extern analog_sensors_t ana_sensors;
 extern qdec_t encoders[];
-extern sd21_t sd21;
 
 extern datalog_t datalog;
 
