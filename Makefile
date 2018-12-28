@@ -24,17 +24,15 @@ QUIET ?= 1
 # development process:
 DEVELHELP ?= 1
 
-DIRS += actuators
 #DIRS += calibration
 DIRS += robotics
 DIRS += system
-USEMODULE += actuators
 #USEMODULE += calibration             # include "core" module
 USEMODULE += robotics             # include "core" module
 USEMODULE += system
 USEMODULE += $(APPLICATION_MODULE)  # include application module
 
-FEATURES_REQUIRED += periph_i2c
+#FEATURES_REQUIRED += periph_i2c
 FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
 FEATURES_REQUIRED += periph_adc
@@ -45,9 +43,7 @@ INCLUDES += -I$(APPDIR)/controllers/include/
 ifeq ($(BOARD),native)
 CFLAGS += -Wno-pedantic -Wno-unused-parameter -Wno-sign-compare
 endif
-CFLAGS += -DCONFIG_SD21
 CFLAGS += -DCONFIG_USE_STARTER
-CFLAGS += -DCONFIG_MOTOR_PAP
 CFLAGS += -DCONFIG_ANALOG_SENSORS
 
 include $(RIOTBASE)/Makefile.include
