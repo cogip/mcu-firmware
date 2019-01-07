@@ -24,9 +24,7 @@ QUIET ?= 1
 DEVELHELP ?= 1
 
 DIRS += robotics
-DIRS += system
 USEMODULE += robotics             # include "core" module
-USEMODULE += system
 USEMODULE += $(APPLICATION_MODULE)  # include application module
 
 #FEATURES_REQUIRED += periph_i2c
