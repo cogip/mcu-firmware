@@ -2,7 +2,6 @@
 #define PLATFORM_H_
 
 #include "controller.h"
-#include "system/log.h"
 #include "odometry.h"
 #include "path.h"
 #include "periph/qdec.h"
@@ -75,7 +74,6 @@
 
 extern qdec_t encoders[];
 
-extern datalog_t datalog;
 
 func_cb_t pf_get_ctrl_loop_pre_pfn(void);
 func_cb_t pf_get_ctrl_loop_post_pfn(void);

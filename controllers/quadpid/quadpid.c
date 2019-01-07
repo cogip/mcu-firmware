@@ -13,7 +13,6 @@
 #include "platform.h"
 #include "ctrl/quadpid.h"
 #include "trigonometry.h"
-#include "system/log.h"
 
 static void set_pose_reached(ctrl_quadpid_t *ctrl)
 {
@@ -314,9 +313,6 @@ void motor_drive(polar_t *command)
 
     motor_set(0, HBRIDGE_MOTOR_LEFT, left_command);
     motor_set(0, HBRIDGE_MOTOR_RIGHT, right_command);
-
-    log_vect_setvalue(&datalog, LOG_IDX_MOTOR_L, (void *) &left_command);
-    log_vect_setvalue(&datalog, LOG_IDX_MOTOR_R, (void *) &right_command);
 }
 
 void *task_ctrl_update(void *arg)

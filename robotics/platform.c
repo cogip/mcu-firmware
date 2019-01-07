@@ -74,9 +74,6 @@ static ctrl_quadpid_t controller = {
 #define TC_MOTOR_PRESCALER      TC_CLKSEL_DIV8_gc
 #define TC_MOTOR_PER_VALUE      200
 
-/* This global object contains all numerical logs references (vectors, etc.) */
-datalog_t datalog;
-
 static void pf_post_ctrl_loop_func(void)
 {
 }
@@ -161,17 +158,6 @@ void pf_setup(void)
     /* global interrupt enable */
     sei();
 #endif
-
-    log_vect_init(&datalog, NULL, /*400,*/
-                  COL_INT32, "left_speed",
-                  COL_INT32, "right_speed",
-                  COL_INT16, "left_command",
-                  COL_INT16, "right_command",
-                  COL_DOUBLE, "robot_speed.distance",
-                    //COL_DOUBLE, "robot_speed.angle",
-                  COL_DOUBLE, "speed_order.distance",
-                    //COL_DOUBLE, "speed_order.angle",
-                  COL_END);
 }
 
 void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command)
@@ -218,9 +204,6 @@ int encoder_read(polar_t *robot_speed)
     /* update speed */
     robot_speed->distance = (right_speed + left_speed) / 2.0;
     robot_speed->angle = right_speed - left_speed;
-
-    log_vect_setvalue(&datalog, LOG_IDX_SPEED_L, (void *) &left_speed);
-    log_vect_setvalue(&datalog, LOG_IDX_SPEED_R, (void *) &right_speed);
 
     return 0;
 }
