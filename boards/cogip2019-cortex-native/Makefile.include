@@ -1,0 +1,189 @@
+export NATIVEINCLUDES += -DNATIVE_INCLUDES
+export NATIVEINCLUDES += -I$(RIOTBOARD)/$(BOARD)/include/
+export NATIVEINCLUDES += -I$(RIOTBASE)/core/include/
+export NATIVEINCLUDES += -I$(RIOTBASE)/drivers/include/
+
+export CPU = native
+
+# toolchain:
+export PREFIX =
+export CC ?= $(PREFIX)gcc
+export CXX ?= $(PREFIX)g++
+
+ifeq ($(LTO),1)
+  export AR = $(PREFIX)gcc-ar
+else
+  export AR = $(PREFIX)ar
+endif
+
+export AS ?= $(PREFIX)as
+export LINK ?= $(PREFIX)gcc
+export SIZE ?= $(PREFIX)size
+
+ifneq ($(shell uname -s),Darwin)
+  export OBJCOPY ?= $(PREFIX)objcopy
+else
+  ifeq (0,$(shell which gobjcopy 2>&1 > /dev/null ; echo $$?))
+    export OBJCOPY ?= gobjcopy
+  else
+    # If gobjcopy is not available, just do nothing. The hexfile
+    # is not used for native anyways.
+    export OBJCOPY ?= true
+  endif
+endif
+
+ifeq ($(shell uname -s),Darwin)
+  export DEBUGGER ?= lldb
+else
+  export DEBUGGER ?= gdb
+endif
+
+export TERMPROG ?= $(ELFFILE)
+export FLASHER = true
+export VALGRIND ?= valgrind
+export CGANNOTATE ?= cg_annotate
+export GPROF ?= gprof
+
+# basic cflags:
+export CFLAGS += -Wall -Wextra -pedantic
+# default std set to gnu99 of not overwritten by user
+ifeq (,$(filter -std=%, $(CFLAGS)))
+  export CFLAGS += -std=gnu99
+endif
+
+ifeq ($(shell uname -m),x86_64)
+  export CFLAGS += -m32
+endif
+ifneq (,$(filter -DDEVELHELP,$(CFLAGS)))
+  export CFLAGS += -fstack-protector-all
+endif
+ifeq ($(shell uname -s),FreeBSD)
+  ifeq ($(shell uname -m),amd64)
+    export CFLAGS += -m32 -DCOMPAT_32BIT -B/usr/lib32
+  endif
+endif
+ifeq ($(shell uname -s),Darwin)
+  export CFLAGS += -Wno-deprecated-declarations
+endif
+
+# unwanted (CXXUWFLAGS) and extra (CXXEXFLAGS) flags for c++
+export CXXUWFLAGS +=
+export CXXEXFLAGS +=
+
+ifeq ($(shell uname -m),x86_64)
+  export LINKFLAGS += -m32
+endif
+ifeq ($(shell uname -s),FreeBSD)
+  ifeq ($(shell uname -m),amd64)
+    export LINKFLAGS += -m32 -DCOMPAT_32BIT -L/usr/lib32 -B/usr/lib32
+  endif
+  export LINKFLAGS += -L $(BINDIR)
+else
+  export LINKFLAGS += -ldl
+endif
+
+# clean up unused functions
+export CFLAGS += -ffunction-sections -fdata-sections
+ifeq ($(shell uname -s),Darwin)
+  export LINKFLAGS += -Wl,-dead_strip
+else
+  export LINKFLAGS += -Wl,--gc-sections
+endif
+export LINKFLAGS += -ffunction-sections
+
+# set the tap interface for term/valgrind
+ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
+  export PORT ?= tap0
+else
+  export PORT =
+endif
+
+export TERMFLAGS := $(PORT) $(TERMFLAGS)
+
+export ASFLAGS =
+ifeq ($(shell basename $(DEBUGGER)),lldb)
+  export DEBUGGER_FLAGS = -- $(ELFFILE) $(TERMFLAGS)
+else
+  export DEBUGGER_FLAGS = -q --args $(ELFFILE) $(TERMFLAGS)
+endif
+term-valgrind: export VALGRIND_FLAGS ?= \
+	--leak-check=full \
+	--track-origins=yes \
+	--fullpath-after=$(RIOTBASE)/ \
+	--read-var-info=yes
+debug-valgrind-server: export VALGRIND_FLAGS ?= --vgdb=yes --vgdb-error=0 -v \
+	--leak-check=full --track-origins=yes --fullpath-after=$(RIOTBASE) \
+	--read-var-info=yes
+term-cachegrind: export CACHEGRIND_FLAGS += --tool=cachegrind
+term-gprof: export TERMPROG = GMON_OUT_PREFIX=gmon.out $(ELFFILE)
+all-valgrind: export CFLAGS += -DHAVE_VALGRIND_H -g
+all-valgrind: export NATIVEINCLUDES += $(shell pkg-config valgrind --cflags)
+all-debug: export CFLAGS += -g
+all-cachegrind: export CFLAGS += -g
+all-gprof: export CFLAGS += -pg
+all-gprof: export LINKFLAGS += -pg
+all-asan: export CFLAGS += -fsanitize=address -fno-omit-frame-pointer -g
+all-asan: export CFLAGS += -DNATIVE_IN_CALLOC
+all-asan: export LINKFLAGS += -fsanitize=address -fno-omit-frame-pointer -g
+
+export INCLUDES += $(NATIVEINCLUDES)
+
+export CFLAGS += -DDEBUG_ASSERT_VERBOSE
+
+# workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52624
+ifneq ($(shell gcc --version | head -1 | grep -E ' (4.6|4.7)'),)
+  export CFLAGS += -DHAVE_NO_BUILTIN_BSWAP16
+endif
+
+# backward compatability with glibc <= 2.17 for native
+ifeq ($(CPU),native)
+  ifeq ($(shell uname -s),Linux)
+    ifeq ($(shell ldd --version |  awk '/^ldd/{if ($$NF < 2.17) {print "yes"} else {print "no"} }'),yes)
+	  LINKFLAGS += -lrt
+    endif
+  endif
+endif
+
+# clumsy way to enable building native on osx:
+BUILDOSXNATIVE = 0
+ifeq ($(CPU),native)
+  ifeq ($(shell uname -s),Darwin)
+    BUILDOSXNATIVE = 1
+  endif
+endif
+
+all: # do not override first target
+
+all-debug: all
+
+all-gprof: all
+
+all-asan: all
+
+all-valgrind: all
+
+all-cachegrind: all
+
+term-valgrind:
+	$(VALGRIND) $(VALGRIND_FLAGS) $(ELFFILE) $(PORT)
+
+debug-valgrind-server:
+	$(VALGRIND) $(VALGRIND_FLAGS) $(ELFFILE) $(PORT)
+
+debug-valgrind:
+	$(eval VALGRIND_PID ?= $(shell pgrep -n memcheck-x86-li -u $(USER) | cut -d" " -f1))
+	$(eval DEBUGGER_FLAGS := -ex "target remote | vgdb --pid=$(VALGRIND_PID)" $(DEBUGGER_FLAGS))
+	$(DEBUGGER) $(DEBUGGER_FLAGS)
+
+term-cachegrind:
+	$(VALGRIND) $(CACHEGRIND_FLAGS) $(ELFFILE) $(PORT)
+
+term-gprof: term
+
+eval-gprof:
+	$(GPROF) $(ELFFILE) $(shell ls -rt gmon.out* | tail -1)
+
+eval-cachegrind:
+	$(CGANNOTATE) $(shell ls -rt cachegrind.out* | tail -1)
+
+export UNDEF += $(BINDIR)/cpu/startup.o
