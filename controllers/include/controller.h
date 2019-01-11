@@ -25,7 +25,7 @@ typedef struct {
 } ctrl_mode_t;
 
 typedef struct {
-    pose_t* pose_order;
+    pose_t pose_order;
     pose_t* pose_current;
     polar_t* speed_order;
 
