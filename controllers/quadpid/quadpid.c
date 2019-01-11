@@ -125,7 +125,7 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
                           polar_t speed_current)
 {
     polar_t command = { 0, 0 };
-    pose_t* pose_order = NULL;
+    const pose_t* pose_order = NULL;
     polar_t* speed_order = NULL;
     polar_t speed;
 
@@ -276,7 +276,7 @@ inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
     irq_enable();
 }
 
-inline pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
+inline const pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
 {
     return &ctrl->common.pose_order;
 }
