@@ -45,7 +45,7 @@ odometry_by_segment(pose_t *p, const double distance, const double angle)
 {
     double O_rad;
 
-    O_rad = p->O / wheels_distance; /* [radian] */
+    O_rad = DEG2RAD(p->O);
 
     p->x += distance * cos(O_rad);
     p->y += distance * sin(O_rad);
@@ -65,7 +65,7 @@ odometry_by_arc(pose_t *p, const double distance, const double angle)
 {
     double O_rad;
 
-    O_rad = p->O / wheels_distance; /* [radian] */
+    O_rad = DEG2RAD(p->O);
 
     if (angle == 0.0) {
         /* robot pose */
@@ -74,15 +74,18 @@ odometry_by_arc(pose_t *p, const double distance, const double angle)
     }
     else {
         /* radius and angle oh the arc */
-        double a = angle / wheels_distance;
+        double a = DEG2RAD(angle);
         double r = distance / a;
+
         /* coordinates of the center oh the arc */
         double xo = p->x - r * sin(O_rad);
         double yo = p->y + r * cos(O_rad);
+
         /* robot pose */
-        p->O += a;
+        p->O += angle;
         p->x = xo + r * sin(O_rad);
         p->y = yo - r * cos(O_rad);
+
         limit_angle(p);
     }
 }

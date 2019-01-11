@@ -54,10 +54,6 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
     (void) robot_pose;
     robot_pose_tmp =  *robot_pose;
 
-    robot_pose_tmp.O /= PULSE_PER_DEGREE;
-    robot_pose_tmp.x /= PULSE_PER_MM;
-    robot_pose_tmp.y /= PULSE_PER_MM;
-
     if (first_boot == 0) {
         first_boot = 1;
         pose_reached = current_path_pos->pos;
@@ -156,9 +152,6 @@ void *task_planner(void *arg)
     path->current_pose_idx = 0;
     current_path_pos = path_get_current_path_pos(path);
     initial_pose = current_path_pos->pos;
-    initial_pose.x *= PULSE_PER_MM;
-    initial_pose.y *= PULSE_PER_MM;
-    initial_pose.O *= PULSE_PER_DEGREE;
     ctrl_set_pose_current(ctrl, &initial_pose);
 
     uint32_t game_start_time = xtimer_now_usec();

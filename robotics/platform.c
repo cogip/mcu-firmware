@@ -64,8 +64,8 @@ static ctrl_quadpid_t controller = {
     },
 
     //.min_distance_for_angular_switch = 500,
-    .min_distance_for_angular_switch = 30,
-    .min_angle_for_pose_reached = 100,
+    .min_distance_for_angular_switch = 3 /* mm */,
+    .min_angle_for_pose_reached = 2 /* °deg */,
     .regul = CTRL_REGUL_POSE_DIST,
 };
 
@@ -149,7 +149,7 @@ void pf_setup(void)
     }
 
     /* controller setup */
-    odometry_setup(WHEELS_DISTANCE);
+    odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
 #if defined(__AVR__)
     /* Programmable Multilevel Interrupt Controller */
@@ -184,16 +184,15 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
     /* convert to position */
     odometry_update(robot_pose, &robot_speed, SEGMENT);
 
-    /* convert pulse to degree */
-    robot_pose->O /= PULSE_PER_DEGREE;
+    /* convert pulse to mmor degree */
+    /*robot_pose->x /= PULSE_PER_MM;
+    robot_pose->y /= PULSE_PER_MM;*/
+    /*robot_pose->O /= PULSE_PER_DEG;*/
 
     /* PID / feedback control */
     *motor_command = ctrl_update(&controller,
                                        robot_pose,
                                        robot_speed);
-
-    /* convert degree to pulse */
-    robot_pose->O *= PULSE_PER_DEGREE;
 }
 
 int encoder_read(polar_t *robot_speed)
@@ -202,8 +201,8 @@ int encoder_read(polar_t *robot_speed)
     int32_t right_speed = qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
 
     /* update speed */
-    robot_speed->distance = (right_speed + left_speed) / 2.0;
-    robot_speed->angle = right_speed - left_speed;
+    robot_speed->distance = ((right_speed + left_speed) / 2.0) / PULSE_PER_MM;
+    robot_speed->angle = (right_speed - left_speed) / PULSE_PER_DEGREE;
 
     return 0;
 }

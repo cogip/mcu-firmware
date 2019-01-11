@@ -141,8 +141,6 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
     /* get next pose_t to reach */
     pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl);
 
-    pose_order->x *= PULSE_PER_MM;
-    pose_order->y *= PULSE_PER_MM;
 
     /* get speed order */
     speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
@@ -184,7 +182,7 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
         }
 
         /* if target point direction angle is too important, bot rotates on its starting point */
-        if (fabs(pos_err.angle) > ctrl->min_angle_for_pose_reached / PULSE_PER_DEGREE) {
+        if (fabs(pos_err.angle) > ctrl->min_angle_for_pose_reached) {
             ctrl->regul = CTRL_REGUL_POSE_PRE_ANGL;
             pos_err.distance = 0;
             pid_reset(&ctrl->linear_pose_pid);
@@ -209,7 +207,7 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
         pid_reset(&ctrl->linear_pose_pid);
 
         /* orientation is reached */
-        if (fabs(pos_err.angle) < ctrl->min_angle_for_pose_reached / PULSE_PER_DEGREE) {
+        if (fabs(pos_err.angle) < ctrl->min_angle_for_pose_reached) {
             pos_err.angle = 0;
             pid_reset(&ctrl->angular_pose_pid);
 
@@ -217,8 +215,6 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
             ctrl->regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
         }
     }
-
-    pos_err.angle *= PULSE_PER_DEGREE;
 
     /* compute speed command with position pid controller */
     command.distance = pid_ctrl(&ctrl->linear_pose_pid,
