@@ -8,6 +8,8 @@
 #include "utils.h"
 #include "ctrl/quadpid.h"
 
+#define ROBOT_ID    0
+
 /*
  * Machine parameters
  */

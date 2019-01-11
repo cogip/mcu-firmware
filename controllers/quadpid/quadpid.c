@@ -149,25 +149,23 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
     /* get speed order */
     speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
 
+    cons_printf("@robot@,@speed_current@,%u,%.0f,%.0f\n",
+                ROBOT_ID,
+                speed_current.distance,
+                speed_current.angle);
+
+    cons_printf("@robot@,@pose_current@,%u,%.0f,%.0f,%.0f\n",
+                ROBOT_ID,
+                pose_current->x,
+                pose_current->y,
+                pose_current->O);
+
     pos_err = compute_position_error(ctrl, pose_order, pose_current);
 
-    cons_printf("@c@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,"
-                "%+.0f,%+.0f,"
-                "%+.0f,%+.0f,"
-                "%+.0f,%+.0f,"
-                "\n",
-                pose_order->x / PULSE_PER_MM,
-                pose_order->y / PULSE_PER_MM,
-                pose_order->O,
-                pose_current->x / PULSE_PER_MM,
-                pose_current->y / PULSE_PER_MM,
-                pose_current->O,
-                pos_err.distance / PULSE_PER_MM,
-                pos_err.angle,
-                speed_order->distance / PULSE_PER_MM,
-                speed_order->angle,
-                speed_current.distance / PULSE_PER_MM,
-                speed_current.angle);
+    cons_printf("@robot@,@pose_error@,%u,%.0f,%.0f\n",
+                ROBOT_ID,
+                pos_err.distance,
+                pos_err.angle);
 
     /* position correction */
     if (ctrl->regul != CTRL_REGUL_POSE_ANGL
@@ -272,6 +270,11 @@ inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
     if (!pose_equal(&ctrl->common.pose_order, pose_order)) {
         ctrl->common.pose_order = *pose_order;
         ctrl->common.pose_reached = FALSE;
+        cons_printf("@robot@,@pose_order@,%u,%.0f,%.0f,%.0f\n",
+                    ROBOT_ID,
+                    pose_order->x,
+                    pose_order->y,
+                    pose_order->O);
     }
     irq_enable();
 }
@@ -284,7 +287,14 @@ inline const pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
 inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
 {
     irq_disable();
+
     ctrl->common.speed_order = speed_order;
+
+    cons_printf("@robot@,@speed_order@,%u,%.0f,%.0f\n",
+                ROBOT_ID,
+                speed_order->distance,
+                speed_order->angle);
+
     irq_enable();
 }
 
