@@ -134,13 +134,17 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
     /* compute position error */
     polar_t pos_err;
 
-    if (ctrl_is_pose_reached((ctrl_t*)ctrl)) {
-        return command;
-    }
-
     /* get next pose_t to reach */
     pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl);
 
+    /* get speed order */
+    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
+
+    if ((!pose_order)
+        || (!speed_order)
+        || (ctrl_is_pose_reached((ctrl_t*)ctrl))) {
+        return command;
+    }
 
     /* get speed order */
     speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
