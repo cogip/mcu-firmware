@@ -269,8 +269,8 @@ inline pose_t* ctrl_get_pose_current(ctrl_t* ctrl)
 inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
 {
     irq_disable();
-    if (!pose_equal(ctrl->common.pose_order, pose_order)) {
-        ctrl->common.pose_order = pose_order;
+    if (!pose_equal(&ctrl->common.pose_order, pose_order)) {
+        ctrl->common.pose_order = *pose_order;
         ctrl->common.pose_reached = FALSE;
     }
     irq_enable();
@@ -278,7 +278,7 @@ inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
 
 inline pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
 {
-    return ctrl->common.pose_order;
+    return &ctrl->common.pose_order;
 }
 
 inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
