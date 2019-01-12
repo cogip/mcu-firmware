@@ -108,7 +108,7 @@ static path_pose_t poses[] = {
 path_t robot_path = {
     /* static cfg */
     .play_in_loop = FALSE,
-    .nb_pose = 9,
+    .nb_pose = sizeof(poses)/sizeof(path_pose_t),
     .poses = poses,
 };
 
