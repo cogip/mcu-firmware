@@ -10,6 +10,9 @@
 #include <irq.h>
 #include <periph/adc.h>
 
+/* RIOT includes */
+#include <log.h>
+
 /* Object variables (singleton) */
 static uint16_t game_time = 0;
 static uint8_t game_started = FALSE;
@@ -60,6 +63,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
         *pose_to_reach = current_path_pos->pos;
         set_start_position_finish_position(&pose_reached, pose_to_reach);
         if (update_graph() == -1) {
+            LOG_ERROR("planner: Update graph failed !\n");
             goto trajectory_get_route_update_error;
         }
     }
@@ -69,12 +73,14 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
 
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
+            LOG_DEBUG("planner: Controller has reach final position.\n");
             path_increment_current_pose_idx(path);
             current_path_pos = path_get_current_path_pos(path);
             robot_pose_tmp = pose_reached;
             need_update = 1;
         }
         else {
+            LOG_DEBUG("planner: Controller has reach intermediate position.\n");
             index++;
         }
     }
@@ -101,6 +107,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
             test = update_graph();
         }
         if (control_loop == 0) {
+            LOG_ERROR("planner: No position reachable !\n");
             goto trajectory_get_route_update_error;
         }
         index = 1;
@@ -111,12 +118,14 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
         && (pose_to_reach->y == current_path_pos->pos.y)) {
         pose_to_reach->O = current_path_pos->pos.O;
         ctrl_set_pose_intermediate(ctrl, FALSE);
+        LOG_DEBUG("planner: Reaching final position\n");
     }
     else {
         /* Update speed order to max speed defined value in the new point to reach */
         speed_order->distance = path_get_current_max_speed(path);
         speed_order->angle = speed_order->distance / 2;
         ctrl_set_pose_intermediate(ctrl, TRUE);
+        LOG_DEBUG("planner: Reaching intermediate position\n");
     }
 
     return 0;
