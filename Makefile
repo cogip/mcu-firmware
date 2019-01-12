@@ -12,6 +12,7 @@ USEMODULE += ps
 USEMODULE += printf_float
 LINKFLAGS += -u _scanf_float
 
+USEMODULE += ctrl
 USEMODULE += ctrl_quadpid
 DIRS += controllers
 
