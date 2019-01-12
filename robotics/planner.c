@@ -43,7 +43,7 @@ void planner_start_game(ctrl_t* ctrl)
 static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, pose_t *pose_to_reach, polar_t *speed_order)
 {
     static pose_t pose_reached;
-    path_pose_t *current_path_pos = path_get_current_path_pos(path);
+    const path_pose_t *current_path_pos = path_get_current_path_pos(path);
     pose_t robot_pose_tmp;
     static uint8_t index = 1;
     static int first_boot = 0;
@@ -130,7 +130,7 @@ void *task_planner(void *arg)
     pose_t initial_pose = { 0, 0, 0 };
     polar_t speed_order = { 0, 0 };
     const uint8_t camp_left = pf_is_camp_left();
-    path_pose_t *current_path_pos = NULL;
+    const path_pose_t *current_path_pos = NULL;
 
     ctrl_t *ctrl = (ctrl_t*)arg;
 
