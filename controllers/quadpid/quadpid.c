@@ -5,6 +5,7 @@
 
 /* RIOT includes */
 #include "irq.h"
+#include "log.h"
 #include "xtimer.h"
 
 /* Project includes */
@@ -267,6 +268,7 @@ inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
     if (!pose_equal(&ctrl->common.pose_order, pose_order)) {
         ctrl->common.pose_order = *pose_order;
         ctrl->common.pose_reached = FALSE;
+
         cons_printf("@robot@,@pose_order@,%u,%.0f,%.0f,%.0f\n",
                     ROBOT_ID,
                     pose_order->x,
@@ -306,7 +308,7 @@ void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_id_t new_mode)
         for (int i = 0; i < CTRL_STATE_NUMOF; i++) {
             if (new_mode == ctrl->common.modes[i].mode_id) {
                 ctrl->common.current_mode = &ctrl->common.modes[i];
-                printf("new_mode = %s\n", ctrl->common.current_mode->name);
+                LOG_DEBUG("ctrl: New mode: %s\n", ctrl->common.current_mode->name);
                 break;
             }
         }
@@ -331,7 +333,7 @@ void *task_ctrl_update(void *arg)
     func_cb_t pfn_evtloop_postfunc = pf_get_ctrl_loop_post_pfn();
 
     ctrl_quadpid_t *ctrl = (ctrl_quadpid_t*)arg;
-    printf("Controller started\n");
+    LOG_DEBUG("ctrl: Controller started\n");
 
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
