@@ -33,6 +33,4 @@ FEATURES_REQUIRED += periph_pwm
 INCLUDES += -I$(APPDIR)/robotics/include/ -I$(APPDIR)/
 INCLUDES += -I$(APPDIR)/controllers/include/
 
-CFLAGS += -DCONFIG_USE_STARTER
-
 include $(RIOTBASE)/Makefile.include

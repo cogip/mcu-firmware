@@ -101,22 +101,13 @@ path_t *pf_get_path(void)
 uint8_t pf_is_game_launched(void)
 {
     /* Starter switch */
-#if defined(CONFIG_USE_STARTER)
-    /* read 4 when the bar is NOT yet removed */
-    return gpio_read(GPIO_PIN(PORT_B, 2)) ? 0 : 1;
-#else
     return 1;
-#endif
 }
 
 uint8_t pf_is_camp_left(void)
 {
     /* Color switch for coords translations */
-    gpio_init(GPIO_PIN(PORT_B, 10), GPIO_IN);
-
-    xtimer_usleep(100 * US_PER_MS); // Wait 100ms (debounce)
-
-    return gpio_read(GPIO_PIN(PORT_B, 10)) ? 1 : 0;
+    return 0;
 }
 
 void pf_setup(void)
@@ -131,12 +122,6 @@ void pf_setup(void)
 #endif
 
     motor_driver_init(0);
-
-    /* Starter, orig 1 & 2, color */
-    gpio_init(GPIO_PIN(PORT_A, 0), GPIO_IN_PU);
-    gpio_init(GPIO_PIN(PORT_A, 1), GPIO_IN_PU);
-    gpio_init(GPIO_PIN(PORT_B, 2), GPIO_IN_PU);
-    gpio_init(GPIO_PIN(PORT_B, 10), GPIO_IN);
 
     /* setup qdec */
     int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_MODE, NULL, NULL);
