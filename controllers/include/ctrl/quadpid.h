@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 /* Project includes */
-#include "controller.h"
+#include "ctrl.h"
 #include "odometry.h"
 #include "pid.h"
 

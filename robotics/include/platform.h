@@ -1,7 +1,7 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
-#include "controller.h"
+#include "ctrl.h"
 #include "odometry.h"
 #include "path.h"
 #include "periph/qdec.h"

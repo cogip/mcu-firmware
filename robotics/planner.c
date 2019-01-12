@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "avoidance.h"
-#include "controller.h"
+#include "ctrl.h"
 #include "xtimer.h"
 #include "platform.h"
 #include "trigonometry.h"

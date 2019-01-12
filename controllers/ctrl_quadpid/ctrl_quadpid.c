@@ -9,7 +9,7 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "controller.h"
+#include "ctrl.h"
 #include "odometry.h"
 #include "platform.h"
 #include "ctrl/quadpid.h"
