@@ -1,7 +1,7 @@
 #ifndef PLANNER_H_
 #define PLANNER_H_
 
-#include "controller.h"
+#include "ctrl.h"
 #include "odometry.h"
 #include "path.h"
 #include "utils.h"
