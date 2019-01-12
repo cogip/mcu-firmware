@@ -146,9 +146,6 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
         return command;
     }
 
-    /* get speed order */
-    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
-
     cons_printf("@robot@,@speed_current@,%u,%.0f,%.0f\n",
                 ROBOT_ID,
                 speed_current.distance,
