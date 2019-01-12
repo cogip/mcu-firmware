@@ -15,7 +15,7 @@ typedef struct {
     /* static cfg */
     uint8_t play_in_loop; /* for unit tests */
     uint8_t nb_pose;
-    path_pose_t *poses;
+    const path_pose_t *poses;
 
     /* dynamic variables */
     uint8_t current_pose_idx;
@@ -24,7 +24,7 @@ typedef struct {
 
 extern path_t robot_path;
 
-path_pose_t *path_get_current_path_pos(const path_t *path);
+const path_pose_t *path_get_current_path_pos(const path_t *path);
 void path_increment_current_pose_idx(path_t *path);
 uint8_t path_get_current_max_speed(const path_t *path);
 void path_horizontal_mirror_all_pos(const path_t *path);
