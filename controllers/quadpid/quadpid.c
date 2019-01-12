@@ -303,10 +303,11 @@ inline polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
 void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_id_t new_mode)
 {
     if (new_mode < CTRL_STATE_NUMOF) {
-        for (int mode_id = 0; mode_id < CTRL_STATE_NUMOF; mode_id++) {
-            if (new_mode == ctrl->common.modes[new_mode].mode_id) {
-                ctrl->common.current_mode = &ctrl->common.modes[new_mode];
+        for (int i = 0; i < CTRL_STATE_NUMOF; i++) {
+            if (new_mode == ctrl->common.modes[i].mode_id) {
+                ctrl->common.current_mode = &ctrl->common.modes[i];
                 printf("new_mode = %s\n", ctrl->common.current_mode->name);
+                break;
             }
         }
     }
