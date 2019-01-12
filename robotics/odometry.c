@@ -7,9 +7,15 @@
 
 static double wheels_distance; /*!< robot wheels distance [pulse] */
 
-inline uint8_t pose_equal(const pose_t *p1, const pose_t *p2)
+inline int pose_equal(const pose_t *p1, const pose_t *p2)
 {
-    return p1->x == p2->x && p1->y == p2->y && p1->O == p2->O;
+    if ((p1 != NULL) && (p2 != NULL)) {
+        return p1 == p2
+            || (p1->x == p2->x && p1->y == p2->y && p1->O == p2->O);
+    }
+    else {
+        return 0;
+    }
 }
 
 void odometry_setup(double d)

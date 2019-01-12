@@ -20,7 +20,7 @@ typedef struct {
     double angle;
 } polar_t;
 
-uint8_t pose_equal(const pose_t *p1, const pose_t *p2);
+int pose_equal(const pose_t *p1, const pose_t *p2);
 
 /**
  * \fn odometry_setup
