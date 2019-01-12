@@ -2,7 +2,6 @@ APPLICATION = cortex
 RIOTBASE ?= $(CURDIR)/../RIOT
 RIOTBOARD ?= boards/
 BOARD ?= cogip2019-cortex
-#BOARD ?= native
 USEMODULE += xtimer
 USEMODULE += motor_driver
 
@@ -34,9 +33,7 @@ FEATURES_REQUIRED += periph_pwm
 INCLUDES += -I$(APPDIR)/robotics/include/ -I$(APPDIR)/
 INCLUDES += -I$(APPDIR)/controllers/include/
 
-ifeq ($(BOARD),native)
 CFLAGS += -Wno-pedantic -Wno-unused-parameter -Wno-sign-compare
-endif
 CFLAGS += -DCONFIG_USE_STARTER
 
 include $(RIOTBASE)/Makefile.include

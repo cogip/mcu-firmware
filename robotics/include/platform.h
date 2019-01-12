@@ -43,11 +43,7 @@
 #define HBRIDGE_MOTOR_LEFT  0
 #define HBRIDGE_MOTOR_RIGHT 1
 
-#if defined(BOARD_NATIVE)
-#define QDEC_MODE   QDEC_X1
-#else
 #define QDEC_MODE   QDEC_X4
-#endif
 #define QDEC_LEFT_POLARITY      -1
 #define QDEC_RIGHT_POLARITY     1
 

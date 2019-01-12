@@ -101,7 +101,7 @@ path_t *pf_get_path(void)
 uint8_t pf_is_game_launched(void)
 {
     /* Starter switch */
-#if defined(CONFIG_USE_STARTER) && !defined(BOARD_NATIVE)
+#if defined(CONFIG_USE_STARTER)
     /* read 4 when the bar is NOT yet removed */
     return gpio_read(GPIO_PIN(PORT_B, 2)) ? 0 : 1;
 #else
