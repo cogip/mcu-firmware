@@ -69,15 +69,6 @@ static ctrl_quadpid_t controller = {
     .regul = CTRL_REGUL_POSE_DIST,
 };
 
-/* TCE0 ClkIn == ClkPer / 8 == 4000 KHz */
-/* Counter set to 200 for 20KHz output */
-#define TC_MOTOR_PRESCALER      TC_CLKSEL_DIV8_gc
-#define TC_MOTOR_PER_VALUE      200
-
-static void pf_post_ctrl_loop_func(void)
-{
-}
-
 inline func_cb_t pf_get_ctrl_loop_pre_pfn(void)
 {
     return NULL;
@@ -85,7 +76,7 @@ inline func_cb_t pf_get_ctrl_loop_pre_pfn(void)
 
 inline func_cb_t pf_get_ctrl_loop_post_pfn(void)
 {
-    return pf_post_ctrl_loop_func;
+    return NULL;
 }
 
 inline func_cb_t pf_get_end_of_game_pfn(void)
@@ -112,15 +103,6 @@ uint8_t pf_is_camp_left(void)
 
 void pf_setup(void)
 {
-#if F_CPU == 32000000UL
-    clksys_intrc_32MHz_setup();
-#endif
-
-#ifdef CONFIG_ENABLE_LOGGING
-    /* setup logs through usart communication */
-    console_init(&usartc0_console);
-#endif
-
     motor_driver_init(0);
 
     /* setup qdec */
@@ -135,14 +117,6 @@ void pf_setup(void)
 
     /* controller setup */
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
-
-#if defined(__AVR__)
-    /* Programmable Multilevel Interrupt Controller */
-    PMIC.CTRL |= PMIC_LOLVLEN_bm; /* Low-level Interrupt Enable */
-
-    /* global interrupt enable */
-    sei();
-#endif
 }
 
 void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command)
@@ -168,11 +142,6 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
 
     /* convert to position */
     odometry_update(robot_pose, &robot_speed, SEGMENT);
-
-    /* convert pulse to mmor degree */
-    /*robot_pose->x /= PULSE_PER_MM;
-    robot_pose->y /= PULSE_PER_MM;*/
-    /*robot_pose->O /= PULSE_PER_DEG;*/
 
     /* PID / feedback control */
     *motor_command = ctrl_quadpid_pose(&controller,
