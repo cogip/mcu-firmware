@@ -79,7 +79,7 @@ static double limit_speed_command(double command,
 /**
  *
  */
-polar_t speed_ctrl(ctrl_quadpid_t *ctrl,
+polar_t ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
                          polar_t speed_order, polar_t speed_current)
 {
     polar_t speed_error;
@@ -111,8 +111,8 @@ polar_t speed_ctrl(ctrl_quadpid_t *ctrl,
     return command;
 }
 
-polar_t ctrl_update(ctrl_quadpid_t* ctrl,
-                          const pose_t *pose_current,
+polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
+                          const pose_t* pose_current,
                           polar_t speed_current)
 {
     polar_t command = { 0, 0 };
@@ -222,7 +222,7 @@ polar_t ctrl_update(ctrl_quadpid_t* ctrl,
                                       speed_current.angle);
 
     /* ********************** speed pid controller ********************* */
-    return speed_ctrl(ctrl, speed, speed_current);
+    return ctrl_quadpid_speed(ctrl, speed, speed_current);
 }
 
 void motor_drive(polar_t *command)

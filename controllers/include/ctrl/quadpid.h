@@ -36,11 +36,11 @@ typedef struct {
 
 } ctrl_quadpid_t;
 
-polar_t speed_ctrl(ctrl_quadpid_t *ctrl,
-                         polar_t speed_setpoint, polar_t real_speed);
+polar_t ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
+                         polar_t speed_order, polar_t speed_current);
 
-polar_t ctrl_update(ctrl_quadpid_t* ctrl,
-                          const pose_t *current_pose,
-                          polar_t current_speed);
+polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
+                          const pose_t* pose_current,
+                          polar_t speed_current);
 
 #endif  /* QUADPID_H_ */
