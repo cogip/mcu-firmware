@@ -102,8 +102,6 @@ void *task_ctrl_update(void *arg)
 {
     /* bot position on the 'table' (absolute position): */
     polar_t motor_command = { 0, 0 };
-    func_cb_t pfn_evtloop_prefunc = pf_get_ctrl_loop_pre_pfn();
-    func_cb_t pfn_evtloop_postfunc = pf_get_ctrl_loop_post_pfn();
 
     ctrl_t *ctrl = (ctrl_t*)arg;
     LOG_DEBUG("ctrl: Controller started\n");
@@ -111,21 +109,11 @@ void *task_ctrl_update(void *arg)
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
 
-        /* Machine specific stuff, if required */
-        if (pfn_evtloop_prefunc) {
-            (*pfn_evtloop_prefunc)();
-        }
-
         if ((ctrl->common.current_mode) && (ctrl->common.current_mode->mode_cb)) {
             ctrl->common.current_mode->mode_cb(ctrl->common.pose_current, &motor_command);
         }
 
         motor_drive(&motor_command);
-
-        /* Machine specific stuff, if required */
-        if (pfn_evtloop_postfunc) {
-            (*pfn_evtloop_postfunc)();
-        }
 
         xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
     }
