@@ -175,7 +175,7 @@ void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
     /*robot_pose->O /= PULSE_PER_DEG;*/
 
     /* PID / feedback control */
-    *motor_command = ctrl_update(&controller,
+    *motor_command = ctrl_quadpid_pose(&controller,
                                        robot_pose,
                                        robot_speed);
 }
