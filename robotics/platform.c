@@ -69,21 +69,6 @@ static ctrl_quadpid_t controller = {
     .regul = CTRL_REGUL_POSE_DIST,
 };
 
-inline func_cb_t pf_get_ctrl_loop_pre_pfn(void)
-{
-    return NULL;
-}
-
-inline func_cb_t pf_get_ctrl_loop_post_pfn(void)
-{
-    return NULL;
-}
-
-inline func_cb_t pf_get_end_of_game_pfn(void)
-{
-    return NULL;
-}
-
 path_t *pf_get_path(void)
 {
     return &robot_path;

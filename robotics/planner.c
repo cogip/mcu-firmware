@@ -136,7 +136,6 @@ trajectory_get_route_update_error:
 
 void *task_planner(void *arg)
 {
-    func_cb_t pfn_evtloop_end_of_game = pf_get_end_of_game_pfn();
     pose_t pose_order = { 0, 0, 0 };
     pose_t initial_pose = { 0, 0, 0 };
     polar_t speed_order = { 0, 0 };
@@ -172,10 +171,6 @@ void *task_planner(void *arg)
 
         if (!game_started) {
             goto yield_point;
-        }
-
-        if (pfn_evtloop_end_of_game && game_time >= GAME_DURATION_TICKS) {
-            (*pfn_evtloop_end_of_game)();
         }
 
         /* while starter switch is not release we wait */
