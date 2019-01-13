@@ -66,6 +66,25 @@ inline const pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
     return &ctrl->common.pose_order;
 }
 
+inline void ctrl_set_speed_current(ctrl_t* ctrl, polar_t* speed_current)
+{
+    irq_disable();
+
+    ctrl->common.speed_current = speed_current;
+
+    cons_printf("@robot@,@speed_current@,%u,%.0f,%.0f\n",
+                ROBOT_ID,
+                speed_current->distance,
+                speed_current->angle);
+
+    irq_enable();
+}
+
+inline const polar_t* ctrl_get_speed_current(ctrl_t* ctrl)
+{
+    return ctrl->common.speed_current;
+}
+
 inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
 {
     irq_disable();

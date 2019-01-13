@@ -137,11 +137,6 @@ polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
         return command;
     }
 
-    cons_printf("@robot@,@speed_current@,%u,%.0f,%.0f\n",
-                ROBOT_ID,
-                speed_current.distance,
-                speed_current.angle);
-
     cons_printf("@robot@,@pose_current@,%u,%.0f,%.0f,%.0f\n",
                 ROBOT_ID,
                 pose_current->x,
