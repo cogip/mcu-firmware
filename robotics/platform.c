@@ -42,6 +42,7 @@ static ctrl_quadpid_t controller = {
             },
         },
     },
+    .conf = ctrl_quadpid_conf,
     .linear_speed_pid = {
         .kp = 15.,
         .ki = 2.,
@@ -104,34 +105,34 @@ void pf_setup(void)
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 }
 
-void ctrl_state_stop_cb(pose_t *robot_pose, polar_t *motor_command)
+void ctrl_state_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
 {
     (void)robot_pose;
+    (void)robot_speed;
     /* final position */
     motor_command->distance = 0;
     motor_command->angle = 0;
 }
 
-void ctrl_state_idle_cb(pose_t *robot_pose, polar_t *motor_command)
+void ctrl_state_idle_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
 {
     (void)motor_command;
     (void)robot_pose;
+    (void)robot_speed;
 }
 
-void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t *motor_command)
+void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
 {
-    polar_t robot_speed = { 0, 0 };
+    (void)motor_command;
 
     /* catch speed */
-    encoder_read(&robot_speed);
+    encoder_read(robot_speed);
 
     /* convert to position */
-    odometry_update(robot_pose, &robot_speed, SEGMENT);
+    odometry_update(robot_pose, robot_speed, SEGMENT);
 
-    /* PID / feedback control */
-    *motor_command = ctrl_quadpid_pose(&controller,
-                                       robot_pose,
-                                       robot_speed);
+    ctrl_set_pose_current((ctrl_t*)&controller, robot_pose);
+    ctrl_set_speed_current((ctrl_t*)&controller, robot_speed);
 }
 
 int encoder_read(polar_t *robot_speed)

@@ -8,7 +8,7 @@
 #include "odometry.h"
 #include "pid.h"
 
-typedef void (*mode_cb_t)(pose_t*, polar_t*);
+typedef void (*mode_cb_t)(pose_t*, polar_t*, polar_t*);
 
 typedef enum {
     CTRL_STATE_STOP = 0,
@@ -38,9 +38,17 @@ typedef struct {
     ctrl_mode_t modes[CTRL_STATE_NUMOF];
 } ctrl_common_t;
 
+typedef struct ctrl_t ctrl_t;
+typedef polar_t (*ctrl_ingame_cb_t)(ctrl_t* ctrl);
+
 typedef struct {
+    ctrl_ingame_cb_t ctrl_ingame_cb;
+} ctrl_configuration_t;
+
+struct ctrl_t {
     ctrl_common_t common;
-} ctrl_t;
+    ctrl_configuration_t conf;
+};
 
 void motor_drive(polar_t *command);
 
