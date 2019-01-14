@@ -111,14 +111,17 @@ polar_t ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
     return command;
 }
 
-polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
-                          const pose_t* pose_current,
-                          polar_t speed_current)
+polar_t ctrl_quadpid_ingame(ctrl_t* ctrl)
 {
     polar_t command = { 0, 0 };
     const pose_t* pose_order = NULL;
     polar_t* speed_order = NULL;
     polar_t speed;
+
+    const pose_t* pose_current = ctrl_get_pose_current(ctrl);
+    const polar_t* speed_current = ctrl_get_speed_current(ctrl);
+
+    ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
 
     /* ******************** position pid ctrl ******************** */
 
@@ -126,14 +129,14 @@ polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
     polar_t pos_err;
 
     /* get next pose_t to reach */
-    pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl);
+    pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl_quadpid);
 
     /* get speed order */
-    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
+    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
 
     if ((!pose_order)
         || (!speed_order)
-        || (ctrl_is_pose_reached((ctrl_t*)ctrl))) {
+        || (ctrl_is_pose_reached((ctrl_t*)ctrl_quadpid))) {
         return command;
     }
 
@@ -143,7 +146,7 @@ polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
                 pose_current->y,
                 pose_current->O);
 
-    pos_err = compute_position_error(ctrl, pose_order, pose_current);
+    pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
     cons_printf("@robot@,@pose_error@,%u,%.0f,%.0f\n",
                 ROBOT_ID,
@@ -151,11 +154,11 @@ polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
                 pos_err.angle);
 
     /* position correction */
-    if (ctrl->regul != CTRL_REGUL_POSE_ANGL
-        && fabs(pos_err.distance) > ctrl->min_distance_for_angular_switch) {
+    if (ctrl_quadpid->regul != CTRL_REGUL_POSE_ANGL
+        && fabs(pos_err.distance) > ctrl_quadpid->min_distance_for_angular_switch) {
 
         /* should we go reverse? */
-        if (ctrl->common.allow_reverse && fabs(pos_err.angle) > 90) {
+        if (ctrl_quadpid->common.allow_reverse && fabs(pos_err.angle) > 90) {
             pos_err.distance = -pos_err.distance;
 
             if (pos_err.angle < 0) {
@@ -167,21 +170,21 @@ polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
         }
 
         /* if target point direction angle is too important, bot rotates on its starting point */
-        if (fabs(pos_err.angle) > ctrl->min_angle_for_pose_reached) {
-            ctrl->regul = CTRL_REGUL_POSE_PRE_ANGL;
+        if (fabs(pos_err.angle) > ctrl_quadpid->min_angle_for_pose_reached) {
+            ctrl_quadpid->regul = CTRL_REGUL_POSE_PRE_ANGL;
             pos_err.distance = 0;
-            pid_reset(&ctrl->linear_pose_pid);
+            pid_reset(&ctrl_quadpid->linear_pose_pid);
         }
         else {
-            ctrl->regul = CTRL_REGUL_POSE_DIST;
+            ctrl_quadpid->regul = CTRL_REGUL_POSE_DIST;
         }
     }
     else {
         /* orientation correction (position is reached) */
-        ctrl->regul = CTRL_REGUL_POSE_ANGL;
+        ctrl_quadpid->regul = CTRL_REGUL_POSE_ANGL;
 
         /* final orientation error */
-        if (!ctrl->common.pose_intermediate) {
+        if (!ctrl_quadpid->common.pose_intermediate) {
             pos_err.angle = limit_angle_deg(pose_order->O - pose_current->O);
         }
         else {
@@ -189,35 +192,35 @@ polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
         }
 
         pos_err.distance = 0;
-        pid_reset(&ctrl->linear_pose_pid);
+        pid_reset(&ctrl_quadpid->linear_pose_pid);
 
         /* orientation is reached */
-        if (fabs(pos_err.angle) < ctrl->min_angle_for_pose_reached) {
+        if (fabs(pos_err.angle) < ctrl_quadpid->min_angle_for_pose_reached) {
             pos_err.angle = 0;
-            pid_reset(&ctrl->angular_pose_pid);
+            pid_reset(&ctrl_quadpid->angular_pose_pid);
 
-            ctrl_set_pose_reached((ctrl_t*) ctrl);
-            ctrl->regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
+            ctrl_set_pose_reached((ctrl_t*) ctrl_quadpid);
+            ctrl_quadpid->regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
         }
     }
 
     /* compute speed command with position pid controller */
-    command.distance = pid_ctrl(&ctrl->linear_pose_pid,
+    command.distance = pid_ctrl(&ctrl_quadpid->linear_pose_pid,
                                       pos_err.distance);
-    command.angle = pid_ctrl(&ctrl->angular_pose_pid,
+    command.angle = pid_ctrl(&ctrl_quadpid->angular_pose_pid,
                                    pos_err.angle);
 
 
     /* limit speed command */
     speed.distance = limit_speed_command(command.distance,
                                          speed_order->distance,
-                                         speed_current.distance);
+                                         speed_current->distance);
     speed.angle = limit_speed_command(command.angle,
                                       speed_order->angle,
-                                      speed_current.angle);
+                                      speed_current->angle);
 
     /* ********************** speed pid controller ********************* */
-    return ctrl_quadpid_speed(ctrl, speed, speed_current);
+    return ctrl_quadpid_speed(ctrl_quadpid, speed, *speed_current);
 }
 
 void motor_drive(polar_t *command)

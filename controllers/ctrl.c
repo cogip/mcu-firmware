@@ -128,8 +128,19 @@ void *task_ctrl_update(void *arg)
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
 
-        if ((ctrl->common.current_mode) && (ctrl->common.current_mode->mode_cb)) {
-            ctrl->common.current_mode->mode_cb(ctrl->common.pose_current, &motor_command);
+        if (ctrl->common.current_mode) {
+            if (ctrl->common.current_mode->mode_cb) {
+                ctrl->common.current_mode->mode_cb(ctrl->common.pose_current, ctrl->common.speed_current, &motor_command);
+            }
+
+            switch(ctrl->common.current_mode->mode_id) {
+                case CTRL_STATE_INGAME:
+                    motor_command = ctrl->conf.ctrl_ingame_cb(ctrl);
+                    break;
+                default:
+                    LOG_ERROR("ctrl: Unhandled mode !\n");
+            }
+
         }
 
         motor_drive(&motor_command);

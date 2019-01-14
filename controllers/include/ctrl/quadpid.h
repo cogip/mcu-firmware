@@ -20,6 +20,7 @@ typedef enum {
 
 typedef struct {
     ctrl_common_t common;
+    ctrl_configuration_t conf;
 
     PID_t linear_speed_pid;
     PID_t angular_speed_pid;
@@ -39,8 +40,10 @@ typedef struct {
 polar_t ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
                          polar_t speed_order, polar_t speed_current);
 
-polar_t ctrl_quadpid_pose(ctrl_quadpid_t* ctrl,
-                          const pose_t* pose_current,
-                          polar_t speed_current);
+polar_t ctrl_quadpid_ingame(ctrl_t* ctrl);
+
+static const ctrl_configuration_t ctrl_quadpid_conf = {
+    .ctrl_ingame_cb = ctrl_quadpid_ingame,
+};
 
 #endif  /* QUADPID_H_ */
