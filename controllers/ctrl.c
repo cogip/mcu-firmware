@@ -129,8 +129,8 @@ void *task_ctrl_update(void *arg)
         xtimer_ticks32_t loop_start_time = xtimer_now();
 
         if (ctrl->common.current_mode) {
-            if (ctrl->common.current_mode->mode_cb) {
-                ctrl->common.current_mode->mode_cb(ctrl->common.pose_current, ctrl->common.speed_current, &motor_command);
+            if (ctrl->common.current_mode->ctrl_pre_mode_cb) {
+                ctrl->common.current_mode->ctrl_pre_mode_cb(ctrl->common.pose_current, ctrl->common.speed_current, &motor_command);
             }
 
             switch(ctrl->common.current_mode->mode_id) {
