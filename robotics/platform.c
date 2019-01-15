@@ -137,29 +137,6 @@ void encoder_reset(void)
     qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
 }
 
-/* FIXME: put following func elsewhere */
-/* Note: requires "LINKFLAGS += -u _scanf_float" */
-int custom_scanf(const char *format, ...)
-{
-    va_list args;
-
-    int c, retval;
-    char buffer[100];
-    uint8_t idx = 0;
-
-    while ((c = cons_getchar()) != '\r' && idx < 100) {
-        printf("%c", c); fflush(stdout);
-        buffer[idx++] = c;
-    }
-    buffer[idx] = '\0';
-
-    va_start(args, format);
-    retval = vsscanf(buffer, format, args);
-    va_end(args);
-
-    return retval;
-}
-
 void pf_tasks_init(void)
 {
     thread_create(controller_thread_stack, sizeof(controller_thread_stack),
