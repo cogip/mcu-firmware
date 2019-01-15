@@ -39,10 +39,10 @@ typedef struct {
 } ctrl_common_t;
 
 typedef struct ctrl_t ctrl_t;
-typedef polar_t (*ctrl_ingame_cb_t)(ctrl_t* ctrl);
+typedef polar_t (*ctrl_mode_cb_t)(ctrl_t* ctrl);
 
 typedef struct {
-    ctrl_ingame_cb_t ctrl_ingame_cb;
+    ctrl_mode_cb_t ctrl_ingame_cb;
 } ctrl_configuration_t;
 
 struct ctrl_t {
