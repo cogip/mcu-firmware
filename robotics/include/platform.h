@@ -8,7 +8,8 @@
 #include "utils.h"
 #include "ctrl/quadpid.h"
 
-#define ROBOT_ID    0
+#define ROBOT_ID            0
+#define PF_START_COUNTDOWN  5
 
 /*
  * Machine parameters
