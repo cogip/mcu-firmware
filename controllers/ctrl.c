@@ -52,7 +52,7 @@ inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order)
         ctrl->common.pose_order = *pose_order;
         ctrl->common.pose_reached = FALSE;
 
-        cons_printf("@robot@,@pose_order@,%u,%.0f,%.0f,%.0f\n",
+        LOG_INFO("@robot@,@pose_order@,%u,%.0f,%.0f,%.0f\n",
                     ROBOT_ID,
                     pose_order->x,
                     pose_order->y,
@@ -72,7 +72,7 @@ inline void ctrl_set_speed_current(ctrl_t* ctrl, polar_t* speed_current)
 
     ctrl->common.speed_current = speed_current;
 
-    cons_printf("@robot@,@speed_current@,%u,%.0f,%.0f\n",
+    LOG_INFO("@robot@,@speed_current@,%u,%.0f,%.0f\n",
                 ROBOT_ID,
                 speed_current->distance,
                 speed_current->angle);
@@ -91,7 +91,7 @@ inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
 
     ctrl->common.speed_order = speed_order;
 
-    cons_printf("@robot@,@speed_order@,%u,%.0f,%.0f\n",
+    LOG_INFO("@robot@,@speed_order@,%u,%.0f,%.0f\n",
                 ROBOT_ID,
                 speed_order->distance,
                 speed_order->angle);
