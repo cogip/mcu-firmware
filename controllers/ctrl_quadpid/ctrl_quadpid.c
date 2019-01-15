@@ -111,6 +111,14 @@ polar_t ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
     return command;
 }
 
+polar_t ctrl_quadpid_stop(ctrl_t* ctrl)
+{
+    (void)ctrl;
+    polar_t command = { 0, 0 };
+
+    return command;
+}
+
 polar_t ctrl_quadpid_ingame(ctrl_t* ctrl)
 {
     polar_t command = { 0, 0 };
