@@ -40,6 +40,7 @@ typedef struct {
 polar_t ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
                          polar_t speed_order, polar_t speed_current);
 
+polar_t ctrl_quadpid_stop(ctrl_t* ctrl);
 polar_t ctrl_quadpid_ingame(ctrl_t* ctrl);
 
 static const ctrl_configuration_t ctrl_quadpid_conf = {
