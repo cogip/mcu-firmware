@@ -105,22 +105,6 @@ void pf_setup(void)
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 }
 
-void ctrl_state_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
-{
-    (void)robot_pose;
-    (void)robot_speed;
-    /* final position */
-    motor_command->distance = 0;
-    motor_command->angle = 0;
-}
-
-void ctrl_state_idle_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
-{
-    (void)motor_command;
-    (void)robot_pose;
-    (void)robot_speed;
-}
-
 void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
 {
     (void)motor_command;
