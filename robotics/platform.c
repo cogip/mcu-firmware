@@ -23,17 +23,17 @@ static ctrl_quadpid_t controller = {
             {
                 .mode_id = CTRL_STATE_STOP,
                 .name = "STOP",
-                .ctrl_pre_mode_cb = ctrl_state_stop_cb
+                .ctrl_pre_mode_cb = NULL,
             },
             {
                 .mode_id = CTRL_STATE_IDLE,
                 .name = "IDLE",
-                .ctrl_pre_mode_cb = ctrl_state_idle_cb
+                .ctrl_pre_mode_cb = NULL,
             },
             {
                 .mode_id = CTRL_STATE_BLOCKED,
                 .name = "BLOCKED",
-                .ctrl_pre_mode_cb = ctrl_state_stop_cb
+                .ctrl_pre_mode_cb = NULL,
             },
             {
                 .mode_id = CTRL_STATE_INGAME,
