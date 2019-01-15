@@ -42,6 +42,9 @@ typedef struct ctrl_t ctrl_t;
 typedef polar_t (*ctrl_mode_cb_t)(ctrl_t* ctrl);
 
 typedef struct {
+    ctrl_mode_cb_t ctrl_stop_cb;
+    ctrl_mode_cb_t ctrl_idle_cb;
+    ctrl_mode_cb_t ctrl_blocked_cb;
     ctrl_mode_cb_t ctrl_ingame_cb;
 } ctrl_configuration_t;
 
