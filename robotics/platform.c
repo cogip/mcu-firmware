@@ -10,10 +10,14 @@
 
 #include <thread.h>
 
+/* RIOT includes */
+#include "log.h"
+#include "shell.h"
 #include "xtimer.h"
 
 char controller_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_thread_stack[THREAD_STACKSIZE_DEFAULT];
+char start_shell_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static ctrl_quadpid_t controller = {
     .common = {
@@ -137,13 +141,66 @@ void encoder_reset(void)
     qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
 }
 
+void *task_start_shell(void *arg)
+{
+    int* start_shell = (int*)arg;
+
+    /* Wait for Enter to be pressed */
+    getchar();
+    /* Set a flag and return once done */
+    *start_shell = TRUE;
+
+    return 0;
+}
+
 void pf_tasks_init(void)
 {
-    thread_create(controller_thread_stack, sizeof(controller_thread_stack),
+    static int start_shell = FALSE;
+    int countdown = PF_START_COUNTDOWN;
+
+    /* Create controller thread */
+    thread_create(controller_thread_stack,
+                  sizeof(controller_thread_stack),
                   0, 0,
                   task_ctrl_update, &controller, "motion_ctrl");
-    thread_create(planner_thread_stack, sizeof(planner_thread_stack),
-                  5, 0,
+    /* Create planner thread */
+    thread_create(planner_thread_stack,
+                  sizeof(planner_thread_stack),
+                  10, 0,
                   task_planner, &controller, "game_planner");
-    planner_start_game((ctrl_t*)&controller);
+    /* Create thread that up a flag on key pressed to start a shell instead of
+       planner below */
+    kernel_pid_t start_shell_pid = thread_create(start_shell_thread_stack,
+                  sizeof(start_shell_thread_stack),
+                  THREAD_PRIORITY_IDLE - 1, 0,
+                  task_start_shell, &start_shell, "shell");
+
+    LOG_INFO("Press Enter to enter calibration mode...\n");
+
+    /* Wait for Enter key pressed or countdown */
+    while ((!start_shell) && (countdown > 0)) {
+        LOG_INFO("%d left...\n", countdown--);
+        xtimer_sleep(1);
+    }
+
+    /* If Enter was pressed, start shell */
+    if (start_shell) {
+        /* Define buffer to be used by the shell */
+        char line_buf[SHELL_DEFAULT_BUFSIZE];
+        /* Start shell */
+        LOG_DEBUG("platform: Start shell\n");
+        shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
+    }
+    /* Else start game */
+    else {
+        /* Stop useless task_start_shell thread still running */
+        thread_t* start_shell_thread = (thread_t*)thread_get(start_shell_pid);
+        if (start_shell_thread) {
+            sched_set_status(start_shell_thread, STATUS_STOPPED);
+        }
+
+        /* Start game */
+        LOG_DEBUG("platform: Start game\n");
+        planner_start_game((ctrl_t*)&controller);
+    }
 }
