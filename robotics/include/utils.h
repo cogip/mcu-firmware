@@ -10,9 +10,6 @@ typedef void (*func_cb_t)(void);
 #define MAX(a, b)   (((a) > (b)) ? (a) : (b))
 
 #include <stdio.h>
-#define cons_printf printf
-#define cons_scanf scanf
-#define cons_getchar getchar
 
 /* set interval to 20 milli-second */
 #define THREAD_PERIOD_INTERVAL (20U * US_PER_MS)

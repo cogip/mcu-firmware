@@ -148,7 +148,7 @@ polar_t ctrl_quadpid_ingame(ctrl_t* ctrl)
         return command;
     }
 
-    cons_printf("@robot@,@pose_current@,%u,%.0f,%.0f,%.0f\n",
+    LOG_INFO("@robot@,@pose_current@,%u,%.0f,%.0f,%.0f\n",
                 ROBOT_ID,
                 pose_current->x,
                 pose_current->y,
@@ -156,7 +156,7 @@ polar_t ctrl_quadpid_ingame(ctrl_t* ctrl)
 
     pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
-    cons_printf("@robot@,@pose_error@,%u,%.0f,%.0f\n",
+    LOG_INFO("@robot@,@pose_error@,%u,%.0f,%.0f\n",
                 ROBOT_ID,
                 pos_err.distance,
                 pos_err.angle);

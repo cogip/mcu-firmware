@@ -5,6 +5,9 @@
 #include "obstacle.h"
 #include <math.h>
 
+/* RIOT includes */
+#include "log.h"
+
 /* Init borders */
 void borders_init(polygon_t *polygon)
 {
@@ -98,8 +101,8 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, double angle_offset, double di
         polygon.points[polygon.count] = (pose_t){.x = ref_pos_left.x + dist * cos(ref_pos_left.O),
                                                  .y = ref_pos_left.y + dist * sin(ref_pos_left.O) };
         polygon.count++;
-        cons_printf("@o@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f\n", polygon.points[0].x, polygon.points[0].y, polygon.points[1].x, polygon.points[1].y, polygon.points[2].x, polygon.points[2].y, polygon.points[3].x, polygon.points[3].y, robot_pose_tmp.O);
-        cons_printf("@t@,%+.0f,%+.0f,%+.0f,%+.0f\n", ref_pos_right.x, ref_pos_right.y, ref_pos_left.x, ref_pos_left.y);
+        LOG_INFO("@o@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f\n", polygon.points[0].x, polygon.points[0].y, polygon.points[1].x, polygon.points[1].y, polygon.points[2].x, polygon.points[2].y, polygon.points[3].x, polygon.points[3].y, robot_pose_tmp.O);
+        LOG_INFO("@t@,%+.0f,%+.0f,%+.0f,%+.0f\n", ref_pos_right.x, ref_pos_right.y, ref_pos_left.x, ref_pos_left.y);
         add_dyn_polygon(&polygon);
     }
     else {
