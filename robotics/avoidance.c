@@ -24,20 +24,16 @@ static pose_t finish_position = { .x = 0, .y = 0 };
 
 static polygon_t borders = { .count = 0, };
 
-void set_start_position_finish_position(const pose_t *s, const pose_t *f)
-{
-    start_position = *s;
-    finish_position = *f;
-}
-
 pose_t avoidance(uint8_t index)
 {
     /* Build path graph */
     return dijkstra(1, index);
 }
 
-int update_graph(void)
+int update_graph(const pose_t *s, const pose_t *f)
 {
+    start_position = *s;
+    finish_position = *f;
 
     /* Init all obstacles */
     if (nb_polygons == 0) {
