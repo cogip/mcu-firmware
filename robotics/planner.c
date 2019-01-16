@@ -61,8 +61,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
         first_boot = 1;
         pose_reached = current_path_pos->pos;
         *pose_to_reach = current_path_pos->pos;
-        set_start_position_finish_position(&pose_reached, pose_to_reach);
-        if (update_graph() == -1) {
+        if (update_graph(&pose_reached, pose_to_reach) == -1) {
             LOG_ERROR("planner: Update graph failed !\n");
             goto trajectory_get_route_update_error;
         }
@@ -94,8 +93,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
     }
 
     if (need_update) {
-        set_start_position_finish_position(&robot_pose_tmp, &(current_path_pos->pos));
-        test = update_graph();
+        test = update_graph(&robot_pose_tmp, &(current_path_pos->pos));
 
         control_loop = path->nb_pose;
         while ((test < 0) && (control_loop-- > 0)) {
@@ -103,8 +101,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
                 path_increment_current_pose_idx(path);
                 current_path_pos = path_get_current_path_pos(path);
             }
-            set_start_position_finish_position(&robot_pose_tmp, &(current_path_pos->pos));
-            test = update_graph();
+            test = update_graph(&robot_pose_tmp, &(current_path_pos->pos));
         }
         if (control_loop == 0) {
             LOG_ERROR("planner: No position reachable !\n");
