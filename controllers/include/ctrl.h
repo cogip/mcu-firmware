@@ -36,7 +36,7 @@ typedef struct {
 } ctrl_common_t;
 
 typedef struct _ctrl_t ctrl_t;
-typedef polar_t (*ctrl_mode_cb_t)(ctrl_t* ctrl);
+typedef int (*ctrl_mode_cb_t)(ctrl_t* ctrl, polar_t* command);
 
 typedef struct {
     ctrl_mode_cb_t ctrl_mode_cb[CTRL_STATE_NUMOF];

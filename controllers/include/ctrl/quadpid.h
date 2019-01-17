@@ -37,11 +37,11 @@ typedef struct {
 
 } ctrl_quadpid_t;
 
-polar_t ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
-                         polar_t speed_order, polar_t speed_current);
+int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
+                         polar_t* command, const polar_t* speed_current);
 
-polar_t ctrl_quadpid_stop(ctrl_t* ctrl);
-polar_t ctrl_quadpid_ingame(ctrl_t* ctrl);
+int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command);
+int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command);
 
 static const ctrl_configuration_t ctrl_quadpid_conf = {
     .ctrl_mode_cb[CTRL_STATE_STOP] = ctrl_quadpid_stop,
