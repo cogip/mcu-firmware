@@ -60,7 +60,8 @@ void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow);
 
 void ctrl_set_pose_reached(ctrl_t* ctrl);
 uint8_t ctrl_is_pose_reached(ctrl_t* ctrl);
-void ctrl_set_pose_to_reach(ctrl_t* ctrl, pose_t* pose_order);
+
+void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t* pose_order);
 const pose_t* ctrl_get_pose_to_reach(ctrl_t *ctrl);
 void ctrl_set_pose_current(ctrl_t* ctrl, pose_t* pose_current);
 pose_t* ctrl_get_pose_current(ctrl_t* ctrl);
