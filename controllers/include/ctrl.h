@@ -9,6 +9,7 @@
 #include "pid.h"
 
 typedef void (*ctrl_pre_mode_cb_t)(pose_t*, polar_t*, polar_t*);
+typedef void (*ctrl_post_mode_cb_t)(pose_t*, polar_t*, polar_t*);
 
 typedef enum {
     CTRL_STATE_STOP = 0,
@@ -16,12 +17,6 @@ typedef enum {
     CTRL_STATE_BLOCKED,
     CTRL_STATE_INGAME,
     CTRL_STATE_NUMOF,
-} ctrl_mode_id_t;
-
-typedef struct {
-    ctrl_mode_id_t mode_id;
-    char *name;
-    ctrl_pre_mode_cb_t ctrl_pre_mode_cb;
 } ctrl_mode_t;
 
 typedef struct {
@@ -34,21 +29,20 @@ typedef struct {
     uint8_t pose_intermediate;
     uint8_t allow_reverse;
 
-    ctrl_mode_t *current_mode;
-    ctrl_mode_t modes[CTRL_STATE_NUMOF];
+    ctrl_mode_t current_mode;
+
+    ctrl_pre_mode_cb_t ctrl_pre_mode_cb[CTRL_STATE_NUMOF];
+    ctrl_post_mode_cb_t ctrl_post_mode_cb[CTRL_STATE_NUMOF];
 } ctrl_common_t;
 
-typedef struct ctrl_t ctrl_t;
+typedef struct _ctrl_t ctrl_t;
 typedef polar_t (*ctrl_mode_cb_t)(ctrl_t* ctrl);
 
 typedef struct {
-    ctrl_mode_cb_t ctrl_stop_cb;
-    ctrl_mode_cb_t ctrl_idle_cb;
-    ctrl_mode_cb_t ctrl_blocked_cb;
-    ctrl_mode_cb_t ctrl_ingame_cb;
+    ctrl_mode_cb_t ctrl_mode_cb[CTRL_STATE_NUMOF];
 } ctrl_configuration_t;
 
-struct ctrl_t {
+struct _ctrl_t {
     ctrl_common_t common;
     ctrl_configuration_t conf;
 };
@@ -73,7 +67,7 @@ polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
 void ctrl_set_speed_current(ctrl_t* ctrl, const polar_t* speed_current);
 const polar_t* ctrl_get_speed_current(ctrl_t* ctrl);
 
-void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_id_t new_mode);
+void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_t new_mode);
 
 void *task_ctrl_update(void *arg);
 

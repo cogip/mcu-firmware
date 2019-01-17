@@ -22,29 +22,8 @@ char start_shell_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static ctrl_quadpid_t controller = {
     .common = {
         .allow_reverse = TRUE,
-        .current_mode = NULL,
-        .modes = {
-            {
-                .mode_id = CTRL_STATE_STOP,
-                .name = "STOP",
-                .ctrl_pre_mode_cb = NULL,
-            },
-            {
-                .mode_id = CTRL_STATE_IDLE,
-                .name = "IDLE",
-                .ctrl_pre_mode_cb = NULL,
-            },
-            {
-                .mode_id = CTRL_STATE_BLOCKED,
-                .name = "BLOCKED",
-                .ctrl_pre_mode_cb = NULL,
-            },
-            {
-                .mode_id = CTRL_STATE_INGAME,
-                .name = "INGAME",
-                .ctrl_pre_mode_cb = ctrl_state_ingame_cb
-            },
-        },
+        .current_mode = CTRL_STATE_STOP,
+        .ctrl_pre_mode_cb[CTRL_STATE_INGAME] = ctrl_state_ingame_cb,
     },
     .conf = ctrl_quadpid_conf,
     .linear_speed_pid = {
