@@ -26,9 +26,9 @@ typedef struct {
 
 typedef struct {
     pose_t pose_order;
-    pose_t* pose_current;
+    pose_t pose_current;
     polar_t* speed_order;
-    polar_t* speed_current;
+    polar_t speed_current;
 
     uint8_t pose_reached;
     uint8_t pose_intermediate;
@@ -63,12 +63,14 @@ uint8_t ctrl_is_pose_reached(ctrl_t* ctrl);
 
 void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t* pose_order);
 const pose_t* ctrl_get_pose_to_reach(ctrl_t *ctrl);
-void ctrl_set_pose_current(ctrl_t* ctrl, pose_t* pose_current);
-pose_t* ctrl_get_pose_current(ctrl_t* ctrl);
+
+void ctrl_set_pose_current(ctrl_t* ctrl, const pose_t* pose_current);
+const pose_t* ctrl_get_pose_current(ctrl_t* ctrl);
 
 void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order);
 polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
-void ctrl_set_speed_current(ctrl_t* ctrl, polar_t* speed_current);
+
+void ctrl_set_speed_current(ctrl_t* ctrl, const polar_t* speed_current);
 const polar_t* ctrl_get_speed_current(ctrl_t* ctrl);
 
 void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_id_t new_mode);
