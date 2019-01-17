@@ -44,10 +44,10 @@ polar_t ctrl_quadpid_stop(ctrl_t* ctrl);
 polar_t ctrl_quadpid_ingame(ctrl_t* ctrl);
 
 static const ctrl_configuration_t ctrl_quadpid_conf = {
-    .ctrl_stop_cb = ctrl_quadpid_stop,
-    .ctrl_idle_cb = NULL,
-    .ctrl_blocked_cb = ctrl_quadpid_stop,
-    .ctrl_ingame_cb = ctrl_quadpid_ingame,
+    .ctrl_mode_cb[CTRL_STATE_STOP] = ctrl_quadpid_stop,
+    .ctrl_mode_cb[CTRL_STATE_IDLE] = NULL,
+    .ctrl_mode_cb[CTRL_STATE_BLOCKED] = ctrl_quadpid_stop,
+    .ctrl_mode_cb[CTRL_STATE_INGAME] = ctrl_quadpid_ingame,
 };
 
 #endif  /* QUADPID_H_ */

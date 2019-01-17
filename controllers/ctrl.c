@@ -104,16 +104,15 @@ inline polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
     return ctrl->common.speed_order;
 }
 
-void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_id_t new_mode)
+void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
 {
     if (new_mode < CTRL_STATE_NUMOF) {
-        for (int i = 0; i < CTRL_STATE_NUMOF; i++) {
-            if (new_mode == ctrl->common.modes[i].mode_id) {
-                ctrl->common.current_mode = &ctrl->common.modes[i];
-                LOG_DEBUG("ctrl: New mode: %s\n", ctrl->common.current_mode->name);
-                break;
-            }
-        }
+        ctrl->common.current_mode = new_mode;
+        LOG_DEBUG("ctrl: New mode: %d\n", ctrl->common.current_mode);
+    }
+    else {
+        LOG_WARNING("ctrl: Unknown mode, stopping controller\n");
+        ctrl->common.current_mode = CTRL_STATE_STOP;
     }
 }
 
@@ -128,19 +127,24 @@ void *task_ctrl_update(void *arg)
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
 
-        if (ctrl->common.current_mode) {
-            if (ctrl->common.current_mode->ctrl_pre_mode_cb) {
-                ctrl->common.current_mode->ctrl_pre_mode_cb(ctrl->common.pose_current, ctrl->common.speed_current, &motor_command);
-            }
+        ctrl_mode_t current_mode = ctrl->common.current_mode;
 
-            switch(ctrl->common.current_mode->mode_id) {
-                case CTRL_STATE_INGAME:
-                    motor_command = ctrl->conf.ctrl_ingame_cb(ctrl);
-                    break;
-                default:
-                    LOG_ERROR("ctrl: Unhandled mode !\n");
-            }
+        ctrl_pre_mode_cb_t pre_mode_cb = ctrl->common.ctrl_pre_mode_cb[ctrl->common.current_mode];
 
+        if (ctrl->common.ctrl_pre_mode_cb[ctrl->common.current_mode]) {
+            pre_mode_cb(&ctrl->common.pose_current, &ctrl->common.speed_current, &motor_command);
+        }
+
+        ctrl_mode_cb_t mode_cb = ctrl->conf.ctrl_mode_cb[ctrl->common.current_mode];
+
+        if (ctrl->conf.ctrl_mode_cb[current_mode]) {
+            mode_cb(ctrl, &motor_command);
+        }
+
+        ctrl_post_mode_cb_t post_mode_cb = ctrl->common.ctrl_post_mode_cb[ctrl->common.current_mode];
+
+        if (ctrl->common.ctrl_post_mode_cb[current_mode]) {
+            post_mode_cb(&ctrl->common.pose_current, &ctrl->common.speed_current, &motor_command);
         }
 
         motor_drive(&motor_command);
