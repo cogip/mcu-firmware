@@ -208,7 +208,7 @@ void *task_planner(void *arg)
         /* reverse gear selection is granted per point to reach, in path */
         ctrl_set_allow_reverse(ctrl, current_path_pos->allow_reverse);
 
-        pose_t* pose_current = ctrl_get_pose_current(ctrl);
+        const pose_t* pose_current = ctrl_get_pose_current(ctrl);
 
         /* ===== position ===== */
         if (trajectory_get_route_update(ctrl, pose_current, &pose_order, &speed_order) == -1) {
