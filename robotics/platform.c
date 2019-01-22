@@ -49,7 +49,6 @@ static ctrl_quadpid_t controller = {
         .kd = 0.,
     },
 
-    //.min_distance_for_angular_switch = 500,
     .min_distance_for_angular_switch = 3 /* mm */,
     .min_angle_for_pose_reached = 2 /* °deg */,
     .regul = CTRL_REGUL_POSE_DIST,
@@ -86,7 +85,6 @@ void pf_setup(void)
         printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
     }
 
-    /* controller setup */
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 }
 
