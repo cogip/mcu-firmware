@@ -1,0 +1,15 @@
+MCUFIRMWAREBASE := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
+RIOTBOARD ?= $(MCUFIRMWAREBASE)/boards/
+
+QUIET ?= 1
+
+DEVELHELP ?= 1
+
+DIRS += $(MCUFIRMWAREBASE)/controllers
+DIRS += $(MCUFIRMWAREBASE)/robotics
+
+INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/ -I$(APPDIR)/include
+INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
+
+include $(RIOTBASE)/Makefile.include
