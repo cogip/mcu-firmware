@@ -1,3 +1,3 @@
-MODULE = ctrl_quadpid
+MODULE = quadpid
 
 include $(RIOTBASE)/Makefile.base
