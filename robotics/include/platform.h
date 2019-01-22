@@ -71,12 +71,6 @@
 
 #define CTRL_BLOCKING_NB_ITERATIONS 200
 
-extern qdec_t encoders[];
-
-
-func_cb_t pf_get_ctrl_loop_pre_pfn(void);
-func_cb_t pf_get_ctrl_loop_post_pfn(void);
-func_cb_t pf_get_end_of_game_pfn(void);
 path_t *pf_get_path(void);
 uint8_t pf_is_game_launched(void);
 uint8_t pf_is_camp_left(void);
@@ -85,8 +79,6 @@ void ctrl_state_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor
 void ctrl_state_idle_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_setup(void);
-void pf_sched_init(void);
-void pf_sched_run(void);
 void pf_tasks_init(void);
 
 int encoder_read(polar_t *robot_speed);

@@ -10,7 +10,6 @@ USEMODULE += shell_commands
 USEMODULE += schedstatistics
 USEMODULE += ps
 USEMODULE += printf_float
-LINKFLAGS += -u _scanf_float
 
 USEMODULE += ctrl
 USEMODULE += ctrl_quadpid
