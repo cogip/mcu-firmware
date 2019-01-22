@@ -20,12 +20,14 @@ char planner_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char start_shell_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static ctrl_quadpid_t controller = {
-    .common = {
-        .allow_reverse = TRUE,
-        .current_mode = CTRL_STATE_STOP,
+    .conf = ctrl_quadpid_conf,
+    .pf_conf = {
         .ctrl_pre_mode_cb[CTRL_STATE_INGAME] = ctrl_state_ingame_cb,
     },
-    .conf = ctrl_quadpid_conf,
+    .control = {
+        .allow_reverse = TRUE,
+        .current_mode = CTRL_STATE_STOP,
+    },
     .linear_speed_pid = {
         .kp = 15.,
         .ki = 2.,

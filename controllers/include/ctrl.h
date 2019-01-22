@@ -30,10 +30,12 @@ typedef struct {
     uint8_t allow_reverse;
 
     ctrl_mode_t current_mode;
+} ctrl_control_t;
 
-    ctrl_pre_mode_cb_t ctrl_pre_mode_cb[CTRL_STATE_NUMOF];
-    ctrl_post_mode_cb_t ctrl_post_mode_cb[CTRL_STATE_NUMOF];
-} ctrl_common_t;
+typedef struct {
+    const ctrl_pre_mode_cb_t ctrl_pre_mode_cb[CTRL_STATE_NUMOF];
+    const ctrl_post_mode_cb_t ctrl_post_mode_cb[CTRL_STATE_NUMOF];
+} ctrl_platform_configuration_t;
 
 typedef struct _ctrl_t ctrl_t;
 typedef int (*ctrl_mode_cb_t)(ctrl_t* ctrl, polar_t* command);
@@ -43,8 +45,9 @@ typedef struct {
 } ctrl_configuration_t;
 
 struct _ctrl_t {
-    ctrl_common_t common;
-    ctrl_configuration_t conf;
+    const ctrl_configuration_t conf;
+    const ctrl_platform_configuration_t pf_conf;
+    ctrl_control_t control;
 };
 
 void motor_drive(polar_t *command);

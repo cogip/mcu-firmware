@@ -172,7 +172,7 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
         && fabs(pos_err.distance) > ctrl_quadpid->min_distance_for_angular_switch) {
 
         /* should we go reverse? */
-        if (ctrl_quadpid->common.allow_reverse && fabs(pos_err.angle) > 90) {
+        if (ctrl_quadpid->control.allow_reverse && fabs(pos_err.angle) > 90) {
             pos_err.distance = -pos_err.distance;
 
             if (pos_err.angle < 0) {
@@ -198,7 +198,7 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
         ctrl_quadpid->regul = CTRL_REGUL_POSE_ANGL;
 
         /* final orientation error */
-        if (!ctrl_quadpid->common.pose_intermediate) {
+        if (!ctrl_quadpid->control.pose_intermediate) {
             pos_err.angle = limit_angle_deg(pose_order->O - pose_current->O);
         }
         else {
