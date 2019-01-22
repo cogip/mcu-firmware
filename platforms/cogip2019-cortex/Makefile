@@ -12,7 +12,7 @@ USEMODULE += xtimer
 
 # mcu-firmware modules
 USEMODULE += ctrl
-USEMODULE += ctrl_quadpid
+USEMODULE += quadpid
 USEMODULE += motor_driver
 USEMODULE += robotics
 USEMODULE += $(APPLICATION_MODULE)
