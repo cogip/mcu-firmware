@@ -132,7 +132,7 @@ void *task_start_shell(void *arg)
     return 0;
 }
 
-void pf_tasks_init(void)
+void pf_init_tasks(void)
 {
     static int start_shell = FALSE;
     int countdown = PF_START_COUNTDOWN;

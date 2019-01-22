@@ -79,7 +79,7 @@ void ctrl_state_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor
 void ctrl_state_idle_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void ctrl_state_ingame_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_setup(void);
-void pf_tasks_init(void);
+void pf_init_tasks(void);
 
 int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
