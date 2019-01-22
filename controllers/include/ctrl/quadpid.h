@@ -19,8 +19,9 @@ typedef enum {
 } ctrl_regul_t;
 
 typedef struct {
-    ctrl_common_t common;
     ctrl_configuration_t conf;
+    ctrl_platform_configuration_t pf_conf;
+    ctrl_control_t control;
 
     PID_t linear_speed_pid;
     PID_t angular_speed_pid;

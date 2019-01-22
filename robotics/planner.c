@@ -86,7 +86,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
 
     reset_dyn_polygons();
 
-    if (ctrl->common.current_mode == CTRL_STATE_BLOCKED) {
+    if (ctrl->control.current_mode == CTRL_STATE_BLOCKED) {
         path_increment_current_pose_idx(path);
         ctrl_set_mode(ctrl, CTRL_STATE_INGAME);
         need_update = 1;
