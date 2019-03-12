@@ -15,7 +15,7 @@ typedef enum {
     CTRL_MODE_STOP = 0,
     CTRL_MODE_IDLE,
     CTRL_MODE_BLOCKED,
-    CTRL_MODE_INGAME,
+    CTRL_MODE_RUNNING,
     CTRL_MODE_NUMOF,
 } ctrl_mode_t;
 

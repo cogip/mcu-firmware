@@ -22,7 +22,7 @@ char start_shell_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static ctrl_quadpid_t controller = {
     .conf = ctrl_quadpid_conf,
     .pf_conf = {
-        .ctrl_pre_mode_cb[CTRL_MODE_INGAME] = ctrl_mode_ingame_cb,
+        .ctrl_pre_mode_cb[CTRL_MODE_RUNNING] = ctrl_mode_ingame_cb,
     },
     .control = {
         .allow_reverse = TRUE,

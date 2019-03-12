@@ -39,7 +39,7 @@ static void show_game_time(void)
 void planner_start_game(ctrl_t* ctrl)
 {
     /* TODO: send pose_initial, pose_order & speed_order to controller */
-    ctrl_set_mode(ctrl, CTRL_MODE_INGAME);
+    ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
     game_started = TRUE;
 }
 
@@ -88,7 +88,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
 
     if (ctrl->control.current_mode == CTRL_MODE_BLOCKED) {
         path_increment_current_pose_idx(path);
-        ctrl_set_mode(ctrl, CTRL_MODE_INGAME);
+        ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
         need_update = 1;
     }
 
