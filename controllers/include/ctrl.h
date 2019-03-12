@@ -12,11 +12,11 @@ typedef void (*ctrl_pre_mode_cb_t)(pose_t*, polar_t*, polar_t*);
 typedef void (*ctrl_post_mode_cb_t)(pose_t*, polar_t*, polar_t*);
 
 typedef enum {
-    CTRL_STATE_STOP = 0,
-    CTRL_STATE_IDLE,
-    CTRL_STATE_BLOCKED,
-    CTRL_STATE_INGAME,
-    CTRL_STATE_NUMOF,
+    CTRL_MODE_STOP = 0,
+    CTRL_MODE_IDLE,
+    CTRL_MODE_BLOCKED,
+    CTRL_MODE_INGAME,
+    CTRL_MODE_NUMOF,
 } ctrl_mode_t;
 
 typedef struct {
@@ -33,15 +33,15 @@ typedef struct {
 } ctrl_control_t;
 
 typedef struct {
-    const ctrl_pre_mode_cb_t ctrl_pre_mode_cb[CTRL_STATE_NUMOF];
-    const ctrl_post_mode_cb_t ctrl_post_mode_cb[CTRL_STATE_NUMOF];
+    const ctrl_pre_mode_cb_t ctrl_pre_mode_cb[CTRL_MODE_NUMOF];
+    const ctrl_post_mode_cb_t ctrl_post_mode_cb[CTRL_MODE_NUMOF];
 } ctrl_platform_configuration_t;
 
 typedef struct _ctrl_t ctrl_t;
 typedef int (*ctrl_mode_cb_t)(ctrl_t* ctrl, polar_t* command);
 
 typedef struct {
-    ctrl_mode_cb_t ctrl_mode_cb[CTRL_STATE_NUMOF];
+    ctrl_mode_cb_t ctrl_mode_cb[CTRL_MODE_NUMOF];
 } ctrl_configuration_t;
 
 struct _ctrl_t {

@@ -39,7 +39,7 @@ static void show_game_time(void)
 void planner_start_game(ctrl_t* ctrl)
 {
     /* TODO: send pose_initial, pose_order & speed_order to controller */
-    ctrl_set_mode(ctrl, CTRL_STATE_INGAME);
+    ctrl_set_mode(ctrl, CTRL_MODE_INGAME);
     game_started = TRUE;
 }
 
@@ -86,9 +86,9 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
 
     reset_dyn_polygons();
 
-    if (ctrl->control.current_mode == CTRL_STATE_BLOCKED) {
+    if (ctrl->control.current_mode == CTRL_MODE_BLOCKED) {
         path_increment_current_pose_idx(path);
-        ctrl_set_mode(ctrl, CTRL_STATE_INGAME);
+        ctrl_set_mode(ctrl, CTRL_MODE_INGAME);
         need_update = 1;
     }
 
@@ -180,7 +180,7 @@ void *task_planner(void *arg)
 
         if (xtimer_now_usec() - game_start_time >= GAME_DURATION_SEC * US_PER_SEC) {
             LOG_INFO(">>>>\n");
-            ctrl_set_mode(ctrl, CTRL_STATE_STOP);
+            ctrl_set_mode(ctrl, CTRL_MODE_STOP);
             break;
         }
 
@@ -212,7 +212,7 @@ void *task_planner(void *arg)
 
         /* ===== position ===== */
         if (trajectory_get_route_update(ctrl, pose_current, &pose_order, &speed_order) == -1) {
-            ctrl_set_mode(ctrl, CTRL_STATE_STOP);
+            ctrl_set_mode(ctrl, CTRL_MODE_STOP);
         }
 
         ctrl_set_speed_order(ctrl, &speed_order);

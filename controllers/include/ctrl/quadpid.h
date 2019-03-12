@@ -45,10 +45,10 @@ int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command);
 int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command);
 
 static const ctrl_configuration_t ctrl_quadpid_conf = {
-    .ctrl_mode_cb[CTRL_STATE_STOP] = ctrl_quadpid_stop,
-    .ctrl_mode_cb[CTRL_STATE_IDLE] = NULL,
-    .ctrl_mode_cb[CTRL_STATE_BLOCKED] = ctrl_quadpid_stop,
-    .ctrl_mode_cb[CTRL_STATE_INGAME] = ctrl_quadpid_ingame,
+    .ctrl_mode_cb[CTRL_MODE_STOP] = ctrl_quadpid_stop,
+    .ctrl_mode_cb[CTRL_MODE_IDLE] = NULL,
+    .ctrl_mode_cb[CTRL_MODE_BLOCKED] = ctrl_quadpid_stop,
+    .ctrl_mode_cb[CTRL_MODE_INGAME] = ctrl_quadpid_ingame,
 };
 
 #endif  /* QUADPID_H_ */
