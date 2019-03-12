@@ -99,7 +99,7 @@ int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
     if (error_blocking >= CTRL_BLOCKING_NB_ITERATIONS) {
         command->distance = 0;
         command->angle = 0;
-        ctrl_set_mode((ctrl_t*)ctrl, CTRL_STATE_BLOCKED);
+        ctrl_set_mode((ctrl_t*)ctrl, CTRL_MODE_BLOCKED);
     }
 
     command->distance = pid_ctrl(&ctrl->linear_speed_pid,
