@@ -147,8 +147,6 @@ void *task_ctrl_update(void *arg)
             post_mode_cb(&ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
         }
 
-        motor_drive(&motor_command);
-
         xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
     }
 

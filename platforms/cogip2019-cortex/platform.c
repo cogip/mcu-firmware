@@ -22,7 +22,10 @@ char start_shell_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static ctrl_quadpid_t controller = {
     .conf = ctrl_quadpid_conf,
     .pf_conf = {
-        .ctrl_pre_mode_cb[CTRL_MODE_RUNNING] = ctrl_mode_ingame_cb,
+        .ctrl_pre_mode_cb[CTRL_MODE_RUNNING]    = ctrl_mode_ingame_cb,
+        .ctrl_post_mode_cb[CTRL_MODE_STOP]      = pf_ctrl_post_stop_cb,
+        .ctrl_post_mode_cb[CTRL_MODE_BLOCKED]   = pf_ctrl_post_stop_cb,
+        .ctrl_post_mode_cb[CTRL_MODE_RUNNING]   = pf_ctrl_post_running_cb,
     },
     .control = {
         .allow_reverse = TRUE,
@@ -100,6 +103,28 @@ void ctrl_mode_ingame_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *moto
 
     ctrl_set_pose_current((ctrl_t*)&controller, robot_pose);
     ctrl_set_speed_current((ctrl_t*)&controller, robot_speed);
+}
+
+void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
+{
+    (void)robot_pose;
+    (void)robot_speed;
+
+    /* Set distance and angle command to 0 to stop the robot*/
+    motor_command->distance = 0;
+    motor_command->angle = 0;
+
+    /* Send command to motors */
+    motor_drive(motor_command);
+}
+
+void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
+{
+    (void)robot_pose;
+    (void)robot_speed;
+
+    /* Send command to motors */
+    motor_drive(motor_command);
 }
 
 int encoder_read(polar_t *robot_speed)
