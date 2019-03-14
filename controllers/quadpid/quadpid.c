@@ -236,13 +236,3 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
     /* ********************** speed pid controller ********************* */
     return ctrl_quadpid_speed(ctrl_quadpid, command, speed_current);
 }
-
-void motor_drive(polar_t *command)
-{
-    /************************ commandes moteur ************************/
-    int16_t right_command = (int16_t) (command->distance + command->angle);
-    int16_t left_command = (int16_t) (command->distance - command->angle);
-
-    motor_set(0, HBRIDGE_MOTOR_LEFT, left_command);
-    motor_set(0, HBRIDGE_MOTOR_RIGHT, right_command);
-}

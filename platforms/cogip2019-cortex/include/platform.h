@@ -84,4 +84,6 @@ void pf_init_tasks(void);
 int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
 
+void motor_drive(polar_t *command);
+
 #endif /* PLATFORM_H_ */

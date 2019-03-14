@@ -287,7 +287,5 @@ void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_t new_mode);
  */
 void *task_ctrl_update(void *arg);
 
-void motor_drive(polar_t *command);
-
 #endif /* CONTROLLER_H_ */
 /** @} */
