@@ -120,6 +120,15 @@ void encoder_reset(void)
     qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
 }
 
+void motor_drive(polar_t *command)
+{
+    int16_t right_command = (int16_t) (command->distance + command->angle);
+    int16_t left_command = (int16_t) (command->distance - command->angle);
+
+    motor_set(0, HBRIDGE_MOTOR_LEFT, left_command);
+    motor_set(0, HBRIDGE_MOTOR_RIGHT, right_command);
+}
+
 void *task_start_shell(void *arg)
 {
     int* start_shell = (int*)arg;
