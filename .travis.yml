@@ -1,4 +1,5 @@
 ---
+dist: bionic
 language: c
 env:
       - PLATFORM=cogip2019-cortex
