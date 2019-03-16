@@ -22,7 +22,7 @@ char start_shell_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static ctrl_quadpid_t controller = {
     .conf = ctrl_quadpid_conf,
     .pf_conf = {
-        .ctrl_pre_mode_cb[CTRL_MODE_RUNNING]    = ctrl_mode_ingame_cb,
+        .ctrl_pre_mode_cb[CTRL_MODE_RUNNING]    = pf_ctrl_pre_running_cb,
         .ctrl_post_mode_cb[CTRL_MODE_STOP]      = pf_ctrl_post_stop_cb,
         .ctrl_post_mode_cb[CTRL_MODE_BLOCKED]   = pf_ctrl_post_stop_cb,
         .ctrl_post_mode_cb[CTRL_MODE_RUNNING]   = pf_ctrl_post_running_cb,
@@ -91,7 +91,7 @@ void pf_setup(void)
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 }
 
-void ctrl_mode_ingame_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
+void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
 {
     (void)motor_command;
 
