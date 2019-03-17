@@ -11,10 +11,11 @@ import subprocess
 import sys
 from threading import Thread
 
-BASE_PATH = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").GetString("MacroPath") + "/robot_motion/"
-BIN_PATH = BASE_PATH + "bin/cogip2019-cortex-native/cortex.elf"
-ROBOT_DESIGN_PATH = BASE_PATH + "Simulateur.STEP"
-AREA_DESIGN_PATH = BASE_PATH + "TableElements2019 v63.iges"
+BASE_PATH = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").GetString("MacroPath") + "/cogip/simulation/"
+BIN_NAME = "cortex-simulation.elf"
+BIN_PATH = BASE_PATH + "bin/cogip2019-cortex-native/" + BIN_NAME
+ROBOT_DESIGN_PATH = BASE_PATH + "Robot.iges"
+AREA_DESIGN_PATH = BASE_PATH + "Table.iges"
 FCD_DOC_NAME = "RobotSimulation"
 FCD_ROBOT_NAME = "Robot_{}_pose_{}"
 
@@ -63,7 +64,7 @@ class FcdObject:
         if cls.do_init_shape:
             try:
                 cls.import_shape_from_file()
-            except AttributeError:
+            except AttributeError, FileNotFoundError:
                 cls.create_default_shape()
 
             # Prepare the first object and hide it
