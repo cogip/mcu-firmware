@@ -6,8 +6,11 @@ from __future__ import print_function
 import FreeCAD
 from FreeCAD import Part
 import FreeCADGui
+import os
+import psutil
 import re
 import subprocess
+import signal
 import sys
 from threading import Thread
 
@@ -211,6 +214,15 @@ class NativeParser(Parser):
 
 
 if __name__ == "__main__":
+    # Kill all remaining bin instance
+    process = filter(lambda p: BIN_NAME in p.name(), psutil.process_iter())
+    for i in process:
+        os.kill(i.pid, signal.SIGKILL)
+        try:
+            os.waitpid(i.pid, 0)
+        except OSError:
+            pass
+
     # Create FreeCAD document
     Simulator.init_fcd_doc()
 
