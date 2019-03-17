@@ -179,6 +179,7 @@ class Parser(Thread):
     def _decode(self, line):
         # Remove trailing spaces or line return
         line = line.rstrip().rstrip(',')
+        output = sys.stdout
         if re.match(r'@.*@,.*', line) is not None:
             # Split parameters
             params = line.split(',')
@@ -195,7 +196,8 @@ class Parser(Thread):
                 elif obj_param == self.POSE_CURRENT_PATTERN:
                     robot.set_pose_current(params[3:])
                 else:
-                    print("Unknown object parameter '{}'".format(obj_param), file=sys.stderr)
+                    output = sys.stderr
+        print(line, file=output)
 
     def parse(self, flow):
         while True:
@@ -209,7 +211,7 @@ class Parser(Thread):
 class NativeParser(Parser):
 
     def parse(self, cmd):
-        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         super(NativeParser, self).parse(p.stdout)
 
 
@@ -222,6 +224,8 @@ if __name__ == "__main__":
             os.waitpid(i.pid, 0)
         except OSError:
             pass
+
+    sys.stdout = FreeCAD.Console
 
     # Create FreeCAD document
     Simulator.init_fcd_doc()
