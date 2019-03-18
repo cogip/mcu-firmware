@@ -1,3 +1,10 @@
+     ██████╗ ██████╗  ██████╗ ██╗██████╗
+    ██╔════╝██╔═══██╗██╔════╝ ██║██╔══██╗
+    ██║     ██║   ██║██║  ███╗██║██████╔╝
+    ██║     ██║   ██║██║   ██║██║██╔═══╝
+    ╚██████╗╚██████╔╝╚██████╔╝██║██║
+     ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝
+
 MCU firmware
 ============
 
@@ -11,38 +18,86 @@ both are required to generate the firwmare binaries.
 ## Build status
 [![Build Status](https://travis-ci.org/cogip/mcu-firmware.svg?branch=master)](https://travis-ci.org/cogip/mcu-firmware)
 
+
 # Cloning repositories
 
 ```bash
-$ git clone https://github.com/cogip/RIOT.git -b firmware-dependencies
-$ git clone https://github.com/cogip/mcu-firmware.git
+$ git clone https://github.com/RIOT/RIOT.git -b master
+$ git clone https://github.com/cogip/mcu-firmware.git -b refacto
 ```
 
-# Simulation
 
-## Build and launch
+# Requirements
+
+To install toolchain and development on ubuntu 18.04:
 
 ```bash
-$ BOARD=native make -j4
-$ bin/native/cortex.elf
+$ sudo apt install build-essential gcc-8 gcc-8-multilib gcc-multilib openocd python-serial
+```
+Minimal gcc version: 8.1
 
+To manually install arm-none-eabi toolchain:
+```bash
+$ mkdir ~/toolchain/
+$ cd ~/toolchain/
+$ wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2
+$ tar xf gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2
 ```
 
-# Embedded target
-
-## Requirements
-
-To install toolchain and development on debian/ubuntu:
-
+Edit ~/.bashrc file and add $HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/ to $PATH variable:
 ```bash
-$ sudo apt install gcc-arm-none-eabi openocd python-serial
+PATH=${PATH}:$HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/
 ```
 
 ## Build, deploy and connect on target
 
+# Simulation
+
+Assuming the platform is cogip2019-cortex-simulation
+
+## Build and launch
+
 ```bash
-$ CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make -j4
-$ CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make flash
-$ CFLAGS=-DCOGIP2018_CPU=F446 BOARD=cogip2018-f4xx make term
+$ cd platforms/cogip2019-cortex-simulation/
+$ make -j$(nproc)
+$ bin/cogip2019-cortex-native/cortex-simulation.elf
 ```
 
+## Build and simulate in FreeCAD
+
+Add robot and area designs:
+
+```bash
+$ cp <robot_design_path.iges> ~/.FreeCAD/Macro/cogip/simulation/Robot.iges
+$ cp <table_design_path.iges> ~/.FreeCAD/Macro/cogip/simulation/Table.iges
+```
+
+Next build and copy simulation python script and binaries:
+
+```bash
+$ mkdir -p ~/.FreeCAD/Macro
+$ cp simulation/robot_simulation_freecad.py ~/.FreeCAD/Macro/
+$ cd platforms/cogip2019-cortex-simulation/
+$ make -j$(nproc)
+$ cp bin/ ~/.FreeCAD/Macro/ -Rf
+```
+
+Make sure '~/.FreeCAD/Macro/robot_simulation_freecad.py' has the correct paths
+at the beginning of the script, according to your own files.
+
+Now launch FreeCAD.
+
+In 'Macro->Macros' launch 'robot_simulation_freecad.py' macro.
+
+# Embedded target
+
+Assuming the platform is cogip2019-cortex
+
+## Build and flash
+
+Make sure JTAG programmer is plugged on target board.
+
+```bash
+$ cd platforms/cogip2019-cortex/
+$ make -j$(nproc) flash
+```
