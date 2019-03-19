@@ -1,0 +1,1 @@
+include $(MCUFIRMWAREBASE)/drivers/sd21/Makefile.dep
