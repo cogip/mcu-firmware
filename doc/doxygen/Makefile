@@ -1,7 +1,7 @@
 MCUFIRMWAREBASE=$(shell git rev-parse --show-toplevel)
 # Generate list of quoted absolute include paths. Evaluated in cogip.doxyfile.
 export STRIP_FROM_INC_PATH_LIST=$(shell \
-    git ls-tree -dr --full-tree --name-only HEAD controllers |\
+    git ls-tree -dr --full-tree --name-only HEAD controllers drivers |\
     grep '/include$$' |\
     sed 's/.*/\"$(subst /,\/,$(MCUFIRMWAREBASE))\/\0\"/')
 
