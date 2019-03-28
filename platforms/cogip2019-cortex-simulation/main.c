@@ -4,7 +4,7 @@
 
 int main(void)
 {
-    pf_setup();
+    pf_init();
 
     pf_init_tasks();
 
