@@ -74,7 +74,7 @@ uint8_t pf_is_camp_left(void)
     return 0;
 }
 
-void pf_setup(void)
+void pf_init(void)
 {
     motor_driver_init(0);
 

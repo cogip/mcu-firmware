@@ -78,7 +78,7 @@ uint8_t pf_is_camp_left(void);
 void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
-void pf_setup(void);
+void pf_init(void);
 void pf_init_tasks(void);
 
 int encoder_read(polar_t *robot_speed);
