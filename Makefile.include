@@ -14,5 +14,10 @@ INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/ -I$(APPDIR)/include
 INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
 
+ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
+	export MCUFIRMWARE_OPTIONS
+	CFLAGS += -DCALIBRATION
+endif
+
 include $(MCUFIRMWAREBASE)/drivers/Makefile.dep
 include $(RIOTBASE)/Makefile.include
