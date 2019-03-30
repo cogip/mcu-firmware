@@ -7,9 +7,12 @@ QUIET ?= 1
 DEVELHELP ?= 1
 
 DIRS += $(MCUFIRMWAREBASE)/controllers
+DIRS += $(MCUFIRMWAREBASE)/drivers
 DIRS += $(MCUFIRMWAREBASE)/robotics
 
 INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/ -I$(APPDIR)/include
 INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
+INCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
 
+include $(MCUFIRMWAREBASE)/drivers/Makefile.dep
 include $(RIOTBASE)/Makefile.include
