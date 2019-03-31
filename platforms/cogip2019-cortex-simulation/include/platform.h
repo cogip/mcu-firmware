@@ -8,6 +8,9 @@
 #include "utils.h"
 #include "ctrl/quadpid.h"
 
+/* RIOT includes */
+#include "shell.h"
+
 #define ROBOT_ID            0
 #define PF_START_COUNTDOWN  5
 
@@ -71,10 +74,13 @@
 
 #define CTRL_BLOCKING_NB_ITERATIONS 200
 
+#define NB_SHELL_COMMANDS   2
+
 path_t *pf_get_path(void);
 uint8_t pf_is_game_launched(void);
 uint8_t pf_is_camp_left(void);
 
+void pf_add_shell_command(shell_command_t *command);
 void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
