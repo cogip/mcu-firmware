@@ -10,8 +10,9 @@ DIRS += $(MCUFIRMWAREBASE)/controllers
 DIRS += $(MCUFIRMWAREBASE)/drivers
 DIRS += $(MCUFIRMWAREBASE)/robotics
 
-INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/ -I$(APPDIR)/include
+INCLUDES += -I$(APPDIR)/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
+INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
 
 ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
