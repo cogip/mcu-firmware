@@ -57,6 +57,17 @@ static ctrl_quadpid_t controller = {
     .regul = CTRL_REGUL_POSE_DIST,
 };
 
+static shell_command_t shell_commands[NB_SHELL_COMMANDS];
+
+void pf_add_shell_command(shell_command_t *command)
+{
+    static uint8_t command_id = 0;
+
+    assert(command_id < NB_SHELL_COMMANDS);
+
+    shell_commands[command_id++] = *command;
+}
+
 path_t *pf_get_path(void)
 {
     return &robot_path;
@@ -200,9 +211,12 @@ void pf_init_tasks(void)
     if (start_shell) {
         /* Define buffer to be used by the shell */
         char line_buf[SHELL_DEFAULT_BUFSIZE];
+        /* Add end NULL entry to shell_command */
+        shell_command_t null_command = { NULL, NULL, NULL };
+        pf_add_shell_command(&null_command);
         /* Start shell */
         LOG_DEBUG("platform: Start shell\n");
-        shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
+        shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
     }
     /* Else start game */
     else {
