@@ -1,17 +1,16 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include "ctrl/quadpid.h"
 #include "platform.h"
 #include "planner.h"
-#include <periph/qdec.h>
-#include <motor_driver.h>
-#include <periph/adc.h>
-#include "ctrl/quadpid.h"
 
-#include <thread.h>
 
 /* RIOT includes */
 #include "log.h"
+#include "motor_driver.h"
+#include "periph/qdec.h"
+#include "thread.h"
 #include "shell.h"
 #include "xtimer.h"
 
