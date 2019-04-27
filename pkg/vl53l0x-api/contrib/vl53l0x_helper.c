@@ -1,0 +1,126 @@
+/*
+ * Copyright (C) 2019 COGIP Robotics association <cogip35@gmail.com>
+ *
+ * This file is subject to the terms and conditions of the GNU Lesser
+ * General Public License v2.1. See the file LICENSE in the top level
+ * directory for more details.
+ */
+
+/*
+ * @{
+ *
+ * @file
+ * @brief       vl53l0x-api RIOT interface
+ *
+ * @author      Gilles DOFFE <g.doffe@gmail.com>
+ */
+
+/* Project includes */
+#include "board.h"
+#include "vl53l0x.h"
+#include "xtimer.h"
+
+static VL53L0X_Dev_t devices[VL53L0X_NUMOF];
+static VL53L0X_Error status[VL53L0X_NUMOF];
+
+int vl53l0x_init_dev(vl53l0x_t dev)
+{
+    VL53L0X_Error Status = VL53L0X_ERROR_NONE;
+    VL53L0X_Dev_t* st_api_vl53l0x = NULL;
+    uint32_t refSpadCount;
+    uint8_t isApertureSpads;
+    uint8_t VhvSettings;
+    uint8_t PhaseCal;
+
+    status[dev] = VL53L0X_ERROR_UNDEFINED;
+
+    /* Check device exists */
+    assert (dev < VL53L0X_NUMOF);
+
+    /* Get device description (not yet initialized) */
+    st_api_vl53l0x = &devices[dev];
+
+    /* Retrieve ToF */
+    const vl53l0x_conf_t* vl53l0x = &vl53l0x_config[dev];
+
+    st_api_vl53l0x->I2cDev          =  vl53l0x->i2c_dev;
+    st_api_vl53l0x->I2cDevAddr      =  vl53l0x->i2c_addr;
+
+    /* Force use of I2C communication protocol */
+    st_api_vl53l0x->comms_type      =  1;
+
+    /* Init I2C bus */
+    i2c_init(vl53l0x->i2c_dev);
+
+    /* Wait for I2C bus to be ready */
+    xtimer_sleep(1);
+
+    /* Data init */
+    if(Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_DataInit(st_api_vl53l0x);
+    }
+
+    /* Static init */
+    if(Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_StaticInit(st_api_vl53l0x);
+    }
+
+    /* Reference calibration */
+    if(Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_PerformRefCalibration(st_api_vl53l0x,
+                &VhvSettings, &PhaseCal);
+    }
+
+    /* Spad init */
+    if(Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_PerformRefSpadManagement(st_api_vl53l0x,
+                &refSpadCount, &isApertureSpads);
+    }
+
+    status[dev] = Status;
+
+    return Status;
+}
+
+void vl53l0x_init(void)
+{
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        assert(vl53l0x_init_dev(dev) == 0);
+    }
+}
+
+uint16_t vl53l0x_single_ranging_measure(vl53l0x_t dev)
+{
+    VL53L0X_RangingMeasurementData_t RangingMeasurementData;
+    VL53L0X_Error Status = VL53L0X_ERROR_NONE;
+    FixPoint1616_t LimitCheckCurrent;
+    VL53L0X_Dev_t* st_api_vl53l0x = NULL;
+
+    /* Check device exists */
+    assert(dev < VL53L0X_NUMOF);
+
+    /* Get device description (not yet initialized) */
+    st_api_vl53l0x = &devices[dev];
+
+    /* Check device description is initialized */
+    if ((st_api_vl53l0x != NULL) && (status[dev] == 0)) {
+        if(Status == VL53L0X_ERROR_NONE)
+        {
+            Status = VL53L0X_PerformSingleRangingMeasurement(st_api_vl53l0x,
+                    &RangingMeasurementData);
+
+            VL53L0X_GetLimitCheckCurrent(st_api_vl53l0x,
+                    VL53L0X_CHECKENABLE_RANGE_IGNORE_THRESHOLD,
+                    &LimitCheckCurrent);
+
+            return RangingMeasurementData.RangeMilliMeter;
+        }
+    }
+
+    return UINT16_MAX;
+}
+/** @} */

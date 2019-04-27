@@ -1,5 +1,6 @@
 MCUFIRMWAREBASE := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
+RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
 RIOTBOARD ?= $(MCUFIRMWAREBASE)/boards/
 
 QUIET ?= 1
@@ -14,6 +15,10 @@ INCLUDES += -I$(APPDIR)/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
+
+ifneq (,$(filter vl53l0x-api,$(USEPKG)))
+	DIRS += $(MCUFIRMWAREBASE)/pkg/vl53l0x-api/
+endif
 
 ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
 	export MCUFIRMWARE_OPTIONS
