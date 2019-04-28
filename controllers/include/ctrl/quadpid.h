@@ -57,13 +57,9 @@ typedef enum {
 } ctrl_regul_t;
 
 /**
- * @brief    QuadPID controller specific structure based on ctrl_t.
+ * @brief    QuadPID controller specific configuration.
  */
 typedef struct {
-    ctrl_configuration_t conf;              /**< See ctrl_t */
-    ctrl_platform_configuration_t pf_conf;  /**< See ctrl_t */
-    ctrl_control_t control;                 /**< See ctrl_t */
-
     PID_t linear_speed_pid;                 /**< Linear speed Kp, Ki, Kd */
     PID_t angular_speed_pid;                /**< Angular speed Kp, Ki, Kd */
     PID_t linear_pose_pid;                  /**< Linear pose Kp, Ki, Kd */
@@ -78,7 +74,17 @@ typedef struct {
                                                      state */
 
     ctrl_regul_t regul;                     /**< Current regulation type */
+} ctrl_quadpid_parameters_t;
 
+/**
+ * @brief    QuadPID controller specific structure based on ctrl_t.
+ */
+typedef struct {
+    const ctrl_configuration_t *conf;                   /**< See ctrl_t */
+    const ctrl_platform_configuration_t *pf_conf;       /**< See ctrl_t */
+    ctrl_control_t control;                             /**< See ctrl_t */
+    ctrl_quadpid_parameters_t quadpid_params;           /**< QuadPID specific
+                                                          configuration */
 } ctrl_quadpid_t;
 
 /**

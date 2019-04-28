@@ -88,7 +88,7 @@ int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
     speed_error.distance = command->distance - speed_current->distance;
     speed_error.angle = command->angle - speed_current->angle;
 
-    double d = fabs(ctrl->linear_speed_pid.previous_error) - fabs(speed_error.distance);
+    double d = fabs(ctrl->quadpid_params.linear_speed_pid.previous_error) - fabs(speed_error.distance);
     if (d < 0) {
         error_blocking++;
     }
@@ -102,9 +102,9 @@ int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
         ctrl_set_mode((ctrl_t*)ctrl, CTRL_MODE_BLOCKED);
     }
 
-    command->distance = pid_ctrl(&ctrl->linear_speed_pid,
+    command->distance = pid_ctrl(&ctrl->quadpid_params.linear_speed_pid,
                                       speed_error.distance);
-    command->angle = pid_ctrl(&ctrl->angular_speed_pid,
+    command->angle = pid_ctrl(&ctrl->quadpid_params.angular_speed_pid,
                                    speed_error.angle);
 
     return 0;
@@ -168,8 +168,8 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
                 pos_err.angle);
 
     /* position correction */
-    if (ctrl_quadpid->regul != CTRL_REGUL_POSE_ANGL
-        && fabs(pos_err.distance) > ctrl_quadpid->min_distance_for_angular_switch) {
+    if (ctrl_quadpid->quadpid_params.regul != CTRL_REGUL_POSE_ANGL
+        && fabs(pos_err.distance) > ctrl_quadpid->quadpid_params.min_distance_for_angular_switch) {
 
         /* should we go reverse? */
         if (ctrl_quadpid->control.allow_reverse && fabs(pos_err.angle) > 90) {
@@ -184,18 +184,18 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
         }
 
         /* if target point direction angle is too important, bot rotates on its starting point */
-        if (fabs(pos_err.angle) > ctrl_quadpid->min_angle_for_pose_reached) {
-            ctrl_quadpid->regul = CTRL_REGUL_POSE_PRE_ANGL;
+        if (fabs(pos_err.angle) > ctrl_quadpid->quadpid_params.min_angle_for_pose_reached) {
+            ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_PRE_ANGL;
             pos_err.distance = 0;
-            pid_reset(&ctrl_quadpid->linear_pose_pid);
+            pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
         }
         else {
-            ctrl_quadpid->regul = CTRL_REGUL_POSE_DIST;
+            ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST;
         }
     }
     else {
         /* orientation correction (position is reached) */
-        ctrl_quadpid->regul = CTRL_REGUL_POSE_ANGL;
+        ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_ANGL;
 
         /* final orientation error */
         if (!ctrl_quadpid->control.pose_intermediate) {
@@ -206,22 +206,22 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
         }
 
         pos_err.distance = 0;
-        pid_reset(&ctrl_quadpid->linear_pose_pid);
+        pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
 
         /* orientation is reached */
-        if (fabs(pos_err.angle) < ctrl_quadpid->min_angle_for_pose_reached) {
+        if (fabs(pos_err.angle) < ctrl_quadpid->quadpid_params.min_angle_for_pose_reached) {
             pos_err.angle = 0;
-            pid_reset(&ctrl_quadpid->angular_pose_pid);
+            pid_reset(&ctrl_quadpid->quadpid_params.angular_pose_pid);
 
             ctrl_set_pose_reached((ctrl_t*) ctrl_quadpid);
-            ctrl_quadpid->regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
+            ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
         }
     }
 
     /* compute speed command->with position pid controller */
-    command->distance = pid_ctrl(&ctrl_quadpid->linear_pose_pid,
+    command->distance = pid_ctrl(&ctrl_quadpid->quadpid_params.linear_pose_pid,
                                       pos_err.distance);
-    command->angle = pid_ctrl(&ctrl_quadpid->angular_pose_pid,
+    command->angle = pid_ctrl(&ctrl_quadpid->quadpid_params.angular_pose_pid,
                                    pos_err.angle);
 
 
