@@ -147,8 +147,8 @@ typedef struct {
  * @brief   Controller default definition
  */
 struct ctrl_t {
-    const ctrl_configuration_t conf;                /**< Modes callbacks */
-    const ctrl_platform_configuration_t pf_conf;    /**< Pre and post
+    const ctrl_configuration_t* conf;               /**< Modes callbacks */
+    const ctrl_platform_configuration_t* pf_conf;   /**< Pre and post
                                                          callbacks */
     ctrl_control_t control;                         /**< Control variables */
 };
@@ -219,7 +219,7 @@ const pose_t* ctrl_get_pose_to_reach(ctrl_t *ctrl);
  *
  * @return
  */
-void ctrl_set_pose_current(ctrl_t* ctrl, const pose_t* pose_current);
+void ctrl_set_pose_current(ctrl_t* const ctrl, const pose_t* pose_current);
 
 /**
  * @brief Get current pose
