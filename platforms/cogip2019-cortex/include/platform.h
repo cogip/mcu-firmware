@@ -93,144 +93,285 @@ static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
 };
 
 static const sd21_conf_t sd21_config[] = {
-    {
+    {   /* SD12 ID0 */
         .i2c_dev_id = 0,
         .i2c_address = (0xC2 >> 1),
         .i2c_speed_khz = I2C_SPEED_FAST,
 
         .servos_nb = 12,
         .servos = {
-            /* Servo 1 */
+            /* Servo 0-1 */
             {
                 .positions = {
-                    685, /* Ramp Disposal */
+                    685,  /* Ramp Disposal */
                     2285, /* Puck prehension */
                     1500, /* Neutral */
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S1: suction cup front left"
+                .name = "S0-1: suction cup front left"
             },
-            /* Servo 2 */
+            /* Servo 0-2 */
             {
                 .positions = {
                     2300, /* Ramp Disposal */
-                    675, /* Puck prehension */
+                    675,  /* Puck prehension */
                     1500, /* Neutral */
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S2: suction cup front central"
+                .name = "S0-2: suction cup front central"
             },
-            /* Servo 3 */
+            /* Servo 0-3 */
             {
                 .positions = {
                     2450, /* Ramp Disposal */
-                    575, /* Puck prehension */
-                    1500, /* Neutral */
+                    575,  /* Puck prehension */
+                    1400, /* Neutral */
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S3: suction cup front right"
+                .name = "S0-3: suction cup front right"
             },
-            /* Servo 4 */
+            /* Servo 0-4 */
             {
                 .positions = {
-                    1260,   /* Open */
+                    1250,   /* Open */
                     2000,   /* Close */
                     1500,   /* Default */
                 },
                 .default_position = 1,
                 .default_speed = 0,
-                .name = "S4: front right arm"
+                .name = "S0-4: front right arm"
             },
-            /* Servo 5 */
+            /* Servo 0-5 */
             {
                 .positions = {
-                    1060,   /* Top position */
+                    1050,   /* Top position */
                     2000,   /* Bottom position */
                     1500,   /* Default */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_position = 1,
                 .default_speed = 0,
-                .name = "S5: front central elevator"
+                .name = "S0-5: front central elevator"
             },
-            /* Servo 6 */
+            /* Servo 0-6 */
             {
                 .positions = {
                     1100,   /* Top position */
-                    2050,   /* Bottom position */
+                    2000,   /* Bottom position */
                     1500,   /* Default */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_position = 1,
                 .default_speed = 0,
-                .name = "S6: front left elevator"
+                .name = "S0-6: front left elevator"
             },
-            /* Servo 7 */
+            /* Servo 0-7 */
             {
                 .positions = {
                     1675,   /* Open */
                     1125,   /* Close */
                     1500,   /* Default */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_position = 1,
                 .default_speed = 0,
-                .name = "S7: front left arm"
+                .name = "S0-7: front left arm"
             },
-            /* Servo 8 */
+            /* Servo 0-8 */
             {
                 .positions = {
                     1975,   /* Top position */
                     1075,   /* Bottom position */
                     1500,   /* Default */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_position = 1,
                 .default_speed = 0,
-                .name = "S8: front right elevator"
+                .name = "S0-8: front right elevator"
             },
-            /* Servo 9 */
+            /* Servo 0-9 */
             {
                 .positions = {
-                    1740,   /* Open */
-                    1160,   /* Close */
+                    1750,   /* Open */
+                    1150,   /* Close */
                     1500,   /* Default */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_position = 1,
                 .default_speed = 0,
-                .name = "S9: front ramp left disposal"
+                .name = "S0-9: front ramp left disposal"
             },
-            /* Servo 10 */
+            /* Servo 0-10 */
             {
                 .positions = {
                     1700,   /* Right */
-                    1520,   /* Left  */
-                    1600,
+                    1525,   /* Left  */
+                    1600,   /* Horizontal */
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S10: front ramp rotation"
+                .name = "S0-10: front ramp rotation"
             },
-            /* Servo 11 */
+            /* Servo 0-11 */
             {
                 .positions = {
-                    1260,   /* Open */
-                    1880,   /* Close */
+                    1250,   /* Open */
+                    1875,   /* Close */
                     1500,   /* Default */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_position = 1,
                 .default_speed = 0,
-                .name = "S11: front ramp right disposal"
+                .name = "S0-11: front ramp right disposal"
             },
-            /* Servo 12 */
+            /* Servo 0-12 */
             {
                 .positions = {
-                    960,    /* Open */
-                    1900,   /* Close */
+                    1900,    /* Open */
+                    950,   /* Close */
                     1500,   /* Default */
                 },
-                .default_position = SD21_SERVO_POS_OPEN,
+                .default_position = 0,
                 .default_speed = 0,
-                .name = "S12: front ramp puck block"
+                .name = "S0-12: front ramp puck block"
+            },
+        },
+    },
+    {   /* SD12 ID1 */
+        .i2c_dev_id = 0,
+        .i2c_address = (0xC4 >> 1),
+        .i2c_speed_khz = I2C_SPEED_FAST,
+
+        .servos_nb = 12,
+        .servos = {
+            /* Servo 1-1 */
+            {
+                .positions = {
+                    1500, /* */
+                    1500, /* */
+                    1500, /* */
+                },
+                .default_position = 2,
+                .default_speed = 0,
+                .name = "S1-1: "
+            },
+            /* Servo 1-2 */
+            {
+                .positions = {
+                    1500, /* */
+                    1500, /* */
+                    1500, /* */
+                },
+                .default_position = 2,
+                .default_speed = 0,
+                .name = "S1-2: "
+            },
+            /* Servo 1-3 */
+            {
+                .positions = {
+                    1000, /* Open */
+                    1850, /* Close */
+                    1500, /* Default */
+                },
+                .default_position = 0,
+                .default_speed = 0,
+                .name = "S1-3: back ramp puck block"
+            },
+            /* Servo 1-4 */
+            {
+                .positions = {
+                    1275,   /* Open */
+                    1875,   /* Close */
+                    1500,   /* Default */
+                },
+                .default_position = 1,
+                .default_speed = 0,
+                .name = "S1-4: back ramp left disposal"
+            },
+            /* Servo 1-5 */
+            {
+                .positions = {
+                    1750,   /* Open */
+                    1075,   /* Close */
+                    1500,   /* Default */
+                },
+                .default_position = 1,
+                .default_speed = 0,
+                .name = "S1-5: back ramp right disposal"
+            },
+            /* Servo 1-6 */
+            {
+                .positions = {
+                    1650,   /* Left position */
+                    1350,   /* Right position */
+                    1500,   /* Horizontal */
+                },
+                .default_position = 2,
+                .default_speed = 0,
+                .name = "S1-6: back ramp rotation"
+            },
+            /* Servo 1-7 */
+            {
+                .positions = {
+                    1000,   /* Top position */
+                    1800,   /* Bottom position */
+                    1500,   /* Default */
+                },
+                .default_position = 1,
+                .default_speed = 0,
+                .name = "S1-7: back right elevator"
+            },
+            /* Servo 1-8 */
+            {
+                .positions = {
+                    1200,   /* Top position */
+                    1975,   /* Bottom position */
+                    1500,   /* Default */
+                },
+                .default_position = 1,
+                .default_speed = 0,
+                .name = "S1-8: back central elevator"
+            },
+            /* Servo 1-9 */
+            {
+                .positions = {
+                    2125,   /* Top position */
+                    1100,   /* Bottom position */
+                    1500,   /* Default */
+                },
+                .default_position = 1,
+                .default_speed = 0,
+                .name = "S1-9: back left elevator"
+            },
+            /* Servo 1-10 */
+            {
+                .positions = {
+                    750,    /* Ramp disposal */
+                    2500,   /* Puck prehension */
+                    1500,   /* Neutral */
+                },
+                .default_position = 2,
+                .default_speed = 0,
+                .name = "S1-10: back right suction cup"
+            },
+            /* Servo 1-11 */
+            {
+                .positions = {
+                    2225,   /* Ramp disposal */
+                    825,   /* Puck prehension */
+                    1575,   /* Neutral */
+                },
+                .default_position = 2,
+                .default_speed = 0,
+                .name = "S1-11: back central suction cup"
+            },
+            /* Servo 1-12 */
+            {
+                .positions = {
+                    2200,   /* Ramp disposal */
+                    725,   /* Puck prehension */
+                    1500,   /* Neutral */
+                },
+                .default_position = 2,
+                .default_speed = 0,
+                .name = "S1-12: back left suction cup"
             },
         },
     }
