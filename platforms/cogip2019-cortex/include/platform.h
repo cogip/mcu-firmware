@@ -145,7 +145,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = SD21_SERVO_POS_CLOSE,
                 .default_speed = 0,
-                .name = "Servo elevateur avant central"
+                .name = "S5: front central elevator"
             },
             /* Servo 6 */
             {
@@ -156,7 +156,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = SD21_SERVO_POS_CLOSE,
                 .default_speed = 0,
-                .name = "Servo elevateur avant gauche"
+                .name = "S6: front left elevator"
             },
             /* Servo 7 */
             {
@@ -167,7 +167,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = SD21_SERVO_POS_CLOSE,
                 .default_speed = 0,
-                .name = "Servo front left arm"
+                .name = "S7: front left arm"
             },
             /* Servo 8 */
             {
@@ -178,7 +178,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = SD21_SERVO_POS_CLOSE,
                 .default_speed = 0,
-                .name = "Servo elevateur avant droite"
+                .name = "S8: front right elevator"
             },
             /* Servo 9 */
             {
@@ -189,7 +189,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = SD21_SERVO_POS_CLOSE,
                 .default_speed = 0,
-                .name = "Servo rampe avant depose gauche"
+                .name = "S9: front ramp left disposal"
             },
             /* Servo 10 */
             {
@@ -200,7 +200,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "Servo rampe avant rotation"
+                .name = "S10: front ramp rotation"
             },
             /* Servo 11 */
             {
@@ -211,7 +211,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = SD21_SERVO_POS_CLOSE,
                 .default_speed = 0,
-                .name = "Servo rampe avant depose droite"
+                .name = "S11: front ramp right disposal"
             },
             /* Servo 12 */
             {
@@ -222,7 +222,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = SD21_SERVO_POS_OPEN,
                 .default_speed = 0,
-                .name = "Servo rampe avant blocage"
+                .name = "S12: front ramp puck block"
             },
         },
     }
