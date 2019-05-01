@@ -116,12 +116,6 @@ const char* sd21_servo_get_name(sd21_t dev, uint8_t servo_id)
 void sd21_init(void)
 {
     for (sd21_t dev = 0; dev < SD21_NUMOF; dev++) {
-        /* Init I2C */
-        i2c_init(sd21_config[dev].i2c_dev_id);
-
-        /* Wait for I2C to be ready */
-        xtimer_sleep(1);
-
         /* Close all servomotors */
         for (uint8_t servo_id = 0; servo_id < sd21_config[dev].servos_nb;
                 servo_id++) {

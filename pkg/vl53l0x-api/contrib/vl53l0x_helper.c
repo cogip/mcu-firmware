@@ -49,12 +49,6 @@ int vl53l0x_init_dev(vl53l0x_t dev)
     /* Force use of I2C communication protocol */
     st_api_vl53l0x->comms_type      =  1;
 
-    /* Init I2C bus */
-    i2c_init(vl53l0x->i2c_dev);
-
-    /* Wait for I2C bus to be ready */
-    xtimer_sleep(1);
-
     /* Data init */
     if(Status == VL53L0X_ERROR_NONE)
     {
