@@ -16,7 +16,7 @@
 
 #define PF_START_COUNTDOWN  5
 
-#define NB_SHELL_COMMANDS   2
+#define NB_SHELL_COMMANDS   10
 
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
