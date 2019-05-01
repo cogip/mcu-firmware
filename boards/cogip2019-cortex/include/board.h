@@ -22,6 +22,7 @@
 #define BOARD_H
 
 #include "motor_driver.h"
+#include "vl53l0x.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,11 +59,18 @@ static const motor_driver_config_t motor_driver_config[] = {
             },
         },
     },
-    {
-    },
 };
 
 #define MOTOR_DRIVER_NUMOF      (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
+
+static const vl53l0x_conf_t vl53l0x_config[] = {
+    {
+        .i2c_dev    = 0,
+        .i2c_addr   = 0xC2,
+    },
+};
+
+#define VL53L0X_NUMOF     (sizeof(vl53l0x_config) / sizeof(vl53l0x_config[0]))
 
 /**
  * @brief   Initialize board specific hardware, including clock, LEDs and std-IO
