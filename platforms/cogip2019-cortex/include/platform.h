@@ -103,38 +103,46 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 1 */
             {
                 .positions = {
-                    1280,
-                    1940,
+                    685, /* Ramp Disposal */
+                    2285, /* Puck prehension */
+                    1500, /* Neutral */
                 },
+                .default_position = 2,
                 .default_speed = 0,
-                .name = "Servo test 0"
+                .name = "S1: suction cup front left"
             },
             /* Servo 2 */
             {
                 .positions = {
-                    1400,
-                    1600,
+                    2300, /* Ramp Disposal */
+                    675, /* Puck prehension */
+                    1500, /* Neutral */
                 },
+                .default_position = 2,
                 .default_speed = 0,
-                .name = "Servo test 1"
+                .name = "S2: suction cup front central"
             },
             /* Servo 3 */
             {
                 .positions = {
-                    1780,
-                    1110,
+                    2450, /* Ramp Disposal */
+                    575, /* Puck prehension */
+                    1500, /* Neutral */
                 },
+                .default_position = 2,
                 .default_speed = 0,
-                .name = "Servo test 2"
+                .name = "S3: suction cup front right"
             },
             /* Servo 4 */
             {
                 .positions = {
-                    920,
-                    1900,
+                    1260,   /* Open */
+                    2000,   /* Close */
+                    1500,   /* Default */
                 },
+                .default_position = 1,
                 .default_speed = 0,
-                .name = "Servo test 3"
+                .name = "S4: front right arm"
             },
             /* Servo 5 */
             {
