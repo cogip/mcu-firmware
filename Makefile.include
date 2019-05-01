@@ -25,5 +25,11 @@ ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
 	CFLAGS += -DCALIBRATION
 endif
 
+ifneq (, $(MCUFIRMWARE_PLATFORM_BASE))
+	DIRS += $(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)
+	INCLUDES += -I$(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)/include
+	USEMODULE += $(MCUFIRMWARE_PLATFORM_BASE)
+endif
+
 include $(MCUFIRMWAREBASE)/drivers/Makefile.dep
 include $(RIOTBASE)/Makefile.include

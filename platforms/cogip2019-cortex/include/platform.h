@@ -1,18 +1,15 @@
 #ifndef PLATFORM_H_
 #define PLATFORM_H_
 
-#include "ctrl.h"
-#include "odometry.h"
-#include "path.h"
-#include "periph/qdec.h"
-#include "utils.h"
-#include "ctrl/quadpid.h"
+#define SD21_SERVO_NUMOF        12
+#define SD21_SERVO_POS_NUMOF    3
+#define SD21_SERVO_POS_MIN      800
+#define SD21_SERVO_POS_MAX      2200
 
-/* RIOT includes */
-#include "shell.h"
-
-#define ROBOT_ID            0
-#define PF_START_COUNTDOWN  5
+/* Project includes */
+#include "platform-common.h"
+#include "sd21.h"
+#include "vl53l0x.h"
 
 /*
  * Machine parameters
@@ -51,15 +48,6 @@
 #define QDEC_LEFT_POLARITY      -1
 #define QDEC_RIGHT_POLARITY     1
 
-#define SERVO_ID_VALVE_LAUNCHER 0
-#define SERVO_ID_VALVE_RECYCLER 1
-#define SERVO_ID_RECYCLER       2
-#define SERVO_ID_BEE_L          3
-#define SERVO_ID_BEE_R          4
-#define SERVO_COUNT             5
-
-#define ADC_RES         ADC_RES_8BIT
-
 #define USART_CONSOLE   USARTC0
 
 #define AVOIDANCE_BORDER_X_MIN  -2000
@@ -74,21 +62,172 @@
 
 #define CTRL_BLOCKING_NB_ITERATIONS 200
 
-#define NB_SHELL_COMMANDS   2
-path_t *pf_get_path(void);
-uint8_t pf_is_game_launched(void);
-uint8_t pf_is_camp_left(void);
+#define GPIO_CAMP       GPIO_PIN(PORT_B, 1)
+#define GPIO_STARTER    GPIO_PIN(PORT_B, 2)
 
-void pf_add_shell_command(shell_command_t *command);
-void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
-void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
-void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
-void pf_init(void);
-void pf_init_tasks(void);
+static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
+        .linear_speed_pid = {
+            .kp = 15.,
+            .ki = 2,
+            .kd = 0.,
+        },
+        .angular_speed_pid = {
+            .kp = 15.,
+            .ki = 2,
+            .kd = 0.,
+        },
+        .linear_pose_pid = {
+            .kp = 0.05,
+            .ki = 0.,
+            .kd = 0,
+        },
+        .angular_pose_pid = {
+            .kp = 0.1,
+            .ki = 0.,
+            .kd = 0.,
+        },
 
-int encoder_read(polar_t *robot_speed);
-void encoder_reset(void);
+        .min_distance_for_angular_switch = 3 /* mm */,
+        .min_angle_for_pose_reached = 2 /* °deg */,
+        .regul = CTRL_REGUL_POSE_DIST,
+};
 
-void motor_drive(polar_t *command);
+static const sd21_conf_t sd21_config[] = {
+    {
+        .i2c_dev_id = 0,
+        .i2c_address = (0xC2 >> 1),
+        .i2c_speed_khz = I2C_SPEED_FAST,
+
+        .servos_nb = 12,
+        .servos = {
+            /* Servo 1 */
+            {
+                .positions = {
+                    1280,
+                    1940,
+                },
+                .default_speed = 0,
+                .name = "Servo test 0"
+            },
+            /* Servo 2 */
+            {
+                .positions = {
+                    1400,
+                    1600,
+                },
+                .default_speed = 0,
+                .name = "Servo test 1"
+            },
+            /* Servo 3 */
+            {
+                .positions = {
+                    1780,
+                    1110,
+                },
+                .default_speed = 0,
+                .name = "Servo test 2"
+            },
+            /* Servo 4 */
+            {
+                .positions = {
+                    920,
+                    1900,
+                },
+                .default_speed = 0,
+                .name = "Servo test 3"
+            },
+            /* Servo 5 */
+            {
+                .positions = {
+                    1060,   /* Top position */
+                    2000,   /* Bottom position */
+                    1500,   /* Default */
+                },
+                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_speed = 0,
+                .name = "Servo elevateur avant central"
+            },
+            /* Servo 6 */
+            {
+                .positions = {
+                    1100,   /* Top position */
+                    2050,   /* Bottom position */
+                    1500,   /* Default */
+                },
+                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_speed = 0,
+                .name = "Servo elevateur avant gauche"
+            },
+            /* Servo 7 */
+            {
+                .positions = {
+                    1675,   /* Open */
+                    1125,   /* Close */
+                    1500,   /* Default */
+                },
+                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_speed = 0,
+                .name = "Servo front left arm"
+            },
+            /* Servo 8 */
+            {
+                .positions = {
+                    1975,   /* Top position */
+                    1075,   /* Bottom position */
+                    1500,   /* Default */
+                },
+                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_speed = 0,
+                .name = "Servo elevateur avant droite"
+            },
+            /* Servo 9 */
+            {
+                .positions = {
+                    1740,   /* Open */
+                    1160,   /* Close */
+                    1500,   /* Default */
+                },
+                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_speed = 0,
+                .name = "Servo rampe avant depose gauche"
+            },
+            /* Servo 10 */
+            {
+                .positions = {
+                    1700,   /* Right */
+                    1520,   /* Left  */
+                    1600,
+                },
+                .default_position = 2,
+                .default_speed = 0,
+                .name = "Servo rampe avant rotation"
+            },
+            /* Servo 11 */
+            {
+                .positions = {
+                    1260,   /* Open */
+                    1880,   /* Close */
+                    1500,   /* Default */
+                },
+                .default_position = SD21_SERVO_POS_CLOSE,
+                .default_speed = 0,
+                .name = "Servo rampe avant depose droite"
+            },
+            /* Servo 12 */
+            {
+                .positions = {
+                    960,    /* Open */
+                    1900,   /* Close */
+                    1500,   /* Default */
+                },
+                .default_position = SD21_SERVO_POS_OPEN,
+                .default_speed = 0,
+                .name = "Servo rampe avant blocage"
+            },
+        },
+    }
+};
+
+#define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
 
 #endif /* PLATFORM_H_ */

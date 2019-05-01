@@ -2,6 +2,8 @@ APPLICATION = cortex-simulation
 
 BOARD ?= cogip2019-cortex-native
 
+MCUFIRMWARE_PLATFORM_BASE = cogip2019-cortex-common
+
 # RIOT modules
 USEMODULE += printf_float
 USEMODULE += ps
