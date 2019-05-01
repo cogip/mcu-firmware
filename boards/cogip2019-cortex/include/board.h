@@ -23,10 +23,14 @@
 
 #include "motor_driver.h"
 #include "vl53l0x.h"
+#include "pca9548.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define PCA9548_CALIB_CB(x) vl53l0x_single_ranging_measure(x)
+#define PCA9548_SENSORS 0
 
 /**
  * @brief Describe DC motor with PWM channel and GPIOs
@@ -71,6 +75,16 @@ static const vl53l0x_conf_t vl53l0x_config[] = {
 };
 
 #define VL53L0X_NUMOF     (sizeof(vl53l0x_config) / sizeof(vl53l0x_config[0]))
+
+static const pca9548_conf_t pca9548_config[] = {
+    {
+        .i2c_dev_id         = 1,
+        .i2c_address        = 0x70,
+        .channel_numof      = VL53L0X_NUMOF,
+    },
+};
+
+#define PCA9548_NUMOF      (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
 
 /**
  * @brief   Initialize board specific hardware, including clock, LEDs and std-IO
