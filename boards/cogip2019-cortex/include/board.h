@@ -59,22 +59,6 @@ static const motor_driver_config_t motor_driver_config[] = {
         },
     },
     {
-        .mode = MOTOR_DRIVER_1_DIR,
-        .pwm_dev = 1,
-        .pwm_frequency = 30U,
-        .pwm_resolution = 10U,
-        .nb_motors = 1,
-        .motors = {
-            {
-                .pwm_channel = 3,
-                .gpio_enable = GPIO_PIN(PORT_C, 11),
-                .gpio_dir0 = GPIO_PIN(PORT_A, 10),
-                .gpio_dir1_or_brake = GPIO_UNDEF,
-                .gpio_dir_reverse = 0,
-                .gpio_enable_invert = 1,
-                .gpio_brake_invert = 0,
-            },
-        },
     },
 };
 
