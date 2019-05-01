@@ -3,8 +3,8 @@
 
 #define SD21_SERVO_NUMOF        12
 #define SD21_SERVO_POS_NUMOF    3
-#define SD21_SERVO_POS_MIN      800
-#define SD21_SERVO_POS_MAX      2200
+#define SD21_SERVO_POS_MIN      500
+#define SD21_SERVO_POS_MAX      2500
 
 /* Project includes */
 #include "platform-common.h"
