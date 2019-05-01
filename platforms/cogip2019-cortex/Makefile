@@ -16,6 +16,7 @@ USEMODULE += xtimer
 USEMODULE += ctrl
 USEMODULE += quadpid
 USEMODULE += motor_driver
+USEMODULE += pca9548
 USEMODULE += robotics
 USEMODULE += sd21
 USEMODULE += $(APPLICATION_MODULE)

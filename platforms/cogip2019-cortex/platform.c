@@ -12,6 +12,7 @@
 
 /* Project includes */
 #include "ctrl/quadpid.h"
+#include "pca9548.h"
 #include "planner.h"
 #include "platform.h"
 #include "platform-common.h"
@@ -19,6 +20,7 @@
 
 #ifdef CALIBRATION
 #include "calibration/calib_sd21.h"
+#include "calibration/calib_pca9548.h"
 #endif /* CALIBRATION */
 
 int pf_is_game_launched(void)
@@ -54,10 +56,17 @@ void pf_init(void)
     assert(gpio_init(GPIO_STARTER, GPIO_IN) == 0);
 
     sd21_init();
+    pca9548_init();
 
-    vl53l0x_init();
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        if (vl53l0x_init_dev(dev) != 0)
+            printf("ERROR: Sensor %u init failed !!!\n", dev);
+    }
+
 
 #ifdef CALIBRATION
     sd21_calib_init();
+    pca9548_calib_init();
 #endif /* CALIBRATION */
 }
