@@ -4,14 +4,6 @@
 #include "sd21.h"
 #include "xtimer.h"
 
-#define REG_VERSION     64
-#define REG_VOLTAGE     65
-
-/* calibration constants */
-#define CAL_RST 1600
-#define CAL_MIN 600
-#define CAL_MAX 2600
-
 static uint16_t sd21_servo_positions[SD21_NUMOF][SD21_SERVO_NUMOF];
 
 static void sd21_check_config(sd21_t dev, uint8_t servo_id)
