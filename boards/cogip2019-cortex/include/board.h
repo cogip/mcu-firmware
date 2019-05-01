@@ -36,7 +36,7 @@ static const motor_driver_config_t motor_driver_config[] = {
         .mode = MOTOR_DRIVER_1_DIR,
         .pwm_dev = 0,
         .pwm_frequency = 20000U,
-        .pwm_resolution = 2000U,
+        .pwm_resolution = 1500U,
         .nb_motors = 2,
         .motors = {
             {
