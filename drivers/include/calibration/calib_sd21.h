@@ -6,7 +6,7 @@
 /**
  * @brief SD21 duty cycle step
  */
-#define SD21_SERVO_POS_STEP    20
+#define SD21_SERVO_POS_STEP    25
 
 /**
  * @brief Initialize SD21 calibration, mainly adds commands to RIOT shell.
