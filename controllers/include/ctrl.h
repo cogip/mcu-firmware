@@ -86,6 +86,7 @@ typedef enum {
     CTRL_MODE_IDLE,         /**< Idled, left free of motion */
     CTRL_MODE_BLOCKED,      /**< Blocked, often meaning something went wrong */
     CTRL_MODE_RUNNING,      /**< Running */
+    CTRL_MODE_RUNNING_SPEED,/**< Running only speed */
     CTRL_MODE_NUMOF,        /**< Number of mode, never use it as an index */
 } ctrl_mode_t;
 
