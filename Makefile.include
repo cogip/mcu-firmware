@@ -32,4 +32,5 @@ ifneq (, $(MCUFIRMWARE_PLATFORM_BASE))
 endif
 
 include $(MCUFIRMWAREBASE)/drivers/Makefile.dep
+include $(MCUFIRMWAREBASE)/controllers/Makefile.dep
 include $(RIOTBASE)/Makefile.include

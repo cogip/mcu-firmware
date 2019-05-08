@@ -1,0 +1,4 @@
+ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
+	USEMODULE += calib_quadpid
+	USEMODULE += fmt
+endif
