@@ -126,6 +126,51 @@ int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command)
     }
 }
 
+int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
+{
+    polar_t* speed_order = NULL;
+
+    const pose_t* pose_current = ctrl_get_pose_current(ctrl);
+    const polar_t* speed_current = ctrl_get_speed_current(ctrl);
+
+    ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
+
+    /* get speed order */
+    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
+
+    if((!speed_order)
+        || (!command)
+        || (ctrl_is_pose_reached((ctrl_t*)ctrl_quadpid))) {
+        return -1;
+    }
+
+    LOG_INFO("@robot@,@pose_current@,%u,%.4f,%.4f,%.4f\n",
+                ROBOT_ID,
+                pose_current->x,
+                pose_current->y,
+                pose_current->O);
+
+    LOG_INFO("@robot@,@speed_current@,%u,%.4f,%.4f\n",
+                ROBOT_ID,
+                speed_current->distance,
+                speed_current->angle);
+
+
+    command->distance = speed_order->distance;
+    command->angle = speed_order->angle;
+
+    /* limit speed command->*/
+    command->distance = limit_speed_command(command->distance,
+                                         fabs(speed_order->distance),
+                                         speed_current->distance);
+    command->angle = limit_speed_command(command->angle,
+                                      fabs(speed_order->angle),
+                                      speed_current->angle);
+
+    /* ********************** speed pid controller ********************* */
+    return ctrl_quadpid_speed(ctrl_quadpid, command, speed_current);
+}
+
 int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 {
     const pose_t* pose_order = NULL;
