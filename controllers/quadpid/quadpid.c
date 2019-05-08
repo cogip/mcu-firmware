@@ -204,15 +204,20 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
         return -1;
     }
 
-    LOG_INFO("@robot@,@pose_current@,%u,%.0f,%.0f,%.0f\n",
+    pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
+
+    LOG_INFO("@robot@,@pose_current@,%u,%.2f,%.2f,%.2f\n",
                 ROBOT_ID,
                 pose_current->x,
                 pose_current->y,
                 pose_current->O);
 
-    pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
+    LOG_INFO("@robot@,@speed_current@,%u,%.2f,%.2f\n",
+                ROBOT_ID,
+                speed_current->distance,
+                speed_current->angle);
 
-    LOG_INFO("@robot@,@pose_error@,%u,%.0f,%.0f\n",
+    LOG_INFO("@robot@,@pose_error@,%u,%.2f,%.2f\n",
                 ROBOT_ID,
                 pos_err.distance,
                 pos_err.angle);
