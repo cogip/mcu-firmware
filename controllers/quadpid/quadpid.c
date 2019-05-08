@@ -114,6 +114,11 @@ int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command)
 {
     (void)ctrl;
 
+    pid_reset(&((ctrl_quadpid_t*)ctrl)->quadpid_params.linear_pose_pid);
+    pid_reset(&((ctrl_quadpid_t*)ctrl)->quadpid_params.angular_pose_pid);
+    pid_reset(&((ctrl_quadpid_t*)ctrl)->quadpid_params.linear_speed_pid);
+    pid_reset(&((ctrl_quadpid_t*)ctrl)->quadpid_params.angular_speed_pid);
+
     if (!command) {
         LOG_ERROR("ctrl_quadpid: 'command' is NULL\n");
         return -1;
@@ -233,6 +238,7 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
             ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_PRE_ANGL;
             pos_err.distance = 0;
             pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
+            pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
         }
         else {
             ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST;
@@ -252,11 +258,15 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 
         pos_err.distance = 0;
         pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
+        pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
 
         /* orientation is reached */
         if (fabs(pos_err.angle) < ctrl_quadpid->quadpid_params.min_angle_for_pose_reached) {
             pos_err.angle = 0;
+            pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
             pid_reset(&ctrl_quadpid->quadpid_params.angular_pose_pid);
+            pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
+            pid_reset(&ctrl_quadpid->quadpid_params.angular_speed_pid);
 
             ctrl_set_pose_reached((ctrl_t*) ctrl_quadpid);
             ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
