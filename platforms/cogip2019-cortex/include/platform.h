@@ -62,9 +62,6 @@
 
 #define CTRL_BLOCKING_NB_ITERATIONS 200
 
-#define GPIO_CAMP       GPIO_PIN(PORT_B, 1)
-#define GPIO_STARTER    GPIO_PIN(PORT_B, 2)
-
 static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
         .linear_speed_pid = {
             .kp = 15.,

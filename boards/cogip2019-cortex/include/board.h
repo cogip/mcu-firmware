@@ -32,6 +32,9 @@ extern "C" {
 #define PCA9548_CALIB_CB(x) vl53l0x_single_ranging_measure(x)
 #define PCA9548_SENSORS 0
 
+#define GPIO_CAMP       GPIO_PIN(PORT_B, 1)
+#define GPIO_STARTER    GPIO_PIN(PORT_B, 2)
+
 /**
  * @brief Describe DC motor with PWM channel and GPIOs
  */
