@@ -31,4 +31,6 @@ FEATURES_REQUIRED += periph_pwm
 
 USEPKG += vl53l0x-api
 
+DEVELHELP=1
+
 include ../../Makefile.include
