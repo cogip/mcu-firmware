@@ -103,7 +103,7 @@ static const pca9548_conf_t pca9548_config[] = {
     {
         .i2c_dev_id         = 1,
         .i2c_address        = 0x70,
-        .channel_numof      = VL53L0X_NUMOF,
+        .channel_numof      = PCA9548_CHANNEL_MAX,
     },
 };
 
