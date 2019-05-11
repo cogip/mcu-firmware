@@ -19,6 +19,9 @@ USEMODULE += motor_driver
 USEMODULE += robotics
 USEMODULE += $(APPLICATION_MODULE)
 
+# Options
+MCUFIRMWARE_OPTIONS += calibration
+
 # Board features required
 FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
