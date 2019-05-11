@@ -72,8 +72,28 @@ static const motor_driver_config_t motor_driver_config[] = {
 
 static const vl53l0x_conf_t vl53l0x_config[] = {
     {
-        .i2c_dev    = 0,
-        .i2c_addr   = 0xC2,
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
     },
 };
 
