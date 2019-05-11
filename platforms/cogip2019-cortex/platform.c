@@ -38,6 +38,8 @@ int pf_is_camp_left(void)
 
 void pf_init(void)
 {
+    board_init();
+
     motor_driver_init(0);
 
     /* setup qdec */
