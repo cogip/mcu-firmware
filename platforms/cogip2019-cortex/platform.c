@@ -19,8 +19,9 @@
 #include "sd21.h"
 
 #ifdef CALIBRATION
-#include "calibration/calib_sd21.h"
 #include "calibration/calib_pca9548.h"
+#include "calibration/calib_quadpid.h"
+#include "calibration/calib_sd21.h"
 #endif /* CALIBRATION */
 
 int pf_is_game_launched(void)
@@ -64,9 +65,10 @@ void pf_init(void)
             printf("ERROR: Sensor %u init failed !!!\n", dev);
     }
 
-
 #ifdef CALIBRATION
+    ctrl_quadpid_calib_init();
     sd21_calib_init();
     pca9548_calib_init();
 #endif /* CALIBRATION */
+
 }
