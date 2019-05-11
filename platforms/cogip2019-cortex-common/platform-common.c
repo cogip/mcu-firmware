@@ -51,18 +51,11 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *m
 {
     (void)motor_command;
 
-    ctrl_quadpid_t* ctrl_quadpid = pf_get_quadpid_ctrl();
-
     /* catch speed */
     encoder_read(robot_speed);
 
     /* convert to position */
     odometry_update(robot_pose, robot_speed, SEGMENT);
-
-    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid,
-            robot_pose);
-    ctrl_set_speed_current((ctrl_t *)ctrl_quadpid,
-            robot_speed);
 }
 
 void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
