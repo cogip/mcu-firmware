@@ -35,10 +35,12 @@ void encoder_reset(void);
 void motor_drive(polar_t *command);
 
 static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
-    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING]    = pf_ctrl_pre_running_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_STOP]      = pf_ctrl_post_stop_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_BLOCKED]   = pf_ctrl_post_stop_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_RUNNING]   = pf_ctrl_post_running_cb,
+    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING]        = pf_ctrl_pre_running_cb,
+    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING_SPEED]  = pf_ctrl_pre_running_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_STOP]          = pf_ctrl_post_stop_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_BLOCKED]       = pf_ctrl_post_stop_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_RUNNING]       = pf_ctrl_post_running_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_post_running_cb,
 };
 
 #endif  /* PLATFORM_COMMON_H_ */
