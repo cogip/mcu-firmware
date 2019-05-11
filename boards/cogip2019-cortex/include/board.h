@@ -109,6 +109,15 @@ static const pca9548_conf_t pca9548_config[] = {
 
 #define PCA9548_NUMOF      (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
 
+static const uint8_t vl53l0x_channel[VL53L0X_NUMOF] = {
+    0,
+    1,
+    2,
+    6,
+    4,
+    5,
+};
+
 /**
  * @brief   Initialize board specific hardware, including clock, LEDs and std-IO
  */
