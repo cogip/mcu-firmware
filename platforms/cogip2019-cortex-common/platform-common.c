@@ -21,9 +21,9 @@ static ctrl_quadpid_t ctrl_quadpid =
 };
 
 /* Thread stacks */
-char controller_thread_stack[THREAD_STACKSIZE_DEFAULT];
-char planner_thread_stack[THREAD_STACKSIZE_DEFAULT];
-char start_shell_thread_stack[THREAD_STACKSIZE_DEFAULT];
+char controller_thread_stack[THREAD_STACKSIZE_LARGE];
+char planner_thread_stack[THREAD_STACKSIZE_LARGE];
+char start_shell_thread_stack[THREAD_STACKSIZE_LARGE];
 
 /* Shell command array */
 static shell_command_t shell_commands[NB_SHELL_COMMANDS];
