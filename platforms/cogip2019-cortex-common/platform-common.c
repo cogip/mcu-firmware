@@ -126,20 +126,6 @@ void pf_init_tasks(void)
 
     ctrl_t* controller = (ctrl_t*)&ctrl_quadpid;
 
-    /* Create controller thread */
-    thread_create(controller_thread_stack,
-                  sizeof(controller_thread_stack),
-                  0, 0,
-                  task_ctrl_update,
-                  (void*)controller,
-                  "motion_ctrl");
-    /* Create planner thread */
-    thread_create(planner_thread_stack,
-                  sizeof(planner_thread_stack),
-                  10, 0,
-                  task_planner,
-                  (void*)controller,
-                  "game_planner");
     /* Create thread that up a flag on key pressed to start a shell instead of
        planner below */
     kernel_pid_t start_shell_pid = thread_create(start_shell_thread_stack,
@@ -154,6 +140,21 @@ void pf_init_tasks(void)
         LOG_INFO("%d left...\n", countdown--);
         xtimer_sleep(1);
     }
+
+    /* Create controller thread */
+    thread_create(controller_thread_stack,
+                  sizeof(controller_thread_stack),
+                  0, 0,
+                  task_ctrl_update,
+                  (void*)controller,
+                  "motion_ctrl");
+    /* Create planner thread */
+    thread_create(planner_thread_stack,
+                  sizeof(planner_thread_stack),
+                  THREAD_PRIORITY_MAIN - 2, 0,
+                  task_planner,
+                  (void*)controller,
+                  "game_planner");
 
     /* If Enter was pressed, start shell */
     if (start_shell) {
