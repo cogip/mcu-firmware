@@ -11,10 +11,11 @@
 #include "xtimer.h"
 
 /* Project includes */
+#include "calibration/calib_quadpid.h"
+#include "ctrl/quadpid.h"
 #include "platform.h"
 #include "platform-common.h"
 #include "planner.h"
-#include "ctrl/quadpid.h"
 
 int pf_is_game_launched(void)
 {
@@ -43,4 +44,8 @@ void pf_init(void)
     }
 
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
+
+#ifdef CALIBRATION
+    ctrl_quadpid_calib_init();
+#endif
 }
