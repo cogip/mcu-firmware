@@ -6,6 +6,7 @@ MCUFIRMWARE_PLATFORM_BASE = cogip2019-cortex-common
 
 # RIOT modules
 USEMODULE += printf_float
+USEMODULE += scanf_float
 USEMODULE += ps
 USEMODULE += schedstatistics
 USEMODULE += shell
@@ -14,9 +15,10 @@ USEMODULE += xtimer
 
 # mcu-firmware modules
 USEMODULE += ctrl
-USEMODULE += quadpid
 USEMODULE += motor_driver
+USEMODULE += planner
 USEMODULE += pca9548
+USEMODULE += quadpid
 USEMODULE += robotics
 USEMODULE += sd21
 USEMODULE += $(APPLICATION_MODULE)
