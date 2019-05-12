@@ -5,6 +5,7 @@ BOARD ?= cogip2019-cortex-native
 MCUFIRMWARE_PLATFORM_BASE = cogip2019-cortex-common
 
 # RIOT modules
+USEMODULE += motor_driver
 USEMODULE += printf_float
 USEMODULE += ps
 USEMODULE += schedstatistics
@@ -14,7 +15,6 @@ USEMODULE += xtimer
 
 # mcu-firmware modules
 USEMODULE += ctrl
-USEMODULE += motor_driver
 USEMODULE += planner
 USEMODULE += quadpid
 USEMODULE += robotics
