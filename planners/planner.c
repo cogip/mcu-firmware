@@ -36,7 +36,7 @@ static void show_game_time(void)
     }
 }
 
-void planner_start_game(ctrl_t* ctrl)
+void planner_start(ctrl_t* ctrl)
 {
     /* TODO: send pose_initial, pose_order & speed_order to controller */
     ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);

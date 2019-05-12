@@ -177,6 +177,6 @@ void pf_init_tasks(void)
 
         /* Start game */
         LOG_DEBUG("platform: Start game\n");
-        planner_start_game((ctrl_t*)controller);
+        planner_start((ctrl_t*)controller);
     }
 }

@@ -8,7 +8,7 @@
 
 extern path_t *path;
 
-void planner_start_game(ctrl_t*);
+void planner_start(ctrl_t*);
 
 void *task_planner(void *arg);
 
