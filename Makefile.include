@@ -9,12 +9,14 @@ DEVELHELP ?= 1
 
 DIRS += $(MCUFIRMWAREBASE)/controllers
 DIRS += $(MCUFIRMWAREBASE)/drivers
+DIRS += $(MCUFIRMWAREBASE)/planners
 DIRS += $(MCUFIRMWAREBASE)/robotics
 
 INCLUDES += -I$(APPDIR)/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
-INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
 INCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
+INCLUDES += -I$(MCUFIRMWAREBASE)/planners/include/
+INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
 
 ifneq (,$(filter vl53l0x-api,$(USEPKG)))
 	DIRS += $(MCUFIRMWAREBASE)/pkg/vl53l0x-api/
