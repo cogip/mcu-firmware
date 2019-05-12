@@ -33,6 +33,9 @@ FEATURES_REQUIRED += periph_pwm
 
 USEPKG += vl53l0x-api
 
+# Main thread stack size
+CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
+
 DEVELHELP=1
 
 include ../../Makefile.include
