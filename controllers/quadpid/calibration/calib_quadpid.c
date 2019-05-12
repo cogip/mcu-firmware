@@ -55,7 +55,7 @@ static void ctrl_quadpid_speed_calib_seq(ctrl_t* ctrl_quadpid, polar_t* speed_or
     ctrl_set_speed_order(ctrl_quadpid, speed_order);
 
     /* Wait seconds before stopping the controller */
-    xtimer_sleep(2);
+    xtimer_sleep(1);
     ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
 }
 
@@ -76,7 +76,8 @@ static void ctrl_quadpid_pose_calib_seq(ctrl_t* ctrl_quadpid, pose_t* pos)
     ctrl_set_mode(ctrl_quadpid, CTRL_MODE_RUNNING);
 
     /* Wait for position reached */
-    while(!ctrl_is_pose_reached(ctrl_quadpid));
+    while(!ctrl_is_pose_reached(ctrl_quadpid))
+        xtimer_usleep(10*US_PER_MS);
 
     /* Stop the controller */
     ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
@@ -212,64 +213,34 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
         goto ctrl_quadpid_calib_servo_cmd_err;
     }
 
-    /* Useful to reset all PIDs */
-    PID_t pid_zero = {
-        .kp=0,
-        .ki=0,
-        .kd=0,
+    /* Calibration path for linear PID */
+    static path_pose_t poses_calibration[] = {
+        {
+            .pos = {
+                       .x = 0,
+                       .y = 0,
+                       .O = 90,
+                   },
+        },
+        {
+            .pos = {
+                       .x = 500,
+                       .y = 500,
+                       .O = 0,
+                   },
+        },
     };
 
     /* Get the quadpid controller */
     ctrl_quadpid_t* ctrl_quadpid = pf_get_quadpid_ctrl();
 
-    /* Reset only position PIDs. Use original or calibrated speed ones */
-    ctrl_quadpid->quadpid_params.linear_pose_pid = pid_zero;
-    ctrl_quadpid->quadpid_params.angular_pose_pid = pid_zero;
-
     /* Key pressed */
     char c = 0;
 
-    /* Calibration path for linear PID */
-    path_pose_t poses_linear[] = {
-        {
-            .pos = {
-                       .x = 0,
-                       .y = 0,
-                       .O = 90,
-                   },
-        },
-        {
-            .pos = {
-                       .x = 0,
-                       .y = 1000,
-                       .O = 90,
-                   },
-        },
-    };
+    /* Index on position to reach according to current angular one */
 
     /* Index on position to reach according to current linear one */
     uint8_t pose_linear_index = 0;
-
-    /* Calibration path for angular PID */
-    path_pose_t poses_angular[] = {
-        {
-            .pos = {
-                       .x = 0,
-                       .y = 0,
-                       .O = -45,
-                   },
-        },
-        {
-            .pos = {
-                       .x = 0,
-                       .y = 0,
-                       .O = 45,
-                   },
-        },
-    };
-
-    /* Index on position to reach according to current angular one */
-    uint8_t pose_angular_index = 0;
 
     /* Automatic reverse */
     ctrl_set_allow_reverse((ctrl_t*)ctrl_quadpid, TRUE);
@@ -281,19 +252,19 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
         switch(c) {
             /* Linear speed Kp */
                 case 'a':
-                ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_linear[pose_linear_index].pos);
+                ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
                 pose_linear_index ^= 1;
-                puts("Enter new linear pose Kp: ");
+                printf("Enter new linear pose Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_pose_pid.kp);
                 scanf("%lf", &ctrl_quadpid->quadpid_params.linear_pose_pid.kp);
-                ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_linear[pose_linear_index].pos);
+                ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
                 break;
             /* Angular pose Kp */
             case 'A':
-                ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_angular[pose_angular_index].pos);
-                pose_angular_index ^= 1;
-                puts("Enter new angular pose Kp: ");
+                ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+                pose_linear_index ^= 1;
+                printf("Enter new angular pose Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_pose_pid.kp);
                 scanf("%lf", &ctrl_quadpid->quadpid_params.angular_pose_pid.kp);
-                ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_angular[pose_angular_index].pos);
+                ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
                 break;
             case 'r':
                 /* Reset signal, useful for remote application */
@@ -318,16 +289,16 @@ ctrl_quadpid_calib_servo_cmd_err:
 void ctrl_quadpid_calib_init(void)
 {
     /* Add speed calibration command */
-    shell_command_t cmd_calib_speed = { 
-        "ctrl_quadpid_speed_calib", "Speed PID coefficinets tuning",
+    shell_command_t cmd_calib_speed = {
+        "cs", "Speed PID coefficinets tuning",
         ctrl_quadpid_speed_calib_cmd
     };
 
     pf_add_shell_command(&cmd_calib_speed);
 
     /* Add pose calibration command */
-    shell_command_t cmd_calib_pose = { 
-        "ctrl_quadpid_pose_calib", "Pose PID coefficinets tuning",
+    shell_command_t cmd_calib_pose = {
+        "cp", "Pose PID coefficinets tuning",
         ctrl_quadpid_pose_calib_cmd
     };
 
