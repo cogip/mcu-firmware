@@ -38,17 +38,17 @@ void pf_add_shell_command(shell_command_t *command)
     shell_commands[command_id++] = *command;
 }
 
-ctrl_quadpid_t* pf_get_quadpid_ctrl(void)
+inline ctrl_quadpid_t* pf_get_quadpid_ctrl(void)
 {
     return &ctrl_quadpid;
 }
 
-ctrl_t* pf_get_ctrl(void)
+inline ctrl_t* pf_get_ctrl(void)
 {
     return (ctrl_t *)&ctrl_quadpid;
 }
 
-path_t *pf_get_path(void)
+inline path_t *pf_get_path(void)
 {
     return &robot_path;
 }
