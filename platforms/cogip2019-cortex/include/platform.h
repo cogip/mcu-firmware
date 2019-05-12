@@ -106,7 +106,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S0-1: suction cup front left"
+                .name = "S0-1: front left suction cup"
             },
             /* Servo 0-2 */
             {
@@ -117,7 +117,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S0-2: suction cup front central"
+                .name = "S0-2: front central suction cup"
             },
             /* Servo 0-3 */
             {
@@ -128,7 +128,7 @@ static const sd21_conf_t sd21_config[] = {
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S0-3: suction cup front right"
+                .name = "S0-3: front right suction cup"
             },
             /* Servo 0-4 */
             {
