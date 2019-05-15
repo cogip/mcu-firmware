@@ -51,13 +51,6 @@ void native_motor_driver_qdec_simulation(
         s = (s + simu_motor_encoder[id][i] + pwm_duty_cycle) / (SIMU_ENC_BUFSIZE + 1);
         simu_motor_encoder[id][i] = s;
         qdecs_value[id] = s;
-
-        LOG_DEBUG("MOTOR-DRIVER=%u"             \
-            "    MOTOR_ID = %u"                 \
-            "    PWM_VALUE = %d"                \
-            "    QDEC_ID = %"PRIu32""           \
-            "    QDEC_AVERAGE = %d\n",          \
-            motor_driver, motor_id, pwm_duty_cycle, id, s);
     }
     else {
         LOG_ERROR("MOTOR-DRIVER=%u"             \
