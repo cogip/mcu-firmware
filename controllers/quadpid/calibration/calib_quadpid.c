@@ -125,6 +125,8 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
         /* Wait for a key pressed */
         c = getchar();
 
+        encoder_reset();
+
         switch(c) {
             /* Linear speed Kp */
             case 'a':
@@ -248,6 +250,8 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
     while (c != 'q') {
         /* Wait for a key pressed */
         c = getchar();
+
+        encoder_reset();
 
         switch(c) {
             /* Linear speed Kp */
