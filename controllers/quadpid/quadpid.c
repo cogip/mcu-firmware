@@ -149,13 +149,13 @@ int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
         return -1;
     }
 
-    LOG_INFO("@robot@,@pose_current@,%u,%.4f,%.4f,%.4f\n",
+    LOG_INFO("@robot@,%u,@pose_current@,%.4f,%.4f,%.4f\n",
                 ROBOT_ID,
                 pose_current->x,
                 pose_current->y,
                 pose_current->O);
 
-    LOG_INFO("@robot@,@speed_current@,%u,%.4f,%.4f\n",
+    LOG_INFO("@robot@,%u,@speed_current@,%.4f,%.4f\n",
                 ROBOT_ID,
                 speed_current->distance,
                 speed_current->angle);
@@ -206,18 +206,18 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 
     pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
-    LOG_INFO("@robot@,@pose_current@,%u,%.2f,%.2f,%.2f\n",
+    LOG_INFO("@robot@,%u,@pose_current@,%.2f,%.2f,%.2f\n",
                 ROBOT_ID,
                 pose_current->x,
                 pose_current->y,
                 pose_current->O);
 
-    LOG_INFO("@robot@,@speed_current@,%u,%.2f,%.2f\n",
+    LOG_INFO("@robot@,%u,@speed_current@,%.2f,%.2f\n",
                 ROBOT_ID,
                 speed_current->distance,
                 speed_current->angle);
 
-    LOG_INFO("@robot@,@pose_error@,%u,%.2f,%.2f\n",
+    LOG_INFO("@robot@,%u,@pose_error@,%.2f,%.2f\n",
                 ROBOT_ID,
                 pos_err.distance,
                 pos_err.angle);
