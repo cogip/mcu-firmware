@@ -117,6 +117,11 @@ void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
     }
 }
 
+inline ctrl_mode_t ctrl_get_mode(ctrl_t* ctrl)
+{
+    return ctrl->control.current_mode;
+}
+
 void *task_ctrl_update(void *arg)
 {
     /* bot position on the 'table' (absolute position): */

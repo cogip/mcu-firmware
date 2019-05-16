@@ -270,7 +270,7 @@ void ctrl_set_speed_current(ctrl_t* ctrl, const polar_t* speed_current);
 const polar_t* ctrl_get_speed_current(ctrl_t* ctrl);
 
 /**
- * @brief Set current speed
+ * @brief Set current mode
  *
  * @param[in] ctrl              Controller object
  * @param[in] new_mode          New mode
@@ -278,6 +278,15 @@ const polar_t* ctrl_get_speed_current(ctrl_t* ctrl);
  * @return
  */
 void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_t new_mode);
+
+/**
+ * @brief Get current mode
+ *
+ * @param[in] ctrl              Controller object
+ *
+ * @return                      Current mode
+ */
+ctrl_mode_t ctrl_get_mode(ctrl_t* ctrl);
 
 /**
  * @brief Periodic task function to process a controller
