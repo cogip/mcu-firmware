@@ -31,6 +31,7 @@ void pf_init(void);
 void pf_init_tasks(void);
 int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
+int pf_read_sensors(void);
 
 void motor_drive(polar_t *command);
 
