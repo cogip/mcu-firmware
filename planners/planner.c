@@ -43,39 +43,23 @@ void planner_start(ctrl_t* ctrl)
     game_started = TRUE;
 }
 
-static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, pose_t *pose_to_reach, polar_t *speed_order)
+static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
+        pose_t *pose_to_reach, polar_t *speed_order, path_t *path)
 {
-    static pose_t pose_reached;
     const path_pose_t *current_path_pos = path_get_current_path_pos(path);
-    pose_t robot_pose_tmp;
     static uint8_t index = 1;
-    static int first_boot = 0;
     int test = 0;
     int control_loop = 0;
     uint8_t need_update = 0;
 
-    (void) robot_pose;
-    robot_pose_tmp =  *robot_pose;
-
-    if (first_boot == 0) {
-        first_boot = 1;
-        pose_reached = current_path_pos->pos;
-        *pose_to_reach = current_path_pos->pos;
-        if (update_graph(&pose_reached, pose_to_reach) == -1) {
-            LOG_ERROR("planner: Update graph failed !\n");
-            goto trajectory_get_route_update_error;
-        }
-    }
+    need_update = pf_read_sensors();
 
     if (ctrl_is_pose_reached(ctrl)) {
-        pose_reached = *pose_to_reach;
-
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
             LOG_DEBUG("planner: Controller has reach final position.\n");
             path_increment_current_pose_idx(path);
             current_path_pos = path_get_current_path_pos(path);
-            robot_pose_tmp = pose_reached;
             need_update = 1;
         }
         else {
@@ -84,8 +68,6 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
         }
     }
 
-    reset_dyn_polygons();
-
     if (ctrl->control.current_mode == CTRL_MODE_BLOCKED) {
         path_increment_current_pose_idx(path);
         ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
@@ -93,7 +75,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
     }
 
     if (need_update) {
-        test = update_graph(&robot_pose_tmp, &(current_path_pos->pos));
+        test = update_graph(robot_pose, &(current_path_pos->pos));
 
         control_loop = path->nb_pose;
         while ((test < 0) && (control_loop-- > 0)) {
@@ -101,7 +83,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose, p
                 path_increment_current_pose_idx(path);
                 current_path_pos = path_get_current_path_pos(path);
             }
-            test = update_graph(&robot_pose_tmp, &(current_path_pos->pos));
+            test = update_graph(robot_pose, &(current_path_pos->pos));
         }
         if (control_loop == 0) {
             LOG_ERROR("planner: No position reachable !\n");
@@ -198,7 +180,6 @@ void *task_planner(void *arg)
         game_time++;
         show_game_time();
 
-        /* ===== speed ===== */
         current_path_pos = path_get_current_path_pos(path);
 
         /* Update speed order to max speed defined value in the new point to reach */
@@ -210,9 +191,11 @@ void *task_planner(void *arg)
 
         const pose_t* pose_current = ctrl_get_pose_current(ctrl);
 
-        /* ===== position ===== */
-        if (trajectory_get_route_update(ctrl, pose_current, &pose_order, &speed_order) == -1) {
+        if (trajectory_get_route_update(ctrl, pose_current, &pose_order, &speed_order, path) == -1) {
             ctrl_set_mode(ctrl, CTRL_MODE_STOP);
+        }
+        else {
+            ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
         }
 
         ctrl_set_speed_order(ctrl, &speed_order);
