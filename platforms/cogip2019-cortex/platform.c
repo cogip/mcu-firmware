@@ -12,6 +12,7 @@
 
 /* Project includes */
 #include "ctrl/quadpid.h"
+#include "obstacle.h"
 #include "pca9548.h"
 #include "planner.h"
 #include "platform.h"
@@ -36,6 +37,36 @@ int pf_is_camp_left(void)
     return gpio_read(GPIO_CAMP);
 }
 
+int pf_read_sensors(void)
+{
+    int obstacle_found = 0;
+    int res = 0;
+
+    ctrl_t* ctrl = (ctrl_t*)pf_get_quadpid_ctrl();
+
+    reset_dyn_polygons();
+
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        uint16_t measure = vl53l0x_single_ranging_measure(dev);
+
+        if ((measure < OBSTACLE_DETECTION_TRESHOLD) && (dev == 4)) {
+            const pf_sensor_t* sensor = &pf_sensors[dev];
+            pose_t robot_pose = *ctrl_get_pose_current(ctrl);
+
+            res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)measure);
+
+            if (!res) {
+                obstacle_found = 1;
+            }
+        }
+
+    }
+
+    return obstacle_found;
+}
+
 void pf_init(void)
 {
     board_init();
@@ -53,7 +84,6 @@ void pf_init(void)
     }
 
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
-
 
     assert(gpio_init(GPIO_CAMP, GPIO_IN) == 0);
     assert(gpio_init(GPIO_STARTER, GPIO_IN) == 0);
