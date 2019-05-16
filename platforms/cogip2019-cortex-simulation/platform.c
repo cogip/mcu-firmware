@@ -29,6 +29,11 @@ int pf_is_camp_left(void)
     return 0;
 }
 
+int pf_read_sensors(void)
+{
+    return 0;
+}
+
 void pf_init(void)
 {
     motor_driver_init(0);
