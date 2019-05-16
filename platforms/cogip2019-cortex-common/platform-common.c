@@ -116,6 +116,8 @@ void *task_start_shell(void *arg)
     /* Set a flag and return once done */
     *start_shell = TRUE;
 
+    puts("Entering calibration mode...");
+
     return 0;
 }
 
