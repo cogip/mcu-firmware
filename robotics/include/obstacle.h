@@ -1,8 +1,11 @@
 #ifndef OBSTACLE_H_
 #define OBSTACLE_H_
 
-#define OBSTACLE_DYN_LENGTH 300
-#define OBSTACLE_DYN_SIZE   800
+#include "avoidance.h"
+
+#define OBSTACLE_DYN_LENGTH         300
+#define OBSTACLE_DYN_SIZE           800
+#define OBSTACLE_DETECTION_TRESHOLD 2000
 
 void borders_init(polygon_t *polygon);
 void mach_fixed_obstacles_init(void);
