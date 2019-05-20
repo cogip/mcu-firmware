@@ -57,12 +57,9 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, double angle_offset, double di
     }
 
     pose_t robot_pose_tmp = *robot_pose;
-    robot_pose_tmp.O /= PULSE_PER_DEGREE;
     robot_pose_tmp.O += angle_offset;
     robot_pose_tmp.O = (int16_t)robot_pose_tmp.O % 360;
     double angle = DEG2RAD(robot_pose_tmp.O);
-    robot_pose_tmp.x /= PULSE_PER_MM;
-    robot_pose_tmp.y /= PULSE_PER_MM;
 
     dist += distance_offset;
 
