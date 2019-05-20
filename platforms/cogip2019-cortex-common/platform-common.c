@@ -42,6 +42,11 @@ ctrl_quadpid_t* pf_get_quadpid_ctrl(void)
     return &ctrl_quadpid;
 }
 
+ctrl_t* pf_get_ctrl(void)
+{
+    return (ctrl_t *)&ctrl_quadpid;
+}
+
 path_t *pf_get_path(void)
 {
     return &robot_path;
