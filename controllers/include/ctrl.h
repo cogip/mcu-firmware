@@ -165,6 +165,15 @@ struct ctrl_t {
 void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate);
 
 /**
+ * @brief Get if the pose order is an intermediate position
+ *
+ * @param[in] ctrl              Controller object
+ *
+ * @return                      normal position when 0, intermediate otherwise
+ */
+int ctrl_get_pose_intermediate(ctrl_t *ctrl);
+
+/**
  * @brief Set the ability to go backward to reach the pose order
  *
  * @param[in] ctrl              Controller object
