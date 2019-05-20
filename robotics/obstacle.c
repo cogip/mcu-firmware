@@ -46,7 +46,7 @@ void mach_fixed_obstacles_init(void)
 }
 
 /* Add a dynamic obstacle */
-int8_t add_dyn_obstacle(const pose_t *robot_pose, double angle_offset, double distance_offset, double dist)
+int8_t add_dyn_obstacle(const uint16_t dev, const pose_t *robot_pose, double angle_offset, double distance_offset, double dist)
 {
     static polygon_t obstacle_borders;
     polygon_t polygon;
@@ -68,6 +68,7 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, double angle_offset, double di
                                      .O = angle };
 
     if (!is_point_in_polygon(&obstacle_borders, obstacle_point)) {
+
         goto add_dyn_obstacle_error_obstacle_borders;
     }
 
@@ -98,7 +99,7 @@ int8_t add_dyn_obstacle(const pose_t *robot_pose, double angle_offset, double di
         polygon.points[polygon.count] = (pose_t){.x = ref_pos_left.x + dist * cos(ref_pos_left.O),
                                                  .y = ref_pos_left.y + dist * sin(ref_pos_left.O) };
         polygon.count++;
-        LOG_INFO("@o@,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f\n", polygon.points[0].x, polygon.points[0].y, polygon.points[1].x, polygon.points[1].y, polygon.points[2].x, polygon.points[2].y, polygon.points[3].x, polygon.points[3].y, robot_pose_tmp.O);
+        LOG_INFO("@obstacle@,%u, %+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f\n", dev, polygon.points[0].x, polygon.points[0].y, polygon.points[1].x, polygon.points[1].y, polygon.points[2].x, polygon.points[2].y, polygon.points[3].x, polygon.points[3].y, robot_pose_tmp.O);
         LOG_INFO("@t@,%+.0f,%+.0f,%+.0f,%+.0f\n", ref_pos_right.x, ref_pos_right.y, ref_pos_left.x, ref_pos_left.y);
         add_dyn_polygon(&polygon);
     }
