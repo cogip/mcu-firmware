@@ -16,7 +16,6 @@
 /* Object variables (singleton) */
 static uint16_t game_time = 0;
 static uint8_t game_started = FALSE;
-path_t *path = NULL;
 
 /* periodic task */
 /* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
@@ -128,7 +127,7 @@ void *task_planner(void *arg)
     /* 2018: Camp left is orange, right is green */
     printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
 
-    path = pf_get_path();
+    path_t* path = pf_get_path();
     if (!path) {
         printf("machine has no path\n");
     }
