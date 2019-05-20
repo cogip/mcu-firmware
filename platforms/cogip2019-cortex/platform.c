@@ -46,6 +46,10 @@ int pf_read_sensors(void)
 
     reset_dyn_polygons();
 
+    if (((ctrl_quadpid_t *)ctrl)->quadpid_params.regul == CTRL_REGUL_POSE_PRE_ANGL) {
+        return 0;
+    }
+
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
 
         pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
