@@ -206,6 +206,12 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 
     pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
+    LOG_INFO("@robot@,%u,@pose_order@,%.2f,%.2f,%.2f\n",
+                ROBOT_ID,
+                pose_order->x,
+                pose_order->y,
+                pose_order->O);
+
     LOG_INFO("@robot@,%u,@pose_current@,%.2f,%.2f,%.2f\n",
                 ROBOT_ID,
                 pose_current->x,
