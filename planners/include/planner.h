@@ -53,4 +53,15 @@ void planner_start(ctrl_t*);
  */
 void *task_planner(void *arg);
 
+/**
+ * @brief Allow or not the planner to change automatically the next path pose
+ * to reach once current pose is reached
+ *
+ * @param[in] value             TRUE to allow planner to change path pose,
+ *                              FALSE otherwise
+ *
+ * @return
+ */
+void pln_set_allow_change_path_pose(uint8_t value);
+
 #endif /* PLANNER_H_ */

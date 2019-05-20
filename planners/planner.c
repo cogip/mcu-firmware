@@ -17,12 +17,21 @@
 static uint16_t game_time = 0;
 static uint8_t game_started = FALSE;
 
+/* Planner can automatically change next path pose to reach when current pose
+ * is reached */
+static uint8_t allow_change_path_pose = TRUE;
+
 /* periodic task */
 /* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
 #define TASK_PERIOD_MS      (200)
 #define TASK_FREQ_HZ        (1000 / TASK_PERIOD_MS)
 #define GAME_DURATION_SEC   100
 #define GAME_DURATION_TICKS (GAME_DURATION_SEC * TASK_FREQ_HZ)
+
+void pln_set_allow_change_path_pose(uint8_t value)
+{
+    allow_change_path_pose = value;
+}
 
 static void show_game_time(void)
 {
@@ -57,7 +66,12 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
             LOG_DEBUG("planner: Controller has reach final position.\n");
-            path_increment_current_pose_idx(path);
+            if (allow_change_path_pose)
+                path_increment_current_pose_idx(path);
+            current_path_pos = path_get_current_path_pos(path);
+            need_update = 1;
+        }
+        else if ((!allow_change_path_pose) && (!ctrl_get_pose_intermediate(ctrl))) {
             current_path_pos = path_get_current_path_pos(path);
             need_update = 1;
         }
@@ -68,6 +82,8 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
     }
 
     if (ctrl->control.current_mode == CTRL_MODE_BLOCKED) {
+        if (!allow_change_path_pose)
+            goto trajectory_get_route_update_error;
         path_increment_current_pose_idx(path);
         ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
         need_update = 1;
@@ -79,6 +95,8 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
         control_loop = path->nb_pose;
         while ((test < 0) && (control_loop-- > 0)) {
             if (test == -1) {
+                if (!allow_change_path_pose)
+                    goto trajectory_get_route_update_error;
                 path_increment_current_pose_idx(path);
                 current_path_pos = path_get_current_path_pos(path);
             }
