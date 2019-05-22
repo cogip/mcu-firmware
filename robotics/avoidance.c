@@ -35,11 +35,6 @@ int update_graph(const pose_t *s, const pose_t *f)
     start_position = *s;
     finish_position = *f;
 
-    /* Init all obstacles */
-    if (nb_polygons == 0) {
-        mach_fixed_obstacles_init();
-    }
-
     if (borders.count == 0) {
         borders_init(&borders);
     }
