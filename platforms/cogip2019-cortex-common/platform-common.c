@@ -178,7 +178,7 @@ void pf_init_tasks(void)
                   sizeof(planner_thread_stack),
                   THREAD_PRIORITY_MAIN - 2, 0,
                   task_planner,
-                  (void*)controller,
+                  NULL,
                   "game_planner");
 
     /* If Enter was pressed, start shell */
