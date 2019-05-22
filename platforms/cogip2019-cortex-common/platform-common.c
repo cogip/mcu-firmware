@@ -155,7 +155,7 @@ void pf_init_tasks(void)
        planner below */
     kernel_pid_t start_shell_pid = thread_create(start_shell_thread_stack,
                   sizeof(start_shell_thread_stack),
-                  THREAD_PRIORITY_IDLE - 1, 0,
+                  THREAD_PRIORITY_MAIN + 1, 0,
                   task_start_shell, &start_shell, "shell");
 
     LOG_INFO("Press Enter to enter calibration mode...\n");
@@ -169,7 +169,7 @@ void pf_init_tasks(void)
     /* Create controller thread */
     thread_create(controller_thread_stack,
                   sizeof(controller_thread_stack),
-                  0, 0,
+                  THREAD_PRIORITY_MAIN - 3, 0,
                   task_ctrl_update,
                   (void*)controller,
                   "motion_ctrl");
