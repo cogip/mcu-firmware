@@ -132,6 +132,7 @@ trajectory_get_route_update_error:
 
 void *task_planner(void *arg)
 {
+    (void)arg;
     pose_t pose_order = { 0, 0, 0 };
     pose_t initial_pose = { 0, 0, 0 };
     polar_t speed_order = { 0, 0 };
@@ -139,7 +140,7 @@ void *task_planner(void *arg)
     const uint8_t camp_left = pf_is_camp_left();
     const path_pose_t *current_path_pos = NULL;
 
-    ctrl_t *ctrl = (ctrl_t*)arg;
+    ctrl_t *ctrl = pf_get_ctrl();
 
     printf("Game planner started\n");
     /* 2018: Camp left is orange, right is green */
