@@ -7,6 +7,7 @@
 #include "xtimer.h"
 
 /* Project includes */
+#include "avoidance.h"
 #include "planner.h"
 #include "platform.h"
 #include "platform-common.h"
@@ -110,6 +111,23 @@ void motor_drive(polar_t *command)
 
     motor_set(0, HBRIDGE_MOTOR_LEFT, left_command);
     motor_set(0, HBRIDGE_MOTOR_RIGHT, right_command);
+}
+
+/* Init all known fixed obstacles on map */
+void pf_fixed_obstacles_init(void)
+{
+    polygon_t polygon;
+    uint8_t nb_vertices;
+
+    polygon.count = 0;
+    nb_vertices = 4;
+    if (nb_vertices < POLY_MAX_POINTS) {
+        polygon.points[polygon.count++] = (pose_t){.x = -800, .y = 1550 };
+        polygon.points[polygon.count++] = (pose_t){.x =  800, .y = 1550 };
+        polygon.points[polygon.count++] = (pose_t){.x =  800, .y = 2200 };
+        polygon.points[polygon.count++] = (pose_t){.x = -800, .y = 2200 };
+        add_polygon(&polygon);
+    }
 }
 
 void *task_start_shell(void *arg)

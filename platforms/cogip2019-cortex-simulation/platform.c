@@ -11,6 +11,7 @@
 #include "xtimer.h"
 
 /* Project includes */
+#include "calibration/calib_planner.h"
 #include "calibration/calib_quadpid.h"
 #include "ctrl/quadpid.h"
 #include "platform.h"
@@ -50,7 +51,10 @@ void pf_init(void)
 
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
+    pf_fixed_obstacles_init();
+
 #ifdef CALIBRATION
     ctrl_quadpid_calib_init();
+    pln_calib_init();
 #endif
 }

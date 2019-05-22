@@ -101,6 +101,8 @@ void pf_init(void)
             printf("ERROR: Sensor %u init failed !!!\n", dev);
     }
 
+    pf_fixed_obstacles_init();
+
 #ifdef CALIBRATION
     ctrl_quadpid_calib_init();
     sd21_calib_init();

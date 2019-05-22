@@ -28,23 +28,6 @@ static void obstacle_borders_init(polygon_t *polygon)
     polygon->points[polygon->count++] = (pose_t){.x = OBSTACLE_BORDER_X_MIN, .y = OBSTACLE_BORDER_Y_MAX };
 }
 
-/* Init all known fixed obstacles on map */
-void mach_fixed_obstacles_init(void)
-{
-    polygon_t polygon;
-    uint8_t nb_vertices;
-
-    polygon.count = 0;
-    nb_vertices = 4;
-    if (nb_vertices < POLY_MAX_POINTS) {
-        polygon.points[polygon.count++] = (pose_t){.x = -800, .y = 1550 };
-        polygon.points[polygon.count++] = (pose_t){.x =  800, .y = 1550 };
-        polygon.points[polygon.count++] = (pose_t){.x =  800, .y = 2200 };
-        polygon.points[polygon.count++] = (pose_t){.x = -800, .y = 2200 };
-        add_polygon(&polygon);
-    }
-}
-
 /* Add a dynamic obstacle */
 int8_t add_dyn_obstacle(const uint16_t dev, const pose_t *robot_pose, double angle_offset, double distance_offset, double dist)
 {
