@@ -7,6 +7,7 @@
 #define SD21_SERVO_POS_MAX      2500
 
 /* Project includes */
+#include "board.h"
 #include "platform-common.h"
 #include "sd21.h"
 #include "vl53l0x.h"
@@ -61,6 +62,38 @@
 #define OBSTACLE_BORDER_Y_MAX   2000
 
 #define CTRL_BLOCKING_NB_ITERATIONS 200
+
+typedef struct {
+    double angle_offset;
+    double distance_offset;
+} pf_sensor_t;
+
+static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
+    {
+        .angle_offset = -135,
+        .distance_offset = 190,
+    },
+    {
+        .angle_offset = 180,
+        .distance_offset = 170,
+    },
+    {
+        .angle_offset = 135,
+        .distance_offset = 1900,
+    },
+    {
+        .angle_offset = -45,
+        .distance_offset = 190,
+    },
+    {
+        .angle_offset = 0,
+        .distance_offset = 170,
+    },
+    {
+        .angle_offset = 45,
+        .distance_offset = 190,
+    },
+};
 
 static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
         .linear_speed_pid = {
