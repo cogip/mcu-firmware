@@ -17,7 +17,7 @@ from threading import Thread
 BASE_PATH = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").GetString("MacroPath") + "/cogip/simulation/"
 BIN_NAME = "cortex-simulation.elf"
 BIN_PATH = BASE_PATH + "bin/cogip2019-cortex-native/" + BIN_NAME
-ROBOT_DESIGN_PATH = BASE_PATH + "Robot.iges"
+ROBOT_DESIGN_PATH = BASE_PATH + "Robot.step"
 AREA_DESIGN_PATH = BASE_PATH + "Table.iges"
 FCD_DOC_NAME = "RobotSimulation"
 FCD_ROBOT_NAME = "Robot_{}_pose_{}"
