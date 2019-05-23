@@ -38,8 +38,8 @@
 /* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
 #define PULSE_PER_DEGREE    51.70
 
-#define MAX_ACC     10
-#define MAX_SPEED   20
+#define MAX_ACC     4
+#define MAX_SPEED   10
 
 #define HBRIDGE_MOTOR_LEFT  0
 #define HBRIDGE_MOTOR_RIGHT 1
@@ -64,28 +64,28 @@
 
 static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
         .linear_speed_pid = {
-            .kp = 15.,
+            .kp = 150.,
             .ki = 2,
             .kd = 0.,
         },
         .angular_speed_pid = {
-            .kp = 15.,
+            .kp = 150.,
             .ki = 2,
             .kd = 0.,
         },
         .linear_pose_pid = {
-            .kp = 0.05,
+            .kp = 1,
             .ki = 0.,
-            .kd = 0,
+            .kd = 2,
         },
         .angular_pose_pid = {
-            .kp = 0.1,
+            .kp = 1,
             .ki = 0.,
-            .kd = 0.,
+            .kd = 5,
         },
 
-        .min_distance_for_angular_switch = 3 /* mm */,
-        .min_angle_for_pose_reached = 2 /* °deg */,
+        .min_distance_for_angular_switch = 3,   // mm,
+        .min_angle_for_pose_reached = 2,        // deg,
         .regul = CTRL_REGUL_POSE_DIST,
 };
 
