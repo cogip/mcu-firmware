@@ -1,5 +1,7 @@
 MODULE = planner
 
-DIRS += $(dir $(wildcard $(addsuffix /Makefile, $(USEMODULE))))
+ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
+	DIRS += calibration
+endif
                                                                                 
 include $(RIOTBASE)/Makefile.base

@@ -32,7 +32,7 @@ static int pln_calib_cmd(int argc, char **argv)
     (void)argv;
     int ret = 0;
     func_cb_t cb = NULL;
-    static uint16_t calib_path_index;
+    static uint8_t calib_path_index = 0;
 
     path_t *path = pf_get_path();
     ctrl_t* ctrl = pf_get_ctrl();
@@ -52,16 +52,17 @@ static int pln_calib_cmd(int argc, char **argv)
 
     pln_set_allow_change_path_pose(FALSE);
 
-    planner_start(ctrl);
-
     while (c != 'q') {
+        /* Display current position index in path */
+        printf("Position index: %u\n", calib_path_index);
+
         /* Wait for a key pressed */
         c = getchar();
 
         switch(c) {
             /* Next position */
             case 'n':
-                if (calib_path_index < path->nb_pose)
+                if (calib_path_index < path->nb_pose - 1)
                     calib_path_index++;
                 path_set_current_pose_idx(path, calib_path_index);
                 break;
@@ -74,7 +75,7 @@ static int pln_calib_cmd(int argc, char **argv)
                 path_reset_current_pose_idx(path);
                 break;
             case 'N':
-                if (calib_path_index < path->nb_pose)
+                if (calib_path_index < path->nb_pose - 1)
                     calib_path_index++;
                 break;
             case 'P':
@@ -82,13 +83,17 @@ static int pln_calib_cmd(int argc, char **argv)
                     calib_path_index--;
                 break;
             case 'a':
-                cb = path_get_current_path_pos(path)->act;
-                if(cb)
-                    cb();
+                cb = path_get_pose_at_idx(path, calib_path_index)->act;
+                if(cb != NULL) {
+                    puts("Launch callback !");
+                    (*cb)();
+                }
                 break;
             default:
                 continue;
         }
+
+        pln_start(ctrl);
 
         /* Data stop signal */
         puts("<<<< STOP >>>>");
