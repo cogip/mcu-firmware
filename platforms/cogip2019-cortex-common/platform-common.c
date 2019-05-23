@@ -23,6 +23,7 @@ static ctrl_quadpid_t ctrl_quadpid =
 
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
+char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_thread_stack[THREAD_STACKSIZE_LARGE];
 char start_shell_thread_stack[THREAD_STACKSIZE_LARGE];
 
@@ -144,6 +145,26 @@ void *task_start_shell(void *arg)
     return 0;
 }
 
+void *pf_task_countdown(void *arg)
+{
+    (void)arg;
+    static int countdown = GAME_DURATION_SEC;
+
+    ctrl_t* controller = (ctrl_t*)&ctrl_quadpid;
+
+    for (;;) {
+        xtimer_ticks32_t loop_start_time = xtimer_now();
+        if (countdown < 0) {
+            pln_stop(controller);
+        }
+        else {
+            LOG_INFO("                                      GAME TIME: %d\n",
+                countdown--);
+        }
+        xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
+    }
+}
+
 void pf_init_tasks(void)
 {
     static int start_shell = FALSE;
@@ -199,6 +220,17 @@ void pf_init_tasks(void)
         if (start_shell_thread) {
             sched_set_status(start_shell_thread, STATUS_STOPPED);
         }
+
+        /* Wait for start switch */
+        while(!pf_is_game_launched());
+
+        /* Create planner thread */
+        thread_create(countdown_thread_stack,
+                sizeof(countdown_thread_stack),
+                THREAD_PRIORITY_MAIN - 4, 0,
+                pf_task_countdown,
+                NULL,
+                "countdown");
 
         /* Start game */
         LOG_DEBUG("platform: Start game\n");

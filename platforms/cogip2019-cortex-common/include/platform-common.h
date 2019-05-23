@@ -18,6 +18,8 @@
 
 #define NB_SHELL_COMMANDS   10
 
+#define GAME_DURATION_SEC   100
+
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
 int pf_is_camp_left(void);
