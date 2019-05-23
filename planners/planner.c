@@ -13,7 +13,7 @@
 /* RIOT includes */
 #include <log.h>
 
-static uint8_t game_started = FALSE;
+static uint8_t pln_started = FALSE;
 
 /* Planner can automatically change next path pose to reach when current pose
  * is reached */
@@ -27,14 +27,16 @@ void pln_set_allow_change_path_pose(uint8_t value)
     allow_change_path_pose = value;
 }
 
+void pln_start(ctrl_t* ctrl)
 {
+    ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
+    pln_started = TRUE;
 }
 
-void planner_start(ctrl_t* ctrl)
+void pln_stop(ctrl_t* ctrl)
 {
-    /* TODO: send pose_initial, pose_order & speed_order to controller */
-    ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
-    game_started = TRUE;
+    ctrl_set_mode(ctrl, CTRL_MODE_STOP);
+    pln_started = FALSE;
 }
 
 static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
@@ -152,7 +154,7 @@ void *task_planner(void *arg)
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
 
-        if (!game_started) {
+        if (!pln_started) {
             goto yield_point;
         }
 
