@@ -27,7 +27,7 @@ int pf_is_game_launched(void)
 int pf_is_camp_left(void)
 {
     /* Color switch for coords translations */
-    return 0;
+    return 1;
 }
 
 int pf_read_sensors(void)
