@@ -15,7 +15,7 @@
 /* Speed correction calibration usage */
 static void pln_calib_print_usage(void)
 {
-    puts(">>> Entering calibration for quadpid controller");
+    puts(">>> Entering calibration for planner");
 
     puts("\t'q'\t Quit calibration");
     puts("\t'n'\t Go to next position");

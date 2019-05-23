@@ -36,13 +36,22 @@
 extern path_t *path;
 
 /**
- * @brief Start a the planification for associated motion controller
+ * @brief Start the trajectory planification and the associated controller
  *
  * @param[in] arg               Controller object
  *
  * @return
  */
-void planner_start(ctrl_t*);
+void pln_start(ctrl_t*);
+
+/**
+ * @brief Stop the trajectory planification and the associated controller
+ *
+ * @param[in] arg               Controller object
+ *
+ * @return
+ */
+void pln_stop(ctrl_t*);
 
 /**
  * @brief Periodic task function to process a planner
