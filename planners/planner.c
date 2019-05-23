@@ -13,35 +13,21 @@
 /* RIOT includes */
 #include <log.h>
 
-/* Object variables (singleton) */
-static uint16_t game_time = 0;
 static uint8_t game_started = FALSE;
 
 /* Planner can automatically change next path pose to reach when current pose
  * is reached */
 static uint8_t allow_change_path_pose = TRUE;
 
-/* periodic task */
-/* sched period = 20ms -> ticks freq is 1/0.02 = 50 Hz */
+/* Periodic task */
 #define TASK_PERIOD_MS      (200)
-#define TASK_FREQ_HZ        (1000 / TASK_PERIOD_MS)
-#define GAME_DURATION_SEC   100
-#define GAME_DURATION_TICKS (GAME_DURATION_SEC * TASK_FREQ_HZ)
 
 void pln_set_allow_change_path_pose(uint8_t value)
 {
     allow_change_path_pose = value;
 }
 
-static void show_game_time(void)
 {
-    static uint8_t _secs = TASK_FREQ_HZ;
-
-    if (!--_secs) {
-        _secs = TASK_FREQ_HZ;
-        printf("Game time = %d\n",
-               game_time / TASK_FREQ_HZ);
-    }
 }
 
 void planner_start(ctrl_t* ctrl)
@@ -163,40 +149,12 @@ void *task_planner(void *arg)
     ctrl_set_pose_current(ctrl, &initial_pose);
     ctrl_set_speed_current(ctrl, &initial_speed);
 
-    uint32_t game_start_time = xtimer_now_usec();
-
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
 
         if (!game_started) {
             goto yield_point;
         }
-
-        /* while starter switch is not release we wait */
-        if (!pf_is_game_launched()) {
-            game_start_time = xtimer_now_usec();
-            goto yield_point;
-        }
-
-        if (xtimer_now_usec() - game_start_time >= GAME_DURATION_SEC * US_PER_SEC) {
-            LOG_INFO(">>>>\n");
-            ctrl_set_mode(ctrl, CTRL_MODE_STOP);
-            break;
-        }
-
-        if (!game_time) {
-            LOG_INFO("<<<< polar_simu.csv\n");
-            LOG_INFO("@command@,pose_order_x,pose_order_y,pose_order_a,"
-                        "pose_current_x,pose_current_y,pose_current_a,"
-                        "position_error_l,position_error_a,"
-                        "speed_order_l,speed_order_a,"
-                        "speed_current_l,speed_current_a,"
-                        "game_time,"
-                        "\n");
-        }
-
-        game_time++;
-        show_game_time();
 
         current_path_pos = path_get_current_path_pos(path);
 
