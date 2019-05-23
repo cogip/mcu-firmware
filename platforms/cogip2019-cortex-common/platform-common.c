@@ -183,8 +183,9 @@ void pf_init_tasks(void)
 
     /* Wait for Enter key pressed or countdown */
     while ((!start_shell) && (countdown > 0)) {
+        xtimer_ticks32_t loop_start_time = xtimer_now();
         LOG_INFO("%d left...\n", countdown--);
-        xtimer_sleep(1);
+        xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
 
     /* Create controller thread */
