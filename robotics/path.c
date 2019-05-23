@@ -9,105 +9,40 @@ static path_pose_t poses[] = {
     /* POSE_INITIAL */
     {
         .pos = {
-                   .x = 0,
-                   .y = 0,
+                   .x = 1500 - ROBOT_MARGIN,
+                   .y = 300 + ROBOT_MARGIN,
                    .O = 90,
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
         .act = NULL,
     },
-
-    /* Travel around a square of 1000mm, reaching 0 angle at each point */
+    /* Homologation path */
     {
         .pos = {
                    .x = 0,
-                   .y = 1000,
-                   .O = 0,
-               },
-        .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 2,
-        .act = NULL,
-    },
-    {
-        .pos = {
-                   .x = 1000,
-                   .y = 1000,
-                   .O = 0,
-               },
-        .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 2,
-        .act = NULL,
-    },
-    {
-        .pos = {
-                   .x = 1000,
-                   .y = 0,
+                   .y = 1050,
                    .O = -90,
                },
-        .allow_reverse = TRUE,
+        .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
         .act = NULL,
     },
     {
         .pos = {
-                   .x = 0,
-                   .y = 0,
-                   .O = 135,
+                   .x = 1200,
+                   .y = 1050,
+                   .O = -90,
                },
-        .allow_reverse = TRUE,
+        .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
-        .act = NULL,
-    },
-
-    /* Diagonals of the square */
-    {
-        .pos = {
-                   .x = 1000,
-                   .y = 1000,
-                   .O = 0,
-               },
-        .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED,
-        .act = NULL,
-    },
-    {
-        .pos = {
-                   .x = 0,
-                   .y = 1000,
-                   .O = -135,
-               },
-        .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED,
-        .act = NULL,
-    },
-    {
-        .pos = {
-                   .x = 1000,
-                   .y = 0,
-                   .O = 0,
-               },
-        .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED,
-        .act = NULL,
-    },
-
-    /* Return to initial pose */
-    {
-        .pos = {
-                   .x = 0,
-                   .y = 0,
-                   .O = 90,
-               },
-        .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED,
         .act = NULL,
     },
 };
 
 path_t robot_path = {
     /* static cfg */
-    .play_in_loop = FALSE,
+    .play_in_loop = TRUE,
     .nb_pose = sizeof(poses)/sizeof(path_pose_t),
     .poses = poses,
 };

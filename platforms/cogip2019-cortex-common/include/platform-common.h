@@ -13,6 +13,8 @@
 #include "shell.h"
 
 #define ROBOT_ID            0
+#define ROBOT_WIDTH         354                 /* units: mm */
+#define ROBOT_MARGIN        (ROBOT_WIDTH / 2)
 
 #define PF_START_COUNTDOWN  5
 
