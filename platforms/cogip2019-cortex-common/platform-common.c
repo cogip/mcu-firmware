@@ -13,7 +13,6 @@
 #include "platform-common.h"
 
 /* Controller */
-
 static ctrl_quadpid_t ctrl_quadpid =
 {
     .conf = &ctrl_quadpid_conf,
@@ -131,7 +130,7 @@ void pf_fixed_obstacles_init(void)
     }
 }
 
-void *task_start_shell(void *arg)
+void *pf_task_start_shell(void *arg)
 {
     int* start_shell = (int*)arg;
 
@@ -177,7 +176,7 @@ void pf_init_tasks(void)
     kernel_pid_t start_shell_pid = thread_create(start_shell_thread_stack,
                   sizeof(start_shell_thread_stack),
                   THREAD_PRIORITY_MAIN + 1, 0,
-                  task_start_shell, &start_shell, "shell");
+                  pf_task_start_shell, &start_shell, "shell");
 
     LOG_INFO("Press Enter to enter calibration mode...\n");
 
@@ -194,14 +193,14 @@ void pf_init_tasks(void)
                   THREAD_PRIORITY_MAIN - 3, 0,
                   task_ctrl_update,
                   (void*)controller,
-                  "motion_ctrl");
+                  "motion control");
     /* Create planner thread */
     thread_create(planner_thread_stack,
                   sizeof(planner_thread_stack),
                   THREAD_PRIORITY_MAIN - 2, 0,
                   task_planner,
                   NULL,
-                  "game_planner");
+                  "planner");
 
     /* If Enter was pressed, start shell */
     if (start_shell) {
