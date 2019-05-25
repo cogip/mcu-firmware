@@ -82,21 +82,22 @@ static double limit_speed_command(double command,
 int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
                          polar_t* command, const polar_t* speed_current)
 {
+    (void)ctrl;
     polar_t speed_error;
     static uint8_t error_blocking = 0;
 
     speed_error.distance = command->distance - speed_current->distance;
     speed_error.angle = command->angle - speed_current->angle;
 
-    double d = fabs(ctrl->quadpid_params.linear_speed_pid.previous_error) - fabs(speed_error.distance);
-    if (d < 0) {
+    if ((fabs(speed_current->distance) < PF_CTRL_BLOCKING_SPEED_TRESHOLD)
+            && (speed_error.distance > PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD)) {
         error_blocking++;
     }
     else {
         error_blocking = 0;
     }
 
-    if (error_blocking >= CTRL_BLOCKING_NB_ITERATIONS) {
+    if (error_blocking >= PF_CTRL_BLOCKING_NB_ITERATIONS) {
         command->distance = 0;
         command->angle = 0;
         ctrl_set_mode((ctrl_t*)ctrl, CTRL_MODE_BLOCKED);
