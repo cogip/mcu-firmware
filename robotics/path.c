@@ -39,7 +39,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
-        .act = NULL, // TODO: Ouvrir (pos 90 deg) les 3 servos ventouse face AV + activer pompes
+        .act = pf_front_cup_take,
     },
     {
         /* Point récolte 3 palets proche balance */
