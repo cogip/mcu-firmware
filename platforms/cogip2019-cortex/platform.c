@@ -90,8 +90,17 @@ void pf_init(void)
 
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
+    /* Init starter and camp selection GPIOs */
     assert(gpio_init(GPIO_CAMP, GPIO_IN) == 0);
     assert(gpio_init(GPIO_STARTER, GPIO_IN_PU) == 0);
+
+    /* Init pump GPIOs */
+    assert(gpio_init(GPIO_BL_PUMP_1, GPIO_OUT) == 0);
+    assert(gpio_init(GPIO_BC_PUMP_2, GPIO_OUT) == 0);
+    assert(gpio_init(GPIO_BR_PUMP_3, GPIO_OUT) == 0);
+    assert(gpio_init(GPIO_FL_PUMP_4, GPIO_OUT) == 0);
+    assert(gpio_init(GPIO_FC_PUMP_5, GPIO_OUT) == 0);
+    assert(gpio_init(GPIO_FR_PUMP_6, GPIO_OUT) == 0);
 
     sd21_init();
     pca9548_init();
