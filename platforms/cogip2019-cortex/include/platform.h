@@ -6,6 +6,10 @@
 #define SD21_SERVO_POS_MIN      500
 #define SD21_SERVO_POS_MAX      2500
 
+#define PF_SERVO_CUP_TAKE       1
+#define PF_SERVO_CUP_HOLD       2
+#define PF_SERVO_CUP_RAMP       0
+
 /* Project includes */
 #include "board.h"
 #include "platform-common.h"
@@ -137,7 +141,7 @@ static const sd21_conf_t sd21_config[] = {
                     2285, /* Puck prehension */
                     1500, /* Neutral */
                 },
-                .default_position = 2,
+                .default_position = PF_SERVO_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S0-1: front left suction cup"
             },
@@ -148,7 +152,7 @@ static const sd21_conf_t sd21_config[] = {
                     675,  /* Puck prehension */
                     1500, /* Neutral */
                 },
-                .default_position = 2,
+                .default_position = PF_SERVO_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S0-2: front central suction cup"
             },
@@ -159,7 +163,7 @@ static const sd21_conf_t sd21_config[] = {
                     575,  /* Puck prehension */
                     1400, /* Neutral */
                 },
-                .default_position = 2,
+                .default_position = PF_SERVO_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S0-3: front right suction cup"
             },
@@ -408,5 +412,8 @@ static const sd21_conf_t sd21_config[] = {
 };
 
 #define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
+
+void pf_front_cup_take(void);
+void pf_front_cup_hold(void);
 
 #endif /* PLATFORM_H_ */
