@@ -456,4 +456,7 @@ static const sd21_conf_t sd21_config[] = {
 
 #define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
 
+void pf_front_cup_take(void);
+void pf_front_cup_hold(void);
+
 #endif /* PLATFORM_H_ */
