@@ -72,6 +72,25 @@ int pf_read_sensors(void)
     return obstacle_found;
 }
 
+void pf_front_cup_take(void)
+{
+    sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(PF_SERVO_FC_CUP, PF_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_TAKE);
+    gpio_set(GPIO_FL_PUMP_4);
+    xtimer_usleep(200 * US_PER_MS);
+    gpio_set(GPIO_FC_PUMP_5);
+    xtimer_usleep(200 * US_PER_MS);
+    gpio_set(GPIO_FR_PUMP_6);
+}
+
+void pf_front_cup_hold(void)
+{
+    sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(PF_SERVO_FC_CUP, PF_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_HOLD);
+}
+
 void pf_init(void)
 {
     board_init();
