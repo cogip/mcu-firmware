@@ -153,8 +153,11 @@ void *task_planner(void *arg)
     path->current_pose_idx = 0;
     current_path_pos = path_get_current_path_pos(path);
     initial_pose = current_path_pos->pos;
+    pose_order = current_path_pos->pos;
     ctrl_set_pose_current(ctrl, &initial_pose);
     ctrl_set_speed_current(ctrl, &initial_speed);
+    ctrl_set_pose_to_reach(ctrl, &pose_order);
+    ctrl_set_pose_reached(ctrl);
 
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
