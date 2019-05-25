@@ -89,6 +89,8 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
                 if (!allow_change_path_pose)
                     goto trajectory_get_route_update_error;
                 path_increment_current_pose_idx(path);
+                if (current_path_pos == path_get_current_path_pos(path))
+                    goto trajectory_get_route_update_error;
                 current_path_pos = path_get_current_path_pos(path);
             }
             test = update_graph(robot_pose, &(current_path_pos->pos));
