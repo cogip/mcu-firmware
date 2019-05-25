@@ -21,6 +21,7 @@ BIN_NAME = "cortex-simulation.elf"
 BIN_PATH = BASE_PATH + "bin/cogip2019-cortex-native/" + BIN_NAME
 ROBOT_DESIGN_PATH = BASE_PATH + "Robot.step"
 AREA_DESIGN_PATH = BASE_PATH + "Table.iges"
+OBSTACLE_DESIGN_PATH = BASE_PATH + "Robot.step"
 FCD_DOC_NAME = "RobotSimulation"
 FCD_ROBOT_NAME = "Robot_{}_pose_{}"
 FCD_OBSTACLE_NAME = "Obstacle_{}_pose_{}"
