@@ -11,7 +11,7 @@ static path_pose_t poses[] = {
         .pos = {
                    .x = 1500 - ROBOT_MARGIN,
                    .y = 300 + ROBOT_MARGIN,
-                   .O = 90,
+                   .O = 180,
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
@@ -20,9 +20,9 @@ static path_pose_t poses[] = {
     /* Homologation path */
     {
         .pos = {
-                   .x = 0,
-                   .y = 1050,
-                   .O = -90,
+                   .x = 1200,
+                   .y = 300 + ROBOT_MARGIN,
+                   .O = 180,
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
@@ -30,9 +30,19 @@ static path_pose_t poses[] = {
     },
     {
         .pos = {
-                   .x = 1200,
+                   .x = 0,
                    .y = 1050,
-                   .O = -90,
+                   .O = 0,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED / 2,
+        .act = NULL,
+    },
+    {
+        .pos = {
+                   .x = 1200 - ROBOT_MARGIN,
+                   .y = 1050,
+                   .O = 0,
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
@@ -42,7 +52,8 @@ static path_pose_t poses[] = {
 
 path_t robot_path = {
     /* static cfg */
-    .play_in_loop = TRUE,
+    .current_pose_idx = 0,
+    .play_in_loop = FALSE,
     .nb_pose = sizeof(poses)/sizeof(path_pose_t),
     .poses = poses,
 };
@@ -93,7 +104,6 @@ inline void path_decrement_current_pose_idx(path_t *path)
     else if (path->play_in_loop) {
         path->current_pose_idx = path->nb_pose - 1;
     }
-    printf("************************************************ %u/%u\n", path->current_pose_idx, path->nb_pose);
 }
 
 inline uint8_t path_get_current_max_speed(const path_t *path)
