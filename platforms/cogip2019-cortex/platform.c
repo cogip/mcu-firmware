@@ -91,6 +91,52 @@ void pf_front_cup_hold(void)
     sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_HOLD);
 }
 
+
+void pf_front_cup_ramp(void)
+{
+ // TODO: Monter les ascenceurs face AV + et stockage des palets
+/* Option 1: on baisse la fourchette  et  on stocke le rouge dans la fourchette.
+    Le vert et le bleu dans la rampe
+    Option 2: on bloque la rampe, on stocke les 3 palets dans la rampe
+*/
+    sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(PF_SERVO_FC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    xtimer_usleep(250 * US_PER_MS);
+
+    sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(PF_SERVO_FC_CUP, PF_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_RAMP);
+    xtimer_usleep(500 * US_PER_MS);
+
+    gpio_clear(GPIO_FL_PUMP_4);
+    gpio_clear(GPIO_FC_PUMP_5);
+    gpio_clear(GPIO_FR_PUMP_6);
+
+    xtimer_usleep(250 * US_PER_MS);
+    pf_front_cup_hold();
+    xtimer_usleep(500 * US_PER_MS);
+}
+
+void pf_back_cup_take(void)
+{
+    sd21_servo_reach_position(PF_SERVO_BL_CUP, PF_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(PF_SERVO_BC_CUP, PF_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_TAKE);
+    gpio_set(GPIO_BL_PUMP_1);
+    xtimer_usleep(200 * US_PER_MS);
+    gpio_set(GPIO_BC_PUMP_2);
+    xtimer_usleep(200 * US_PER_MS);
+    gpio_set(GPIO_BR_PUMP_3);
+}
+
+void pf_back_cup_hold(void)
+{
+    sd21_servo_reach_position(PF_SERVO_BL_CUP, PF_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(PF_SERVO_BC_CUP, PF_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_HOLD);
+}
+
 void pf_init(void)
 {
     board_init();
