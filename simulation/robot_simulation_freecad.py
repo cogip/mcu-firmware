@@ -23,6 +23,7 @@ ROBOT_DESIGN_PATH = BASE_PATH + "Robot.step"
 AREA_DESIGN_PATH = BASE_PATH + "Table.iges"
 FCD_DOC_NAME = "RobotSimulation"
 FCD_ROBOT_NAME = "Robot_{}_pose_{}"
+FCD_OBSTACLE_NAME = "Obstacle_{}_pose_{}"
 
 
 class Simulator:
@@ -46,6 +47,7 @@ class Simulator:
             cls.fcd_doc.getObject(obj.Label).ViewObject.Visibility = False
 
         Robot.init_shape()
+        Obstacle.init_shape()
         Area.init_shape()
 
 
@@ -69,7 +71,7 @@ class FcdObject:
         if cls.do_init_shape:
             try:
                 cls.import_shape_from_file()
-            except AttributeError, FileNotFoundError:
+            except (FreeCAD.Base.FreeCADError, AttributeError, FileNotFoundError):
                 cls.create_default_shape()
 
             # Prepare the first object and hide it
@@ -120,19 +122,19 @@ class Robot(FcdObject):
     def __init__(self, robot_id):
         self.robot_id = robot_id
 
-        self.fcd_robot_pose_current = Simulator.fcd_doc.getObject(FCD_ROBOT_NAME.format(self.robot_id, "current"))
-        self.fcd_robot_pose_order = Simulator.fcd_doc.getObject(FCD_ROBOT_NAME.format(self.robot_id, "order"))
+        self.fcd_robot_pose_current = Simulator.fcd_doc.getObject(FCD_ROBOT_NAME.format(int(self.robot_id), "current"))
+        self.fcd_robot_pose_order = Simulator.fcd_doc.getObject(FCD_ROBOT_NAME.format(int(self.robot_id), "order"))
 
         if not self.fcd_robot_pose_current or not self.fcd_robot_pose_order:
             # Add pose current object
             self.fcd_robot_pose_current = Simulator.fcd_doc.addObject("Part::Feature",
-                                                                      FCD_ROBOT_NAME.format(self.robot_id, "current"))
+                                                                      FCD_ROBOT_NAME.format(int(self.robot_id), "current"))
             self.fcd_robot_pose_current.ViewObject.Visibility = True
             self.fcd_robot_pose_current.Shape = Robot.fcd_shape
 
             # Add pose order object
             self.fcd_robot_pose_order = Simulator.fcd_doc.addObject("Part::Feature",
-                                                                    FCD_ROBOT_NAME.format(self.robot_id, "order"))
+                                                                      FCD_ROBOT_NAME.format(int(self.robot_id), "order"))
             self.fcd_robot_pose_order.ViewObject.Visibility = True
             self.fcd_robot_pose_order.Shape = Robot.fcd_shape
 
@@ -151,7 +153,7 @@ class Robot(FcdObject):
         # Set pose order object transparency for visibility
         self.fcd_robot_pose_order.ViewObject.Transparency = 90
 
-    def _set_pose(self, fcd_obj, params):
+    def set_pose(self, fcd_obj, params):
         x = float(params[0])
         y = float(params[1])
         teta = float(params[2])
@@ -166,30 +168,85 @@ class Robot(FcdObject):
         fcd_obj.Placement = FreeCAD.Placement(position, rotation, center)
 
     def set_pose_order(self, params):
-        self._set_pose(self.fcd_robot_pose_order, params)
+        self.set_pose(self.fcd_robot_pose_order, params)
 
     def set_pose_current(self, params):
-        self._set_pose(self.fcd_robot_pose_current, params)
+        self.set_pose(self.fcd_robot_pose_current, params)
+
+class Obstacle(FcdObject):
+    # Default box dimensions if no obstacle design is provided
+    default_length = 300
+    default_width = 300
+    default_height = 375
+    # Offsets for placement
+    offset_length = 0
+    offset_width = 0
+    offset_height = 0
+    offset_angle = 0
+    # Obstacle design path
+    _design_path = OBSTACLE_DESIGN_PATH
+    fcd_shape = None
+
+    def __init__(self, obstacle_id):
+        self.obstacle_id = obstacle_id
+
+        self.fcd_obstacle_pose = Simulator.fcd_doc.getObject(FCD_OBSTACLE_NAME.format(int(self.obstacle_id), "current"))
+        self.fcd_obstacle_pose_order = Simulator.fcd_doc.getObject(FCD_OBSTACLE_NAME.format(int(self.obstacle_id), "order"))
+
+        if not self.fcd_obstacle_pose:
+            # Add pose current object
+            self.fcd_obstacle_pose = Simulator.fcd_doc.addObject("Part::Feature",
+                                                                      FCD_OBSTACLE_NAME.format(int(self.obstacle_id), "current"))
+            self.fcd_obstacle_pose.ViewObject.Visibility = True
+            self.fcd_obstacle_pose.Shape = Obstacle.fcd_shape
+
+            Simulator.fcd_doc.recompute()
+        else:
+            self.fcd_obstacle_pose.ViewObject.Visibility = True
+
+        if self.fcd_obstacle_pose.Shape.ShapeType == 'Solid':
+            # Define box offset as reference point is a box corner
+            self.offset_length = self.default_length / 2
+            self.offset_width = self.default_width / 2
+            self.offset_height = 0
+
+    def set_pose(self, fcd_obj, params):
+        x = float(params[0])
+        y = float(params[1])
+        teta = float(params[2])
+
+        # Reference point for Part::Box is the (min(x), min(y), min(z)) corner.
+        # Replace the center of the box on the target point by adding half of obstacle lentgh.
+        position = FreeCAD.Vector(x - self.offset_length, y - self.offset_width, self.offset_height)
+        # Rotation
+        rotation = FreeCAD.Rotation(FreeCAD.Vector(0, 0, 1), teta + self.offset_angle)
+        # Rotation axis is the center relatively to the position point
+        center = FreeCAD.Vector(self.offset_length, self.offset_width, 0)
+        fcd_obj.Placement = FreeCAD.Placement(position, rotation, center)
 
 
 class Parser(Thread):
-    STARTLINE_PATTERN = '>>>>'
-    ROBOT_OBJECT_PATTERN = '@robot@'
-    POSE_ORDER_PATTERN = '@pose_order@'
-    POSE_CURRENT_PATTERN = '@pose_current@'
+    STARTLINE_PATTERN = b'>>>>'
+    ROBOT_OBJECT_PATTERN = b'@robot@'
+    OBSTACLE_OBJECT_PATTERN = b'@obstacle@'
+    POSE_ORDER_PATTERN = b'@pose_order@'
+    POSE_CURRENT_PATTERN = b'@pose_current@'
 
     def _decode(self, line):
         # Remove trailing spaces or line return
-        line = line.rstrip().rstrip(',')
+        line = line.rstrip().rstrip(b',')
         output = sys.stdout
-        if re.match(r'@.*@,.*', line) is not None:
+        if re.match(b'@.*@,.*', line) is not None:
             # Split parameters
-            params = line.split(',')
+            params = line.split(b',')
 
             # Extract objects parameters
-            obj_type = params[0]
-            obj_param = params[1]
-            obj_id = params[2]
+            try:
+                obj_type = params[0]
+                obj_id = params[1]
+                obj_param = params[2]
+            except IndexError:
+                return
 
             if obj_type == self.ROBOT_OBJECT_PATTERN:
                 robot = Robot.get_fcd_object(obj_id)
@@ -199,11 +256,25 @@ class Parser(Thread):
                     robot.set_pose_current(params[3:])
                 else:
                     output = sys.stderr
-        print(line, file=output)
+                print(line, file=output)
+            elif obj_type == self.OBSTACLE_OBJECT_PATTERN:
+                if len(params) == 11:
+                    obstacle = Obstacle.get_fcd_object(obj_id)
+                    x=(int(params[2]) + int(params[6])) / 2
+                    y=(int(params[3]) + int(params[7])) / 2
+                    O=int(params[10])
+
+                    obstacle.set_pose(obstacle.fcd_obstacle_pose, (x, y, O))
+
+                    print(line, file=output)
 
     def parse(self, flow):
         while True:
-            line = flow.readline()
+            try:
+                line = bytes(flow.readline())
+            except serial.serialutil.SerialException:
+                self.ser.close()
+                self.ser.open()
             if line.startswith(self.STARTLINE_PATTERN):
                 break
             self._decode(line)
