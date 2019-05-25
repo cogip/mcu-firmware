@@ -54,8 +54,11 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
             LOG_DEBUG("planner: Controller has reach final position.\n");
-            if (allow_change_path_pose)
+            if (allow_change_path_pose) {
+                if (current_path_pos->act)
+                    (*(current_path_pos->act))();
                 path_increment_current_pose_idx(path);
+            }
             current_path_pos = path_get_current_path_pos(path);
             need_update = 1;
         }
