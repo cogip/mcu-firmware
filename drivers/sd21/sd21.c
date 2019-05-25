@@ -112,6 +112,8 @@ void sd21_init(void)
         for (uint8_t servo_id = 0; servo_id < sd21_config[dev].servos_nb;
                 servo_id++) {
                 sd21_servo_reset_position(dev, servo_id);
+                /* Wait a small tempo to avoid current peak */
+                xtimer_usleep(50 * US_PER_MS);
         }
     }
 }
