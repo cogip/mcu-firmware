@@ -136,7 +136,7 @@ void *task_planner(void *arg)
     ctrl_t *ctrl = pf_get_ctrl();
 
     printf("Game planner started\n");
-    /* 2018: Camp left is orange, right is green */
+    /* 2019: Camp left is purple, right is yellow */
     printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
 
     path_t* path = pf_get_path();
@@ -144,8 +144,8 @@ void *task_planner(void *arg)
         printf("machine has no path\n");
     }
 
-    /* mirror the points in place if selected camp is right */
-    if (!camp_left) {
+    /* mirror the points in place if selected camp is left */
+    if (camp_left) {
         path_horizontal_mirror_all_pos(path);
     }
 
