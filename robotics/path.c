@@ -52,6 +52,14 @@ inline const path_pose_t *path_get_current_path_pos(const path_t *path)
     return &path->poses[path->current_pose_idx];
 }
 
+inline const path_pose_t* path_get_pose_at_idx(path_t *path, uint8_t idx)
+{
+    if ((idx < path->nb_pose) && (idx > 0))
+        return &path->poses[idx];
+    else
+        return NULL;
+}
+
 inline uint8_t path_get_current_pose_idx(path_t *path)
 {
     return path->current_pose_idx;
