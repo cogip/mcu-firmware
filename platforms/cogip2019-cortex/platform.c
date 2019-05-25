@@ -29,13 +29,13 @@
 int pf_is_game_launched(void)
 {
     /* Starter switch */
-    return gpio_read(GPIO_STARTER);
+    return !gpio_read(GPIO_STARTER);
 }
 
 int pf_is_camp_left(void)
 {
     /* Color switch for coords translations */
-    return gpio_read(GPIO_CAMP);
+    return !gpio_read(GPIO_CAMP);
 }
 
 int pf_read_sensors(void)
@@ -91,7 +91,7 @@ void pf_init(void)
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
     assert(gpio_init(GPIO_CAMP, GPIO_IN) == 0);
-    assert(gpio_init(GPIO_STARTER, GPIO_IN) == 0);
+    assert(gpio_init(GPIO_STARTER, GPIO_IN_PU) == 0);
 
     sd21_init();
     pca9548_init();
