@@ -137,7 +137,7 @@ sd21_calib_servo_cmd_err:
 void sd21_calib_init(void)
 {
     shell_command_t cmd = { 
-        "sd21_calib", "sd21_calib <board_id> <servo_id>",
+        "sc", "sd21_calib <board_id> <servo_id>",
         sd21_calib_servo_cmd
     };
 
