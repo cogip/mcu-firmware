@@ -16,7 +16,7 @@
 #define ROBOT_WIDTH         354                 /* units: mm */
 #define ROBOT_MARGIN        (ROBOT_WIDTH / 2)
 
-#define PF_START_COUNTDOWN  5
+#define PF_START_COUNTDOWN  3
 
 #define NB_SHELL_COMMANDS   10
 
