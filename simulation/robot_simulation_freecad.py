@@ -9,6 +9,8 @@ import FreeCADGui
 import os
 import psutil
 import re
+from serial import *
+import serial
 import subprocess
 import signal
 import sys
@@ -214,6 +216,23 @@ class NativeParser(Parser):
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         super(NativeParser, self).parse(p.stdout)
 
+class SerialParser(Parser):
+    def __init__(self, serial_port):
+        try:
+            self.ser = Serial(port=serial_port, baudrate=115200, timeout=1, writeTimeout=1)
+        except serial.serialutil.SerialException:
+            self.ser.close()
+            self.ser.open()
+
+    def parse(self):
+            if self.ser.isOpen():
+                while True:
+                    super(SerialParser, self).parse(self.ser)
+
+    def send(self, p):
+        for line in fileinput.input():
+                if self.ser.isOpen():
+                    self.ser.write(line)
 
 if __name__ == "__main__":
     # Kill all remaining bin instance
@@ -241,5 +260,7 @@ if __name__ == "__main__":
 
     parser = NativeParser()
     thread = Thread(target=parser.parse, args=(BIN_PATH,))
+    #parser = SerialParser("/dev/ttyUSB0")
+    #thread = Thread(target=parser.parse)
     thread.daemon = True
     thread.start()
