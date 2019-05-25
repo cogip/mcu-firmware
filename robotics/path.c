@@ -17,8 +17,8 @@ static path_pose_t poses[] = {
         .max_speed = MAX_SPEED / 2,
         .act = NULL,
     },
-    /* Homologation path */
-    {
+    /* Game path */
+    {   /* Sortie zone de départ */
         .pos = {
                    .x = 1200,
                    .y = 300 + ROBOT_MARGIN,
@@ -28,25 +28,41 @@ static path_pose_t poses[] = {
         .max_speed = MAX_SPEED / 2,
         .act = NULL,
     },
+
+
     {
+        /* Pré-Point récolte 3 palets proche balance */
         .pos = {
-                   .x = 0,
-                   .y = 1050,
-                   .O = 0,
+                   .x = 600,
+                   .y = 1300,
+                   .O = 90,
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED / 2,
+        .act = NULL, // TODO: Ouvrir (pos 90 deg) les 3 servos ventouse face AV + activer pompes
+    },
+    {
+        /* Point récolte 3 palets proche balance */
+        /* TODO /!\ Régulation de vitesse seulement !! */
+        .pos = {
+                   .x = 600,
+                   .y = 1361,
+                   .O = 90,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED / 4,
         .act = NULL,
     },
     {
+        /* Post-Point récolte 3 palets proche balance */
         .pos = {
-                   .x = 1200 - ROBOT_MARGIN,
-                   .y = 1050,
-                   .O = 0,
+                   .x = 600,
+                   .y = 1300,
+                   .O = 90,
                },
-        .allow_reverse = FALSE,
+        .allow_reverse = TRUE,
         .max_speed = MAX_SPEED / 2,
-        .act = NULL,
+        .act = pf_front_cup_ramp,
     },
 };
 
