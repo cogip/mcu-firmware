@@ -207,7 +207,7 @@ static const sd21_conf_t sd21_config[] = {
             {
                 .positions = {
                     2450, /* Ramp Disposal */
-                    575,  /* Puck prehension */
+                    625,  /* Puck prehension */
                     1400, /* Neutral */
                 },
                 .default_position = PF_SERVO_STATE_CUP_HOLD,
