@@ -110,9 +110,14 @@
 /*****************/
 
 /* Suction cups */
+#define PF_SERVO_STATE_CUP_RAMP     0
 #define PF_SERVO_STATE_CUP_TAKE     1
 #define PF_SERVO_STATE_CUP_HOLD     2
-#define PF_SERVO_STATE_CUP_RAMP     0
+
+/* Elevators */
+#define PF_SERVO_STATE_ELEVATOR_TOP     0
+#define PF_SERVO_STATE_ELEVATOR_BOTTOM  1
+//TODO: check in struct below. #define PF_SERVO_STATE_ELEVATOR_FORK    XXX
 
 typedef struct {
     double angle_offset;
@@ -462,5 +467,6 @@ static const sd21_conf_t sd21_config[] = {
 
 void pf_front_cup_take(void);
 void pf_front_cup_hold(void);
+void pf_front_cup_ramp(void);
 
 #endif /* PLATFORM_H_ */
