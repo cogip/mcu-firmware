@@ -47,6 +47,34 @@ void pf_front_cup_ramp(void)
 {
 }
 
+void pf_back_cup_take(void)
+{
+}
+
+void pf_back_cup_hold(void)
+{
+}
+
+void pf_back_cup_ramp(void)
+{
+}
+
+void pf_front_ramp_right_drop(void)
+{
+}
+
+void pf_front_ramp_reset(void)
+{
+}
+
+void pf_back_ramp_left_drop(void)
+{
+}
+
+void pf_back_ramp_reset(void)
+{
+}
+
 void pf_init(void)
 {
     motor_driver_init(0);

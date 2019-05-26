@@ -137,6 +137,69 @@ void pf_back_cup_hold(void)
     sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_HOLD);
 }
 
+void pf_back_cup_ramp(void)
+{
+    sd21_servo_reach_position(PF_SERVO_BL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(PF_SERVO_BC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(PF_SERVO_BR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    xtimer_usleep(250 * US_PER_MS);
+
+    sd21_servo_reach_position(PF_SERVO_BL_CUP, PF_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(PF_SERVO_BC_CUP, PF_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_RAMP);
+    xtimer_usleep(500 * US_PER_MS);
+
+    gpio_clear(GPIO_BL_PUMP_1);
+    gpio_clear(GPIO_BC_PUMP_2);
+    gpio_clear(GPIO_BR_PUMP_3);
+
+    xtimer_usleep(250 * US_PER_MS);
+
+    pf_back_cup_hold();
+}
+
+
+void pf_front_ramp_right_drop(void)
+{
+    sd21_servo_reach_position(PF_SERVO_F_RAMP_BLOCK, PF_SERVO_STATE_RAMP_OPEN);
+    sd21_servo_reach_position(PF_SERVO_FR_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+    sd21_servo_reach_position(PF_SERVO_F_RAMP, PF_SERVO_STATE_RAMP_RIGHT);
+    xtimer_usleep(3000 * US_PER_MS);
+
+    pf_front_ramp_reset();
+}
+
+void pf_front_ramp_reset(void)
+{
+    //sd21_servo_reach_position(PF_SERVO_F_RAMP_BLOCK, PF_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(PF_SERVO_FL_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(PF_SERVO_FR_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
+    xtimer_usleep(500 * US_PER_MS);
+    sd21_servo_reach_position(PF_SERVO_F_RAMP, PF_SERVO_STATE_RAMP_HORIZ);
+    xtimer_usleep(1000 * US_PER_MS);
+}
+
+
+void pf_back_ramp_left_drop(void)
+{
+    sd21_servo_reach_position(PF_SERVO_B_RAMP_BLOCK, PF_SERVO_STATE_RAMP_OPEN);
+    sd21_servo_reach_position(PF_SERVO_BL_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+    sd21_servo_reach_position(PF_SERVO_B_RAMP, PF_SERVO_STATE_RAMP_LEFT);
+    xtimer_usleep(3000 * US_PER_MS);
+
+    pf_back_ramp_reset();
+}
+
+void pf_back_ramp_reset(void)
+{
+    //sd21_servo_reach_position(PF_SERVO_B_RAMP_BLOCK, PF_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(PF_SERVO_BL_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(PF_SERVO_BR_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
+    xtimer_usleep(500 * US_PER_MS);
+    sd21_servo_reach_position(PF_SERVO_B_RAMP, PF_SERVO_STATE_RAMP_HORIZ);
+    xtimer_usleep(1000 * US_PER_MS);
+}
+
 void pf_init(void)
 {
     board_init();
