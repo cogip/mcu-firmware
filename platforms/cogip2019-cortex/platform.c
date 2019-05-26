@@ -116,6 +116,10 @@ void pf_front_cup_ramp(void)
     xtimer_usleep(250 * US_PER_MS);
     pf_front_cup_hold();
     xtimer_usleep(500 * US_PER_MS);
+
+    sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(PF_SERVO_FC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
 }
 
 void pf_back_cup_take(void)
@@ -156,6 +160,12 @@ void pf_back_cup_ramp(void)
     xtimer_usleep(250 * US_PER_MS);
 
     pf_back_cup_hold();
+
+    xtimer_usleep(500 * US_PER_MS);
+
+    sd21_servo_reach_position(PF_SERVO_BL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(PF_SERVO_BC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(PF_SERVO_BR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
 }
 
 
