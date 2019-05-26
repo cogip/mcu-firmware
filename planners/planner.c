@@ -76,6 +76,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
         if (!allow_change_path_pose)
             goto trajectory_get_route_update_error;
         path_increment_current_pose_idx(path);
+        current_path_pos = path_get_current_path_pos(path);
         need_update = 1;
     }
 
