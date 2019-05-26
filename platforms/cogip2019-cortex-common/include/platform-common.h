@@ -25,6 +25,10 @@
 #define MAX_ACC     4
 #define MAX_SPEED   10
 
+#define PF_CTRL_BLOCKING_SPEED_TRESHOLD         2
+#define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD     (MAX_ACC / 2)
+#define PF_CTRL_BLOCKING_NB_ITERATIONS          10
+
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
 int pf_is_camp_left(void);
@@ -51,6 +55,10 @@ static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
     .ctrl_post_mode_cb[CTRL_MODE_BLOCKED]       = pf_ctrl_post_stop_cb,
     .ctrl_post_mode_cb[CTRL_MODE_RUNNING]       = pf_ctrl_post_running_cb,
     .ctrl_post_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_post_running_cb,
+
+    .blocking_speed_treshold            = PF_CTRL_BLOCKING_SPEED_TRESHOLD,
+    .blocking_speed_error_treshold      = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
+    .blocking_cycles_max                = PF_CTRL_BLOCKING_NB_ITERATIONS,
 };
 
 #endif  /* PLATFORM_COMMON_H_ */
