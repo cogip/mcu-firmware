@@ -26,7 +26,7 @@
 #define MAX_SPEED   10
 
 #define PF_CTRL_BLOCKING_SPEED_TRESHOLD         2
-#define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD     (MAX_ACC / 2)
+#define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD     1
 #define PF_CTRL_BLOCKING_NB_ITERATIONS          10
 
 path_t *pf_get_path(void);
