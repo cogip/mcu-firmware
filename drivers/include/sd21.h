@@ -57,6 +57,13 @@
 /**
  * @brief   Maximum number of servos by board
  */
+#ifndef SD21_I2C_RETRIES
+#define SD21_I2C_RETRIES        3
+#endif /* SD21_I2C_RETRIES */
+
+/**
+ * @brief   Maximum number of servos by board
+ */
 #ifndef SD21_SERVO_NUMOF
 #define SD21_SERVO_NUMOF        21
 #endif /* SD21_SERVO_NUMOF */

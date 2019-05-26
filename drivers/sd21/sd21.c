@@ -29,15 +29,27 @@ static void sd21_send_twi_cmd(sd21_t dev, uint8_t servo_id, uint8_t speed, uint1
 
     data[0] = reg;
     data[1] = speed;
-    i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0);
+    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
+        if (!i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0))
+            break;
+        xtimer_usleep(20 * US_PER_MS);
+    }
 
     data[0] = reg + 1;
     data[1] = (uint8_t) (position & 0x00FF);
-    i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0);
+    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
+        if (!i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0))
+            break;
+        xtimer_usleep(20 * US_PER_MS);
+    }
 
     data[0] = reg + 2;
     data[1] = position >> 8;
-    i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0);
+    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
+        if (i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0))
+            break;
+        xtimer_usleep(20 * US_PER_MS);
+    }
 
     sd21_servo_positions[dev][servo_id] = position;
 
@@ -114,8 +126,6 @@ void sd21_init(void)
         /* Close all servomotors */
         for (uint8_t servo_id = 0; servo_id < sd21_config[dev].servos_nb;
                 servo_id++) {
-                sd21_servo_reset_position(dev, servo_id);
-                xtimer_usleep(20 * US_PER_MS);
                 sd21_servo_reset_position(dev, servo_id);
                 /* Wait a small tempo to avoid current peak */
                 xtimer_usleep(20 * US_PER_MS);
