@@ -35,6 +35,18 @@ int pf_read_sensors(void)
     return 0;
 }
 
+void pf_front_cup_take(void)
+{
+}
+
+void pf_front_cup_hold(void)
+{
+}
+
+void pf_front_cup_ramp(void)
+{
+}
+
 void pf_init(void)
 {
     motor_driver_init(0);
