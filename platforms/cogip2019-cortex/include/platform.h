@@ -310,9 +310,9 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 0-12 */
             {
                 .positions = {
-                    1900,    /* Open */
-                    950,   /* Close */
-                    1500,   /* Default */
+                    950,    /* Open */
+                    1900,   /* Close */
+                    950,    /* Default */
                 },
                 .default_position = 0,
                 .default_speed = 0,
