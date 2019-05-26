@@ -86,4 +86,7 @@ static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
         .regul = CTRL_REGUL_POSE_DIST,
 };
 
+void pf_front_cup_take(void);
+void pf_front_cup_hold(void);
+void pf_front_cup_ramp(void);
 #endif /* PLATFORM_H_ */
