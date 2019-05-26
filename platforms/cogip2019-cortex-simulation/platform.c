@@ -75,6 +75,18 @@ void pf_back_ramp_reset(void)
 {
 }
 
+void pf_back_ramp_left_horiz_for_goldenium(void)
+{
+}
+
+void pf_arms_open(void)
+{
+}
+
+void pf_arms_close(void)
+{
+}
+
 void pf_init(void)
 {
     motor_driver_init(0);

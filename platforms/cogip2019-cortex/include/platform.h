@@ -106,6 +106,10 @@
 #define PF_SERVO_STATE_RAMP_LEFT        1
 #define PF_SERVO_STATE_RAMP_HORIZ       2
 
+/* Arms */
+#define PF_SERVO_STATE_ARM_OPEN         0
+#define PF_SERVO_STATE_ARM_CLOSE        1
+
 typedef struct {
     double angle_offset;
     double distance_offset;
@@ -463,5 +467,8 @@ void pf_front_ramp_right_drop(void);
 void pf_front_ramp_reset(void);
 void pf_back_ramp_left_drop(void);
 void pf_back_ramp_reset(void);
+void pf_back_ramp_left_horiz_for_goldenium(void);
+void pf_arms_open(void);
+void pf_arms_close(void);
 
 #endif /* PLATFORM_H_ */
