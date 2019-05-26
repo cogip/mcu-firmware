@@ -38,6 +38,16 @@ inline void ctrl_set_allow_reverse(ctrl_t* ctrl, uint8_t allow)
     ctrl->control.allow_reverse = allow;
 }
 
+inline void ctrl_set_anti_blocking_on(ctrl_t* ctrl, uint8_t value)
+{
+    ctrl->control.anti_blocking_on = value;
+}
+
+inline uint8_t ctrl_get_anti_blocking_on(ctrl_t* ctrl)
+{
+    return ctrl->control.anti_blocking_on;
+}
+
 inline uint8_t ctrl_is_pose_reached(ctrl_t* ctrl)
 {
     return ctrl->control.pose_reached;
@@ -64,10 +74,14 @@ inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t* pose_order)
             pose_order->x, pose_order->y, pose_order->O);
 
     irq_disable();
+
+    ctrl->control.blocking_cycles = 0;
+
     if (!pose_equal(&ctrl->control.pose_order, pose_order)) {
         ctrl->control.pose_order = *pose_order;
         ctrl->control.pose_reached = FALSE;
     }
+
     irq_enable();
 }
 
