@@ -110,12 +110,15 @@ const char* sd21_servo_get_name(sd21_t dev, uint8_t servo_id)
 void sd21_init(void)
 {
     for (sd21_t dev = 0; dev < SD21_NUMOF; dev++) {
+        xtimer_usleep(250 * US_PER_MS);
         /* Close all servomotors */
         for (uint8_t servo_id = 0; servo_id < sd21_config[dev].servos_nb;
                 servo_id++) {
                 sd21_servo_reset_position(dev, servo_id);
+                xtimer_usleep(20 * US_PER_MS);
+                sd21_servo_reset_position(dev, servo_id);
                 /* Wait a small tempo to avoid current peak */
-                xtimer_usleep(50 * US_PER_MS);
+                xtimer_usleep(20 * US_PER_MS);
         }
     }
 }
