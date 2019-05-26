@@ -5,6 +5,13 @@
 
 #include "utils.h"
 
+/*
+ * TODO:
+ * - Add anti-blocking activation for each point,
+ * - For each actions: keep a status if its done (to avoid multiple puck capture
+ *    if delivery was bypassed for any reason)
+ * - Absolute coordinate recalibration on games frames (?)
+ */
 static path_pose_t poses[] = {
     /* POSE_INITIAL */
     {
@@ -14,7 +21,7 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED / 2,
+        .max_speed = NORMAL_SPEED,
         .act = NULL,
     },
     /* Game path */
@@ -25,129 +32,220 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED / 2,
+        .max_speed = NORMAL_SPEED,
         .act = NULL,
     },
-
-
+    /*
+     * Récole 3 palets proche balance
+     */
     {
-        /* Pré-Point récolte 3 palets proche balance */
+        /* Pré-Point */
         .pos = {
                    .x = 600,
                    .y = 1300,
                    .O = 90,
                },
         .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED / 2,
+        .max_speed = NORMAL_SPEED,
         .act = pf_front_cup_take,
     },
     {
-        /* Point récolte 3 palets proche balance */
-        /* TODO /!\ Régulation de vitesse seulement !! */
+        /* Point récolte */
+        /* TODO /!\ Régulation de vitesse seulement ? */
         .pos = {
                    .x = 600,
                    .y = 1361,
                    .O = 90,
                },
         .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED / 4,
+        .max_speed = LOW_SPEED,
         .act = NULL,
     },
     {
-        /* Post-Point récolte 3 palets proche balance */
+        /* Post-Point */
         .pos = {
                    .x = 600,
                    .y = 1300,
                    .O = 90,
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 2,
+        .max_speed = NORMAL_SPEED,
         .act = pf_front_cup_ramp,
     },
-
+    /*
+     * Récole 3 palets éloignés balance
+     */
     {
-        /* Pré-Point récolte 3 palets éloignés balance */
+        /* Pré-Point */
         .pos = {
                    .x = 900,
                    .y = 1300,
                    .O = 270,
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 2,
+        .max_speed = NORMAL_SPEED,
         .act = pf_back_cup_take,
     },
     {
-        /* Point récolte 3 palets éloignés balance */
-        /* TODO /!\ Régulation de vitesse seulement !! */
+        /* Point récolte */
+        /* TODO /!\ Régulation de vitesse seulement ? */
         .pos = {
                    .x = 900,
                    .y = 1361,
                    .O = 270,
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 4,
+        .max_speed = LOW_SPEED,
         .act = NULL,
     },
     {
-        /* Post-Point récolte 3 palets éloignés balance */
+        /* Post-Point */
         .pos = {
                    .x = 900,
                    .y = 1300,
                    .O = 270,
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 2,
+        .max_speed = NORMAL_SPEED,
         .act = pf_back_cup_ramp,
     },
-
+    /*
+     * Dépose dans la balance
+     */
     {
-        /* Pré-Point dépose de 3 palets dans la balance */
-        .pos = {
-                   .x = 300,
-                   .y = 1310,
-                   .O = 180, // 0 == dépose cote droit, 180: dépose cote gauche
-               },
-        .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 2,
-        .act = NULL,
-    },
-    {
-        /* Point dépose de 3 palets dans la balance */
+        /* Point dépose rampe avant */
         .pos = {
                    .x = 230,
                    .y = 1310,
-                   .O = 180, // 0 == dépose cote droit, 180: dépose cote gauche
+                   .O = 180, // 180: dépose cote gauche
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 4,
-        // TODO: /!\ à symétriser fonction de la couleur
-        // ouverture rampe cote + pivot même cote + attendre
+        .max_speed = MAX_SPEED, //NORMAL_SPEED,
         .act = pf_front_ramp_right_drop,
     },
     {
-        /* Point dépose de 3 palets dans la balance */
+        /* Point dépose rampe arrière */
         .pos = {
                    .x = 230,
                    .y = 1310,
-                   .O = 0, //  ****** 180: dépose cote gauche
+                   .O = 0, //  0 == dépose cote droit
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 2,
-        // TODO: /!\ à symétriser fonction de la couleur
-        // ouverture rampe cote ??? + pivot même cote + attendre
+        .max_speed = NORMAL_SPEED,
         .act = pf_back_ramp_left_drop,
     },
+    /*
+     * Déplacement vers petit distributeur & pousse des palets en zone de départ
+     */
     {
-        /* Post-Point dépose de 3 palets dans la balance */
+        /* Post-Point récolte 3 palets éloignés balance + orientation vers zone départ */
         .pos = {
-                   .x = 300,
-                   .y = 1310,
-                   .O = 0, // 0 == dépose cote droit, 180: dépose cote gauche
+                   .x = 900,
+                   .y = 1300,
+                   .O = 300,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED, //NORMAL_SPEED,
+        .act = pf_arms_open,
+    },
+    {
+        /* Point interne à la zone de départ */
+        .pos = {
+                   .x = 1100,
+                   .y = 1000,
+                   .O = 300
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_arms_close,
+    },
+    {
+        /* Point approche dans couloir vers le petit distributeur */
+        .pos = {
+                   .x = 1275,
+                   .y = 1500,
+                   .O = 90,
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED / 4,
+        .max_speed = NORMAL_SPEED,
         .act = NULL,
     },
+    /*
+     * Récolte petit distributeur
+     */
+    {
+        /* Pré-Point */
+        .pos = {
+                   .x = 1275,
+                   .y = 1739+40,
+                   .O = 90,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_front_cup_take,
+    },
+    {
+        /* Point petit distributeur */
+        .pos = {
+                   .x = 1275,
+                   .y = 1800+40,
+                   .O = 90,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = LOW_SPEED,
+        .act = NULL,
+    },
+    {
+        /* Post-Point */
+        .pos = {
+                   .x = 1275,
+                   .y = 1300,
+                   .O = 90,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = NORMAL_SPEED,
+        // TODO: /!\ à symétriser fonction de la couleur
+        .act = pf_front_cup_ramp,
+    },
+    /*
+     * Ouverture du goldenium
+     */
+    {   /* Pré-point */
+        .pos = {
+                   .x = -150,
+                   .y = 285,
+                   .O = 180,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_back_ramp_left_horiz_for_goldenium,
+    },
+
+    {   /* Point ouverture goldenium */
+        .pos = {
+                   .x = -280,
+                   .y = 285,
+                   .O = 180,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+
+    {   /* Post-point */
+        .pos = {
+                   .x = -150,
+                   .y = 285,
+                   .O = 180,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_back_ramp_reset,
+    },
+
+    /*
+     * End of path
+     */
 };
 
 path_t robot_path = {
