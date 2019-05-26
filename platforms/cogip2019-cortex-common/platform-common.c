@@ -178,7 +178,7 @@ void pf_init_tasks(void)
     /* Create controller thread */
     thread_create(controller_thread_stack,
                   sizeof(controller_thread_stack),
-                  THREAD_PRIORITY_MAIN - 3, 0,
+                  THREAD_PRIORITY_MAIN - 4, 0,
                   task_ctrl_update,
                   (void*)controller,
                   "motion control");
@@ -218,7 +218,7 @@ void pf_init_tasks(void)
         /* Create countdown thread */
         thread_create(countdown_thread_stack,
                 sizeof(countdown_thread_stack),
-                THREAD_PRIORITY_MAIN - 4, 0,
+                THREAD_PRIORITY_MAIN - 3, 0,
                 pf_task_countdown,
                 NULL,
                 "countdown");
