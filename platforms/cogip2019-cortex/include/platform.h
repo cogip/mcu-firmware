@@ -296,7 +296,7 @@ static const sd21_conf_t sd21_config[] = {
             {
                 .positions = {
                     1700,   /* Right */
-                    1525,   /* Left  */
+                    1400,   /* Left  */ // FIXME: réparer la rampe !
                     1600,   /* Horizontal */
                 },
                 .default_position = 2,
