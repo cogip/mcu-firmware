@@ -24,6 +24,7 @@ static void sd21_send_twi_cmd(sd21_t dev, uint8_t servo_id, uint8_t speed, uint1
     uint8_t reg = (servo_id) * 3;
     uint8_t data[2];
 
+    irq_disable();
     i2c_acquire(sd21->i2c_dev_id);
 
     data[0] = reg;
@@ -41,6 +42,7 @@ static void sd21_send_twi_cmd(sd21_t dev, uint8_t servo_id, uint8_t speed, uint1
     sd21_servo_positions[dev][servo_id] = position;
 
     i2c_release(sd21->i2c_dev_id);
+    irq_enable();
 }
 
 void sd21_servo_control(sd21_t dev, uint8_t servo_id, uint8_t speed,
