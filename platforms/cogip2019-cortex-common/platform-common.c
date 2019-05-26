@@ -215,7 +215,7 @@ void pf_init_tasks(void)
         /* Debug indicator to track the non starting state */
         gpio_set(GPIO_DEBUG_LED);
 
-        /* Create planner thread */
+        /* Create countdown thread */
         thread_create(countdown_thread_stack,
                 sizeof(countdown_thread_stack),
                 THREAD_PRIORITY_MAIN - 4, 0,
