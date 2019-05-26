@@ -182,7 +182,7 @@ static const sd21_conf_t sd21_config[] = {
     {   /* SD12 ID0 */
         .i2c_dev_id = 0,
         .i2c_address = (0xC2 >> 1),
-        .i2c_speed_khz = I2C_SPEED_FAST,
+        .i2c_speed_khz = I2C_SPEED_NORMAL,
 
         .servos_nb = 12,
         .servos = {
@@ -323,7 +323,7 @@ static const sd21_conf_t sd21_config[] = {
     {   /* SD12 ID1 */
         .i2c_dev_id = 0,
         .i2c_address = (0xC4 >> 1),
-        .i2c_speed_khz = I2C_SPEED_FAST,
+        .i2c_speed_khz = I2C_SPEED_NORMAL,
 
         .servos_nb = 12,
         .servos = {
