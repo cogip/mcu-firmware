@@ -20,7 +20,7 @@ static path_pose_t poses[] = {
     /* Game path */
     {   /* Sortie zone de départ */
         .pos = {
-                   .x = 1200,
+                   .x = 1000,
                    .y = 300 + ROBOT_MARGIN,
                    .O = 180,
                },
