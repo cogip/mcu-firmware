@@ -64,6 +64,90 @@ static path_pose_t poses[] = {
         .max_speed = MAX_SPEED / 2,
         .act = pf_front_cup_ramp,
     },
+
+    {
+        /* Pré-Point récolte 3 palets éloignés balance */
+        .pos = {
+                   .x = 900,
+                   .y = 1300,
+                   .O = 270,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED / 2,
+        .act = pf_back_cup_take,
+    },
+    {
+        /* Point récolte 3 palets éloignés balance */
+        /* TODO /!\ Régulation de vitesse seulement !! */
+        .pos = {
+                   .x = 900,
+                   .y = 1361,
+                   .O = 270,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED / 4,
+        .act = NULL,
+    },
+    {
+        /* Post-Point récolte 3 palets éloignés balance */
+        .pos = {
+                   .x = 900,
+                   .y = 1300,
+                   .O = 270,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED / 2,
+        .act = pf_back_cup_ramp,
+    },
+
+    {
+        /* Pré-Point dépose de 3 palets dans la balance */
+        .pos = {
+                   .x = 300,
+                   .y = 1310,
+                   .O = 180, // 0 == dépose cote droit, 180: dépose cote gauche
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED / 2,
+        .act = NULL,
+    },
+    {
+        /* Point dépose de 3 palets dans la balance */
+        .pos = {
+                   .x = 230,
+                   .y = 1310,
+                   .O = 180, // 0 == dépose cote droit, 180: dépose cote gauche
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED / 4,
+        // TODO: /!\ à symétriser fonction de la couleur
+        // ouverture rampe cote + pivot même cote + attendre
+        .act = pf_front_ramp_right_drop,
+    },
+    {
+        /* Point dépose de 3 palets dans la balance */
+        .pos = {
+                   .x = 230,
+                   .y = 1310,
+                   .O = 0, //  ****** 180: dépose cote gauche
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED / 2,
+        // TODO: /!\ à symétriser fonction de la couleur
+        // ouverture rampe cote ??? + pivot même cote + attendre
+        .act = pf_back_ramp_left_drop,
+    },
+    {
+        /* Post-Point dépose de 3 palets dans la balance */
+        .pos = {
+                   .x = 300,
+                   .y = 1310,
+                   .O = 0, // 0 == dépose cote droit, 180: dépose cote gauche
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED / 4,
+        .act = NULL,
+    },
 };
 
 path_t robot_path = {
