@@ -407,7 +407,7 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 1-8 */
             {
                 .positions = {
-                    1200,   /* Top position */
+                    1100,   /* Top position */
                     1975,   /* Bottom position */
                     1500,   /* Default */
                 },
