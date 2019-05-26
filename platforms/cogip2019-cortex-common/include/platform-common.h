@@ -22,6 +22,9 @@
 
 #define GAME_DURATION_SEC   100
 
+#define MAX_ACC     4
+#define MAX_SPEED   10
+
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
 int pf_is_camp_left(void);

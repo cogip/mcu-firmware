@@ -31,9 +31,6 @@
 /* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
 #define PULSE_PER_DEGREE    51.70
 
-#define MAX_ACC     10
-#define MAX_SPEED   20
-
 #define HBRIDGE_MOTOR_LEFT  0
 #define HBRIDGE_MOTOR_RIGHT 1
 
