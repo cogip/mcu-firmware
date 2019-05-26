@@ -212,6 +212,9 @@ void pf_init_tasks(void)
         /* Wait for start switch */
         while(!pf_is_game_launched());
 
+        /* Debug indicator to track the non starting state */
+        gpio_set(GPIO_DEBUG_LED);
+
         /* Create planner thread */
         thread_create(countdown_thread_stack,
                 sizeof(countdown_thread_stack),

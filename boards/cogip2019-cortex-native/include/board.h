@@ -35,6 +35,9 @@ extern "C" {
 #include "mtd_native.h"
 #endif
 
+/* Debug LED (stub) */
+#define GPIO_DEBUG_LED  (0)
+
 /**
  * @name    LED handlers
  * @{
