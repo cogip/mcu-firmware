@@ -119,6 +119,13 @@
 #define PF_SERVO_STATE_ELEVATOR_BOTTOM  1
 //TODO: check in struct below. #define PF_SERVO_STATE_ELEVATOR_FORK    XXX
 
+/* Ramps */
+#define PF_SERVO_STATE_RAMP_OPEN        0
+#define PF_SERVO_STATE_RAMP_CLOSE       1
+#define PF_SERVO_STATE_RAMP_RIGHT       0
+#define PF_SERVO_STATE_RAMP_LEFT        1
+#define PF_SERVO_STATE_RAMP_HORIZ       2
+
 typedef struct {
     double angle_offset;
     double distance_offset;
@@ -468,5 +475,13 @@ static const sd21_conf_t sd21_config[] = {
 void pf_front_cup_take(void);
 void pf_front_cup_hold(void);
 void pf_front_cup_ramp(void);
+void pf_back_cup_take(void);
+void pf_back_cup_hold(void);
+void pf_back_cup_ramp(void);
+
+void pf_front_ramp_right_drop(void);
+void pf_front_ramp_reset(void);
+void pf_back_ramp_left_drop(void);
+void pf_back_ramp_reset(void);
 
 #endif /* PLATFORM_H_ */
