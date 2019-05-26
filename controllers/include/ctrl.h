@@ -104,6 +104,10 @@ typedef struct {
                                      not the final destination */
     uint8_t allow_reverse;      /**< Boolean to allow going backward to reach
                                      the pose_order */
+    uint8_t anti_blocking_on;   /**< Continuous cycles number the controller is
+                                     blocked */
+    uint16_t blocking_cycles;   /**< Continuous cycles number the controller is
+                                     blocked */
 
     ctrl_mode_t current_mode;   /**< Current controller mode */
 } ctrl_control_t;
@@ -116,6 +120,13 @@ typedef struct {
         ctrl_pre_mode_cb[CTRL_MODE_NUMOF];  /**< Modes pre callbacks */
     const ctrl_post_mode_cb_t \
         ctrl_post_mode_cb[CTRL_MODE_NUMOF]; /**< Modes post callbacks */
+
+    const uint16_t  blocking_speed_treshold;        /**< Blocking speed
+                                                         treshold */
+    const uint16_t  blocking_speed_error_treshold;  /**< Blocking speed error
+                                                         treshold */
+    const uint16_t  blocking_cycles_max;            /**< Blocking cycles
+                                                         maximum number */
 } ctrl_platform_configuration_t;
 
 /**
@@ -182,6 +193,26 @@ int ctrl_get_pose_intermediate(ctrl_t *ctrl);
  * @return
  */
 void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow);
+
+/**
+ * @brief Enable/disable robot blocked detection
+ *
+ * @param[in] ctrl              Controller object
+ * @param[in] value             Disabled when 0, enabled otherwise
+ *
+ * @return
+ */
+void ctrl_set_anti_blocking_on(ctrl_t* ctrl, uint8_t value);
+
+/**
+ * @brief Get robot blocked detection status
+ *
+ * @param[in] ctrl              Controller object
+ *
+ * @return                      0 if disabled
+ *                              >0 if enabled
+ */
+uint8_t ctrl_get_anti_blocking_on(ctrl_t* ctrl);
 
 /**
  * @brief Up pose reached flag
