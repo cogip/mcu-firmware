@@ -245,6 +245,8 @@ void pf_init(void)
 
     pf_fixed_obstacles_init();
 
+    ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
+
 #ifdef CALIBRATION
     ctrl_quadpid_calib_init();
     pca9548_calib_init();
