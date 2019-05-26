@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 /* RIOT includes */
+#define ENABLE_DEBUG        (0)
+#include "debug.h"
 #include "irq.h"
 #include "log.h"
 #include "xtimer.h"
@@ -102,6 +104,7 @@ int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
         command->distance = 0;
         command->angle = 0;
         ctrl_set_mode((ctrl_t*)ctrl, CTRL_MODE_BLOCKED);
+        ctrl->control.blocking_cycles = 0;
     }
 
     command->distance = pid_ctrl(&ctrl->quadpid_params.linear_speed_pid,
@@ -151,13 +154,13 @@ int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
         return -1;
     }
 
-    LOG_INFO("@robot@,%u,@pose_current@,%.4f,%.4f,%.4f\n",
+    DEBUG("@robot@,%u,@pose_current@,%.4f,%.4f,%.4f\n",
                 ROBOT_ID,
                 pose_current->x,
                 pose_current->y,
                 pose_current->O);
 
-    LOG_INFO("@robot@,%u,@speed_current@,%.4f,%.4f\n",
+    DEBUG("@robot@,%u,@speed_current@,%.4f,%.4f\n",
                 ROBOT_ID,
                 speed_current->distance,
                 speed_current->angle);
@@ -208,24 +211,24 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 
     pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
-    LOG_INFO("@robot@,%u,@pose_order@,%.2f,%.2f,%.2f\n",
+    DEBUG("@robot@,%u,@pose_order@,%.2f,%.2f,%.2f\n",
                 ROBOT_ID,
                 pose_order->x,
                 pose_order->y,
                 pose_order->O);
 
-    LOG_INFO("@robot@,%u,@pose_current@,%.2f,%.2f,%.2f\n",
+    DEBUG("@robot@,%u,@pose_current@,%.2f,%.2f,%.2f\n",
                 ROBOT_ID,
                 pose_current->x,
                 pose_current->y,
                 pose_current->O);
 
-    LOG_INFO("@robot@,%u,@speed_current@,%.2f,%.2f\n",
+    DEBUG("@robot@,%u,@speed_current@,%.2f,%.2f\n",
                 ROBOT_ID,
                 speed_current->distance,
                 speed_current->angle);
 
-    LOG_INFO("@robot@,%u,@pose_error@,%.2f,%.2f\n",
+    DEBUG("@robot@,%u,@pose_error@,%.2f,%.2f\n",
                 ROBOT_ID,
                 pos_err.distance,
                 pos_err.angle);

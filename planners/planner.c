@@ -11,7 +11,9 @@
 #include <periph/adc.h>
 
 /* RIOT includes */
-#include <log.h>
+#define ENABLE_DEBUG        (1)
+#include "debug.h"
+#include "log.h"
 
 static uint8_t pln_started = FALSE;
 
@@ -53,7 +55,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
     if (ctrl_is_pose_reached(ctrl)) {
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
-            LOG_DEBUG("planner: Controller has reach final position.\n");
+            DEBUG("planner: Controller has reach final position.\n");
             if (allow_change_path_pose) {
                 if (current_path_pos->act)
                     (*(current_path_pos->act))();
@@ -67,12 +69,13 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
             need_update = 1;
         }
         else {
-            LOG_DEBUG("planner: Controller has reach intermediate position.\n");
+            DEBUG("planner: Controller has reach intermediate position.\n");
             index++;
         }
     }
 
     if (ctrl->control.current_mode == CTRL_MODE_BLOCKED) {
+        DEBUG("planner: Controller is blocked.\n");
         if (!allow_change_path_pose)
             goto trajectory_get_route_update_error;
         path_increment_current_pose_idx(path);
@@ -107,14 +110,14 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
         && (pose_to_reach->y == current_path_pos->pos.y)) {
         pose_to_reach->O = current_path_pos->pos.O;
         ctrl_set_pose_intermediate(ctrl, FALSE);
-        LOG_DEBUG("planner: Reaching final position\n");
+        DEBUG("planner: Reaching final position\n");
     }
     else {
         /* Update speed order to max speed defined value in the new point to reach */
         speed_order->distance = path_get_current_max_speed(path);
         speed_order->angle = speed_order->distance / 2;
         ctrl_set_pose_intermediate(ctrl, TRUE);
-        LOG_DEBUG("planner: Reaching intermediate position\n");
+        DEBUG("planner: Reaching intermediate position\n");
     }
 
     return 0;
