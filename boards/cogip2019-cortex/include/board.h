@@ -45,6 +45,8 @@ extern "C" {
 #define GPIO_FC_PUMP_5  GPIO_PIN(PORT_A, 9)
 #define GPIO_FR_PUMP_6  GPIO_PIN(PORT_B, 15)
 
+#define GPIO_DEBUG_LED  GPIO_PIN(PORT_C, 8)
+
 /**
  * @brief Describe DC motor with PWM channel and GPIOs
  */

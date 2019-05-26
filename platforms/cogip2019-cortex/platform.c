@@ -167,6 +167,10 @@ void pf_init(void)
     assert(gpio_init(GPIO_FC_PUMP_5, GPIO_OUT) == 0);
     assert(gpio_init(GPIO_FR_PUMP_6, GPIO_OUT) == 0);
 
+    /* Debug LED */
+    assert(gpio_init(GPIO_DEBUG_LED, GPIO_OUT) == 0);
+    gpio_clear(GPIO_DEBUG_LED);
+
     sd21_init();
     pca9548_init();
 
