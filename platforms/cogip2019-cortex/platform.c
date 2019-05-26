@@ -210,6 +210,32 @@ void pf_back_ramp_reset(void)
     xtimer_usleep(1000 * US_PER_MS);
 }
 
+void pf_back_ramp_left_horiz_for_goldenium(void)
+{
+    uint8_t is_camp_left = pf_is_camp_left();
+
+    sd21_servo_reach_position(PF_SERVO_B_RAMP_BLOCK, PF_SERVO_STATE_RAMP_OPEN);
+    if (is_camp_left)
+        sd21_servo_reach_position(PF_SERVO_BR_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+    else
+        sd21_servo_reach_position(PF_SERVO_BL_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+    xtimer_usleep(500 * US_PER_MS);
+}
+
+void pf_arms_open(void)
+{
+    sd21_servo_reach_position(PF_SERVO_FL_ARM, PF_SERVO_STATE_ARM_OPEN);
+    sd21_servo_reach_position(PF_SERVO_FR_ARM, PF_SERVO_STATE_ARM_OPEN);
+    xtimer_usleep(500 * US_PER_MS);
+}
+
+void pf_arms_close(void)
+{
+    sd21_servo_reach_position(PF_SERVO_FL_ARM, PF_SERVO_STATE_ARM_CLOSE);
+    sd21_servo_reach_position(PF_SERVO_FR_ARM, PF_SERVO_STATE_ARM_CLOSE);
+    xtimer_usleep(500 * US_PER_MS);
+}
+
 void pf_init(void)
 {
     board_init();

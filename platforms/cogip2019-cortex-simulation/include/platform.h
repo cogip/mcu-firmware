@@ -82,5 +82,8 @@ void pf_front_ramp_right_drop(void);
 void pf_front_ramp_reset(void);
 void pf_back_ramp_left_drop(void);
 void pf_back_ramp_reset(void);
+void pf_back_ramp_left_horiz_for_goldenium(void);
+void pf_arms_open(void);
+void pf_arms_close(void);
 
 #endif /* PLATFORM_H_ */
