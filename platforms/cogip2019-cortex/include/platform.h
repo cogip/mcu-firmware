@@ -404,7 +404,7 @@ static const sd21_conf_t sd21_config[] = {
             {
                 .positions = {
                     1000,   /* Top position */
-                    1800,   /* Bottom position */
+                    1700,   /* Bottom position */
                     1500,   /* Default */
                 },
                 .default_position = 1,
@@ -415,7 +415,7 @@ static const sd21_conf_t sd21_config[] = {
             {
                 .positions = {
                     1100,   /* Top position */
-                    1975,   /* Bottom position */
+                    1900,   /* Bottom position */
                     1500,   /* Default */
                 },
                 .default_position = 1,
@@ -426,7 +426,7 @@ static const sd21_conf_t sd21_config[] = {
             {
                 .positions = {
                     2125,   /* Top position */
-                    1100,   /* Bottom position */
+                    1250,   /* Bottom position */
                     1500,   /* Default */
                 },
                 .default_position = 1,
