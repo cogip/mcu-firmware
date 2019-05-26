@@ -77,18 +77,18 @@
 #define PF_SERVO_FC_CUP             0, 1
 #define PF_SERVO_FR_CUP             0, 2
 
-#define PF_SERVO_BL_CUP             0, 11
-#define PF_SERVO_BC_CUP             0, 10
-#define PF_SERVO_BR_CUP             0, 9
+#define PF_SERVO_BL_CUP             1, 11
+#define PF_SERVO_BC_CUP             1, 10
+#define PF_SERVO_BR_CUP             1, 9
 
 /* Elevators */
 #define PF_SERVO_FC_ELEVATOR        0, 4
 #define PF_SERVO_FL_ELEVATOR        0, 5
 #define PF_SERVO_FR_ELEVATOR        0, 7
 
-#define PF_SERVO_BC_ELEVATOR        0, 7
-#define PF_SERVO_BL_ELEVATOR        0, 8
-#define PF_SERVO_BR_ELEVATOR        0, 6
+#define PF_SERVO_BC_ELEVATOR        1, 7
+#define PF_SERVO_BL_ELEVATOR        1, 8
+#define PF_SERVO_BR_ELEVATOR        1, 6
 
 /* Ramps */
 #define PF_SERVO_FL_RAMP_DISP       0, 8
