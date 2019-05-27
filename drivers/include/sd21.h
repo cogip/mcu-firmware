@@ -150,9 +150,10 @@ void sd21_init(void);
  * @param[in]   speed       Servomotor speed
  * @param[in]   position    Servomotor position in ms
  *
- * @return
+ * @return                  0 on success
+ *                          not 0 on failure
  */
-void sd21_servo_control(sd21_t dev, uint8_t servo_id, uint8_t speed,
+int sd21_servo_control(sd21_t dev, uint8_t servo_id, uint8_t speed,
         uint16_t position);
 
 /**
@@ -162,9 +163,10 @@ void sd21_servo_control(sd21_t dev, uint8_t servo_id, uint8_t speed,
  * @param[in]   servo_id    Servomotor id
  * @param[in]   pos_index   Servomotor pre defined position index
  *
- * @return
+ * @return                  0 on success
+ *                          not 0 on failure
  */
-void sd21_servo_reach_position(sd21_t dev, uint8_t servo_id,
+int sd21_servo_reach_position(sd21_t dev, uint8_t servo_id,
         uint8_t pos_index);
 
 /**
@@ -173,9 +175,10 @@ void sd21_servo_reach_position(sd21_t dev, uint8_t servo_id,
  * @param[in]   dev         SD21 device id
  * @param[in]   servo_id    Servomotor id
  *
- * @return
+ * @return                  0 on success
+ *                          not 0 on failure
  */
-void sd21_servo_reset_position(sd21_t dev, uint8_t servo_id);
+int sd21_servo_reset_position(sd21_t dev, uint8_t servo_id);
 
 /**
  * @brief Get SD21 firmware version.
