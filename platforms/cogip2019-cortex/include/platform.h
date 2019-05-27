@@ -48,9 +48,6 @@
 
 #define USART_CONSOLE   USARTC0
 
-#define CTRL_BLOCKING_NB_ITERATIONS 200
-
-
 /**********/
 /* Servos */
 /**********/
