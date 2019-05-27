@@ -2,6 +2,8 @@
 #include <thread.h>
 
 /* RIOT includes */
+#define ENABLE_DEBUG        (0)
+#include "debug.h"
 #include "log.h"
 #include "shell.h"
 #include "xtimer.h"
@@ -163,7 +165,7 @@ static void *pf_task_countdown(void *arg)
             pln_stop(controller);
         }
         else {
-            LOG_INFO("                                      GAME TIME: %d\n",
+            DEBUG("                                      GAME TIME: %d\n",
                 countdown--);
         }
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
@@ -237,7 +239,7 @@ void pf_init_tasks(void)
         shell_command_t null_command = { NULL, NULL, NULL };
         pf_add_shell_command(&null_command);
         /* Start shell */
-        LOG_DEBUG("platform: Start shell\n");
+        DEBUG("platform: Start shell\n");
         shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
     }
     /* Else start game */
@@ -265,7 +267,7 @@ void pf_init_tasks(void)
                 "countdown");
 
         /* Start game */
-        LOG_DEBUG("platform: Start game\n");
+        DEBUG("platform: Start game\n");
         pln_start((ctrl_t*)controller);
     }
 }
