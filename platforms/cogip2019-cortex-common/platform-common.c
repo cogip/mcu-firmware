@@ -116,8 +116,38 @@ void motor_drive(polar_t *command)
 /* Init all known fixed obstacles on map */
 void pf_fixed_obstacles_init(void)
 {
+    polygon_t polygon;
+    uint8_t nb_vertices;
 
+    polygon.count = 0;
+    nb_vertices = 4;
+    if (nb_vertices < POLY_MAX_POINTS) {
+        polygon.points[polygon.count++] = (pose_t){.x = -1000, .y = 0 };
+        polygon.points[polygon.count++] = (pose_t){.x =  1000, .y = 0 };
+        polygon.points[polygon.count++] = (pose_t){.x =  1000, .y = 70 + ROBOT_MARGIN};
+        polygon.points[polygon.count++] = (pose_t){.x = -1000, .y = 70 + ROBOT_MARGIN};
+        add_polygon(&polygon);
+    }
 
+    polygon.count = 0;
+    nb_vertices = 4;
+    if (nb_vertices < POLY_MAX_POINTS) {
+        polygon.points[polygon.count++] = (pose_t){.x = -1050 - ROBOT_MARGIN, .y = 1540 - ROBOT_MARGIN};
+        polygon.points[polygon.count++] = (pose_t){.x =  1050 + ROBOT_MARGIN, .y = 1540 - ROBOT_MARGIN};
+        polygon.points[polygon.count++] = (pose_t){.x =  1050 + ROBOT_MARGIN, .y = 2000};
+        polygon.points[polygon.count++] = (pose_t){.x = -1050 - ROBOT_MARGIN, .y = 2000};
+        add_polygon(&polygon);
+    }
+
+    polygon.count = 0;
+    nb_vertices = 4;
+    if (nb_vertices < POLY_MAX_POINTS) {
+        polygon.points[polygon.count++] = (pose_t){.x = -20 - ROBOT_MARGIN, .y = 1350 - ROBOT_MARGIN};
+        polygon.points[polygon.count++] = (pose_t){.x =  20 + ROBOT_MARGIN, .y = 1350 - ROBOT_MARGIN};
+        polygon.points[polygon.count++] = (pose_t){.x =  20 + ROBOT_MARGIN, .y = 2000};
+        polygon.points[polygon.count++] = (pose_t){.x = -20 - ROBOT_MARGIN, .y = 2000};
+        add_polygon(&polygon);
+    }
 }
 
 static void *pf_task_countdown(void *arg)
