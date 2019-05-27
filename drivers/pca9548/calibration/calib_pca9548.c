@@ -18,7 +18,7 @@ static void pca9548_calib_print_usage(pca9548_t dev)
             dev);
 
 #ifdef PCA9548_CALIB_CB
-    puts("\t'c'\t Run defined callback");
+    puts("\t'a'\t Run defined callback");
 #endif /* PCA9548_CALIB_CB */
     puts("\t'n'\t Next channel");
     puts("\t'p'\t Previous channel");
@@ -49,17 +49,20 @@ static int pca9548_calib_cmd(int argc, char **argv)
     puts("");
 
     /* Key pressed */
-    char c = 0;
+    char c[2];
 
-    while (c != 'q') {
+    while (c[0] != 'q') {
         printf("Channel number: %u\n", channel_id);
 
-        c = getchar();
+        c[0] = getchar();
 
-        switch(c) {
+        /* useful only for 0 to 7 keys */
+        uint8_t channel_selected = (uint8_t)atoi(c);
+
+        switch(c[0]) {
 #ifdef PCA9548_CALIB_CB
             /* Calibration callback */
-            case 'c':
+            case 'a':
                 PCA9548_CALIB_CB(dev);
                 break;
 #endif /* PCA9548_CALIB_CB */
@@ -68,9 +71,26 @@ static int pca9548_calib_cmd(int argc, char **argv)
                 channel_id = (channel_id >= pca9548_config[dev].channel_numof - 1) ?
                     pca9548_config[dev].channel_numof - 1 : channel_id + 1;
                 break;
+            /* Previous channel */
+            case 'p':
+                channel_id = (channel_id <= 0) ? 0 : channel_id - 1;
+                break;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+                if (channel_selected < pca9548_config[dev].channel_numof)
+                    channel_id = channel_selected;
+                break;
             default:
                 continue;
         }
+
+        pca9548_set_current_channel(dev, channel_id);
 
     }
 
