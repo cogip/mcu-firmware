@@ -24,7 +24,7 @@ static void sd21_calib_print_usage(sd21_t dev, uint8_t servo_id)
     puts("\t'r'\t Reset to center position");
     printf("\t'+'\t Add %u microseconds to current position\n",
             SD21_SERVO_POS_STEP);
-    printf("\t'+'\t Substract %u microseconds to current position\n",
+    printf("\t'-'\t Substract %u microseconds to current position\n",
             SD21_SERVO_POS_STEP);
     puts("\t'0..1'\t Switch to predefined positions (between 0 and 9)");
 }
