@@ -105,6 +105,8 @@ int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
         command->angle = 0;
         ctrl_set_mode((ctrl_t*)ctrl, CTRL_MODE_BLOCKED);
         ctrl->control.blocking_cycles = 0;
+
+        return 0;
     }
 
     command->distance = pid_ctrl(&ctrl->quadpid_params.linear_speed_pid,
