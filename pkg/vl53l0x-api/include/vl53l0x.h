@@ -66,13 +66,13 @@ int vl53l0x_init_dev(vl53l0x_t dev);
 void vl53l0x_init(void);
 
 /**
- * @brief Perform a single ranging measurement
+ * @brief Perform a continuous ranging measurement
  *
  * @param[in]   dev         VL53L0X ToF sensor id
  *
  * @return                  distance measure (millimeter)
  */
-uint16_t vl53l0x_single_ranging_measure(vl53l0x_t dev);
+uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev);
 
 #endif  /* VL53L0X_H */
 /** @} */

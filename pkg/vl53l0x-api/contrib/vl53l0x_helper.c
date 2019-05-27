@@ -75,6 +75,17 @@ int vl53l0x_init_dev(vl53l0x_t dev)
                 &refSpadCount, &isApertureSpads);
     }
 
+    if(Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_SetDeviceMode(st_api_vl53l0x,
+                VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+    }
+
+    if(Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_StartMeasurement(st_api_vl53l0x);
+    }
+
     status[dev] = Status;
 
     return Status;
@@ -87,7 +98,7 @@ void vl53l0x_init(void)
     }
 }
 
-uint16_t vl53l0x_single_ranging_measure(vl53l0x_t dev)
+uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
 {
     VL53L0X_RangingMeasurementData_t RangingMeasurementData;
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
@@ -102,19 +113,23 @@ uint16_t vl53l0x_single_ranging_measure(vl53l0x_t dev)
 
     /* Check device description is initialized */
     if ((st_api_vl53l0x != NULL) && (status[dev] == 0)) {
-        if(Status == VL53L0X_ERROR_NONE)
-        {
-            Status = VL53L0X_PerformSingleRangingMeasurement(st_api_vl53l0x,
-                    &RangingMeasurementData);
+        Status = VL53L0X_GetRangingMeasurementData(st_api_vl53l0x,
+                &RangingMeasurementData);
 
-            VL53L0X_GetLimitCheckCurrent(st_api_vl53l0x,
-                    VL53L0X_CHECKENABLE_RANGE_IGNORE_THRESHOLD,
-                    &LimitCheckCurrent);
+        VL53L0X_GetLimitCheckCurrent(st_api_vl53l0x,
+                VL53L0X_CHECKENABLE_RANGE_IGNORE_THRESHOLD,
+                &LimitCheckCurrent);
 
-            return RangingMeasurementData.RangeMilliMeter;
-        }
+        if (Status != VL53L0X_ERROR_NONE)
+            goto vl53l0x_continuous_ranging_get_measure_err;
+    }
+    else {
+        goto vl53l0x_continuous_ranging_get_measure_err;
     }
 
+    return RangingMeasurementData.RangeMilliMeter;
+
+vl53l0x_continuous_ranging_get_measure_err:
     return UINT16_MAX;
 }
 /** @} */
