@@ -73,13 +73,29 @@ int pf_read_sensors(void)
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
 
         pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        uint16_t measure = vl53l0x_single_ranging_measure(dev);
 
-        if ((measure < OBSTACLE_DETECTION_TRESHOLD)) {
+        uint16_t measure[3];
+        uint16_t middle = 0;
+
+        for (int i = 0; i < 3; i++)
+            measure[i] = vl53l0x_continuous_ranging_get_measure(dev);
+
+        if (((measure[0] < measure[1]) && (measure[1] < measure[2]))
+           || ((measure[2] < measure[1]) && (measure[1] < measure[0])))
+            middle = measure[1];
+        else if (((measure[1] < measure[0]) && (measure[0] < measure[2]))
+           || ((measure[2] < measure[0]) && (measure[0] < measure[1])))
+            middle = measure[0];
+        else
+            middle = measure[2];
+
+        printf("Measure sensor %u: %u\n\n", dev, middle);
+
+        if ((middle < OBSTACLE_DETECTION_TRESHOLD)) {
             const pf_sensor_t* sensor = &pf_sensors[dev];
             pose_t robot_pose = *ctrl_get_pose_current(ctrl);
 
-            res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)measure);
+            res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)middle);
 
             if (!res) {
                 obstacle_found = 1;
