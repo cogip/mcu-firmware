@@ -22,8 +22,6 @@ static uint64_t graph[GRAPH_MAX_VERTICES];
 static pose_t start_position = { .x = 0, .y = 0 };
 static pose_t finish_position = { .x = 0, .y = 0 };
 
-static polygon_t borders = { .count = 0, };
-
 pose_t avoidance(uint8_t index)
 {
     /* Build path graph */
@@ -35,10 +33,6 @@ int update_graph(const pose_t *s, const pose_t *f)
     start_position = *s;
     finish_position = *f;
 
-    if (borders.count == 0) {
-        borders_init(&borders);
-    }
-
     if (!is_point_in_polygon(&borders, finish_position)) {
         goto update_graph_error_finish_position;
     }
@@ -49,8 +43,6 @@ int update_graph(const pose_t *s, const pose_t *f)
             goto update_graph_error_finish_position;
         }
         if (is_point_in_polygon(&polygons[i], start_position)) {
-            // TODO: Add return code
-            //goto update_graph_error_start_position;
             // find nearest polygon point
             double min = DIJKSTRA_MAX_DISTANCE;
             pose_t *pose_tmp = &start_position;

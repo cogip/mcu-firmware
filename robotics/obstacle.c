@@ -8,36 +8,11 @@
 /* RIOT includes */
 #include "log.h"
 
-/* Init borders */
-void borders_init(polygon_t *polygon)
-{
-    polygon->count = 0;
-    polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MIN, .y = AVOIDANCE_BORDER_Y_MIN };
-    polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MAX, .y = AVOIDANCE_BORDER_Y_MIN };
-    polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MAX, .y = AVOIDANCE_BORDER_Y_MAX };
-    polygon->points[polygon->count++] = (pose_t){.x = AVOIDANCE_BORDER_X_MIN, .y = AVOIDANCE_BORDER_Y_MAX };
-}
-
-/* Init onstacle borders */
-static void obstacle_borders_init(polygon_t *polygon)
-{
-    polygon->count = 0;
-    polygon->points[polygon->count++] = (pose_t){.x = OBSTACLE_BORDER_X_MIN, .y = OBSTACLE_BORDER_Y_MIN };
-    polygon->points[polygon->count++] = (pose_t){.x = OBSTACLE_BORDER_X_MAX, .y = OBSTACLE_BORDER_Y_MIN };
-    polygon->points[polygon->count++] = (pose_t){.x = OBSTACLE_BORDER_X_MAX, .y = OBSTACLE_BORDER_Y_MAX };
-    polygon->points[polygon->count++] = (pose_t){.x = OBSTACLE_BORDER_X_MIN, .y = OBSTACLE_BORDER_Y_MAX };
-}
-
 /* Add a dynamic obstacle */
 int8_t add_dyn_obstacle(const uint16_t dev, const pose_t *robot_pose, double angle_offset, double distance_offset, double dist)
 {
-    static polygon_t obstacle_borders;
     polygon_t polygon;
     uint8_t nb_vertices;
-
-    if (!obstacle_borders.count) {
-        obstacle_borders_init(&obstacle_borders);
-    }
 
     pose_t robot_pose_tmp = *robot_pose;
     robot_pose_tmp.O += angle_offset;
