@@ -38,6 +38,25 @@ int pf_is_camp_left(void)
     return !gpio_read(GPIO_CAMP);
 }
 
+void pf_calib_read_sensors(pca9548_t dev)
+{
+    vl53l0x_t sensor = 0;
+    uint8_t channel = pca9548_get_current_channel(dev);
+    for (sensor = 0; sensor < VL53L0X_NUMOF; sensor++) {
+        if (vl53l0x_channel[sensor] == channel)
+            break;
+    }
+
+    if (sensor < VL53L0X_NUMOF) {
+        uint16_t measure = vl53l0x_continuous_ranging_get_measure(dev);
+
+        printf("Measure sensor %u: %u\n\n", sensor, measure);
+    }
+    else {
+        printf("No sensor for this channel %u !\n\n", sensor);
+    }
+}
+
 int pf_read_sensors(void)
 {
     int obstacle_found = 0;
