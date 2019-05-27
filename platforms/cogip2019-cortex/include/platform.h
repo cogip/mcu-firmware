@@ -281,9 +281,9 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 0-10 */
             {
                 .positions = {
-                    1700,   /* Right */
-                    1400,   /* Left  */ // FIXME: réparer la rampe !
-                    1600,   /* Horizontal */
+                    1900,   /* Right */
+                    1475,   /* Left  */ // FIXME: réparer la rampe !
+                    1675,   /* Horizontal */
                 },
                 .default_position = 2,
                 .default_speed = 0,
