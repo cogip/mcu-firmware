@@ -48,6 +48,8 @@
 
 #define USART_CONSOLE   USARTC0
 
+#define PCA9548_CALIB_CB(x) pf_calib_read_sensors(x)
+
 /**********/
 /* Servos */
 /**********/
@@ -453,6 +455,8 @@ static const sd21_conf_t sd21_config[] = {
         },
     }
 };
+
+void pf_calib_read_sensors(pca9548_t dev);
 
 #define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
 

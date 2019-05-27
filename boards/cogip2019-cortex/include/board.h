@@ -29,7 +29,6 @@
 extern "C" {
 #endif
 
-#define PCA9548_CALIB_CB(x) vl53l0x_single_ranging_measure(x)
 #define PCA9548_SENSORS 0
 
 /* Camp selection */
