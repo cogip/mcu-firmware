@@ -120,7 +120,7 @@ void pf_fixed_obstacles_init(void)
 
 }
 
-void *pf_task_countdown(void *arg)
+static void *pf_task_countdown(void *arg)
 {
     (void)arg;
     static int countdown = GAME_DURATION_SEC;
@@ -138,6 +138,8 @@ void *pf_task_countdown(void *arg)
         }
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
+
+    return NULL;
 }
 
 #ifdef CALIBRATION
