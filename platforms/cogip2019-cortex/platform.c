@@ -56,7 +56,7 @@ int pf_read_sensors(void)
         pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
         uint16_t measure = vl53l0x_single_ranging_measure(dev);
 
-        if ((measure < OBSTACLE_DETECTION_TRESHOLD) && (dev == 4)) {
+        if ((measure < OBSTACLE_DETECTION_TRESHOLD)) {
             const pf_sensor_t* sensor = &pf_sensors[dev];
             pose_t robot_pose = *ctrl_get_pose_current(ctrl);
 
