@@ -46,7 +46,7 @@ static void sd21_send_twi_cmd(sd21_t dev, uint8_t servo_id, uint8_t speed, uint1
     data[0] = reg + 2;
     data[1] = position >> 8;
     for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        if (i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0))
+        if (!i2c_write_bytes(sd21->i2c_dev_id, sd21->i2c_address, data, 2, 0))
             break;
         xtimer_usleep(20 * US_PER_MS);
     }
