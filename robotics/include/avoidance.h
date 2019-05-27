@@ -1,9 +1,12 @@
 #ifndef AVOIDANCE_H_
 #define AVOIDANCE_H_
 
+/* Standard includes */
 #include <stdint.h>
 
+/* Project includes */
 #include "odometry.h"
+#include "platform.h"
 
 #define MAX_POINTS      256
 #define POLY_MAX        16
@@ -39,5 +42,28 @@ int8_t get_point_index_in_polygon(const polygon_t *polygons, pose_t p);
 uint8_t is_segment_crossing_line(pose_t a, pose_t b, pose_t o, pose_t p);
 uint8_t is_segment_crossing_segment(pose_t a, pose_t b, pose_t o, pose_t p);
 uint8_t is_point_on_segment(pose_t a, pose_t b, pose_t o);
+int check_polygon_collision(pose_t *point);
+
+static const polygon_t borders = {
+    .points = {
+        {
+            .x = AVOIDANCE_BORDER_X_MIN,
+            .y = AVOIDANCE_BORDER_Y_MIN
+        },
+        {
+            .x = AVOIDANCE_BORDER_X_MAX,
+            .y = AVOIDANCE_BORDER_Y_MIN
+        },
+        {
+            .x = AVOIDANCE_BORDER_X_MAX,
+            .y = AVOIDANCE_BORDER_Y_MAX
+        },
+        {
+            .x = AVOIDANCE_BORDER_X_MIN,
+            .y = AVOIDANCE_BORDER_Y_MAX
+        },
+    },
+    .count = 4,
+};
 
 #endif /* AVOIDANCE_H_ */

@@ -44,18 +44,6 @@
 
 #define USART_CONSOLE   USARTC0
 
-#define AVOIDANCE_BORDER_X_MIN  -2000
-#define AVOIDANCE_BORDER_X_MAX  2000
-#define AVOIDANCE_BORDER_Y_MIN  -2000
-#define AVOIDANCE_BORDER_Y_MAX  2000
-
-#define OBSTACLE_BORDER_X_MIN   -2000
-#define OBSTACLE_BORDER_X_MAX   2000
-#define OBSTACLE_BORDER_Y_MIN   -2000
-#define OBSTACLE_BORDER_Y_MAX   2000
-
-#define CTRL_BLOCKING_NB_ITERATIONS 200
-
 static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
         .linear_speed_pid = {
             .kp = 10,
