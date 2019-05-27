@@ -116,20 +116,8 @@ void motor_drive(polar_t *command)
 /* Init all known fixed obstacles on map */
 void pf_fixed_obstacles_init(void)
 {
-}
 
-void *pf_task_start_shell(void *arg)
-{
-    int* start_shell = (int*)arg;
 
-    /* Wait for Enter to be pressed */
-    getchar();
-    /* Set a flag and return once done */
-    *start_shell = TRUE;
-
-    puts("Entering calibration mode...");
-
-    return 0;
 }
 
 void *pf_task_countdown(void *arg)
@@ -152,12 +140,30 @@ void *pf_task_countdown(void *arg)
     }
 }
 
+#ifdef CALIBRATION
+static void *pf_task_start_shell(void *arg)
+{
+    int* start_shell = (int*)arg;
+
+    /* Wait for Enter to be pressed */
+    getchar();
+    /* Set a flag and return once done */
+    *start_shell = TRUE;
+
+    puts("Entering calibration mode...");
+
+    return NULL;
+}
+#endif  /* CALIBRATION */
+
 void pf_init_tasks(void)
 {
     static int start_shell = FALSE;
-    int countdown = PF_START_COUNTDOWN;
 
     ctrl_t* controller = (ctrl_t*)&ctrl_quadpid;
+
+#ifdef CALIBRATION
+    int countdown = PF_START_COUNTDOWN;
 
     /* Create thread that up a flag on key pressed to start a shell instead of
        planner below */
@@ -174,6 +180,7 @@ void pf_init_tasks(void)
         LOG_INFO("%d left...\n", countdown--);
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
+#endif  /* CALIBRATION */
 
     /* Create controller thread */
     thread_create(controller_thread_stack,
@@ -204,10 +211,12 @@ void pf_init_tasks(void)
     /* Else start game */
     else {
         /* Stop useless task_start_shell thread still running */
+#ifdef CALIBRATION
         thread_t* start_shell_thread = (thread_t*)thread_get(start_shell_pid);
         if (start_shell_thread) {
             sched_set_status(start_shell_thread, STATUS_STOPPED);
         }
+#endif  /* CALIBRATION */
 
         /* Wait for start switch */
         while(!pf_is_game_launched());
