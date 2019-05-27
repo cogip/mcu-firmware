@@ -106,7 +106,7 @@ pca9548_calib_servo_cmd_err:
 void pca9548_calib_init(void)
 {
     shell_command_t cmd = { 
-        "pca9548_calib", "pca9548_calib <pca9548_id>",
+        "pcc", "pcc <pca9548_id>",
         pca9548_calib_cmd
     };
 
