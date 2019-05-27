@@ -116,7 +116,7 @@ typedef struct {
 
 static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
     {
-        .angle_offset = -135,
+        .angle_offset = 135,
         .distance_offset = 190,
     },
     {
@@ -124,7 +124,7 @@ static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
         .distance_offset = 170,
     },
     {
-        .angle_offset = 135,
+        .angle_offset = -135,
         .distance_offset = 1900,
     },
     {
