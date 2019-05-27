@@ -92,6 +92,20 @@ int add_polygon(polygon_t *polygon)
     }
 }
 
+int check_polygon_collision(pose_t *point)
+{
+    if (!is_point_in_polygon(&obstacle_borders, *point))
+        return TRUE;
+
+    for (int i = 0; i < (nb_polygons + nb_dyn_polygons); i++) {
+        if (is_point_in_polygon(&polygons[i], *point)) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 /* Add a dynamic polygon to obstacle list */
 int add_dyn_polygon(polygon_t *polygon)
 {

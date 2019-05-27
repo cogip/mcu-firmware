@@ -25,8 +25,7 @@ int8_t add_dyn_obstacle(const uint16_t dev, const pose_t *robot_pose, double ang
                                      .y = robot_pose_tmp.y + dist * sin(angle),
                                      .O = angle };
 
-    if (!is_point_in_polygon(&obstacle_borders, obstacle_point)) {
-
+    if (check_polygon_collision(&obstacle_point)) {
         goto add_dyn_obstacle_error_obstacle_borders;
     }
 
