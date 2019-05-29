@@ -21,23 +21,34 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = FALSE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = NULL,
     },
     /* Game path */
     {   /* Sortie zone de départ */
         .pos = {
-                   .x = 1000,
+                   .x = 1100,
                    .y = 300 + ROBOT_MARGIN,
                    .O = 180,
                },
         .allow_reverse = FALSE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = NULL,
     },
     /*
      * Récole 3 palets proche balance
      */
+    {
+        /* Pré-Point */
+        .pos = {
+                   .x = 600,
+                   .y = 1200,
+                   .O = 90,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED,
+        .act = NULL,
+    },
     {
         /* Pré-Point */
         .pos = {
@@ -69,7 +80,7 @@ static path_pose_t poses[] = {
                    .O = 90,
                },
         .allow_reverse = TRUE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = pf_front_cup_ramp,
     },
     /*
@@ -106,7 +117,7 @@ static path_pose_t poses[] = {
                    .O = 270,
                },
         .allow_reverse = TRUE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = pf_back_cup_ramp,
     },
     /*
@@ -120,7 +131,7 @@ static path_pose_t poses[] = {
                    .O = 180, // 180: dépose cote gauche
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED, //NORMAL_SPEED,
+        .max_speed = MAX_SPEED, //MAX_SPEED,
         .act = pf_front_ramp_right_drop,
     },
     {
@@ -131,7 +142,7 @@ static path_pose_t poses[] = {
                    .O = 0, //  0 == dépose cote droit
                },
         .allow_reverse = TRUE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = pf_back_ramp_left_drop,
     },
     /*
@@ -145,7 +156,7 @@ static path_pose_t poses[] = {
                    .O = 300,
                },
         .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED, //NORMAL_SPEED,
+        .max_speed = MAX_SPEED, //MAX_SPEED,
         .act = pf_arms_open,
     },
     {
@@ -156,7 +167,7 @@ static path_pose_t poses[] = {
                    .O = 300
                },
         .allow_reverse = FALSE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = pf_arms_close,
     },
     {
@@ -167,7 +178,7 @@ static path_pose_t poses[] = {
                    .O = 90,
                },
         .allow_reverse = TRUE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = NULL,
     },
     /*
@@ -177,7 +188,7 @@ static path_pose_t poses[] = {
         /* Pré-Point */
         .pos = {
                    .x = 1275,
-                   .y = 1739+40,
+                   .y = 1750,
                    .O = 90,
                },
         .allow_reverse = FALSE,
@@ -188,7 +199,7 @@ static path_pose_t poses[] = {
         /* Point petit distributeur */
         .pos = {
                    .x = 1275,
-                   .y = 1800+40,
+                   .y = 1820,
                    .O = 90,
                },
         .allow_reverse = FALSE,
@@ -203,7 +214,7 @@ static path_pose_t poses[] = {
                    .O = 90,
                },
         .allow_reverse = TRUE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         // TODO: /!\ à symétriser fonction de la couleur
         .act = pf_front_cup_ramp,
     },
@@ -217,7 +228,7 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = FALSE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = pf_back_ramp_left_horiz_for_goldenium,
     },
 
@@ -228,7 +239,7 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = FALSE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = NULL,
     },
 
@@ -239,7 +250,7 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = TRUE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = pf_back_ramp_reset,
     },
 
