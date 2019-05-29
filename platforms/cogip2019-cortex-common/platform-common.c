@@ -121,6 +121,7 @@ void pf_fixed_obstacles_init(void)
     polygon_t polygon;
     uint8_t nb_vertices;
 
+    /* Accelerator */
     polygon.count = 0;
     nb_vertices = 4;
     if (nb_vertices < POLY_MAX_POINTS) {
@@ -131,6 +132,7 @@ void pf_fixed_obstacles_init(void)
         add_polygon(&polygon);
     }
 
+    /* Balance */
     polygon.count = 0;
     nb_vertices = 4;
     if (nb_vertices < POLY_MAX_POINTS) {
@@ -141,6 +143,7 @@ void pf_fixed_obstacles_init(void)
         add_polygon(&polygon);
     }
 
+    /* Central stuff */
     polygon.count = 0;
     nb_vertices = 4;
     if (nb_vertices < POLY_MAX_POINTS) {
