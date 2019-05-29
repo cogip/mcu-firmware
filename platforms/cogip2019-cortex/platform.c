@@ -81,7 +81,8 @@ int pf_read_sensors(void)
 
         DEBUG("Measure sensor %u: %u\n\n", dev, measure);
 
-        if (measure < OBSTACLE_DETECTION_TRESHOLD) {
+        if ((measure > OBSTACLE_DETECTION_MINIMUM_TRESHOLD)
+                && (measure < OBSTACLE_DETECTION_MAXIMUM_TRESHOLD)) {
             const pf_sensor_t* sensor = &pf_sensors[dev];
             pose_t robot_pose = *ctrl_get_pose_current(ctrl);
 
