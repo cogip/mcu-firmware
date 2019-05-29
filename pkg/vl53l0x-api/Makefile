@@ -1,6 +1,6 @@
 PKG_NAME=		vl53l0x-api
 PKG_URL=		https://github.com/gdoffe/vl53l0x-api.git
-PKG_VERSION=	test
+PKG_VERSION=	master
 
 .PHONY: all
 
