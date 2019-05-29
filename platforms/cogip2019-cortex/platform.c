@@ -97,6 +97,25 @@ int pf_read_sensors(void)
     return obstacle_found;
 }
 
+static void pf_vl53l0x_reset(void)
+{
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        if (vl53l0x_reset_dev(dev) != 0)
+            DEBUG("ERROR: Sensor %u reset failed !!!\n", dev);
+    }
+}
+
+static void pf_vl53l0x_init(void)
+{
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        if (vl53l0x_init_dev(dev) != 0)
+            DEBUG("ERROR: Sensor %u init failed !!!\n", dev);
+    }
+}
+
+
 void pf_front_cup_take(void)
 {
     sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_TAKE);
@@ -107,6 +126,9 @@ void pf_front_cup_take(void)
     gpio_set(GPIO_FC_PUMP_5);
     xtimer_usleep(200 * US_PER_MS);
     gpio_set(GPIO_FR_PUMP_6);
+
+    pf_vl53l0x_reset();
+    pf_vl53l0x_init();
 }
 
 void pf_front_cup_hold(void)
@@ -145,6 +167,9 @@ void pf_front_cup_ramp(void)
     sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(PF_SERVO_FC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+
+    pf_vl53l0x_reset();
+    pf_vl53l0x_init();
 }
 
 void pf_back_cup_take(void)
@@ -157,6 +182,9 @@ void pf_back_cup_take(void)
     gpio_set(GPIO_BC_PUMP_2);
     xtimer_usleep(200 * US_PER_MS);
     gpio_set(GPIO_BR_PUMP_3);
+
+    pf_vl53l0x_reset();
+    pf_vl53l0x_init();
 }
 
 void pf_back_cup_hold(void)
@@ -191,6 +219,9 @@ void pf_back_cup_ramp(void)
     sd21_servo_reach_position(PF_SERVO_BL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(PF_SERVO_BC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(PF_SERVO_BR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+
+    pf_vl53l0x_reset();
+    pf_vl53l0x_init();
 }
 
 
