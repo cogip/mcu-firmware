@@ -154,7 +154,7 @@ void sd21_init(void)
                     printf("Servo %u from board %u init failed !", servo_id,
                             dev);
                 /* Wait a small tempo to avoid current peak */
-                xtimer_usleep(20 * US_PER_MS);
+                xtimer_usleep(50 * US_PER_MS);
         }
     }
 }
