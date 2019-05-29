@@ -320,7 +320,7 @@ void *task_radio(void *arg)
 {
     (void)arg;
 
-    LOG_INFO("Radio thread started\n");
+    DEBUG("Radio thread started\n");
     emitter_init();
 
     ///* Wait for start switch */
@@ -328,9 +328,9 @@ void *task_radio(void *arg)
     //    ;
 
     for (;;) {
-        //LOG_INFO("Radio thread started\n");
+        //DEBUG("Radio thread started\n");
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        LOG_INFO(" -------------------- Loop radio\n");
+        DEBUG(" -------------------- Loop radio\n");
 
         emitter_loop();
 
@@ -370,12 +370,12 @@ void pf_init_tasks(void)
                   THREAD_PRIORITY_MAIN + 1, 0,
                   pf_task_start_shell, &start_shell, "shell");
 
-    LOG_INFO("Press Enter to enter calibration mode...\n");
+    DEBUG("Press Enter to enter calibration mode...\n");
 
     /* Wait for Enter key pressed or countdown */
     while ((!start_shell) && (countdown > 0)) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        LOG_INFO("%d left...\n", countdown--);
+        DEBUG("%d left...\n", countdown--);
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
 #endif  /* CALIBRATION */
