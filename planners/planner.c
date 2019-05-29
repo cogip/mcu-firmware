@@ -100,7 +100,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
             test = update_graph(robot_pose, &(current_path_pos->pos));
         }
         if (control_loop <= 0) {
-            LOG_ERROR("planner: No position reachable !\n");
+            DEBUG("planner: No position reachable !\n");
             goto trajectory_get_route_update_error;
         }
         index = 1;
