@@ -22,7 +22,7 @@ static uint8_t pln_started = FALSE;
 static uint8_t allow_change_path_pose = TRUE;
 
 /* Periodic task */
-#define TASK_PERIOD_MS      (200)
+#define TASK_PERIOD_MS      (50)
 
 void pln_set_allow_change_path_pose(uint8_t value)
 {
