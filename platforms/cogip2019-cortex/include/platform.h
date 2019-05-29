@@ -369,13 +369,13 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 1-2 */
             {
                 .positions = {
-                    1500, /* */
-                    1500, /* */
-                    1500, /* */
+                    1975, /* Top position */
+                    1350, /* Bottom position */
+                    1975, /* Default */
                 },
                 .default_position = 2,
                 .default_speed = 0,
-                .name = "S1-2: "
+                .name = "S1-2: Front fork"
             },
             /* Servo 1-3 */
             {
