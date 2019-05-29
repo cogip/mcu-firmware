@@ -66,6 +66,23 @@ int vl53l0x_init_dev(vl53l0x_t dev);
 void vl53l0x_init(void);
 
 /**
+ * @brief Reset given VL53L0X ToF sensor
+ *
+ * param[in]    dev         VL53L0X ToF sensor id
+ *
+ * @return                  0 on success
+ * @return                  not 0 otherwise
+ */
+int vl53l0x_reset_dev(vl53l0x_t dev);
+
+/**
+ * @brief Reset all VL53L0X ToF sensors
+ *
+ * @return
+ */
+void vl53l0x_reset(void);
+
+/**
  * @brief Perform a continuous ranging measurement
  *
  * @param[in]   dev         VL53L0X ToF sensor id
