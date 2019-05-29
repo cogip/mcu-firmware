@@ -53,6 +53,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
     need_update = pf_read_sensors();
 
     if (ctrl_is_pose_reached(ctrl)) {
+        pf_reset_sensors();
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
             DEBUG("planner: Controller has reach final position.\n");
