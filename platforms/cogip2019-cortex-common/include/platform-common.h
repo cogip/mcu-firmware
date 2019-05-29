@@ -22,7 +22,7 @@
 
 #define GAME_DURATION_SEC   100
 
-#define MAX_ACC     4
+#define MAX_ACC     5
 #define MAX_SPEED   10
 
 #define LOW_SPEED           (MAX_SPEED / 4)
