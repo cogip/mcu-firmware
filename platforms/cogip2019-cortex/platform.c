@@ -232,7 +232,7 @@ void pf_front_ramp_right_drop(void)
     sd21_servo_reach_position(PF_SERVO_FR_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
     sd21_servo_reach_position(PF_SERVO_F_RAMP,
                               is_camp_left ? PF_SERVO_STATE_RAMP_LEFT : PF_SERVO_STATE_RAMP_RIGHT);
-    xtimer_usleep(3000 * US_PER_MS);
+    xtimer_usleep(1500 * US_PER_MS);
 
     pf_front_ramp_reset();
 }
@@ -256,7 +256,7 @@ void pf_back_ramp_left_drop(void)
     sd21_servo_reach_position(PF_SERVO_BL_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
     sd21_servo_reach_position(PF_SERVO_B_RAMP,
                               is_camp_left ? PF_SERVO_STATE_RAMP_RIGHT : PF_SERVO_STATE_RAMP_LEFT);
-    xtimer_usleep(3000 * US_PER_MS);
+    xtimer_usleep(1500 * US_PER_MS);
 
     pf_back_ramp_reset();
 }
