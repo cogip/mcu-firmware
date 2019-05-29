@@ -112,6 +112,41 @@
 #define PF_SERVO_STATE_ARM_OPEN         0
 #define PF_SERVO_STATE_ARM_CLOSE        1
 
+/*********/
+/* Radio */
+/*********/
+
+#ifndef CC110X_PARAM_SPI
+#define CC110X_PARAM_SPI            SPI_DEV(0)
+#endif
+
+#ifndef CC110X_PARAM_CS
+#define CC110X_PARAM_CS             GPIO_PIN(PORT_A, 1)
+#endif
+
+#ifndef CC110X_PARAM_GDO0
+#define CC110X_PARAM_GDO0           GPIO_PIN(PORT_C, 4)
+#endif
+
+/* Note: GDO1 is muxed with MISO pin */
+#ifndef CC110X_PARAM_GDO1
+#define CC110X_PARAM_GDO1           GPIO_PIN(PORT_C, 2)
+#endif
+
+#ifndef CC110X_PARAM_GDO2
+#define CC110X_PARAM_GDO2           GPIO_PIN(PORT_A, 0)
+#endif
+
+#ifndef CC110X_PARAMS
+#define CC110X_PARAMS               { \
+                                        .spi  = CC110X_PARAM_SPI,  \
+                                        .cs   = CC110X_PARAM_CS,   \
+                                        .gdo0 = CC110X_PARAM_GDO0, \
+                                        .gdo1 = CC110X_PARAM_GDO1, \
+                                        .gdo2 = CC110X_PARAM_GDO2, \
+                                    }
+#endif
+
 typedef struct {
     double angle_offset;
     double distance_offset;
