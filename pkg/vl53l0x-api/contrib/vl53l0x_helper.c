@@ -91,6 +91,29 @@ int vl53l0x_init_dev(vl53l0x_t dev)
     return Status;
 }
 
+int vl53l0x_reset_dev(vl53l0x_t dev) {
+    VL53L0X_Error Status = VL53L0X_ERROR_NONE;
+    VL53L0X_Dev_t* st_api_vl53l0x = &devices[dev];
+
+    status[dev] = VL53L0X_ERROR_UNDEFINED;
+
+    /* Check device exists */
+    assert (dev < VL53L0X_NUMOF);
+
+    Status = VL53L0X_ResetDevice(st_api_vl53l0x);
+
+    status[dev] = Status;
+
+    return Status;
+}
+
+void vl53l0x_reset(void)
+{
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        assert(vl53l0x_reset_dev(dev) == 0);
+    }
+}
+
 void vl53l0x_init(void)
 {
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
