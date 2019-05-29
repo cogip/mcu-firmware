@@ -56,9 +56,9 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
     puts(sd21_servo_get_name(dev, servo_id));
 
     /* Key pressed */
-    char c = 0;
+    char c[2];
 
-    while (c != 'q') {
+    while (c[0] != 'q') {
         uint16_t current_position = sd21_servo_get_position(dev, servo_id);
 
         /* Print current position on same line */
@@ -66,12 +66,12 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
         print_u32_dec(current_position);
         print_str("    \r");
 
-        c = getchar();
+        c[0] = getchar();
 
         /* useful only for 0 to 9 keys */
-        uint8_t defined_position = (uint8_t)atoi(&c);
+        uint8_t defined_position = (uint8_t)atoi(c);
 
-        switch(c) {
+        switch(c[0]) {
             /* Opened position */
             case 'o':
                 sd21_servo_reach_position(dev, servo_id, SD21_SERVO_POS_OPEN);
