@@ -27,8 +27,6 @@
 #include "calibration/calib_sd21.h"
 #endif /* CALIBRATION */
 
-static uint16_t measure[VL53L0X_NUMOF][3];
-
 int pf_is_game_launched(void)
 {
     /* Starter switch */
@@ -60,17 +58,8 @@ void pf_calib_read_sensors(pca9548_t dev)
     }
 }
 
-void pf_reset_sensors(void)
-{
-    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-        for (int i = 0; i < 3; i++)
-            measure[dev][i] = UINT16_MAX;
-    }
-}
-
 int pf_read_sensors(void)
 {
-    static uint8_t index_measure = 0;
     int obstacle_found = 0;
     int res = 0;
 
@@ -78,11 +67,7 @@ int pf_read_sensors(void)
 
     reset_dyn_polygons();
 
-    if ((((ctrl_quadpid_t *)ctrl)->quadpid_params.regul
-                == CTRL_REGUL_POSE_PRE_ANGL) 
-            || (((ctrl_quadpid_t *)ctrl)->quadpid_params.regul
-                == CTRL_REGUL_POSE_ANGL)) {
-        pf_reset_sensors();
+    if (((ctrl_quadpid_t *)ctrl)->quadpid_params.regul == CTRL_REGUL_POSE_PRE_ANGL) {
         return 0;
     }
 
@@ -90,28 +75,17 @@ int pf_read_sensors(void)
 
         pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
 
-        uint16_t middle = UINT16_MAX;
+        uint16_t measure;
 
-        //middle = vl53l0x_continuous_ranging_get_measure(dev);
-        measure[dev][index_measure] = vl53l0x_continuous_ranging_get_measure(dev);
+        measure = vl53l0x_continuous_ranging_get_measure(dev);
 
-        if (((measure[dev][0] < measure[dev][1]) && (measure[dev][1] < measure[dev][2]))
-           || ((measure[dev][2] < measure[dev][1]) && (measure[dev][1] < measure[dev][0])))
-            middle = measure[dev][1];
-        else if (((measure[dev][1] < measure[dev][0]) && (measure[dev][0] < measure[dev][2]))
-           || ((measure[dev][2] < measure[dev][0]) && (measure[dev][0] < measure[dev][1])))
-            middle = measure[dev][0];
-        else
-            middle = measure[dev][2];
+        DEBUG("Measure sensor %u: %u\n\n", dev, measure);
 
-        DEBUG("Measure sensor %u: %u\n\n", dev, middle);
-
-
-        if ((middle < OBSTACLE_DETECTION_TRESHOLD)) {
+        if (measure < OBSTACLE_DETECTION_TRESHOLD) {
             const pf_sensor_t* sensor = &pf_sensors[dev];
             pose_t robot_pose = *ctrl_get_pose_current(ctrl);
 
-            res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)middle);
+            res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)measure);
 
             if (!res) {
                 obstacle_found = 1;
@@ -119,10 +93,6 @@ int pf_read_sensors(void)
         }
 
     }
-
-    index_measure++;
-    if (index_measure >= 3)
-        index_measure = 0;
 
     return obstacle_found;
 }
@@ -351,8 +321,6 @@ void pf_init(void)
         if (vl53l0x_init_dev(dev) != 0)
             printf("ERROR: Sensor %u init failed !!!\n", dev);
     }
-
-    pf_reset_sensors();
 
     pf_fixed_obstacles_init();
 
