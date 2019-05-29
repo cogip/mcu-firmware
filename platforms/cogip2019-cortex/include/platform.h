@@ -120,27 +120,27 @@ typedef struct {
 static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
     {
         .angle_offset = 135,
-        .distance_offset = 190,
+        .distance_offset = ROBOT_MARGIN,
     },
     {
         .angle_offset = 180,
-        .distance_offset = 170,
+        .distance_offset = ROBOT_MARGIN,
     },
     {
         .angle_offset = -135,
-        .distance_offset = 1900,
+        .distance_offset = ROBOT_MARGIN,
     },
     {
         .angle_offset = -45,
-        .distance_offset = 190,
+        .distance_offset = ROBOT_MARGIN,
     },
     {
         .angle_offset = 0,
-        .distance_offset = 170,
+        .distance_offset = ROBOT_MARGIN,
     },
     {
         .angle_offset = 45,
-        .distance_offset = 190,
+        .distance_offset = ROBOT_MARGIN,
     },
 };
 
