@@ -14,3 +14,6 @@ include $(RIOTMAKE)/tools/serial.inc.mk
 
 # this board uses openocd
 include $(RIOTMAKE)/tools/openocd.inc.mk
+
+# add the common stm32 header files from RIOT repository to the include path
+INCLUDES += -I$(RIOTBASE)/boards/common/stm32/include
