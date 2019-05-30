@@ -331,9 +331,9 @@ void *task_radio(void *arg)
     //    ;
 
     for (;;) {
-        //DEBUG("Radio thread started\n");
+        DEBUG("Radio thread started\n");
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        //DEBUG(" -------------------- Loop radio\n");
+        DEBUG(" -------------------- Loop radio\n");
 
         emitter_loop();
 
@@ -398,12 +398,12 @@ void pf_init_tasks(void)
                   NULL,
                   "planner");
     /* Create radio thread */
-    //thread_create(radio_thread_stack,
-    //              sizeof(radio_thread_stack),
-    //              THREAD_PRIORITY_MAIN + 1, 0,
-    //              task_radio,
-    //              (void*)NULL,
-    //              "radio control");
+    thread_create(radio_thread_stack,
+                    sizeof(radio_thread_stack),
+                  THREAD_PRIORITY_MAIN + 1, 0,
+                  task_radio,
+                  (void*)NULL,
+                  "radio control");
 
     /* If Enter was pressed, start shell */
     if (start_shell) {

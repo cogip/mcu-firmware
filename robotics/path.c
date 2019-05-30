@@ -130,7 +130,7 @@ static path_pose_t poses[] = {
                    .y = 1310,
                    .O = 180, // 180: dépose cote gauche
                },
-        .allow_reverse = TRUE,
+        .allow_reverse = FALSE,
         .max_speed = MAX_SPEED, //MAX_SPEED,
         .act = pf_front_ramp_right_drop,
     },
@@ -253,6 +253,62 @@ static path_pose_t poses[] = {
         .max_speed = MAX_SPEED,
         .act = pf_back_ramp_reset,
     },
+    /*
+     * Vidange balance avant
+     */
+    {   /* point vidange */
+        .pos = {
+                   .x = 600,
+                   .y = 800,
+                   .O = 90,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED,
+        .act = pf_front_ramp_right_drop,
+    },
+    /*
+     * Poussette zone de chaos
+     */
+    {   /* pré point poussette */
+        .pos = {
+                   .x = 90,
+                   .y = 800,
+                   .O = 90,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED,
+        .act = NULL,
+    },
+    {   /* pré point poussette */
+        .pos = {
+                   .x = 100,
+                   .y = 1150,
+                   .O = 340,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED,
+        .act = pf_arms_open,
+    },
+    {   /* pré point poussette */
+        .pos = {
+                   .x = 1000,
+                   .y = 900,
+                   .O = 340,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED,
+        .act = pf_arms_close,
+    },
+    //{   /* point vidange sans action */
+    //    .pos = {
+    //               .x = 600,
+    //               .y = 800,
+    //               .O = 90,
+    //           },
+    //    .allow_reverse = TRUE,
+    //    .max_speed = MAX_SPEED,
+    //    .act = NULL,
+    //},
 
     /*
      * End of path

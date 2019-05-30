@@ -152,6 +152,19 @@ typedef struct {
     double distance_offset;
 } pf_sensor_t;
 
+typedef struct {
+    uint8_t nb_puck_front_ramp;
+    uint8_t nb_puck_back_ramp;
+    uint8_t front_ramp_blocked;
+    uint8_t back_ramp_blocked;
+    uint8_t front_arms_opened;
+    uint8_t goldenium_opened;
+    uint8_t goldenium_taken;
+    uint8_t red_puck_on_hold_front;
+    uint8_t red_puck_on_hold_back;
+    uint8_t any_pump_on;
+} pf_actions_context_t;
+
 static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
     {
         .angle_offset = 135,
@@ -496,10 +509,8 @@ void pf_calib_read_sensors(pca9548_t dev);
 #define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
 
 void pf_front_cup_take(void);
-void pf_front_cup_hold(void);
 void pf_front_cup_ramp(void);
 void pf_back_cup_take(void);
-void pf_back_cup_hold(void);
 void pf_back_cup_ramp(void);
 
 void pf_front_ramp_right_drop(void);
