@@ -308,7 +308,8 @@ static void *pf_task_countdown(void *arg)
         }
         else {
             DEBUG("                                      GAME TIME: %d\n",
-                countdown--);
+                countdown);
+            countdown--;
         }
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
