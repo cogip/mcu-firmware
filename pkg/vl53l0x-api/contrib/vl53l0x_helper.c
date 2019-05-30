@@ -102,6 +102,12 @@ int vl53l0x_reset_dev(vl53l0x_t dev) {
 
     Status = VL53L0X_ResetDevice(st_api_vl53l0x);
 
+    if(Status == VL53L0X_ERROR_NONE)
+    {
+        Status = VL53L0X_SetPowerMode(st_api_vl53l0x,
+                VL53L0X_POWERMODE_STANDBY_LEVEL1);
+    }
+
     status[dev] = Status;
 
     return Status;
