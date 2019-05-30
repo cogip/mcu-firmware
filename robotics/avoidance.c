@@ -32,6 +32,7 @@ int update_graph(const pose_t *s, const pose_t *f)
 {
     start_position = *s;
     finish_position = *f;
+    int index = 1;
 
     if (!is_point_in_polygon(&borders, finish_position)) {
         goto update_graph_error_finish_position;
@@ -59,6 +60,7 @@ int update_graph(const pose_t *s, const pose_t *f)
             }
 
             start_position = *pose_tmp;
+            index = 0;
         }
     }
 
@@ -68,10 +70,10 @@ int update_graph(const pose_t *s, const pose_t *f)
 
     build_avoidance_graph();
 
-    return 0;
+    return index;
 
 update_graph_error_finish_position:
-    return -1;
+    return AVOIDANCE_GRAPH_ERROR;
 }
 
 double distance_points(pose_t *a, pose_t *b)

@@ -15,6 +15,8 @@
 #define GRAPH_MAX_VERTICES      64
 #define DIJKSTRA_MAX_DISTANCE   13000000
 
+#define AVOIDANCE_GRAPH_ERROR               -1
+
 /* Vector */
 /* TODO: should it be generic to all core functions ? */
 typedef struct {

@@ -45,8 +45,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
         pose_t *pose_to_reach, polar_t *speed_order, path_t *path)
 {
     const path_pose_t *current_path_pos = path_get_current_path_pos(path);
-    static uint8_t index = 1;
-    int test = 0;
+    static int index = 1;
     int control_loop = 0;
     uint8_t need_update = 0;
 
@@ -83,25 +82,24 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
     }
 
     if (need_update) {
-        test = update_graph(robot_pose, &(current_path_pos->pos));
+        index = update_graph(robot_pose, &(current_path_pos->pos));
 
         control_loop = path->nb_pose;
-        while ((test < 0) && (control_loop-- > 0)) {
-            if (test == -1) {
+        while ((index < 0) && (control_loop-- > 0)) {
+            if (index == -1) {
                 if (!allow_change_path_pose)
                     goto trajectory_get_route_update_error;
                 path_increment_current_pose_idx(path);
                 if (current_path_pos == path_get_current_path_pos(path))
                     goto trajectory_get_route_update_error;
                 current_path_pos = path_get_current_path_pos(path);
+                index = update_graph(robot_pose, &(current_path_pos->pos));
             }
-            test = update_graph(robot_pose, &(current_path_pos->pos));
         }
         if (control_loop < 0) {
             DEBUG("planner: No position reachable !\n");
             goto trajectory_get_route_update_error;
         }
-        index = 1;
     }
 
     *pose_to_reach = avoidance(index);
