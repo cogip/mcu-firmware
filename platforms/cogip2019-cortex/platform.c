@@ -73,12 +73,13 @@ int pf_read_sensors(void)
 
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
 
-        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-
         uint16_t measure;
+        irq_disable();
 
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
         measure = vl53l0x_continuous_ranging_get_measure(dev);
 
+        irq_enable();
         DEBUG("Measure sensor %u: %u\n\n", dev, measure);
 
         if ((measure > OBSTACLE_DETECTION_MINIMUM_TRESHOLD)
@@ -127,9 +128,15 @@ void pf_front_cup_take(void)
     gpio_set(GPIO_FC_PUMP_5);
     xtimer_usleep(200 * US_PER_MS);
     gpio_set(GPIO_FR_PUMP_6);
+    xtimer_usleep(10 * US_PER_MS);
 
-    pf_vl53l0x_reset();
-    pf_vl53l0x_init();
+    //irq_disable();
+    //pf_vl53l0x_reset();
+    //for(uint32_t i=0;i<1000000;i++) {
+    //  __asm__ volatile ("nop\n");
+    //}
+    //pf_vl53l0x_init();
+    //irq_enable();
 }
 
 void pf_front_cup_hold(void)
@@ -169,8 +176,13 @@ void pf_front_cup_ramp(void)
     sd21_servo_reach_position(PF_SERVO_FC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
 
+    irq_disable();
     pf_vl53l0x_reset();
+    for(uint32_t i=0;i<1000000;i++) {
+      __asm__ volatile ("nop\n");
+    }
     pf_vl53l0x_init();
+    irq_enable();
 }
 
 void pf_back_cup_take(void)
@@ -183,9 +195,15 @@ void pf_back_cup_take(void)
     gpio_set(GPIO_BC_PUMP_2);
     xtimer_usleep(200 * US_PER_MS);
     gpio_set(GPIO_BR_PUMP_3);
+    xtimer_usleep(10 * US_PER_MS);
 
-    pf_vl53l0x_reset();
-    pf_vl53l0x_init();
+    //irq_disable();
+    //pf_vl53l0x_reset();
+    //for(uint32_t i=0;i<1000000;i++) {
+    //  __asm__ volatile ("nop\n");
+    //}
+    //pf_vl53l0x_init();
+    //irq_enable();
 }
 
 void pf_back_cup_hold(void)
@@ -221,8 +239,13 @@ void pf_back_cup_ramp(void)
     sd21_servo_reach_position(PF_SERVO_BC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(PF_SERVO_BR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
 
+    irq_disable();
     pf_vl53l0x_reset();
+    for(uint32_t i=0;i<1000000;i++) {
+      __asm__ volatile ("nop\n");
+    }
     pf_vl53l0x_init();
+    irq_enable();
 }
 
 

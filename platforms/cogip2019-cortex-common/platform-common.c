@@ -30,11 +30,11 @@ static ctrl_quadpid_t ctrl_quadpid =
 };
 
 /* Thread stacks */
-char controller_thread_stack[THREAD_STACKSIZE_LARGE];
-char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
-char planner_thread_stack[THREAD_STACKSIZE_LARGE];
-char start_shell_thread_stack[THREAD_STACKSIZE_LARGE];
-char radio_thread_stack[THREAD_STACKSIZE_DEFAULT];
+char controller_thread_stack[THREAD_STACKSIZE_LARGE*2];
+char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT*2];
+char planner_thread_stack[THREAD_STACKSIZE_LARGE*2];
+char start_shell_thread_stack[THREAD_STACKSIZE_LARGE*2];
+char radio_thread_stack[THREAD_STACKSIZE_DEFAULT*2];
 
 /* Shell command array */
 static shell_command_t shell_commands[NB_SHELL_COMMANDS];
@@ -308,7 +308,8 @@ static void *pf_task_countdown(void *arg)
         }
         else {
             DEBUG("                                      GAME TIME: %d\n",
-                countdown--);
+                countdown);
+            countdown--;
         }
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
@@ -395,12 +396,12 @@ void pf_init_tasks(void)
                   NULL,
                   "planner");
     /* Create radio thread */
-    thread_create(radio_thread_stack,
-                  sizeof(radio_thread_stack),
-                  THREAD_PRIORITY_MAIN + 1, 0,
-                  task_radio,
-                  (void*)NULL,
-                  "radio control");
+    //thread_create(radio_thread_stack,
+    //              sizeof(radio_thread_stack),
+    //              THREAD_PRIORITY_MAIN + 1, 0,
+    //              task_radio,
+    //              (void*)NULL,
+    //              "radio control");
 
     /* If Enter was pressed, start shell */
     if (start_shell) {

@@ -37,6 +37,8 @@ USEPKG += vl53l0x-api
 
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
+# Default ISR: 512
+CFLAGS += -DISR_STACKSIZE=1024
 
 DEVELHELP=1
 

@@ -11,7 +11,7 @@
 #include <periph/adc.h>
 
 /* RIOT includes */
-#define ENABLE_DEBUG        (0)
+#define ENABLE_DEBUG        (1)
 #include "debug.h"
 #include "log.h"
 
@@ -57,8 +57,11 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
             && (pose_to_reach->y == current_path_pos->pos.y)) {
             DEBUG("planner: Controller has reach final position.\n");
             if (allow_change_path_pose) {
-                if (current_path_pos->act)
+                if (current_path_pos->act) {
+                    DEBUG("planner: action launched !\n");
                     (*(current_path_pos->act))();
+                    DEBUG("planner: action finished !\n");
+                }
                 path_increment_current_pose_idx(path);
             }
             current_path_pos = path_get_current_path_pos(path);
@@ -83,19 +86,21 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
     }
 
     if (need_update) {
+        DEBUG("planner: Updating graph !\n");
         test = update_graph(robot_pose, &(current_path_pos->pos));
 
         control_loop = path->nb_pose;
         while ((test < 0) && (control_loop-- > 0)) {
             if (test == -1) {
+                DEBUG("planner: Keep updating graph !\n");
                 if (!allow_change_path_pose)
                     goto trajectory_get_route_update_error;
                 path_increment_current_pose_idx(path);
                 if (current_path_pos == path_get_current_path_pos(path))
                     goto trajectory_get_route_update_error;
                 current_path_pos = path_get_current_path_pos(path);
+                test = update_graph(robot_pose, &(current_path_pos->pos));
             }
-            test = update_graph(robot_pose, &(current_path_pos->pos));
         }
         if (control_loop < 0) {
             DEBUG("planner: No position reachable !\n");
