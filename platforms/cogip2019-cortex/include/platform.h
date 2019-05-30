@@ -181,12 +181,12 @@ static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
 
 static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
         .linear_speed_pid = {
-            .kp = 15.,
+            .kp = 150.,
             .ki = 2,
             .kd = 0.,
         },
         .angular_speed_pid = {
-            .kp = 15.,
+            .kp = 150.,
             .ki = 2,
             .kd = 0.,
         },

@@ -145,6 +145,7 @@ const char* sd21_servo_get_name(sd21_t dev, uint8_t servo_id)
 
 void sd21_init(void)
 {
+    xtimer_usleep(250 * US_PER_MS);
     for (sd21_t dev = 0; dev < SD21_NUMOF; dev++) {
         xtimer_usleep(250 * US_PER_MS);
         /* Close all servomotors */

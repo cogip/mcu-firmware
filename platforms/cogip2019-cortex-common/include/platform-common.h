@@ -28,7 +28,7 @@
 #define LOW_SPEED           (MAX_SPEED / 4)
 #define NORMAL_SPEED        (MAX_SPEED / 2)
 
-#define PF_CTRL_BLOCKING_SPEED_TRESHOLD         2
+#define PF_CTRL_BLOCKING_SPEED_TRESHOLD         1
 #define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD     1.5
 #define PF_CTRL_BLOCKING_NB_ITERATIONS          40
 

@@ -205,16 +205,18 @@ static void emitter_loop(void)
 
     cc110x_write_reg(dev, CC110X_IOCFG2,
                      CC110X_GDO_LOW_ON_TX_FIFO_BELOW_THRESHOLD);
+                     
+    (void)nb_pkt_tot;
 
     for (uint8_t quit = 0; !quit;) {
 
         quit = 1;
-        printf("Will send a pkt (%ld)\n", ++nb_pkt_tot);
+        //printf("Will send a pkt (%ld)\n", ++nb_pkt_tot);
 
         /* Put CC110x in IDLE mode to flush the FIFO */
         cc110x_strobe(dev, CC110X_SIDLE);
 
-        printf("Flush TX FIFO to be sure it is empty\n");
+        //printf("Flush TX FIFO to be sure it is empty\n");
         /* Flush TX FIFO to be sure it is empty */
         cc110x_strobe(dev, CC110X_SFTX);
 
@@ -242,11 +244,11 @@ static void emitter_loop(void)
             direction = !direction;
         }
 
-        printf("Write packet into TX FIFO\n");
+        //printf("Write packet into TX FIFO\n");
         /* Write packet into TX FIFO */
         cc110x_writeburst_reg(dev, CC110X_TXFIFO, (char *)pkt, FSIZE+1);
 
-        printf("Before TX mode : %d bytes to send\n", cc110x_read_status(dev, CC110X_TXBYTES));
+        //printf("Before TX mode : %d bytes to send\n", cc110x_read_status(dev, CC110X_TXBYTES));
         /* Switch to TX mode */
         cc110x_strobe(dev, CC110X_STX);
 
@@ -256,13 +258,13 @@ static void emitter_loop(void)
             xtimer_usleep(15);
             nb_wait++;
         }
-        printf("... Waited %d us (%d)\n", nb_wait * 15, cc110x_read_status(dev, CC110X_TXBYTES));
+        //printf("... Waited %d us (%d)\n", nb_wait * 15, cc110x_read_status(dev, CC110X_TXBYTES));
 
         /* Print sent packet content */
         for (uint8_t i = 0; i < FSIZE + 1; i++) {
-            printf("%02x ", pkt[i]);
+            //printf("%02x ", pkt[i]);
         }
-        printf("\n");
+        //printf("\n");
     }
 }
 
@@ -331,7 +333,7 @@ void *task_radio(void *arg)
     for (;;) {
         //DEBUG("Radio thread started\n");
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        DEBUG(" -------------------- Loop radio\n");
+        //DEBUG(" -------------------- Loop radio\n");
 
         emitter_loop();
 
