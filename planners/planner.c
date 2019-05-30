@@ -56,8 +56,11 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
             && (pose_to_reach->y == current_path_pos->pos.y)) {
             DEBUG("planner: Controller has reach final position.\n");
             if (allow_change_path_pose) {
-                if (current_path_pos->act)
+                if (current_path_pos->act) {
+                    DEBUG("planner: action launched !\n");
                     (*(current_path_pos->act))();
+                    DEBUG("planner: action finished !\n");
+                }
                 path_increment_current_pose_idx(path);
             }
             current_path_pos = path_get_current_path_pos(path);
@@ -82,6 +85,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
     }
 
     if (need_update) {
+	DEBUG("planner: Updating graph !\n");
         index = update_graph(robot_pose, &(current_path_pos->pos));
 
         control_loop = path->nb_pose;
