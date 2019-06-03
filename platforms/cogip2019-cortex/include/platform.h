@@ -72,6 +72,9 @@
 #define PF_SERVO_BL_ELEVATOR        1, 8
 #define PF_SERVO_BR_ELEVATOR        1, 6
 
+/* Fork */
+#define PF_SERVO_FORK               1, 2
+
 /* Ramps */
 #define PF_SERVO_FL_RAMP_DISP       0, 8
 #define PF_SERVO_FR_RAMP_DISP       0, 10
@@ -99,7 +102,12 @@
 /* Elevators */
 #define PF_SERVO_STATE_ELEVATOR_TOP     0
 #define PF_SERVO_STATE_ELEVATOR_BOTTOM  1
+#define PF_SERVO_STATE_ELEVATOR_GOLDEN  2
 //TODO: check in struct below. #define PF_SERVO_STATE_ELEVATOR_FORK    XXX
+
+/* Fork */
+#define PF_SERVO_STATE_FORK_TOP         0
+#define PF_SERVO_STATE_FORK_BOTTOM      1
 
 /* Ramps */
 #define PF_SERVO_STATE_RAMP_OPEN        0
