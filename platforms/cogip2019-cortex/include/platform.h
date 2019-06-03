@@ -495,6 +495,8 @@ void pf_calib_read_sensors(pca9548_t dev);
 
 #define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
 
+void pf_stop_pumps(void);
+
 void pf_front_cup_take(void);
 void pf_front_cup_hold(void);
 void pf_front_cup_ramp(void);
@@ -509,5 +511,8 @@ void pf_back_ramp_reset(void);
 void pf_back_ramp_left_horiz_for_goldenium(void);
 void pf_arms_open(void);
 void pf_arms_close(void);
+void pf_goldenium_hold(void);
+void pf_goldenium_take(void);
+void pf_goldenium_drop(void);
 
 #endif /* PLATFORM_H_ */
