@@ -138,16 +138,6 @@ void pf_front_cup_take(void)
     gpio_set(GPIO_FC_PUMP_5);
     xtimer_usleep(200 * US_PER_MS);
     gpio_set(GPIO_FR_PUMP_6);
-
-    pf_vl53l0x_reset();
-    pf_vl53l0x_init();
-}
-
-void pf_front_cup_hold(void)
-{
-    sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_FC_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_HOLD);
 }
 
 
@@ -194,16 +184,6 @@ void pf_back_cup_take(void)
     gpio_set(GPIO_BC_PUMP_2);
     xtimer_usleep(200 * US_PER_MS);
     gpio_set(GPIO_BR_PUMP_3);
-
-    pf_vl53l0x_reset();
-    pf_vl53l0x_init();
-}
-
-void pf_back_cup_hold(void)
-{
-    sd21_servo_reach_position(PF_SERVO_BL_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_BC_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_HOLD);
 }
 
 void pf_back_cup_ramp(void)
