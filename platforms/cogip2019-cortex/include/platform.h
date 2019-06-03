@@ -217,8 +217,8 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 0-1 */
             {
                 .positions = {
-                    685,  /* Ramp Disposal */
-                    2285, /* Puck prehension */
+                    750,  /* Ramp Disposal */
+                    2325, /* Puck prehension */
                     1500, /* Neutral */
                 },
                 .default_position = PF_SERVO_STATE_CUP_HOLD,
@@ -228,7 +228,7 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 0-2 */
             {
                 .positions = {
-                    2300, /* Ramp Disposal */
+                    2500, /* Ramp Disposal */
                     675,  /* Puck prehension */
                     1500, /* Neutral */
                 },
@@ -240,7 +240,7 @@ static const sd21_conf_t sd21_config[] = {
             {
                 .positions = {
                     2450, /* Ramp Disposal */
-                    625,  /* Puck prehension */
+                    575,  /* Puck prehension */
                     1400, /* Neutral */
                 },
                 .default_position = PF_SERVO_STATE_CUP_HOLD,
@@ -272,9 +272,9 @@ static const sd21_conf_t sd21_config[] = {
             /* Servo 0-6 */
             {
                 .positions = {
-                    1100,   /* Top position */
+                    1025,   /* Top position */
                     2000,   /* Bottom position */
-                    1500,   /* Default */
+                    1425,   /* Goldenium */
                 },
                 .default_position = 1,
                 .default_speed = 0,
@@ -296,7 +296,7 @@ static const sd21_conf_t sd21_config[] = {
                 .positions = {
                     1975,   /* Top position */
                     1075,   /* Bottom position */
-                    1500,   /* Default */
+                    1600,   /* Goldenium */
                 },
                 .default_position = 1,
                 .default_speed = 0,
