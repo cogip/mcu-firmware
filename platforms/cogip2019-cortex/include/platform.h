@@ -498,10 +498,8 @@ void pf_calib_read_sensors(pca9548_t dev);
 void pf_stop_pumps(void);
 
 void pf_front_cup_take(void);
-void pf_front_cup_hold(void);
 void pf_front_cup_ramp(void);
 void pf_back_cup_take(void);
-void pf_back_cup_hold(void);
 void pf_back_cup_ramp(void);
 
 void pf_front_ramp_right_drop(void);
