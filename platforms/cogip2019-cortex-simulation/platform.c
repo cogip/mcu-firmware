@@ -87,6 +87,19 @@ void pf_arms_close(void)
 {
 }
 
+void pf_stop_pumps(void)
+{
+}
+
+void pf_goldenium_hold(void)
+{}
+
+void pf_goldenium_take(void)
+{}
+
+void pf_goldenium_drop(void)
+{}
+
 void pf_init(void)
 {
     motor_driver_init(0);

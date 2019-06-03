@@ -81,5 +81,9 @@ void pf_back_ramp_reset(void);
 void pf_back_ramp_left_horiz_for_goldenium(void);
 void pf_arms_open(void);
 void pf_arms_close(void);
+void pf_stop_pumps(void);
+void pf_goldenium_hold(void);
+void pf_goldenium_take(void);
+void pf_goldenium_drop(void);
 
 #endif /* PLATFORM_H_ */

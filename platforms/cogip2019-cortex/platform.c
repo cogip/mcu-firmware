@@ -116,6 +116,17 @@ static void pf_vl53l0x_init(void)
     }
 }
 
+void pf_stop_pumps(void)
+{
+    gpio_clear(GPIO_BL_PUMP_1);
+    gpio_clear(GPIO_BC_PUMP_2);
+    gpio_clear(GPIO_BR_PUMP_3);
+    gpio_clear(GPIO_FL_PUMP_4);
+    gpio_clear(GPIO_FC_PUMP_5);
+    gpio_clear(GPIO_FR_PUMP_6);
+    pf_actions_ctx.any_pump_on = 0;
+}
+
 
 void pf_front_cup_take(void)
 {
@@ -309,6 +320,88 @@ void pf_arms_close(void)
     sd21_servo_reach_position(PF_SERVO_FL_ARM, PF_SERVO_STATE_ARM_CLOSE);
     sd21_servo_reach_position(PF_SERVO_FR_ARM, PF_SERVO_STATE_ARM_CLOSE);
     xtimer_usleep(500 * US_PER_MS);
+}
+
+void pf_goldenium_take(void)
+{
+    uint8_t is_camp_left = pf_is_camp_left();
+
+    if(!is_camp_left)
+    {
+        // Front Right cup do the job
+        sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_TAKE);
+        sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_GOLDEN);
+        pf_actions_ctx.any_pump_on = 1;
+        gpio_set(GPIO_FL_PUMP_4);
+        xtimer_usleep(10 * US_PER_MS);
+    }
+    else
+    {
+        // Front Left cup do the job
+        sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_TAKE);
+        sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_GOLDEN);
+        pf_actions_ctx.any_pump_on = 1;
+        gpio_set(GPIO_FR_PUMP_6);
+        xtimer_usleep(10 * US_PER_MS);
+    }
+}
+
+void pf_goldenium_hold(void)
+{
+    uint8_t is_camp_left = pf_is_camp_left();
+
+    if(!is_camp_left)
+    {
+        // Front Right cup do the job
+        sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_HOLD); //TODO: besoin de descendre ascenseur ?
+        xtimer_usleep(500 * US_PER_MS);
+        sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+        xtimer_usleep(500 * US_PER_MS);
+        gpio_clear(GPIO_FL_PUMP_4);
+        pf_actions_ctx.any_pump_on = 0;
+    }
+    else
+    {
+        // Front Left cup do the job
+        sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_HOLD); //TODO: besoin de descendre ascenseur ?
+        xtimer_usleep(500 * US_PER_MS);
+        sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+        xtimer_usleep(500 * US_PER_MS);
+        gpio_clear(GPIO_FR_PUMP_6);
+        pf_actions_ctx.any_pump_on = 0;
+    }
+}
+
+void pf_goldenium_drop(void)
+{
+    uint8_t is_camp_left = pf_is_camp_left();
+
+    if(!is_camp_left)
+    {
+        // Front Right cup do the job
+        pf_actions_ctx.any_pump_on = 1;
+        gpio_set(GPIO_FL_PUMP_4);
+        xtimer_usleep(500 * US_PER_MS);
+        sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+        xtimer_usleep(500 * US_PER_MS);
+        sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_TAKE);
+        xtimer_usleep(500 * US_PER_MS);
+        gpio_clear(GPIO_FL_PUMP_4);
+        pf_actions_ctx.any_pump_on = 0;
+    }
+    else
+    {
+        // Front Left cup do the job
+        pf_actions_ctx.any_pump_on = 1;
+        gpio_set(GPIO_FR_PUMP_6);
+        xtimer_usleep(500 * US_PER_MS);
+        sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+        xtimer_usleep(500 * US_PER_MS);
+        sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_TAKE);
+        xtimer_usleep(500 * US_PER_MS);
+        gpio_clear(GPIO_FR_PUMP_6);
+        pf_actions_ctx.any_pump_on = 0;
+    }
 }
 
 void pf_init(void)
