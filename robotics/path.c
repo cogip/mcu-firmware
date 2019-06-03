@@ -27,26 +27,33 @@ static path_pose_t poses[] = {
     /* Game path */
     {   /* Sortie zone de départ */
         .pos = {
-                   .x = 1100,
+                   .x = 1275,//1100,
                    .y = 300 + ROBOT_MARGIN,
-                   .O = 180,
-               },
-        .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED,
-        .act = NULL,
-    },
-    /*
-     * Récole 3 palets proche balance
-     */
-    {
-        /* Pré-Point */
-        .pos = {
-                   .x = 600,
-                   .y = 1200,
                    .O = 90,
                },
         .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    /* Point évitement zone du chaos x=800 y=1100 O=205+90*/
+    {
+        .pos = {
+                   .x = 1275, //800,
+                   .y = 1300, //1100,
+                   .O = 115,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {
+        .pos = {
+                   .x = 600, //800,
+                   .y = 1300, //1100,
+                   .O = 90,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
         .act = NULL,
     },
     {
@@ -57,7 +64,7 @@ static path_pose_t poses[] = {
                    .O = 90,
                },
         .allow_reverse = FALSE,
-        .max_speed = NORMAL_SPEED,
+        .max_speed = MAX_SPEED,
         .act = pf_front_cup_take,
     },
     {
@@ -130,7 +137,7 @@ static path_pose_t poses[] = {
                    .y = 1310,
                    .O = 180, // 180: dépose cote gauche
                },
-        .allow_reverse = TRUE,
+        .allow_reverse = FALSE,
         .max_speed = MAX_SPEED, //MAX_SPEED,
         .act = pf_front_ramp_right_drop,
     },
@@ -214,9 +221,20 @@ static path_pose_t poses[] = {
                    .O = 90,
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED,
+        .max_speed = NORMAL_SPEED,
         // TODO: /!\ à symétriser fonction de la couleur
         .act = pf_front_cup_ramp,
+    },
+    {
+        /* Post-Point failsafe pump */
+        .pos = {
+                   .x = 1275,
+                   .y = 1200,
+                   .O = 270,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED,
+        .act = pf_stop_pumps,
     },
     /*
      * Ouverture du goldenium
@@ -239,7 +257,7 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = FALSE,
-        .max_speed = MAX_SPEED,
+        .max_speed = NORMAL_SPEED,
         .act = NULL,
     },
 
@@ -250,8 +268,97 @@ static path_pose_t poses[] = {
                    .O = 180,
                },
         .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED,
+        .max_speed = NORMAL_SPEED,
         .act = pf_back_ramp_reset,
+    },
+    /*
+     * Récolte goldenium
+     */
+    {   /* Pré-point */
+        .pos = {
+                   .x = -625,
+                   .y = 320,
+                   .O = 270,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_goldenium_take,
+    },
+    {   /* récolte */
+        .pos = {
+                   .x = -625,
+                   .y = 250,
+                   .O = 270,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = LOW_SPEED,
+        .act = NULL,
+    },
+    {   /* Post-point */
+        .pos = {
+                   .x = -625,
+                   .y = 320,
+                   .O = 270,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = LOW_SPEED,
+        .act = pf_goldenium_hold,
+    },
+    /*
+     * Vidange balance avant
+     */
+    /*
+     * Poussette zone de chaos
+     */
+    {   /* pré point poussette */
+        .pos = {
+                   .x = 90,
+                   .y = 800,
+                   .O = 90,
+               },
+        .allow_reverse = TRUE,
+        .max_speed = MAX_SPEED,
+        .act = NULL,
+    },
+    {   /* pré point poussette */
+        .pos = {
+                   .x = 100,
+                   .y = 1150,
+                   .O = 340,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_arms_open,
+    },
+    {   /* pré point poussette */
+        .pos = {
+                   .x = 1000,
+                   .y = 800,
+                   .O = 340,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED,
+        .act = pf_arms_close,
+    },
+    {   /* vidange back ramp */
+        .pos = {
+                   .x = 1000,
+                   .y = 800,
+                   .O = 90,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_front_ramp_right_drop,
+    },
+    {   /* vidange goldenium */
+        .pos = {
+                   .x = 1000,
+                   .y = 800,
+                   .O = 0,
+               },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = pf_goldenium_drop,
     },
 
     /*
