@@ -2,6 +2,12 @@
 export CPU = stm32f4
 export CPU_MODEL = stm32f446re
 
+# compute FLASHSIZE and RAMSIZE
+include $(RIOTCPU)/stm32_common/stm32_mem_lengths.mk
+KB := 1024
+LEN := $(shell echo $(RAM_LEN) | sed 's/K//')
+RAMSIZE := $(shell echo $$(( $(LEN) * $(KB) )) )
+
 export DEBUG_ADAPTER ?= stlink
 export STLINK_VERSION ?= 2
 

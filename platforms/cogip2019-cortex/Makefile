@@ -41,3 +41,10 @@ CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 DEVELHELP=1
 
 include ../../Makefile.include
+
+# Override default build rule to hook a MCU footprint display
+.DEFAULT_GOAL := world
+
+.PHONY: world
+world: all
+	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAMSIZE)
