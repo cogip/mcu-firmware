@@ -19,7 +19,6 @@ void ctrl_set_pose_reached(ctrl_t* ctrl)
     DEBUG("ctrl: Pose is reached\n");
 
     ctrl->control.pose_reached = TRUE;
-    ctrl->control.current_mode = CTRL_MODE_STOP;
 }
 
 inline void ctrl_set_pose_intermediate(ctrl_t* ctrl, uint8_t intermediate)
