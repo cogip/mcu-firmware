@@ -52,6 +52,8 @@ static int pln_calib_cmd(int argc, char **argv)
 
     pln_set_allow_change_path_pose(FALSE);
 
+    pln_start(ctrl);
+
     while (c != 'q') {
         /* Display current position index in path */
         printf("Position index: %u\n", calib_path_index);
@@ -92,8 +94,6 @@ static int pln_calib_cmd(int argc, char **argv)
             default:
                 continue;
         }
-
-        pln_start(ctrl);
 
         /* Data stop signal */
         puts("<<<< STOP >>>>");
