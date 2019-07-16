@@ -7,49 +7,17 @@ QUIET ?= 1
 
 DEVELHELP ?= 1
 
-ifneq (,$(filter ctrl,$(USEMODULE)))
-	DIRS += $(MCUFIRMWAREBASE)/controllers
-endif
-DIRS += $(MCUFIRMWAREBASE)/drivers
-ifneq (,$(filter planner,$(USEMODULE)))
-	DIRS += $(MCUFIRMWAREBASE)/planners
-endif
-ifneq (,$(filter robotics,$(USEMODULE)))
-	DIRS += $(MCUFIRMWAREBASE)/robotics
-endif
-
-INCLUDES += -I$(APPDIR)/include/
-ifneq (,$(filter ctrl,$(USEMODULE)))
-	INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
-endif
-INCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
-ifneq (,$(filter planner,$(USEMODULE)))
-	INCLUDES += -I$(MCUFIRMWAREBASE)/planners/include/
-endif
-ifneq (,$(filter robotics,$(USEMODULE)))
-	INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
-endif
-
-ifneq (,$(filter vl53l0x-api,$(USEPKG)))
-	DIRS += $(MCUFIRMWAREBASE)/pkg/vl53l0x-api/
-endif
-
 ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
 	export MCUFIRMWARE_OPTIONS
 	CFLAGS += -DCALIBRATION
 endif
 
 ifneq (, $(MCUFIRMWARE_PLATFORM_BASE))
-	DIRS += $(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)
-	INCLUDES += -I$(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)/include
+	DIRS += $(MCUFIRMWAREBASE)/platforms/common/$(MCUFIRMWARE_PLATFORM_BASE)
+	INCLUDES += -I$(MCUFIRMWAREBASE)/platforms/common/$(MCUFIRMWARE_PLATFORM_BASE)/include
 	USEMODULE += $(MCUFIRMWARE_PLATFORM_BASE)
+	include $(MCUFIRMWAREBASE)/platforms/common/$(MCUFIRMWARE_PLATFORM_BASE)/Makefile.include
 endif
 
-include $(MCUFIRMWAREBASE)/drivers/Makefile.dep
-ifneq (,$(filter ctrl,$(USEMODULE)))
-	include $(MCUFIRMWAREBASE)/controllers/Makefile.dep
-endif
-ifneq (,$(filter planner,$(USEMODULE)))
-	include $(MCUFIRMWAREBASE)/planners/Makefile.dep
-endif
+include $(MCUFIRMWAREBASE)/Makefile.dep
 include $(RIOTBASE)/Makefile.include
