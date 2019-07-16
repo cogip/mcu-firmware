@@ -1,3 +1,3 @@
-MODULE = cogip2019-cortex-common
+MODULE = cortex
 
 include $(RIOTBASE)/Makefile.base
