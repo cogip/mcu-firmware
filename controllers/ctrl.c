@@ -29,7 +29,7 @@ inline void ctrl_set_pose_intermediate(ctrl_t* ctrl, uint8_t intermediate)
     ctrl->control.pose_intermediate = intermediate;
 }
 
-inline int ctrl_get_pose_intermediate(ctrl_t* ctrl)
+inline uint8_t ctrl_is_pose_intermediate(ctrl_t* ctrl)
 {
     return ctrl->control.pose_intermediate;
 }

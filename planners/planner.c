@@ -66,7 +66,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
             current_path_pos = path_get_current_path_pos(path);
             need_update = 1;
         }
-        else if ((!allow_change_path_pose) && (ctrl_get_pose_intermediate(ctrl))) {
+        else if ((!allow_change_path_pose) && (ctrl_is_pose_intermediate(ctrl))) {
             need_update = 1;
         }
         else {
