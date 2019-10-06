@@ -21,7 +21,7 @@ install:
       - gcc --version
       - arm-none-eabi-gcc --version
 before_script:
-      - git clone https://github.com/RIOT-OS/RIOT.git $RIOTBASE -b master --depth 1
+      - git clone https://github.com/RIOT-OS/RIOT.git $RIOTBASE -b 2019.07-branch --depth 1
 script:
       - cd platforms/$PLATFORM
       - make -j$(nproc)
