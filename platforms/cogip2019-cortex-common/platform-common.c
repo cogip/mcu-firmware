@@ -119,8 +119,8 @@ void motor_drive(polar_t *command)
     int16_t right_command = (int16_t) (command->distance + command->angle);
     int16_t left_command = (int16_t) (command->distance - command->angle);
 
-    motor_set(0, HBRIDGE_MOTOR_LEFT, left_command);
-    motor_set(0, HBRIDGE_MOTOR_RIGHT, right_command);
+    motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_LEFT, left_command);
+    motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_RIGHT, right_command);
 }
 
 /* Init all known fixed obstacles on map */
