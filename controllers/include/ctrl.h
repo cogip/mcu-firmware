@@ -180,9 +180,9 @@ void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate);
  *
  * @param[in] ctrl              Controller object
  *
- * @return                      normal position when 0, intermediate otherwise
+ * @return                      non-zero on intermediate position, 0 otherwise
  */
-int ctrl_get_pose_intermediate(ctrl_t *ctrl);
+uint8_t ctrl_is_pose_intermediate(ctrl_t *ctrl);
 
 /**
  * @brief Set the ability to go backward to reach the pose order

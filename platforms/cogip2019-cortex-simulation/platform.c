@@ -102,7 +102,7 @@ void pf_goldenium_drop(void)
 
 void pf_init(void)
 {
-    motor_driver_init(0);
+    motor_driver_init(MOTOR_DRIVER_DEV(0));
 
     /* setup qdec */
     int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_MODE, NULL, NULL);
