@@ -100,3 +100,35 @@ Make sure JTAG programmer is plugged on target board.
 $ cd platforms/cogip2019-cortex/
 $ make -j$(nproc) flash
 ```
+
+# General build targets
+
+## Build all platforms
+
+```bash
+$ make
+```
+
+## Clean all platforms
+
+```bash
+$ make clean
+```
+
+## Distclean all platforms
+
+```bash
+$ make distclean
+```
+
+## Generate doc in various formats
+
+```bash
+$ make doc docman doclatex
+```
+
+## Clean doc
+
+```bash
+$ make docclean
+```
