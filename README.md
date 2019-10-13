@@ -23,9 +23,8 @@ both are required to generate the firwmare binaries.
 
 ```bash
 $ git clone https://github.com/RIOT-OS/RIOT.git -b 2019.07-branch
-$ git clone https://github.com/cogip/mcu-firmware.git -b refacto
+$ git clone https://github.com/cogip/mcu-firmware.git
 ```
-
 
 # Requirements
 
