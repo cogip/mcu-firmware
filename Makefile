@@ -1,7 +1,7 @@
 # List all platforms
 pfs := $(foreach dir,$(wildcard platforms/*/Makefile),$(subst Makefile, , $(dir)))
 
-.PHONY: all clean distclean doc doc-man latex docclean help $(pfs)
+.PHONY: all clean distclean doc docman doclatex docclean help $(pfs)
 
 all: $(pfs)
 
@@ -18,10 +18,10 @@ $(pfs):
 doc:
 	"$(MAKE)" -BC doc/doxygen
 
-doc-man:
+docman:
 	"$(MAKE)" -BC doc/doxygen man
 
-latex:
+doclatex:
 	"$(MAKE)" -BC doc/doxygen latex
 
 docclean:
