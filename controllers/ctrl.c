@@ -156,19 +156,19 @@ void *task_ctrl_update(void *arg)
 
         ctrl_pre_mode_cb_t pre_mode_cb = ctrl->pf_conf->ctrl_pre_mode_cb[current_mode];
 
-        if (ctrl->pf_conf->ctrl_pre_mode_cb[ctrl->control.current_mode]) {
+        if (pre_mode_cb) {
             pre_mode_cb(&ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
         }
 
         ctrl_mode_cb_t mode_cb = ctrl->conf->ctrl_mode_cb[current_mode];
 
-        if (ctrl->conf->ctrl_mode_cb[current_mode]) {
+        if (mode_cb) {
             mode_cb(ctrl, &motor_command);
         }
 
         ctrl_post_mode_cb_t post_mode_cb = ctrl->pf_conf->ctrl_post_mode_cb[current_mode];
 
-        if (ctrl->pf_conf->ctrl_post_mode_cb[current_mode]) {
+        if (post_mode_cb) {
             post_mode_cb(&ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
         }
 
