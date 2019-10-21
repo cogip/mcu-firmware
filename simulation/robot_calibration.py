@@ -239,3 +239,5 @@ if __name__ == "__main__":
 
     if sys.flags.interactive != 1 or not hasattr(pg.QtCore, 'PYQT_VERSION'):
         pg.QtGui.QApplication.exec_()
+
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
