@@ -1,7 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-from __future__ import print_function
 
 import fileinput
 import getpass
@@ -18,7 +16,6 @@ import signal
 from threading import Thread
 from threading import Lock
 from threading import RLock
-import mutex
 
 BASE_PATH = "platforms/cogip2019-cortex-simulation/"
 BIN_NAME = "cortex-simulation.elf"
@@ -171,7 +168,7 @@ class Parser(Thread):
     def parse(self, flow):
         global stop_timer
         while True:
-            line = flow.readline()
+            line = flow.readline().decode('utf-8')
             output = sys.stdout
             print(line, file=output, end='')
             if line.startswith(self.STOP_PATTERN):
@@ -194,21 +191,22 @@ class NativeParser(Parser):
 
     def send(self, p):
         for line in fileinput.input():
-            p.stdin.write(line)
+            p.stdin.write(line.encode('utf-8'))
+            p.stdin.flush()
 
 class SerialParser(Parser):
     def __init__(self, serial_port):
         self.ser = Serial(port=serial_port, baudrate=115200, timeout=1, writeTimeout=1)
 
     def parse(self):
-            if self.ser.isOpen():
-                while True:
-                    super(SerialParser, self).parse(self.ser)
+        if self.ser.isOpen():
+            while True:
+                super(SerialParser, self).parse(self.ser)
 
     def send(self, p):
         for line in fileinput.input():
-                if self.ser.isOpen():
-                    self.ser.write(line)
+            if self.ser.isOpen():
+                self.ser.write(bytes(line, 'utf8'))
 
 if __name__ == "__main__":
     # Kill all remaining bin instance
