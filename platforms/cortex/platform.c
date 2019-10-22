@@ -26,7 +26,6 @@ static ctrl_quadpid_t ctrl_quadpid =
 {
     .conf = &ctrl_quadpid_conf,
     .pf_conf = &ctrl_pf_quadpid_conf,
-    .quadpid_params = ctrl_quadpid_params,
 };
 
 /* Thread stacks */
@@ -46,6 +45,11 @@ void pf_add_shell_command(shell_command_t *command)
     assert(command_id < NB_SHELL_COMMANDS);
 
     shell_commands[command_id++] = *command;
+}
+
+void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
+{
+    ctrl_quadpid.quadpid_params = ctrl_quadpid_params;
 }
 
 inline ctrl_quadpid_t* pf_get_quadpid_ctrl(void)

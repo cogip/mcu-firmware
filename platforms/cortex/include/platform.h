@@ -76,6 +76,7 @@ void pf_add_shell_command(shell_command_t *command);
 void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
+void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params);
 ctrl_quadpid_t* pf_get_quadpid_ctrl(void);
 ctrl_t* pf_get_ctrl(void);
 void pf_init(void);

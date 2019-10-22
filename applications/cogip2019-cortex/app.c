@@ -452,6 +452,9 @@ void pf_init(void)
 
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
+    /* Init quadpid controller */
+    pf_init_quadpid_params(ctrl_quadpid_params);
+
     /* Init starter and camp selection GPIOs */
     assert(gpio_init(GPIO_CAMP, GPIO_IN) == 0);
     assert(gpio_init(GPIO_STARTER, GPIO_IN_PU) == 0);
