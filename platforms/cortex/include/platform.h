@@ -16,6 +16,29 @@
 #define ROBOT_WIDTH         354                 /* units: mm */
 #define ROBOT_MARGIN        (ROBOT_WIDTH / 2)
 
+/* To be computed :
+ *  - PULSE_PER_MM		: Number of pulses per mm of coding wheel
+ *  - WHEELS_DISTANCE		: Distance between coding wheels in pulses
+ *  - PULSE_PER_DEGREE		: Number of pulses per degree of coding wheel
+ *
+ * Must be known :
+ *  - WHEELS_DIAMETER		: Coding wheel diameter
+ *  - WHEELS_DISTANCE_MM	: Distance between coding wheels in mm
+ *
+ * Must be known and defined :
+ *  - WHEELS_ENCODER_RESOLUTION	: Number of pulses by turn of coding wheels
+ */
+
+#define WHEELS_ENCODER_RESOLUTION   2000
+/* WHEELS_PERIMETER = pi*WHEELS_DIAMETER
+ * PULSE_PER_MM = WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
+ */
+#define PULSE_PER_MM        10.624
+/* WHEELS_DISTANCE = WHEELS_DISTANCE_MM * PULSE_PER_MM */
+#define WHEELS_DISTANCE     2974.72
+/* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
+#define PULSE_PER_DEGREE    51.91
+
 #define PF_START_COUNTDOWN  3
 
 #define NB_SHELL_COMMANDS   10
