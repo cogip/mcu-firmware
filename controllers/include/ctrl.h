@@ -291,16 +291,6 @@ void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order);
 polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
 
 /**
- * @brief Set current speed
- *
- * @param[in] ctrl              Controller object
- * @param[in] speed_current     Current speed
- *
- * @return
- */
-void ctrl_set_speed_current(ctrl_t* ctrl, const polar_t* speed_current);
-
-/**
  * @brief Get current speed
  *
  * @param[in] ctrl              Controller object
