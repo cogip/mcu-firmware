@@ -39,12 +39,6 @@
 /* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
 #define PULSE_PER_DEGREE    51.91
 
-#define HBRIDGE_MOTOR_LEFT  0
-#define HBRIDGE_MOTOR_RIGHT 1
-
-#define QDEC_MODE   QDEC_X4
-#define QDEC_LEFT_POLARITY      -1
-#define QDEC_RIGHT_POLARITY     1
 
 #define USART_CONSOLE   USARTC0
 
