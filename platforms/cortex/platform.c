@@ -11,8 +11,8 @@
 /* Project includes */
 #include "avoidance.h"
 #include "planner.h"
+#include "app.h"
 #include "platform.h"
-#include "platform-common.h"
 
 /* Radio includes */
 #if defined(MODULE_CC110X)

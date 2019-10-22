@@ -2,7 +2,7 @@
 #define PLATFORM_H_
 
 /* Project includes */
-#include "platform-common.h"
+#include "platform.h"
 
 /*
  * Machine parameters

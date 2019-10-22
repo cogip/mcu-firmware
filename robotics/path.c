@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "path.h"
-#include "platform.h"
+#include "app.h"
 
 #include "utils.h"
 
