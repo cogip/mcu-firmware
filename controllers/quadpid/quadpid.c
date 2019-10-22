@@ -150,12 +150,6 @@ int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
     /* get speed order */
     speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
 
-    if((!speed_order)
-        || (!command)
-        || (ctrl_is_pose_reached((ctrl_t*)ctrl_quadpid))) {
-        return -1;
-    }
-
     DEBUG("@robot@,%u,@pose_current@,%.4f,%.4f,%.4f\n",
                 ROBOT_ID,
                 pose_current->x,
@@ -203,13 +197,6 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 
     /* get speed order */
     speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
-
-    if ((!pose_order)
-        || (!speed_order)
-        || (!command)
-        || (ctrl_is_pose_reached((ctrl_t*)ctrl_quadpid))) {
-        return -1;
-    }
 
     pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
