@@ -11,7 +11,6 @@
 /* Project includes */
 #include "avoidance.h"
 #include "planner.h"
-#include "app.h"
 #include "platform.h"
 
 /* Radio includes */
