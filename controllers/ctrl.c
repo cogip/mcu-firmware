@@ -90,18 +90,6 @@ inline const pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
     return &ctrl->control.pose_order;
 }
 
-inline void ctrl_set_speed_current(ctrl_t* ctrl, const polar_t* speed_current)
-{
-    DEBUG("ctrl: Speed current: linear=%lf, angle=%lf\n",
-            speed_current->distance, speed_current->angle);
-
-    irq_disable();
-
-    ctrl->control.speed_current = *speed_current;
-
-    irq_enable();
-}
-
 inline const polar_t* ctrl_get_speed_current(ctrl_t* ctrl)
 {
     return &ctrl->control.speed_current;
