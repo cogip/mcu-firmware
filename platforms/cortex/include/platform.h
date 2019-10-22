@@ -45,6 +45,9 @@
 
 #define GAME_DURATION_SEC   100
 
+#define CAMP_LEFT 1
+#define CAMP_RIGHT 0
+
 #define MAX_ACC     5
 #define MAX_SPEED   10
 
