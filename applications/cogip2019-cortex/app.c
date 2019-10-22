@@ -16,8 +16,8 @@
 #include "obstacle.h"
 #include "pca9548.h"
 #include "planner.h"
+#include "app.h"
 #include "platform.h"
-#include "platform-common.h"
 #include "sd21.h"
 
 #ifdef CALIBRATION

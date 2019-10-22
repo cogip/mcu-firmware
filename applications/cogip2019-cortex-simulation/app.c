@@ -14,8 +14,8 @@
 #include "calibration/calib_planner.h"
 #include "calibration/calib_quadpid.h"
 #include "ctrl/quadpid.h"
+#include "app.h"
 #include "platform.h"
-#include "platform-common.h"
 #include "planner.h"
 
 int pf_is_game_launched(void)

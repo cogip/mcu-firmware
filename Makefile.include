@@ -13,10 +13,10 @@ ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
 endif
 
 ifneq (, $(MCUFIRMWARE_PLATFORM_BASE))
-	DIRS += $(MCUFIRMWAREBASE)/platforms/common/$(MCUFIRMWARE_PLATFORM_BASE)
-	INCLUDES += -I$(MCUFIRMWAREBASE)/platforms/common/$(MCUFIRMWARE_PLATFORM_BASE)/include
+	DIRS += $(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)
+	INCLUDES += -I$(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)/include
 	USEMODULE += $(MCUFIRMWARE_PLATFORM_BASE)
-	include $(MCUFIRMWAREBASE)/platforms/common/$(MCUFIRMWARE_PLATFORM_BASE)/Makefile.include
+	include $(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)/Makefile.include
 endif
 
 include $(MCUFIRMWAREBASE)/Makefile.dep

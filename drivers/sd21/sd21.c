@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "platform.h"
+#include "app.h"
 #include "sd21.h"
 #include "xtimer.h"
 
