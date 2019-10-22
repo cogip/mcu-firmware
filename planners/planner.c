@@ -133,7 +133,6 @@ void *task_planner(void *arg)
     pose_t pose_order = { 0, 0, 0 };
     pose_t initial_pose = { 0, 0, 0 };
     polar_t speed_order = { 0, 0 };
-    polar_t initial_speed = { 0, 0 };
     const uint8_t camp_left = pf_is_camp_left();
     const path_pose_t *current_path_pos = NULL;
 
@@ -159,7 +158,7 @@ void *task_planner(void *arg)
     initial_pose = current_path_pos->pos;
     pose_order = current_path_pos->pos;
     ctrl_set_pose_current(ctrl, &initial_pose);
-    ctrl_set_speed_current(ctrl, &initial_speed);
+    ctrl_set_speed_order(ctrl, &speed_order);
     ctrl_set_pose_to_reach(ctrl, &pose_order);
     ctrl_set_pose_reached(ctrl);
 
