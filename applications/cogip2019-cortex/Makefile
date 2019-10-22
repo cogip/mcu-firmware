@@ -8,7 +8,6 @@ MCUFIRMWARE_PLATFORM_BASE = cortex
 USEMODULE += scanf_float
 
 # mcu-firmware modules
-USEMODULE += cc110x
 USEMODULE += pca9548
 USEMODULE += sd21
 USEMODULE += $(APPLICATION_MODULE)
