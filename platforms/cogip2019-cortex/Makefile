@@ -5,7 +5,6 @@ BOARD ?= cogip2019-cortex
 MCUFIRMWARE_PLATFORM_BASE = cortex
 
 # RIOT modules
-USEMODULE += mpu_stack_guard
 USEMODULE += scanf_float
 
 # mcu-firmware modules
