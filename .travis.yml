@@ -2,8 +2,6 @@
 dist: bionic
 language: c
 env:
-      - PLATFORM=cogip2019-cortex
-      - PLATFORM=cogip2019-cortex-simulation
 before_install:
       - export TOOLCHAIN_NAME=gcc-arm-none-eabi-8-2018-q4-major
       - export PATH=/opt/toolchain/$TOOLCHAIN_NAME/bin:$PATH
@@ -23,6 +21,5 @@ install:
 before_script:
       - git clone https://github.com/RIOT-OS/RIOT.git $RIOTBASE -b 2020.04-branch --depth 1
 script:
-      - cd platforms/$PLATFORM
       - make -j$(nproc)
       - make distclean
