@@ -13,13 +13,6 @@
 #include "planner.h"
 #include "platform.h"
 
-/* Radio includes */
-#if defined(MODULE_CC110X)
-#include "cc110x.h"
-#include "cc110x-spi.h"
-#include "cc110x-defines.h"
-#endif
-
 /* Controller */
 static ctrl_quadpid_t ctrl_quadpid =
 {
@@ -204,136 +197,8 @@ void pf_fixed_obstacles_init(void)
     }
 }
 
-#if defined(MODULE_CC110X)
-
-#define FSIZE 32
-
-static uint32_t nb_pkt_tot = 0;
-
 #define CAMP_LEFT 1
 #define CAMP_RIGHT 0
-
-static const cc110x_params_t cc110x_params[] = {
-    CC110X_PARAMS
-};
-
-static cc110x_t pf_cc1101_device;
-
-const char cc110x_cortex_pa_table[8] = {
-    0x60,
-    0x60,
-    0x60,
-    0x60,
-    0x60,
-    0x60,
-    0x60,
-    0x60
-};
-
-const char cc110x_cortex_base_freq[3] = { 0x21, 0x62, 0x76 };
-
-static void emitter_loop(void)
-{
-    cc110x_t *dev = &pf_cc1101_device;
-
-    uint8_t pkt[FSIZE+1] = {FSIZE};
-    memset(pkt+1, 0, FSIZE);
-
-    pkt[0] = FSIZE;
-
-    for(uint8_t i = 2; i < FSIZE+1; i++)
-        pkt[i] = i + 1;
-
-    cc110x_write_reg(dev, CC110X_IOCFG2,
-                     CC110X_GDO_LOW_ON_TX_FIFO_BELOW_THRESHOLD);
-
-    for (uint8_t quit = 0; !quit;) {
-
-        quit = 1;
-        printf("Will send a pkt (%ld)\n", ++nb_pkt_tot);
-
-        /* Put CC110x in IDLE mode to flush the FIFO */
-        cc110x_strobe(dev, CC110X_SIDLE);
-
-        printf("Flush TX FIFO to be sure it is empty\n");
-        /* Flush TX FIFO to be sure it is empty */
-        cc110x_strobe(dev, CC110X_SFTX);
-
-        {
-            static uint8_t direction = 0;
-            static uint32_t motor_time_sec = 120 * US_PER_MS; /* 120 sec */
-
-            for (uint8_t i = 2; i < FSIZE+1; i++)
-                pkt[i] = direction ? 0x11 : 0xee;
-
-            if (1) {
-                pkt[2] = 0x55;
-                pkt[3] = 0xaa;
-                //pkt[4] = CAMP_LEFT;
-                ////pkt[4] = CAMP_RIGHT;
-                pkt[4] = !pf_is_camp_left() ? CAMP_LEFT : CAMP_RIGHT;
-
-                /* climb time in microseconds */
-                pkt[5] = (uint8_t) ((motor_time_sec & 0x000000ff) >> 0);
-                pkt[6] = (uint8_t) ((motor_time_sec & 0x0000ff00) >> 8);
-                pkt[7] = (uint8_t) ((motor_time_sec & 0x00ff0000) >> 16);
-                pkt[8] = (uint8_t) ((motor_time_sec & 0xff000000) >> 24);
-            }
-
-            direction = !direction;
-        }
-
-        printf("Write packet into TX FIFO\n");
-        /* Write packet into TX FIFO */
-        cc110x_writeburst_reg(dev, CC110X_TXFIFO, (char *)pkt, FSIZE+1);
-
-        printf("Before TX mode : %d bytes to send\n", cc110x_read_status(dev, CC110X_TXBYTES));
-        /* Switch to TX mode */
-        cc110x_strobe(dev, CC110X_STX);
-
-        /* Wait that the TX FIFO is empty */
-        uint8_t nb_wait = 0;
-        while (cc110x_read_status(dev, CC110X_TXBYTES) & 0x7f) {
-            xtimer_usleep(15);
-            nb_wait++;
-        }
-        printf("... Waited %d us (%d)\n", nb_wait * 15, cc110x_read_status(dev, CC110X_TXBYTES));
-
-        /* Print sent packet content */
-        for (uint8_t i = 0; i < FSIZE + 1; i++) {
-            printf("%02x ", pkt[i]);
-        }
-        printf("\n");
-    }
-}
-
-static void emitter_init(void)
-{
-    cc110x_t *dev = &pf_cc1101_device;
-
-    uint8_t bus = SPI_DEV(0);
-    cc110x_setup(dev, &cc110x_params[bus]);
-    gpio_init_af(spi_config[bus].mosi_pin, GPIO_AF7);
-
-    cc110x_set_channel(dev, 0);
-
-    //cc110x_write_reg(dev, CC110X_SYNC1, 0xB5);
-    //cc110x_write_reg(dev, CC110X_SYNC0, 0x47);
-
-    cc110x_write_reg(dev, CC110X_ADDR, 0x04);
-
-    printf("CC1101_TEST0 = 0x%x\n", cc110x_read_reg(dev, CC110X_TEST0));
-    printf("CC1101_TEST1 = 0x%x\n", cc110x_read_reg(dev, CC110X_TEST1));
-    printf("CC1101_TEST2 = 0x%x\n", cc110x_read_reg(dev, CC110X_TEST2));
-
-    printf("CC1101_PARTNUM = 0x%x\n", cc110x_read_status(dev, CC110X_PARTNUM));
-
-    printf("CC1101_VERSION = 0x%x\n", cc110x_read_status(dev, CC110X_VERSION));
-}
-#else
-#define emitter_init()
-#define emitter_loop()
-#endif /* defined(MODULE_CC110X) */
 
 static void *pf_task_countdown(void *arg)
 {
@@ -356,28 +221,6 @@ static void *pf_task_countdown(void *arg)
     }
 
     return NULL;
-}
-
-void *task_radio(void *arg)
-{
-    (void)arg;
-
-    DEBUG("Radio thread started\n");
-    emitter_init();
-
-    ///* Wait for start switch */
-    //while(!pf_is_game_launched())
-    //    ;
-
-    for (;;) {
-        //DEBUG("Radio thread started\n");
-        xtimer_ticks32_t loop_start_time = xtimer_now();
-        DEBUG(" -------------------- Loop radio\n");
-
-        emitter_loop();
-
-        xtimer_periodic_wakeup(&loop_start_time, 100 * US_PER_MS);
-    }
 }
 
 #ifdef CALIBRATION
@@ -439,13 +282,6 @@ void pf_init_tasks(void)
                   task_planner,
                   NULL,
                   "planner");
-    /* Create radio thread */
-    thread_create(radio_thread_stack,
-                  sizeof(radio_thread_stack),
-                  THREAD_PRIORITY_MAIN + 1, 0,
-                  task_radio,
-                  (void*)NULL,
-                  "radio control");
 
     /* If Enter was pressed, start shell */
     if (start_shell) {
