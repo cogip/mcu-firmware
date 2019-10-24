@@ -58,3 +58,6 @@ Makefile.local
 
 # scan-build artifacts
 scan-build/
+
+# python virtual environnement
+simulation/venv/
