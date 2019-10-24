@@ -96,7 +96,7 @@ typedef enum {
 typedef struct {
     pose_t pose_order;          /**< Position order */
     pose_t pose_current;        /**< Current position */
-    polar_t* speed_order;       /**< Speed order to reach the position */
+    polar_t speed_order;        /**< Speed order to reach the position */
     polar_t speed_current;      /**< Current speed reaching the position */
 
     uint8_t pose_reached;       /**< Boolean set when pose_order is reached */
