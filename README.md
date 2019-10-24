@@ -48,6 +48,17 @@ Edit ~/.bashrc file and add $HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bi
 PATH=${PATH}:$HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/
 ```
 
+# Prepare python environment
+
+Some tool rely on python to run. Minimum required version is python 3.6.
+A possible preparation is proposed below:
+
+```bash
+$ python3 -m venv simulation/venv
+$ source simulation/venv/bin/activate
+$ pip install -r simulation/requirements.txt
+```
+
 ## Build, deploy and connect on target
 
 # Simulation
@@ -61,6 +72,23 @@ $ cd platforms/cogip2019-cortex-simulation/
 $ make -j$(nproc)
 $ bin/cogip2019-cortex-native/cortex-simulation.elf
 ```
+
+## Build and observe control loop
+
+A python script is available to observe the data of the control loop.
+Script can be launched using following:
+
+```bash
+$ source simulation/venv/bin/activate
+$ python simulation/robot_calibration.py
+```
+
+To get relevant visualization, please ensure following files have ENABLE_DEBUG
+set:
+
+- controllers/ctrl.c
+- controllers/quadpid/quadpid.c
+- platforms/common/cortex/platform-common.c
 
 ## Build and simulate in FreeCAD
 
