@@ -65,7 +65,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
-        .act = pf_front_cup_take,
+        .act = app_front_cup_take,
     },
     {
         /* Point récolte */
@@ -88,7 +88,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
-        .act = pf_front_cup_ramp,
+        .act = app_front_cup_ramp,
     },
     /*
      * Récole 3 palets éloignés balance
@@ -102,7 +102,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
-        .act = pf_back_cup_take,
+        .act = app_back_cup_take,
     },
     {
         /* Point récolte */
@@ -125,7 +125,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
-        .act = pf_back_cup_ramp,
+        .act = app_back_cup_ramp,
     },
     /*
      * Dépose dans la balance
@@ -139,7 +139,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED, //MAX_SPEED,
-        .act = pf_front_ramp_right_drop,
+        .act = app_front_ramp_right_drop,
     },
     {
         /* Point dépose rampe arrière */
@@ -150,7 +150,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
-        .act = pf_back_ramp_left_drop,
+        .act = app_back_ramp_left_drop,
     },
     /*
      * Déplacement vers petit distributeur & pousse des palets en zone de départ
@@ -164,7 +164,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED, //MAX_SPEED,
-        .act = pf_arms_open,
+        .act = app_arms_open,
     },
     {
         /* Point interne à la zone de départ */
@@ -175,7 +175,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
-        .act = pf_arms_close,
+        .act = app_arms_close,
     },
     {
         /* Point approche dans couloir vers le petit distributeur */
@@ -200,7 +200,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
-        .act = pf_front_cup_take,
+        .act = app_front_cup_take,
     },
     {
         /* Point petit distributeur */
@@ -223,7 +223,7 @@ static path_pose_t poses[] = {
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
         // TODO: /!\ à symétriser fonction de la couleur
-        .act = pf_front_cup_ramp,
+        .act = app_front_cup_ramp,
     },
     {
         /* Post-Point failsafe pump */
@@ -234,7 +234,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
-        .act = pf_stop_pumps,
+        .act = app_stop_pumps,
     },
     /*
      * Ouverture du goldenium
@@ -247,7 +247,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
-        .act = pf_back_ramp_left_horiz_for_goldenium,
+        .act = app_back_ramp_left_horiz_for_goldenium,
     },
 
     {   /* Point ouverture goldenium */
@@ -269,7 +269,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
-        .act = pf_back_ramp_reset,
+        .act = app_back_ramp_reset,
     },
     /*
      * Récolte goldenium
@@ -282,7 +282,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
-        .act = pf_goldenium_take,
+        .act = app_goldenium_take,
     },
     {   /* récolte */
         .pos = {
@@ -302,7 +302,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = TRUE,
         .max_speed = LOW_SPEED,
-        .act = pf_goldenium_hold,
+        .act = app_goldenium_hold,
     },
     /*
      * Vidange balance avant
@@ -328,7 +328,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
-        .act = pf_arms_open,
+        .act = app_arms_open,
     },
     {   /* pré point poussette */
         .pos = {
@@ -338,7 +338,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
-        .act = pf_arms_close,
+        .act = app_arms_close,
     },
     {   /* vidange back ramp */
         .pos = {
@@ -348,7 +348,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
-        .act = pf_front_ramp_right_drop,
+        .act = app_front_ramp_right_drop,
     },
     {   /* vidange goldenium */
         .pos = {
@@ -358,7 +358,7 @@ static path_pose_t poses[] = {
                },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
-        .act = pf_goldenium_drop,
+        .act = app_goldenium_drop,
     },
 
     /*
