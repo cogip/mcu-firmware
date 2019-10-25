@@ -323,3 +323,7 @@ void pf_init_tasks(void)
         pln_start((ctrl_t*)controller);
     }
 }
+
+void pf_init(void)
+{
+}

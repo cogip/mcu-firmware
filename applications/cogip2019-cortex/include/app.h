@@ -94,7 +94,7 @@
 typedef struct {
     double angle_offset;
     double distance_offset;
-} pf_sensor_t;
+} app_sensor_t;
 
 typedef struct {
     uint8_t nb_puck_front_ramp;
@@ -108,9 +108,9 @@ typedef struct {
     uint8_t red_puck_on_hold_back;
     uint8_t any_pump_on;
     uint8_t front_fork_occupied;
-} pf_actions_context_t;
+} app_actions_context_t;
 
-static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
+static const app_sensor_t app_sensors[VL53L0X_NUMOF] = {
     {
         .angle_offset = 135,
         .distance_offset = ROBOT_MARGIN,
@@ -449,26 +449,30 @@ static const sd21_conf_t sd21_config[] = {
     }
 };
 
-void pf_calib_read_sensors(pca9548_t dev);
+void app_calib_read_sensors(pca9548_t dev);
 
 #define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
 
-void pf_stop_pumps(void);
+void app_init(void);
+void app_init_tasks(void);
+int app_read_sensors(void);
 
-void pf_front_cup_take(void);
-void pf_front_cup_ramp(void);
-void pf_back_cup_take(void);
-void pf_back_cup_ramp(void);
+void app_stop_pumps(void);
 
-void pf_front_ramp_right_drop(void);
-void pf_front_ramp_reset(void);
-void pf_back_ramp_left_drop(void);
-void pf_back_ramp_reset(void);
-void pf_back_ramp_left_horiz_for_goldenium(void);
-void pf_arms_open(void);
-void pf_arms_close(void);
-void pf_goldenium_hold(void);
-void pf_goldenium_take(void);
-void pf_goldenium_drop(void);
+void app_front_cup_take(void);
+void app_front_cup_ramp(void);
+void app_back_cup_take(void);
+void app_back_cup_ramp(void);
+
+void app_front_ramp_right_drop(void);
+void app_front_ramp_reset(void);
+void app_back_ramp_left_drop(void);
+void app_back_ramp_reset(void);
+void app_back_ramp_left_horiz_for_goldenium(void);
+void app_arms_open(void);
+void app_arms_close(void);
+void app_goldenium_hold(void);
+void app_goldenium_take(void);
+void app_goldenium_drop(void);
 
 #endif /* PLATFORM_H_ */

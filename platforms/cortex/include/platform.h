@@ -79,11 +79,10 @@ void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *mot
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params);
 ctrl_quadpid_t* pf_get_quadpid_ctrl(void);
 ctrl_t* pf_get_ctrl(void);
-void pf_init(void);
 void pf_init_tasks(void);
+void pf_init(void);
 int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
-int pf_read_sensors(void);
 void pf_fixed_obstacles_init(void);
 
 void motor_drive(polar_t *command);
