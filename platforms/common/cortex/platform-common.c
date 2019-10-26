@@ -364,6 +364,8 @@ void pf_init_tasks(void)
 #ifdef CALIBRATION
     int countdown = PF_START_COUNTDOWN;
 
+    puts("Built-in calibration mode is ACTIVATED");
+
     /* Create thread that up a flag on key pressed to start a shell instead of
        planner below */
     kernel_pid_t start_shell_pid = thread_create(start_shell_thread_stack,
@@ -371,12 +373,12 @@ void pf_init_tasks(void)
                   THREAD_PRIORITY_MAIN + 1, 0,
                   pf_task_start_shell, &start_shell, "shell");
 
-    DEBUG("Press Enter to enter calibration mode...\n");
+    puts("Press Enter to enter calibration mode...");
 
     /* Wait for Enter key pressed or countdown */
     while ((!start_shell) && (countdown > 0)) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        DEBUG("%d left...\n", countdown);
+        printf("%d seconds left...\n", countdown);
         countdown--;
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
