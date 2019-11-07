@@ -245,25 +245,25 @@ class Parser(Thread):
             try:
                 obj_type = params[0]
                 obj_id = params[1]
-                obj_param = params[2]
+                obj_param = params[3]
             except IndexError:
                 return
 
             if obj_type == self.ROBOT_OBJECT_PATTERN:
                 robot = Robot.get_fcd_object(obj_id)
                 if obj_param == self.POSE_ORDER_PATTERN:
-                    robot.set_pose_order(params[3:])
+                    robot.set_pose_order(params[4:])
                 elif obj_param == self.POSE_CURRENT_PATTERN:
-                    robot.set_pose_current(params[3:])
+                    robot.set_pose_current(params[4:])
                 else:
                     output = sys.stderr
                 print(line, file=output)
             elif obj_type == self.OBSTACLE_OBJECT_PATTERN:
                 if len(params) == 11:
                     obstacle = Obstacle.get_fcd_object(obj_id)
-                    x=(int(params[2]) + int(params[6])) / 2
-                    y=(int(params[3]) + int(params[7])) / 2
-                    O=int(params[10])
+                    x=(int(params[3]) + int(params[7])) / 2
+                    y=(int(params[4]) + int(params[8])) / 2
+                    O=int(params[11])
 
                     obstacle.set_pose(obstacle.fcd_obstacle_pose, (x, y, O))
 
