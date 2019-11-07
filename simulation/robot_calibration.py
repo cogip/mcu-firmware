@@ -106,6 +106,69 @@ rw = CurveOverTime('Right wheel')
 rw.setLegends('motor_cmd', 'qdec_speed')
 win.addItem(rw, row=1, col=1)
 
+class RobotTelemetry():
+    """
+    Aggregates multi-lines measurements
+
+    Class methods manages a thread safe FIFO of instances
+    """
+
+    telemetry_points = []
+    lock = Lock()
+
+    @classmethod
+    def push(cls, point):
+        """
+        Store a telemetry record in FIFO.
+        Intended to be called by Parser threads
+        """
+        cls.lock.acquire()
+        cls.telemetry_points.append(point)
+        cls.lock.release()
+
+    @classmethod
+    def pop(cls):
+        """
+        Load a telemetry record from FIFO.
+        Intended to be called by Qt event loop, from refresh timer callback.
+        """
+        point = None
+
+        cls.lock.acquire()
+        if len(cls.telemetry_points):
+            point = cls.telemetry_points.pop(0)
+        cls.lock.release()
+
+        return point
+
+    def __init__(self, current_cycle):
+        self.current_cycle = current_cycle # might not be needed...
+        self.speed_order = (0., 0.)
+        self.speed_current = (0., 0.)
+        self.qdec_speed = (0, 0)
+        self.motor_cmd = (0, 0)
+
+        self.pose_order = (0., 0., 0.)
+        self.pose_current = (0., 0., 0.)
+
+    def set_speed_order(self, speed_lin, speed_order_ang):
+        self.speed_order = (speed_lin, speed_order_ang)
+
+    def set_speed_current(self, speed_lin, speed_ang):
+        self.speed_current = (speed_lin, speed_ang)
+
+    def set_qdec_speed(self, qdec_speed_left, qdec_speed_right):
+        self.qdec_speed = (qdec_speed_left, qdec_speed_right)
+
+    def set_motor_cmd(self, motor_cmd_left, motor_cmd_right):
+        self.motor_cmd = (motor_cmd_left, motor_cmd_right)
+
+    def set_pose_order(self, x, y, theta):
+        self.pose_order = (x, y, theta)
+
+    def set_pose_current(self, x, y, theta):
+        self.pose_current = (x, y, theta)
+
 def update_plot():
     pass
 
