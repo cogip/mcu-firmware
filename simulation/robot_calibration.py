@@ -21,27 +21,9 @@ BASE_PATH = "platforms/cogip2019-cortex-simulation/"
 BIN_NAME = "cortex-simulation.elf"
 BIN_PATH = BASE_PATH + "bin/cogip2019-cortex-native/" + BIN_NAME
 
-# Speeds array
-speed_linear_values = []
-speed_angular_values = []
-speed_linear_times = []
-speed_angular_times = []
-# Pose array
-pose_linear_values = []
-pose_angular_values = []
-pose_linear_times = []
-pose_angular_times = []
-# Motion control periods counters
-speed_linear_time = 0
-speed_angular_time = 0
-pose_linear_time = 0
-pose_angular_time = 0
 
 # Lock for datas
 lock = Lock()
-
-# Flag to stop refreshing plots when no datas are available
-stop_timer = 0
 
 # Create plots window
 win = pg.GraphicsWindow()
@@ -52,58 +34,17 @@ win.setWindowTitle("Speeds")
 p_speed = win.addPlot()
 p_pose = win.addPlot()
 # Create associated curves
-plt_speed_linear = p_speed.plot(speed_linear_times, speed_linear_values, title="Speed linear")
-plt_speed_angular = p_speed.plot(speed_angular_times, speed_angular_values, title="Speed angular")
-plt_pose_linear = p_pose.plot(pose_linear_times, pose_linear_values, title="Pose linear")
-plt_pose_angular = p_pose.plot(pose_angular_times, pose_angular_values, title="Pose angular")
+plt_speed_linear = p_speed.plot()
+plt_speed_angular = p_speed.plot()
+plt_pose_linear = p_pose.plot()
+plt_pose_angular = p_pose.plot()
 # Display grid on all plots
 p_speed.showGrid(x=True,y=True)
 p_pose.showGrid(x=True,y=True)
 
-last_len_linear = 0
-
-def reset_arrays():
-    global speed_linear_values
-    global speed_angular_values
-    global speed_linear_times
-    global speed_angular_times
-    global speed_linear_time
-    global speed_angular_time
-    global pose_linear_values
-    global pose_angular_values
-    global pose_linear_times
-    global pose_angular_times
-    global pose_linear_time
-    global pose_angular_time
-
-    lock.acquire()
-    # Speeds array
-    speed_linear_values = []
-    speed_angular_values = []
-    speed_linear_times = []
-    speed_angular_times = []
-    # Pose array
-    pose_linear_values = []
-    pose_angular_values = []
-    pose_linear_times = []
-    pose_angular_times = []
-
-    plt_speed_linear.setData(speed_linear_times, speed_linear_values, clear=True, pen='r')
-    plt_speed_angular.setData(speed_angular_times, speed_angular_values, clear=True, pen='b')
-    plt_pose_linear.setData(pose_linear_times, pose_linear_values, clear=True, pen='r')
-    plt_pose_angular.setData(pose_angular_times, pose_angular_values, clear=True, pen='b')
-    lock.release()
 
 def update_plot():
-    global last_len_linear
-    lock.acquire()
-    if len(speed_linear_times) != last_len_linear:
-        plt_speed_linear.setData(speed_linear_times, speed_linear_values, clear=True, pen='r')
-        plt_speed_angular.setData(speed_angular_times, speed_angular_values, clear=False, pen='b')
-        plt_pose_linear.setData(pose_linear_times, pose_linear_values, clear=True, pen='r')
-        plt_pose_angular.setData(pose_angular_times, pose_angular_values, clear=False, pen='b')
-        last_len_linear = len(speed_linear_times)
-    lock.release()
+    pass
 
 class Parser(Thread):
     END_PATTERN = '>>>>'
@@ -116,19 +57,6 @@ class Parser(Thread):
     SPEED_CURRENT_PATTERN = '@speed_current@'
 
     def _decode(self, line):
-        global speed_linear_values
-        global speed_angular_values
-        global speed_linear_times
-        global speed_angular_times
-        global speed_linear_time
-        global speed_angular_time
-        global pose_linear_values
-        global pose_angular_values
-        global pose_linear_times
-        global pose_angular_times
-        global pose_linear_time
-        global pose_angular_time
-        global stop_timer
 
         # Remove trailing spaces or line return
         line = line.rstrip().rstrip(',')
@@ -141,46 +69,14 @@ class Parser(Thread):
             obj_param = params[1]
             obj_id = params[2]
 
-            lock.acquire()
-            if obj_type == self.ROBOT_OBJECT_PATTERN:
-            #    if obj_param == self.POSE_ORDER_PATTERN:
-            #    elif obj_param == self.POSE_CURRENT_PATTERN:
-                if obj_param == self.SPEED_CURRENT_PATTERN:
-                    stop_timer = 0
-                    speed_linear_times.append(int(speed_linear_time))
-                    speed_linear_values.append(float(params[3]))
-                    speed_angular_times.append(int(speed_angular_time))
-                    speed_angular_values.append(float(params[4]))
-                    speed_linear_time = speed_linear_time + 1
-                    speed_angular_time = speed_linear_time + 1
-                elif obj_param == self.POSE_ERROR_PATTERN:
-                    stop_timer = 0
-                    pose_linear_times.append(int(pose_linear_time))
-                    pose_linear_values.append(float(params[3]))
-                    pose_angular_times.append(int(pose_angular_time))
-                    pose_angular_values.append(float(params[4]))
-                    pose_linear_time = pose_linear_time + 1
-                    pose_angular_time = pose_linear_time + 1
-                else:
-                    output = sys.stderr
-            lock.release()
 
     def parse(self, flow):
-        global stop_timer
         while True:
             line = flow.readline().decode('utf-8')
             output = sys.stdout
-            print(line, file=output, end='')
-            if line.startswith(self.STOP_PATTERN):
-                stop_timer = 1
-            elif line.startswith(self.RESET_PATTERN):
-                reset_arrays()
-                stop_timer = 0
-            elif line.startswith(self.END_PATTERN):
-                stop_timer = 1
-                break
-            else:
-                self._decode(line)
+            print('\x1b[0;35;40m' + line + '\033[0m', file=output, end='')
+            output.flush()
+            self._decode(line)
         print('Parsing finished')
 
 
