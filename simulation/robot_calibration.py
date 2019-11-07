@@ -97,6 +97,13 @@ class CurveOverTime(pg.PlotItem):
 
 
 # Create plots
+lin_speed = CurveOverTime('Linear speed')
+lin_speed.setLegends('speed_order', 'speed_current')
+win.addItem(lin_speed, row=0, col=0)
+
+ang_speed = CurveOverTime('Angular speed')
+ang_speed.setLegends('speed_order', 'speed_current')
+win.addItem(ang_speed, row=1, col=0)
 
 lw = CurveOverTime('Left wheel')
 lw.setLegends('motor_cmd', 'qdec_speed')
@@ -187,6 +194,14 @@ def update_plot():
         (left, right) = t.qdec_speed
         lw.appendMeas(left)
         rw.appendMeas(right)
+
+        (linear, angular) = t.speed_order
+        lin_speed.appendCommand(linear)
+        ang_speed.appendCommand(angular)
+
+        (linear, angular) = t.speed_current
+        lin_speed.appendMeas(linear)
+        ang_speed.appendMeas(angular)
 
 class Parser(Thread):
     END_PATTERN = '>>>>'
