@@ -117,6 +117,9 @@ void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
     if (new_mode < CTRL_MODE_NUMOF) {
         ctrl->control.current_mode = new_mode;
         DEBUG("ctrl: New mode: %d\n", ctrl->control.current_mode);
+
+        if (ctrl->control.current_mode == CTRL_MODE_STOP)
+            ctrl->control.current_cycle = 0;
     }
     else {
         LOG_WARNING("ctrl: Unknown mode, stopping controller\n");
@@ -159,6 +162,9 @@ void *task_ctrl_update(void *arg)
         if (post_mode_cb) {
             post_mode_cb(&ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
         }
+
+        /* Current cycle finished */
+        ctrl->control.current_cycle++;
 
         xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
     }
