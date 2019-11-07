@@ -72,6 +72,16 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *m
 
     /* convert to position */
     odometry_update(robot_pose, robot_speed, SEGMENT);
+
+    ctrl_t *ctrl = pf_get_ctrl();
+
+    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP)
+        DEBUG("@robot@,%u,%"PRIu32",@pose_current@,%.2f,%.2f,%.2f\n",
+                    ROBOT_ID,
+                    ctrl->control.current_cycle,
+                    robot_pose->x,
+                    robot_pose->y,
+                    robot_pose->O);
 }
 
 void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
@@ -105,6 +115,19 @@ int encoder_read(polar_t *robot_speed)
     robot_speed->distance = ((right_speed + left_speed) / 2.0) / PULSE_PER_MM;
     robot_speed->angle = (right_speed - left_speed) / PULSE_PER_DEGREE;
 
+    ctrl_t *ctrl = pf_get_ctrl();
+
+    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP) {
+        DEBUG("@robot@,%u,%"PRIu32",@qdec_speed@,%"PRIi32",%"PRIi32"\n",
+            ROBOT_ID, ctrl->control.current_cycle, left_speed, right_speed);
+
+        DEBUG("@robot@,%u,%"PRIu32",@speed_current@,%.2f,%.2f\n",
+            ROBOT_ID,
+            ctrl->control.current_cycle,
+            robot_speed->distance,
+            robot_speed->angle);
+    }
+
     return 0;
 }
 
@@ -118,6 +141,19 @@ void motor_drive(polar_t *command)
 {
     int16_t right_command = (int16_t) (command->distance + command->angle);
     int16_t left_command = (int16_t) (command->distance - command->angle);
+
+    ctrl_t *ctrl = pf_get_ctrl();
+
+    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP) {
+        DEBUG("@robot@,%u,%"PRIu32",@speed_set@,%.4f,%.4f\n",
+                    ROBOT_ID,
+                    ctrl->control.current_cycle,
+                    command->distance,
+                    command->angle);
+
+        DEBUG("@robot@,%u,%"PRIu32",@motor_set@,%"PRIi16",%"PRIi16"\n",
+              ROBOT_ID, ctrl->control.current_cycle, left_command, right_command);
+    }
 
     motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_LEFT, left_command);
     motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_RIGHT, right_command);
