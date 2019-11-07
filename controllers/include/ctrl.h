@@ -110,6 +110,11 @@ typedef struct {
                                      blocked */
 
     ctrl_mode_t current_mode;   /**< Current controller mode */
+
+    uint32_t current_cycle;     /**< Count each control loop turn.
+                                     Reset when controller state move to
+                                     CTRL_MODE_STOP, incremented on each loop
+                                     turn otherwise */
 } ctrl_control_t;
 
 /**
