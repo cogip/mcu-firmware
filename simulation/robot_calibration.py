@@ -169,18 +169,40 @@ class RobotTelemetry():
     def set_pose_current(self, x, y, theta):
         self.pose_current = (x, y, theta)
 
+    def dump_all(self):
+        print("speed_order: " + str(self.speed_order)
+              + " qdec_speed: " + str(self.qdec_speed)
+              + " motor_cmd" + str(self.motor_cmd))
+
 def update_plot():
-    pass
+    while True:
+        t = RobotTelemetry.pop()
+        if not t:
+            break
+
+        (left, right) = t.motor_cmd
+        lw.appendCommand(left)
+        rw.appendCommand(right)
+
+        (left, right) = t.qdec_speed
+        lw.appendMeas(left)
+        rw.appendMeas(right)
 
 class Parser(Thread):
     END_PATTERN = '>>>>'
     RESET_PATTERN = '<<<< RESET >>>>'
     STOP_PATTERN = '<<<< STOP >>>>'
     ROBOT_OBJECT_PATTERN = '@robot@'
+    QDEC_SPEED_PATTERN = '@qdec_speed@'
+    MOTOR_CMD_PATTERN = '@motor_set@'
     POSE_ORDER_PATTERN = '@pose_order@'
     POSE_CURRENT_PATTERN = '@pose_current@'
-    POSE_ERROR_PATTERN = '@pose_error@'
+    SPEED_ORDER_PATTERN = '@speed_order@'
     SPEED_CURRENT_PATTERN = '@speed_current@'
+
+    def __init__(self):
+        self.current_cycle = -1
+        self.robot_telemetry = None
 
     def _decode(self, line):
 
@@ -192,9 +214,37 @@ class Parser(Thread):
 
             # Extract objects parameters
             obj_type = params[0]
-            obj_param = params[1]
-            obj_id = params[2]
+            obj_id = params[1]
+            obj_current_cycle = int(params[2])
+            obj_param = params[3]
 
+            # New multi-line measurement incoming
+            if (obj_current_cycle != self.current_cycle):
+
+                # If already some telemetry stored, send them to GUI
+                if self.robot_telemetry:
+                    self.robot_telemetry.dump_all()
+                    RobotTelemetry.push(self.robot_telemetry)
+
+                # New 'current_cycle' -> Start new telemetry record
+                self.current_cycle = obj_current_cycle
+                self.robot_telemetry = RobotTelemetry(self.current_cycle)
+
+            assert (self.robot_telemetry is not None)
+
+            if obj_type == self.ROBOT_OBJECT_PATTERN:
+                if obj_param == self.QDEC_SPEED_PATTERN:
+                    self.robot_telemetry.set_qdec_speed(int(params[4]), int(params[5]))
+                elif obj_param == self.SPEED_ORDER_PATTERN:
+                    self.robot_telemetry.set_speed_order(float(params[4]), float(params[5]))
+                elif obj_param == self.SPEED_CURRENT_PATTERN:
+                    self.robot_telemetry.set_speed_current(float(params[4]), float(params[5]))
+                elif obj_param == self.POSE_ORDER_PATTERN:
+                    self.robot_telemetry.set_pose_order(float(params[4]), float(params[5]), float(params[6]))
+                elif obj_param == self.POSE_CURRENT_PATTERN:
+                    self.robot_telemetry.set_pose_current(float(params[4]), float(params[5]), float(params[6]))
+                elif obj_param == self.MOTOR_CMD_PATTERN:
+                    self.robot_telemetry.set_motor_cmd(int(params[4]), int(params[5]))
 
     def parse(self, flow):
         while True:
@@ -218,6 +268,7 @@ class NativeParser(Parser):
 
 class SerialParser(Parser):
     def __init__(self, serial_port):
+        super().__init__()
         self.ser = Serial(port=serial_port, baudrate=115200, timeout=1, writeTimeout=1)
 
     def parse(self):
