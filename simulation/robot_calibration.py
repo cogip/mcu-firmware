@@ -27,21 +27,84 @@ lock = Lock()
 
 # Create plots window
 win = pg.GraphicsWindow()
-win.setWindowTitle("Speeds")
-# Create 2 plots
-# * One for linear speed
-# * One for angular speed
-p_speed = win.addPlot()
-p_pose = win.addPlot()
-# Create associated curves
-plt_speed_linear = p_speed.plot()
-plt_speed_angular = p_speed.plot()
-plt_pose_linear = p_pose.plot()
-plt_pose_angular = p_pose.plot()
-# Display grid on all plots
-p_speed.showGrid(x=True,y=True)
-p_pose.showGrid(x=True,y=True)
+win.setWindowTitle("PID loop monitor")
+win.resize(1080, 720)
 
+class DataItemSameTime(pg.PlotDataItem):
+
+    def __init__(self, *args, **kargs):
+        pg.PlotDataItem.__init__(self, *args, **kargs)
+
+        self.y_values =  np.array([])
+        self.setData(y = self.y_values) # yvalues only
+
+    def addPoint(self, value):
+        self.y_values = np.append(self.y_values, [value])
+        self.setData(y = self.y_values)
+
+
+class CurveOverTime(pg.PlotItem):
+    """
+    This object manages two set of points over time series.
+
+    One set represents commands ("Cmd") curve, the second set represents
+    the measurements ("Meas").
+    """
+
+    def __init__(self, title=None, *args, **kargs):
+        pg.PlotItem.__init__(self, title=title, *args, **kargs)
+
+        self.setLabel('bottom', 'Time[20 ms steps]')
+        self.setLabel('left', 'm.s-1 ?')
+        self.showGrid(x = True, y = True)
+
+        self._addDataItems()
+
+        self.legend = self.addLegend()
+        self.legend.addItem(self.dataItemCmd, 'Cmd')
+        self.legend.addItem(self.dataItemMeas, 'Meas')
+
+
+    def _addDataItems(self):
+        # Green pen with few tranparency
+        self.dataItemCmd = DataItemSameTime(pen = pg.mkPen(80, 255, 80, 200))
+        self.addItem(self.dataItemCmd)
+        # Red pen with few tranparency
+        self.dataItemMeas = DataItemSameTime(pen = pg.mkPen(255, 80, 80, 200))
+        self.addItem(self.dataItemMeas)
+
+
+    def appendCommand(self, value):
+        self.dataItemCmd.addPoint(value)
+
+
+    def appendMeas(self, value):
+        self.dataItemMeas.addPoint(value)
+
+
+    def setLegends(self, cmd, meas):
+        # FIXME: Following works once and this is ugly.
+        self.legend.removeItem('Cmd')
+        self.legend.removeItem('Meas')
+        self.legend.addItem(self.dataItemCmd, cmd)
+        self.legend.addItem(self.dataItemMeas, meas)
+
+
+    def clear(self):
+        pg.PlotItem.clear(self)
+        self._addDataItems()
+
+
+
+# Create plots
+
+lw = CurveOverTime('Left wheel')
+lw.setLegends('motor_cmd', 'qdec_speed')
+win.addItem(lw, row=0, col=1)
+
+rw = CurveOverTime('Right wheel')
+rw.setLegends('motor_cmd', 'qdec_speed')
+win.addItem(rw, row=1, col=1)
 
 def update_plot():
     pass
