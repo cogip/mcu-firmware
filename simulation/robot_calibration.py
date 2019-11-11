@@ -175,6 +175,33 @@ class GraphWindow(QMainWindow):
         self.graphicLayoutWidget = pg.GraphicsLayoutWidget()
         self.setCentralWidget(self.graphicLayoutWidget)
 
+        #
+        # Icon name:
+        #  https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
+        # Src:
+        #  https://doc.qt.io/qtforpython/PySide2/QtGui/QIcon.html#PySide2.QtGui.PySide2.QtGui.QIcon.fromTheme
+        exitIcon = QIcon.fromTheme("application-exit")
+        exitAct = QAction(exitIcon, 'Exit application', self)
+        exitAct.setShortcut('Ctrl+Q')
+        exitAct.triggered.connect(qApp.quit)
+
+        saveAsIcon = QIcon.fromTheme("document-save-as")
+        saveAsAct = QAction(saveAsIcon, 'Save Left & Right wheel to CSV', self)
+        saveAsAct.setShortcut('Ctrl+S')
+        saveAsAct.triggered.connect(self.saveAsActClicked)
+
+        clearAllIcon = QIcon.fromTheme("edit-clear")
+        clearAllAct = QAction(clearAllIcon, 'Clear graphs', self)
+        clearAllAct.setShortcut('Ctrl+K')
+        clearAllAct.triggered.connect(self.clearAllActClicked)
+
+        # Register all actions in window toolbar
+        self.toolbar = self.addToolBar("Main")
+        self.toolbar.setStyleSheet("background-color:black; color:grey");
+        self.toolbar.addAction(exitAct)
+        self.toolbar.addAction(saveAsAct)
+        self.toolbar.addAction(clearAllAct)
+
         # Add all graphes
         self.lin_speed = CurveOverTime('Linear speed')
         self.lin_speed.setLegends('speed_order', 'speed_current')
@@ -199,6 +226,19 @@ class GraphWindow(QMainWindow):
         self.timer = pg.QtCore.QTimer()
         self.timer.timeout.connect(self._update_plot)
         self.timer.start(10) # ms
+
+
+    def saveAsActClicked(self):
+        print("saveAsActClicked")
+
+    def clearAllActClicked(self):
+        print("clearAllActClicked")
+
+        self.lin_speed.clear()
+        self.ang_speed.clear()
+        self.lw.clear()
+        self.rw.clear()
+        #TODO: self.mb.clear()
 
     def _update_plot(self):
 
