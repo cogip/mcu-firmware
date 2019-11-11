@@ -9,6 +9,8 @@ os.environ['PYQTGRAPH_QT_LIB'] = 'PyQt5'
 import pyqtgraph as pg
 import pyqtgraph.exporters
 from pyqtgraph import QtCore, QtGui
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
 import numpy as np
 import re
 from serial import *
@@ -22,13 +24,7 @@ BIN_NAME = "cortex-simulation.elf"
 BIN_PATH = BASE_PATH + "bin/cogip2019-cortex-native/" + BIN_NAME
 
 
-# Lock for datas
-lock = Lock()
 
-# Create plots window
-win = pg.GraphicsWindow()
-win.setWindowTitle("PID loop monitor")
-win.resize(1080, 720)
 
 class DataItemSameTime(pg.PlotDataItem):
 
@@ -161,25 +157,85 @@ class MapView(pg.PlotItem):
         qpoly = self._calc_robot_polygon(x, y, theta)
         self.robot_current.setPolygon(qpoly)
 
-# Create plots
-lin_speed = CurveOverTime('Linear speed')
-lin_speed.setLegends('speed_order', 'speed_current')
-win.addItem(lin_speed, row=0, col=0)
+# Create plots window
 
-ang_speed = CurveOverTime('Angular speed')
-ang_speed.setLegends('speed_order', 'speed_current')
-win.addItem(ang_speed, row=1, col=0)
+class GraphWindow(QMainWindow):
+    """
+    Main QT Window classes.
 
-lw = CurveOverTime('Left wheel')
-lw.setLegends('motor_cmd', 'qdec_speed')
-win.addItem(lw, row=0, col=1)
+    Embed a pg.GraphicsLayoutWidget() in its central widget to display graphs.
+    """
+    def __init__(self):
+        super().__init__()
+        self.initUI()
 
-rw = CurveOverTime('Right wheel')
-rw.setLegends('motor_cmd', 'qdec_speed')
-win.addItem(rw, row=1, col=1)
+    def initUI(self):
 
-mb = MapView('Map')
-win.addItem(mb, row=0, col=2, rowspan=2)
+        # Create pyqtgraph layout widget
+        self.graphicLayoutWidget = pg.GraphicsLayoutWidget()
+        self.setCentralWidget(self.graphicLayoutWidget)
+
+        # Add all graphes
+        self.lin_speed = CurveOverTime('Linear speed')
+        self.lin_speed.setLegends('speed_order', 'speed_current')
+        self.addItem(self.lin_speed, row=0, col=1)
+
+        self.ang_speed = CurveOverTime('Angular speed')
+        self.ang_speed.setLegends('speed_order', 'speed_current')
+        self.addItem(self.ang_speed, row=1, col=1)
+
+        self.lw = CurveOverTime('Left wheel')
+        self.lw.setLegends('motor_cmd', 'qdec_speed')
+        self.addItem(self.lw, row=0, col=2)
+
+        self.rw = CurveOverTime('Right wheel')
+        self.rw.setLegends('motor_cmd', 'qdec_speed')
+        self.addItem(self.rw, row=1, col=2)
+
+        self.mb = MapView('Map')
+        self.addItem(self.mb, row=0, col=3, rowspan=2)
+
+        # Timer used to refresh plots
+        self.timer = pg.QtCore.QTimer()
+        self.timer.timeout.connect(self._update_plot)
+        self.timer.start(10) # ms
+
+    def _update_plot(self):
+
+        while True:
+            t = RobotTelemetry.pop()
+            if not t:
+                break
+
+            (left, right) = t.motor_cmd
+            self.lw.appendCommand(left)
+            self.rw.appendCommand(right)
+
+            (left, right) = t.qdec_speed
+            self.lw.appendMeas(left)
+            self.rw.appendMeas(right)
+
+            (linear, angular) = t.speed_order
+            self.lin_speed.appendCommand(linear)
+            self.ang_speed.appendCommand(angular)
+
+            (linear, angular) = t.speed_current
+            self.lin_speed.appendMeas(linear)
+            self.ang_speed.appendMeas(angular)
+
+            (x, y, theta) = t.pose_current
+            self.mb.setRobotPoseCurrent(x, y, theta)
+
+
+    def addItem(self, widget, row=None, col=None, rowspan=1, colspan=1):
+        """
+        This methods makes this QtGui subclass compatible with pg.GraphicsWindow() API.
+        """
+        self.graphicLayoutWidget.addItem(widget, row, col, rowspan, colspan)
+
+
+
+
 
 class RobotTelemetry():
     """
@@ -249,30 +305,6 @@ class RobotTelemetry():
               + " qdec_speed: " + str(self.qdec_speed)
               + " motor_cmd" + str(self.motor_cmd))
 
-def update_plot():
-    while True:
-        t = RobotTelemetry.pop()
-        if not t:
-            break
-
-        (left, right) = t.motor_cmd
-        lw.appendCommand(left)
-        rw.appendCommand(right)
-
-        (left, right) = t.qdec_speed
-        lw.appendMeas(left)
-        rw.appendMeas(right)
-
-        (linear, angular) = t.speed_order
-        lin_speed.appendCommand(linear)
-        ang_speed.appendCommand(angular)
-
-        (linear, angular) = t.speed_current
-        lin_speed.appendMeas(linear)
-        ang_speed.appendMeas(angular)
-
-        (x, y, theta) = t.pose_current
-        mb.setRobotPoseCurrent(x, y, theta)
 
 class Parser(Thread):
     END_PATTERN = '>>>>'
@@ -377,6 +409,14 @@ if __name__ == "__main__":
         except OSError:
             pass
 
+    # Start Qt app
+    app = pg.QtGui.QApplication([])
+
+    win = GraphWindow()
+    win.setWindowTitle("PID loop monitor")
+    win.resize(1600, 900)
+    win.show()
+
     p = subprocess.Popen(BIN_PATH, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     parser = NativeParser()
     thread = Thread(target=parser.parse, args=(p,))
@@ -389,12 +429,8 @@ if __name__ == "__main__":
     thread.daemon = True
     thread.start()
 
-    # Timer used to refresh plots
-    timer = pg.QtCore.QTimer()
-    timer.timeout.connect(update_plot)
-    timer.start(10)
 
     if sys.flags.interactive != 1 or not hasattr(pg.QtCore, 'PYQT_VERSION'):
-        pg.QtGui.QApplication.exec_()
+        app.exec_()
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
