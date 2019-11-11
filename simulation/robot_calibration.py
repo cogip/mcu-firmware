@@ -178,6 +178,9 @@ rw = CurveOverTime('Right wheel')
 rw.setLegends('motor_cmd', 'qdec_speed')
 win.addItem(rw, row=1, col=1)
 
+mb = MapView('Map')
+win.addItem(mb, row=0, col=2, rowspan=2)
+
 class RobotTelemetry():
     """
     Aggregates multi-lines measurements
@@ -267,6 +270,9 @@ def update_plot():
         (linear, angular) = t.speed_current
         lin_speed.appendMeas(linear)
         ang_speed.appendMeas(angular)
+
+        (x, y, theta) = t.pose_current
+        mb.setRobotPoseCurrent(x, y, theta)
 
 class Parser(Thread):
     END_PATTERN = '>>>>'
