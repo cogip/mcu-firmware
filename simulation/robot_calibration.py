@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import fileinput
-import getpass
+import math
 import os
 import psutil
 os.environ['PYQTGRAPH_QT_LIB'] = 'PyQt5'
 import pyqtgraph as pg
 import pyqtgraph.exporters
+from pyqtgraph import QtCore, QtGui
 import numpy as np
 import re
 from serial import *
@@ -15,7 +16,6 @@ import subprocess
 import signal
 from threading import Thread
 from threading import Lock
-from threading import RLock
 
 BASE_PATH = "platforms/cogip2019-cortex-simulation/"
 BIN_NAME = "cortex-simulation.elf"
@@ -95,6 +95,71 @@ class CurveOverTime(pg.PlotItem):
         self._addDataItems()
 
 
+class MapView(pg.PlotItem):
+    """
+    This object allow a representation of the robot map.
+
+    It draws a fixed rectangle for the game area, according to firmware's frame
+    coordinates.
+    """
+
+    TABLE_WIDTH_MM = 3000
+    TABLE_HEIGHT_MM = 2000
+
+    ROBOT_WIDTH_MM = 354
+
+    def __init__(self, title=None, *args, **kargs):
+        pg.PlotItem.__init__(self, title=title, *args, **kargs)
+
+        # Set fixed ratio and configure view area
+        self.setXRange(-self.TABLE_WIDTH_MM / 2, self.TABLE_WIDTH_MM / 2)
+        self.setYRange(0, self.TABLE_HEIGHT_MM)
+        self.setAspectLocked(True, ratio = 1.0)
+
+        # Draw a rectangle to represent the game area
+        self.table = pg.QtGui.QGraphicsRectItem( -self.TABLE_WIDTH_MM / 2, 0, self.TABLE_WIDTH_MM, self.TABLE_HEIGHT_MM)
+        self.table.setPen(pg.mkPen((255, 128, 128, 100))) # Red pen with lots of tranparency
+        self.table.setBrush(pg.mkBrush((50, 50, 200, 50))) # Blue background with lots of tranparency
+        self.addItem(self.table)
+
+        # Draw a triangle to represent the robot
+        self.robot_current = pg.QtGui.QGraphicsPolygonItem()
+        self.robot_current.setPen(pg.mkPen((128, 255, 128, 100)))
+
+        self.setRobotPoseCurrent(0., 0., 0.)
+        self.addItem(self.robot_current)
+
+        self.showGrid(x = True, y = True)
+
+    def _calc_robot_polygon(self, x, y, theta):
+        """
+        Prepare a QPolygonF representing the robot by a triangle, given a pose
+        @return: a QPolygonF object.
+        """
+        # angle coordinates translation
+        theta = math.radians(theta)
+
+        # 3 points around the gravity center (x, y)
+        # all oriented following the theta angle
+        x1 = (self.ROBOT_WIDTH_MM // 2) * math.cos(theta)
+        y1 = (self.ROBOT_WIDTH_MM // 2) * math.sin(theta)
+        x2 = (self.ROBOT_WIDTH_MM // 2) * math.cos(theta + 2.5 * (math.pi / 3.))
+        y2 = (self.ROBOT_WIDTH_MM // 2) * math.sin(theta + 2.5 * (math.pi / 3.))
+        x3 = (self.ROBOT_WIDTH_MM // 2) * math.cos(theta + 3.5 * (math.pi / 3.))
+        y3 = (self.ROBOT_WIDTH_MM // 2) * math.sin(theta + 3.5 * (math.pi / 3.))
+        points = [(x + x1, y + y1), (x + x2, y + y2), (x + x3, y + y3)]
+
+        qpoints = [QtCore.QPointF(x, y) for (x, y) in points]
+        qpoly = QtGui.QPolygonF(qpoints)
+
+        return qpoly
+
+    def setRobotPoseCurrent(self, x, y, theta):
+        """
+        Define current pose of the robot, and update view drawing accordingly.
+        """
+        qpoly = self._calc_robot_polygon(x, y, theta)
+        self.robot_current.setPolygon(qpoly)
 
 # Create plots
 lin_speed = CurveOverTime('Linear speed')
