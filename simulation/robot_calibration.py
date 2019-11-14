@@ -417,9 +417,17 @@ class Parser(Thread):
 class NativeParser(Parser):
 
     def parse(self, p):
+        """
+        Read subprocess 'p' outcoming character from stdout and parse them in
+        upper class.
+        """
         super(NativeParser, self).parse(p.stdout)
 
     def send(self, p):
+        """
+        Read this python script incoming character from stdin and when a line is
+        completed, propagates the whole string to subprocess 'p' stdin stream.
+        """
         for line in fileinput.input():
             p.stdin.write(line.encode('utf-8'))
             p.stdin.flush()
@@ -430,11 +438,19 @@ class SerialParser(Parser):
         self.ser = Serial(port=serial_port, baudrate=115200, timeout=1, writeTimeout=1)
 
     def parse(self):
+        """
+        Read serial port incoming character (i.e. MCU firwmare stdout) and parse
+        them it in upper class
+        """
         if self.ser.isOpen():
             while True:
                 super(SerialParser, self).parse(self.ser)
 
     def send(self, p):
+        """
+        Read this python script incoming character from stdin and when a line is
+        completed, propagates the whole string to serial port.
+        """
         for line in fileinput.input():
             if self.ser.isOpen():
                 self.ser.write(bytes(line, 'utf8'))
@@ -443,6 +459,7 @@ if __name__ == "__main__":
     # Kill all remaining bin instance
     process = filter(lambda p: BIN_NAME in p.name(), psutil.process_iter())
     for i in process:
+        print(f"Kill remaining instance {i.pid}")
         os.kill(i.pid, signal.SIGKILL)
         try:
             os.waitpid(i.pid, 0)
@@ -473,4 +490,6 @@ if __name__ == "__main__":
     if sys.flags.interactive != 1 or not hasattr(pg.QtCore, 'PYQT_VERSION'):
         app.exec_()
 
+    print("Qt GUI closed... stop other processes.")
+    p.kill()
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
