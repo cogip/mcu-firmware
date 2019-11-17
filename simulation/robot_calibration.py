@@ -448,7 +448,7 @@ class SerialParser(Parser):
             while True:
                 super(SerialParser, self).parse(self.ser)
 
-    def send(self, p):
+    def send(self):
         """
         Read this python script incoming character from stdin and when a line is
         completed, propagates the whole string to serial port.
@@ -504,24 +504,27 @@ if __name__ == "__main__":
     win.show()
 
     if uart_dev is not None:
-        p = subprocess.Popen(BIN_PATH, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = None
         parser = SerialParser(uart_dev)
-        thread = Thread(target=parser.parse)
+        thr_from_mcu = Thread(target=parser.parse)
+        thr_to_mcu = Thread(target=parser.send)
     else:
         p = subprocess.Popen(BIN_PATH, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         parser = NativeParser()
-        thread = Thread(target=parser.parse, args=(p,))
-    thread.daemon = True
-    thread.start()
+        thr_from_mcu = Thread(target=parser.parse, args=(p,))
+        thr_to_mcu = Thread(target=parser.send, args=(p,))
 
-    thread = Thread(target=parser.send, args=(p,))
-    thread.daemon = True
-    thread.start()
+    thr_from_mcu.daemon = True
+    thr_from_mcu.start()
+
+    thr_to_mcu.daemon = True
+    thr_to_mcu.start()
 
 
     if sys.flags.interactive != 1 or not hasattr(pg.QtCore, 'PYQT_VERSION'):
         app.exec_()
 
     print("Qt GUI closed... stop other processes.")
-    p.kill()
+    if p:
+        p.kill()
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
