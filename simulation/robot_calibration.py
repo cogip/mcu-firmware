@@ -348,7 +348,7 @@ class RobotTelemetry():
               + " motor_cmd" + str(self.motor_cmd))
 
 
-class Parser(Thread):
+class Parser():
     END_PATTERN = '>>>>'
     RESET_PATTERN = '<<<< RESET >>>>'
     STOP_PATTERN = '<<<< STOP >>>>'
