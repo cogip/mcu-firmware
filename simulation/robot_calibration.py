@@ -80,6 +80,13 @@ class CurveOverTime(pg.PlotItem):
         self.dataItemMeas.addPoint(value)
 
 
+    def getData(self):
+        t1, cmd = self.dataItemCmd.getData()
+        _, meas = self.dataItemMeas.getData()
+
+        return [t1, cmd, meas]
+
+
     def setLegends(self, cmd, meas):
         # FIXME: Following works once and this is ugly.
         self.legend.removeItem('Cmd')
@@ -232,6 +239,35 @@ class GraphWindow(QMainWindow):
 
     def saveAsActClicked(self):
         print("saveAsActClicked")
+
+        import csv
+
+        t, lw_cmd, lw_mes = self.lw.getData()
+        _, rw_cmd, rw_mes = self.rw.getData()
+
+        # Outputs saved in 'csv_outputs' subdir relative to this script location
+        SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+        OUT_DIR = os.path.join(SCRIPT_DIR, "csv_outputs")
+
+        if not os.path.exists(OUT_DIR):
+            print(f"Create {OUT_DIR}")
+            os.mkdir(OUT_DIR)
+
+        # Get a timestamp to ensure uniq filename
+        from datetime import datetime
+        fname = 'data_' + str(datetime.now()).replace(' ', '_') + '.csv'
+
+        # Write CSV file
+        with open(os.path.join(OUT_DIR, fname), 'w', newline='') as csvfile:
+            w = csv.writer(csvfile, delimiter=',',
+                           quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            # Header on first row
+            w.writerow(['time', 'lw_cmd', 'lw_mes', 'rw_cmd', 'rw_mes'])
+            # Left & Right wheel data on following rows
+            for i in range(0, len(t)):
+                w.writerow([t[i], lw_cmd[i], lw_mes[i], rw_cmd[i], rw_mes[i]])
+
+            print(f"Data saved in '{fname}'")
 
     def clearAllActClicked(self):
         print("clearAllActClicked")
