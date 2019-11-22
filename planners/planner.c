@@ -50,7 +50,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
     int control_loop = 0;
     uint8_t need_update = 0;
 
-    need_update = app_read_sensors();
+    need_update = pf_read_sensors();
 
     if (ctrl_is_pose_reached(ctrl)) {
         if ((pose_to_reach->x == current_path_pos->pos.x)

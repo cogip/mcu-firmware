@@ -4,10 +4,6 @@
 #include "avoidance.h"
 #include "platform.h"
 
-#define OBSTACLE_DYN_SIZE           800
-#define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10
-#define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200
-
 void borders_init(polygon_t *polygon);
 void mach_fixed_obstacles_init(void);
 int8_t add_dyn_obstacle(const uint16_t dev,
