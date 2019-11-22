@@ -2,6 +2,7 @@
 #define PLATFORM_COMMON_H_
 
 /* Project includes */
+#include "board.h"
 #include "ctrl.h"
 #include "ctrl/quadpid.h"
 #include "odometry.h"
@@ -68,6 +69,56 @@
 #define OBSTACLE_BORDER_Y_MIN   AVOIDANCE_BORDER_Y_MIN
 #define OBSTACLE_BORDER_Y_MAX   AVOIDANCE_BORDER_Y_MAX
 
+#define OBSTACLE_DYN_SIZE                   800
+#define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10
+#define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200
+
+typedef struct {
+    double angle_offset;
+    double distance_offset;
+} pf_sensor_t;
+
+typedef struct {
+    uint8_t nb_puck_front_ramp;
+    uint8_t nb_puck_back_ramp;
+    uint8_t front_ramp_blocked;
+    uint8_t back_ramp_blocked;
+    uint8_t front_arms_opened;
+    uint8_t goldenium_opened;
+    uint8_t goldenium_taken;
+    uint8_t red_puck_on_hold_front;
+    uint8_t red_puck_on_hold_back;
+    uint8_t any_pump_on;
+    uint8_t front_fork_occupied;
+} pf_actions_context_t;
+
+static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
+    {
+        .angle_offset = 135,
+        .distance_offset = ROBOT_MARGIN,
+    },
+    {
+        .angle_offset = 180,
+        .distance_offset = ROBOT_MARGIN,
+    },
+    {
+        .angle_offset = -135,
+        .distance_offset = ROBOT_MARGIN,
+    },
+    {
+        .angle_offset = -45,
+        .distance_offset = ROBOT_MARGIN,
+    },
+    {
+        .angle_offset = 0,
+        .distance_offset = ROBOT_MARGIN,
+    },
+    {
+        .angle_offset = 45,
+        .distance_offset = ROBOT_MARGIN,
+    },
+};
+
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
 int pf_is_camp_left(void);
@@ -83,8 +134,8 @@ void pf_init_tasks(void);
 void pf_init(void);
 int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
-void pf_fixed_obstacles_init(void);
-
+int pf_read_sensors(void);
+void pf_calib_read_sensors(pca9548_t dev);
 void motor_drive(polar_t *command);
 
 static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {

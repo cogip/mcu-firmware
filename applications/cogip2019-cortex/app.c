@@ -60,50 +60,6 @@ void app_calib_read_sensors(pca9548_t dev)
     }
 }
 
-int app_read_sensors(void)
-{
-    int obstacle_found = 0;
-    int res = 0;
-
-    ctrl_t* ctrl = (ctrl_t*)pf_get_quadpid_ctrl();
-
-    reset_dyn_polygons();
-
-    if (((ctrl_quadpid_t *)ctrl)->quadpid_params.regul == CTRL_REGUL_POSE_PRE_ANGL) {
-        return 0;
-    }
-
-    if(!app_actions_ctx.any_pump_on)
-    {
-        for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-
-            uint16_t measure;
-            irq_disable();
-
-            pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-            measure = vl53l0x_continuous_ranging_get_measure(dev);
-
-            irq_enable();
-            DEBUG("Measure sensor %u: %u\n\n", dev, measure);
-
-            if ((measure > OBSTACLE_DETECTION_MINIMUM_TRESHOLD)
-                    && (measure < OBSTACLE_DETECTION_MAXIMUM_TRESHOLD)) {
-                const app_sensor_t* sensor = &app_sensors[dev];
-                pose_t robot_pose = *ctrl_get_pose_current(ctrl);
-
-                res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)measure);
-
-                if (!res) {
-                    obstacle_found = 1;
-                }
-            }
-
-        }
-    }
-
-    return obstacle_found;
-}
-
 static void app_vl53l0x_reset(void)
 {
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
@@ -120,6 +76,9 @@ static void app_vl53l0x_init(void)
         if (vl53l0x_init_dev(dev) != 0)
             DEBUG("ERROR: Sensor %u init failed !!!\n", dev);
     }
+}
+
+static void app_fixed_obstacles_init(void) {
 }
 
 void app_stop_pumps(void)
@@ -480,9 +439,23 @@ void app_init(void)
             printf("ERROR: Sensor %u init failed !!!\n", dev);
     }
 
-    pf_fixed_obstacles_init();
+    app_fixed_obstacles_init();
 
     ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
+
+    const uint8_t camp_left = app_is_camp_left();
+    /* 2019: Camp left is purple, right is yellow */
+    printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
+
+    path_t* path = pf_get_path();
+    if (!path) {
+        printf("machine has no path\n");
+    }
+
+    /* mirror the points in place if selected camp is left */
+    if (camp_left) {
+        path_horizontal_mirror_all_pos(path);
+    }
 
 #ifdef CALIBRATION
     ctrl_quadpid_calib_init();

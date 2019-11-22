@@ -10,6 +10,7 @@
 
 /* Project includes */
 #include "avoidance.h"
+#include "obstacle.h"
 #include "planner.h"
 #include "platform.h"
 
@@ -157,48 +158,97 @@ void motor_drive(polar_t *command)
     motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_RIGHT, right_command);
 }
 
-/* Init all known fixed obstacles on map */
-void pf_fixed_obstacles_init(void)
+int pf_is_game_launched(void)
 {
-    polygon_t polygon;
-    uint8_t nb_vertices;
+    /* Starter switch */
+    return !gpio_read(GPIO_STARTER);
+}
 
-    /* Accelerator */
-    polygon.count = 0;
-    nb_vertices = 4;
-    if (nb_vertices < POLY_MAX_POINTS) {
-        polygon.points[polygon.count++] = (pose_t){.x = -1000, .y = 0 };
-        polygon.points[polygon.count++] = (pose_t){.x =  1000, .y = 0 };
-        polygon.points[polygon.count++] = (pose_t){.x =  1000, .y = 70 + ROBOT_MARGIN};
-        polygon.points[polygon.count++] = (pose_t){.x = -1000, .y = 70 + ROBOT_MARGIN};
-        add_polygon(&polygon);
-    }
-
-    /* Balance */
-    polygon.count = 0;
-    nb_vertices = 4;
-    if (nb_vertices < POLY_MAX_POINTS) {
-        polygon.points[polygon.count++] = (pose_t){.x = -1050 - ROBOT_MARGIN, .y = 1540 - ROBOT_MARGIN};
-        polygon.points[polygon.count++] = (pose_t){.x =  1050 + ROBOT_MARGIN, .y = 1540 - ROBOT_MARGIN};
-        polygon.points[polygon.count++] = (pose_t){.x =  1050 + ROBOT_MARGIN, .y = 2000};
-        polygon.points[polygon.count++] = (pose_t){.x = -1050 - ROBOT_MARGIN, .y = 2000};
-        add_polygon(&polygon);
-    }
-
-    /* Central stuff */
-    polygon.count = 0;
-    nb_vertices = 4;
-    if (nb_vertices < POLY_MAX_POINTS) {
-        polygon.points[polygon.count++] = (pose_t){.x = -20 - ROBOT_MARGIN, .y = 1350 - ROBOT_MARGIN};
-        polygon.points[polygon.count++] = (pose_t){.x =  20 + ROBOT_MARGIN, .y = 1350 - ROBOT_MARGIN};
-        polygon.points[polygon.count++] = (pose_t){.x =  20 + ROBOT_MARGIN, .y = 2000};
-        polygon.points[polygon.count++] = (pose_t){.x = -20 - ROBOT_MARGIN, .y = 2000};
-        add_polygon(&polygon);
+void pf_vl53l0x_reset(void)
+{
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        if (vl53l0x_reset_dev(dev) != 0)
+            DEBUG("ERROR: Sensor %u reset failed !!!\n", dev);
     }
 }
 
-#define CAMP_LEFT 1
-#define CAMP_RIGHT 0
+void pf_vl53l0x_init(void)
+{
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        if (vl53l0x_init_dev(dev) != 0)
+            DEBUG("ERROR: Sensor %u init failed !!!\n", dev);
+    }
+}
+
+int pf_read_sensors(void)
+{
+    int obstacle_found = 0;
+    int res = 0;
+
+    ctrl_t* ctrl = (ctrl_t*)pf_get_quadpid_ctrl();
+
+    reset_dyn_polygons();
+
+    if (((ctrl_quadpid_t *)ctrl)->quadpid_params.regul == CTRL_REGUL_POSE_PRE_ANGL) {
+        return 0;
+    }
+
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+
+        uint16_t measure;
+        irq_disable();
+
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        measure = vl53l0x_continuous_ranging_get_measure(dev);
+
+        irq_enable();
+        DEBUG("Measure sensor %u: %u\n\n", dev, measure);
+
+        if ((measure > OBSTACLE_DETECTION_MINIMUM_TRESHOLD)
+                && (measure < OBSTACLE_DETECTION_MAXIMUM_TRESHOLD)) {
+            const pf_sensor_t* sensor = &pf_sensors[dev];
+            pose_t robot_pose = *ctrl_get_pose_current(ctrl);
+
+            res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)measure);
+
+            if (!res) {
+                obstacle_found = 1;
+            }
+        }
+
+    }
+
+    return obstacle_found;
+}
+
+void pf_calib_read_sensors(pca9548_t dev)
+{
+    vl53l0x_t sensor = 0;
+    uint8_t channel = pca9548_get_current_channel(dev);
+    for (sensor = 0; sensor < VL53L0X_NUMOF; sensor++) {
+        if (vl53l0x_channel[sensor] == channel)
+            break;
+    }
+
+    if (sensor < VL53L0X_NUMOF) {
+        uint16_t measure = vl53l0x_continuous_ranging_get_measure(dev);
+
+        printf("Measure sensor %u: %u\n\n", sensor, measure);
+    }
+    else {
+        printf("No sensor for this channel %u !\n\n", sensor);
+    }
+}
+
+
+int pf_is_camp_left(void)
+{
+    /* Color switch for coords translations */
+    return !gpio_read(GPIO_CAMP);
+}
+
 
 static void *pf_task_countdown(void *arg)
 {
