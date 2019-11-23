@@ -114,17 +114,23 @@ inline polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
 
 void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
 {
-    if (new_mode < CTRL_MODE_NUMOF) {
-        ctrl->control.current_mode = new_mode;
-        DEBUG("ctrl: New mode: %d\n", ctrl->control.current_mode);
-
-        if (ctrl->control.current_mode == CTRL_MODE_STOP)
-            ctrl->control.current_cycle = 0;
-    }
-    else {
+    /* Ensure we don't set a non existant mode */
+    if (new_mode >= CTRL_MODE_NUMOF)  {
         LOG_WARNING("ctrl: Unknown mode, stopping controller\n");
         ctrl->control.current_mode = CTRL_MODE_STOP;
+        return;
     }
+
+    irq_disable();
+
+    if (new_mode != ctrl->control.current_mode) {
+        ctrl->control.current_mode = new_mode;
+        DEBUG("ctrl: New mode: %d\n", ctrl->control.current_mode);
+        /* Reset current cycle as current mode has changed */
+        ctrl->control.current_cycle = 0;
+    }
+
+    irq_enable();
 }
 
 inline ctrl_mode_t ctrl_get_mode(ctrl_t* ctrl)
