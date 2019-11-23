@@ -7,7 +7,7 @@
 #include "fmt.h"
 
 /* Project includes */
-#include "platform.h"
+#include "app.h"
 #include "sd21.h"
 #include "calibration/calib_sd21.h"
 
@@ -59,7 +59,8 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
     char c[2];
 
     while (c[0] != 'q') {
-        uint16_t current_position = sd21_servo_get_position(dev, servo_id);
+        uint16_t current_position = 0;
+        sd21_servo_get_position(dev, servo_id, &current_position);
 
         /* Print current position on same line */
         print_str("Current position: ");
@@ -93,16 +94,16 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
                 break;
             /* Reset position to middle (between opened and closed) */
             case 'r':
-                sd21_servo_control(dev, servo_id, 0, SD21_SERVO_POS_MID);
+                sd21_servo_control_position(dev, servo_id, SD21_SERVO_POS_MID);
                 break;
             /* Add SD21_SERVO_POS_STEP */
             case '+':
-                sd21_servo_control(dev, servo_id, 0, current_position
+                sd21_servo_control_position(dev, servo_id, current_position
                         + SD21_SERVO_POS_STEP);
                 break;
             /* Substract SD21_SERVO_POS_STEP */
             case '-':
-                sd21_servo_control(dev, servo_id, 0, current_position
+                sd21_servo_control_position(dev, servo_id, current_position
                         - SD21_SERVO_POS_STEP);
                 break;
             /* Intermediate positions */
