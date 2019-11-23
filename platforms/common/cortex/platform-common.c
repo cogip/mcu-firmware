@@ -117,7 +117,8 @@ int encoder_read(polar_t *robot_speed)
 
     ctrl_t *ctrl = pf_get_ctrl();
 
-    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP) {
+    /* Only log info when controller is in interesting enough mode */
+    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP && ctrl_get_mode(ctrl) != CTRL_MODE_IDLE) {
         DEBUG("@robot@,%u,%"PRIu32",@qdec_speed@,%"PRIi32",%"PRIi32"\n",
             ROBOT_ID, ctrl->control.current_cycle, left_speed, right_speed);
 
@@ -144,7 +145,8 @@ void motor_drive(polar_t *command)
 
     ctrl_t *ctrl = pf_get_ctrl();
 
-    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP) {
+    /* Only log info when controller is in interesting enough mode */
+    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP && ctrl_get_mode(ctrl) != CTRL_MODE_IDLE) {
         DEBUG("@robot@,%u,%"PRIu32",@speed_set@,%.4f,%.4f\n",
                     ROBOT_ID,
                     ctrl->control.current_cycle,
