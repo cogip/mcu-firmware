@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import fileinput
-import getopt
+import argparse
 import math
 import os
 import psutil
@@ -493,33 +493,16 @@ class SerialParser(Parser):
             if self.ser.isOpen():
                 self.ser.write(bytes(line, 'utf8'))
 
-def usage(pname = ""):
-    print(f"Usage : {pname} [-h] [-d /dev/ttyUSB0]")
-    print("")
-    print("Launch PID measurement tool. Works on native board or real target through serial link.")
-    print("")
-    print("\t-h\t\tThis help message.")
-    print("\t-d, --device=\tSpecify UART device, run on native board otherwise.");
-
 if __name__ == "__main__":
 
     # Parse command line arguments
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hD:", ["help", "device="])
-    except getopt.GetoptError as err:
-        print(str(err))  # will print something like "option -a not recognized"
-        usage(pname = sys.argv[0])
-        sys.exit(2)
-
-    uart_dev = None
-    for o, a in opts:
-        if o in ("-h", "--help"):
-            usage(pname = sys.argv[0])
-            sys.exit()
-        elif o in ("-D", "--device"):
-            uart_dev = a
-        else:
-            assert False, "unhandled option"
+    arg_parser = argparse.ArgumentParser(description='Launch PID measurement tool. Works on native board or real target through serial link.')
+    arg_parser.add_argument(
+        "-D", "--device",
+        dest="uart_dev", default=None,
+        help="Specify UART device, run on native board otherwise"
+    )
+    args = arg_parser.parse_args()
 
     # Kill all remaining bin instance
     process = filter(lambda p: BIN_NAME in p.name(), psutil.process_iter())
@@ -539,9 +522,9 @@ if __name__ == "__main__":
     win.resize(1600, 900)
     win.show()
 
-    if uart_dev is not None:
+    if args.uart_dev:
         p = None
-        parser = SerialParser(uart_dev)
+        parser = SerialParser(args.uart_dev)
         thr_from_mcu = Thread(target=parser.parse)
         thr_to_mcu = Thread(target=parser.send)
     else:
