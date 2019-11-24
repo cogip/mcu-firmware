@@ -160,3 +160,19 @@ $ make doc docman doclatex
 ```bash
 $ make docclean
 ```
+
+## Start ddd on a gdbserver's target
+
+```bash
+$ make DBG=ddd DBG_FLAGS='--debugger "${GDB} ${DBG_DEFAULT_FLAGS}"' debug
+```
+
+Then, inside DDD application, in gdb prompt, type
+```
+target remote localhost:3333
+```
+
+To debug specific function, type
+```
+list <functionname>
+```
