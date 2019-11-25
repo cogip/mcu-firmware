@@ -144,6 +144,21 @@ int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command)
     }
 }
 
+int ctrl_quadpid_nopid(ctrl_t* ctrl, polar_t* command)
+{
+    polar_t* speed_order = NULL;
+
+    ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
+
+    /* get speed order */
+    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
+
+    command->distance = speed_order->distance;
+    command->angle = speed_order->angle;
+
+    return 0;
+}
+
 int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
 {
     polar_t* speed_order = NULL;

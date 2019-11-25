@@ -118,6 +118,19 @@ int ctrl_quadpid_speed(ctrl_quadpid_t* ctrl,
 int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command);
 
 /**
+ * @brief   QuadPID CTRL_MODE_CALIB_NO_PID callback.
+ *
+ * Callback launched when controller is set in no-PID mode.
+ *
+ * @param[in]       ctrl        QuadPID controller object
+ * @param[out]   command        Linear and angular motors commands
+ *
+ * @return                      0 on success
+ * @return                      not 0 on error
+ */
+int ctrl_quadpid_nopid(ctrl_t* ctrl, polar_t* command);
+
+/**
  * @brief   QuadPID CTRL_MODE_RUNNING_SPEED callback.
  *
  * Callback launched when controller is in running speed only mode.
@@ -154,6 +167,7 @@ static const ctrl_configuration_t ctrl_quadpid_conf = {
     .ctrl_mode_cb[CTRL_MODE_BLOCKED] = ctrl_quadpid_stop,
     .ctrl_mode_cb[CTRL_MODE_RUNNING] = ctrl_quadpid_ingame,
     .ctrl_mode_cb[CTRL_MODE_RUNNING_SPEED] = ctrl_quadpid_running_speed,
+    .ctrl_mode_cb[CTRL_MODE_CALIB_NO_PID] = ctrl_quadpid_nopid,
 };
 
 #endif  /* QUADPID_H_ */
