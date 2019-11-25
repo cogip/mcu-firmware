@@ -125,7 +125,25 @@ void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
 
     if (new_mode != ctrl->control.current_mode) {
         ctrl->control.current_mode = new_mode;
-        DEBUG("ctrl: New mode: %d\n", ctrl->control.current_mode);
+
+#if ENABLE_DEBUG == 1
+        printf("ctrl: New mode: ");
+        switch(new_mode) {
+        case CTRL_MODE_STOP:
+            puts("CTRL_MODE_STOP"); break;
+        case CTRL_MODE_IDLE:
+            puts("CTRL_MODE_IDLE"); break;
+        case CTRL_MODE_BLOCKED:
+            puts("CTRL_MODE_BLOCKED"); break;
+        case CTRL_MODE_RUNNING:
+            puts("CTRL_MODE_RUNNING"); break;
+        case CTRL_MODE_RUNNING_SPEED:
+            puts("CTRL_MODE_RUNNING_SPEED"); break;
+        default:
+            puts("<unknown>"); break;
+        }
+#endif
+
         /* Reset current cycle as current mode has changed */
         ctrl->control.current_cycle = 0;
     }
