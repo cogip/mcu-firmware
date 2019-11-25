@@ -87,6 +87,7 @@ typedef enum {
     CTRL_MODE_BLOCKED,      /**< Blocked, often meaning something went wrong */
     CTRL_MODE_RUNNING,      /**< Running 4x PID: 2x speed PID nested in 2x pose PID (linear and angular) */
     CTRL_MODE_RUNNING_SPEED,/**< Running 2x speed PID only (linear and angular) */
+    CTRL_MODE_CALIB_NO_PID, /**< No PID at all. (Calibration purpose) */
     CTRL_MODE_NUMOF,        /**< Number of mode, never use it as an index */
 } ctrl_mode_t;
 
