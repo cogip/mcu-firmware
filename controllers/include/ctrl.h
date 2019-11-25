@@ -85,8 +85,8 @@ typedef enum {
     CTRL_MODE_STOP = 0,     /**< Stopped */
     CTRL_MODE_IDLE,         /**< Idled, left free of motion */
     CTRL_MODE_BLOCKED,      /**< Blocked, often meaning something went wrong */
-    CTRL_MODE_RUNNING,      /**< Running */
-    CTRL_MODE_RUNNING_SPEED,/**< Running only speed */
+    CTRL_MODE_RUNNING,      /**< Running 4x PID: 2x speed PID nested in 2x pose PID (linear and angular) */
+    CTRL_MODE_RUNNING_SPEED,/**< Running 2x speed PID only (linear and angular) */
     CTRL_MODE_NUMOF,        /**< Number of mode, never use it as an index */
 } ctrl_mode_t;
 
@@ -112,9 +112,8 @@ typedef struct {
     ctrl_mode_t current_mode;   /**< Current controller mode */
 
     uint32_t current_cycle;     /**< Count each control loop turn.
-                                     Reset when controller state move to
-                                     CTRL_MODE_STOP, incremented on each loop
-                                     turn otherwise */
+                                     Reset when a new controller mode is set,
+                                     incremented on each loop turn otherwise */
 } ctrl_control_t;
 
 /**
