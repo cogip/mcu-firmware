@@ -107,9 +107,13 @@ inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
     irq_enable();
 }
 
-inline polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
+uint8_t ctrl_get_speed_order(ctrl_t* ctrl, polar_t* speed_order)
 {
-    return &ctrl->control.speed_order;
+    uint8_t seq_finished = FALSE;
+
+    *speed_order = ctrl->control.speed_order;
+
+    return seq_finished;
 }
 
 void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)

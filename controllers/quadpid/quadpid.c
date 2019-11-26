@@ -146,39 +146,32 @@ int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command)
 
 int ctrl_quadpid_nopid(ctrl_t* ctrl, polar_t* command)
 {
-    polar_t* speed_order = NULL;
+    polar_t speed_order = { 0., 0. };
 
-    ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
+    ctrl_get_speed_order(ctrl, &speed_order);
 
-    /* get speed order */
-    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
-
-    command->distance = speed_order->distance;
-    command->angle = speed_order->angle;
+    command->distance = speed_order.distance;
+    command->angle = speed_order.angle;
 
     return 0;
 }
 
 int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
 {
-    polar_t* speed_order = NULL;
+    ctrl_quadpid_t *ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
 
-    const polar_t* speed_current = ctrl_get_speed_current(ctrl);
+    const polar_t  *speed_current = ctrl_get_speed_current(ctrl);
+    polar_t         speed_order = { 0., 0. };
 
-    ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
+    ctrl_get_speed_order(ctrl, &speed_order);
+    command->distance = speed_order.distance;
+    command->angle = speed_order.angle;
 
-    /* get speed order */
-    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
-
-    command->distance = speed_order->distance;
-    command->angle = speed_order->angle;
-
-    /* limit speed command->*/
     command->distance = limit_speed_command(command->distance,
-                                         fabs(speed_order->distance),
+                                         fabs(speed_order.distance),
                                          speed_current->distance);
     command->angle = limit_speed_command(command->angle,
-                                      fabs(speed_order->angle),
+                                      fabs(speed_order.angle),
                                       speed_current->angle);
 
     /* ********************** speed pid controller ********************* */
@@ -188,9 +181,10 @@ int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
 int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 {
     const pose_t* pose_order = NULL;
-    polar_t* speed_order = NULL;
 
     const pose_t* pose_current = ctrl_get_pose_current(ctrl);
+    polar_t _speed_order = {0, 0};
+    polar_t* speed_order = &_speed_order;
     const polar_t* speed_current = ctrl_get_speed_current(ctrl);
 
     ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
@@ -204,7 +198,7 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
     pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl_quadpid);
 
     /* get speed order */
-    speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
+    ctrl_get_speed_order(ctrl, &_speed_order);
 
     pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 

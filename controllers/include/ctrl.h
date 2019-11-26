@@ -290,10 +290,12 @@ void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order);
  * @brief Get speed order
  *
  * @param[in] ctrl              Controller object
+ * @param[out] speed_order      Speed goal to reach pose order
  *
- * @return                      Speed order
+ * @return                      TRUE if controller should stop motors,
+ *                              FALSE otherwise.
  */
-polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
+uint8_t ctrl_get_speed_order(ctrl_t* ctrl, polar_t* speed_order);
 
 /**
  * @brief Get current speed
