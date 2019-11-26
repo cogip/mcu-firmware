@@ -107,11 +107,35 @@ inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
     irq_enable();
 }
 
+void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb, void *user_data)
+{
+    irq_disable();
+
+    ctrl->control.speed_order_cb = speed_order_cb;
+    ctrl->control.speed_order_cb_user_data = user_data;
+    ctrl->control.current_cycle = 0;
+
+    irq_enable();
+}
+
 uint8_t ctrl_get_speed_order(ctrl_t* ctrl, polar_t* speed_order)
 {
     uint8_t seq_finished = FALSE;
 
-    *speed_order = ctrl->control.speed_order;
+    speed_order_cb_t cb = ctrl->control.speed_order_cb;
+
+    if (cb) {
+        /* Variable speed_order is computable through a callback */
+        seq_finished = (*cb)(ctrl->control.speed_order_cb_user_data,
+                             ctrl->control.current_cycle,
+                             speed_order);
+        if (seq_finished)
+            ctrl_set_mode(ctrl, CTRL_MODE_STOP);
+    }
+    else {
+        /* Constant speed_order */
+        *speed_order = ctrl->control.speed_order;
+    }
 
     return seq_finished;
 }
