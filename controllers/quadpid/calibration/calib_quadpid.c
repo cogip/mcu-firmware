@@ -24,6 +24,7 @@ static void ctrl_quadpid_speed_calib_print_usage(void)
     puts("\t'P'\t Speed angular Kp calibration");
     puts("\t'I'\t Speed angular Ki calibration");
     puts("\t'D'\t Speed angular Kd calibration");
+    puts("\t'r'\t Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)");
 }
 
 /* Position correction calibration usage */
@@ -83,6 +84,28 @@ static void ctrl_quadpid_pose_calib_seq(ctrl_t* ctrl_quadpid, pose_t* pos)
     ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
 }
 
+/**
+ * @brief Reset all PID coefficients before calibration
+ *
+ * Set all PID to Kp = 1, Ki = 0, Kd = 0.
+ *
+ * @param[in]   ctrl_quadpid    Controller object.
+ */
+static void pid_reset_all(ctrl_quadpid_t *ctrl_quadpid)
+{
+    PID_t pid_initial = {
+        .kp = 1.0,
+        .ki = 0.0,
+        .kd = 0.0,
+    };
+
+    /* Reset all PIDs */
+    ctrl_quadpid->quadpid_params.linear_speed_pid  = pid_initial;
+    ctrl_quadpid->quadpid_params.angular_speed_pid = pid_initial;
+    ctrl_quadpid->quadpid_params.linear_pose_pid   = pid_initial;
+    ctrl_quadpid->quadpid_params.angular_pose_pid  = pid_initial;
+}
+
 /* Speed calibration command */
 static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
 {
@@ -99,21 +122,8 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
         goto ctrl_quadpid_calib_servo_cmd_err;
     }
 
-    /* Useful to reset all PIDs */
-    PID_t pid_zero = {
-        .kp=0,
-        .ki=0,
-        .kd=0,
-    };
-
     /* Get the quadpid controller */
     ctrl_quadpid_t* ctrl_quadpid = pf_get_quadpid_ctrl();
-
-    /* Reset all PIDs, even position ones as they are uneeded */
-    ctrl_quadpid->quadpid_params.linear_speed_pid = pid_zero;
-    ctrl_quadpid->quadpid_params.angular_speed_pid = pid_zero;
-    ctrl_quadpid->quadpid_params.linear_pose_pid = pid_zero;
-    ctrl_quadpid->quadpid_params.angular_pose_pid = pid_zero;
 
     /* Declare a speed order, will be initialized specically for each case */
     polar_t speed_order;
@@ -181,8 +191,7 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
                 ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
                 break;
             case 'r':
-                /* Reset signal, useful for remote application */
-                puts("<<<< RESET >>>>");
+                pid_reset_all(ctrl_quadpid);
                 break;
             default:
                 continue;
