@@ -18,15 +18,16 @@ both are required to generate the firwmare binaries.
 ## Build status
 [![Build Status](https://travis-ci.org/cogip/mcu-firmware.svg?branch=master)](https://travis-ci.org/cogip/mcu-firmware)
 
+# Environment setup
 
-# Cloning repositories
+## Cloning repositories
 
 ```bash
 $ git clone https://github.com/RIOT-OS/RIOT.git -b 2019.07-branch
 $ git clone https://github.com/cogip/mcu-firmware.git
 ```
 
-# Requirements
+## Requirements
 
 To install toolchain and development on ubuntu 18.04:
 
@@ -48,7 +49,7 @@ Edit ~/.bashrc file and add $HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bi
 PATH=${PATH}:$HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/
 ```
 
-# Prepare python environment
+## Prepare python environment
 
 Some tool rely on python to run. Minimum required version is python 3.6.
 A possible preparation is proposed below:
@@ -59,9 +60,7 @@ $ source simulation/venv/bin/activate
 $ pip install -r simulation/requirements.txt
 ```
 
-## Build, deploy and connect on target
-
-# Simulation
+# Simulation target (x86_64 architecture)
 
 Assuming the platform is cogip2019-cortex-simulation
 
@@ -71,6 +70,14 @@ Assuming the platform is cogip2019-cortex-simulation
 $ cd platforms/cogip2019-cortex-simulation/
 $ make -j$(nproc)
 $ bin/cogip2019-cortex-native/cortex-simulation.elf
+```
+
+## Build and launch in debugger
+
+```bash
+$ cd platforms/cogip2019-cortex-simulation/
+$ make -j$(nproc) all-debug
+$ ddd bin/cogip2019-cortex-native/cortex-simulation.elf
 ```
 
 ## Build and observe control loop
@@ -116,7 +123,7 @@ Now launch FreeCAD.
 
 In 'Macro->Macros' launch 'robot_simulation_freecad.py' macro.
 
-# Embedded target
+# Embedded target (cortex-m architecture)
 
 Assuming the platform is cogip2019-cortex
 
@@ -127,6 +134,22 @@ Make sure JTAG programmer is plugged on target board.
 ```bash
 $ cd platforms/cogip2019-cortex/
 $ make -j$(nproc) flash
+```
+
+## Start ddd on a gdbserver's target
+
+```bash
+$ make DBG=ddd DBG_FLAGS='--debugger "${GDB} ${DBG_DEFAULT_FLAGS}"' debug
+```
+
+Then, inside DDD application, in gdb prompt, type
+```
+target remote localhost:3333
+```
+
+To debug specific function, type
+```
+list <functionname>
 ```
 
 # General build targets
@@ -159,20 +182,4 @@ $ make doc docman doclatex
 
 ```bash
 $ make docclean
-```
-
-## Start ddd on a gdbserver's target
-
-```bash
-$ make DBG=ddd DBG_FLAGS='--debugger "${GDB} ${DBG_DEFAULT_FLAGS}"' debug
-```
-
-Then, inside DDD application, in gdb prompt, type
-```
-target remote localhost:3333
-```
-
-To debug specific function, type
-```
-list <functionname>
 ```
