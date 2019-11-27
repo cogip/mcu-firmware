@@ -18,12 +18,14 @@ static void ctrl_quadpid_speed_calib_print_usage(void)
 
     puts("\t'q'\t Quit calibration");
     puts("\t'r'\t Send reset");
-    puts("\t'p'\t Speed linear Kp calibration");
-    puts("\t'i'\t Speed linear Ki calibration");
-    puts("\t'd'\t Speed linear Kd calibration");
-    puts("\t'P'\t Speed angular Kp calibration");
-    puts("\t'I'\t Speed angular Ki calibration");
-    puts("\t'D'\t Speed angular Kd calibration");
+    puts("\t'L'\t Linear speed PID test");
+    puts("\t'A'\t Angular speed PID test");
+    puts("\t'p'\t Set linear Kp");
+    puts("\t'i'\t Set linear Ki");
+    puts("\t'd'\t Set linear Kd");
+    puts("\t'P'\t Set angular Kp");
+    puts("\t'I'\t Set angular Ki");
+    puts("\t'D'\t Set angular Kd");
     puts("\t'r'\t Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)");
 }
 
@@ -138,57 +140,47 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
         encoder_reset();
 
         switch(c) {
-            /* Linear speed Kp */
-            case 'p':
+            /* Linear speed PID test. */
+            case 'L':
                 speed_order.distance = MAX_SPEED;
                 speed_order.angle = 0;
-                printf("Enter new angular speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.kp);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.linear_speed_pid.kp);
                 ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
+                break;
+            /* Angular speed PID test. */
+            case 'A':
+                speed_order.distance = 0;
+                speed_order.angle = MAX_SPEED / 2;
+                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
+                break;
+            /* Linear speed Kp */
+            case 'p':
+                printf("Enter new linear speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.kp);
+                scanf("%lf", &ctrl_quadpid->quadpid_params.linear_speed_pid.kp);
                 break;
             /* Linear speed Ki */
             case 'i':
-                speed_order.distance = MAX_SPEED;
-                speed_order.angle = 0;
-                puts("**WARNING**: Setup your optimal Kp before setting Ki");
-                printf("Enter new angular speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.ki);
+                printf("Enter new linear speed Ki (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.ki);
                 scanf("%lf", &ctrl_quadpid->quadpid_params.linear_speed_pid.ki);
-                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
                 break;
             /* Linear speed Kd */
             case 'd':
-                speed_order.distance = MAX_SPEED;
-                speed_order.angle = 0;
-                puts("**WARNING**: Setup your optimal Kp before setting Kd");
-                printf("Enter new angular speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.kd);
+                printf("Enter new linear speed Kd (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.kd);
                 scanf("%lf", &ctrl_quadpid->quadpid_params.linear_speed_pid.kd);
-                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
                 break;
             /* Angular speed Kp */
             case 'P':
-                speed_order.distance = 0;
-                speed_order.angle = MAX_SPEED / 2;
                 printf("Enter new angular speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.kp);
                 scanf("%lf", &ctrl_quadpid->quadpid_params.angular_speed_pid.kp);
-                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
                 break;
             /* Angular speed Ki */
             case 'I':
-                speed_order.distance = 0;
-                speed_order.angle = MAX_SPEED / 2;
-                puts("**WARNING**: Setup your optimal Kp before setting Ki and Kd");
-                printf("Enter new angular speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.ki);
+                printf("Enter new angular speed Ki (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.ki);
                 scanf("%lf", &ctrl_quadpid->quadpid_params.angular_speed_pid.ki);
-                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
                 break;
             /* Angular speed Kd */
             case 'D':
-                speed_order.distance = 0;
-                speed_order.angle = MAX_SPEED / 2;
-                puts("**WARNING**: Setup your optimal Kp before setting Kd");
-                printf("Enter new angular speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.kd);
+                printf("Enter new angular speed Kd (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.kd);
                 scanf("%lf", &ctrl_quadpid->quadpid_params.angular_speed_pid.kd);
-                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
                 break;
             case 'r':
                 pid_reset_all(ctrl_quadpid);
