@@ -11,6 +11,49 @@
 #include "platform.h"
 #include "calibration/calib_quadpid.h"
 
+/**
+ * @brief Impulse function parameters
+ *
+ * This structures store all parameters related to impulse speed_order function.
+ * These parameters defines the expected impulse response amplitude and timings
+ * as visible in following figure.
+ *
+ * @verbatim
+ *
+ *                       output
+ *                          ^
+ *                          |
+ *                          |
+ *                          |
+ * impulse_max_value  --->  |         +--------+
+ *                          |         |        |
+ *                          |         |        |
+ *                          |         |        |
+ *                          |         |        |
+ *                          +---------+--------+--------------------->   time
+ *                        0                                            [seconds]
+ *                                    ^        ^                ^
+ *                                    |        |                |
+ *                                             |
+ *                           cycle_start_mot   |          cycle_end_func
+ *                                             |
+ *                                       cycle_end_mot
+ *
+ * @endverbatim
+ */
+typedef struct {
+    uint32_t cycle_start_mot;    /**< Defines when output should be 'impulse_max_value', in seconds */
+    uint32_t cycle_end_mot;      /**< Defines when output return back to 0, in seconds */
+    uint32_t cycle_end_func;     /**< Defines when impulse function is considered finished, in seconds */
+    double   impulse_max_value;  /**< Maximum output when impulse is 'high' level. ('low' lelvel is 0). */
+
+    uint8_t  is_linear;          /**< TRUE if linear set_point required, FALSE for angular */
+} impulse_cfg_t;
+
+
+/* 20ms period == 50Hz sampling rate */
+#define PULSE_PER_SEC              50
+
 /* Speed correction calibration usage */
 static void ctrl_quadpid_speed_calib_print_usage(void)
 {
@@ -40,26 +83,118 @@ static void ctrl_quadpid_pose_calib_print_usage(void)
     puts("\t'A'\t Speed angular Kp calibration");
 }
 
-/* Speed calibration sequence */
-static void ctrl_quadpid_speed_calib_seq(ctrl_t* ctrl_quadpid, polar_t* speed_order)
-{
-    /* Automatic reverse */
-    static int dir = -1;
-    dir *= -1;
+static impulse_cfg_t impulse_cfg__speed_pid_linear = {
+    .cycle_start_mot = 1 /* sec */,
+    .cycle_end_mot   = 3 /* sec */,
+    .cycle_end_func  = 5 /* sec */,
+    .impulse_max_value = 35,
+    .is_linear       = TRUE,
+};
 
-    /* Revert speed order to avoid always going in the same direction */
-    speed_order->distance *= dir;
-    speed_order->angle *= dir;
+static impulse_cfg_t impulse_cfg__speed_pid_angular = {
+    .cycle_start_mot = 1 /* sec */,
+    .cycle_end_mot   = 3 /* sec */,
+    .cycle_end_func  = 5 /* sec */,
+    .impulse_max_value = 13,
+    .is_linear       = FALSE,
+};
+
+static impulse_cfg_t* current_impulse_cfg = NULL;
+static int seq_finished = FALSE;
+
+/**
+ * @brief Impulse function
+ *
+ * This compute the output of the impulse function given a time value.
+ *
+ * @param[in]        cfg        Impulse function parameters, @ref impulse_cfg_t.
+ * @param[in]       time        Time [cycle number].
+ *
+ * @return                      Computed set point
+ */
+static double func_impulse(impulse_cfg_t* cfg, uint32_t time)
+{
+    double set_point = 0;
+
+    if (cfg) {
+        /* Timeline is before impulse start marker, motor set to 0 */
+        if (time < cfg->cycle_start_mot * PULSE_PER_SEC)
+            set_point = 0;
+        /* Timeline is in impulse interval, motor set to impulse_max_value */
+        else if (time >= cfg->cycle_start_mot * PULSE_PER_SEC && time < cfg->cycle_end_mot * PULSE_PER_SEC)
+            set_point = cfg->impulse_max_value;
+        /* Timeline is after impulse end marker, motor reset to 0 */
+        else if (time >= cfg->cycle_end_mot * PULSE_PER_SEC
+                && time < cfg->cycle_end_func * PULSE_PER_SEC)
+            set_point = 0;
+        else
+            seq_finished = TRUE;
+    }
+
+    return set_point;
+}
+
+/**
+ * @brief Variable speed_order impulse function
+ *
+ * This generate a variable speed_order over time, using impulse function.
+ *
+ * @param[in]   ctrl        Controller object
+ *
+ * @return                  Computed speed order
+ */
+static polar_t func_impulse_on_speed_order(ctrl_t* ctrl)
+{
+    double set_point = 0;
+    polar_t speed_order = {0, 0};
+
+    set_point = func_impulse(current_impulse_cfg,
+            ctrl_get_current_cycle(ctrl));
+
+    if (current_impulse_cfg->is_linear) {
+        speed_order.distance = set_point;
+        speed_order.angle = 0;
+    }
+    else {
+        speed_order.distance = 0;
+        speed_order.angle = set_point;
+    }
+
+    return speed_order;
+}
+
+
+/**
+ * @brief Speed calibration sequence
+ *
+ * Start controller with speed feedback loop PID only. This rely on the use
+ * of variable speed_order previously registered in the controller and so does
+ * not apply any constant speed_order. Test sequence is launched until variable
+ * speed_order function is finished, or until a timeout occured.
+ *
+ * @param[in]   ctrl_quadpid    Controller object.
+ */
+static void calib_seq_speed_pid_only(ctrl_t* ctrl_quadpid)
+{
+    seq_finished = FALSE;
 
     /* Turn controller into runnning mode swith only speed correction loops */
     ctrl_set_mode(ctrl_quadpid, CTRL_MODE_RUNNING_SPEED);
 
-    /* Send speed order to the controller */
-    ctrl_set_speed_order(ctrl_quadpid, speed_order);
+    /* Wait for sequence to finish or timeout */
+    uint16_t timeout = 20; /* seconds */
+    do {
+        if (seq_finished == TRUE) {
+            ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
+            break;
+        }
+        xtimer_usleep(US_PER_SEC);
+    } while (ctrl_get_mode(ctrl_quadpid) != CTRL_MODE_STOP && --timeout);
 
-    /* Wait seconds before stopping the controller */
-    xtimer_sleep(1);
-    ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
+    if (!timeout) {
+        puts("Unexpected behavior");
+        ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
+    }
 }
 
 /* Position calibration sequence */
@@ -127,9 +262,6 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
     /* Get the quadpid controller */
     ctrl_quadpid_t* ctrl_quadpid = pf_get_quadpid_ctrl();
 
-    /* Declare a speed order, will be initialized specically for each case */
-    polar_t speed_order;
-
     /* Key pressed */
     char c = 0;
 
@@ -142,15 +274,25 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
         switch(c) {
             /* Linear speed PID test. */
             case 'L':
-                speed_order.distance = MAX_SPEED;
-                speed_order.angle = 0;
-                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
+                                             func_impulse_on_speed_order);
+
+                current_impulse_cfg = &impulse_cfg__speed_pid_linear;
+
+                calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
+
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
                 break;
             /* Angular speed PID test. */
             case 'A':
-                speed_order.distance = 0;
-                speed_order.angle = MAX_SPEED / 2;
-                ctrl_quadpid_speed_calib_seq((ctrl_t*)ctrl_quadpid, &speed_order);
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
+                                             func_impulse_on_speed_order);
+
+                current_impulse_cfg = &impulse_cfg__speed_pid_angular;
+
+                calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
+
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
                 break;
             /* Linear speed Kp */
             case 'p':
