@@ -61,6 +61,8 @@ static void ctrl_quadpid_speed_calib_print_usage(void)
 
     puts("\t'q'\t Quit calibration");
     puts("\t'r'\t Send reset");
+    puts("\t'l'\t Linear speed characterization");
+    puts("\t'a'\t Angular speed characterization");
     puts("\t'L'\t Linear speed PID test");
     puts("\t'A'\t Angular speed PID test");
     puts("\t'p'\t Set linear Kp");
@@ -82,6 +84,22 @@ static void ctrl_quadpid_pose_calib_print_usage(void)
     puts("\t'a'\t Speed linear Kp calibration");
     puts("\t'A'\t Speed angular Kp calibration");
 }
+
+static impulse_cfg_t impulse_cfg__tf_ident_linear = {
+    .cycle_start_mot = 1 /* sec */,
+    .cycle_end_mot   = 3 /* sec */,
+    .cycle_end_func  = 5 /* sec */,
+    .impulse_max_value = 1000,
+    .is_linear       = TRUE,
+};
+
+static impulse_cfg_t impulse_cfg__tf_ident_angular = {
+    .cycle_start_mot = 1 /* sec */,
+    .cycle_end_mot   = 3 /* sec */,
+    .cycle_end_func  = 5 /* sec */,
+    .impulse_max_value = 1000,
+    .is_linear       = FALSE,
+};
 
 static impulse_cfg_t impulse_cfg__speed_pid_linear = {
     .cycle_start_mot = 1 /* sec */,
@@ -155,6 +173,31 @@ static uint8_t func_impulse_on_speed_order(void *user_data, uint16_t time, polar
     return seq_finished;
 }
 
+/**
+ * @brief Transfer function identification sequence
+ *
+ * Inject impulse command in motor and catch encoders response when no PID are
+ * running. This will output data that can be used to generate a mathematical
+ * model of the mobile robot.
+ *
+ * @param[in]   ctrl_quadpid    Controller object.
+ */
+static void calib_seq_identify_robot_tf(ctrl_t* ctrl_quadpid)
+{
+    /* Turn controller into direct driving mode, thus no PID at all */
+    ctrl_set_mode(ctrl_quadpid, CTRL_MODE_CALIB_NO_PID);
+
+    /* Wait for sequence to finish or timeout */
+    uint16_t timeout = 20; /* seconds */
+    do {
+        xtimer_usleep(US_PER_SEC);
+    } while (ctrl_get_mode(ctrl_quadpid) != CTRL_MODE_STOP && --timeout);
+
+    if (!timeout) {
+        puts("Unexpected behavior");
+        ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
+    }
+}
 
 /**
  * @brief Speed calibration sequence
@@ -258,6 +301,28 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
         encoder_reset();
 
         switch(c) {
+            /* Linear speed model identification. */
+            case 'l':
+                /* Register speed order generation function to the controller */
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
+                                             func_impulse_on_speed_order,
+                                             &impulse_cfg__tf_ident_linear);
+
+                calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
+
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL, NULL);
+                break;
+            /* Angular speed model identification. */
+            case 'a':
+                /* Register speed order generation function to the controller */
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
+                                             func_impulse_on_speed_order,
+                                             &impulse_cfg__tf_ident_angular);
+
+                calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
+
+                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL, NULL);
+                break;
             /* Linear speed PID test. */
             case 'L':
                 ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
