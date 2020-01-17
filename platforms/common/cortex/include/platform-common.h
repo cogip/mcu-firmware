@@ -71,6 +71,9 @@ static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
     .ctrl_post_mode_cb[CTRL_MODE_RUNNING]       = pf_ctrl_post_running_cb,
     .ctrl_post_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_post_running_cb,
 
+    .ctrl_pre_mode_cb[CTRL_MODE_PASSTHROUGH]   = pf_ctrl_pre_running_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_PASSTHROUGH]  = pf_ctrl_post_running_cb,
+
     .blocking_speed_treshold            = PF_CTRL_BLOCKING_SPEED_TRESHOLD,
     .blocking_speed_error_treshold      = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
     .blocking_cycles_max                = PF_CTRL_BLOCKING_NB_ITERATIONS,
