@@ -139,6 +139,8 @@ void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
             puts("CTRL_MODE_RUNNING"); break;
         case CTRL_MODE_RUNNING_SPEED:
             puts("CTRL_MODE_RUNNING_SPEED"); break;
+        case CTRL_MODE_PASSTHROUGH:
+            puts("CTRL_MODE_PASSTHROUGH"); break;
         default:
             puts("<unknown>"); break;
         }

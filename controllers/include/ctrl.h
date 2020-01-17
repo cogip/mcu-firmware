@@ -87,6 +87,7 @@ typedef enum {
     CTRL_MODE_BLOCKED,      /**< Blocked, often meaning something went wrong */
     CTRL_MODE_RUNNING,      /**< Move according to asked position */
     CTRL_MODE_RUNNING_SPEED,/**< Move according to asked speed  */
+    CTRL_MODE_PASSTHROUGH,  /**< Direct control of motion, input is output */
     CTRL_MODE_NUMOF,        /**< Number of mode, never use it as an index */
 } ctrl_mode_t;
 
