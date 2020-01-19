@@ -146,7 +146,7 @@ int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command)
 
 int ctrl_quadpid_nopid(ctrl_t* ctrl, polar_t* command)
 {
-    polar_t* speed_order = NULL;
+    const polar_t* speed_order = NULL;
 
     ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
 
@@ -161,7 +161,7 @@ int ctrl_quadpid_nopid(ctrl_t* ctrl, polar_t* command)
 
 int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
 {
-    polar_t* speed_order = NULL;
+    const polar_t* speed_order = NULL;
 
     const polar_t* speed_current = ctrl_get_speed_current(ctrl);
 
@@ -188,7 +188,7 @@ int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
 int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 {
     const pose_t* pose_order = NULL;
-    polar_t* speed_order = NULL;
+    const polar_t* speed_order = NULL;
 
     const pose_t* pose_current = ctrl_get_pose_current(ctrl);
     const polar_t* speed_current = ctrl_get_speed_current(ctrl);
