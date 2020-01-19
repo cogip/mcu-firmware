@@ -112,6 +112,33 @@ inline const polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
     return &ctrl->control.speed_order;
 }
 
+void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb)
+{
+    irq_disable();
+
+    ctrl->control.speed_order_cb = speed_order_cb;
+    ctrl->control.current_cycle = 0;
+
+    irq_enable();
+}
+
+polar_t ctrl_compute_speed_order(ctrl_t* ctrl)
+{
+    speed_order_cb_t cb = ctrl->control.speed_order_cb;
+    polar_t speed_order = {0, 0};
+
+    if (cb) {
+        /* Variable speed_order is computable through a callback */
+        speed_order = (*cb)(ctrl);
+    }
+    else {
+        /* Constant speed_order */
+        speed_order = ctrl->control.speed_order;
+    }
+
+    return speed_order;
+}
+
 void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
 {
     /* Ensure we don't set a non existant mode */
