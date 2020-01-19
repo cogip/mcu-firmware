@@ -293,7 +293,7 @@ void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order);
  *
  * @return                      Speed order
  */
-polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
+const polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
 
 /**
  * @brief Get current speed

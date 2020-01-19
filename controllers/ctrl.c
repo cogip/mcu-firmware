@@ -107,7 +107,7 @@ inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
     irq_enable();
 }
 
-inline polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
+inline const polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
 {
     return &ctrl->control.speed_order;
 }
