@@ -92,6 +92,25 @@ typedef enum {
 } ctrl_mode_t;
 
 /**
+ * @brief   Controller default definition
+ */
+typedef struct ctrl_t ctrl_t;
+
+/**
+ * @brief   Variable speed order callback.
+ *
+ * When registered, this callback can enhance controller to move from a constant
+ * speed_order to a variable speed_order driven by external part of code.
+ * Thus, the speed_order can change depending on some factors, such as time or
+ * mobile robot position.
+ *
+ * @param[in]       ctrl        Controler object
+ *
+ * @return                      New computed speed order
+ */
+typedef polar_t (*speed_order_cb_t)(ctrl_t* ctrl);
+
+/**
  * @brief    Controller general structure
  */
 typedef struct {
@@ -99,6 +118,7 @@ typedef struct {
     pose_t pose_current;        /**< Current position */
     polar_t speed_order;        /**< Speed order to reach the position */
     polar_t speed_current;      /**< Current speed reaching the position */
+    speed_order_cb_t speed_order_cb; /**< Optional @ref speed_order_cb_t. */
 
     uint8_t pose_reached;       /**< Boolean set when pose_order is reached */
     uint8_t pose_intermediate;  /**< Boolean set when current pose_order is
@@ -133,11 +153,6 @@ typedef struct {
     const uint16_t  blocking_cycles_max;            /**< Blocking cycles
                                                          maximum number */
 } ctrl_platform_configuration_t;
-
-/**
- * @brief   Controller default definition
- */
-typedef struct ctrl_t ctrl_t;
 
 /**
  * @brief   Modes controller callbacks.
@@ -282,7 +297,11 @@ const pose_t* ctrl_get_pose_current(ctrl_t* ctrl);
  * @param[in] ctrl              Controller object
  * @param[in] speed_order       Speed goal to reach pose order
  *
- * @return
+ * @note This set point can be overriden and ignored if user request a variable
+ * speed_order. Please check @ref ctrl_register_speed_order_cb for more
+ * informations.
+ *
+ * @return                      Nothing
  */
 void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order);
 
@@ -294,6 +313,44 @@ void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order);
  * @return                      Speed order
  */
 const polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
+
+/**
+ * @brief Register a speed_order callback.
+ *
+ * When this callback function is called, the controller no more uses a
+ * constant speed order to reach its regulations points, but instead rely on an
+ * external function to compute its speed order. This function is called on each
+ * controller cycle if @ref ctrl_compute_speed_order is called.
+ * It allows the speed order to vary over time or other factor depending on the
+ * callback implementation.
+ *
+ * This function overrides any other constant speed order the user could set
+ * through @ref ctrl_set_speed_order. Thus any previous or future call to
+ * @ref ctrl_set_speed_order could have no effect if a speed_order callback
+ * function is registered and if @ref ctrl_compute_speed_order is called at
+ * each cycle.
+ *
+ * To move back to a constant speed_order, user can unregister the callback
+ * by calling this function and register a NULL speed_order callback.
+ *
+ * @param[in] ctrl              Controller object
+ * @param[in] speed_order_cb    Function callback. (See @ref speed_order_cb_t )
+ *
+ * @return                      Nothing
+ */
+void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb);
+
+/**
+ * @brief compute speed order
+ *
+ * This function computes speed order by calling callback registered with
+ * @ref ctrl_register_speed_order_cb.
+ *
+ * @param[in] ctrl              Controller object
+ *
+ * @return                      Speed order
+ */
+polar_t ctrl_compute_speed_order(ctrl_t* ctrl);
 
 /**
  * @brief Get current speed
