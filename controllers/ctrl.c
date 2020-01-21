@@ -21,6 +21,11 @@ void ctrl_set_pose_reached(ctrl_t* ctrl)
     ctrl->control.pose_reached = TRUE;
 }
 
+uint32_t ctrl_get_current_cycle(ctrl_t* ctrl)
+{
+    return ctrl->control.current_cycle;
+}
+
 inline void ctrl_set_pose_intermediate(ctrl_t* ctrl, uint8_t intermediate)
 {
     if (intermediate)
