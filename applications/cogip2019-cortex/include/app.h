@@ -26,70 +26,70 @@
 /**********/
 
 /* Suction cups */
-#define PF_SERVO_FL_CUP             0, 0
-#define PF_SERVO_FC_CUP             0, 1
-#define PF_SERVO_FR_CUP             0, 2
+#define APP_SERVO_FL_CUP             0, 0
+#define APP_SERVO_FC_CUP             0, 1
+#define APP_SERVO_FR_CUP             0, 2
 
-#define PF_SERVO_BL_CUP             1, 11
-#define PF_SERVO_BC_CUP             1, 10
-#define PF_SERVO_BR_CUP             1, 9
+#define APP_SERVO_BL_CUP             1, 11
+#define APP_SERVO_BC_CUP             1, 10
+#define APP_SERVO_BR_CUP             1, 9
 
 /* Elevators */
-#define PF_SERVO_FC_ELEVATOR        0, 4
-#define PF_SERVO_FL_ELEVATOR        0, 5
-#define PF_SERVO_FR_ELEVATOR        0, 7
+#define APP_SERVO_FC_ELEVATOR        0, 4
+#define APP_SERVO_FL_ELEVATOR        0, 5
+#define APP_SERVO_FR_ELEVATOR        0, 7
 
-#define PF_SERVO_BC_ELEVATOR        1, 7
-#define PF_SERVO_BL_ELEVATOR        1, 8
-#define PF_SERVO_BR_ELEVATOR        1, 6
+#define APP_SERVO_BC_ELEVATOR        1, 7
+#define APP_SERVO_BL_ELEVATOR        1, 8
+#define APP_SERVO_BR_ELEVATOR        1, 6
 
 /* Fork */
-#define PF_SERVO_FORK               1, 2
+#define APP_SERVO_FORK               1, 2
 
 /* Ramps */
-#define PF_SERVO_FL_RAMP_DISP       0, 8
-#define PF_SERVO_FR_RAMP_DISP       0, 10
-#define PF_SERVO_F_RAMP             0, 9
-#define PF_SERVO_F_RAMP_BLOCK       0, 11
+#define APP_SERVO_FL_RAMP_DISP       0, 8
+#define APP_SERVO_FR_RAMP_DISP       0, 10
+#define APP_SERVO_F_RAMP             0, 9
+#define APP_SERVO_F_RAMP_BLOCK       0, 11
 
-#define PF_SERVO_BL_RAMP_DISP       1, 3
-#define PF_SERVO_BR_RAMP_DISP       1, 4
-#define PF_SERVO_B_RAMP             1, 5
-#define PF_SERVO_B_RAMP_BLOCK       1, 2
+#define APP_SERVO_BL_RAMP_DISP       1, 3
+#define APP_SERVO_BR_RAMP_DISP       1, 4
+#define APP_SERVO_B_RAMP             1, 5
+#define APP_SERVO_B_RAMP_BLOCK       1, 2
 
 /* ARMs */
-#define PF_SERVO_FR_ARM             0, 3
-#define PF_SERVO_FL_ARM             0, 6
+#define APP_SERVO_FR_ARM             0, 3
+#define APP_SERVO_FL_ARM             0, 6
 
 /*****************/
 /* Servos states */
 /*****************/
 
 /* Suction cups */
-#define PF_SERVO_STATE_CUP_RAMP     0
-#define PF_SERVO_STATE_CUP_TAKE     1
-#define PF_SERVO_STATE_CUP_HOLD     2
+#define APP_SERVO_STATE_CUP_RAMP     0
+#define APP_SERVO_STATE_CUP_TAKE     1
+#define APP_SERVO_STATE_CUP_HOLD     2
 
 /* Elevators */
-#define PF_SERVO_STATE_ELEVATOR_TOP     0
-#define PF_SERVO_STATE_ELEVATOR_BOTTOM  1
-#define PF_SERVO_STATE_ELEVATOR_GOLDEN  2
-//TODO: check in struct below. #define PF_SERVO_STATE_ELEVATOR_FORK    XXX
+#define APP_SERVO_STATE_ELEVATOR_TOP     0
+#define APP_SERVO_STATE_ELEVATOR_BOTTOM  1
+#define APP_SERVO_STATE_ELEVATOR_GOLDEN  2
+//TODO: check in struct below. #define APP_SERVO_STATE_ELEVATOR_FORK    XXX
 
 /* Fork */
-#define PF_SERVO_STATE_FORK_TOP         0
-#define PF_SERVO_STATE_FORK_BOTTOM      1
+#define APP_SERVO_STATE_FORK_TOP         0
+#define APP_SERVO_STATE_FORK_BOTTOM      1
 
 /* Ramps */
-#define PF_SERVO_STATE_RAMP_OPEN        0
-#define PF_SERVO_STATE_RAMP_CLOSE       1
-#define PF_SERVO_STATE_RAMP_RIGHT       0
-#define PF_SERVO_STATE_RAMP_LEFT        1
-#define PF_SERVO_STATE_RAMP_HORIZ       2
+#define APP_SERVO_STATE_RAMP_OPEN        0
+#define APP_SERVO_STATE_RAMP_CLOSE       1
+#define APP_SERVO_STATE_RAMP_RIGHT       0
+#define APP_SERVO_STATE_RAMP_LEFT        1
+#define APP_SERVO_STATE_RAMP_HORIZ       2
 
 /* Arms */
-#define PF_SERVO_STATE_ARM_OPEN         0
-#define PF_SERVO_STATE_ARM_CLOSE        1
+#define APP_SERVO_STATE_ARM_OPEN         0
+#define APP_SERVO_STATE_ARM_CLOSE        1
 
 typedef struct {
     double angle_offset;
@@ -179,7 +179,7 @@ static const sd21_conf_t sd21_config[] = {
                     2325, /* Puck prehension */
                     1500, /* Neutral */
                 },
-                .default_position = PF_SERVO_STATE_CUP_HOLD,
+                .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S0-1: front left suction cup"
             },
@@ -190,7 +190,7 @@ static const sd21_conf_t sd21_config[] = {
                     675,  /* Puck prehension */
                     1500, /* Neutral */
                 },
-                .default_position = PF_SERVO_STATE_CUP_HOLD,
+                .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S0-2: front central suction cup"
             },
@@ -201,7 +201,7 @@ static const sd21_conf_t sd21_config[] = {
                     575,  /* Puck prehension */
                     1400, /* Neutral */
                 },
-                .default_position = PF_SERVO_STATE_CUP_HOLD,
+                .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S0-3: front right suction cup"
             },
@@ -419,7 +419,7 @@ static const sd21_conf_t sd21_config[] = {
                     2425,   /* Puck prehension */
                     1500,   /* Neutral */
                 },
-                .default_position = PF_SERVO_STATE_CUP_HOLD,
+                .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S1-10: back right suction cup"
             },
@@ -430,7 +430,7 @@ static const sd21_conf_t sd21_config[] = {
                     825,   /* Puck prehension */
                     1575,   /* Neutral */
                 },
-                .default_position = PF_SERVO_STATE_CUP_HOLD,
+                .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S1-11: back central suction cup"
             },
@@ -441,7 +441,7 @@ static const sd21_conf_t sd21_config[] = {
                     725,   /* Puck prehension */
                     1500,   /* Neutral */
                 },
-                .default_position = PF_SERVO_STATE_CUP_HOLD,
+                .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
                 .name = "S1-12: back left suction cup"
             },

@@ -136,9 +136,9 @@ void app_stop_pumps(void)
 
 void app_front_cup_take(void)
 {
-    sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_TAKE);
-    sd21_servo_reach_position(PF_SERVO_FC_CUP, PF_SERVO_STATE_CUP_TAKE);
-    sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(APP_SERVO_FL_CUP, APP_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(APP_SERVO_FC_CUP, APP_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(APP_SERVO_FR_CUP, APP_SERVO_STATE_CUP_TAKE);
 
     app_actions_ctx.any_pump_on = 1;
 
@@ -160,14 +160,14 @@ void app_front_cup_ramp(void)
 */
     if (app_actions_ctx.nb_puck_front_ramp != 0)
         return;
-    sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
-    sd21_servo_reach_position(PF_SERVO_FC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
-    sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(APP_SERVO_FL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(APP_SERVO_FC_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(APP_SERVO_FR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
     xtimer_usleep(250 * US_PER_MS);
-    sd21_servo_reach_position(PF_SERVO_FC_CUP, PF_SERVO_STATE_CUP_RAMP);
-    sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_RAMP);
-    sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(APP_SERVO_FC_CUP, APP_SERVO_STATE_CUP_RAMP);
     app_actions_ctx.nb_puck_front_ramp = 3;
+    sd21_servo_reach_position(APP_SERVO_FL_CUP, APP_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(APP_SERVO_FR_CUP, APP_SERVO_STATE_CUP_RAMP);
     xtimer_usleep(500 * US_PER_MS);
 
     gpio_clear(GPIO_FL_PUMP_4);
@@ -177,14 +177,14 @@ void app_front_cup_ramp(void)
     app_actions_ctx.any_pump_on = 0;
 
     xtimer_usleep(250 * US_PER_MS);
-    sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_FC_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(APP_SERVO_FL_CUP, APP_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(APP_SERVO_FC_CUP, APP_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(APP_SERVO_FR_CUP, APP_SERVO_STATE_CUP_HOLD);
     xtimer_usleep(500 * US_PER_MS);
 
-    sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
-    sd21_servo_reach_position(PF_SERVO_FC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
-    sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(APP_SERVO_FL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(APP_SERVO_FC_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(APP_SERVO_FR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
 
     app_vl53l0x_reset();
     app_vl53l0x_init();
@@ -192,9 +192,9 @@ void app_front_cup_ramp(void)
 
 void app_back_cup_take(void)
 {
-    sd21_servo_reach_position(PF_SERVO_BL_CUP, PF_SERVO_STATE_CUP_TAKE);
-    sd21_servo_reach_position(PF_SERVO_BC_CUP, PF_SERVO_STATE_CUP_TAKE);
-    sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(APP_SERVO_BL_CUP, APP_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(APP_SERVO_BC_CUP, APP_SERVO_STATE_CUP_TAKE);
+    sd21_servo_reach_position(APP_SERVO_BR_CUP, APP_SERVO_STATE_CUP_TAKE);
 
     app_actions_ctx.any_pump_on = 1;
 
@@ -208,14 +208,14 @@ void app_back_cup_take(void)
 
 void app_back_cup_ramp(void)
 {
-    sd21_servo_reach_position(PF_SERVO_BL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
-    sd21_servo_reach_position(PF_SERVO_BC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
-    sd21_servo_reach_position(PF_SERVO_BR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(APP_SERVO_BL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(APP_SERVO_BC_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
+    sd21_servo_reach_position(APP_SERVO_BR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
     xtimer_usleep(250 * US_PER_MS);
 
-    sd21_servo_reach_position(PF_SERVO_BL_CUP, PF_SERVO_STATE_CUP_RAMP);
-    sd21_servo_reach_position(PF_SERVO_BC_CUP, PF_SERVO_STATE_CUP_RAMP);
-    sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(APP_SERVO_BL_CUP, APP_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(APP_SERVO_BC_CUP, APP_SERVO_STATE_CUP_RAMP);
+    sd21_servo_reach_position(APP_SERVO_BR_CUP, APP_SERVO_STATE_CUP_RAMP);
     xtimer_usleep(500 * US_PER_MS);
 
     gpio_clear(GPIO_BL_PUMP_1);
@@ -226,14 +226,14 @@ void app_back_cup_ramp(void)
     app_actions_ctx.nb_puck_back_ramp = 3;
 
     xtimer_usleep(250 * US_PER_MS);
-    sd21_servo_reach_position(PF_SERVO_BL_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_BC_CUP, PF_SERVO_STATE_CUP_HOLD);
-    sd21_servo_reach_position(PF_SERVO_BR_CUP, PF_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(APP_SERVO_BL_CUP, APP_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(APP_SERVO_BC_CUP, APP_SERVO_STATE_CUP_HOLD);
+    sd21_servo_reach_position(APP_SERVO_BR_CUP, APP_SERVO_STATE_CUP_HOLD);
     xtimer_usleep(500 * US_PER_MS);
 
-    sd21_servo_reach_position(PF_SERVO_BL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
-    sd21_servo_reach_position(PF_SERVO_BC_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
-    sd21_servo_reach_position(PF_SERVO_BR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(APP_SERVO_BL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(APP_SERVO_BC_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
+    sd21_servo_reach_position(APP_SERVO_BR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
 
     app_vl53l0x_reset();
     app_vl53l0x_init();
@@ -247,16 +247,16 @@ void app_front_ramp_right_drop(void)
 
     uint8_t is_camp_left = app_is_camp_left();
 
-    sd21_servo_reach_position(PF_SERVO_F_RAMP_BLOCK, PF_SERVO_STATE_RAMP_OPEN);
+    sd21_servo_reach_position(APP_SERVO_F_RAMP_BLOCK, APP_SERVO_STATE_RAMP_OPEN);
     if (is_camp_left) {
-        sd21_servo_reach_position(PF_SERVO_F_RAMP, PF_SERVO_STATE_RAMP_LEFT);
-        sd21_servo_reach_position(PF_SERVO_FL_RAMP_DISP,
-                PF_SERVO_STATE_RAMP_OPEN);
+        sd21_servo_reach_position(APP_SERVO_F_RAMP, APP_SERVO_STATE_RAMP_LEFT);
+        sd21_servo_reach_position(APP_SERVO_FL_RAMP_DISP,
+                APP_SERVO_STATE_RAMP_OPEN);
     }
     else {
-        sd21_servo_reach_position(PF_SERVO_F_RAMP, PF_SERVO_STATE_RAMP_RIGHT);
-        sd21_servo_reach_position(PF_SERVO_FR_RAMP_DISP,
-                PF_SERVO_STATE_RAMP_OPEN);
+        sd21_servo_reach_position(APP_SERVO_F_RAMP, APP_SERVO_STATE_RAMP_RIGHT);
+        sd21_servo_reach_position(APP_SERVO_FR_RAMP_DISP,
+                APP_SERVO_STATE_RAMP_OPEN);
     }
     app_actions_ctx.nb_puck_front_ramp = 0;
     xtimer_usleep(1500 * US_PER_MS);
@@ -266,10 +266,10 @@ void app_front_ramp_right_drop(void)
 
 void app_front_ramp_reset(void)
 {
-    sd21_servo_reach_position(PF_SERVO_FL_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
-    sd21_servo_reach_position(PF_SERVO_FR_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(APP_SERVO_FL_RAMP_DISP, APP_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(APP_SERVO_FR_RAMP_DISP, APP_SERVO_STATE_RAMP_CLOSE);
     xtimer_usleep(500 * US_PER_MS);
-    sd21_servo_reach_position(PF_SERVO_F_RAMP, PF_SERVO_STATE_RAMP_HORIZ);
+    sd21_servo_reach_position(APP_SERVO_F_RAMP, APP_SERVO_STATE_RAMP_HORIZ);
     xtimer_usleep(1000 * US_PER_MS);
 }
 
@@ -280,17 +280,17 @@ void app_back_ramp_left_drop(void)
         return;
     uint8_t is_camp_left = app_is_camp_left();
 
-    sd21_servo_reach_position(PF_SERVO_B_RAMP_BLOCK, PF_SERVO_STATE_RAMP_OPEN);
+    sd21_servo_reach_position(APP_SERVO_B_RAMP_BLOCK, APP_SERVO_STATE_RAMP_OPEN);
     if (is_camp_left) {
-        sd21_servo_reach_position(PF_SERVO_B_RAMP, PF_SERVO_STATE_RAMP_RIGHT);
-        sd21_servo_reach_position(PF_SERVO_BR_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+        sd21_servo_reach_position(APP_SERVO_B_RAMP, APP_SERVO_STATE_RAMP_RIGHT);
+        sd21_servo_reach_position(APP_SERVO_BR_RAMP_DISP, APP_SERVO_STATE_RAMP_OPEN);
         if(app_actions_ctx.nb_puck_front_ramp == 3) {
             app_front_ramp_right_drop();
         }
     }
     else {
-        sd21_servo_reach_position(PF_SERVO_B_RAMP, PF_SERVO_STATE_RAMP_LEFT);
-        sd21_servo_reach_position(PF_SERVO_BL_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+        sd21_servo_reach_position(APP_SERVO_B_RAMP, APP_SERVO_STATE_RAMP_LEFT);
+        sd21_servo_reach_position(APP_SERVO_BL_RAMP_DISP, APP_SERVO_STATE_RAMP_OPEN);
         if(app_actions_ctx.nb_puck_front_ramp == 3) {
             app_front_ramp_right_drop();
         }
@@ -303,10 +303,10 @@ void app_back_ramp_left_drop(void)
 
 void app_back_ramp_reset(void)
 {
-    sd21_servo_reach_position(PF_SERVO_BL_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
-    sd21_servo_reach_position(PF_SERVO_BR_RAMP_DISP, PF_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(APP_SERVO_BL_RAMP_DISP, APP_SERVO_STATE_RAMP_CLOSE);
+    sd21_servo_reach_position(APP_SERVO_BR_RAMP_DISP, APP_SERVO_STATE_RAMP_CLOSE);
     xtimer_usleep(500 * US_PER_MS);
-    sd21_servo_reach_position(PF_SERVO_B_RAMP, PF_SERVO_STATE_RAMP_HORIZ);
+    sd21_servo_reach_position(APP_SERVO_B_RAMP, APP_SERVO_STATE_RAMP_HORIZ);
     xtimer_usleep(1000 * US_PER_MS);
 }
 
@@ -314,11 +314,11 @@ void app_back_ramp_left_horiz_for_goldenium(void)
 {
     uint8_t is_camp_left = app_is_camp_left();
 
-    sd21_servo_reach_position(PF_SERVO_B_RAMP_BLOCK, PF_SERVO_STATE_RAMP_OPEN);
+    sd21_servo_reach_position(APP_SERVO_B_RAMP_BLOCK, APP_SERVO_STATE_RAMP_OPEN);
     if (is_camp_left)
-        sd21_servo_reach_position(PF_SERVO_BR_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+        sd21_servo_reach_position(APP_SERVO_BR_RAMP_DISP, APP_SERVO_STATE_RAMP_OPEN);
     else
-        sd21_servo_reach_position(PF_SERVO_BL_RAMP_DISP, PF_SERVO_STATE_RAMP_OPEN);
+        sd21_servo_reach_position(APP_SERVO_BL_RAMP_DISP, APP_SERVO_STATE_RAMP_OPEN);
     xtimer_usleep(500 * US_PER_MS);
 
     app_actions_ctx.goldenium_opened = 1;
@@ -331,8 +331,8 @@ void app_arms_open(void)
 
     if(app_actions_ctx.front_arms_opened == 1)
         return;
-    sd21_servo_reach_position(PF_SERVO_FL_ARM, PF_SERVO_STATE_ARM_OPEN);
-    sd21_servo_reach_position(PF_SERVO_FR_ARM, PF_SERVO_STATE_ARM_OPEN);
+    sd21_servo_reach_position(APP_SERVO_FL_ARM, APP_SERVO_STATE_ARM_OPEN);
+    sd21_servo_reach_position(APP_SERVO_FR_ARM, APP_SERVO_STATE_ARM_OPEN);
     xtimer_usleep(500 * US_PER_MS);
 
     app_actions_ctx.front_arms_opened = 1;
@@ -345,8 +345,8 @@ void app_arms_close(void)
 
     if(app_actions_ctx.front_arms_opened == 0)
         return;
-    sd21_servo_reach_position(PF_SERVO_FL_ARM, PF_SERVO_STATE_ARM_CLOSE);
-    sd21_servo_reach_position(PF_SERVO_FR_ARM, PF_SERVO_STATE_ARM_CLOSE);
+    sd21_servo_reach_position(APP_SERVO_FL_ARM, APP_SERVO_STATE_ARM_CLOSE);
+    sd21_servo_reach_position(APP_SERVO_FR_ARM, APP_SERVO_STATE_ARM_CLOSE);
     xtimer_usleep(500 * US_PER_MS);
 
     app_actions_ctx.front_arms_opened = 0;
@@ -359,8 +359,8 @@ void app_goldenium_take(void)
     if(!is_camp_left)
     {
         // Front Right cup do the job
-        sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_TAKE);
-        sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_GOLDEN);
+        sd21_servo_reach_position(APP_SERVO_FR_CUP, APP_SERVO_STATE_CUP_TAKE);
+        sd21_servo_reach_position(APP_SERVO_FR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_GOLDEN);
         app_actions_ctx.any_pump_on = 1;
         gpio_set(GPIO_FL_PUMP_4);
         xtimer_usleep(10 * US_PER_MS);
@@ -368,8 +368,8 @@ void app_goldenium_take(void)
     else
     {
         // Front Left cup do the job
-        sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_TAKE);
-        sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_GOLDEN);
+        sd21_servo_reach_position(APP_SERVO_FL_CUP, APP_SERVO_STATE_CUP_TAKE);
+        sd21_servo_reach_position(APP_SERVO_FL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_GOLDEN);
         app_actions_ctx.any_pump_on = 1;
         gpio_set(GPIO_FR_PUMP_6);
         xtimer_usleep(10 * US_PER_MS);
@@ -383,9 +383,9 @@ void app_goldenium_hold(void)
     if(!is_camp_left)
     {
         // Front Right cup do the job
-        sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_HOLD); //TODO: besoin de descendre ascenseur ?
+        sd21_servo_reach_position(APP_SERVO_FR_CUP, APP_SERVO_STATE_CUP_HOLD); //TODO: besoin de descendre ascenseur ?
         xtimer_usleep(500 * US_PER_MS);
-        sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+        sd21_servo_reach_position(APP_SERVO_FR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
         xtimer_usleep(500 * US_PER_MS);
         gpio_clear(GPIO_FL_PUMP_4);
         app_actions_ctx.any_pump_on = 0;
@@ -393,9 +393,9 @@ void app_goldenium_hold(void)
     else
     {
         // Front Left cup do the job
-        sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_HOLD); //TODO: besoin de descendre ascenseur ?
+        sd21_servo_reach_position(APP_SERVO_FL_CUP, APP_SERVO_STATE_CUP_HOLD); //TODO: besoin de descendre ascenseur ?
         xtimer_usleep(500 * US_PER_MS);
-        sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_TOP);
+        sd21_servo_reach_position(APP_SERVO_FL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_TOP);
         xtimer_usleep(500 * US_PER_MS);
         gpio_clear(GPIO_FR_PUMP_6);
         app_actions_ctx.any_pump_on = 0;
@@ -412,9 +412,9 @@ void app_goldenium_drop(void)
         app_actions_ctx.any_pump_on = 1;
         gpio_set(GPIO_FL_PUMP_4);
         xtimer_usleep(500 * US_PER_MS);
-        sd21_servo_reach_position(PF_SERVO_FR_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+        sd21_servo_reach_position(APP_SERVO_FR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
         xtimer_usleep(500 * US_PER_MS);
-        sd21_servo_reach_position(PF_SERVO_FR_CUP, PF_SERVO_STATE_CUP_TAKE);
+        sd21_servo_reach_position(APP_SERVO_FR_CUP, APP_SERVO_STATE_CUP_TAKE);
         xtimer_usleep(500 * US_PER_MS);
         gpio_clear(GPIO_FL_PUMP_4);
         app_actions_ctx.any_pump_on = 0;
@@ -425,9 +425,9 @@ void app_goldenium_drop(void)
         app_actions_ctx.any_pump_on = 1;
         gpio_set(GPIO_FR_PUMP_6);
         xtimer_usleep(500 * US_PER_MS);
-        sd21_servo_reach_position(PF_SERVO_FL_ELEVATOR, PF_SERVO_STATE_ELEVATOR_BOTTOM);
+        sd21_servo_reach_position(APP_SERVO_FL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
         xtimer_usleep(500 * US_PER_MS);
-        sd21_servo_reach_position(PF_SERVO_FL_CUP, PF_SERVO_STATE_CUP_TAKE);
+        sd21_servo_reach_position(APP_SERVO_FL_CUP, APP_SERVO_STATE_CUP_TAKE);
         xtimer_usleep(500 * US_PER_MS);
         gpio_clear(GPIO_FR_PUMP_6);
         app_actions_ctx.any_pump_on = 0;
