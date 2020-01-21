@@ -186,6 +186,15 @@ struct ctrl_t {
 };
 
 /**
+ * @brief Get current elapsed cycle
+ *
+ * @param[in] ctrl              Controller object
+ *
+ * @return                      Current elapsed cycle
+ */
+uint32_t ctrl_get_current_cycle(ctrl_t* ctrl);
+
+/**
  * @brief Set the pose order as an intermediate position
  *
  * @param[in] ctrl              Controller object
