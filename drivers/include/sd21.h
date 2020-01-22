@@ -51,9 +51,6 @@
 /* RIOT includes */
 #include "periph/i2c.h"
 
-/* Project includes */
-#include "platform.h"
-
 /**
  * @brief   Maximum number of servos by board
  */
@@ -138,22 +135,23 @@ typedef struct {
 /**
  * @brief Initialize SD21 board driver according to static configuration.
  *
+ * @param[in]   sd21_config_new     SD21 configuration
+ *
  * @return
  */
-void sd21_init(void);
+void sd21_init(const sd21_conf_t* sd21_config_new);
 
 /**
  * @brief Servomotor driving function
  *
  * @param[in]   dev         SD21 device id
  * @param[in]   servo_id    Servomotor id
- * @param[in]   speed       Servomotor speed
  * @param[in]   position    Servomotor position in ms
  *
  * @return                  0 on success
  *                          not 0 on failure
  */
-int sd21_servo_control(sd21_t dev, uint8_t servo_id, uint8_t speed,
+int sd21_servo_control_position(sd21_t dev, uint8_t servo_id,
         uint16_t position);
 
 /**
@@ -203,10 +201,12 @@ double sd21_get_battery_voltage(sd21_t dev);
  *
  * @param[in]   dev         SD21 device id
  * @param[in]   servo_id    Servomotor id
+ * @param[ou]   position    Servomotor position
  *
- * @return                  Servomotor position
+ * @return                  0 on success
+ *                          not 0 on failure
  */
-uint16_t sd21_servo_get_position(sd21_t dev, uint8_t servo_id);
+int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t* position);
 
 /**
  * @brief Get Servomotor name.
