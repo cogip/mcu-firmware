@@ -14,6 +14,13 @@
 #include "planner.h"
 #include "platform.h"
 
+#ifdef CALIBRATION
+#include "calibration/calib_pca9548.h"
+#include "calibration/calib_planner.h"
+#include "calibration/calib_quadpid.h"
+#include "calibration/calib_sd21.h"
+#endif /* CALIBRATION */
+
 /* Controller */
 static ctrl_quadpid_t ctrl_quadpid =
 {
@@ -376,4 +383,56 @@ void pf_init_tasks(void)
 
 void pf_init(void)
 {
+    board_init();
+
+    motor_driver_init(MOTOR_DRIVER_DEV(0));
+
+    /* Setup qdec periphereal */
+    int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_MODE, NULL, NULL);
+    if (error) {
+        printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_LEFT, error);
+    }
+    error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
+    if (error) {
+        printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
+    }
+
+    /* Init odometry */
+    odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
+
+    /* Init starter and camp selection GPIOs */
+    assert(gpio_init(GPIO_CAMP, GPIO_IN) == 0);
+    assert(gpio_init(GPIO_STARTER, GPIO_IN_PU) == 0);
+
+    /* Debug LED */
+    assert(gpio_init(GPIO_DEBUG_LED, GPIO_OUT) == 0);
+    gpio_clear(GPIO_DEBUG_LED);
+
+    pca9548_init();
+
+    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
+        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
+        if (vl53l0x_init_dev(dev) != 0)
+            printf("ERROR: Sensor %u init failed !!!\n", dev);
+    }
+
+    ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
+
+    /* Get platform path */
+    path_t* path = pf_get_path();
+    if (!path) {
+        printf("machine has no path\n");
+    }
+
+    /* mirror the points in place if selected camp is left */
+    if (pf_is_camp_left()) {
+        path_horizontal_mirror_all_pos(path);
+    }
+
+#ifdef CALIBRATION
+    ctrl_quadpid_calib_init();
+    pca9548_calib_init();
+    pln_calib_init();
+    sd21_calib_init();
+#endif /* CALIBRATION */
 }
