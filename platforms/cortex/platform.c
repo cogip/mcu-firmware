@@ -383,8 +383,6 @@ void pf_init_tasks(void)
 
 void pf_init(void)
 {
-    board_init();
-
     motor_driver_init(MOTOR_DRIVER_DEV(0));
 
     /* Setup qdec periphereal */
