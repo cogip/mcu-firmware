@@ -1,3 +1,7 @@
+# define the cpu used by the cogip2018-cortex board
+CPU = stm32f4
+CPU_MODEL = stm32f446re
+
 # Put defined MCU peripherals here (in alphabetical order)
 FEATURES_PROVIDED += periph_adc
 FEATURES_PROVIDED += periph_gpio
