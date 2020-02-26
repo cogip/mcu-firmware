@@ -1,7 +1,3 @@
-# define the cpu used by the cogip2018-cortex board
-export CPU = stm32f4
-export CPU_MODEL = stm32f446re
-
 # compute FLASHSIZE and RAMSIZE
 include $(RIOTCPU)/stm32_common/stm32_mem_lengths.mk
 KB := 1024
