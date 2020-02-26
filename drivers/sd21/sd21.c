@@ -47,9 +47,7 @@ static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id, const void* data,
     if (ret) goto sd21_write_twi_cmd_err;
 
     for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        ret = i2c_release(sd21->i2c_dev_id);
-        if (!ret)
-            break;
+        i2c_release(sd21->i2c_dev_id);
     }
     if (ret) goto sd21_write_twi_cmd_err;
 
@@ -88,9 +86,7 @@ static int sd21_read_twi_cmd(sd21_t dev, uint8_t servo_id, void* data,
     if (ret) goto sd21_read_twi_cmd_err;
 
     for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        ret = i2c_release(sd21->i2c_dev_id);
-        if (!ret)
-            break;
+        i2c_release(sd21->i2c_dev_id);
     }
     if (ret) goto sd21_read_twi_cmd_err;
 
