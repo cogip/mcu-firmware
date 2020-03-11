@@ -3,9 +3,6 @@ export NATIVEINCLUDES += -I$(RIOTBOARD)/$(BOARD)/include/
 export NATIVEINCLUDES += -I$(RIOTBASE)/core/include/
 export NATIVEINCLUDES += -I$(RIOTBASE)/drivers/include/
 
-
-export CPU = native
-
 # mcu-firmware includes
 export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
 export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/pkg/vl53l0x-api/include/
@@ -44,7 +41,8 @@ else
   export DEBUGGER ?= gdb
 endif
 
-export TERMPROG ?= $(ELFFILE)
+export FLASHFILE ?= $(ELFFILE)
+export TERMPROG ?= $(FLASHFILE)
 export FLASHER = true
 export VALGRIND ?= valgrind
 export CGANNOTATE ?= cg_annotate
