@@ -7,7 +7,7 @@ include $(RIOTBASE)/pkg/pkg.mk
 
 .PHONY: all
 
-CFLAGS += -Wno-unused-parameter -Wno-unused-but-set-variable
+CFLAGS += -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-absolute-value
 
 INCLUDES += -I$(PKG_BUILDDIR)/include
 
