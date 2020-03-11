@@ -27,6 +27,10 @@
 /* RIOT includes */
 #include <motor_driver.h>
 
+/* Project includes */
+#include "vl53l0x.h"
+#include "pca9548.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -189,6 +193,35 @@ static const motor_driver_config_t motor_driver_config[] = {
 
 #define MOTOR_DRIVER_NUMOF           (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
 /** @} */
+
+static const vl53l0x_conf_t vl53l0x_config[] = {
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+};
+
+#define VL53L0X_NUMOF     (sizeof(vl53l0x_config) / sizeof(vl53l0x_config[0]))
 
 #ifdef __cplusplus
 }
