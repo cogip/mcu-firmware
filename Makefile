@@ -1,17 +1,17 @@
-# List all platforms
-pfs := $(foreach dir,$(wildcard platforms/*/Makefile),$(subst Makefile, , $(dir)))
+# List all applications
+apps := $(foreach dir,$(wildcard applications/*/Makefile),$(subst Makefile, , $(dir)))
 
-.PHONY: all clean distclean doc docman doclatex docclean help $(pfs)
+.PHONY: all clean distclean doc docman doclatex docclean help $(apps)
 
-all: $(pfs)		## Build all platforms (default target)
+all: $(apps)		## Build all applications (default target)
 
 clean: PF_TARGET = clean
-clean: $(pfs)		## Clean build for all platforms
+clean: $(apps)		## Clean build for all applications
 
 distclean: PF_TARGET = distclean
-distclean: $(pfs)	## Clean build and configuration for all platforms
+distclean: $(apps)	## Clean build and configuration for all applications
 
-$(pfs):
+$(apps):
 	$(MAKE) -j$$(nproc) -C $@ $(PF_TARGET)
 
 
