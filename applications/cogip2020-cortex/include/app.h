@@ -55,7 +55,6 @@ static const sd21_conf_t sd21_config[] = {
         .i2c_speed_khz = I2C_SPEED_NORMAL,
 
         .servos_nb = 0,
-        .servos = {},
     }
 };
 
