@@ -39,6 +39,21 @@ extern "C" {
 #include "mtd_native.h"
 #endif
 
+/* Camp selection */
+#define GPIO_CAMP       GPIO_PIN(1, 1)
+/* Starting switch */
+#define GPIO_STARTER    GPIO_PIN(1, 2)
+
+/* Pumps */
+#define GPIO_BL_PUMP_1  GPIO_PIN(2, 11)
+#define GPIO_BC_PUMP_2  GPIO_PIN(0, 12)
+#define GPIO_BR_PUMP_3  GPIO_PIN(0, 11)
+#define GPIO_FL_PUMP_4  GPIO_PIN(0, 10)
+#define GPIO_FC_PUMP_5  GPIO_PIN(0, 9)
+#define GPIO_FR_PUMP_6  GPIO_PIN(1, 15)
+
+#define GPIO_DEBUG_LED  GPIO_PIN(2, 8)
+
 /* Motors */
 #define HBRIDGE_MOTOR_LEFT  0
 #define HBRIDGE_MOTOR_RIGHT 1
@@ -47,9 +62,6 @@ extern "C" {
 #define QDEC_MODE           QDEC_X1
 #define QDEC_LEFT_POLARITY  1
 #define QDEC_RIGHT_POLARITY 1
-
-/* Debug LED (stub) */
-#define GPIO_DEBUG_LED  (0)
 
 /**
  * @name    LED handlers
