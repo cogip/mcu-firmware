@@ -3,7 +3,13 @@ export NATIVEINCLUDES += -I$(RIOTBOARD)/$(BOARD)/include/
 export NATIVEINCLUDES += -I$(RIOTBASE)/core/include/
 export NATIVEINCLUDES += -I$(RIOTBASE)/drivers/include/
 
+
 export CPU = native
+
+# mcu-firmware includes
+export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
+export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/pkg/vl53l0x-api/include/
+export NATIVEINCLUDES += -I$(PKGDIRBASE)/vl53l0x-api/include/
 
 # toolchain:
 export PREFIX =
