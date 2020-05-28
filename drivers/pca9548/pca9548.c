@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-#include "platform.h"
 #include "pca9548.h"
 #include "xtimer.h"
 
