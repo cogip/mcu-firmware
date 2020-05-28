@@ -1,5 +1,5 @@
 export NATIVEINCLUDES += -DNATIVE_INCLUDES
-export NATIVEINCLUDES += -I$(RIOTBOARD)/$(BOARD)/include/
+export NATIVEINCLUDES += -I$(EXTERNAL_BOARD_DIRS)/$(BOARD)/include/
 export NATIVEINCLUDES += -I$(RIOTBASE)/core/include/
 export NATIVEINCLUDES += -I$(RIOTBASE)/drivers/include/
 
