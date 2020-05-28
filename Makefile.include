@@ -21,3 +21,14 @@ endif
 
 include $(MCUFIRMWAREBASE)/Makefile.dep
 include $(RIOTBASE)/Makefile.include
+
+ifeq (,$(filter $(CPU),native))
+	.DEFAULT_GOAL := world
+endif
+
+RAM_LEN_K := $(shell echo $(RAM_LEN) | sed 's/K//')
+RAMSIZE := $(shell echo $$(( $(RAM_LEN_K) * $(KB) )) )
+
+.PHONY: world
+world: all
+	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAMSIZE)
