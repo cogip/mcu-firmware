@@ -22,10 +22,3 @@ USEPKG += vl53l0x-api
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 
 include ../../Makefile.include
-
-# Override default build rule to hook a MCU footprint display
-.DEFAULT_GOAL := world
-
-.PHONY: world
-world: all
-	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAMSIZE)
