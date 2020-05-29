@@ -39,6 +39,8 @@ extern "C" {
 #include "mtd_native.h"
 #endif
 
+#define PCA9548_SENSORS 0
+
 /* Camp selection */
 #define GPIO_CAMP       GPIO_PIN(1, 1)
 /* Starting switch */
@@ -234,6 +236,26 @@ static const vl53l0x_conf_t vl53l0x_config[] = {
 };
 
 #define VL53L0X_NUMOF     (sizeof(vl53l0x_config) / sizeof(vl53l0x_config[0]))
+
+static const pca9548_conf_t pca9548_config[] = {
+    {
+        .i2c_dev_id         = 1,
+        .i2c_address        = 0x70,
+        .channel_numof      = PCA9548_CHANNEL_MAX,
+    },
+};
+
+#define PCA9548_NUMOF      (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
+
+static const uint8_t vl53l0x_channel[VL53L0X_NUMOF] = {
+    0,
+    1,
+    2,
+    6,
+    4,
+    5,
+};
+
 
 #ifdef __cplusplus
 }
