@@ -24,10 +24,9 @@ include $(RIOTBASE)/Makefile.include
 
 ifeq (,$(filter $(CPU),native))
 	.DEFAULT_GOAL := world
+	RAM_LEN_K := $(shell echo $(RAM_LEN) | sed 's/K//')
+	RAMSIZE := $(shell echo $$(( $(RAM_LEN_K) * $(KB) )) )
 endif
-
-RAM_LEN_K := $(shell echo $(RAM_LEN) | sed 's/K//')
-RAMSIZE := $(shell echo $$(( $(RAM_LEN_K) * $(KB) )) )
 
 .PHONY: world
 world: all
