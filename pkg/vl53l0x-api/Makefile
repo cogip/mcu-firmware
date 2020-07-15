@@ -9,7 +9,7 @@ include $(RIOTBASE)/pkg/pkg.mk
 
 CFLAGS += -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-absolute-value
 
-INCLUDES += -I$(PKG_BUILDDIR)/include
+INCLUDES += -I$(PKG_SOURCE_DIR)/include
 
 all:
-	$(MAKE) -C $(PKG_BUILDDIR)
+	$(MAKE) -C $(PKG_SOURCE_DIR)
