@@ -1,5 +1,6 @@
 /* System includes */
 #include <thread.h>
+#include <stdlib.h>
 
 /* RIOT includes */
 #define ENABLE_DEBUG        (0)
@@ -35,16 +36,54 @@ char start_shell_thread_stack[THREAD_STACKSIZE_LARGE];
 char radio_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 /* Shell command array */
-static shell_command_t shell_commands[NB_SHELL_COMMANDS];
+static shell_command_linked_t current_shell_commands;
 
-void pf_add_shell_command(shell_command_t *command)
+shell_command_linked_t pf_shell_commands;
+
+void pf_push_shell_commands(shell_command_linked_t *shell_commands) {
+    shell_commands->previous = current_shell_commands.current;
+    memcpy(&current_shell_commands, shell_commands, sizeof(shell_command_linked_t));
+}
+
+void pf_pop_shell_commands(void) {
+    if(current_shell_commands.previous) {
+        memcpy(&current_shell_commands, current_shell_commands.previous, sizeof(shell_command_linked_t));
+    }
+}
+
+void pf_init_shell_commands(shell_command_linked_t *shell_commands) {
+    shell_commands->current = shell_commands;
+    shell_commands->previous = NULL;
+
+    for(uint8_t i = 0 ; i < NB_SHELL_COMMANDS ; i++) {
+        shell_commands->shell_commands[i] = (shell_command_t){ NULL, NULL, NULL };
+    }
+}
+
+void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
 {
-    static uint8_t command_id = 0;
+    uint8_t command_id = 0;
+
+    shell_command_t * entry = shell_commands->shell_commands;
+    for (; entry->name != NULL; entry++, command_id++) {}
 
     assert(command_id < NB_SHELL_COMMANDS);
 
-    shell_commands[command_id++] = *command;
+    shell_commands->shell_commands[command_id++] = *command;
 }
+
+int pf_exit_shell(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+    pf_pop_shell_commands();
+    return EXIT_SUCCESS;
+}
+
+shell_command_t cmd_exit_shell = {
+    "exit", "Exit planner calibration",
+    pf_exit_shell
+};
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
 {
@@ -343,12 +382,12 @@ void pf_init_tasks(void)
     if (start_shell) {
         /* Define buffer to be used by the shell */
         char line_buf[SHELL_DEFAULT_BUFSIZE];
-        /* Add end NULL entry to shell_command */
-        shell_command_t null_command = { NULL, NULL, NULL };
-        pf_add_shell_command(&null_command);
+
+        pf_push_shell_commands(&pf_shell_commands);
+
         /* Start shell */
         DEBUG("platform: Start shell\n");
-        shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+        shell_run((shell_command_t*)&current_shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
     }
     /* Else start game */
     else {
@@ -382,6 +421,8 @@ void pf_init_tasks(void)
 
 void pf_init(void)
 {
+    pf_init_shell_commands(&pf_shell_commands);
+
     motor_driver_init(MOTOR_DRIVER_DEV(0));
 
     /* Setup qdec periphereal */

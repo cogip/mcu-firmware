@@ -110,5 +110,5 @@ void pca9548_calib_init(void)
         pca9548_calib_cmd
     };
 
-    pf_add_shell_command(&cmd);
+    pf_add_shell_command(&pf_shell_commands, &cmd);
 }

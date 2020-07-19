@@ -8,22 +8,95 @@
 #include "xtimer.h"
 
 /* Project includes */
+#define ENABLE_DEBUG        (0)
+#include "debug.h"
 #include "planner.h"
 #include "platform.h"
 #include "calibration/calib_planner.h"
 
-/* Speed correction calibration usage */
-static void pln_calib_print_usage(void)
-{
-    puts(">>> Entering calibration for planner");
+/* Shell command array */
+static shell_command_linked_t pln_shell_commands;
 
-    puts("\t'q'\t Quit calibration");
-    puts("\t'n'\t Go to next position");
-    puts("\t'p'\t Go to previous position");
-    puts("\t's'\t Go back to start position");
-    puts("\t'N'\t Select next position");
-    puts("\t'P'\t Select previous position");
-    puts("\t'a'\t Launch action");
+static uint8_t calib_path_index;
+
+static int pln_cmd_go_next_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    path_t *path = pf_get_path();
+
+    if (calib_path_index < path->nb_pose - 1)
+        calib_path_index++;
+    path_set_current_pose_idx(path, calib_path_index);
+
+    return EXIT_SUCCESS;
+}
+
+static int pln_cmd_go_previous_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    path_t *path = pf_get_path();
+
+    if (calib_path_index > 0)
+        calib_path_index--;
+    path_set_current_pose_idx(path, calib_path_index);
+
+    return EXIT_SUCCESS;
+}
+
+static int pln_cmd_go_start_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    path_t *path = pf_get_path();
+
+    path_reset_current_pose_idx(path);
+
+    return EXIT_SUCCESS;
+}
+
+static int pln_cmd_select_next_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    path_t *path = pf_get_path();
+
+    if (calib_path_index < path->nb_pose - 1)
+        calib_path_index++;
+
+    return EXIT_SUCCESS;
+}
+
+static int pln_cmd_select_previous_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    if (calib_path_index > 0)
+        calib_path_index--;
+
+    return EXIT_SUCCESS;
+}
+
+static int pln_cmd_launch_action_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    path_t *path = pf_get_path();
+    func_cb_t cb = path_get_pose_at_idx(path, calib_path_index)->act;;
+
+    if(cb != NULL) {
+        puts("Launch callback!");
+        (*cb)();
+    }
+
+    return EXIT_SUCCESS;
 }
 
 /* Speed calibration command */
@@ -31,76 +104,47 @@ static int pln_calib_cmd(int argc, char **argv)
 {
     (void)argv;
     int ret = 0;
-    func_cb_t cb = NULL;
-    static uint8_t calib_path_index = 0;
 
-    path_t *path = pf_get_path();
+    calib_path_index = 0;
+
     ctrl_t* ctrl = pf_get_ctrl();
-
-    /* Always print usage first */
-    pln_calib_print_usage();
 
     /* Check arguments */
     if (argc > 1) {
-        puts("Bad arguments number !");
+        puts("Bad number of arguments!");
         ret = -1;
         goto pln_calib_cmd_err;
     }
-
-    /* Key pressed */
-    char c = 0;
 
     pln_set_allow_change_path_pose(FALSE);
 
     pln_start(ctrl);
 
-    while (c != 'q') {
-        /* Display current position index in path */
-        printf("Position index: %u\n", calib_path_index);
+    pf_init_shell_commands(&pln_shell_commands);
 
-        /* Wait for a key pressed */
-        c = getchar();
+    pf_add_shell_command(&pln_shell_commands, &cmd_exit_shell);
 
-        switch(c) {
-            /* Next position */
-            case 'n':
-                if (calib_path_index < path->nb_pose - 1)
-                    calib_path_index++;
-                path_set_current_pose_idx(path, calib_path_index);
-                break;
-            case 'p':
-                if (calib_path_index > 0)
-                    calib_path_index--;
-                path_set_current_pose_idx(path, calib_path_index);
-                break;
-            case 's':
-                path_reset_current_pose_idx(path);
-                break;
-            case 'N':
-                if (calib_path_index < path->nb_pose - 1)
-                    calib_path_index++;
-                break;
-            case 'P':
-                if (calib_path_index > 0)
-                    calib_path_index--;
-                break;
-            case 'a':
-                cb = path_get_pose_at_idx(path, calib_path_index)->act;
-                if(cb != NULL) {
-                    puts("Launch callback !");
-                    (*cb)();
-                }
-                break;
-            default:
-                continue;
-        }
+    shell_command_t pln_cmd_go_next = {"n", "Go to next position", pln_cmd_go_next_cb};
+    pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_next);
 
-        /* Data stop signal */
-        puts("<<<< STOP >>>>");
+    shell_command_t pln_cmd_go_previous = {"p", "Go to previous position", pln_cmd_go_previous_cb};
+    pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_previous);
 
-        /* Always remind usage */
-        pln_calib_print_usage();
-    }
+    shell_command_t pln_cmd_go_start = {"s", "Go back to start position", pln_cmd_go_start_cb};
+    pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_start);
+
+    shell_command_t pln_cmd_select_next = {"N", "Select next position", pln_cmd_select_next_cb};
+    pf_add_shell_command(&pln_shell_commands, &pln_cmd_select_next);
+
+    shell_command_t pln_cmd_select_previous = {"P", "Select previous position", pln_cmd_select_previous_cb};
+    pf_add_shell_command(&pln_shell_commands, &pln_cmd_select_previous);
+
+    shell_command_t pln_cmd_launch_action = {"a", "Launch action", pln_cmd_launch_action_cb};
+    pf_add_shell_command(&pln_shell_commands, &pln_cmd_launch_action);
+
+    /* Push new menu */
+    DEBUG("planner: Start shell\n");
+    pf_push_shell_commands(&pln_shell_commands);
 
 pln_calib_cmd_err:
     return ret;
@@ -115,5 +159,5 @@ void pln_calib_init(void)
         pln_calib_cmd
     };
 
-    pf_add_shell_command(&cmd_calib_pln);
+    pf_add_shell_command(&pf_shell_commands, &cmd_calib_pln);
 }
