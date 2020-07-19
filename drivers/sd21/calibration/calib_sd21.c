@@ -149,5 +149,5 @@ void sd21_calib_init(const sd21_conf_t* sd21_config_new)
         sd21_calib_servo_cmd
     };
 
-    pf_add_shell_command(&cmd);
+    pf_add_shell_command(&pf_shell_commands, &cmd);
 }

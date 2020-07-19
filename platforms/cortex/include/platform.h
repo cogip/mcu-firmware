@@ -41,7 +41,7 @@
 
 #define PF_START_COUNTDOWN  3
 
-#define NB_SHELL_COMMANDS   10
+#define NB_SHELL_COMMANDS   11
 
 #define GAME_DURATION_SEC   100
 
@@ -118,11 +118,30 @@ static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
     },
 };
 
+typedef struct shell_command_linked shell_command_linked_t;
+struct shell_command_linked {
+    /* Copy of the shell_commands currently used */
+    shell_command_t shell_commands[NB_SHELL_COMMANDS];
+    /* Pointer to the real current shell_commands */
+    shell_command_linked_t *current;
+    /* Pointer to the real previous shell_commands */
+    shell_command_linked_t *previous;
+};
+
+extern shell_command_linked_t pf_shell_commands;
+
+/* TODO: These functions/structs should be moved to common code */
+void pf_push_shell_commands(shell_command_linked_t *shell_commands);
+void pf_pop_shell_commands(void);
+void pf_init_shell_commands(shell_command_linked_t *shell_commands);
+void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command);
+int pf_display_json_help(int argc, char **argv);
+int pf_exit_shell(int argc, char **argv);
+extern shell_command_t cmd_exit_shell;
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
 int pf_is_camp_left(void);
 
-void pf_add_shell_command(shell_command_t *command);
 void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
 void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
