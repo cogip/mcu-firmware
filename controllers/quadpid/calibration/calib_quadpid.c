@@ -514,7 +514,7 @@ void ctrl_quadpid_calib_init(void)
         ctrl_quadpid_speed_calib_cmd
     };
 
-    pf_add_shell_command(&cmd_calib_speed);
+    pf_add_shell_command(&pf_shell_commands, &cmd_calib_speed);
 
     /* Add pose calibration command */
     shell_command_t cmd_calib_pose = {
@@ -522,5 +522,5 @@ void ctrl_quadpid_calib_init(void)
         ctrl_quadpid_pose_calib_cmd
     };
 
-    pf_add_shell_command(&cmd_calib_pose);
+    pf_add_shell_command(&pf_shell_commands, &cmd_calib_pose);
 }
