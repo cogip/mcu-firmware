@@ -41,7 +41,7 @@
 
 #define PF_START_COUNTDOWN  3
 
-#define NB_SHELL_COMMANDS   11
+#define NB_SHELL_COMMANDS   14
 
 #define GAME_DURATION_SEC   100
 
