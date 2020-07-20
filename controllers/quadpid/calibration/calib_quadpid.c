@@ -8,6 +8,8 @@
 #include "xtimer.h"
 
 /* Project includes */
+#define ENABLE_DEBUG        (0)
+#include "debug.h"
 #include "platform.h"
 #include "calibration/calib_quadpid.h"
 
@@ -54,36 +56,15 @@ typedef struct {
 /* 20ms period == 50Hz sampling rate */
 #define PULSE_PER_SEC              50
 
-/* Speed correction calibration usage */
-static void ctrl_quadpid_speed_calib_print_usage(void)
-{
-    puts(">>> Entering calibration for quadpid controller");
+/* Shell command array */
+static shell_command_linked_t ctrl_quadpid_speed_shell_commands;
+static shell_command_linked_t ctrl_quadpid_pose_shell_commands;
 
-    puts("\t'q'\t Quit calibration");
-    puts("\t'r'\t Send reset");
-    puts("\t'l'\t Linear speed characterization");
-    puts("\t'a'\t Angular speed characterization");
-    puts("\t'L'\t Linear speed PID test");
-    puts("\t'A'\t Angular speed PID test");
-    puts("\t'p'\t Set linear Kp");
-    puts("\t'i'\t Set linear Ki");
-    puts("\t'd'\t Set linear Kd");
-    puts("\t'P'\t Set angular Kp");
-    puts("\t'I'\t Set angular Ki");
-    puts("\t'D'\t Set angular Kd");
-    puts("\t'r'\t Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)");
-}
+/* Quadpid controller */
+static ctrl_quadpid_t* ctrl_quadpid = NULL;
 
-/* Position correction calibration usage */
-static void ctrl_quadpid_pose_calib_print_usage(void)
-{
-    puts(">>> Entering calibration for quadpid controller");
-
-    puts("\t'q'\t Quit calibration");
-    puts("\t'r'\t Send reset");
-    puts("\t'a'\t Speed linear Kp calibration");
-    puts("\t'A'\t Speed angular Kp calibration");
-}
+/* Index on position to reach according to current linear one */
+uint8_t pose_linear_index = 0;
 
 static impulse_cfg_t impulse_cfg__tf_ident_linear = {
     .cycle_start_mot = 1 /* sec */,
@@ -292,14 +273,183 @@ static void pid_reset_all(ctrl_quadpid_t *ctrl_quadpid)
     ctrl_quadpid->quadpid_params.angular_pose_pid  = pid_initial;
 }
 
+static int ctrl_quadpid_speed_cmd_linear_speed_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    /* Register speed order generation function to the controller */
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
+    current_impulse_cfg = &impulse_cfg__tf_ident_linear;
+    calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_angular_speed_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    /* Register speed order generation function to the controller */
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
+    current_impulse_cfg = &impulse_cfg__tf_ident_angular;
+    calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_linear_pid_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
+    current_impulse_cfg = &impulse_cfg__speed_pid_linear;
+    calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_angular_pid_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
+    current_impulse_cfg = &impulse_cfg__speed_pid_angular;
+    calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_set_linear_kp_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double kp = (double)atof(argv[1]);
+    if (kp == 0.0) {
+        puts("Bad value for Kp\n");
+        return EXIT_FAILURE;
+    }
+    ctrl_quadpid->quadpid_params.linear_speed_pid.kp = kp;
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_set_linear_ki_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double ki = (double)atof(argv[1]);
+    if (ki == 0.0) {
+        puts("Bad value for Ki\n");
+        return EXIT_FAILURE;
+    }
+    ctrl_quadpid->quadpid_params.linear_speed_pid.ki = ki;
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_set_linear_kd_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double kd = (double)atof(argv[1]);
+    if (kd == 0.0) {
+        puts("Bad value for Kd\n");
+        return EXIT_FAILURE;
+    }
+    ctrl_quadpid->quadpid_params.linear_speed_pid.kd = kd;
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_set_angular_kp_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double kp = (double)atof(argv[1]);
+    if (kp == 0.0) {
+        puts("Bad value for Kp\n");
+        return EXIT_FAILURE;
+    }
+    ctrl_quadpid->quadpid_params.angular_speed_pid.kp = kp;
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_set_angular_ki_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double ki = (double)atof(argv[1]);
+    if (ki == 0.0) {
+        puts("Bad value for Ki\n");
+        return EXIT_FAILURE;
+    }
+    ctrl_quadpid->quadpid_params.angular_speed_pid.ki = ki;
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_set_angular_kd_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double kd = (double)atof(argv[1]);
+    if (kd == 0.0) {
+        puts("Bad value for Kd\n");
+        return EXIT_FAILURE;
+    }
+    ctrl_quadpid->quadpid_params.angular_speed_pid.kd = kd;
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    pid_reset_all(ctrl_quadpid);
+
+    return EXIT_SUCCESS;
+}
+
 /* Speed calibration command */
 static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
 {
     (void)argv;
     int ret = 0;
-
-    /* Always print usage first */
-    ctrl_quadpid_speed_calib_print_usage();
 
     /* Check arguments */
     if (argc > 1) {
@@ -309,110 +459,127 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
     }
 
     /* Get the quadpid controller */
-    ctrl_quadpid_t* ctrl_quadpid = pf_get_quadpid_ctrl();
+    ctrl_quadpid = pf_get_quadpid_ctrl();
 
-    /* Key pressed */
-    char c = 0;
+    pf_init_shell_commands(&ctrl_quadpid_speed_shell_commands);
 
-    while (c != 'q') {
-        /* Wait for a key pressed */
-        c = getchar();
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &cmd_exit_shell);
 
-        encoder_reset();
+    shell_command_t ctrl_quadpid_speed_cmd_linear_speed = {"l", "Linear speed characterization", ctrl_quadpid_speed_cmd_linear_speed_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_linear_speed);
 
-        switch(c) {
-            /* Linear speed model identification. */
-            case 'l':
-                /* Register speed order generation function to the controller */
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
-                                             func_impulse_on_speed_order);
+    shell_command_t ctrl_quadpid_speed_cmd_angular_speed = {"a", "Angular speed characterization", ctrl_quadpid_speed_cmd_angular_speed_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_angular_speed);
 
-                current_impulse_cfg = &impulse_cfg__tf_ident_linear;
+    shell_command_t ctrl_quadpid_speed_cmd_linear_pid = {"L", "Linear speed PID test", ctrl_quadpid_speed_cmd_linear_pid_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_linear_pid);
 
-                calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
+    shell_command_t ctrl_quadpid_speed_cmd_angular_pid = {"A", "Angular speed PID test", ctrl_quadpid_speed_cmd_angular_pid_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_angular_pid);
 
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-                break;
-            /* Angular speed model identification. */
-            case 'a':
-                /* Register speed order generation function to the controller */
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
-                                             func_impulse_on_speed_order);
+    shell_command_t ctrl_quadpid_speed_cmd_set_linear_kp = {"p", "Set linear Kp to <kp>", ctrl_quadpid_speed_cmd_set_linear_kp_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_linear_kp);
 
-                current_impulse_cfg = &impulse_cfg__tf_ident_angular;
+    shell_command_t ctrl_quadpid_speed_cmd_set_linear_ki = {"i", "Set linear Ki to <ki>", ctrl_quadpid_speed_cmd_set_linear_ki_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_linear_ki);
 
-                calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
+    shell_command_t ctrl_quadpid_speed_cmd_set_linear_kd = {"d", "Set linear Kd to <kd>", ctrl_quadpid_speed_cmd_set_linear_kd_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_linear_kd);
 
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-                break;
-            /* Linear speed PID test. */
-            case 'L':
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
-                                             func_impulse_on_speed_order);
+    shell_command_t ctrl_quadpid_speed_cmd_set_angular_kp = {"P", "Set angular Kp to <kp>", ctrl_quadpid_speed_cmd_set_angular_kp_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_angular_kp);
 
-                current_impulse_cfg = &impulse_cfg__speed_pid_linear;
+    shell_command_t ctrl_quadpid_speed_cmd_set_angular_ki = {"I", "Set angular Ki to <ki>", ctrl_quadpid_speed_cmd_set_angular_ki_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_angular_ki);
 
-                calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
+    shell_command_t ctrl_quadpid_speed_cmd_set_angular_kd = {"D", "Set angular Kd to <kd>", ctrl_quadpid_speed_cmd_set_angular_kd_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_angular_kd);
 
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-                break;
-            /* Angular speed PID test. */
-            case 'A':
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid,
-                                             func_impulse_on_speed_order);
+    shell_command_t ctrl_quadpid_speed_cmd_reset_coef = {"r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)", ctrl_quadpid_speed_cmd_reset_coef_cb};
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_reset_coef);
 
-                current_impulse_cfg = &impulse_cfg__speed_pid_angular;
-
-                calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
-
-                ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-                break;
-            /* Linear speed Kp */
-            case 'p':
-                printf("Enter new linear speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.kp);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.linear_speed_pid.kp);
-                break;
-            /* Linear speed Ki */
-            case 'i':
-                printf("Enter new linear speed Ki (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.ki);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.linear_speed_pid.ki);
-                break;
-            /* Linear speed Kd */
-            case 'd':
-                printf("Enter new linear speed Kd (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_speed_pid.kd);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.linear_speed_pid.kd);
-                break;
-            /* Angular speed Kp */
-            case 'P':
-                printf("Enter new angular speed Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.kp);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.angular_speed_pid.kp);
-                break;
-            /* Angular speed Ki */
-            case 'I':
-                printf("Enter new angular speed Ki (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.ki);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.angular_speed_pid.ki);
-                break;
-            /* Angular speed Kd */
-            case 'D':
-                printf("Enter new angular speed Kd (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_speed_pid.kd);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.angular_speed_pid.kd);
-                break;
-            case 'r':
-                pid_reset_all(ctrl_quadpid);
-                break;
-            default:
-                continue;
-        }
-
-        /* Data stop signal */
-        puts("<<<< STOP >>>>");
-
-        /* Always remind usage */
-        ctrl_quadpid_speed_calib_print_usage();
-    }
+    /* Push new menu */
+    DEBUG("ctrl_quadpid_speed: Start shell\n");
+    pf_push_shell_commands(&ctrl_quadpid_speed_shell_commands);
 
 ctrl_quadpid_calib_servo_cmd_err:
     return ret;
+}
+
+/* Calibration path for linear PID */
+static path_pose_t poses_calibration[] = {
+    {
+        .pos = {
+                    .x = 0,
+                    .y = 0,
+                    .O = 90,
+                },
+    },
+    {
+        .pos = {
+                    .x = 500,
+                    .y = 500,
+                    .O = 0,
+                },
+    },
+};
+
+
+static int ctrl_quadpid_pose_cmd_reset_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    encoder_reset();
+    puts("<<<< RESET >>>>");
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_pose_cmd_linear_kp_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double kp = (double)atof(argv[1]);
+    if (kp == 0.0) {
+        puts("Bad value for Kp\n");
+        return EXIT_FAILURE;
+    }
+
+    encoder_reset();
+    ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    pose_linear_index ^= 1;
+    ctrl_quadpid->quadpid_params.linear_pose_pid.kp = kp;
+    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+
+    return EXIT_SUCCESS;
+}
+
+static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    double kp = (double)atof(argv[1]);
+    if (kp == 0.0) {
+        puts("Bad value for Kp\n");
+        return EXIT_FAILURE;
+    }
+
+    encoder_reset();
+    ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    pose_linear_index ^= 1;
+    ctrl_quadpid->quadpid_params.angular_pose_pid.kp = kp;
+    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+
+    return EXIT_SUCCESS;
 }
 
 /* Position calibration command */
@@ -421,9 +588,6 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
     (void)argv;
     int ret = 0;
 
-    /* Always print usage first */
-    ctrl_quadpid_pose_calib_print_usage();
-
     /* Check arguments */
     if (argc > 1) {
         puts("Bad arguments number !");
@@ -431,75 +595,33 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
         goto ctrl_quadpid_calib_servo_cmd_err;
     }
 
-    /* Calibration path for linear PID */
-    static path_pose_t poses_calibration[] = {
-        {
-            .pos = {
-                       .x = 0,
-                       .y = 0,
-                       .O = 90,
-                   },
-        },
-        {
-            .pos = {
-                       .x = 500,
-                       .y = 500,
-                       .O = 0,
-                   },
-        },
-    };
-
     /* Get the quadpid controller */
-    ctrl_quadpid_t* ctrl_quadpid = pf_get_quadpid_ctrl();
-
-    /* Key pressed */
-    char c = 0;
+    ctrl_quadpid = pf_get_quadpid_ctrl();
 
     /* Index on position to reach according to current angular one */
 
     /* Index on position to reach according to current linear one */
-    uint8_t pose_linear_index = 0;
+    pose_linear_index = 0;
 
     /* Automatic reverse */
     ctrl_set_allow_reverse((ctrl_t*)ctrl_quadpid, TRUE);
 
-    while (c != 'q') {
-        /* Wait for a key pressed */
-        c = getchar();
+    pf_init_shell_commands(&ctrl_quadpid_pose_shell_commands);
 
-        encoder_reset();
+    pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &cmd_exit_shell);
 
-        switch(c) {
-            /* Linear speed Kp */
-                case 'a':
-                ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
-                pose_linear_index ^= 1;
-                printf("Enter new linear pose Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.linear_pose_pid.kp);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.linear_pose_pid.kp);
-                ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
-                break;
-            /* Angular pose Kp */
-            case 'A':
-                ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
-                pose_linear_index ^= 1;
-                printf("Enter new angular pose Kp (%0.2lf):\n", ctrl_quadpid->quadpid_params.angular_pose_pid.kp);
-                scanf("%lf", &ctrl_quadpid->quadpid_params.angular_pose_pid.kp);
-                ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
-                break;
-            case 'r':
-                /* Reset signal, useful for remote application */
-                puts("<<<< RESET >>>>");
-                break;
-            default:
-                continue;
-        }
+    shell_command_t ctrl_quadpid_pose_cmd_reset = {"r", "Send reset", ctrl_quadpid_pose_cmd_reset_cb};
+    pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_reset);
 
-        /* Data stop tag */
-        puts("<<<< STOP >>>>");
+    shell_command_t ctrl_quadpid_pose_cmd_linear_kp = {"a", "Speed linear Kp calibration to <kp>", ctrl_quadpid_pose_cmd_linear_kp_cb};
+    pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_linear_kp);
 
-        /* Always remind usage */
-        ctrl_quadpid_pose_calib_print_usage();
-    }
+    shell_command_t ctrl_quadpid_pose_cmd_angular_kp = {"A", "Speed angular Kp calibration to <kp>", ctrl_quadpid_pose_cmd_angular_kp_cb};
+    pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_angular_kp);
+
+    /* Push new menu */
+    DEBUG("ctrl_quadpid_pose: Start shell\n");
+    pf_push_shell_commands(&ctrl_quadpid_pose_shell_commands);
 
 ctrl_quadpid_calib_servo_cmd_err:
     return ret;
