@@ -7,6 +7,8 @@
 #include "fmt.h"
 
 /* Project includes */
+#define ENABLE_DEBUG        (0)
+#include "debug.h"
 #include "platform.h"
 #include "sd21.h"
 #include "calibration/calib_sd21.h"
@@ -14,22 +16,138 @@
 static const sd21_conf_t* sd21_config = NULL;
 static size_t sd21_numof = 0;
 
-static void sd21_calib_print_usage(sd21_t dev, uint8_t servo_id)
-{
-    printf(">>> Entering calibration for servo %u of SD21 board %u\n\n",
-            servo_id, dev);
+/* Shell command array */
+static shell_command_linked_t sd21_shell_commands;
 
-    puts("\t'o'\t Opened position");
-    puts("\t'c'\t Closed position");
-    puts("\t'n'\t Next servomotor");
-    puts("\t'p'\t Previous servomotor");
-    puts("\t'q'\t Quit calibration");
-    puts("\t'r'\t Reset to center position");
-    printf("\t'+'\t Add %u microseconds to current position\n",
-            SD21_SERVO_POS_STEP);
-    printf("\t'-'\t Substract %u microseconds to current position\n",
-            SD21_SERVO_POS_STEP);
-    puts("\t'0..1'\t Switch to predefined positions (between 0 and 9)");
+/* Board and servo ids */
+static sd21_t dev = 0;
+static uint8_t servo_id = 0;
+
+static uint16_t sd21_get_current_position(void) {
+    uint16_t current_position = 0;
+    sd21_servo_get_position(dev, servo_id, &current_position);
+
+    /* Print current position on same line */
+    print_str("Current position: ");
+    print_u32_dec(current_position);
+    print_str("    \r");
+
+    return current_position;
+}
+
+static int sd21_cmd_opened_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    sd21_get_current_position();
+    sd21_servo_reach_position(dev, servo_id, SD21_SERVO_POS_OPEN);
+
+    return EXIT_SUCCESS;
+}
+
+static int sd21_cmd_closed_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    sd21_get_current_position();
+    sd21_servo_reach_position(dev, servo_id, SD21_SERVO_POS_CLOSE);
+
+    return EXIT_SUCCESS;
+}
+
+static int sd21_cmd_next_servo_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    sd21_get_current_position();
+    servo_id = (servo_id >= sd21_config[dev].servos_nb - 1) ?
+        sd21_config[dev].servos_nb - 1 : servo_id + 1;
+    printf("\n\n%s\n", sd21_servo_get_name(dev, servo_id));
+
+    return EXIT_SUCCESS;
+}
+
+static int sd21_cmd_previous_servo_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    sd21_get_current_position();
+    servo_id = (servo_id == 0) ? 0 : servo_id - 1;
+    printf("\n\n%s\n", sd21_servo_get_name(dev, servo_id));
+
+    return EXIT_SUCCESS;
+}
+
+static int sd21_cmd_reset_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    sd21_get_current_position();
+    sd21_servo_control_position(dev, servo_id, SD21_SERVO_POS_MID);
+
+    return EXIT_SUCCESS;
+}
+
+static int sd21_cmd_add_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    uint16_t current_position = sd21_get_current_position();
+    sd21_servo_control_position(dev, servo_id, current_position + SD21_SERVO_POS_STEP);
+
+    return EXIT_SUCCESS;
+}
+
+static int sd21_cmd_sub_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    uint16_t current_position = sd21_get_current_position();
+    sd21_servo_control_position(dev, servo_id, current_position - SD21_SERVO_POS_STEP);
+
+    return EXIT_SUCCESS;
+}
+
+static int sd21_cmd_switch_cb(int argc, char **argv)
+{
+    sd21_get_current_position();
+
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    uint8_t defined_position = (uint8_t)atoi(argv[1]);
+
+    switch (defined_position)
+    {
+        case 0: /* SD21_SERVO_POS_OPEN */
+        case 1: /* SD21_SERVO_POS_CLOSE */
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            if (defined_position < SD21_SERVO_POS_NUMOF) {
+                sd21_servo_reach_position(dev, servo_id, defined_position);
+            }
+            break;
+        default:
+            break;
+    }
+
+    return EXIT_SUCCESS;
 }
 
 static int sd21_calib_servo_cmd(int argc, char **argv)
@@ -39,99 +157,51 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
 
     /* Check arguments */
     if (argc != 3) {
-        puts("Bad arguments number !");
+        puts("Bad number of arguments!");
         ret = -1;
         goto sd21_calib_servo_cmd_err;
     }
 
     /* Get board and servo ids */
-    sd21_t dev = atoi(argv[1]);
-    uint8_t servo_id = atoi(argv[2]) - 1;
-
-    /* Display usage */
-    sd21_calib_print_usage(dev, servo_id);
-
-    puts("");
-    puts("=======================");
-    puts("");
+    dev = atoi(argv[1]);
+    servo_id = atoi(argv[2]) - 1;
 
     /* Display current servo name */
     puts(sd21_servo_get_name(dev, servo_id));
 
-    /* Key pressed */
-    char c[2];
+    pf_init_shell_commands(&sd21_shell_commands);
 
-    while (c[0] != 'q') {
-        uint16_t current_position = 0;
-        sd21_servo_get_position(dev, servo_id, &current_position);
+    pf_add_shell_command(&sd21_shell_commands, &cmd_exit_shell);
 
-        /* Print current position on same line */
-        print_str("Current position: ");
-        print_u32_dec(current_position);
-        print_str("    \r");
+    shell_command_t sd21_cmd_opened = {"n", "Opened position", sd21_cmd_opened_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_opened);
 
-        c[0] = getchar();
+    shell_command_t sd21_cmd_closed = {"c", "Closed position", sd21_cmd_closed_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_closed);
 
-        /* useful only for 0 to 9 keys */
-        uint8_t defined_position = (uint8_t)atoi(c);
+    shell_command_t sd21_cmd_next_servo = {"n", "Next servomotor", sd21_cmd_next_servo_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_next_servo);
 
-        switch(c[0]) {
-            /* Opened position */
-            case 'o':
-                sd21_servo_reach_position(dev, servo_id, SD21_SERVO_POS_OPEN);
-                break;
-            /* Closed position */
-            case 'c':
-                sd21_servo_reach_position(dev, servo_id, SD21_SERVO_POS_CLOSE);
-                break;
-            /* Next servomotor */
-            case 'n':
-                servo_id = (servo_id >= sd21_config[dev].servos_nb - 1) ?
-                    sd21_config[dev].servos_nb - 1 : servo_id + 1;
-                printf("\n\n%s\n", sd21_servo_get_name(dev, servo_id));
-                break;
-            /* Previous servomotor */
-            case 'p':
-                servo_id = (servo_id == 0) ? 0 : servo_id - 1;
-                printf("\n\n%s\n", sd21_servo_get_name(dev, servo_id));
-                break;
-            /* Reset position to middle (between opened and closed) */
-            case 'r':
-                sd21_servo_control_position(dev, servo_id, SD21_SERVO_POS_MID);
-                break;
-            /* Add SD21_SERVO_POS_STEP */
-            case '+':
-                sd21_servo_control_position(dev, servo_id, current_position
-                        + SD21_SERVO_POS_STEP);
-                break;
-            /* Substract SD21_SERVO_POS_STEP */
-            case '-':
-                sd21_servo_control_position(dev, servo_id, current_position
-                        - SD21_SERVO_POS_STEP);
-                break;
-            /* Intermediate positions */
-            case '0':   /* SD21_SERVO_POS_OPEN */
-            case '1':   /* SD21_SERVO_POS_CLOSE */
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                if (defined_position < SD21_SERVO_POS_NUMOF)
-                    sd21_servo_reach_position(dev, servo_id, defined_position);
-                break;
-            default:
-                continue;
-        }
+    shell_command_t sd21_cmd_previous_servo = {"n", "Previous servomotor", sd21_cmd_previous_servo_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_previous_servo);
 
-    }
+    shell_command_t sd21_cmd_reset = {"r", "Reset to center position", sd21_cmd_reset_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_reset);
 
-    puts("");
+    #define STR(x) #x
+    shell_command_t sd21_cmd_add = {"+", "Add "STR(SD21_SERVO_POS_STEP)"microseconds to current position", sd21_cmd_add_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_add);
 
-    return ret;
+    shell_command_t sd21_cmd_sub = {"-", "Substract "STR(SD21_SERVO_POS_STEP)"microseconds from current position", sd21_cmd_sub_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_sub);
+    #undef STR
+
+    shell_command_t sd21_cmd_switch = {"switch", "Switch to predefined position <n> (n between 0 and 9)", sd21_cmd_switch_cb};
+    pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_switch);
+
+    /* Push new menu */
+    DEBUG("sd21: Start shell\n");
+    pf_push_shell_commands(&sd21_shell_commands);
 
 sd21_calib_servo_cmd_err:
     return ret;
