@@ -16,6 +16,7 @@
 
 /* Shell command array */
 static shell_command_linked_t pca9548_shell_commands;
+static const char *pca9548_name = "pca9548";
 
 /* Board and servo ids */
 static pca9548_t dev = 0;
@@ -113,7 +114,7 @@ static int pca9548_calib_cmd(int argc, char **argv)
     dev = atoi(argv[1]);
     channel_id = pca9548_get_current_channel(dev);
 
-    pf_init_shell_commands(&pca9548_shell_commands);
+    pf_init_shell_commands(&pca9548_shell_commands, pca9548_name);
 
     pf_add_shell_command(&pca9548_shell_commands, &cmd_exit_shell);
 
