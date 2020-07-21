@@ -78,16 +78,16 @@ int pf_display_json_help(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    puts("{\"cmd\": \"pf_display_json_help()\"}");
+    printf("[");
     shell_command_t * entry = (shell_command_t*)&current_shell_commands;
     for (; entry->name != NULL; entry++) {
         printf(
-            "{\"data\": {\"name\": \"%s\", \"desc\": \"%s\"}}\n",
+            "{\"name\": \"%s\", \"desc\": \"%s\"}, ",
             entry->name,
             entry->desc
         );
     }
-    puts("{\"result\": \"SUCCESS\"}\n");
+    printf("]\n");
     return EXIT_SUCCESS;
 }
 
