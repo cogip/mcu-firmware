@@ -39,19 +39,23 @@ char radio_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static shell_command_linked_t current_shell_commands;
 
 shell_command_linked_t pf_shell_commands;
+static const char *pf_name = "platform";
 
 void pf_push_shell_commands(shell_command_linked_t *shell_commands) {
     shell_commands->previous = current_shell_commands.current;
     memcpy(&current_shell_commands, shell_commands, sizeof(shell_command_linked_t));
+    printf("Enter shell menu: %s\n", current_shell_commands.name);
 }
 
 void pf_pop_shell_commands(void) {
     if(current_shell_commands.previous) {
         memcpy(&current_shell_commands, current_shell_commands.previous, sizeof(shell_command_linked_t));
     }
+    printf("Exit shell menu: %s\n", current_shell_commands.name);
 }
 
-void pf_init_shell_commands(shell_command_linked_t *shell_commands) {
+void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *name) {
+    shell_commands->name = name;
     shell_commands->current = shell_commands;
     shell_commands->previous = NULL;
 
@@ -410,7 +414,6 @@ void pf_init_tasks(void)
         pf_push_shell_commands(&pf_shell_commands);
 
         /* Start shell */
-        DEBUG("platform: Start shell\n");
         shell_run((shell_command_t*)&current_shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
     }
     /* Else start game */
@@ -445,7 +448,7 @@ void pf_init_tasks(void)
 
 void pf_init(void)
 {
-    pf_init_shell_commands(&pf_shell_commands);
+    pf_init_shell_commands(&pf_shell_commands, pf_name);
 
     motor_driver_init(MOTOR_DRIVER_DEV(0));
 

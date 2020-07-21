@@ -18,6 +18,7 @@ static size_t sd21_numof = 0;
 
 /* Shell command array */
 static shell_command_linked_t sd21_shell_commands;
+static const char *sd21_name = "sd21";
 
 /* Board and servo ids */
 static sd21_t dev = 0;
@@ -169,7 +170,7 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
     /* Display current servo name */
     puts(sd21_servo_get_name(dev, servo_id));
 
-    pf_init_shell_commands(&sd21_shell_commands);
+    pf_init_shell_commands(&sd21_shell_commands, sd21_name);
 
     pf_add_shell_command(&sd21_shell_commands, &cmd_exit_shell);
 

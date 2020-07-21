@@ -58,7 +58,10 @@ typedef struct {
 
 /* Shell command array */
 static shell_command_linked_t ctrl_quadpid_speed_shell_commands;
+static const char *quadpid_speed_name = "quadpid_speed";
+
 static shell_command_linked_t ctrl_quadpid_pose_shell_commands;
+static const char *quadpid_pose_name = "quadpid_pose";
 
 /* Quadpid controller */
 static ctrl_quadpid_t* ctrl_quadpid = NULL;
@@ -461,7 +464,7 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
     /* Get the quadpid controller */
     ctrl_quadpid = pf_get_quadpid_ctrl();
 
-    pf_init_shell_commands(&ctrl_quadpid_speed_shell_commands);
+    pf_init_shell_commands(&ctrl_quadpid_speed_shell_commands, quadpid_speed_name);
 
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &cmd_exit_shell);
 
@@ -606,7 +609,7 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
     /* Automatic reverse */
     ctrl_set_allow_reverse((ctrl_t*)ctrl_quadpid, TRUE);
 
-    pf_init_shell_commands(&ctrl_quadpid_pose_shell_commands);
+    pf_init_shell_commands(&ctrl_quadpid_pose_shell_commands, quadpid_pose_name);
 
     pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &cmd_exit_shell);
 

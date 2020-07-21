@@ -16,6 +16,7 @@
 
 /* Shell command array */
 static shell_command_linked_t pln_shell_commands;
+static const char *pln_name = "planner";
 
 static uint8_t calib_path_index;
 
@@ -120,7 +121,7 @@ static int pln_calib_cmd(int argc, char **argv)
 
     pln_start(ctrl);
 
-    pf_init_shell_commands(&pln_shell_commands);
+    pf_init_shell_commands(&pln_shell_commands, pln_name);
 
     pf_add_shell_command(&pln_shell_commands, &cmd_exit_shell);
 
@@ -143,7 +144,7 @@ static int pln_calib_cmd(int argc, char **argv)
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_launch_action);
 
     /* Push new menu */
-    DEBUG("planner: Start shell\n");
+    puts("Enter shell menu: planner");
     pf_push_shell_commands(&pln_shell_commands);
 
 pln_calib_cmd_err:
