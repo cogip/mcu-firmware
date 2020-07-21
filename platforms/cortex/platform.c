@@ -48,10 +48,11 @@ void pf_push_shell_commands(shell_command_linked_t *shell_commands) {
 }
 
 void pf_pop_shell_commands(void) {
+    printf("Exit shell menu: %s\n", current_shell_commands.name);
     if(current_shell_commands.previous) {
         memcpy(&current_shell_commands, current_shell_commands.previous, sizeof(shell_command_linked_t));
     }
-    printf("Exit shell menu: %s\n", current_shell_commands.name);
+    printf("Enter shell menu: %s\n", current_shell_commands.name);
 }
 
 void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *name) {
@@ -82,16 +83,19 @@ int pf_display_json_help(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    printf("[");
+    printf("{\"name\": \"%s\", \"entries\": [", current_shell_commands.name);
     shell_command_t * entry = (shell_command_t*)&current_shell_commands;
     for (; entry->name != NULL; entry++) {
+        if(entry != (shell_command_t*)&current_shell_commands) {
+            printf(", ");
+        }
         printf(
-            "{\"name\": \"%s\", \"desc\": \"%s\"}, ",
+            "{\"cmd\": \"%s\", \"desc\": \"%s\"}",
             entry->name,
             entry->desc
         );
     }
-    printf("]\n");
+    printf("]}\n");
     return EXIT_SUCCESS;
 }
 
