@@ -4,7 +4,7 @@
 #include <thread.h>
 
 /* RIOT includes */
-#define ENABLE_DEBUG        (1)
+#define ENABLE_DEBUG        (0)
 #include "debug.h"
 #include <motor_driver.h>
 #include <periph/adc.h>
