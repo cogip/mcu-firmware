@@ -113,7 +113,7 @@ shell_command_t cmd_exit_shell = {
 };
 
 shell_command_t cmd_help_json = {
-    "help_json", "Display available commands in JSON format",
+    "_help_json", "Display available commands in JSON format",
     pf_display_json_help
 };
 
