@@ -8,8 +8,6 @@
 #include "xtimer.h"
 
 /* Project includes */
-#define ENABLE_DEBUG        (0)
-#include "debug.h"
 #include "platform.h"
 #include "calibration/calib_quadpid.h"
 
@@ -466,8 +464,6 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&ctrl_quadpid_speed_shell_commands, quadpid_speed_name);
 
-    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &cmd_exit_shell);
-
     shell_command_t ctrl_quadpid_speed_cmd_linear_speed = {"l", "Linear speed characterization", ctrl_quadpid_speed_cmd_linear_speed_cb};
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_linear_speed);
 
@@ -501,8 +497,9 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
     shell_command_t ctrl_quadpid_speed_cmd_reset_coef = {"r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)", ctrl_quadpid_speed_cmd_reset_coef_cb};
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_reset_coef);
 
+    pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &cmd_exit_shell);
+
     /* Push new menu */
-    DEBUG("ctrl_quadpid_speed: Start shell\n");
     pf_push_shell_commands(&ctrl_quadpid_speed_shell_commands);
 
 ctrl_quadpid_calib_servo_cmd_err:
@@ -611,8 +608,6 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&ctrl_quadpid_pose_shell_commands, quadpid_pose_name);
 
-    pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &cmd_exit_shell);
-
     shell_command_t ctrl_quadpid_pose_cmd_reset = {"r", "Send reset", ctrl_quadpid_pose_cmd_reset_cb};
     pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_reset);
 
@@ -622,8 +617,9 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
     shell_command_t ctrl_quadpid_pose_cmd_angular_kp = {"A", "Speed angular Kp calibration to <kp>", ctrl_quadpid_pose_cmd_angular_kp_cb};
     pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_angular_kp);
 
+    pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &cmd_exit_shell);
+
     /* Push new menu */
-    DEBUG("ctrl_quadpid_pose: Start shell\n");
     pf_push_shell_commands(&ctrl_quadpid_pose_shell_commands);
 
 ctrl_quadpid_calib_servo_cmd_err:
