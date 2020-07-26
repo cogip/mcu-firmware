@@ -115,20 +115,35 @@ static int pca9548_calib_cmd(int argc, char **argv)
     pf_init_shell_commands(&pca9548_shell_commands, pca9548_name);
 
 #ifdef PCA9548_CALIB_CB
-    shell_command_t pca9548_cmd_defined_callback = {"a", "Run defined callback", pca9548_cmd_defined_callback_cb};
+    shell_command_t pca9548_cmd_defined_callback = {
+        "a", "Run defined callback",
+        pca9548_cmd_defined_callback_cb
+    };
     pf_add_shell_command(&pca9548_shell_commands, &pln_cmd_defined_callback);
 #endif /* PCA9548_CALIB_CB */
 
-    shell_command_t pca9548_cmd_next_channel = {"n", "Next channel", pca9548_cmd_next_channel_cb};
+    shell_command_t pca9548_cmd_next_channel = {
+        "n", "Next channel",
+        pca9548_cmd_next_channel_cb
+    };
     pf_add_shell_command(&pca9548_shell_commands, &pca9548_cmd_next_channel);
 
-    shell_command_t pca9548_cmd_previous_channel = {"p", "Previous channel", pca9548_cmd_previous_channel_cb};
+    shell_command_t pca9548_cmd_previous_channel = {
+        "p", "Previous channel",
+        pca9548_cmd_previous_channel_cb
+    };
     pf_add_shell_command(&pca9548_shell_commands, &pca9548_cmd_previous_channel);
 
-    shell_command_t pca9548_cmd_refresh = {"r", "Refresh", pca9548_cmd_refresh_cb};
+    shell_command_t pca9548_cmd_refresh = {
+        "r", "Refresh",
+        pca9548_cmd_refresh_cb
+    };
     pf_add_shell_command(&pca9548_shell_commands, &pca9548_cmd_refresh);
 
-    shell_command_t pca9548_cmd_switch = {"switch", "Switch to channel <n> (n between 0 and 9)", pca9548_cmd_switch_cb};
+    shell_command_t pca9548_cmd_switch = {
+        "switch", "Switch to channel <n> (n between 0 and 9)",
+        pca9548_cmd_switch_cb
+    };
     pf_add_shell_command(&pca9548_shell_commands, &pca9548_cmd_switch);
 
     pf_add_shell_command(&pca9548_shell_commands, &cmd_exit_shell);
@@ -147,6 +162,5 @@ void pca9548_calib_init(void)
         "pcc", "pca9548 calibration <id>",
         pca9548_calib_cmd
     };
-
     pf_add_shell_command(&pf_shell_commands, &cmd);
 }
