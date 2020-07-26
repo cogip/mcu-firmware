@@ -41,7 +41,7 @@
 
 #define PF_START_COUNTDOWN  3
 
-#define NB_SHELL_COMMANDS   14
+#define NB_SHELL_COMMANDS   15
 
 #define GAME_DURATION_SEC   100
 
@@ -139,8 +139,10 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command);
 int pf_display_json_help(int argc, char **argv);
 int pf_exit_shell(int argc, char **argv);
+int pf_print_pose_current_cb(int argc, char **argv);
 extern shell_command_t cmd_help_json;
 extern shell_command_t cmd_exit_shell;
+extern shell_command_t cmd_print_pose_current;
 
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);

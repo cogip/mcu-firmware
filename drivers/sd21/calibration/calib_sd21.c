@@ -172,8 +172,6 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&sd21_shell_commands, sd21_name);
 
-    pf_add_shell_command(&sd21_shell_commands, &cmd_exit_shell);
-
     shell_command_t sd21_cmd_opened = {"n", "Opened position", sd21_cmd_opened_cb};
     pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_opened);
 
@@ -200,8 +198,9 @@ static int sd21_calib_servo_cmd(int argc, char **argv)
     shell_command_t sd21_cmd_switch = {"switch", "Switch to predefined position <n> (n between 0 and 9)", sd21_cmd_switch_cb};
     pf_add_shell_command(&sd21_shell_commands, &sd21_cmd_switch);
 
+    pf_add_shell_command(&sd21_shell_commands, &cmd_exit_shell);
+
     /* Push new menu */
-    DEBUG("sd21: Start shell\n");
     pf_push_shell_commands(&sd21_shell_commands);
 
 sd21_calib_servo_cmd_err:
@@ -216,7 +215,7 @@ void sd21_calib_init(const sd21_conf_t* sd21_config_new)
     sd21_numof = sizeof(*sd21_config) / sizeof(sd21_config[0]);
 
     shell_command_t cmd = { 
-        "sc", "sd21_calib <board_id> <servo_id>",
+        "sc", "sd21 calibration <board_id> <servo_id>",
         sd21_calib_servo_cmd
     };
 
