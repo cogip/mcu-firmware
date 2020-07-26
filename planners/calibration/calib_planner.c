@@ -8,8 +8,6 @@
 #include "xtimer.h"
 
 /* Project includes */
-#define ENABLE_DEBUG        (0)
-#include "debug.h"
 #include "planner.h"
 #include "platform.h"
 #include "calibration/calib_planner.h"
@@ -123,8 +121,6 @@ static int pln_calib_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&pln_shell_commands, pln_name);
 
-    pf_add_shell_command(&pln_shell_commands, &cmd_exit_shell);
-
     shell_command_t pln_cmd_go_next = {"n", "Go to next position", pln_cmd_go_next_cb};
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_next);
 
@@ -143,8 +139,9 @@ static int pln_calib_cmd(int argc, char **argv)
     shell_command_t pln_cmd_launch_action = {"a", "Launch action", pln_cmd_launch_action_cb};
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_launch_action);
 
+    pf_add_shell_command(&pln_shell_commands, &cmd_exit_shell);
+
     /* Push new menu */
-    puts("Enter shell menu: planner");
     pf_push_shell_commands(&pln_shell_commands);
 
 pln_calib_cmd_err:

@@ -7,8 +7,6 @@
 #include "fmt.h"
 
 /* Project includes */
-#define ENABLE_DEBUG        (0)
-#include "debug.h"
 #include "board.h"
 #include "pca9548.h"
 #include "platform.h"
@@ -116,8 +114,6 @@ static int pca9548_calib_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&pca9548_shell_commands, pca9548_name);
 
-    pf_add_shell_command(&pca9548_shell_commands, &cmd_exit_shell);
-
 #ifdef PCA9548_CALIB_CB
     shell_command_t pca9548_cmd_defined_callback = {"a", "Run defined callback", pca9548_cmd_defined_callback_cb};
     pf_add_shell_command(&pca9548_shell_commands, &pln_cmd_defined_callback);
@@ -135,8 +131,9 @@ static int pca9548_calib_cmd(int argc, char **argv)
     shell_command_t pca9548_cmd_switch = {"switch", "Switch to channel <n> (n between 0 and 9)", pca9548_cmd_switch_cb};
     pf_add_shell_command(&pca9548_shell_commands, &pca9548_cmd_switch);
 
+    pf_add_shell_command(&pca9548_shell_commands, &cmd_exit_shell);
+
     /* Push new menu */
-    DEBUG("pca9548: Start shell\n");
     pf_push_shell_commands(&pca9548_shell_commands);
 
 pca9548_calib_servo_cmd_err:
@@ -147,7 +144,7 @@ pca9548_calib_servo_cmd_err:
 void pca9548_calib_init(void)
 {
     shell_command_t cmd = { 
-        "pcc", "pcc <pca9548_id>",
+        "pcc", "pca9548 calibration <id>",
         pca9548_calib_cmd
     };
 
