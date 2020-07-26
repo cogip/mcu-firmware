@@ -5,6 +5,7 @@
 
 /* RIOT includes */
 #include "fmt.h"
+#include "thread.h"
 #include "xtimer.h"
 
 /* Project includes */
@@ -101,6 +102,10 @@ static impulse_cfg_t impulse_cfg__speed_pid_angular = {
 
 static impulse_cfg_t* current_impulse_cfg = NULL;
 static int seq_finished = FALSE;
+
+/* Thread vars */
+static char quadpid_thread_stack[THREAD_STACKSIZE_DEFAULT];
+static kernel_pid_t ctrl_quadpid_thread_command_pid = 0;
 
 /**
  * @brief Impulse function
@@ -274,57 +279,105 @@ static void pid_reset_all(ctrl_quadpid_t *ctrl_quadpid)
     ctrl_quadpid->quadpid_params.angular_pose_pid  = pid_initial;
 }
 
+static bool check_running_thread(void) {
+    if (ctrl_quadpid_thread_command_pid == 0) {
+        return FALSE;
+    }
+    kernel_pid_t status = thread_getstatus(ctrl_quadpid_thread_command_pid);
+    if (status != (int)STATUS_NOT_FOUND && status != STATUS_STOPPED)
+    {
+        printf("Error: Previous command still running.\n");
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static void run_cmd_in_thread(void *(func)(void *arg)) {
+    ctrl_quadpid_thread_command_pid = thread_create(
+        quadpid_thread_stack,
+        sizeof(quadpid_thread_stack),
+        THREAD_PRIORITY_MAIN - 4, 0,
+        func,
+        NULL,
+        "command thread"
+    );
+}
+
+static void *ctrl_quadpid_speed_thread_cmd_linear_speed(void *arg)
+{
+    (void)arg;
+    /* Register speed order generation function to the controller */
+    ctrl_register_speed_order_cb((ctrl_t *)ctrl_quadpid, func_impulse_on_speed_order);
+    current_impulse_cfg = &impulse_cfg__tf_ident_linear;
+    calib_seq_identify_robot_tf((ctrl_t *)ctrl_quadpid);
+    ctrl_register_speed_order_cb((ctrl_t *)ctrl_quadpid, NULL);
+    return 0;
+}
+
 static int ctrl_quadpid_speed_cmd_linear_speed_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
+    if(check_running_thread()) return EXIT_FAILURE;
+    run_cmd_in_thread(ctrl_quadpid_speed_thread_cmd_linear_speed);
+    return EXIT_SUCCESS;
+}
 
+static void *ctrl_quadpid_speed_thread_cmd_angular_speed(void *arg)
+{
+    (void)arg;
     /* Register speed order generation function to the controller */
     ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
-    current_impulse_cfg = &impulse_cfg__tf_ident_linear;
+    current_impulse_cfg = &impulse_cfg__tf_ident_angular;
     calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
     ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-
-    return EXIT_SUCCESS;
+    return 0;
 }
 
 static int ctrl_quadpid_speed_cmd_angular_speed_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-
-    /* Register speed order generation function to the controller */
-    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
-    current_impulse_cfg = &impulse_cfg__tf_ident_angular;
-    calib_seq_identify_robot_tf((ctrl_t*)ctrl_quadpid);
-    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-
+    if(check_running_thread()) return EXIT_FAILURE;
+    run_cmd_in_thread(ctrl_quadpid_speed_thread_cmd_angular_speed);
     return EXIT_SUCCESS;
+}
+
+static void *ctrl_quadpid_speed_thread_cmd_linear_pid(void *arg)
+{
+    (void)arg;
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
+    current_impulse_cfg = &impulse_cfg__speed_pid_linear;
+    calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
+    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
+    return 0;
 }
 
 static int ctrl_quadpid_speed_cmd_linear_pid_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
+    if(check_running_thread()) return EXIT_FAILURE;
+    run_cmd_in_thread(ctrl_quadpid_speed_thread_cmd_linear_pid);
+    return EXIT_SUCCESS;
+}
 
+static void *ctrl_quadpid_speed_thread_cmd_angular_pid(void *arg)
+{
+    (void)arg;
     ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
-    current_impulse_cfg = &impulse_cfg__speed_pid_linear;
+    current_impulse_cfg = &impulse_cfg__speed_pid_angular;
     calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
     ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-
-    return EXIT_SUCCESS;
+    return 0;
 }
 
 static int ctrl_quadpid_speed_cmd_angular_pid_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-
-    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, func_impulse_on_speed_order);
-    current_impulse_cfg = &impulse_cfg__speed_pid_angular;
-    calib_seq_speed_pid_only((ctrl_t*)ctrl_quadpid);
-    ctrl_register_speed_order_cb((ctrl_t*)ctrl_quadpid, NULL);
-
+    if(check_running_thread()) return EXIT_FAILURE;
+    run_cmd_in_thread(ctrl_quadpid_speed_thread_cmd_angular_pid);
     return EXIT_SUCCESS;
 }
 
@@ -335,6 +388,8 @@ static int ctrl_quadpid_speed_cmd_set_linear_kp_cb(int argc, char **argv)
         puts("Bad number of arguments!");
         return EXIT_FAILURE;
     }
+
+    if(check_running_thread()) return EXIT_FAILURE;
 
     double kp = (double)atof(argv[1]);
     if (kp == 0.0) {
@@ -354,6 +409,8 @@ static int ctrl_quadpid_speed_cmd_set_linear_ki_cb(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    if(check_running_thread()) return EXIT_FAILURE;
+
     double ki = (double)atof(argv[1]);
     if (ki == 0.0) {
         puts("Bad value for Ki\n");
@@ -371,6 +428,8 @@ static int ctrl_quadpid_speed_cmd_set_linear_kd_cb(int argc, char **argv)
         puts("Bad number of arguments!");
         return EXIT_FAILURE;
     }
+
+    if(check_running_thread()) return EXIT_FAILURE;
 
     double kd = (double)atof(argv[1]);
     if (kd == 0.0) {
@@ -390,6 +449,8 @@ static int ctrl_quadpid_speed_cmd_set_angular_kp_cb(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    if(check_running_thread()) return EXIT_FAILURE;
+
     double kp = (double)atof(argv[1]);
     if (kp == 0.0) {
         puts("Bad value for Kp\n");
@@ -407,6 +468,8 @@ static int ctrl_quadpid_speed_cmd_set_angular_ki_cb(int argc, char **argv)
         puts("Bad number of arguments!");
         return EXIT_FAILURE;
     }
+
+    if(check_running_thread()) return EXIT_FAILURE;
 
     double ki = (double)atof(argv[1]);
     if (ki == 0.0) {
@@ -426,6 +489,8 @@ static int ctrl_quadpid_speed_cmd_set_angular_kd_cb(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    if(check_running_thread()) return EXIT_FAILURE;
+
     double kd = (double)atof(argv[1]);
     if (kd == 0.0) {
         puts("Bad value for Kd\n");
@@ -440,6 +505,8 @@ static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
+
+    if(check_running_thread()) return EXIT_FAILURE;
 
     pid_reset_all(ctrl_quadpid);
 
@@ -563,10 +630,19 @@ static int ctrl_quadpid_pose_cmd_reset_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
+    if(check_running_thread()) return EXIT_FAILURE;
+
     encoder_reset();
     puts("<<<< RESET >>>>");
 
     return EXIT_SUCCESS;
+}
+
+static void *ctrl_quadpid_pose_thread_cmd_linear_kp(void *arg)
+{
+    (void)arg;
+    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    return 0;
 }
 
 static int ctrl_quadpid_pose_cmd_linear_kp_cb(int argc, char **argv)
@@ -583,13 +659,23 @@ static int ctrl_quadpid_pose_cmd_linear_kp_cb(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    if(check_running_thread()) return EXIT_FAILURE;
+
     encoder_reset();
     ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
     pose_linear_index ^= 1;
     ctrl_quadpid->quadpid_params.linear_pose_pid.kp = kp;
-    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+
+    run_cmd_in_thread(ctrl_quadpid_pose_thread_cmd_linear_kp);
 
     return EXIT_SUCCESS;
+}
+
+static void *ctrl_quadpid_pose_thread_cmd_angular_kp(void *arg)
+{
+    (void)arg;
+    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    return 0;
 }
 
 static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
@@ -606,11 +692,14 @@ static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    if(check_running_thread()) return EXIT_FAILURE;
+
     encoder_reset();
     ctrl_set_pose_current((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
     pose_linear_index ^= 1;
     ctrl_quadpid->quadpid_params.angular_pose_pid.kp = kp;
-    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+
+    run_cmd_in_thread(ctrl_quadpid_pose_thread_cmd_angular_kp);
 
     return EXIT_SUCCESS;
 }
