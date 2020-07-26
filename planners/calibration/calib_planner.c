@@ -121,22 +121,40 @@ static int pln_calib_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&pln_shell_commands, pln_name);
 
-    shell_command_t pln_cmd_go_next = {"n", "Go to next position", pln_cmd_go_next_cb};
+    shell_command_t pln_cmd_go_next = {
+        "n", "Go to next position",
+        pln_cmd_go_next_cb
+    };
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_next);
 
-    shell_command_t pln_cmd_go_previous = {"p", "Go to previous position", pln_cmd_go_previous_cb};
+    shell_command_t pln_cmd_go_previous = {
+        "p", "Go to previous position",
+        pln_cmd_go_previous_cb
+    };
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_previous);
 
-    shell_command_t pln_cmd_go_start = {"s", "Go back to start position", pln_cmd_go_start_cb};
+    shell_command_t pln_cmd_go_start = {
+        "s", "Go back to start position",
+        pln_cmd_go_start_cb
+    };
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_start);
 
-    shell_command_t pln_cmd_select_next = {"N", "Select next position", pln_cmd_select_next_cb};
+    shell_command_t pln_cmd_select_next = {
+        "N", "Select next position",
+        pln_cmd_select_next_cb
+    };
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_select_next);
 
-    shell_command_t pln_cmd_select_previous = {"P", "Select previous position", pln_cmd_select_previous_cb};
+    shell_command_t pln_cmd_select_previous = {
+        "P", "Select previous position",
+        pln_cmd_select_previous_cb
+    };
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_select_previous);
 
-    shell_command_t pln_cmd_launch_action = {"a", "Launch action", pln_cmd_launch_action_cb};
+    shell_command_t pln_cmd_launch_action = {
+        "a", "Launch action",
+        pln_cmd_launch_action_cb
+    };
     pf_add_shell_command(&pln_shell_commands, &pln_cmd_launch_action);
 
     pf_add_shell_command(&pln_shell_commands, &cmd_exit_shell);
@@ -156,6 +174,5 @@ void pln_calib_init(void)
         "pc", "Planner calibration",
         pln_calib_cmd
     };
-
     pf_add_shell_command(&pf_shell_commands, &cmd_calib_pln);
 }
