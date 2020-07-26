@@ -64,6 +64,7 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
         shell_commands->shell_commands[i] = (shell_command_t){ NULL, NULL, NULL };
     }
     shell_commands->shell_commands[0] = cmd_help_json;
+    shell_commands->shell_commands[1] = cmd_print_pose_current;
 }
 
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
@@ -107,6 +108,27 @@ int pf_exit_shell(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+int pf_print_pose_current(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    printf(
+        "{"
+        "\"mode\": \"%u\", "
+        "\"O\": \"%lf\", "
+        "\"x\": \"%lf\", "
+        "\"y\": \"%lf\""
+        "}\n",
+        ctrl_quadpid.control.current_mode,
+        ctrl_quadpid.control.pose_current.O,
+        ctrl_quadpid.control.pose_current.x,
+        ctrl_quadpid.control.pose_current.y
+    );
+    return EXIT_SUCCESS;
+}
+
+
 shell_command_t cmd_exit_shell = {
     "exit", "Exit planner calibration",
     pf_exit_shell
@@ -116,6 +138,12 @@ shell_command_t cmd_help_json = {
     "_help_json", "Display available commands in JSON format",
     pf_display_json_help
 };
+
+shell_command_t cmd_print_pose_current = {
+    "_pose", "Print current pose",
+    pf_print_pose_current
+};
+
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
 {
