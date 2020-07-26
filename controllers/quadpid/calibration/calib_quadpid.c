@@ -464,37 +464,70 @@ static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&ctrl_quadpid_speed_shell_commands, quadpid_speed_name);
 
-    shell_command_t ctrl_quadpid_speed_cmd_linear_speed = {"l", "Linear speed characterization", ctrl_quadpid_speed_cmd_linear_speed_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_linear_speed = {
+        "l", "Linear speed characterization",
+        ctrl_quadpid_speed_cmd_linear_speed_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_linear_speed);
 
-    shell_command_t ctrl_quadpid_speed_cmd_angular_speed = {"a", "Angular speed characterization", ctrl_quadpid_speed_cmd_angular_speed_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_angular_speed = {
+        "a", "Angular speed characterization",
+        ctrl_quadpid_speed_cmd_angular_speed_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_angular_speed);
 
-    shell_command_t ctrl_quadpid_speed_cmd_linear_pid = {"L", "Linear speed PID test", ctrl_quadpid_speed_cmd_linear_pid_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_linear_pid = {
+        "L", "Linear speed PID test",
+        ctrl_quadpid_speed_cmd_linear_pid_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_linear_pid);
 
-    shell_command_t ctrl_quadpid_speed_cmd_angular_pid = {"A", "Angular speed PID test", ctrl_quadpid_speed_cmd_angular_pid_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_angular_pid = {
+        "A", "Angular speed PID test",
+        ctrl_quadpid_speed_cmd_angular_pid_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_angular_pid);
 
-    shell_command_t ctrl_quadpid_speed_cmd_set_linear_kp = {"p", "Set linear Kp to <kp>", ctrl_quadpid_speed_cmd_set_linear_kp_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_set_linear_kp = {
+        "p", "Set linear Kp to <kp>",
+        ctrl_quadpid_speed_cmd_set_linear_kp_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_linear_kp);
 
-    shell_command_t ctrl_quadpid_speed_cmd_set_linear_ki = {"i", "Set linear Ki to <ki>", ctrl_quadpid_speed_cmd_set_linear_ki_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_set_linear_ki = {
+        "i", "Set linear Ki to <ki>",
+        ctrl_quadpid_speed_cmd_set_linear_ki_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_linear_ki);
 
-    shell_command_t ctrl_quadpid_speed_cmd_set_linear_kd = {"d", "Set linear Kd to <kd>", ctrl_quadpid_speed_cmd_set_linear_kd_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_set_linear_kd = {
+        "d", "Set linear Kd to <kd>",
+        ctrl_quadpid_speed_cmd_set_linear_kd_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_linear_kd);
 
-    shell_command_t ctrl_quadpid_speed_cmd_set_angular_kp = {"P", "Set angular Kp to <kp>", ctrl_quadpid_speed_cmd_set_angular_kp_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_set_angular_kp = {
+        "P", "Set angular Kp to <kp>",
+        ctrl_quadpid_speed_cmd_set_angular_kp_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_angular_kp);
 
-    shell_command_t ctrl_quadpid_speed_cmd_set_angular_ki = {"I", "Set angular Ki to <ki>", ctrl_quadpid_speed_cmd_set_angular_ki_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_set_angular_ki = {
+        "I", "Set angular Ki to <ki>",
+        ctrl_quadpid_speed_cmd_set_angular_ki_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_angular_ki);
 
-    shell_command_t ctrl_quadpid_speed_cmd_set_angular_kd = {"D", "Set angular Kd to <kd>", ctrl_quadpid_speed_cmd_set_angular_kd_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_set_angular_kd = {
+        "D", "Set angular Kd to <kd>",
+        ctrl_quadpid_speed_cmd_set_angular_kd_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_set_angular_kd);
 
-    shell_command_t ctrl_quadpid_speed_cmd_reset_coef = {"r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)", ctrl_quadpid_speed_cmd_reset_coef_cb};
+    shell_command_t ctrl_quadpid_speed_cmd_reset_coef = {
+        "r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)",
+        ctrl_quadpid_speed_cmd_reset_coef_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &ctrl_quadpid_speed_cmd_reset_coef);
 
     pf_add_shell_command(&ctrl_quadpid_speed_shell_commands, &cmd_exit_shell);
@@ -608,13 +641,22 @@ static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
 
     pf_init_shell_commands(&ctrl_quadpid_pose_shell_commands, quadpid_pose_name);
 
-    shell_command_t ctrl_quadpid_pose_cmd_reset = {"r", "Send reset", ctrl_quadpid_pose_cmd_reset_cb};
+    shell_command_t ctrl_quadpid_pose_cmd_reset = {
+        "r", "Send reset",
+        ctrl_quadpid_pose_cmd_reset_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_reset);
 
-    shell_command_t ctrl_quadpid_pose_cmd_linear_kp = {"a", "Speed linear Kp calibration to <kp>", ctrl_quadpid_pose_cmd_linear_kp_cb};
+    shell_command_t ctrl_quadpid_pose_cmd_linear_kp = {
+        "a", "Speed linear Kp calibration to <kp>",
+        ctrl_quadpid_pose_cmd_linear_kp_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_linear_kp);
 
-    shell_command_t ctrl_quadpid_pose_cmd_angular_kp = {"A", "Speed angular Kp calibration to <kp>", ctrl_quadpid_pose_cmd_angular_kp_cb};
+    shell_command_t ctrl_quadpid_pose_cmd_angular_kp = {
+        "A", "Speed angular Kp calibration to <kp>",
+        ctrl_quadpid_pose_cmd_angular_kp_cb
+    };
     pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &ctrl_quadpid_pose_cmd_angular_kp);
 
     pf_add_shell_command(&ctrl_quadpid_pose_shell_commands, &cmd_exit_shell);
@@ -634,7 +676,6 @@ void ctrl_quadpid_calib_init(void)
         "cs", "Speed PID coefficients tuning",
         ctrl_quadpid_speed_calib_cmd
     };
-
     pf_add_shell_command(&pf_shell_commands, &cmd_calib_speed);
 
     /* Add pose calibration command */
@@ -642,6 +683,5 @@ void ctrl_quadpid_calib_init(void)
         "cp", "Pose PID coefficients tuning",
         ctrl_quadpid_pose_calib_cmd
     };
-
     pf_add_shell_command(&pf_shell_commands, &cmd_calib_pose);
 }
