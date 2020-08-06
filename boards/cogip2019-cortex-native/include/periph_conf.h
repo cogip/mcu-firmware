@@ -11,6 +11,8 @@
 #ifndef PERIPH_CONF_H
 #define PERIPH_CONF_H
 
+#include "periph_board.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -78,8 +80,10 @@ extern "C" {
  * @{
  */
 #ifndef I2C_NUMOF
-#define I2C_NUMOF (1U)
+#define I2C_NUMOF (8U)
 #endif
+
+static const i2c_conf_t i2c_config[I2C_NUMOF];
 /** @} */
 
 /**
