@@ -399,11 +399,18 @@ void pf_init(void)
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
     /* Init starter and camp selection GPIOs */
-    assert(gpio_init(GPIO_CAMP, GPIO_IN) == 0);
-    assert(gpio_init(GPIO_STARTER, GPIO_IN_PU) == 0);
+    if (gpio_init(GPIO_CAMP, GPIO_IN) == 0) {
+        puts("WARNING: GPIO_CAMP not initialized !");
+    }
+    if (gpio_init(GPIO_STARTER, GPIO_IN_PU) == 0) {
+        puts("WARNING: GPIO_STARTER not initialized !");
+    }
 
     /* Debug LED */
-    assert(gpio_init(GPIO_DEBUG_LED, GPIO_OUT) == 0);
+    if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT) == 0) {
+        puts("WARNING: GPIO_DEBUG_LED not initialized !");
+    }
+
     gpio_clear(GPIO_DEBUG_LED);
 
     pca9548_init();
