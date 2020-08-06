@@ -61,7 +61,7 @@ extern "C" {
 #define HBRIDGE_MOTOR_RIGHT 1
 
 /* Quadrature decoding */
-#define QDEC_MODE           QDEC_X1
+#define QDEC_MODE           QDEC_X4
 #define QDEC_LEFT_POLARITY  1
 #define QDEC_RIGHT_POLARITY 1
 
