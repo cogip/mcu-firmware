@@ -28,8 +28,9 @@
 #include <motor_driver.h>
 
 /* Project includes */
-#include "vl53l0x.h"
 #include "pca9548.h"
+#include "vl53l0x.h"
+#include "periph_conf.h"
 
 #ifdef __cplusplus
 extern "C" {
