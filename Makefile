@@ -1,5 +1,6 @@
 # List all applications
 apps := $(foreach dir,$(wildcard applications/*/Makefile),$(subst Makefile, , $(dir)))
+boards := $(foreach dir,$(wildcard boards/*),$(subst boards/, , $(dir)))
 
 .PHONY: all clean distclean doc docman doclatex docclean help $(apps)
 
@@ -12,8 +13,9 @@ distclean: PF_TARGET = distclean
 distclean: $(apps)	## Clean build and configuration for all applications
 
 $(apps):
-	$(MAKE) -j$$(nproc) -C $@ $(PF_TARGET)
-
+	@for board in $(boards); do \
+		$(MAKE) BOARD="$$board" -j$$(nproc) -C $@ $(PF_TARGET) || exit 1; \
+	done
 
 doc: 			## Generate doxygen
 	"$(MAKE)" -BC doc/doxygen
