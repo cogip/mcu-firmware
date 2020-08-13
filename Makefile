@@ -14,7 +14,7 @@ distclean: $(apps)	## Clean build and configuration for all applications
 
 $(apps):
 	@for board in $(boards); do \
-		$(MAKE) BOARD="$$board" -j$$(nproc) -C $@ $(PF_TARGET) || exit 1; \
+		$(MAKE) BOARD="$$board" -j$$(nproc) -C $@ $(PF_TARGET) || exit $$?; \
 	done
 
 doc: 			## Generate doxygen
