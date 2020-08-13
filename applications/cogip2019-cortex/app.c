@@ -17,6 +17,7 @@
 #include "pca9548.h"
 #include "planner.h"
 #include "app.h"
+#include "app_conf.h"
 #include "platform.h"
 #include "sd21.h"
 

@@ -1,5 +1,4 @@
-#ifndef PLATFORM_H_
-#define PLATFORM_H_
+#pragma once
 
 #define SD21_SERVO_NUMOF        12
 #define SD21_SERVO_POS_NUMOF    3
@@ -135,33 +134,6 @@ static const app_sensor_t app_sensors[VL53L0X_NUMOF] = {
         .angle_offset = 45,
         .distance_offset = ROBOT_MARGIN,
     },
-};
-
-static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
-        .linear_speed_pid = {
-            .kp = 150.,
-            .ki = 2,
-            .kd = 0.,
-        },
-        .angular_speed_pid = {
-            .kp = 150.,
-            .ki = 2,
-            .kd = 0.,
-        },
-        .linear_pose_pid = {
-            .kp = 1,
-            .ki = 0.,
-            .kd = 2,
-        },
-        .angular_pose_pid = {
-            .kp = 1,
-            .ki = 0.,
-            .kd = 5,
-        },
-
-        .min_distance_for_angular_switch = 3,   // mm,
-        .min_angle_for_pose_reached = 2,        // deg,
-        .regul = CTRL_REGUL_POSE_DIST,
 };
 
 static const sd21_conf_t sd21_config[] = {
@@ -451,8 +423,6 @@ static const sd21_conf_t sd21_config[] = {
 
 void app_calib_read_sensors(pca9548_t dev);
 
-#define SD21_NUMOF     (sizeof(sd21_config) / sizeof(sd21_config[0]))
-
 void app_init(void);
 void app_init_tasks(void);
 int app_read_sensors(void);
@@ -474,5 +444,3 @@ void app_arms_close(void);
 void app_goldenium_hold(void);
 void app_goldenium_take(void);
 void app_goldenium_drop(void);
-
-#endif /* PLATFORM_H_ */

@@ -16,6 +16,7 @@
 #include "pca9548.h"
 #include "planner.h"
 #include "app.h"
+#include "app_conf.h"
 #include "platform.h"
 
 int app_is_game_launched(void)

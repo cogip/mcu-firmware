@@ -10,6 +10,7 @@ ifneq (,$(filter robotics,$(USEMODULE)))
 endif
 
 INCLUDES += -I$(APPDIR)/include/
+
 ifneq (,$(filter ctrl,$(USEMODULE)))
 	INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
 endif

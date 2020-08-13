@@ -26,6 +26,10 @@ ifeq (,$(filter $(CPU),native))
 	.DEFAULT_GOAL := world
 	RAM_LEN_K := $(shell echo $(RAM_LEN) | sed 's/K//')
 	RAMSIZE := $(shell echo $$(( $(RAM_LEN_K) * $(KB) )) )
+
+	INCLUDES += -I$(APPDIR)/include/real/
+else
+	INCLUDES += -I$(APPDIR)/include/simulation/
 endif
 
 .PHONY: world
