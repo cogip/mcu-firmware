@@ -1,5 +1,4 @@
-#ifndef CALIB_PLN_H_
-#define CALIB_PLN_H_
+#pragma once
 
 #include "ctrl/quadpid.h"
 
@@ -9,5 +8,3 @@
  * @return
  */
 void pln_calib_init(void);
-
-#endif /* CALIB_PLN_H_ */

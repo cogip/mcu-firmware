@@ -8,8 +8,7 @@
  * This file is copied from RIOT-OS native board sources
  */
 
-#ifndef PERIPH_CONF_H
-#define PERIPH_CONF_H
+#pragma once
 
 #include "periph_board.h"
 
@@ -128,5 +127,4 @@ static const i2c_conf_t i2c_config[I2C_NUMOF];
 }
 #endif
 
-#endif /* PERIPH_CONF_H */
 /** @} */

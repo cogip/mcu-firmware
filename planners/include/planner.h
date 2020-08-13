@@ -23,8 +23,7 @@
  * @author      Yannick GICQUEL <yannick.gicquel@gmail.com>
  * @author      Stephen CLYMANS <sclymans@gmail.com>
  */
-#ifndef PLANNER_H_
-#define PLANNER_H_
+#pragma once
 
 /* Project includes */
 #include "ctrl.h"
@@ -72,5 +71,3 @@ void *task_planner(void *arg);
  * @return
  */
 void pln_set_allow_change_path_pose(uint8_t value);
-
-#endif /* PLANNER_H_ */
