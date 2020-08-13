@@ -1,5 +1,4 @@
-#ifndef ODOMETRY_H_
-#define ODOMETRY_H_
+#pragma once
 
 #include <stdint.h>
 
@@ -39,5 +38,3 @@ void odometry_setup(double d);
 void odometry_update(pose_t *p,
                      polar_t *robot_speed,
                      const uint8_t approximation);
-
-#endif /* ODOMETRY_H_ */

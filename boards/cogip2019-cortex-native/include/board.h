@@ -19,8 +19,7 @@
  * @author      Ludwig Knüpfer <ludwig.knuepfer@fu-berlin.de>
  */
 
-#ifndef BOARD_H
-#define BOARD_H
+#pragma once
 
 #include <stdint.h>
 
@@ -263,4 +262,3 @@ static const uint8_t vl53l0x_channel[VL53L0X_NUMOF] = {
 #endif
 
 /** @} */
-#endif /* BOARD_H */

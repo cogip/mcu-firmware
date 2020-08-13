@@ -1,5 +1,4 @@
-#ifndef PERIPH_BOARD_H
-#define PERIPH_BOARD_H
+#pragma once
 
 #include "periph/dev_enums.h"
 
@@ -43,5 +42,4 @@ typedef struct {
 }
 #endif
 
-#endif /* PERIPH_BOARD_H */
 /** @} */

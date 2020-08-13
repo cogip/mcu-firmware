@@ -1,5 +1,4 @@
-#ifndef OBSTACLE_H_
-#define OBSTACLE_H_
+#pragma once
 
 #include "avoidance.h"
 #include "platform.h"
@@ -33,5 +32,3 @@ static const polygon_t obstacle_borders = {
     },
     .count = 4,
 };
-
-#endif /* OBSTACLE_H_ */

@@ -23,8 +23,7 @@
  *
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  */
-#ifndef VL53L0X_H
-#define VL53L0X_H
+#pragma once
 
 /* RIOT includes */
 #include "periph/i2c.h"
@@ -91,5 +90,4 @@ void vl53l0x_reset(void);
  */
 uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev);
 
-#endif  /* VL53L0X_H */
 /** @} */

@@ -52,8 +52,7 @@
  * @author      Stephen CLYMANS <sclymans@gmail.com>
  */
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#pragma once
 
 /* Standard includes */
 #include <stdint.h>
@@ -398,5 +397,4 @@ ctrl_mode_t ctrl_get_mode(ctrl_t* ctrl);
  */
 void *task_ctrl_update(void *arg);
 
-#endif /* CONTROLLER_H_ */
 /** @} */

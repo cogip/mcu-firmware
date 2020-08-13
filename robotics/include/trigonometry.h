@@ -1,5 +1,4 @@
-#ifndef TRIGONOMETRY_H_
-#define TRIGONOMETRY_H_
+#pragma once
 
 #ifndef M_PI
 #define M_PI   3.14159265358979323846  /* pi */
@@ -12,5 +11,3 @@
 
 double limit_angle_rad(double O);
 double limit_angle_deg(double O);
-
-#endif /* TRIGONOMETRY_H_ */

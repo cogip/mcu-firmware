@@ -1,5 +1,4 @@
-#ifndef AVOIDANCE_H_
-#define AVOIDANCE_H_
+#pragma once
 
 /* Standard includes */
 #include <stdint.h>
@@ -67,5 +66,3 @@ static const polygon_t borders = {
     },
     .count = 4,
 };
-
-#endif /* AVOIDANCE_H_ */

@@ -1,5 +1,4 @@
-#ifndef UTILS_H_
-#define UTILS_H_
+#pragma once
 
 typedef void (*func_cb_t)(void);
 
@@ -13,5 +12,3 @@ typedef void (*func_cb_t)(void);
 
 /* set interval to 20 milli-second */
 #define THREAD_PERIOD_INTERVAL (20U * US_PER_MS)
-
-#endif /* UTILS_H_ */

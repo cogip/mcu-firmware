@@ -24,8 +24,7 @@
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  */
 
-#ifndef PCA9548_H_
-#define PCA9548_H_
+#pragma once
 
 /* RIOT includes */
 #include "periph/i2c.h"
@@ -75,5 +74,4 @@ void pca9548_set_current_channel(pca9548_t dev, uint8_t channel);
  */
 uint8_t pca9548_get_current_channel(pca9548_t dev);
 
-#endif /* PCA9548_H_ */
 /** @} */
