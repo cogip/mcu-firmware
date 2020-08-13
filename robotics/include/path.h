@@ -1,5 +1,4 @@
-#ifndef PATH_H_
-#define PATH_H_
+#pragma once
 
 #include "utils.h"
 #include "odometry.h"
@@ -33,5 +32,3 @@ void path_increment_current_pose_idx(path_t *path);
 void path_decrement_current_pose_idx(path_t *path);
 uint8_t path_get_current_max_speed(const path_t *path);
 void path_horizontal_mirror_all_pos(const path_t *path);
-
-#endif /* PATH_H_ */

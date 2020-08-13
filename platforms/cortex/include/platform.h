@@ -1,5 +1,4 @@
-#ifndef PLATFORM_COMMON_H_
-#define PLATFORM_COMMON_H_
+#pragma once
 
 /* Project includes */
 #include "board.h"
@@ -155,5 +154,3 @@ static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
     .blocking_speed_error_treshold      = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
     .blocking_cycles_max                = PF_CTRL_BLOCKING_NB_ITERATIONS,
 };
-
-#endif  /* PLATFORM_COMMON_H_ */

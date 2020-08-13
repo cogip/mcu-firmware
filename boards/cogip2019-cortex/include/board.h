@@ -18,8 +18,7 @@
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  */
 
-#ifndef BOARD_H
-#define BOARD_H
+#pragma once
 
 #include "motor_driver.h"
 #include "vl53l0x.h"
@@ -157,5 +156,4 @@ void board_init(void);
 }
 #endif
 
-#endif /* BOARD_H */
 /** @} */

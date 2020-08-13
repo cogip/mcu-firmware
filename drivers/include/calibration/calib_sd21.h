@@ -1,5 +1,4 @@
-#ifndef CALIB_SD21_H_
-#define CALIB_SD21_H_
+#pragma once
 
 #include "sd21.h"
 
@@ -14,5 +13,3 @@
  * @return
  */
 void sd21_calib_init(void);
-
-#endif /* CALIB_SD21_H_ */

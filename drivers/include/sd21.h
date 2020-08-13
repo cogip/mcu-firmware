@@ -45,8 +45,7 @@
  * @author      Stephen CLYMANS <sclymans@gmail.com>
  */
 
-#ifndef SD21_H_
-#define SD21_H_
+#pragma once
 
 /* RIOT includes */
 #include "periph/i2c.h"
@@ -218,5 +217,4 @@ int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t* position);
  */
 const char* sd21_servo_get_name(sd21_t dev, uint8_t servo_id);
 
-#endif /* SD21_H_ */
 /** @} */

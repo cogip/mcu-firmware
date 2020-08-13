@@ -34,8 +34,7 @@
  * @author      Stephen CLYMANS <sclymans@gmail.com>
  */
 
-#ifndef QUADPID_H_
-#define QUADPID_H_
+#pragma once
 
 /* Standard includes */
 #include <stdint.h>
@@ -170,5 +169,4 @@ static const ctrl_configuration_t ctrl_quadpid_conf = {
     .ctrl_mode_cb[CTRL_MODE_PASSTHROUGH] = ctrl_quadpid_nopid,
 };
 
-#endif  /* QUADPID_H_ */
 /** @} */

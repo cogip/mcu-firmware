@@ -18,8 +18,7 @@
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  */
 
-#ifndef PERIPH_CONF_H
-#define PERIPH_CONF_H
+#pragma once
 
 #include "periph_cpu.h"
 
@@ -290,5 +289,4 @@ static const spi_conf_t spi_config[] = {
 }
 #endif
 
-#endif /* PERIPH_CONF_H */
 /** @} */
