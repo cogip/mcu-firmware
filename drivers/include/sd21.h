@@ -51,6 +51,12 @@
 #include "periph/i2c.h"
 
 /**
+ * Note:    All following macros can be overrided by setting CFLAGS variable in
+ *          Makefile. Example
+ *              CFLAGS += -DSD21_SERVO_POS_NUMOF=3
+ */
+
+/**
  * @brief   Maximum number of servos by board
  */
 #ifndef SD21_I2C_RETRIES
