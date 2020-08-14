@@ -401,6 +401,8 @@ void app_init(void)
 
     app_fixed_obstacles_init();
 
+    sd21_init(sd21_config_app);
+
     const uint8_t camp_left = pf_is_camp_left();
     /* 2019: Camp left is purple, right is yellow */
     printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");

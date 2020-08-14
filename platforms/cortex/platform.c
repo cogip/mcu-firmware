@@ -2,7 +2,7 @@
 #include <thread.h>
 
 /* RIOT includes */
-#define ENABLE_DEBUG        (0)
+#define ENABLE_DEBUG        (1)
 #include "debug.h"
 #include "log.h"
 #include "shell.h"
@@ -18,7 +18,6 @@
 #include "calibration/calib_pca9548.h"
 #include "calibration/calib_planner.h"
 #include "calibration/calib_quadpid.h"
-#include "calibration/calib_sd21.h"
 #endif /* CALIBRATION */
 
 /* Controller */
@@ -438,6 +437,5 @@ void pf_init(void)
     ctrl_quadpid_calib_init();
     pca9548_calib_init();
     pln_calib_init();
-    sd21_calib_init();
 #endif /* CALIBRATION */
 }
