@@ -9,7 +9,7 @@ static size_t sd21_numof = 0;
 
 static const sd21_servo_t* sd21_get_servo(sd21_t dev, uint8_t servo_id)
 {
-    assert(sd21_config == NULL);
+    assert(sd21_config != NULL);
 
     assert(dev < sd21_numof);
 
