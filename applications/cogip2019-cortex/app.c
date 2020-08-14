@@ -408,8 +408,6 @@ void app_init(void)
     printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
 
 #ifdef CALIBRATION
-    ctrl_quadpid_calib_init();
-    pln_calib_init();
     sd21_calib_init();
 #endif /* CALIBRATION */
 }
