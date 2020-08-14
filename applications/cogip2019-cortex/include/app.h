@@ -136,7 +136,7 @@ static const app_sensor_t app_sensors[VL53L0X_NUMOF] = {
     },
 };
 
-static const sd21_conf_t sd21_config[] = {
+static const sd21_conf_t sd21_config_app[] = {
     {   /* SD12 ID0 */
         .i2c_dev_id = 0,
         .i2c_address = (0xC2 >> 1),
