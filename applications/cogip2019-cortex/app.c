@@ -408,7 +408,7 @@ void app_init(void)
     printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
 
 #ifdef CALIBRATION
-    sd21_calib_init();
+    sd21_calib_init(sd21_config_app);
 #endif /* CALIBRATION */
 }
 

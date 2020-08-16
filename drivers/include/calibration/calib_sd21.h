@@ -10,6 +10,8 @@
 /**
  * @brief Initialize SD21 calibration, mainly adds commands to RIOT shell.
  *
+ * @param[in]   sd21_config_new     sd21 input configuration
+ *
  * @return
  */
-void sd21_calib_init(void);
+void sd21_calib_init(const sd21_conf_t* sd21_config_new);
