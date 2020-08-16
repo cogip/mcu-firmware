@@ -7,9 +7,12 @@
 #include "fmt.h"
 
 /* Project includes */
-#include "app.h"
+#include "platform.h"
 #include "sd21.h"
 #include "calibration/calib_sd21.h"
+
+static const sd21_conf_t* sd21_config = NULL;
+static size_t sd21_numof = 0;
 
 static void sd21_calib_print_usage(sd21_t dev, uint8_t servo_id)
 {
@@ -135,8 +138,12 @@ sd21_calib_servo_cmd_err:
 }
 
 
-void sd21_calib_init(void)
+void sd21_calib_init(const sd21_conf_t* sd21_config_new)
 {
+    sd21_config = sd21_config_new;
+
+    sd21_numof = sizeof(*sd21_config) / sizeof(sd21_config[0]);
+
     shell_command_t cmd = { 
         "sc", "sd21_calib <board_id> <servo_id>",
         sd21_calib_servo_cmd
