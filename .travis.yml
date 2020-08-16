@@ -14,3 +14,5 @@ before_script:
 script:
       - make
       - make distclean
+      - make MCUFIRMWARE_OPTIONS=calibration
+      - make distclean
