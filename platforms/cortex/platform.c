@@ -58,6 +58,7 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands) {
     for(uint8_t i = 0 ; i < NB_SHELL_COMMANDS ; i++) {
         shell_commands->shell_commands[i] = (shell_command_t){ NULL, NULL, NULL };
     }
+    shell_commands->shell_commands[0] = cmd_help_json;
 }
 
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
@@ -72,6 +73,24 @@ void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_
     shell_commands->shell_commands[command_id++] = *command;
 }
 
+int pf_display_json_help(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    puts("{\"cmd\": \"pf_display_json_help()\"}");
+    shell_command_t * entry = (shell_command_t*)&current_shell_commands;
+    for (; entry->name != NULL; entry++) {
+        printf(
+            "{\"data\": {\"name\": \"%s\", \"desc\": \"%s\"}}\n",
+            entry->name,
+            entry->desc
+        );
+    }
+    puts("{\"result\": \"SUCCESS\"}\n");
+    return EXIT_SUCCESS;
+}
+
 int pf_exit_shell(int argc, char **argv)
 {
     (void)argc;
@@ -83,6 +102,11 @@ int pf_exit_shell(int argc, char **argv)
 shell_command_t cmd_exit_shell = {
     "exit", "Exit planner calibration",
     pf_exit_shell
+};
+
+shell_command_t cmd_help_json = {
+    "help_json", "Display available commands in JSON format",
+    pf_display_json_help
 };
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
