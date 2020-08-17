@@ -137,7 +137,9 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands);
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command);
 int pf_display_json_help(int argc, char **argv);
 int pf_exit_shell(int argc, char **argv);
+extern shell_command_t cmd_help_json;
 extern shell_command_t cmd_exit_shell;
+
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
 int pf_is_camp_left(void);
