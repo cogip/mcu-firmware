@@ -41,7 +41,7 @@
 
 #define PF_START_COUNTDOWN  3
 
-#define NB_SHELL_COMMANDS   15
+#define NB_SHELL_COMMANDS   16
 
 #define GAME_DURATION_SEC   100
 
@@ -143,6 +143,7 @@ int pf_print_pose_current_cb(int argc, char **argv);
 extern shell_command_t cmd_help_json;
 extern shell_command_t cmd_exit_shell;
 extern shell_command_t cmd_print_pose_current;
+extern shell_command_t cmd_print_dyn_obstacles;
 
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);

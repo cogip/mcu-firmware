@@ -371,3 +371,34 @@ pose_t dijkstra(uint16_t target, uint16_t index)
 dijkstra_error_no_destination:
     return start_position;
 }
+
+int avoidance_print_dyn_obstacles(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    printf("[");
+
+    for(int i = nb_polygons ; i < nb_dyn_polygons ; i++) {
+        polygon_t *polygon = &(polygons[i]);
+
+        printf("[");
+        for(int j = 0 ; j < polygon->count ; j++) {
+            if(j > 0) {
+                printf(", ");
+            }
+            printf(
+                "{"
+                "\"x\": \"%lf\", "
+                "\"y\": \"%lf\""
+                "}",
+                polygon->points[j].x,
+                polygon->points[j].y
+            );
+        }
+        printf("]");
+    }
+    printf("]\n");
+
+    return EXIT_SUCCESS;
+}

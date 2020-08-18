@@ -65,6 +65,7 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
     }
     shell_commands->shell_commands[0] = cmd_help_json;
     shell_commands->shell_commands[1] = cmd_print_pose_current;
+    shell_commands->shell_commands[2] = cmd_print_dyn_obstacles;
 }
 
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
@@ -128,7 +129,6 @@ int pf_print_pose_current(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-
 shell_command_t cmd_exit_shell = {
     "exit", "Exit planner calibration",
     pf_exit_shell
@@ -142,6 +142,11 @@ shell_command_t cmd_help_json = {
 shell_command_t cmd_print_pose_current = {
     "_pose", "Print current pose",
     pf_print_pose_current
+};
+
+shell_command_t cmd_print_dyn_obstacles = {
+    "_dyn_obstacles", "Print dynamic obstacles",
+    avoidance_print_dyn_obstacles
 };
 
 
