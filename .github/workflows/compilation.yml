@@ -1,0 +1,37 @@
+name: Compilation Workflow
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  compilation:
+
+    runs-on: ubuntu-20.04
+
+    env:
+      RIOTBASE: ${GITHUB_WORKSPACE}/RIOT
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+      with:
+        repository: 'RIOT-OS/RIOT'
+        ref: '2020.07'
+        path: 'RIOT'
+    - name: Install toolchain
+      run: |
+        sudo apt-get install -qq build-essential gcc-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi
+        gcc --version
+        arm-none-eabi-gcc --version
+    - name: Compile
+      run: |
+        make
+        make distclean
+        make MCUFIRMWARE_OPTIONS=calibration
+        make distclean
