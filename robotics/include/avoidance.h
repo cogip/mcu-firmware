@@ -44,6 +44,7 @@ uint8_t is_segment_crossing_line(pose_t a, pose_t b, pose_t o, pose_t p);
 uint8_t is_segment_crossing_segment(pose_t a, pose_t b, pose_t o, pose_t p);
 uint8_t is_point_on_segment(pose_t a, pose_t b, pose_t o);
 int check_polygon_collision(pose_t *point);
+int avoidance_print_dyn_obstacles(int argc, char **argv);
 
 static const polygon_t borders = {
     .points = {
