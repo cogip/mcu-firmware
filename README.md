@@ -16,7 +16,7 @@ As this firmware and RIOT-OS are both evolving, two git repositories lives next 
 both are required to generate the firwmare binaries.
 
 ## Build status
-[![Build Status](https://travis-ci.org/cogip/mcu-firmware.svg?branch=master)](https://travis-ci.org/cogip/mcu-firmware)
+![Build Status](https://github.com/cogip/mcu-firmware/workflows/Compilation%20Workflow/badge.svg)
 
 # Environment setup
 
