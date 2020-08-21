@@ -27,12 +27,13 @@
 #pragma once
 
 /* Project includes */
-#include "board.h"
 #include "ctrl.h"
 #include "ctrl/quadpid.h"
 #include "odometry.h"
 #include "path.h"
+#include "pca9548.h"
 #include "utils.h"
+#include "vl53l0x.h"
 
 /* RIOT includes */
 #include <periph/qdec.h>
@@ -126,6 +127,68 @@ typedef struct {
     uint8_t front_fork_occupied;
 } pf_actions_context_t;
 
+/*
+ * VL53L0X I2C configuration.
+ * Identical for all as a PCA9548 I2C switch is used.
+ */
+static const vl53l0x_conf_t vl53l0x_config[] = {
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+    {
+        .i2c_dev    = 1,
+        .i2c_addr   = 0x29,
+    },
+};
+
+/* VL53L0X number */
+#define VL53L0X_NUMOF     (sizeof(vl53l0x_config) / sizeof(vl53l0x_config[0]))
+
+/* PCA9548 I2C switch configuration */
+static const pca9548_conf_t pca9548_config[] = {
+    {
+        .i2c_dev_id         = 1,
+        .i2c_address        = 0x70,
+        .channel_numof      = PCA9548_CHANNEL_MAX,
+    },
+};
+
+/* PCA9548 number */
+#define PCA9548_NUMOF      (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
+
+/*
+ * Relation between VL53L0X id (index of the array)
+ * and its PCA9548 port id (value of the array)
+ */
+static const uint8_t vl53l0x_channel[VL53L0X_NUMOF] = {
+    0,
+    1,
+    2,
+    6,
+    4,
+    5,
+};
+
+/*
+ * Physical placement of each VL53L0X sensor on the robot
+ */
 static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
     {
         .angle_offset = 135,
