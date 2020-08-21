@@ -22,10 +22,6 @@ ifneq (,$(filter robotics,$(USEMODULE)))
 	INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
 endif
 
-ifneq (,$(filter vl53l0x-api,$(USEPKG)))
-	DIRS += $(MCUFIRMWAREBASE)/pkg/vl53l0x-api/
-endif
-
 include $(MCUFIRMWAREBASE)/drivers/Makefile.dep
 ifneq (,$(filter ctrl,$(USEMODULE)))
 	include $(MCUFIRMWAREBASE)/controllers/Makefile.dep
