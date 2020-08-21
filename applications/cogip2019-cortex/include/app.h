@@ -9,7 +9,6 @@
 #include "board.h"
 #include "platform.h"
 #include "sd21.h"
-#include "vl53l0x.h"
 
 /*
  * Machine parameters
