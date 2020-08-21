@@ -1,3 +1,29 @@
+/*
+ * Copyright (C) 2020 COGIP Robotics association
+ *
+ * This file is subject to the terms and conditions of the GNU Lesser
+ * General Public License v2.1. See the file LICENSE in the top level
+ * directory for more details.
+ */
+
+/**
+ * @defgroup    platforms_cortex Cortex platform
+ * @ingroup     platforms_cortex
+ * @brief       COGIP robotic base platform definition
+ * @{
+ *
+ * @file
+ * @brief       Define hardware properties of Cortex platform.
+ *              Units:
+ *              * time:         s
+ *              * distance:     mm
+ *              * speed:        mm/s
+ *              * acceleration: mm/s²
+ *
+ *
+ * @author      Gilles DOFFE <g.doffe@gmail.com>
+ */
+
 #pragma once
 
 /* Project includes */
@@ -9,15 +35,17 @@
 #include "utils.h"
 
 /* RIOT includes */
-#include "periph/qdec.h"
-#include "shell.h"
+#include <periph/qdec.h>
+#include <shell.h>
 
 #define ROBOT_ID            0
 #define ROBOT_WIDTH         354                 /* units: mm */
 #define ROBOT_MARGIN        (ROBOT_WIDTH / 2)
 
-/* To be computed :
- *  - PULSE_PER_MM		: Number of pulses per mm of coding wheel
+/* Motorization bloc mechanical characteristics
+ *
+ * To be computed :
+ *  - PULSE_PER_MM		    : Number of pulses per mm of coding wheel
  *  - WHEELS_DISTANCE		: Distance between coding wheels in pulses
  *  - PULSE_PER_DEGREE		: Number of pulses per degree of coding wheel
  *
@@ -28,9 +56,9 @@
  * Must be known and defined :
  *  - WHEELS_ENCODER_RESOLUTION	: Number of pulses by turn of coding wheels
  */
-
 #define WHEELS_ENCODER_RESOLUTION   2000
-/* WHEELS_PERIMETER = pi*WHEELS_DIAMETER
+/* Intermediate calculation
+ * WHEELS_PERIMETER = pi*WHEELS_DIAMETER
  * PULSE_PER_MM = WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
  */
 #define PULSE_PER_MM        10.624
@@ -39,36 +67,43 @@
 /* WHEELS_DISTANCE*2*pi pulses for 360 deg. Thus 51.76 pulses per deg */
 #define PULSE_PER_DEGREE    51.91
 
+/* Delay to press a key before the robot starts */
 #define PF_START_COUNTDOWN  3
 
+/* Shell commands array size */
 #define NB_SHELL_COMMANDS   16
 
+/* Timeout before completely stop the robot once started */
 #define GAME_DURATION_SEC   100
 
+/* Camp selection for path mirroring */
 #define CAMP_LEFT 1
 #define CAMP_RIGHT 0
 
+/* Acceleration and speed profiles */
 #define MAX_ACC     5
 #define MAX_SPEED   10
-
 #define LOW_SPEED           (MAX_SPEED / 4)
 #define NORMAL_SPEED        (MAX_SPEED / 2)
 
+/* Anti-blocking */
 #define PF_CTRL_BLOCKING_SPEED_TRESHOLD         1
 #define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD     1.5
 #define PF_CTRL_BLOCKING_NB_ITERATIONS          40
 
+/* Borders in which the robot can move */
 #define AVOIDANCE_BORDER_X_MIN  (-1500 + ROBOT_MARGIN + 10)
 #define AVOIDANCE_BORDER_X_MAX  (AVOIDANCE_BORDER_X_MIN * -1)
 #define AVOIDANCE_BORDER_Y_MIN  0 + (ROBOT_MARGIN + 10)
 #define AVOIDANCE_BORDER_Y_MAX  2000 - (ROBOT_MARGIN)
-
+/* Borders in which an obstacle can be placed */
 #define OBSTACLE_BORDER_X_MIN   AVOIDANCE_BORDER_X_MIN
 #define OBSTACLE_BORDER_X_MAX   AVOIDANCE_BORDER_X_MAX
 #define OBSTACLE_BORDER_Y_MIN   AVOIDANCE_BORDER_Y_MIN
 #define OBSTACLE_BORDER_Y_MAX   AVOIDANCE_BORDER_Y_MAX
-
+/* Obstacle size */
 #define OBSTACLE_DYN_SIZE                   800
+/* Detection thresholds */
 #define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10
 #define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200
 
