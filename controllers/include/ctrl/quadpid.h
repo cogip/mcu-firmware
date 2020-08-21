@@ -162,7 +162,6 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command);
  */
 static const ctrl_configuration_t ctrl_quadpid_conf = {
     .ctrl_mode_cb[CTRL_MODE_STOP] = ctrl_quadpid_stop,
-    .ctrl_mode_cb[CTRL_MODE_IDLE] = NULL,
     .ctrl_mode_cb[CTRL_MODE_BLOCKED] = ctrl_quadpid_stop,
     .ctrl_mode_cb[CTRL_MODE_RUNNING] = ctrl_quadpid_ingame,
     .ctrl_mode_cb[CTRL_MODE_RUNNING_SPEED] = ctrl_quadpid_running_speed,
