@@ -4,8 +4,11 @@ export NATIVEINCLUDES += -I$(RIOTBASE)/core/include/
 export NATIVEINCLUDES += -I$(RIOTBASE)/drivers/include/
 
 # mcu-firmware includes
+export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
 export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
 export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/pkg/vl53l0x-api/include/
+export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)/include
+export NATIVEINCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
 export NATIVEINCLUDES += -I$(PKGDIRBASE)/vl53l0x-api/include/
 
 # toolchain:
