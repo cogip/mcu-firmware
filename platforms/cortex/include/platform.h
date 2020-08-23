@@ -72,7 +72,7 @@
 #define PF_START_COUNTDOWN  3
 
 /* Shell commands array size */
-#define NB_SHELL_COMMANDS   16
+#define NB_SHELL_COMMANDS   17
 
 /* Timeout before completely stop the robot once started */
 #define GAME_DURATION_SEC   100
@@ -103,7 +103,7 @@
 #define OBSTACLE_BORDER_Y_MIN   AVOIDANCE_BORDER_Y_MIN
 #define OBSTACLE_BORDER_Y_MAX   AVOIDANCE_BORDER_Y_MAX
 /* Obstacle size */
-#define OBSTACLE_DYN_SIZE                   800
+#define OBSTACLE_DYN_SIZE                   400
 /* Detection thresholds */
 #define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10
 #define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200
@@ -229,6 +229,7 @@ struct shell_command_linked {
 };
 
 extern shell_command_linked_t pf_shell_commands;
+extern int pf_shm_key;
 
 /* TODO: These functions/structs should be moved to common code */
 void pf_push_shell_commands(shell_command_linked_t *shell_commands);
@@ -242,6 +243,7 @@ extern shell_command_t cmd_help_json;
 extern shell_command_t cmd_exit_shell;
 extern shell_command_t cmd_print_pose_current;
 extern shell_command_t cmd_print_dyn_obstacles;
+extern shell_command_t cmd_set_shm_key;
 
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);
