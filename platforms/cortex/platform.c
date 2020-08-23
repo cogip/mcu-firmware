@@ -42,6 +42,9 @@ static shell_command_linked_t current_shell_commands;
 shell_command_linked_t pf_shell_commands;
 static const char *pf_name = "platform";
 
+/* Shared memory key used to communicate with the simulator */
+int pf_shm_key = 0;
+
 void pf_push_shell_commands(shell_command_linked_t *shell_commands) {
     shell_commands->previous = current_shell_commands.current;
     memcpy(&current_shell_commands, shell_commands, sizeof(shell_command_linked_t));
@@ -67,6 +70,7 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
     shell_commands->shell_commands[0] = cmd_help_json;
     shell_commands->shell_commands[1] = cmd_print_pose_current;
     shell_commands->shell_commands[2] = cmd_print_dyn_obstacles;
+    shell_commands->shell_commands[3] = cmd_set_shm_key;
 }
 
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
@@ -130,6 +134,19 @@ int pf_print_pose_current(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+int pf_set_shm_key(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    pf_shm_key = atoi(argv[1]);
+
+    return EXIT_SUCCESS;
+}
+
 shell_command_t cmd_exit_shell = {
     "exit", "Exit planner calibration",
     pf_exit_shell
@@ -148,6 +165,11 @@ shell_command_t cmd_print_pose_current = {
 shell_command_t cmd_print_dyn_obstacles = {
     "_dyn_obstacles", "Print dynamic obstacles",
     avoidance_print_dyn_obstacles
+};
+
+shell_command_t cmd_set_shm_key = {
+    "_set_shm_key", "Set shared memory key to communicate with simulator",
+    pf_set_shm_key
 };
 
 
