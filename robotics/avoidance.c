@@ -379,8 +379,12 @@ int avoidance_print_dyn_obstacles(int argc, char **argv)
 
     printf("[");
 
-    for(int i = nb_polygons ; i < nb_dyn_polygons ; i++) {
+    for(int i = nb_polygons ; i < nb_polygons + nb_dyn_polygons ; i++) {
         polygon_t *polygon = &(polygons[i]);
+
+        if(i > nb_polygons) {
+            printf(", ");
+        }
 
         printf("[");
         for(int j = 0 ; j < polygon->count ; j++) {
