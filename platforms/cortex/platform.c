@@ -1,6 +1,7 @@
 /* System includes */
 #include <thread.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* RIOT includes */
 #define ENABLE_DEBUG        (0)
