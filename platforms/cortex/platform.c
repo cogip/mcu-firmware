@@ -121,15 +121,27 @@ int pf_print_pose_current(int argc, char **argv)
 
     printf(
         "{"
-        "\"mode\": \"%u\", "
-        "\"O\": \"%lf\", "
-        "\"x\": \"%lf\", "
-        "\"y\": \"%lf\""
+          "\"mode\": \"%u\", "
+          "\"pose_current\": "
+          "{"
+            "\"O\": \"%lf\", "
+            "\"x\": \"%lf\", "
+            "\"y\": \"%lf\""
+          "}, "
+          "\"pose_order\": "
+          "{"
+            "\"O\": \"%lf\", "
+            "\"x\": \"%lf\", "
+            "\"y\": \"%lf\""
+          "}"
         "}\n",
         ctrl_quadpid.control.current_mode,
         ctrl_quadpid.control.pose_current.O,
         ctrl_quadpid.control.pose_current.x,
-        ctrl_quadpid.control.pose_current.y
+        ctrl_quadpid.control.pose_current.y,
+        ctrl_quadpid.control.pose_order.O,
+        ctrl_quadpid.control.pose_order.x,
+        ctrl_quadpid.control.pose_order.y
     );
     return EXIT_SUCCESS;
 }
