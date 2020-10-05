@@ -67,7 +67,7 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
         shell_commands->shell_commands[i] = (shell_command_t){ NULL, NULL, NULL };
     }
     shell_commands->shell_commands[0] = cmd_help_json;
-    shell_commands->shell_commands[1] = cmd_print_pose_current;
+    shell_commands->shell_commands[1] = cmd_print_state;
     shell_commands->shell_commands[2] = cmd_print_dyn_obstacles;
     shell_commands->shell_commands[3] = cmd_set_shm_key;
 }
@@ -113,7 +113,7 @@ int pf_exit_shell(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-int pf_print_pose_current(int argc, char **argv)
+int pf_print_state(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -132,6 +132,17 @@ int pf_print_pose_current(int argc, char **argv)
             "\"O\": \"%lf\", "
             "\"x\": \"%lf\", "
             "\"y\": \"%lf\""
+          "}, "
+          "\"cycle\": \"%"PRIu32"\", "
+          "\"speed_current\": "
+          "{"
+            "\"distance\": \"%lf\", "
+            "\"angle\": \"%lf\""
+          "}, "
+          "\"speed_order\": "
+          "{"
+            "\"distance\": \"%lf\", "
+            "\"angle\": \"%lf\""
           "}"
         "}\n",
         ctrl_quadpid.control.current_mode,
@@ -140,8 +151,14 @@ int pf_print_pose_current(int argc, char **argv)
         ctrl_quadpid.control.pose_current.y,
         ctrl_quadpid.control.pose_order.O,
         ctrl_quadpid.control.pose_order.x,
-        ctrl_quadpid.control.pose_order.y
+        ctrl_quadpid.control.pose_order.y,
+        ctrl_quadpid.control.current_cycle,
+        ctrl_quadpid.control.speed_current.distance,
+        ctrl_quadpid.control.speed_current.angle,
+        ctrl_quadpid.control.speed_order.distance,
+        ctrl_quadpid.control.speed_order.angle
     );
+
     return EXIT_SUCCESS;
 }
 
@@ -168,9 +185,9 @@ shell_command_t cmd_help_json = {
     pf_display_json_help
 };
 
-shell_command_t cmd_print_pose_current = {
-    "_pose", "Print current pose",
-    pf_print_pose_current
+shell_command_t cmd_print_state = {
+    "_state", "Print current state",
+    pf_print_state
 };
 
 shell_command_t cmd_print_dyn_obstacles = {
