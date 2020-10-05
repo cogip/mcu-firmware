@@ -238,10 +238,10 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command);
 int pf_display_json_help(int argc, char **argv);
 int pf_exit_shell(int argc, char **argv);
-int pf_print_pose_current_cb(int argc, char **argv);
+int pf_print_state_cb(int argc, char **argv);
 extern shell_command_t cmd_help_json;
 extern shell_command_t cmd_exit_shell;
-extern shell_command_t cmd_print_pose_current;
+extern shell_command_t cmd_print_state;
 extern shell_command_t cmd_print_dyn_obstacles;
 extern shell_command_t cmd_set_shm_key;
 
