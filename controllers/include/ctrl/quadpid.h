@@ -8,7 +8,7 @@
 
 /**
  * @defgroup    quadpid Quadruple PID actuator motion controller
- * @ingroup     controller
+ * @ingroup     controllers
  * @brief       Actuators Quadruple PID  motion speed and position controller
  *
  * The QuadPID controller aims to control actuators motions according to a
