@@ -7,8 +7,8 @@
  */
 
 /**
- * @defgroup    controller Actuators motion controller
- * @ingroup     robotics
+ * @defgroup    controller Common
+ * @ingroup     controllers
  * @brief       Actuators motion speed and position controller
  *
  * The controller aims to control actuators motions according to algorithms

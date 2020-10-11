@@ -7,8 +7,8 @@
  */
 
 /**
- * @defgroup    planner Trajectory planification module
- * @ingroup     robotics
+ * @defgroup    planner Simple trajectory planification module
+ * @ingroup     planners
  * @brief       Trajectory planification module
  *
  * The planner, asociated to a controller, generate the robot course according
