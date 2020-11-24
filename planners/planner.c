@@ -134,23 +134,15 @@ void *task_planner(void *arg)
     pose_t pose_order = { 0, 0, 0 };
     pose_t initial_pose = { 0, 0, 0 };
     polar_t speed_order = { 0, 0 };
-    const uint8_t camp_left = pf_is_camp_left();
     const path_pose_t *current_path_pos = NULL;
 
-    ctrl_t *ctrl = pf_get_ctrl();
+    printf("Game planner starting\n");
 
-    printf("Game planner started\n");
-    /* 2019: Camp left is purple, right is yellow */
-    printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
+    ctrl_t *ctrl = pf_get_ctrl();
 
     path_t* path = pf_get_path();
     if (!path) {
         printf("machine has no path\n");
-    }
-
-    /* mirror the points in place if selected camp is left */
-    if (camp_left) {
-        path_horizontal_mirror_all_pos(path);
     }
 
     /* object context initialisation */
@@ -162,6 +154,8 @@ void *task_planner(void *arg)
     ctrl_set_speed_order(ctrl, &speed_order);
     ctrl_set_pose_to_reach(ctrl, &pose_order);
     ctrl_set_pose_reached(ctrl);
+
+    printf("Game planner started\n");
 
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
