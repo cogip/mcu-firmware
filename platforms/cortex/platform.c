@@ -34,7 +34,6 @@ char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_thread_stack[THREAD_STACKSIZE_LARGE];
 char start_shell_thread_stack[THREAD_STACKSIZE_LARGE];
-char radio_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 /* Shell command array */
 static shell_command_linked_t current_shell_commands;
