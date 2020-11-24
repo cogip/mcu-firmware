@@ -30,12 +30,6 @@
 
 static app_actions_context_t app_actions_ctx = {0};
 
-int app_is_game_launched(void)
-{
-    /* Starter switch */
-    return !gpio_read(GPIO_STARTER);
-}
-
 int app_is_camp_left(void)
 {
     /* Color switch for coords translations */
