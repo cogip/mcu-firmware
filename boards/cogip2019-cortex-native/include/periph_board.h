@@ -1,7 +1,5 @@
 #pragma once
 
-#include "periph/dev_enums.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
