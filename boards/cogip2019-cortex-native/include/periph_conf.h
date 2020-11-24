@@ -62,17 +62,21 @@ extern "C" {
 
 /**
  * @brief PWM configuration
+ * @{
  */
 #ifndef PWM_NUMOF
 #define PWM_NUMOF (8U)
 #endif
+/** @} */
 
 /**
  * @brief QDEC configuration
+ * @{
  */
 #ifndef QDEC_NUMOF
 #define QDEC_NUMOF (8U)
 #endif
+/** @} */
 
 /**
  * @brief I2C configuration
