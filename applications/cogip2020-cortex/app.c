@@ -19,17 +19,10 @@
 #include "app_conf.h"
 #include "platform.h"
 
-int app_is_game_launched(void)
-{
-    /* Starter switch */
-    return !gpio_read(GPIO_STARTER);
-}
-
 /* Init all known fixed obstacles on map */
 static void app_fixed_obstacles_init(void)
 {
 }
-
 
 void app_init(void)
 {
