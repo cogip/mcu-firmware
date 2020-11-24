@@ -16,6 +16,7 @@
  */
 
 /* Standard include */
+#include <assert.h>
 #include <stdio.h>
 #include <sys/shm.h>
 
