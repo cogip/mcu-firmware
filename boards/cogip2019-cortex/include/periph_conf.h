@@ -236,15 +236,6 @@ static const i2c_conf_t i2c_config[] = {
  * @{
  */
 
-/* Include below must be placed after "define CLOCK_APB1" */
-#include "cfg_spi_divtable.h"
-
-/* On Cortex 2019, SPI bus signals are wired on two different PORT of MCU
- * This is not supported by alternate setting framework as mosi is
- * alternate function 7 (AF7). All others signals are a AF5.
- * Thus an extra call to "gpio_init_af" must be done after "spi_init" functions
- * to bypass this limitation.
- */
 static const spi_conf_t spi_config[] = {
     {
         .dev      = SPI2,
