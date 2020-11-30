@@ -3,6 +3,10 @@ USEPKG := $(filter-out vl53l0x-api,$(USEPKG))
 
 USEMODULE += periph_common
 
+ifneq (,$(filter periph_gpio,$(USEMODULE)))
+  USEMODULE += periph_gpio_mock
+endif
+
 ifneq (,$(filter netdev_default gnrc_netdev_default,$(USEMODULE)))
   USEMODULE += netdev_tap
 endif
