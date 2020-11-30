@@ -146,41 +146,41 @@ int ctrl_quadpid_stop(ctrl_t* ctrl, polar_t* command)
 
 int ctrl_quadpid_nopid(ctrl_t* ctrl, polar_t* command)
 {
-    polar_t speed_order;
+    /* Get speed order */
+    const polar_t* speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
 
-    ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
+    /* Compute speed order */
+    ctrl_compute_speed_order((ctrl_t*)ctrl);
 
-    /* get speed order */
-    speed_order = ctrl_compute_speed_order((ctrl_t*)ctrl_quadpid);
-
-    command->distance = speed_order.distance;
-    command->angle = speed_order.angle;
+    command->distance = speed_order->distance;
+    command->angle = speed_order->angle;
 
     return 0;
 }
 
 int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
 {
+    /* Get speed current */
     const polar_t* speed_current = ctrl_get_speed_current(ctrl);
+    /* Get speed order */
+    const polar_t* speed_order = ctrl_get_speed_order((ctrl_t*)ctrl);
 
-    ctrl_quadpid_t* ctrl_quadpid = (ctrl_quadpid_t*)ctrl;
+    /* Compute speed order */
+    ctrl_compute_speed_order((ctrl_t*)ctrl);
 
-    /* get speed order */
-    polar_t speed_order = ctrl_compute_speed_order((ctrl_t*)ctrl_quadpid);
-
-    command->distance = speed_order.distance;
-    command->angle = speed_order.angle;
+    command->distance = speed_order->distance;
+    command->angle = speed_order->angle;
 
     /* limit speed command->*/
     command->distance = limit_speed_command(command->distance,
-                                         fabs(speed_order.distance),
+                                         fabs(speed_order->distance),
                                          speed_current->distance);
     command->angle = limit_speed_command(command->angle,
-                                      fabs(speed_order.angle),
+                                      fabs(speed_order->angle),
                                       speed_current->angle);
 
     /* ********************** speed pid controller ********************* */
-    return ctrl_quadpid_speed(ctrl_quadpid, command, speed_current);
+    return ctrl_quadpid_speed((ctrl_quadpid_t*)ctrl, command, speed_current);
 }
 
 int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
