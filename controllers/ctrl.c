@@ -127,21 +127,14 @@ void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb)
     irq_enable();
 }
 
-polar_t ctrl_compute_speed_order(ctrl_t* ctrl)
+void ctrl_compute_speed_order(ctrl_t* ctrl)
 {
     speed_order_cb_t cb = ctrl->control.speed_order_cb;
-    polar_t speed_order = {0, 0};
 
     if (cb) {
         /* Variable speed_order is computable through a callback */
-        speed_order = (*cb)(ctrl);
+        ctrl->control.speed_order = (*cb)(ctrl);
     }
-    else {
-        /* Constant speed_order */
-        speed_order = ctrl->control.speed_order;
-    }
-
-    return speed_order;
 }
 
 void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
