@@ -352,13 +352,11 @@ void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb)
  * @brief compute speed order
  *
  * This function computes speed order by calling callback registered with
- * @ref ctrl_register_speed_order_cb.
+ * @ref ctrl_register_speed_order_cb and set the new speed order accordingly.
  *
  * @param[in] ctrl              Controller object
- *
- * @return                      Speed order
  */
-polar_t ctrl_compute_speed_order(ctrl_t* ctrl);
+void ctrl_compute_speed_order(ctrl_t* ctrl);
 
 /**
  * @brief Get current speed
