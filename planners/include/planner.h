@@ -31,26 +31,23 @@
 #include "path.h"
 #include "utils.h"
 
-
-extern path_t *path;
-
 /**
  * @brief Start the trajectory planification and the associated controller
  *
- * @param[in] arg               Controller object
+ * @param[in]   ctrl            Controller object
  *
  * @return
  */
-void pln_start(ctrl_t*);
+void pln_start(ctrl_t* ctrl);
 
 /**
  * @brief Stop the trajectory planification and the associated controller
  *
- * @param[in] arg               Controller object
+ * @param[in]   ctrl            Controller object
  *
  * @return
  */
-void pln_stop(ctrl_t*);
+void pln_stop(ctrl_t* ctrl);
 
 /**
  * @brief Periodic task function to process a planner
@@ -71,3 +68,5 @@ void *task_planner(void *arg);
  * @return
  */
 void pln_set_allow_change_path_pose(uint8_t value);
+
+/** @} */
