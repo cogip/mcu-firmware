@@ -206,7 +206,7 @@ double sd21_get_battery_voltage(sd21_t dev);
  *
  * @param[in]   dev         SD21 device id
  * @param[in]   servo_id    Servomotor id
- * @param[ou]   position    Servomotor position
+ * @param[out]  position    Servomotor position in ms
  *
  * @return                  0 on success
  *                          not 0 on failure
