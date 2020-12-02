@@ -112,10 +112,10 @@ static kernel_pid_t ctrl_quadpid_thread_command_pid = 0;
  *
  * This compute the output of the impulse function given a time value.
  *
- * @param[in]        cfg        Impulse function parameters, @ref impulse_cfg_t.
- * @param[in]       time        Time [cycle number].
+ * @param[in]       cfg         impulse function parameters, @ref impulse_cfg_t.
+ * @param[in]       time        time [cycle number].
  *
- * @return                      Computed set point
+ * @return                      computed set point
  */
 static double func_impulse(impulse_cfg_t* cfg, uint32_t time)
 {
@@ -144,9 +144,9 @@ static double func_impulse(impulse_cfg_t* cfg, uint32_t time)
  *
  * This generate a variable speed_order over time, using impulse function.
  *
- * @param[in]   ctrl        Controller object
+ * @param[in]   ctrl        controller object
  *
- * @return                  Computed speed order
+ * @return                  computed speed order
  */
 static polar_t func_impulse_on_speed_order(ctrl_t* ctrl)
 {
@@ -175,7 +175,7 @@ static polar_t func_impulse_on_speed_order(ctrl_t* ctrl)
  * running. This will output data that can be used to generate a mathematical
  * model of the mobile robot.
  *
- * @param[in]   ctrl_quadpid    Controller object.
+ * @param[in]   ctrl_quadpid    controller object.
  */
 static void calib_seq_identify_robot_tf(ctrl_t* ctrl_quadpid)
 {
@@ -208,7 +208,7 @@ static void calib_seq_identify_robot_tf(ctrl_t* ctrl_quadpid)
  * not apply any constant speed_order. Test sequence is launched until variable
  * speed_order function is finished, or until a timeout occured.
  *
- * @param[in]   ctrl_quadpid    Controller object.
+ * @param[in]   ctrl_quadpid    controller object.
  */
 static void calib_seq_speed_pid_only(ctrl_t* ctrl_quadpid)
 {
@@ -262,7 +262,7 @@ static void ctrl_quadpid_pose_calib_seq(ctrl_t* ctrl_quadpid, pose_t* pos)
  *
  * Set all PID to Kp = 1, Ki = 0, Kd = 0.
  *
- * @param[in]   ctrl_quadpid    Controller object.
+ * @param[in]   ctrl_quadpid    controller object.
  */
 static void pid_reset_all(ctrl_quadpid_t *ctrl_quadpid)
 {
@@ -303,6 +303,11 @@ static void run_cmd_in_thread(void *(func)(void *arg)) {
     );
 }
 
+/**
+ * @brief Linear speed characterization
+ *
+ * @param[in]   arg     not used
+ */
 static void *ctrl_quadpid_speed_thread_cmd_linear_speed(void *arg)
 {
     (void)arg;
@@ -314,6 +319,16 @@ static void *ctrl_quadpid_speed_thread_cmd_linear_speed(void *arg)
     return 0;
 }
 
+/**
+ * @brief Angular speed characterization command
+ *
+ * Run command in a dedicated thread
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_linear_speed_cb(int argc, char **argv)
 {
     (void)argc;
@@ -323,6 +338,11 @@ static int ctrl_quadpid_speed_cmd_linear_speed_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Angular speed characterization
+ *
+ * @param[in]   arg     not used
+ */
 static void *ctrl_quadpid_speed_thread_cmd_angular_speed(void *arg)
 {
     (void)arg;
@@ -334,6 +354,16 @@ static void *ctrl_quadpid_speed_thread_cmd_angular_speed(void *arg)
     return 0;
 }
 
+/**
+ * @brief Angular speed characterization command
+ *
+ * Run command in a dedicated thread
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_angular_speed_cb(int argc, char **argv)
 {
     (void)argc;
@@ -343,6 +373,11 @@ static int ctrl_quadpid_speed_cmd_angular_speed_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Linear speed PID test
+ *
+ * @param[in]   arg     not used
+ */
 static void *ctrl_quadpid_speed_thread_cmd_linear_pid(void *arg)
 {
     (void)arg;
@@ -353,6 +388,16 @@ static void *ctrl_quadpid_speed_thread_cmd_linear_pid(void *arg)
     return 0;
 }
 
+/**
+ * @brief Linear speed PID test command
+ *
+ * Run command in a dedicated thread
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_linear_pid_cb(int argc, char **argv)
 {
     (void)argc;
@@ -362,6 +407,11 @@ static int ctrl_quadpid_speed_cmd_linear_pid_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Angular speed PID test
+ *
+ * @param[in]   arg     not used
+ */
 static void *ctrl_quadpid_speed_thread_cmd_angular_pid(void *arg)
 {
     (void)arg;
@@ -372,6 +422,16 @@ static void *ctrl_quadpid_speed_thread_cmd_angular_pid(void *arg)
     return 0;
 }
 
+/**
+ * @brief Angular speed PID test command
+ *
+ * Run command in a dedicated thread
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_angular_pid_cb(int argc, char **argv)
 {
     (void)argc;
@@ -381,6 +441,14 @@ static int ctrl_quadpid_speed_cmd_angular_pid_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Set Linear Kp command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_set_linear_kp_cb(int argc, char **argv)
 {
     /* Check arguments */
@@ -401,6 +469,14 @@ static int ctrl_quadpid_speed_cmd_set_linear_kp_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Set linear ki command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_set_linear_ki_cb(int argc, char **argv)
 {
     /* Check arguments */
@@ -421,6 +497,14 @@ static int ctrl_quadpid_speed_cmd_set_linear_ki_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Set linear kd command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_set_linear_kd_cb(int argc, char **argv)
 {
     /* Check arguments */
@@ -441,6 +525,14 @@ static int ctrl_quadpid_speed_cmd_set_linear_kd_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Set angular kp command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_set_angular_kp_cb(int argc, char **argv)
 {
     /* Check arguments */
@@ -461,6 +553,14 @@ static int ctrl_quadpid_speed_cmd_set_angular_kp_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Set angular ki command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_set_angular_ki_cb(int argc, char **argv)
 {
     /* Check arguments */
@@ -481,6 +581,14 @@ static int ctrl_quadpid_speed_cmd_set_angular_ki_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Set angular kd command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_set_angular_kd_cb(int argc, char **argv)
 {
     /* Check arguments */
@@ -501,6 +609,14 @@ static int ctrl_quadpid_speed_cmd_set_angular_kd_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Reset all PID command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
 {
     (void)argc;
@@ -513,7 +629,14 @@ static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-/* Speed calibration command */
+/**
+ * @brief Global speed regulation command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_speed_calib_cmd(int argc, char **argv)
 {
     (void)argv;
@@ -625,6 +748,14 @@ static path_pose_t poses_calibration[] = {
 };
 
 
+/**
+ * @brief Encoders reset command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_pose_cmd_reset_cb(int argc, char **argv)
 {
     (void)argc;
@@ -704,7 +835,14 @@ static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-/* Position calibration command */
+/**
+ * @brief Position calibration command
+ *
+ * @param[in]   argc    number of arguments
+ * @param[in]   argv    arguments list
+ *
+ * @return              0 on success not 0 otherwise
+ */
 static int ctrl_quadpid_pose_calib_cmd(int argc, char **argv)
 {
     (void)argv;
@@ -757,7 +895,11 @@ ctrl_quadpid_calib_servo_cmd_err:
     return ret;
 }
 
-/* Init calibration commands */
+/**
+ * @brief Initialize quapid controller calibration
+ *
+ * Register quapid controller calibration commands.
+ */
 void ctrl_quadpid_calib_init(void)
 {
     /* Add speed calibration command */
