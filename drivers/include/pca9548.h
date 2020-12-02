@@ -29,7 +29,13 @@
 /* RIOT includes */
 #include "periph/i2c.h"
 
+/**
+ * @brief   PCA9548 maximum channel number
+ */
 #define PCA9548_CHANNEL_MAX  8
+/**
+ * @brief   PCA9548 default channel
+ */
 #define PCA9548_DEFAULT_CHANNEL 0
 
 /**
@@ -44,7 +50,7 @@ typedef struct {
     i2c_t i2c_dev_id;                       /**< I2C bus */
     uint16_t i2c_address;                   /**< I2C board address */
     i2c_speed_t i2c_speed_khz;              /**< I2C bus speed */
-    uint8_t channel_numof;
+    uint8_t channel_numof;                  /**< Channels number */
 } pca9548_conf_t;
 
 
