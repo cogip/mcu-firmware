@@ -42,20 +42,37 @@ void pln_stop(ctrl_t* ctrl)
     pln_started = FALSE;
 }
 
-static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
-        pose_t *pose_to_reach, polar_t *speed_order, path_t *path)
+static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
+        pose_t* pose_to_reach, path_t* path)
 {
-    const path_pose_t *current_path_pos = path_get_current_path_pos(path);
-    static int index = 1;
-    int control_loop = 0;
-    uint8_t need_update = 0;
+    /* Current final path pose to reach */
+    const path_pose_t* current_path_pos = path_get_current_path_pos(path);
+    /* Avoidance graph position index. This index increments on each
+     * intermediate pose used to reach the current path pose */
+    static int avoidance_index = 1;
+    /* Control variable if there is still at least a reachable pose in the
+     * path */
+    int nb_pose_reachable = 0;
+    /* Recompute avoidance graph if not 0 */
+    int avoidance_update = FALSE;
 
-    need_update = pf_read_sensors();
+    /* Read sensors to know if some obstacles are detected and then if
+     * avoidance graph needs to be recomputed */
+    avoidance_update = pf_read_sensors();
 
+    /* Ask to the controller if the targeted position has been reached */
     if (ctrl_is_pose_reached(ctrl)) {
+        /* If the targeted pose has been reached, check if it is the
+         * current path pose */
         if ((pose_to_reach->x == current_path_pos->pos.x)
             && (pose_to_reach->y == current_path_pos->pos.y)) {
+            /* If the targeted pose is the current path pose to reach, launch
+             * the action and update the current path pose to reach to the next
+             * one in path, if allowed. */
             DEBUG("planner: Controller has reach final position.\n");
+
+            /* If it exists launch action associated to the point and increment
+             * the position to reach in the path */
             if (allow_change_path_pose) {
                 if (current_path_pos->act) {
                     DEBUG("planner: action launched!\n");
@@ -64,62 +81,79 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t *robot_pose,
                 }
                 path_increment_current_pose_idx(path);
             }
+            /* Update current path targeted position in case it has changed */
             current_path_pos = path_get_current_path_pos(path);
-            need_update = 1;
+            /* As current path pose could have changed, avoidance graph needs
+             * to be recomputed */
+            avoidance_update = TRUE;
         }
-        else if ((!allow_change_path_pose) && (ctrl_is_pose_intermediate(ctrl))) {
-            need_update = 1;
-        }
+        /* If it is an intermediate pose, just go to the next one in
+         * avoidance graph */
         else {
             DEBUG("planner: Controller has reach intermediate position.\n");
-            index++;
+            avoidance_index++;
         }
     }
 
+    /* If the robot is blocked */
     if (ctrl->control.current_mode == CTRL_MODE_BLOCKED) {
         DEBUG("planner: Controller is blocked.\n");
         if (!allow_change_path_pose)
             goto trajectory_get_route_update_error;
+        /* Increment the position to reach in the path */
         path_increment_current_pose_idx(path);
         current_path_pos = path_get_current_path_pos(path);
-        need_update = 1;
+        /* As current path pose has changed, avoidance graph needs to be
+         * recomputed */
+        avoidance_update = TRUE;
     }
 
-    if (need_update) {
+    /* If the avoidance graph needs to be recomputed */
+    if (avoidance_update) {
         DEBUG("planner: Updating graph!\n");
-        index = update_graph(robot_pose, &(current_path_pos->pos));
+        /* Update the avoidance graph according to the current robot position
+         * and the path target position.
+         * Updating the graph results in a new array of intermediate positions
+         * to reach the targeted path current position.
+         * The current intermediate position is then pointed by avoidance_index
+         */
+        avoidance_index = update_graph(robot_pose, &(current_path_pos->pos));
 
-        control_loop = path->nb_pose;
-        while ((index < 0) && (control_loop-- > 0)) {
-            if (index == -1) {
+        /* In case the targeted position is not reachable, select the
+         * next position in the path. If no position is reachable, return an
+         * error */
+        nb_pose_reachable = path->nb_pose;
+        while ((avoidance_index < 0) && (nb_pose_reachable-- > 0)) {
+            if (avoidance_index == -1) {
                 if (!allow_change_path_pose)
                     goto trajectory_get_route_update_error;
                 path_increment_current_pose_idx(path);
                 if (current_path_pos == path_get_current_path_pos(path))
                     goto trajectory_get_route_update_error;
                 current_path_pos = path_get_current_path_pos(path);
-                index = update_graph(robot_pose, &(current_path_pos->pos));
+                avoidance_index = update_graph(robot_pose, &(current_path_pos->pos));
             }
         }
-        if (control_loop < 0) {
+        if (nb_pose_reachable < 0) {
             DEBUG("planner: No position reachable!\n");
             goto trajectory_get_route_update_error;
         }
     }
 
-    *pose_to_reach = avoidance(index);
+    /* At this point the avoidance graph is valid and the next targeted
+     * point can be retrieved. */
+    *pose_to_reach = avoidance(avoidance_index);
+
+    /* Check if the point to reach is the current path position to reach */
     if ((pose_to_reach->x == current_path_pos->pos.x)
         && (pose_to_reach->y == current_path_pos->pos.y)) {
+        DEBUG("planner: Reaching final position\n");
         pose_to_reach->O = current_path_pos->pos.O;
         ctrl_set_pose_intermediate(ctrl, FALSE);
-        DEBUG("planner: Reaching final position\n");
     }
     else {
-        /* Update speed order to max speed defined value in the new point to reach */
-        speed_order->distance = path_get_current_max_speed(path);
-        speed_order->angle = speed_order->distance / 2;
-        ctrl_set_pose_intermediate(ctrl, TRUE);
         DEBUG("planner: Reaching intermediate position\n");
+        ctrl_set_pose_intermediate(ctrl, TRUE);
     }
 
     return 0;
@@ -175,7 +209,7 @@ void *task_planner(void *arg)
 
         const pose_t* pose_current = ctrl_get_pose_current(ctrl);
 
-        if (trajectory_get_route_update(ctrl, pose_current, &pose_order, &speed_order, path) == -1) {
+        if (trajectory_get_route_update(ctrl, pose_current, &pose_order,path)) {
             ctrl_set_mode(ctrl, CTRL_MODE_STOP);
         }
         else {
