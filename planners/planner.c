@@ -185,7 +185,7 @@ void *task_planner(void *arg)
     initial_pose = current_path_pos->pos;
     pose_order = current_path_pos->pos;
     ctrl_set_pose_current(ctrl, &initial_pose);
-    ctrl_set_speed_order(ctrl, &speed_order);
+    ctrl_set_speed_order(ctrl, speed_order);
     ctrl_set_pose_to_reach(ctrl, &pose_order);
     ctrl_set_pose_reached(ctrl);
 
@@ -216,7 +216,7 @@ void *task_planner(void *arg)
             ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
         }
 
-        ctrl_set_speed_order(ctrl, &speed_order);
+        ctrl_set_speed_order(ctrl, speed_order);
 
         ctrl_set_pose_to_reach(ctrl, &pose_order);
 

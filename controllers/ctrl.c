@@ -100,14 +100,14 @@ inline const polar_t* ctrl_get_speed_current(ctrl_t* ctrl)
     return &ctrl->control.speed_current;
 }
 
-inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order)
+inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t speed_order)
 {
     DEBUG("ctrl: New speed order: linear=%lf, angle=%lf\n",
-            speed_order->distance, speed_order->angle);
+            speed_order.distance, speed_order.angle);
 
     irq_disable();
 
-    ctrl->control.speed_order = *speed_order;
+    ctrl->control.speed_order = speed_order;
 
     irq_enable();
 }
