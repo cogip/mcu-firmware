@@ -311,7 +311,7 @@ const pose_t* ctrl_get_pose_current(ctrl_t* ctrl);
  *
  * @return                      Nothing
  */
-void ctrl_set_speed_order(ctrl_t* ctrl, polar_t* speed_order);
+void ctrl_set_speed_order(ctrl_t* ctrl, polar_t speed_order);
 
 /**
  * @brief Get speed order
