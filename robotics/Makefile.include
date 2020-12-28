@@ -1,0 +1,2 @@
+DIRS += $(MCUFIRMWAREBASE)/robotics
+INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/

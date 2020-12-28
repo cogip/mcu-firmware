@@ -1,0 +1,31 @@
+# RIOT modules
+USEMODULE += motor_driver
+USEMODULE += printf_float
+USEMODULE += ps
+USEMODULE += scanf_float
+USEMODULE += schedstatistics
+USEMODULE += shell
+USEMODULE += shell_commands
+USEMODULE += xtimer
+
+# mcu-firmware modules
+USEMODULE += ctrl
+USEMODULE += pca9548
+USEMODULE += planner
+USEMODULE += quadpid
+USEMODULE += robotics
+USEMODULE += sd21
+USEMODULE += $(APPLICATION_MODULE)
+
+# External package required
+USEPKG += vl53l0x-api
+
+# Board features required
+FEATURES_REQUIRED += periph_i2c
+FEATURES_REQUIRED += periph_qdec
+FEATURES_REQUIRED += periph_pwm
+
+ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
+	USEMODULE += calib_platform
+	USEMODULE += fmt
+endif

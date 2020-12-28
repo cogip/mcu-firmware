@@ -1,42 +1,12 @@
-ifneq (,$(filter ctrl,$(USEMODULE)))
-	DIRS += $(MCUFIRMWAREBASE)/controllers
-endif
-DIRS += $(MCUFIRMWAREBASE)/drivers
-ifneq (,$(filter planner,$(USEMODULE)))
-	DIRS += $(MCUFIRMWAREBASE)/planners
-endif
-ifneq (,$(filter robotics,$(USEMODULE)))
-	DIRS += $(MCUFIRMWAREBASE)/robotics
-endif
+# Dependencies makefiles are included in a specific order
 
-DIRS += $(MCUFIRMWAREBASE)/sys
+# First platfoms as they depend on other modules, hardware or software
+include $(MCUFIRMWAREBASE)/platforms/Makefile.dep
+
+# Next pure software components that could depend on hardware drivers
+include $(MCUFIRMWAREBASE)/controllers/Makefile.dep
+include $(MCUFIRMWAREBASE)/planners/Makefile.dep
 include $(MCUFIRMWAREBASE)/sys/Makefile.dep
 
-ifneq (, $(MCUFIRMWARE_PLATFORM_BASE))
-	INCLUDES += -I$(APPDIR)/include/
-	ifneq ($(CPU),native)
-		INCLUDES += -I$(APPDIR)/include/real/
-	else
-		INCLUDES += -I$(APPDIR)/include/simulation/
-	endif
-endif
-
-ifneq (,$(filter ctrl,$(USEMODULE)))
-	INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
-endif
-INCLUDES += -I$(MCUFIRMWAREBASE)/drivers/include/
-INCLUDES += -I$(MCUFIRMWAREBASE)/sys/include/
-ifneq (,$(filter planner,$(USEMODULE)))
-	INCLUDES += -I$(MCUFIRMWAREBASE)/planners/include/
-endif
-ifneq (,$(filter robotics,$(USEMODULE)))
-	INCLUDES += -I$(MCUFIRMWAREBASE)/robotics/include/
-endif
-
+# Finally hardware drivers that could depend on each other
 include $(MCUFIRMWAREBASE)/drivers/Makefile.dep
-ifneq (,$(filter ctrl,$(USEMODULE)))
-	include $(MCUFIRMWAREBASE)/controllers/Makefile.dep
-endif
-ifneq (,$(filter planner,$(USEMODULE)))
-	include $(MCUFIRMWAREBASE)/planners/Makefile.dep
-endif

@@ -1,0 +1,2 @@
+DIRS +=	$(MCUFIRMWAREBASE)/controllers
+INCLUDES += -I$(MCUFIRMWAREBASE)/controllers/include/
