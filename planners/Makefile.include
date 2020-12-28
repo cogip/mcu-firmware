@@ -1,0 +1,2 @@
+DIRS += $(MCUFIRMWAREBASE)/planners
+INCLUDES += -I$(MCUFIRMWAREBASE)/planners/include/

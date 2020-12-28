@@ -1,0 +1,2 @@
+DIRS += $(MCUFIRMWAREBASE)/sys
+INCLUDES += -I$(MCUFIRMWAREBASE)/sys/include/
