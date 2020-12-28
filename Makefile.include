@@ -12,16 +12,28 @@ ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
 	CFLAGS += -DCALIBRATION
 endif
 
-ifneq (, $(MCUFIRMWARE_PLATFORM_BASE))
-	DIRS += $(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)
-	INCLUDES += -I$(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)/include
-	USEMODULE += $(MCUFIRMWARE_PLATFORM_BASE)
-	include $(MCUFIRMWAREBASE)/platforms/$(MCUFIRMWARE_PLATFORM_BASE)/Makefile.include
+INCLUDES += -I$(APPDIR)/include/
+ifneq ($(CPU),native)
+	INCLUDES += -I$(APPDIR)/include/real/
+else
+	INCLUDES += -I$(APPDIR)/include/simulation/
 endif
 
+# Modules dependencies
 include $(MCUFIRMWAREBASE)/Makefile.dep
+
+# Components Makefile includes
+include $(MCUFIRMWAREBASE)/controllers/Makefile.include
+include $(MCUFIRMWAREBASE)/drivers/Makefile.include
+include $(MCUFIRMWAREBASE)/planners/Makefile.include
+include $(MCUFIRMWAREBASE)/platforms/Makefile.include
+include $(MCUFIRMWAREBASE)/robotics/Makefile.include
+include $(MCUFIRMWAREBASE)/sys/Makefile.include
+
+# RIOT Makefile include
 include $(RIOTBASE)/Makefile.include
 
+# As RIOT Makefile.include is included, RAMSIZE can be computed
 ifneq ($(CPU),native)
 	.DEFAULT_GOAL := world
 	RAM_LEN_K := $(shell echo $(RAM_LEN) | sed 's/K//')
