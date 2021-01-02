@@ -74,25 +74,25 @@ inline const pose_t* ctrl_get_pose_current(ctrl_t* ctrl)
     return &ctrl->control.pose_current;
 }
 
-inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t* pose_order)
+inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t pose_order)
 {
     DEBUG("ctrl: New pose to reach: x=%lf, y=%lf, O=%lf\n",
-            pose_order->x, pose_order->y, pose_order->O);
+            pose_order.x, pose_order.y, pose_order.O);
 
     irq_disable();
 
-    if (!pose_equal(&ctrl->control.pose_order, pose_order)) {
+    if (!pose_equal(&ctrl->control.pose_order, &pose_order)) {
         ctrl->control.blocking_cycles = 0;
-        ctrl->control.pose_order = *pose_order;
+        ctrl->control.pose_order = pose_order;
         ctrl->control.pose_reached = FALSE;
     }
 
     irq_enable();
 }
 
-inline const pose_t* ctrl_get_pose_to_reach(ctrl_t* ctrl)
+inline pose_t ctrl_get_pose_to_reach(ctrl_t* ctrl)
 {
-    return &ctrl->control.pose_order;
+    return ctrl->control.pose_order;
 }
 
 inline const polar_t* ctrl_get_speed_current(ctrl_t* ctrl)

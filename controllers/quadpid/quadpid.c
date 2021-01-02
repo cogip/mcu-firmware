@@ -185,7 +185,6 @@ int ctrl_quadpid_running_speed(ctrl_t* ctrl, polar_t* command)
 
 int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 {
-    const pose_t* pose_order = NULL;
     const polar_t* speed_order = NULL;
 
     const pose_t* pose_current = ctrl_get_pose_current(ctrl);
@@ -199,19 +198,19 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
     polar_t pos_err;
 
     /* get next pose_t to reach */
-    pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl_quadpid);
+    const pose_t pose_order = ctrl_get_pose_to_reach((ctrl_t*)ctrl_quadpid);
 
     /* get speed order */
     speed_order = ctrl_get_speed_order((ctrl_t*)ctrl_quadpid);
 
-    pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
+    pos_err = compute_position_error(ctrl_quadpid, &pose_order, pose_current);
 
     DEBUG("@robot@,%u,%"PRIu32",@pose_order@,%.2f,%.2f,%.2f\n",
                 ROBOT_ID,
                 ctrl->control.current_cycle,
-                pose_order->x,
-                pose_order->y,
-                pose_order->O);
+                pose_order.x,
+                pose_order.y,
+                pose_order.O);
 
     /* position correction */
     if (ctrl_quadpid->quadpid_params.regul != CTRL_REGUL_POSE_ANGL
@@ -246,7 +245,7 @@ int ctrl_quadpid_ingame(ctrl_t* ctrl, polar_t* command)
 
         /* final orientation error */
         if (!ctrl_quadpid->control.pose_intermediate) {
-            pos_err.angle = limit_angle_deg(pose_order->O - pose_current->O);
+            pos_err.angle = limit_angle_deg(pose_order.O - pose_current->O);
         }
         else {
             pos_err.angle = 0;
