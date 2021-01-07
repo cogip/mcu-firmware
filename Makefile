@@ -13,7 +13,7 @@ distclean: PF_TARGET = distclean
 distclean: $(apps)	## Clean build and configuration for all applications
 
 $(apps):
-	$(MAKE) -j$$(nproc) -C $@ $(PF_TARGET) || exit $$?; \
+	"$(MAKE)" -j$$(nproc) -C $@ $(PF_TARGET) || exit $$?
 
 doc: 			## Generate doxygen
 	"$(MAKE)" -BC doc/doxygen
