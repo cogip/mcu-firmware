@@ -14,9 +14,12 @@
  * @}
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include "board.h"
 
 #include "board_internal.h"
+#include "platform.h"
+#include "calibration/calib_platform.h"
 
 #ifdef MODULE_MTD
 #include "mtd_native.h"
@@ -28,6 +31,8 @@
 void board_init(void)
 {
     puts("COGIP 2019 native board initialized.");
+
+    pf_add_shell_command(&pf_shell_commands, &cmd_set_shm_key);
 }
 
 #ifdef MODULE_MTD
