@@ -15,10 +15,32 @@
  */
 #include <inttypes.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /* RIOT includes */
 #include <board.h>
 #include <log.h>
+
+/* Shared memory key used to communicate with the simulator */
+static int pf_shm_key = 0;
+
+int pf_set_shm_key(int argc, char **argv)
+{
+    /* Check arguments */
+    if (argc != 2) {
+        puts("Bad number of arguments!");
+        return EXIT_FAILURE;
+    }
+
+    pf_shm_key = atoi(argv[1]);
+
+    return EXIT_SUCCESS;
+}
+
+int pf_get_shm_key(void)
+{
+    return pf_shm_key;
+}
 
 #ifdef QDEC_NUMOF
 
