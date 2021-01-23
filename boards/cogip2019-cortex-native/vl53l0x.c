@@ -54,6 +54,8 @@ void vl53l0x_init(void)
 
 uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
 {
+    int pf_shm_key = pf_get_shm_key();
+
     /* Try to initialize shared memory if not already done */
     if(shm_ptr == NULL && pf_shm_key != 0) {
         int shmid = shmget(pf_shm_key, VL53L0X_NUMOF*sizeof(uint16_t), 0);

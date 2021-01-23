@@ -156,6 +156,15 @@ extern mtd_dev_t *mtd0;
 /** @} */
 #endif
 
+int pf_set_shm_key(int argc, char **argv);
+int pf_get_shm_key(void);
+
+static const shell_command_t cmd_set_shm_key = {
+    "_set_shm_key", "Set shared memory key to communicate with simulator",
+    pf_set_shm_key
+};
+
+
 /**
  * @brief Simulate QDEC on motor_set() calls
  *
