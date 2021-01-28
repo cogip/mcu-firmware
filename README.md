@@ -129,3 +129,9 @@ $ make doc docman doclatex
 ```bash
 $ make docclean
 ```
+
+## Run uncrustify to check coding rules
+
+```bash
+$ make check-codingrules
+```
