@@ -26,6 +26,7 @@ jobs:
         path: 'RIOT'
     - name: Install toolchain
       run: |
+        sudo apt-get update
         sudo apt-get install -qq build-essential gcc-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi
         gcc --version
         arm-none-eabi-gcc --version
