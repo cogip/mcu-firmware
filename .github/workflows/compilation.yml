@@ -18,8 +18,12 @@ jobs:
       RIOTBASE: ${GITHUB_WORKSPACE}/RIOT
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/checkout@v2
+    - name: Clone mcu-firmware
+      uses: actions/checkout@v2
+      with:
+        path: 'mcu-firmware'
+    - name: Clone RIOT
+      uses: actions/checkout@v2
       with:
         repository: 'RIOT-OS/RIOT'
         ref: '2020.10'
@@ -32,10 +36,12 @@ jobs:
         arm-none-eabi-gcc --version
     - name: Compile
       run: |
+        cd mcu-firmware
         make
         make distclean
         make MCUFIRMWARE_OPTIONS=calibration
         make distclean
     - name: Check coding rules
       run: |
+        cd mcu-firmware
         make check-codingrules
