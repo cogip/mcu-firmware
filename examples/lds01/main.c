@@ -9,9 +9,8 @@
 #include "lds01.h"
 #include "lds01_params.h"
 
-/* This is provided by the lds01 driver, see drivers/lds01/lds01.c */
-extern lds01_t lds01_devs[ARRAY_SIZE(lds01_params)];
-lds01_t *lds01 = &lds01_devs[0];
+/* Device to use (defined in lds01_params.h) */
+lds01_t lds01 = 0;
 
 #define SHELL_BUFSIZE (128U)
 #define FRAME_READER_PRIO (THREAD_PRIORITY_MAIN - 1)
@@ -171,7 +170,7 @@ static const shell_command_t shell_commands[] = {
 
 int main(void)
 {
-    puts("\n== LDS01 example ==");
+    puts("\n== LDS01 example using UART driver ==");
 
     /* Start the frame reader thread */
     frame_updater_thread_pid = thread_create(
