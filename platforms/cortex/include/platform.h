@@ -216,34 +216,6 @@ static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
     },
 };
 
-typedef struct shell_command_linked shell_command_linked_t;
-struct shell_command_linked {
-    /* Copy of the shell_commands currently used */
-    shell_command_t shell_commands[NB_SHELL_COMMANDS];
-    /* Pointer to the real current shell_commands */
-    shell_command_linked_t *current;
-    /* Pointer to the real previous shell_commands */
-    shell_command_linked_t *previous;
-    /* Menu name */
-    const char *name;
-};
-
-extern shell_command_linked_t pf_shell_commands;
-extern int pf_shm_key;
-
-/* TODO: These functions/structs should be moved to common code */
-void pf_push_shell_commands(shell_command_linked_t *shell_commands);
-void pf_pop_shell_commands(void);
-void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *name);
-void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command);
-int pf_display_json_help(int argc, char **argv);
-int pf_exit_shell(int argc, char **argv);
-int pf_print_state_cb(int argc, char **argv);
-extern shell_command_t cmd_help_json;
-extern shell_command_t cmd_exit_shell;
-extern shell_command_t cmd_print_state;
-extern shell_command_t cmd_print_dyn_obstacles;
-extern shell_command_t cmd_set_shm_key;
 
 path_t *pf_get_path(void);
 int pf_is_game_launched(void);

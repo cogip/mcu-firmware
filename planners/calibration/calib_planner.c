@@ -11,6 +11,7 @@
 #include "planner.h"
 #include "platform.h"
 #include "calibration/calib_planner.h"
+#include "calibration/calib_platform.h"
 
 /* Shell command array */
 static shell_command_linked_t pln_shell_commands;
