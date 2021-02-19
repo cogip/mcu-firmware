@@ -11,7 +11,6 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "calibration/calib_pca9548.h"
 #include "calibration/calib_planner.h"
 #include "calibration/calib_platform.h"
 #include "calibration/calib_quadpid.h"
@@ -231,6 +230,5 @@ void pf_calib_init(void)
     pf_init_shell_commands(&pf_shell_commands, MCUFIRMWARE_PLATFORM_BASE);
 
     ctrl_quadpid_calib_init();
-    pca9548_calib_init();
     pln_calib_init();
 }
