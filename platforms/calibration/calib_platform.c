@@ -43,6 +43,9 @@ void pf_pop_shell_commands(void) {
 }
 
 void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *name) {
+    if ((shell_commands) && (shell_commands->name))
+        return;
+
     shell_commands->name = name;
     shell_commands->current = shell_commands;
     shell_commands->previous = NULL;
@@ -59,6 +62,10 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
 {
     uint8_t command_id = 0;
+
+    if ((!shell_commands) || (!shell_commands->name)) {
+        pf_init_shell_commands(shell_commands, MCUFIRMWARE_PLATFORM_BASE);
+    }
 
     shell_command_t * entry = shell_commands->shell_commands;
     for (; entry->name != NULL; entry++, command_id++) {}
