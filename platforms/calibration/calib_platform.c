@@ -50,9 +50,10 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
     for(uint8_t i = 0 ; i < NB_SHELL_COMMANDS ; i++) {
         shell_commands->shell_commands[i] = (shell_command_t){ NULL, NULL, NULL };
     }
-    shell_commands->shell_commands[0] = cmd_help_json;
-    shell_commands->shell_commands[1] = cmd_print_state;
-    shell_commands->shell_commands[2] = cmd_print_dyn_obstacles;
+
+    pf_add_shell_command(shell_commands, &cmd_help_json);
+    pf_add_shell_command(shell_commands, &cmd_print_state);
+    pf_add_shell_command(shell_commands, &cmd_print_dyn_obstacles);
 }
 
 void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
