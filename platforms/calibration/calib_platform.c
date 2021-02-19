@@ -13,6 +13,7 @@
 /* Project includes */
 #include "calibration/calib_pca9548.h"
 #include "calibration/calib_planner.h"
+#include "calibration/calib_platform.h"
 #include "calibration/calib_quadpid.h"
 #include "avoidance.h"
 #include "ctrl.h"

@@ -21,14 +21,51 @@
  *
  * @{
  * @file
- * @brief       QuadPID controllers API and datas
+ * @brief       Common platform calibration headers
  *
+ * @author      Eric Courtois <eric.courtois@gmail.com>
  * @author      Gilles DOFFE <g.doffe@gmail.com>
- * @author      Yannick GICQUEL <yannick.gicquel@gmail.com>
- * @author      Stephen CLYMANS <sclymans@gmail.com>
  */
 /* Project includes */
 #include "ctrl.h"
+#include "platform.h"
 
 void pf_init_calib_tasks(ctrl_t* pf_ctrl);
 void pf_calib_init(void);
+
+/**
+ * @brief Chained list to store commands through modules declaration
+ */
+typedef struct shell_command_linked shell_command_linked_t;
+
+/**
+ * @brief Chained list to store commands through modules
+ */
+struct shell_command_linked {
+    shell_command_t shell_commands[NB_SHELL_COMMANDS];
+                            /**< Copy of the shell_commands currently used */
+    shell_command_linked_t *current;
+                            /**< Pointer to the real current shell_commands */
+    shell_command_linked_t *previous;
+                            /**< Pointer to the real previous shell_commands */
+    const char *name;
+                            /**< Menu name */
+};
+
+/* TODO: These functions/structs should be moved to common code */
+void pf_push_shell_commands(shell_command_linked_t *shell_commands);
+void pf_pop_shell_commands(void);
+void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *name);
+void pf_add_shell_command(shell_command_linked_t *shell_commands, const shell_command_t *command);
+int pf_display_json_help(int argc, char **argv);
+int pf_exit_shell(int argc, char **argv);
+int pf_print_state_cb(int argc, char **argv);
+
+extern shell_command_t cmd_help_json;
+extern shell_command_t cmd_exit_shell;
+extern shell_command_t cmd_print_state;
+extern shell_command_t cmd_motors_test;
+extern shell_command_t cmd_print_dyn_obstacles;
+extern shell_command_linked_t pf_shell_commands;
+
+/** @} */
