@@ -88,7 +88,7 @@ static impulse_cfg_t impulse_cfg__speed_pid_linear = {
     .cycle_start_mot = 1 /* sec */,
     .cycle_end_mot   = 3 /* sec */,
     .cycle_end_func  = 5 /* sec */,
-    .impulse_max_value = 35,
+    .impulse_max_value = MAX_SPEED,
     .is_linear       = TRUE,
 };
 
@@ -96,7 +96,7 @@ static impulse_cfg_t impulse_cfg__speed_pid_angular = {
     .cycle_start_mot = 1 /* sec */,
     .cycle_end_mot   = 3 /* sec */,
     .cycle_end_func  = 5 /* sec */,
-    .impulse_max_value = 13,
+    .impulse_max_value = MAX_SPEED / 2,
     .is_linear       = FALSE,
 };
 
