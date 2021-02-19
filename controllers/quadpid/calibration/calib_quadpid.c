@@ -234,7 +234,7 @@ static void calib_seq_speed_pid_only(ctrl_t* ctrl_quadpid)
 }
 
 /* Position calibration sequence */
-static void ctrl_quadpid_pose_calib_seq(ctrl_t* ctrl_quadpid, pose_t* pos)
+static void ctrl_quadpid_pose_calib_seq(ctrl_t* ctrl_quadpid, pose_t pos)
 {
     /* Speed order is fixed to maximum speed */
     polar_t speed_order = {
@@ -244,7 +244,7 @@ static void ctrl_quadpid_pose_calib_seq(ctrl_t* ctrl_quadpid, pose_t* pos)
 
     /* Send the speed order and the position to reach to the controller */
     ctrl_set_pose_to_reach(ctrl_quadpid, pos);
-    ctrl_set_speed_order(ctrl_quadpid, &speed_order);
+    ctrl_set_speed_order(ctrl_quadpid, speed_order);
 
     /* Turn the controller into the running mode */
     ctrl_set_mode(ctrl_quadpid, CTRL_MODE_RUNNING);
@@ -772,7 +772,7 @@ static int ctrl_quadpid_pose_cmd_reset_cb(int argc, char **argv)
 static void *ctrl_quadpid_pose_thread_cmd_linear_kp(void *arg)
 {
     (void)arg;
-    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
     return 0;
 }
 
@@ -805,7 +805,7 @@ static int ctrl_quadpid_pose_cmd_linear_kp_cb(int argc, char **argv)
 static void *ctrl_quadpid_pose_thread_cmd_angular_kp(void *arg)
 {
     (void)arg;
-    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    ctrl_quadpid_pose_calib_seq((ctrl_t*)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
     return 0;
 }
 
