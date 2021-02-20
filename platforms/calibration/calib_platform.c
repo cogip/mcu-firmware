@@ -136,18 +136,18 @@ int pf_print_state(int argc, char **argv)
             "\"angle\": \"%lf\""
           "}"
         "}\n",
-        ctrl_quadpid.control.current_mode,
-        ctrl_quadpid.control.pose_current.O,
-        ctrl_quadpid.control.pose_current.x,
-        ctrl_quadpid.control.pose_current.y,
-        ctrl_quadpid.control.pose_order.O,
-        ctrl_quadpid.control.pose_order.x,
-        ctrl_quadpid.control.pose_order.y,
-        ctrl_quadpid.control.current_cycle,
-        ctrl_quadpid.control.speed_current.distance,
-        ctrl_quadpid.control.speed_current.angle,
-        ctrl_quadpid.control.speed_order.distance,
-        ctrl_quadpid.control.speed_order.angle
+        ctrl->control.current_mode,
+        ctrl->control.pose_current.O,
+        ctrl->control.pose_current.x,
+        ctrl->control.pose_current.y,
+        ctrl->control.pose_order.O,
+        ctrl->control.pose_order.x,
+        ctrl->control.pose_order.y,
+        ctrl->control.current_cycle,
+        ctrl->control.speed_current.distance,
+        ctrl->control.speed_current.angle,
+        ctrl->control.speed_order.distance,
+        ctrl->control.speed_order.angle
     );
 
     return EXIT_SUCCESS;
