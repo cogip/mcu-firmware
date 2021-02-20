@@ -180,7 +180,7 @@ void *task_planner(void *arg)
 
     path_t* path = pf_get_path();
     if (!path) {
-        printf("machine has no path\n");
+        printf("Machine has no path\n");
     }
 
     /* object context initialisation */
