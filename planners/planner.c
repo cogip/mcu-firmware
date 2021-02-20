@@ -81,6 +81,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
                     (*(current_path_pos->act))();
                     DEBUG("planner: action finished!\n");
                 }
+                DEBUG("planner: Increment position.\n");
                 path_increment_current_pose_idx(path);
             }
             /* Update current path targeted position in case it has changed */
