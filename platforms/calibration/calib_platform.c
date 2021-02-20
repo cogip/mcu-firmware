@@ -59,7 +59,7 @@ void pf_init_shell_commands(shell_command_linked_t *shell_commands, const char *
     pf_add_shell_command(shell_commands, &cmd_print_dyn_obstacles);
 }
 
-void pf_add_shell_command(shell_command_linked_t *shell_commands, shell_command_t *command)
+void pf_add_shell_command(shell_command_linked_t *shell_commands, const shell_command_t *command)
 {
     uint8_t command_id = 0;
 
