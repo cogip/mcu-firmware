@@ -455,7 +455,7 @@ static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
  * @name PCA9548 number defined by pca9548_config size
  * @{
  */
-#define PCA9548_NUMOF (sizeof(motor_driver_config) / sizeof(motor_driver_config[0]))
+#define PCA9548_NUMOF (sizeof(pca9548_config) / sizeof(pca9548_config[0]))
     /**< PCA9548 number */
 /** @} */
 
