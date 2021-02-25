@@ -17,6 +17,8 @@
 #include "avoidance.h"
 #include "ctrl.h"
 
+#define GLOBAL_MENU "_global"
+
 /* Controller */
 static ctrl_t* ctrl = NULL;
 
@@ -65,7 +67,7 @@ void pf_add_shell_command(shell_command_linked_t *shell_commands, const shell_co
     uint8_t command_id = 0;
 
     if ((!shell_commands) || (!shell_commands->name)) {
-        pf_init_shell_commands(shell_commands, MCUFIRMWARE_PLATFORM_BASE);
+        pf_init_shell_commands(shell_commands, GLOBAL_MENU);
     }
 
     shell_command_t * entry = shell_commands->shell_commands;
@@ -306,7 +308,7 @@ void pf_init_calib_tasks(ctrl_t* pf_ctrl)
 
 void pf_calib_init(void)
 {
-    pf_init_shell_commands(&pf_shell_commands, MCUFIRMWARE_PLATFORM_BASE);
+    pf_init_shell_commands(&pf_shell_commands, GLOBAL_MENU);
 
     ctrl_quadpid_calib_init();
     pln_calib_init();
