@@ -1,6 +1,6 @@
 APPLICATION = cortex
 
-BOARD ?= cogip2019-cortex
+BOARD ?= cogip-board
 
 # Platform
 USEMODULE += pf_cortex
