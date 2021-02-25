@@ -1,7 +1,0 @@
-ifneq (,$(filter sd21,$(USEMODULE)))
-	include $(MCUFIRMWAREBASE)/drivers/sd21/Makefile.dep
-endif
-
-ifneq (,$(filter pca9548,$(USEMODULE)))
-	include $(MCUFIRMWAREBASE)/drivers/pca9548/Makefile.dep
-endif

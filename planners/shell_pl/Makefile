@@ -1,3 +1,3 @@
-MODULE = calib_planner
+MODULE = shell_pl
 
 include $(RIOTBASE)/Makefile.base

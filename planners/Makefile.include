@@ -1,2 +1,7 @@
-DIRS += $(MCUFIRMWAREBASE)/planners
-INCLUDES += -I$(MCUFIRMWAREBASE)/planners/include/
+LAST_MAKEFILEDIR_planners := $(LAST_MAKEFILEDIR)
+
+# Calibration
+EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_planners)/shell_pl
+
+# Planners
+EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_planners)/astar
