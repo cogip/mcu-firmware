@@ -1,0 +1,2 @@
+FEATURES_REQUIRED += periph_uart
+FEATURES_REQUIRED += periph_dma
