@@ -69,4 +69,9 @@ void *task_planner(void *arg);
  */
 void pln_set_allow_change_path_pose(uint8_t value);
 
+/**
+ * @brief Initialize planner
+ */
+void pln_init(void);
+
 /** @} */
