@@ -25,8 +25,8 @@ jobs:
     - name: Clone RIOT
       uses: actions/checkout@v2
       with:
-        repository: 'RIOT-OS/RIOT'
-        ref: '2020.10'
+        repository: 'cogip/RIOT'
+        ref: 'cogip_fix'
         path: 'RIOT'
     - name: Install toolchain
       run: |
