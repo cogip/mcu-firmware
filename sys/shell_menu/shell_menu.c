@@ -5,7 +5,7 @@
 
 #include "shell_menu.h"
 
-const shell_command_t menu_cmd_null = {NULL, NULL, NULL};
+const shell_command_t menu_cmd_null = { NULL, NULL, NULL };
 const shell_command_t *global_commands = NULL;
 
 shell_menu_t current_menu;
@@ -16,16 +16,16 @@ static int _display_json_help(int argc, char **argv)
     (void)argv;
 
     printf("{\"name\": \"%s\", \"entries\": [", current_menu.name);
-    shell_command_t *cmd = (shell_command_t*)&current_menu;
+    shell_command_t *cmd = (shell_command_t *)&current_menu;
     for (; cmd->name != NULL; cmd++) {
-        if(cmd != (shell_command_t*)&current_menu) {
+        if (cmd != (shell_command_t *)&current_menu) {
             printf(", ");
         }
         printf(
             "{\"cmd\": \"%s\", \"desc\": \"%s\"}",
             cmd->name,
             cmd->desc
-        );
+            );
     }
     printf("]}\n");
     return EXIT_SUCCESS;
@@ -62,7 +62,7 @@ void menu_init(shell_menu_t *menu, const char *name)
     menu->current = menu;
     menu->previous = NULL;
 
-    for(uint8_t i = 0 ; i < NB_SHELL_COMMANDS ; i++) {
+    for (uint8_t i = 0; i < NB_SHELL_COMMANDS; i++) {
         menu->shell_commands[i] = menu_cmd_null;
     }
 
@@ -78,7 +78,7 @@ void menu_add_one(shell_menu_t *menu, const shell_command_t *command)
 {
     uint8_t command_id = 0;
 
-    for (shell_command_t *cmd = menu->shell_commands ; cmd->name != NULL; cmd++, command_id++) {}
+    for (shell_command_t *cmd = menu->shell_commands; cmd->name != NULL; cmd++, command_id++) {}
 
     assert(command_id < NB_SHELL_COMMANDS);
 
@@ -92,13 +92,15 @@ void menu_add_list(shell_menu_t *menu, const shell_command_t commands[])
     }
 }
 
-void menu_enter(shell_menu_t *menu) {
+void menu_enter(shell_menu_t *menu)
+{
     menu->previous = current_menu.current;
     memcpy(&current_menu, menu, sizeof(shell_menu_t));
     printf("Enter shell menu: %s\n", menu->name);
 }
 
-void menu_exit(void) {
+void menu_exit(void)
+{
     if (current_menu.previous) {
         printf("Exit shell menu: %s\n", current_menu.name);
         memcpy(&current_menu, current_menu.previous, sizeof(shell_menu_t));
@@ -110,5 +112,5 @@ void menu_start(void)
 {
     char line_buf[SHELL_DEFAULT_BUFSIZE];
 
-    shell_run((shell_command_t*)&current_menu, line_buf, SHELL_DEFAULT_BUFSIZE);
+    shell_run((shell_command_t *)&current_menu, line_buf, SHELL_DEFAULT_BUFSIZE);
 }

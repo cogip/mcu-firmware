@@ -24,6 +24,10 @@
 /* RIOT includes */
 #include "shell.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief       Max shell commands
  */
@@ -40,10 +44,10 @@ typedef struct shell_menu shell_menu_t;
  * @brief       Shell menu linked list element.
  */
 struct shell_menu {
-    shell_command_t shell_commands[NB_SHELL_COMMANDS]; /**< Copy of the menu currently used */
-    shell_menu_t *current;  /**< Pointer to the real current shell_commands */
-    shell_menu_t *previous; /**< Pointer to the real previous shell_commands */
-    const char *name;       /**< Menu name */
+    shell_command_t shell_commands[NB_SHELL_COMMANDS];  /**< Copy of the menu currently used */
+    shell_menu_t *current;                              /**< Pointer to the real current shell_commands */
+    shell_menu_t *previous;                             /**< Pointer to the real previous shell_commands */
+    const char *name;                                   /**< Menu name */
 };
 
 /**
@@ -62,16 +66,16 @@ void menu_set_global_commands(const shell_command_t command[]);
 /**
  * @brief        Initialize a menu.
  *
- * @param[in]    menu      menu to initialize
- * @param[in]    name      name of the menu
+ * @param[in]    menu       menu to initialize
+ * @param[in]    name       name of the menu
  */
 void menu_init(shell_menu_t *menu, const char *name);
 
 /**
  * @brief        Add a command to a menu.
  *
- * @param[in]    menu      menu
- * @param[in]    command   command to add
+ * @param[in]    menu       menu
+ * @param[in]    command    command to add
  */
 void menu_add_one(shell_menu_t *menu, const shell_command_t *command);
 
@@ -99,3 +103,9 @@ void menu_exit(void);
  * @brief        Start the main menu.
  */
 void menu_start(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+/** @} */
