@@ -16,9 +16,9 @@
 #include "planner.h"
 #include "platform.h"
 
-#ifdef CALIBRATION
-#include "calib_platform.h"
-#endif /* CALIBRATION */
+#ifdef MODULE_SHELL_PLATFORMS
+#include "shell_platforms.h"
+#endif /* MODULE_SHELL_PLATFORMS */
 
 /* Controller */
 static ctrl_quadpid_t ctrl_quadpid =
@@ -215,7 +215,7 @@ int pf_read_sensors(void)
     return obstacle_found;
 }
 
-void pf_calib_read_sensors(pca9548_t dev)
+void pf_shell_read_sensors(pca9548_t dev)
 {
     vl53l0x_t sensor = 0;
     uint8_t channel = pca9548_get_current_channel(dev);
@@ -286,7 +286,7 @@ void pf_init_tasks(void)
                   "planner");
 
 #ifdef CALIBRATION
-    pf_init_calib_tasks(controller);
+    pf_init_shell_tasks(controller);
 #endif /* CALIBRATION */
 
     /* Wait for start switch */
@@ -362,7 +362,7 @@ void pf_init(void)
         printf("%s camp\n", pf_is_camp_left() ? "LEFT" : "RIGHT");
     }
 
-#ifdef CALIBRATION
-    pf_calib_init();
-#endif /* CALIBRATION */
+#ifdef MODULE_SHELL_PLATFORMS
+    pf_shell_init();
+#endif /* MODULE_SHELL_PLATFORMS */
 }

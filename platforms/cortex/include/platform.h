@@ -318,7 +318,7 @@ int pf_read_sensors(void);
  *
  * @return
  **/
-void pf_calib_read_sensors(pca9548_t dev);
+void pf_shell_read_sensors(pca9548_t dev);
 
 /**
  * @brief Apply the given command to the motors
