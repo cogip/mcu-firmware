@@ -6,6 +6,7 @@
 #include "shell_menu.h"
 
 const shell_command_t menu_cmd_null = {NULL, NULL, NULL};
+const shell_command_t *global_commands = NULL;
 
 shell_menu_t current_menu;
 
@@ -50,7 +51,13 @@ const shell_command_t cmd_help_json = {
     _display_json_help
 };
 
-void menu_init(shell_menu_t *menu, const char *name) {
+void menu_set_global_commands(const shell_command_t command[])
+{
+    global_commands = command;
+}
+
+void menu_init(shell_menu_t *menu, const char *name)
+{
     menu->name = name;
     menu->current = menu;
     menu->previous = NULL;
@@ -61,6 +68,10 @@ void menu_init(shell_menu_t *menu, const char *name) {
 
     menu_add_one(menu, &cmd_exit_menu);
     menu_add_one(menu, &cmd_help_json);
+
+    if (global_commands) {
+        menu_add_list(menu, global_commands);
+    }
 }
 
 void menu_add_one(shell_menu_t *menu, const shell_command_t *command)
