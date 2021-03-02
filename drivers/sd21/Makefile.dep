@@ -1,6 +1,1 @@
 FEATURES_REQUIRED += periph_i2c
-
-ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
-	USEMODULE += calib_sd21
-	USEMODULE += fmt
-endif

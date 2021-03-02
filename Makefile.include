@@ -1,26 +1,32 @@
 MCUFIRMWAREBASE := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+
+APPDIR:=$(CURDIR)
+EXTERNAL_BOARD_DIRS ?= $(MCUFIRMWAREBASE)/boards/
+LAST_MAKEFILEDIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
 RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
-EXTERNAL_BOARD_DIRS ?= $(MCUFIRMWAREBASE)/boards/
 
+# Development options
 QUIET ?= 1
-
 DEVELHELP ?= 1
 
 ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
-	export MCUFIRMWARE_OPTIONS
 	CFLAGS += -DCALIBRATION
 endif
 
-INCLUDES += -I$(APPDIR)/include/
-ifneq ($(CPU),native)
-	INCLUDES += -I$(APPDIR)/include/real/
-else
-	INCLUDES += -I$(APPDIR)/include/simulation/
-endif
+ifneq ($(wildcard $(APPDIR)/include/.*),)
+	INCLUDES += -I$(APPDIR)/include/
 
-# Modules dependencies
-include $(MCUFIRMWAREBASE)/Makefile.dep
+	ifneq ($(CPU),native)
+		ifneq ($(wildcard $(APPDIR)/include/real/.*),)
+			INCLUDES += -I$(APPDIR)/include/real/
+		endif
+	else
+		ifneq ($(wildcard $(APPDIR)/include/simulation/.*),)
+			INCLUDES += -I$(APPDIR)/include/simulation/
+		endif
+	endif
+endif
 
 # Components Makefile includes
 include $(MCUFIRMWAREBASE)/controllers/Makefile.include

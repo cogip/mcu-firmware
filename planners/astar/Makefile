@@ -1,3 +1,3 @@
-MODULE = pf_cortex
+MODULE = pl_astar
 
 include $(RIOTBASE)/Makefile.base

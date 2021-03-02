@@ -2,7 +2,11 @@ APPLICATION = cortex
 
 BOARD ?= cogip2019-cortex
 
-MCUFIRMWARE_PLATFORM_BASE = cortex
+# Platform
+USEMODULE += pf_cortex
+
+# Planner
+USEMODULE += pl_astar
 
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096

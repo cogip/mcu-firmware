@@ -17,7 +17,7 @@
 #include "platform.h"
 
 #ifdef CALIBRATION
-#include "calibration/calib_platform.h"
+#include "calib_platform.h"
 #endif /* CALIBRATION */
 
 /* Controller */
