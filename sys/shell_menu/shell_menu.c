@@ -7,7 +7,9 @@
 
 const shell_command_t menu_cmd_null = {NULL, NULL, NULL};
 
-shell_menu_t current_menu;
+static shell_menu_t current_menu;
+
+static shell_menu_t main_menu;
 
 static int _display_json_help(int argc, char **argv)
 {
@@ -50,7 +52,7 @@ const shell_command_t cmd_help_json = {
     _display_json_help
 };
 
-void menu_init(shell_menu_t *menu, const char *name) {
+void menu_init_menu(shell_menu_t *menu, const char *name) {
     menu->name = name;
     menu->current = menu;
     menu->previous = NULL;
@@ -99,5 +101,18 @@ void menu_start(void)
 {
     char line_buf[SHELL_DEFAULT_BUFSIZE];
 
-    shell_run((shell_command_t*)&current_menu, line_buf, SHELL_DEFAULT_BUFSIZE);
+    /* Push main menu */
+    menu_enter(&main_menu);
+
+    shell_run((shell_command_t*)&main_menu, line_buf, SHELL_DEFAULT_BUFSIZE);
+}
+
+shell_menu_t *menu_get_main_menu(void)
+{
+    return &main_menu;
+}
+
+void menu_init(const char *name) {
+    /* Create the main menu */
+    menu_init_menu(&main_menu, name);
 }
