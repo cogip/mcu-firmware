@@ -12,7 +12,7 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "ctrl/quadpid.h"
+#include "quadpid.h"
 #include "obstacle.h"
 #include "pca9548.h"
 #include "planner.h"
