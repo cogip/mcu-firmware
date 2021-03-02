@@ -10,7 +10,7 @@
 
 /* Project includes */
 #include "platform.h"
-#include "calibration/calib_platform.h"
+#include "calib_platform.h"
 #include "calibration/calib_quadpid.h"
 
 /**

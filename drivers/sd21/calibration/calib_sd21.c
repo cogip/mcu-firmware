@@ -11,7 +11,7 @@
 #include "debug.h"
 #include "platform.h"
 #include "sd21.h"
-#include "calibration/calib_platform.h"
+#include "calib_platform.h"
 #include "calibration/calib_sd21.h"
 
 static const sd21_conf_t* sd21_config = NULL;
