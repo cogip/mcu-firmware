@@ -75,7 +75,7 @@ static int cmd_sub_1(int argc, char **argv)
         { NULL, NULL, NULL }
     };
 
-    menu_init(&menu, "Sub-menu 1");
+    menu_init_menu(&menu, "Sub-menu 1");
 
     menu_add_list(&menu, commands);
 
@@ -96,8 +96,7 @@ static int cmd_sub_2(int argc, char **argv)
         { NULL, NULL, NULL }
     };
 
-
-    menu_init(&menu, "Sub-menu 2");
+    menu_init_menu(&menu, "Sub-menu 2");
 
     menu_add_list(&menu, commands);
 
@@ -110,10 +109,9 @@ int main(void)
 {
     puts("\n== Shell menu example ==");
 
-    /* Create the main menu */
-    shell_menu_t main_menu;
+    menu_init("Main menu");
 
-    menu_init(&main_menu, "Main menu");
+    shell_menu_t * const main_menu = menu_get_main_menu();
 
     const shell_command_t main_menu_commands[] = {
         { "cmd_1", "Command 1", cmd_1 },
@@ -123,10 +121,7 @@ int main(void)
         menu_cmd_null
     };
 
-    menu_add_list(&main_menu, main_menu_commands);
-
-    /* Push main menu */
-    menu_enter(&main_menu);
+    menu_add_list(main_menu, main_menu_commands);
 
     /* Start shell */
     menu_start();
