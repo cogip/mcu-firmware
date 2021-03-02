@@ -52,12 +52,19 @@ struct shell_menu {
 extern const shell_command_t menu_cmd_null;
 
 /**
+ * @brief        Initialize main root menu.
+ *
+ * @param[in]    name      name of the menu
+ */
+void menu_init(const char *name);
+
+/**
  * @brief        Initialize a menu.
  *
  * @param[in]    menu      menu to initialize
  * @param[in]    name      name of the menu
  */
-void menu_init(shell_menu_t *menu, const char *name);
+void menu_init_menu(shell_menu_t *menu, const char *name);
 
 /**
  * @brief        Add a command to a menu.
@@ -91,3 +98,10 @@ void menu_exit(void);
  * @brief        Start the main menu.
  */
 void menu_start(void);
+
+/**
+ * @brief        Return main root menu
+ *
+ * @return       pointer on main_menu
+ */
+shell_menu_t *menu_get_main_menu(void);
