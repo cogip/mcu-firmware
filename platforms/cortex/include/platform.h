@@ -28,7 +28,7 @@
 
 /* Project includes */
 #include "ctrl.h"
-#include "ctrl/quadpid.h"
+#include "quadpid.h"
 #include "odometry.h"
 #include "path.h"
 #include "pca9548.h"

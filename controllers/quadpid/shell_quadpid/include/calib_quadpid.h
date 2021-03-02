@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ctrl/quadpid.h"
+#include "quadpid.h"
 
 /**
  * @brief Initialize quadpid calibration, mainly adds commands to RIOT shell.
