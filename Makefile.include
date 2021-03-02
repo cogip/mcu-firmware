@@ -36,8 +36,24 @@ include $(MCUFIRMWAREBASE)/platforms/Makefile.include
 include $(MCUFIRMWAREBASE)/robotics/Makefile.include
 include $(MCUFIRMWAREBASE)/sys/Makefile.include
 
+# include external modules dependencies
+# processed before RIOT ones to be evaluated before the 'default' rules.
+-include $(foreach d,$(MCUFW_EXTERNAL_MODULE_DIRS), \
+			$(if $(filter $(shell sed -E 's/MODULE\s*=\s*(.*)/\1/' $(d)/Makefile), $(USEMODULE)), $(d)/Makefile.dep,\
+				$(if $(filter $(notdir $(d)), $(USEMODULE)), $(d)/Makefile.dep)))
+
 # RIOT Makefile include
 include $(RIOTBASE)/Makefile.include
+
+# include external modules configuration
+-include $(MCUFW_EXTERNAL_MODULE_DIRS:%=%/Makefile.include)
+
+DIRS += $(foreach d,$(MCUFW_EXTERNAL_MODULE_DIRS), \
+            $(if $(filter $(shell sed -E 's/MODULE\s*=\s*(.*)/\1/' $(d)/Makefile), $(USEMODULE)), $(d), \
+                $(if $(filter $(notdir $(d)), $(USEMODULE)), $(d))))
+
+USEMODULE_INCLUDES_ = $(strip $(call uniq,$(USEMODULE_INCLUDES)))
+INCLUDES += $(USEMODULE_INCLUDES_:%=-I%)
 
 # As RIOT Makefile.include is included, RAMSIZE can be computed
 ifneq ($(CPU),native)
