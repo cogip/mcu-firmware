@@ -11,7 +11,7 @@
 #include "pca9548.h"
 #include "platform.h"
 #include "calibration/calib_pca9548.h"
-#include "calibration/calib_platform.h"
+#include "calib_platform.h"
 
 /* Shell command array */
 static shell_command_linked_t pca9548_shell_commands;

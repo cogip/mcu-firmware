@@ -11,8 +11,8 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "calibration/calib_planner.h"
-#include "calibration/calib_platform.h"
+#include "calib_planner.h"
+#include "calib_platform.h"
 #include "calibration/calib_quadpid.h"
 #include "avoidance.h"
 #include "ctrl.h"
