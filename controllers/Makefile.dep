@@ -1,3 +1,0 @@
-ifneq (,$(filter quadpid,$(USEMODULE)))
-	include $(MCUFIRMWAREBASE)/controllers/quadpid/Makefile.dep
-endif

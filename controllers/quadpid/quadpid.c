@@ -14,7 +14,7 @@
 #include "ctrl.h"
 #include "odometry.h"
 #include "platform.h"
-#include "ctrl/quadpid.h"
+#include "quadpid.h"
 #include "trigonometry.h"
 
 /**
