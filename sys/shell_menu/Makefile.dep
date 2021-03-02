@@ -1,0 +1,2 @@
+USEMODULE += shell
+USEMODULE += shell_commands

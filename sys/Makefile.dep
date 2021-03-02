@@ -1,4 +1,0 @@
-ifneq (,$(filter shell_menu,$(USEMODULE)))
-  USEMODULE += shell
-  USEMODULE += shell_commands
-endif
