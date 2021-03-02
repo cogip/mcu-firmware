@@ -1,7 +1,7 @@
 LAST_MAKEFILEDIR_controllers := $(LAST_MAKEFILEDIR)
 
 # Common part for all controllers
-EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_controllers)/common
+MCUFW_EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_controllers)/common
 
 # Controllers
-EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_controllers)/quadpid
+MCUFW_EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_controllers)/quadpid
