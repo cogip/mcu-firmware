@@ -1,15 +1,11 @@
-export DEBUG_ADAPTER ?= stlink
-export STLINK_VERSION ?= 2
-
-# set default port depending on operating system
-PORT_LINUX ?= /dev/ttyUSB0
-PORT_DARWIN ?= $(firstword $(sort $(wildcard /dev/tty.SLAB_USBtoUART*)))
-
-# setup serial terminal
-include $(RIOTMAKE)/tools/serial.inc.mk
-
-# this board uses openocd
-include $(RIOTMAKE)/tools/openocd.inc.mk
-
 # add the common stm32 header files from RIOT repository to the include path
 INCLUDES += -I$(RIOTBASE)/boards/common/stm32/include
+
+# this board uses openocd with st-link
+PROGRAMMER ?= openocd
+
+# this board has an on-board ST-link adapter
+OPENOCD_DEBUG_ADAPTER ?= stlink
+
+# openocd programmer is supported
+PROGRAMMERS_SUPPORTED += openocd
