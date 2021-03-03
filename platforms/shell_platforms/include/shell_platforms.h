@@ -7,11 +7,11 @@
  */
 
 /**
- * @defgroup    platforms_calibration Common platform calibration
+ * @defgroup    platforms_shell Common platform shell
  * @ingroup     platforms
- * @brief       Common platform calibration with shell management
+ * @brief       Common platform shell with shell management
  *
- * The common platform calibration code defines shell commands to retrieve
+ * The common platform shell code defines shell commands to retrieve
  * informations from the platform component which has a central role.
  * For now the shell has the following commands:
  * * _dyn_obstacles : Print dynamic obstacles
@@ -21,7 +21,7 @@
  *
  * @{
  * @file
- * @brief       Common platform calibration headers
+ * @brief       Common platform shell headers
  *
  * @author      Eric Courtois <eric.courtois@gmail.com>
  * @author      Gilles DOFFE <g.doffe@gmail.com>
@@ -30,8 +30,8 @@
 #include "ctrl.h"
 #include "platform.h"
 
-void pf_init_calib_tasks(ctrl_t* pf_ctrl);
-void pf_calib_init(void);
+void pf_init_shell_tasks(ctrl_t* pf_ctrl);
+void pf_shell_init(void);
 
 /**
  * @brief Chained list to store commands through modules declaration
