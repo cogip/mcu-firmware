@@ -1,7 +1,0 @@
-LAST_MAKEFILEDIR_platforms := $(LAST_MAKEFILEDIR)
-
-# Calibration
-MCUFW_EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_platforms)/shell_pf
-
-# Platforms
-MCUFW_EXTERNAL_MODULE_DIRS += $(LAST_MAKEFILEDIR_platforms)/cortex
