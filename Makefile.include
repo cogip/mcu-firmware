@@ -31,9 +31,9 @@ endif
 MCUFW_MODULE_DIRS = " \
 					controllers \
 					drivers \
+					lib \
 					planners \
 					platforms \
-					robotics \
 					sys \
 					"
 
