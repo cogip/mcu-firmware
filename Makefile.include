@@ -6,6 +6,10 @@ LAST_MAKEFILEDIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
 RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
 
+# Create a symbolic for each package in RIOT
+pkgs := $(foreach dir,$(wildcard $(RIOTBASE)/pkg/*/Makefile),$(subst Makefile,, $(dir)))
+$(foreach pkg,$(pkgs), $(shell ln -sf $(pkg) $(RIOTPKG)/$(notdir $(pkg))))
+
 # Development options
 QUIET ?= 1
 DEVELHELP ?= 1
