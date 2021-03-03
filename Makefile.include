@@ -14,6 +14,20 @@ $(foreach pkg,$(pkgs), $(shell ln -sf $(pkg) $(RIOTPKG)/$(notdir $(pkg))))
 QUIET ?= 1
 DEVELHELP ?= 1
 
+MCUFW_MODULE_DIRS = " \
+					controllers \
+					drivers \
+					lib \
+					planners \
+					platforms \
+					sys \
+					"
+
+EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/)
+
+# RIOT Makefile include
+include $(RIOTBASE)/Makefile.include
+
 ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
 	CFLAGS += -DCALIBRATION
 endif
@@ -31,20 +45,6 @@ ifneq ($(wildcard $(APPDIR)/include/.*),)
 		endif
 	endif
 endif
-
-MCUFW_MODULE_DIRS = " \
-					controllers \
-					drivers \
-					lib \
-					planners \
-					platforms \
-					sys \
-					"
-
-EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/)
-
-# RIOT Makefile include
-include $(RIOTBASE)/Makefile.include
 
 # As RIOT Makefile.include is included, RAMSIZE can be computed
 ifneq ($(CPU),native)
