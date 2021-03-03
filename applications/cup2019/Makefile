@@ -5,6 +5,9 @@ BOARD ?= cogip-board
 # Platform
 USEMODULE += cortex
 
+# Shell menus management
+USEMODULE += shell_menu
+
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 # Number of positions available for each servomotor
