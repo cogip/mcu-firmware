@@ -52,6 +52,14 @@ struct shell_menu {
 extern const shell_command_t menu_cmd_null;
 
 /**
+ * @brief        Add a a list of global commands to all menus. Should be called before menu_init().
+ *
+ * @param[in]    menu      menu
+ * @param[in]    command   command to add
+ */
+void menu_set_global_commands(const shell_command_t command[]);
+
+/**
  * @brief        Initialize main root menu.
  *
  * @param[in]    name      name of the menu
