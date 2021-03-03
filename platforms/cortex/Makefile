@@ -1,3 +1,1 @@
-MODULE = pf_cortex
-
 include $(RIOTBASE)/Makefile.base

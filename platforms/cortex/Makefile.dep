@@ -10,18 +10,16 @@ USEMODULE += xtimer
 
 # mcu-firmware modules
 USEMODULE += avoidance
-USEMODULE += ctrl
 USEMODULE += obstacle
 USEMODULE += odometry
 USEMODULE += path
 USEMODULE += pca9548
 USEMODULE += pid
-USEMODULE += pl_astar
+USEMODULE += astar
 USEMODULE += quadpid
 USEMODULE += sd21
 USEMODULE += trigonometry
 USEMODULE += utils
-USEMODULE += $(APPLICATION_MODULE)
 
 # External package required
 USEPKG += vl53l0x-api

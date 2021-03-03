@@ -3,10 +3,7 @@ APPLICATION = cortex
 BOARD ?= cogip-board
 
 # Platform
-USEMODULE += pf_cortex
-
-# Planner
-USEMODULE += pl_astar
+USEMODULE += cortex
 
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
