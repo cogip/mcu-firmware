@@ -10,14 +10,14 @@
 /* Project includes */
 #include "planner.h"
 #include "platform.h"
-#include "calib_planner.h"
-#include "calib_platform.h"
+#include "shell_planner.h"
+#include "shell_platform.h"
 
 /* Shell command array */
 static shell_command_linked_t pln_shell_commands;
 static const char *pln_name = "planner";
 
-static uint8_t calib_path_index;
+static uint8_t shell_path_index;
 
 static int pln_cmd_go_next_cb(int argc, char **argv)
 {
@@ -26,9 +26,9 @@ static int pln_cmd_go_next_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (calib_path_index < path->nb_pose - 1)
-        calib_path_index++;
-    path_set_current_pose_idx(path, calib_path_index);
+    if (shell_path_index < path->nb_pose - 1)
+        shell_path_index++;
+    path_set_current_pose_idx(path, shell_path_index);
 
     return EXIT_SUCCESS;
 }
@@ -40,9 +40,9 @@ static int pln_cmd_go_previous_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (calib_path_index > 0)
-        calib_path_index--;
-    path_set_current_pose_idx(path, calib_path_index);
+    if (shell_path_index > 0)
+        shell_path_index--;
+    path_set_current_pose_idx(path, shell_path_index);
 
     return EXIT_SUCCESS;
 }
@@ -66,8 +66,8 @@ static int pln_cmd_select_next_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (calib_path_index < path->nb_pose - 1)
-        calib_path_index++;
+    if (shell_path_index < path->nb_pose - 1)
+        shell_path_index++;
 
     return EXIT_SUCCESS;
 }
@@ -77,8 +77,8 @@ static int pln_cmd_select_previous_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    if (calib_path_index > 0)
-        calib_path_index--;
+    if (shell_path_index > 0)
+        shell_path_index--;
 
     return EXIT_SUCCESS;
 }
@@ -89,7 +89,7 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     (void)argv;
 
     path_t *path = pf_get_path();
-    func_cb_t cb = path_get_pose_at_idx(path, calib_path_index)->act;;
+    func_cb_t cb = path_get_pose_at_idx(path, shell_path_index)->act;;
 
     if(cb != NULL) {
         puts("Launch callback!");
@@ -99,13 +99,13 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-/* Speed calibration command */
-static int pln_calib_cmd(int argc, char **argv)
+/* Speed shellration command */
+static int pln_shell_cmd(int argc, char **argv)
 {
     (void)argv;
     int ret = 0;
 
-    calib_path_index = 0;
+    shell_path_index = 0;
 
     ctrl_t* ctrl = pf_get_ctrl();
 
@@ -113,7 +113,7 @@ static int pln_calib_cmd(int argc, char **argv)
     if (argc > 1) {
         puts("Bad number of arguments!");
         ret = -1;
-        goto pln_calib_cmd_err;
+        goto pln_shell_cmd_err;
     }
 
     pln_set_allow_change_path_pose(FALSE);
@@ -163,17 +163,17 @@ static int pln_calib_cmd(int argc, char **argv)
     /* Push new menu */
     pf_push_shell_commands(&pln_shell_commands);
 
-pln_calib_cmd_err:
+pln_shell_cmd_err:
     return ret;
 }
 
-/* Init calibration commands */
-void pln_calib_init(void)
+/* Init shellration commands */
+void pln_shell_init(void)
 {
-    /* Add planner calibration command */
-    shell_command_t cmd_calib_pln = {
-        "pc", "Planner calibration",
-        pln_calib_cmd
+    /* Add planner shellration command */
+    shell_command_t cmd_shell_pln = {
+        "pc", "Planner shellration",
+        pln_shell_cmd
     };
-    pf_add_shell_command(&pf_shell_commands, &cmd_calib_pln);
+    pf_add_shell_command(&pf_shell_commands, &cmd_shell_pln);
 }
