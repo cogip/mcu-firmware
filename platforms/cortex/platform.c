@@ -359,6 +359,9 @@ void pf_init(void)
         printf("%s camp\n", pf_is_camp_left() ? "LEFT" : "RIGHT");
     }
 
+    /* Initialize planner */
+    pln_init();
+
 #ifdef MODULE_SHELL_PLATFORMS
     pf_shell_init();
 #endif /* MODULE_SHELL_PLATFORMS */
