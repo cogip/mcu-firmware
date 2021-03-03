@@ -28,8 +28,3 @@ USEPKG += vl53l0x-api
 FEATURES_REQUIRED += periph_i2c
 FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
-
-ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
-	USEMODULE += shell_pf
-	USEMODULE += fmt
-endif
