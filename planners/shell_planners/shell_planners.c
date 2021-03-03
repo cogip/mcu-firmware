@@ -10,13 +10,9 @@
 /* Project includes */
 #include "planner.h"
 #include "platform.h"
-#include "shell_planner.h"
-#include "shell_platform.h"
+#include "shell_planners.h"
 
 /* Shell command array */
-static shell_command_linked_t pln_shell_commands;
-static const char *pln_name = "planner";
-
 static uint8_t shell_path_index;
 
 static int pln_cmd_go_next_cb(int argc, char **argv)
@@ -99,81 +95,22 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-/* Speed shellration command */
-static int pln_shell_cmd(int argc, char **argv)
-{
-    (void)argv;
-    int ret = 0;
-
-    shell_path_index = 0;
-
-    ctrl_t* ctrl = pf_get_ctrl();
-
-    /* Check arguments */
-    if (argc > 1) {
-        puts("Bad number of arguments!");
-        ret = -1;
-        goto pln_shell_cmd_err;
-    }
-
-    pln_set_allow_change_path_pose(FALSE);
-
-    pln_start(ctrl);
-
-    pf_init_shell_commands(&pln_shell_commands, pln_name);
-
-    shell_command_t pln_cmd_go_next = {
-        "n", "Go to next position",
-        pln_cmd_go_next_cb
-    };
-    pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_next);
-
-    shell_command_t pln_cmd_go_previous = {
-        "p", "Go to previous position",
-        pln_cmd_go_previous_cb
-    };
-    pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_previous);
-
-    shell_command_t pln_cmd_go_start = {
-        "s", "Go back to start position",
-        pln_cmd_go_start_cb
-    };
-    pf_add_shell_command(&pln_shell_commands, &pln_cmd_go_start);
-
-    shell_command_t pln_cmd_select_next = {
-        "N", "Select next position",
-        pln_cmd_select_next_cb
-    };
-    pf_add_shell_command(&pln_shell_commands, &pln_cmd_select_next);
-
-    shell_command_t pln_cmd_select_previous = {
-        "P", "Select previous position",
-        pln_cmd_select_previous_cb
-    };
-    pf_add_shell_command(&pln_shell_commands, &pln_cmd_select_previous);
-
-    shell_command_t pln_cmd_launch_action = {
-        "a", "Launch action",
-        pln_cmd_launch_action_cb
-    };
-    pf_add_shell_command(&pln_shell_commands, &pln_cmd_launch_action);
-
-    pf_add_shell_command(&pln_shell_commands, &cmd_exit_shell);
-
-    /* Push new menu */
-    pf_push_shell_commands(&pln_shell_commands);
-
-pln_shell_cmd_err:
-    return ret;
-}
-
-/* Init shellration commands */
+/* Init shell commands */
 void pln_shell_init(void)
 {
-    /* Add planner shellration command */
-    shell_command_t cmd_shell_pln = {
-        "pc", "Planner shellration",
-        pln_shell_cmd
+    shell_menu_t planners_menu;
+
+    menu_init(&planners_menu, "Planners menu");
+
+    const shell_command_t planners_menu_commands[] = {
+        { "n", "Go to next position", pln_cmd_go_next_cb },
+        { "p", "Go to previous position", pln_cmd_go_previous_cb },
+        { "s", "Go back to start position", pln_cmd_go_start_cb },
+        { "N", "Select next position", pln_cmd_select_next_cb },
+        { "P", "Select previous position", pln_cmd_select_previous_cb },
+        { "a", "Launch action", pln_cmd_launch_action_cb },
+        menu_cmd_null,
     };
-    pf_add_shell_command(&pf_shell_commands, &cmd_shell_pln);
+
+    menu_add_list(&planners_menu, planners_menu_commands);
 }
