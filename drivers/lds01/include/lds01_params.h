@@ -16,6 +16,10 @@
  * @author      Eric Courtois <eric.courtois@gmail.com>
  */
 
+#error This default header should not be included. \
+    Create your own lds01_params.h in your application folder.
+
+/* Code below is given as example */
 #pragma once
 
 #include "lds01.h"
