@@ -19,7 +19,6 @@
 
 #include "board_internal.h"
 #include "platform.h"
-#include "calibration/calib_platform.h"
 
 #ifdef MODULE_MTD
 #include "mtd_native.h"
