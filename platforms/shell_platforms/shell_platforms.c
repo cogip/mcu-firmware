@@ -1,4 +1,5 @@
 /* System includes */
+#include <inttypes.h>
 #include <thread.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,7 +103,7 @@ int pf_motors_test(int argc, char **argv)
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            printf("    qdec value = %ld\n", qdec_value);
+            printf("    qdec value = %"PRId32"\n", qdec_value);
             puts("    Done");
 
             /* Stop */
@@ -120,7 +121,7 @@ int pf_motors_test(int argc, char **argv)
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            printf("    qdec value = %ld\n", qdec_value);
+            printf("    qdec value = %"PRId32"\n", qdec_value);
             puts("    Done");
 
             /* Stop */
