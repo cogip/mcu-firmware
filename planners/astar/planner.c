@@ -16,6 +16,10 @@
 #include "debug.h"
 #include "log.h"
 
+#ifdef MODULE_SHELL_PLANNERS
+#include "shell_planners.h"
+#endif /* MODULE_SHELL_PLANNERS */
+
 static uint8_t pln_started = FALSE;
 
 /* Planner can automatically change next path pose to reach when current pose
@@ -225,4 +229,11 @@ yield_point:
     }
 
     return 0;
+}
+
+void pln_init(void)
+{
+#ifdef MODULE_SHELL_PLANNERS
+    pln_shell_init();
+#endif /* MODULE_SHELL_PLANNERS */
 }
