@@ -24,8 +24,9 @@
 #include "vl53l0x.h"
 #include "board.h"
 #include "platform.h"
+#include "shmem.h"
 
-uint16_t *shm_ptr = NULL;
+uint16_t *shmem_ptrr = NULL;
 
 int vl53l0x_init_dev(vl53l0x_t dev)
 {
@@ -54,22 +55,23 @@ void vl53l0x_init(void)
 
 uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
 {
-    int pf_shm_key = pf_get_shm_key();
+    int shmem_key = shmem_get_key();
 
     /* Try to initialize shared memory if not already done */
-    if(shm_ptr == NULL && pf_shm_key != 0) {
-        int shmid = shmget(pf_shm_key, VL53L0X_NUMOF*sizeof(uint16_t), 0);
-        shm_ptr = (uint16_t*) shmat(shmid,(void*)0,0);
+    if(shmem_ptrr == NULL && shmem_key != 0) {
+        int shmid = shmget(shmem_key, VL53L0X_NUMOF*sizeof(uint16_t), 0);
+        shmem_ptrr = (uint16_t*) shmat(shmid,(void*)0,0);
     }
 
     /* Return max value if shared memory is not initialized */
-    if(shm_ptr == NULL) {
+    if(shmem_ptrr == NULL) {
         return UINT16_MAX;
     }
 
-    /* printf("Sensor %d = %d\n", dev, shm_ptr[dev]); */
+    /* printf("Sensor %d = %d\n", dev, shmem_ptrr[dev]); */
 
     /* Return value from simulator */
-    return shm_ptr[dev];
+    return shmem_ptrr[dev];
+
 }
 /** @} */
