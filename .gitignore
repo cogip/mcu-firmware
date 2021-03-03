@@ -59,5 +59,6 @@ Makefile.local
 # scan-build artifacts
 scan-build/
 
-# python virtual environnement
-simulation/venv/
+# Symbolic links
+pkg/*
+!pkg/vl53l0x-api
