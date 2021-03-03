@@ -29,9 +29,7 @@
  */
 void board_init(void)
 {
-    puts("COGIP 2019 native board initialized.");
-
-    pf_add_shell_command(&pf_shell_commands, &cmd_set_shm_key);
+    puts("COGIP native board initialized.");
 }
 
 #ifdef MODULE_MTD
