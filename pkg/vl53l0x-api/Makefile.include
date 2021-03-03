@@ -1,4 +1,8 @@
 INCLUDES += -I$(MCUFIRMWAREBASE)/pkg/vl53l0x-api/include
 INCLUDES += -I$(PKGDIRBASE)/vl53l0x-api/include
 
-DIRS += $(MCUFIRMWAREBASE)/pkg/vl53l0x-api/contrib
+ifeq ($(CPU),native)
+	DIRS += $(MCUFIRMWAREBASE)/pkg/vl53l0x-api/simulation
+else
+	DIRS += $(MCUFIRMWAREBASE)/pkg/vl53l0x-api/contrib
+endif
