@@ -3,6 +3,16 @@
 #include "shell.h"
 #include "shell_menu.h"
 
+static int cmd_global(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    puts("Execute global command");
+
+    return 0;
+}
+
 static int cmd_1_1(int argc, char **argv)
 {
     (void)argc;
@@ -109,7 +119,11 @@ int main(void)
 {
     puts("\n== Shell menu example ==");
 
-    menu_init("Main menu");
+    const shell_command_t global_commands[] = {
+        {"global", "Global command", cmd_global},
+        menu_cmd_null
+    };
+    menu_set_global_commands(global_commands);
 
     shell_menu_t * const main_menu = menu_get_main_menu();
 
@@ -120,6 +134,8 @@ int main(void)
         { "sub2", "Enter sub-menu 1", cmd_sub_2 },
         menu_cmd_null
     };
+
+    menu_init("Main menu");
 
     menu_add_list(main_menu, main_menu_commands);
 
