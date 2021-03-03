@@ -11,11 +11,10 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "calib_planner.h"
-#include "calib_platform.h"
-#include "calibration/calib_quadpid.h"
 #include "avoidance.h"
 #include "ctrl.h"
+#include "shell_platforms.h"
+
 
 #define GLOBAL_MENU "_global"
 
@@ -222,7 +221,7 @@ int pf_motors_test(int argc, char **argv)
 }
 
 shell_command_t cmd_exit_shell = {
-    "exit", "Exit planner calibration",
+    "exit", "Exit planner shell",
     pf_exit_shell
 };
 
@@ -255,12 +254,12 @@ static void *pf_task_start_shell(void *arg)
     /* Set a flag and return once done */
     *start_shell = TRUE;
 
-    puts("Entering calibration mode...");
+    puts("Entering shell mode...");
 
     return NULL;
 }
 
-void pf_init_calib_tasks(ctrl_t* pf_ctrl)
+void pf_init_shell_tasks(ctrl_t* pf_ctrl)
 {
     static int start_shell = FALSE;
 
@@ -268,7 +267,7 @@ void pf_init_calib_tasks(ctrl_t* pf_ctrl)
 
     ctrl = pf_ctrl;
 
-    puts("Built-in calibration mode is ACTIVATED");
+    puts("Built-in shell mode is ACTIVATED");
 
     /* Create thread that up a flag on key pressed to start a shell instead of
        planner below */
@@ -277,7 +276,7 @@ void pf_init_calib_tasks(ctrl_t* pf_ctrl)
                   THREAD_PRIORITY_MAIN + 1, 0,
                   pf_task_start_shell, &start_shell, "shell");
 
-    puts("Press Enter to enter calibration mode...");
+    puts("Press Enter to enter shell mode...");
 
     /* Wait for Enter key pressed or countdown */
     while ((!start_shell) && (countdown > 0)) {
@@ -306,10 +305,8 @@ void pf_init_calib_tasks(ctrl_t* pf_ctrl)
     }
 }
 
-void pf_calib_init(void)
+void pf_shell_init(void)
 {
     pf_init_shell_commands(&pf_shell_commands, GLOBAL_MENU);
-
-    ctrl_quadpid_calib_init();
-    pln_calib_init();
 }
+
