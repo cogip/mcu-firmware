@@ -18,8 +18,9 @@
 #include "shell_menu.h"
 #include "shell_platforms.h"
 
-
-#define GLOBAL_MENU "_global"
+#ifdef MODULE_SHMEM
+#include "shmem.h"
+#endif
 
 /* Controller */
 static ctrl_t* ctrl = NULL;
@@ -147,6 +148,9 @@ void pf_shell_init(void)
         { "_state", "Print current state", pf_print_state },
         { "_dyn_obstacles", "Print dynamic obstacles",
             avoidance_print_dyn_obstacles },
+#ifdef MODULE_SHMEM
+        SHMEM_SET_KEY_CMD,
+#endif
         MENU_NULL_CMD
     };
     menu_set_global_commands(global_commands);
