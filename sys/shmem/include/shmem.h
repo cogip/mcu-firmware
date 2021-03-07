@@ -40,7 +40,13 @@ int shmem_get_key(void);
 const shmem_data_t *shmem_get_data(void);
 int shmem_set_key_cmd_cb(int argc, char **argv);
 
-extern const shell_command_t shmem_set_key_cmd;
+/* Command to add to the shell */
+#define SHMEM_SET_KEY_CMD                                      \
+    {                                                          \
+        "set_shmem_key",                                       \
+        "Set shared memory key to communicate with simulator", \
+        shmem_set_key_cmd_cb                                   \
+    }
 
 #ifdef __cplusplus
 }

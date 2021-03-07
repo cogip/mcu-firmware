@@ -14,12 +14,6 @@ static int shmem_key = 0;
 /* Shared memory structure shared by the simulator */
 static shmem_data_t *shmem_data = NULL;
 
-/* Command to add to the shell */
-const shell_command_t shmem_set_key_cmd = {
-    "set_shmem_key", "Set shared memory key to communicate with simulator",
-    shmem_set_key_cmd_cb
-};
-
 void shmem_set_key(int key)
 {
     /* Detach previous shared memory if any */

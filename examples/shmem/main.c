@@ -32,26 +32,18 @@ int main(void)
     puts("\n== shmem example ==");
 
     /* make set_key command available in all menus */
-    const shell_command_t global_commands[] = {
-        shmem_set_key_cmd,
-        menu_cmd_null
+    static const shell_command_t global_commands[] = {
+        SHMEM_SET_KEY_CMD,
+        MENU_NULL_CMD
     };
     menu_set_global_commands(global_commands);
-
-    /* Create the main menu */
-    shell_menu_t main_menu;
-
-    menu_init(&main_menu, "Main menu");
 
     /* Add print data command */
     const shell_command_t print_data_cmd = {
         "data", "Print data from the shared memory",
         print_data_cmd_cb
     };
-    menu_add_one(&main_menu, &print_data_cmd);
-
-    /* Push main menu */
-    menu_enter(&main_menu);
+    menu_add_one(menu_root, &print_data_cmd);
 
     /* Start shell */
     menu_start();
