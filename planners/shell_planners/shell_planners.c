@@ -98,9 +98,8 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
 /* Init shell commands */
 void pln_shell_init(void)
 {
-    shell_menu_t planners_menu;
-
-    menu_init(&planners_menu, "Planners menu");
+    /* Planners menu and commands */
+    shell_menu_t menu = menu_init("Planners menu", "pln_menu", menu_root);
 
     const shell_command_t planners_menu_commands[] = {
         { "n", "Go to next position", pln_cmd_go_next_cb },
@@ -109,8 +108,8 @@ void pln_shell_init(void)
         { "N", "Select next position", pln_cmd_select_next_cb },
         { "P", "Select previous position", pln_cmd_select_previous_cb },
         { "a", "Launch action", pln_cmd_launch_action_cb },
-        menu_cmd_null,
+        MENU_NULL_CMD,
     };
 
-    menu_add_list(&planners_menu, planners_menu_commands);
+    menu_add_list(menu, planners_menu_commands);
 }
