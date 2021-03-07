@@ -142,15 +142,22 @@ void pf_shell_init(void)
 {
     ctrl = pf_get_ctrl();
 
-    shell_menu_t * const main_menu = menu_get_main_menu();
-
-    const shell_command_t platforms_menu_commands[] = {
+    /* Global commands */
+    static const shell_command_t global_commands[] = {
         { "_state", "Print current state", pf_print_state },
         { "_dyn_obstacles", "Print dynamic obstacles",
             avoidance_print_dyn_obstacles },
+        MENU_NULL_CMD
+    };
+    menu_set_global_commands(global_commands);
+
+    /* Platforms menu and commands */
+    shell_menu_t menu = menu_init("Platforms menu", "pf_menu", menu_root);
+
+    const shell_command_t shell_platforms_menu_commands[] = {
         { "mt", "Test all DC motors", pf_motors_test },
-        menu_cmd_null,
+        MENU_NULL_CMD,
     };
 
-    menu_add_list(main_menu, platforms_menu_commands);
+    menu_add_list(menu, shell_platforms_menu_commands);
 }
