@@ -25,34 +25,52 @@
 #include "shell.h"
 
 /**
- * @brief       Max shell commands
+ * @brief       Max shell commands by menu
  */
 #ifndef NB_SHELL_COMMANDS
 #  define NB_SHELL_COMMANDS 20
 #endif
 
 /**
+ * @brief       Max shell menus
+ */
+#ifndef NB_SHELL_MENUS
+#  define NB_SHELL_MENUS 10
+#endif
+
+/**
+ * @brief       Null command used to terminate arrays of commands
+ */
+#define MENU_NULL_CMD { NULL, NULL, NULL }
+
+/**
+ * @brief       Typedef for shell_menu identifier.
+ */
+typedef unsigned int shell_menu_t;
+
+/**
+ * @brief       Root menu.
+ */
+extern const shell_menu_t menu_root;
+
+/**
  * @brief       Typedef for shell_menu structure.
  */
-typedef struct shell_menu shell_menu_t;
+typedef struct shell_menu shell_menu_data_t;
 
 /**
  * @brief       Shell menu linked list element.
  */
 struct shell_menu {
-    shell_command_t shell_commands[NB_SHELL_COMMANDS]; /**< Copy of the menu currently used */
-    shell_menu_t *current;  /**< Pointer to the real current shell_commands */
-    shell_menu_t *previous; /**< Pointer to the real previous shell_commands */
-    const char *name;       /**< Menu name */
+    shell_command_t shell_commands[NB_SHELL_COMMANDS];  /**< Copy of the menu currently used */
+    shell_menu_data_t *current;                         /**< Pointer to the real current shell_commands */
+    shell_menu_data_t *previous;                        /**< Pointer to the real previous shell_commands */
+    const char *name;                                   /**< Menu name */
+    const char *cmd;                                    /**< Command to enter this menu */
 };
 
 /**
- * @brief        Null command used to terminate a command list.
- */
-extern const shell_command_t menu_cmd_null;
-
-/**
- * @brief        Add a a list of global commands to all menus. Should be called before menu_init().
+ * @brief        Add a a list of global commands to all menus. Should be called before any menu_init().
  *
  * @param[in]    menu      menu
  * @param[in]    command   command to add
@@ -60,42 +78,38 @@ extern const shell_command_t menu_cmd_null;
 void menu_set_global_commands(const shell_command_t command[]);
 
 /**
- * @brief        Initialize main root menu.
- *
- * @param[in]    name      name of the menu
- */
-void menu_init(const char *name);
-
-/**
  * @brief        Initialize a menu.
  *
- * @param[in]    menu      menu to initialize
  * @param[in]    name      name of the menu
+ * @param[in]    cmd       shell command to enter the menu
+ * @param[in]    parent    parent menu
+ *
+ * @return                 menu identifer
  */
-void menu_init_menu(shell_menu_t *menu, const char *name);
+shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t parent);
 
 /**
  * @brief        Add a command to a menu.
  *
- * @param[in]    menu      menu
+ * @param[in]    menu      menu identifier
  * @param[in]    command   command to add
  */
-void menu_add_one(shell_menu_t *menu, const shell_command_t *command);
+void menu_add_one(const shell_menu_t menu, const shell_command_t *command);
 
 /**
  * @brief        Add a list of command to a menu.
  *
- * @param[in]    menu       menu
+ * @param[in]    menu       menu identifier
  * @param[in]    commands   list of commands to add
  */
-void menu_add_list(shell_menu_t *menu, const shell_command_t commands[]);
+void menu_add_list(const shell_menu_t menu, const shell_command_t commands[]);
 
 /**
  * @brief        Enter a new menu.
  *
- * @param[in]    menu       new menu
+ * @param[in]    menu       new menu identifier
  */
-void menu_enter(shell_menu_t *menu);
+void menu_enter(const shell_menu_t menu);
 
 /**
  * @brief        Exit current menu and go back to previous menu.
@@ -106,10 +120,3 @@ void menu_exit(void);
  * @brief        Start the main menu.
  */
 void menu_start(void);
-
-/**
- * @brief        Return main root menu
- *
- * @return       pointer on main_menu
- */
-shell_menu_t *menu_get_main_menu(void);
