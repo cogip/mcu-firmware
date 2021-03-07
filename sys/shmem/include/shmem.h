@@ -35,9 +35,33 @@
 extern "C" {
 #endif
 
+/**
+ * @brief        Set the SHM key.
+ *
+ * @param[in]    key       new SHM key
+ */
 void shmem_set_key(int key);
+
+/**
+ * @brief        Get current SHM key
+ *
+ * @return                 current SHM key, 0 if not set
+ */
 int shmem_get_key(void);
+
+/**
+ * @brief        Get SHM data pointer
+ *
+ * @return                 pointer to SHM data, NULL if not set
+ */
 const shmem_data_t *shmem_get_data(void);
+
+/**
+ * @brief        Callback to use in the shell menu to set the SHM key.
+ *
+ * @param[in]    argc      unused
+ * @param[in]    argv      unused
+ */
 int shmem_set_key_cmd_cb(int argc, char **argv);
 
 /* Command to add to the shell */
