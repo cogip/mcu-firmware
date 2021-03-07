@@ -7,49 +7,7 @@ static int cmd_global(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-
     puts("Execute global command");
-
-    return 0;
-}
-
-static int cmd_1_1(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    puts("Execute command 1 in sub-menu 1");
-
-    return 0;
-}
-
-static int cmd_1_2(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    puts("Execute command 2 in sub-menu 1");
-
-    return 0;
-}
-
-static int cmd_2_1(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    puts("Execute command 1 in sub-menu 2");
-
-    return 0;
-}
-
-static int cmd_2_2(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    puts("Execute command 2 in sub-menu 2");
-
     return 0;
 }
 
@@ -57,9 +15,7 @@ static int cmd_1(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-
     puts("Execute command 1 in main menu");
-
     return 0;
 }
 
@@ -67,77 +23,100 @@ static int cmd_2(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-
     puts("Execute command 2 in main menu");
-
     return 0;
 }
 
-static int cmd_sub_1(int argc, char **argv)
+static int cmd_1_1(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-
-    shell_menu_t menu;
-    const shell_command_t commands[] = {
-        { "cmd_1_1", "Command 1/1", cmd_1_1 },
-        { "cmd_1_2", "Command 1/2", cmd_1_2 },
-        { NULL, NULL, NULL }
-    };
-
-    menu_init_menu(&menu, "Sub-menu 1");
-
-    menu_add_list(&menu, commands);
-
-    menu_enter(&menu);
-
+    puts("Execute command 1 in Module 1");
     return 0;
 }
 
-static int cmd_sub_2(int argc, char **argv)
+static int cmd_1_2(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-
-    shell_menu_t menu;
-    const shell_command_t commands[] = {
-        { "cmd_2_1", "Command 2/1", cmd_2_1 },
-        { "cmd_2_2", "Command 2/2", cmd_2_2 },
-        { NULL, NULL, NULL }
-    };
-
-    menu_init_menu(&menu, "Sub-menu 2");
-
-    menu_add_list(&menu, commands);
-
-    menu_enter(&menu);
-
+    puts("Execute command 2 in Module 1");
     return 0;
+}
+
+static int cmd_2_1(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+    puts("Execute command 1 in Module 2");
+    return 0;
+}
+
+static int cmd_2_2(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+    puts("Execute command 2 in Module 2");
+    return 0;
+}
+
+static int cmd_2_1_sub(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+    puts("Execute command in Module 2 sub-menu");
+    return 0;
+}
+
+void module1_init(void) {
+    shell_menu_t menu = menu_init("Module 1 menu", "mod1", menu_root);
+    static const shell_command_t menu_commands[] = {
+        { "cmd_1", "Module 1 command 1", cmd_1_1 },
+        { "cmd_2", "Module 1 command 2", cmd_1_2 },
+        MENU_NULL_CMD
+    };
+    menu_add_list(menu, menu_commands);
+}
+
+void module2_init(void) {
+    shell_menu_t menu = menu_init("Module 2 menu", "mod2", menu_root);
+    static const shell_command_t menu_commands[] = {
+        { "cmd_1", "Module 2 command 1", cmd_2_1 },
+        { "cmd_2", "Module 2 command 2", cmd_2_2 },
+        MENU_NULL_CMD
+    };
+    menu_add_list(menu, menu_commands);
+
+    /* Add a sub menu in the module */
+    shell_menu_t sub_menu = menu_init("Module 2 sub-menu", "mod2_sub", menu);
+    static const shell_command_t sub_menu_commands[] = {
+        { "cmd_1", "Module 2 sub-menu command", cmd_2_1_sub },
+        MENU_NULL_CMD
+    };
+    menu_add_list(sub_menu, sub_menu_commands);
+}
+
+void app_init(void) {
+    static shell_command_t global_commands[] = {
+        {"global", "Global command", cmd_global},
+        MENU_NULL_CMD
+    };
+    menu_set_global_commands(global_commands);
+
+    const shell_command_t main_menu_commands[] = {
+        { "cmd_1", "Command 1", cmd_1 },
+        { "cmd_2", "Command 2", cmd_2 },
+        MENU_NULL_CMD
+    };
+    menu_add_list(menu_root, main_menu_commands);
 }
 
 int main(void)
 {
     puts("\n== Shell menu example ==");
 
-    const shell_command_t global_commands[] = {
-        {"global", "Global command", cmd_global},
-        menu_cmd_null
-    };
-    menu_set_global_commands(global_commands);
-
-    shell_menu_t * const main_menu = menu_get_main_menu();
-
-    const shell_command_t main_menu_commands[] = {
-        { "cmd_1", "Command 1", cmd_1 },
-        { "cmd_2", "Command 2", cmd_2 },
-        { "sub1", "Enter sub-menu 1", cmd_sub_1 },
-        { "sub2", "Enter sub-menu 1", cmd_sub_2 },
-        menu_cmd_null
-    };
-
-    menu_init("Main menu");
-
-    menu_add_list(main_menu, main_menu_commands);
+    app_init();
+    module1_init();
+    module2_init();
 
     /* Start shell */
     menu_start();
