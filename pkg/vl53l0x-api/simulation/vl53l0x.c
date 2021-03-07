@@ -55,23 +55,17 @@ void vl53l0x_init(void)
 
 uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
 {
-    int shmem_key = shmem_get_key();
-
-    /* Try to initialize shared memory if not already done */
-    if(shmem_ptrr == NULL && shmem_key != 0) {
-        int shmid = shmget(shmem_key, VL53L0X_NUMOF*sizeof(uint16_t), 0);
-        shmem_ptrr = (uint16_t*) shmat(shmid,(void*)0,0);
-    }
+    const shmem_data_t *shared_data = shmem_get_data();
 
     /* Return max value if shared memory is not initialized */
-    if(shmem_ptrr == NULL) {
+    if (shared_data == NULL) {
         return UINT16_MAX;
     }
 
     /* printf("Sensor %d = %d\n", dev, shmem_ptrr[dev]); */
 
     /* Return value from simulator */
-    return shmem_ptrr[dev];
+    return shared_data->vl53l0x_values[dev];
 
 }
 /** @} */
