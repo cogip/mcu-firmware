@@ -1,7 +1,10 @@
 #include <stdio.h>
-
 #include "pca9548.h"
 #include "xtimer.h"
+
+#ifdef MODULE_SHELL_PCA9548
+#   include "shell_pca9548.h"
+#endif
 
 static uint8_t pca9548_current_channel[PCA9548_NUMOF];
 
@@ -41,4 +44,8 @@ void pca9548_init(void)
 
         pca9548_set_current_channel(dev, 0);
     }
+
+#ifdef MODULE_SHELL_PCA9548
+    pca9548_shell_init();
+#endif
 }

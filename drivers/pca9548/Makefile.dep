@@ -1,4 +1,0 @@
-ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
-	USEMODULE += calib_pca9548
-	USEMODULE += fmt
-endif
