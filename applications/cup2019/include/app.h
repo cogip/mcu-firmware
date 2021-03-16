@@ -17,7 +17,7 @@
 
 #define USART_CONSOLE   USARTC0
 
-#define PCA9548_CALIB_CB(x) pf_calib_read_sensors(x)
+#define PCA9548_SHELL_CB(x) app_shell_read_sensors(x)
 
 /**********/
 /* Servos */
