@@ -21,13 +21,6 @@
 #include "platform.h"
 #include "sd21.h"
 
-#ifdef CALIBRATION
-#include "calibration/calib_pca9548.h"
-#include "calibration/calib_planner.h"
-#include "calibration/calib_quadpid.h"
-#include "calibration/calib_sd21.h"
-#endif /* CALIBRATION */
-
 static app_actions_context_t app_actions_ctx = {0};
 
 int app_is_camp_left(void)
@@ -36,7 +29,7 @@ int app_is_camp_left(void)
     return !gpio_read(GPIO_CAMP);
 }
 
-void app_calib_read_sensors(pca9548_t dev)
+void app_shell_read_sensors(pca9548_t dev)
 {
     vl53l0x_t sensor = 0;
     uint8_t channel = pca9548_get_current_channel(dev);
@@ -400,10 +393,6 @@ void app_init(void)
     const uint8_t camp_left = pf_is_camp_left();
     /* 2019: Camp left is purple, right is yellow */
     printf("%s camp\n", camp_left ? "LEFT" : "RIGHT");
-
-#ifdef CALIBRATION
-    sd21_calib_init(sd21_config_app);
-#endif /* CALIBRATION */
 }
 
 void app_init_tasks(void)
