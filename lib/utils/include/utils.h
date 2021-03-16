@@ -10,5 +10,7 @@ typedef void (*func_cb_t)(void);
 
 #include <stdio.h>
 
+#define STR(x)  #x
+
 /* set interval to 20 milli-second */
 #define THREAD_PERIOD_INTERVAL (20U * US_PER_MS)
