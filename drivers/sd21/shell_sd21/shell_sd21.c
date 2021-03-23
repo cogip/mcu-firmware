@@ -172,7 +172,7 @@ void sd21_shell_init(const sd21_conf_t* sd21_config_new)
     sd21_config = sd21_config_new;
 
     /* SD21 menu and commands */
-    shell_menu_t menu = menu_init("SD21 menu", "sd21_menu", menu_root);
+    shell_menu_t menu = menu_init("SD21 menu", "sd21_menu", menu_root, NULL);
 
     const shell_command_t shell_pca9548_menu_commands[] = {
         { "d", "sd21 device", sd21_cmd_device_cb },

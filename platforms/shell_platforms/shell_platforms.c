@@ -156,7 +156,7 @@ void pf_shell_init(void)
     menu_set_global_commands(global_commands);
 
     /* Platforms menu and commands */
-    shell_menu_t menu = menu_init("Platforms menu", "pf_menu", menu_root);
+    shell_menu_t menu = menu_init("Platforms menu", "pf_menu", menu_root, NULL);
 
     const shell_command_t shell_platforms_menu_commands[] = {
         { "mt", "Test all DC motors", pf_motors_test },

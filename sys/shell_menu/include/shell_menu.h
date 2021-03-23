@@ -24,6 +24,9 @@
 /* RIOT includes */
 #include "shell.h"
 
+/* Project includes */
+#include "utils.h"
+
 /**
  * @brief       Max shell commands by menu
  */
@@ -67,6 +70,7 @@ struct shell_menu {
     shell_menu_data_t *previous;                        /**< Pointer to the real previous shell_commands */
     const char *name;                                   /**< Menu name */
     const char *cmd;                                    /**< Command to enter this menu */
+    func_cb_t enter_cb;                                 /**< Function to execute at menu entry */
 };
 
 /**
@@ -83,10 +87,11 @@ void menu_set_global_commands(const shell_command_t command[]);
  * @param[in]    name      name of the menu
  * @param[in]    cmd       shell command to enter the menu
  * @param[in]    parent    parent menu
+ * @param[in]    enter_cb  callback function executed at menu entry (can be NULL)
  *
  * @return                 menu identifer
  */
-shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t parent);
+shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t parent, func_cb_t enter_cb);
 
 /**
  * @brief        Add a command to a menu.

@@ -109,7 +109,7 @@ static void _init_main_menu(void)
     menu_add_one(menu_root, &cmd_help_json);
 }
 
-shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t parent)
+shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t parent, func_cb_t enter_cb)
 {
     _init_main_menu();
 
@@ -125,6 +125,7 @@ shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t par
     shell_menus[menu].cmd = cmd;
     shell_menus[menu].current = &shell_menus[menu];
     shell_menus[menu].previous = NULL;
+    shell_menus[menu].enter_cb = enter_cb;
 
     for (uint8_t i = 0; i < NB_SHELL_COMMANDS; i++) {
         shell_menus[menu].shell_commands[i] = (const shell_command_t)MENU_NULL_CMD;
@@ -177,6 +178,9 @@ void menu_enter(const shell_menu_t menu)
     }
     memcpy(&current_menu, &shell_menus[menu], sizeof(shell_menu_data_t));
     printf("Enter shell menu: %s\n", current_menu.name);
+    if (current_menu.enter_cb) {
+        current_menu.enter_cb();
+    }
 }
 
 void menu_exit(void)

@@ -67,8 +67,13 @@ static int cmd_2_1_sub(int argc, char **argv)
     return 0;
 }
 
+void module1_enter_callback(void)
+{
+    puts("Execute module1 enter callback");
+}
+
 void module1_init(void) {
-    shell_menu_t menu = menu_init("Module 1 menu", "mod1", menu_root);
+    shell_menu_t menu = menu_init("Module 1 menu", "mod1", menu_root, module1_enter_callback);
     static const shell_command_t menu_commands[] = {
         { "cmd_1", "Module 1 command 1", cmd_1_1 },
         { "cmd_2", "Module 1 command 2", cmd_1_2 },
@@ -78,7 +83,7 @@ void module1_init(void) {
 }
 
 void module2_init(void) {
-    shell_menu_t menu = menu_init("Module 2 menu", "mod2", menu_root);
+    shell_menu_t menu = menu_init("Module 2 menu", "mod2", menu_root, NULL);
     static const shell_command_t menu_commands[] = {
         { "cmd_1", "Module 2 command 1", cmd_2_1 },
         { "cmd_2", "Module 2 command 2", cmd_2_2 },
@@ -87,7 +92,7 @@ void module2_init(void) {
     menu_add_list(menu, menu_commands);
 
     /* Add a sub menu in the module */
-    shell_menu_t sub_menu = menu_init("Module 2 sub-menu", "mod2_sub", menu);
+    shell_menu_t sub_menu = menu_init("Module 2 sub-menu", "mod2_sub", menu, NULL);
     static const shell_command_t sub_menu_commands[] = {
         { "cmd_1", "Module 2 sub-menu command", cmd_2_1_sub },
         MENU_NULL_CMD
