@@ -97,7 +97,7 @@ static int pca9548_cmd_switch_cb(int argc, char **argv)
 void pca9548_shell_init(void)
 {
     /* pca9548 menu and commands */
-    shell_menu_t menu = menu_init("PCA9548 menu", "pca9548_menu", menu_root);
+    shell_menu_t menu = menu_init("PCA9548 menu", "pca9548_menu", menu_root, NULL);
 
     const shell_command_t shell_pca9548_menu_commands[] = {
         { "a", "Run defined callback", pca9548_cmd_defined_callback_cb },

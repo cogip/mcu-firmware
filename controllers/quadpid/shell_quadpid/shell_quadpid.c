@@ -745,7 +745,7 @@ void ctrl_quadpid_shell_init(void)
 
     /* ctrl_quadpid speed menu and commands */
     shell_menu_t menu_speed = menu_init("QuadPID controller Speed menu",
-            "ctrl_quadpid_speed_menu", menu_root);
+            "ctrl_quadpid_speed_menu", menu_root, NULL);
 
     const shell_command_t shell_ctrl_quadpid_speed_menu_commands[] = {
         { "l", "Linear speed characterization",
@@ -777,7 +777,7 @@ void ctrl_quadpid_shell_init(void)
 
     /* ctrl_quadpid pose menu and commands */
     shell_menu_t menu_pose = menu_init("QuadPID controller pose menu",
-            "ctrl_quadpid_pose_menu", menu_root);
+            "ctrl_quadpid_pose_menu", menu_root, NULL);
 
     const shell_command_t shell_ctrl_quadpid_pose_menu_commands[] = {
         { "a", "Speed linear Kp calibration to <kp>",
