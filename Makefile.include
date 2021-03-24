@@ -33,10 +33,6 @@ $(warning $(EXTERNAL_MODULE_DIRS))
 # RIOT Makefile include
 include $(RIOTBASE)/Makefile.include
 
-ifneq (,$(filter calibration,$(MCUFIRMWARE_OPTIONS)))
-	CFLAGS += -DCALIBRATION
-endif
-
 ifneq ($(wildcard $(APPDIR)/include/.*),)
 	INCLUDES += -I$(APPDIR)/include/
 
