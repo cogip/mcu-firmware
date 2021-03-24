@@ -39,7 +39,7 @@ jobs:
         cd mcu-firmware
         make
         make distclean
-        make MCUFIRMWARE_OPTIONS=calibration
+        make
         make distclean
     - name: Check coding rules
       run: |
