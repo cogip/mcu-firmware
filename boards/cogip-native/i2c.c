@@ -1,21 +1,25 @@
 #include "periph/i2c.h"
 
-void i2c_init(i2c_t dev) {
+void i2c_init(i2c_t dev)
+{
     (void)dev;
 }
 
-int i2c_acquire(i2c_t dev) {
+int i2c_acquire(i2c_t dev)
+{
     (void)dev;
 
     return 0;
 }
 
-void i2c_release(i2c_t dev) {
+void i2c_release(i2c_t dev)
+{
     (void)dev;
 }
 
 int i2c_read_bytes(i2c_t dev, uint16_t addr,
-                   void *data, size_t len, uint8_t flags) {
+                   void *data, size_t len, uint8_t flags)
+{
     (void)dev;
     (void)addr;
     (void)data;
@@ -26,7 +30,8 @@ int i2c_read_bytes(i2c_t dev, uint16_t addr,
 }
 
 int i2c_write_bytes(i2c_t dev, uint16_t addr, const void *data,
-                    size_t len, uint8_t flags) {
+                    size_t len, uint8_t flags)
+{
     (void)dev;
     (void)addr;
     (void)data;

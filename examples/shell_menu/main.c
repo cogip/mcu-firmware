@@ -72,23 +72,27 @@ void module1_enter_callback(void)
     puts("Execute module1 enter callback");
 }
 
-void module1_init(void) {
+void module1_init(void)
+{
     shell_menu_t menu = menu_init("Module 1 menu", "mod1", menu_root, module1_enter_callback);
     static const shell_command_t menu_commands[] = {
         { "cmd_1", "Module 1 command 1", cmd_1_1 },
         { "cmd_2", "Module 1 command 2", cmd_1_2 },
         MENU_NULL_CMD
     };
+
     menu_add_list(menu, menu_commands);
 }
 
-void module2_init(void) {
+void module2_init(void)
+{
     shell_menu_t menu = menu_init("Module 2 menu", "mod2", menu_root, NULL);
     static const shell_command_t menu_commands[] = {
         { "cmd_1", "Module 2 command 1", cmd_2_1 },
         { "cmd_2", "Module 2 command 2", cmd_2_2 },
         MENU_NULL_CMD
     };
+
     menu_add_list(menu, menu_commands);
 
     /* Add a sub menu in the module */
@@ -100,11 +104,13 @@ void module2_init(void) {
     menu_add_list(sub_menu, sub_menu_commands);
 }
 
-void app_init(void) {
+void app_init(void)
+{
     static shell_command_t global_commands[] = {
-        {"global", "Global command", cmd_global},
+        { "global", "Global command", cmd_global },
         MENU_NULL_CMD
     };
+
     menu_set_global_commands(global_commands);
 
     const shell_command_t main_menu_commands[] = {
