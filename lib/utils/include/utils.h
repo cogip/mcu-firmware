@@ -8,8 +8,6 @@ typedef void (*func_cb_t)(void);
 #define MIN(a, b)   (((a) < (b)) ? (a) : (b))
 #define MAX(a, b)   (((a) > (b)) ? (a) : (b))
 
-#include <stdio.h>
-
 #define STR(x)  #x
 
 /* set interval to 20 milli-second */

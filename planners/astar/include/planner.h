@@ -27,9 +27,6 @@
 
 /* Project includes */
 #include "ctrl.h"
-#include "odometry.h"
-#include "path.h"
-#include "utils.h"
 
 /**
  * @brief Start the trajectory planification and the associated controller
