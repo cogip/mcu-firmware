@@ -5,15 +5,13 @@
 #include <string.h>
 
 /* RIOT includes */
-#define ENABLE_DEBUG        (0)
-#include "debug.h"
 #include "log.h"
 #include "shell.h"
 #include "xtimer.h"
+#include "periph/qdec.h"
 
 /* Project includes */
 #include "avoidance.h"
-#include "ctrl.h"
 #include "ctrl.h"
 #include "shell_menu.h"
 #include "shell_platforms.h"
@@ -21,6 +19,10 @@
 #ifdef MODULE_SHMEM
 #include "shmem.h"
 #endif
+
+/* Enable or disable debug for this file only */
+#define ENABLE_DEBUG        (0)
+#include "debug.h"
 
 /* Controller */
 static ctrl_t* ctrl = NULL;
