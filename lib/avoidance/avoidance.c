@@ -96,8 +96,9 @@ int add_polygon(polygon_t *polygon)
 
 int check_polygon_collision(pose_t *point)
 {
-    if (!is_point_in_polygon(&obstacle_borders, *point))
+    if (!is_point_in_polygon(&obstacle_borders, *point)) {
         return TRUE;
+    }
 
     for (int i = 0; i < (nb_polygons + nb_dyn_polygons); i++) {
         if (is_point_in_polygon(&polygons[i], *point)) {
@@ -379,16 +380,16 @@ int avoidance_print_dyn_obstacles(int argc, char **argv)
 
     printf("[");
 
-    for(int i = nb_polygons ; i < nb_polygons + nb_dyn_polygons ; i++) {
+    for (int i = nb_polygons; i < nb_polygons + nb_dyn_polygons; i++) {
         polygon_t *polygon = &(polygons[i]);
 
-        if(i > nb_polygons) {
+        if (i > nb_polygons) {
             printf(", ");
         }
 
         printf("[");
-        for(int j = 0 ; j < polygon->count ; j++) {
-            if(j > 0) {
+        for (int j = 0; j < polygon->count; j++) {
+            if (j > 0) {
                 printf(", ");
             }
             printf(
@@ -398,7 +399,7 @@ int avoidance_print_dyn_obstacles(int argc, char **argv)
                 "}",
                 polygon->points[j].x,
                 polygon->points[j].y
-            );
+                );
         }
         printf("]");
     }

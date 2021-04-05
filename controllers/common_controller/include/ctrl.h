@@ -32,15 +32,15 @@
  *   from hardware informations.
  * * The entire source code which could change controller mode according to
  *   external events.
- * 
+ *
  * @verbatim
     --------------------------------------------------------------------
-   | Structure/Setup               | Controller | Platform | Everywhere |
-   |--------------------------------------------------------------------|
-   | ctrl_configuration_t          |     X      |          |            |
-   | ctrl_platform_configuration_t |            |    X     |            |
-   | ctrl_control_t                |            |          |     X      |
-   |_______________________________|____________|__________|____________|
+ | Structure/Setup               | Controller | Platform | Everywhere |
+ |--------------------------------------------------------------------|
+ | ctrl_configuration_t          |     X      |          |            |
+ | ctrl_platform_configuration_t |            |    X     |            |
+ | ctrl_control_t                |            |          |     X      |
+ |_______________________________|____________|__________|____________|
    @endverbatim
  *
  * @{
@@ -66,7 +66,7 @@
  * This callback is used to prepare the call to the controller mode callback
  * ctrl_mode_cb[] according to the current mode.
  */
-typedef void (*ctrl_pre_mode_cb_t)(pose_t*, polar_t*, polar_t*);
+typedef void (*ctrl_pre_mode_cb_t)(pose_t *, polar_t *, polar_t *);
 
 /**
  * @brief   Post-controller callback. Called after the controller process
@@ -74,19 +74,19 @@ typedef void (*ctrl_pre_mode_cb_t)(pose_t*, polar_t*, polar_t*);
  * This callback is used for post treatment of the controller mode callback
  * ctrl_mode_cb[] according to the current mode.
  */
-typedef void (*ctrl_post_mode_cb_t)(pose_t*, polar_t*, polar_t*);
+typedef void (*ctrl_post_mode_cb_t)(pose_t *, polar_t *, polar_t *);
 
 /**
  *@brief    Controllers working mode
  */
 typedef enum {
-    CTRL_MODE_STOP = 0,     /**< Stopped */
-    CTRL_MODE_IDLE,         /**< Idled, left free of motion */
-    CTRL_MODE_BLOCKED,      /**< Blocked, often meaning something went wrong */
-    CTRL_MODE_RUNNING,      /**< Move according to asked position */
-    CTRL_MODE_RUNNING_SPEED,/**< Move according to asked speed  */
-    CTRL_MODE_PASSTHROUGH,  /**< Direct control of motion, input is output */
-    CTRL_MODE_NUMOF,        /**< Number of mode, never use it as an index */
+    CTRL_MODE_STOP = 0,         /**< Stopped */
+    CTRL_MODE_IDLE,             /**< Idled, left free of motion */
+    CTRL_MODE_BLOCKED,          /**< Blocked, often meaning something went wrong */
+    CTRL_MODE_RUNNING,          /**< Move according to asked position */
+    CTRL_MODE_RUNNING_SPEED,    /**< Move according to asked speed  */
+    CTRL_MODE_PASSTHROUGH,      /**< Direct control of motion, input is output */
+    CTRL_MODE_NUMOF,            /**< Number of mode, never use it as an index */
 } ctrl_mode_t;
 
 /**
@@ -106,33 +106,33 @@ typedef struct ctrl_t ctrl_t;
  *
  * @return                      New computed speed order
  */
-typedef polar_t (*speed_order_cb_t)(ctrl_t* ctrl);
+typedef polar_t (*speed_order_cb_t)(ctrl_t *ctrl);
 
 /**
  * @brief    Controller general structure
  */
 typedef struct {
-    pose_t pose_order;          /**< Position order */
-    pose_t pose_current;        /**< Current position */
-    polar_t speed_order;        /**< Speed order to reach the position */
-    polar_t speed_current;      /**< Current speed reaching the position */
-    speed_order_cb_t speed_order_cb; /**< Optional @ref speed_order_cb_t. */
+    pose_t pose_order;                  /**< Position order */
+    pose_t pose_current;                /**< Current position */
+    polar_t speed_order;                /**< Speed order to reach the position */
+    polar_t speed_current;              /**< Current speed reaching the position */
+    speed_order_cb_t speed_order_cb;    /**< Optional @ref speed_order_cb_t. */
 
-    uint8_t pose_reached;       /**< Boolean set when pose_order is reached */
-    uint8_t pose_intermediate;  /**< Boolean set when current pose_order is
-                                     not the final destination */
-    uint8_t allow_reverse;      /**< Boolean to allow going backward to reach
-                                     the pose_order */
-    uint8_t anti_blocking_on;   /**< Continuous cycles number the controller is
-                                     blocked */
-    uint16_t blocking_cycles;   /**< Continuous cycles number the controller is
-                                     blocked */
+    uint8_t pose_reached;               /**< Boolean set when pose_order is reached */
+    uint8_t pose_intermediate;          /**< Boolean set when current pose_order is
+                                             not the final destination */
+    uint8_t allow_reverse;              /**< Boolean to allow going backward to reach
+                                             the pose_order */
+    uint8_t anti_blocking_on;           /**< Continuous cycles number the controller is
+                                             blocked */
+    uint16_t blocking_cycles;           /**< Continuous cycles number the controller is
+                                             blocked */
 
-    ctrl_mode_t current_mode;   /**< Current controller mode */
+    ctrl_mode_t current_mode;           /**< Current controller mode */
 
-    uint32_t current_cycle;     /**< Count each control loop turn.
-                                     Reset when a new controller mode is set,
-                                     incremented on each loop turn otherwise */
+    uint32_t current_cycle;             /**< Count each control loop turn.
+                                             Reset when a new controller mode is set,
+                                             incremented on each loop turn otherwise */
 } ctrl_control_t;
 
 /**
@@ -140,15 +140,15 @@ typedef struct {
  */
 typedef struct {
     const ctrl_pre_mode_cb_t \
-        ctrl_pre_mode_cb[CTRL_MODE_NUMOF];  /**< Modes pre callbacks */
+        ctrl_pre_mode_cb[CTRL_MODE_NUMOF];          /**< Modes pre callbacks */
     const ctrl_post_mode_cb_t \
-        ctrl_post_mode_cb[CTRL_MODE_NUMOF]; /**< Modes post callbacks */
+        ctrl_post_mode_cb[CTRL_MODE_NUMOF];         /**< Modes post callbacks */
 
-    const uint16_t  blocking_speed_treshold;        /**< Blocking speed
+    const uint16_t blocking_speed_treshold;         /**< Blocking speed
                                                          treshold */
-    const uint16_t  blocking_speed_error_treshold;  /**< Blocking speed error
+    const uint16_t blocking_speed_error_treshold;   /**< Blocking speed error
                                                          treshold */
-    const uint16_t  blocking_cycles_max;            /**< Blocking cycles
+    const uint16_t blocking_cycles_max;             /**< Blocking cycles
                                                          maximum number */
 } ctrl_platform_configuration_t;
 
@@ -164,7 +164,7 @@ typedef struct {
  * @return                      0 on success
  * @return                      not 0 on error
  */
-typedef int (*ctrl_mode_cb_t)(ctrl_t* ctrl, polar_t* command);
+typedef int (*ctrl_mode_cb_t)(ctrl_t *ctrl, polar_t *command);
 
 /**
  * @brief   Controller modes callbacks definitions
@@ -177,8 +177,8 @@ typedef struct {
  * @brief   Controller default definition
  */
 struct ctrl_t {
-    const ctrl_configuration_t* conf;               /**< Modes callbacks */
-    const ctrl_platform_configuration_t* pf_conf;   /**< Pre and post
+    const ctrl_configuration_t *conf;               /**< Modes callbacks */
+    const ctrl_platform_configuration_t *pf_conf;   /**< Pre and post
                                                          callbacks */
     ctrl_control_t control;                         /**< Control variables */
 };
@@ -190,7 +190,7 @@ struct ctrl_t {
  *
  * @return                      Current elapsed cycle
  */
-uint32_t ctrl_get_current_cycle(ctrl_t* ctrl);
+uint32_t ctrl_get_current_cycle(ctrl_t *ctrl);
 
 /**
  * @brief Set the pose order as an intermediate position
@@ -229,7 +229,7 @@ void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow);
  *
  * @return
  */
-void ctrl_set_anti_blocking_on(ctrl_t* ctrl, uint8_t value);
+void ctrl_set_anti_blocking_on(ctrl_t *ctrl, uint8_t value);
 
 /**
  * @brief Get robot blocked detection status
@@ -239,7 +239,7 @@ void ctrl_set_anti_blocking_on(ctrl_t* ctrl, uint8_t value);
  * @return                      0 if disabled
  *                              >0 if enabled
  */
-uint8_t ctrl_get_anti_blocking_on(ctrl_t* ctrl);
+uint8_t ctrl_get_anti_blocking_on(ctrl_t *ctrl);
 
 /**
  * @brief Up pose reached flag
@@ -248,7 +248,7 @@ uint8_t ctrl_get_anti_blocking_on(ctrl_t* ctrl);
  *
  * @return
  */
-void ctrl_set_pose_reached(ctrl_t* ctrl);
+void ctrl_set_pose_reached(ctrl_t *ctrl);
 
 /**
  * @brief Up pose reached flag
@@ -258,7 +258,7 @@ void ctrl_set_pose_reached(ctrl_t* ctrl);
  * @return                      0 if pose is not reached
  * @return                      >0 otherwise
  */
-uint8_t ctrl_is_pose_reached(ctrl_t* ctrl);
+uint8_t ctrl_is_pose_reached(ctrl_t *ctrl);
 
 /**
  * @brief Set pose order
@@ -268,7 +268,7 @@ uint8_t ctrl_is_pose_reached(ctrl_t* ctrl);
  *
  * @return
  */
-void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t pose_order);
+void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order);
 
 /**
  * @brief Get pose order
@@ -287,7 +287,7 @@ pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl);
  *
  * @return
  */
-void ctrl_set_pose_current(ctrl_t* const ctrl, const pose_t* pose_current);
+void ctrl_set_pose_current(ctrl_t *const ctrl, const pose_t *pose_current);
 
 /**
  * @brief Get current pose
@@ -296,7 +296,7 @@ void ctrl_set_pose_current(ctrl_t* const ctrl, const pose_t* pose_current);
  *
  * @return                      Current pose
  */
-const pose_t* ctrl_get_pose_current(ctrl_t* ctrl);
+const pose_t *ctrl_get_pose_current(ctrl_t *ctrl);
 
 /**
  * @brief Set speed order
@@ -310,7 +310,7 @@ const pose_t* ctrl_get_pose_current(ctrl_t* ctrl);
  *
  * @return                      Nothing
  */
-void ctrl_set_speed_order(ctrl_t* ctrl, polar_t speed_order);
+void ctrl_set_speed_order(ctrl_t *ctrl, polar_t speed_order);
 
 /**
  * @brief Get speed order
@@ -319,7 +319,7 @@ void ctrl_set_speed_order(ctrl_t* ctrl, polar_t speed_order);
  *
  * @return                      Speed order
  */
-const polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
+const polar_t *ctrl_get_speed_order(ctrl_t *ctrl);
 
 /**
  * @brief Register a speed_order callback.
@@ -348,14 +348,14 @@ const polar_t* ctrl_get_speed_order(ctrl_t* ctrl);
 void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb);
 
 /**
- * @brief compute speed order
+ * @brief Compute speed order
  *
  * This function computes speed order by calling callback registered with
  * @ref ctrl_register_speed_order_cb and set the new speed order accordingly.
  *
  * @param[in] ctrl              Controller object
  */
-void ctrl_compute_speed_order(ctrl_t* ctrl);
+void ctrl_compute_speed_order(ctrl_t *ctrl);
 
 /**
  * @brief Get current speed
@@ -364,7 +364,7 @@ void ctrl_compute_speed_order(ctrl_t* ctrl);
  *
  * @return                      Current speed
  */
-const polar_t* ctrl_get_speed_current(ctrl_t* ctrl);
+const polar_t *ctrl_get_speed_current(ctrl_t *ctrl);
 
 /**
  * @brief Set current mode
@@ -383,7 +383,7 @@ void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_t new_mode);
  *
  * @return                      Current mode
  */
-ctrl_mode_t ctrl_get_mode(ctrl_t* ctrl);
+ctrl_mode_t ctrl_get_mode(ctrl_t *ctrl);
 
 /**
  * @brief Periodic task function to process a controller

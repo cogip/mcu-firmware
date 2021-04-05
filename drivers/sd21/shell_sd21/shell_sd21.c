@@ -15,14 +15,16 @@
 #include "shell_sd21.h"
 #include "utils.h"
 
-static const sd21_conf_t* sd21_config = NULL;
+static const sd21_conf_t *sd21_config = NULL;
 
 /* Board and servo ids */
 static sd21_t dev = 0;
 static uint8_t servo_id = 0;
 
-static uint16_t sd21_get_current_position(void) {
+static uint16_t sd21_get_current_position(void)
+{
     uint16_t current_position = 0;
+
     sd21_servo_get_position(dev, servo_id, &current_position);
 
     /* Print current position on same line */
@@ -80,7 +82,7 @@ static int sd21_cmd_next_servo_cb(int argc, char **argv)
 
     sd21_get_current_position();
     servo_id = (servo_id >= sd21_config[dev].servos_nb - 1) ?
-        sd21_config[dev].servos_nb - 1 : servo_id + 1;
+               sd21_config[dev].servos_nb - 1 : servo_id + 1;
     printf("\n\n%s\n", sd21_servo_get_name(dev, servo_id));
 
     return EXIT_SUCCESS;
@@ -143,8 +145,7 @@ static int sd21_cmd_switch_cb(int argc, char **argv)
 
     uint8_t defined_position = (uint8_t)atoi(argv[1]);
 
-    switch (defined_position)
-    {
+    switch (defined_position) {
         case 0: /* SD21_SERVO_POS_OPEN */
         case 1: /* SD21_SERVO_POS_CLOSE */
         case 2:
@@ -166,7 +167,7 @@ static int sd21_cmd_switch_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-void sd21_shell_init(const sd21_conf_t* sd21_config_new)
+void sd21_shell_init(const sd21_conf_t *sd21_config_new)
 {
     /* SD21 new_config */
     sd21_config = sd21_config_new;
@@ -181,12 +182,12 @@ void sd21_shell_init(const sd21_conf_t* sd21_config_new)
         { "n", "Next servomotor", sd21_cmd_next_servo_cb },
         { "p", "Previous servomotor", sd21_cmd_previous_servo_cb },
         { "r", "Reset to center position", sd21_cmd_reset_cb },
-        { "+", "Add "STR(SD21_SERVO_POS_STEP)"microseconds to current position",
-            sd21_cmd_add_cb },
-        { "-", "Substract "STR(SD21_SERVO_POS_STEP)"microseconds \
+        { "+", "Add "STR (SD21_SERVO_POS_STEP)"microseconds to current position",
+          sd21_cmd_add_cb },
+        { "-", "Substract "STR (SD21_SERVO_POS_STEP) "microseconds \
             from current position", sd21_cmd_sub_cb },
         { "switch", "Switch to predefined position <n> (n between 0 and 9)",
-            sd21_cmd_switch_cb },
+          sd21_cmd_switch_cb },
         MENU_NULL_CMD,
     };
 

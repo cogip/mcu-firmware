@@ -146,9 +146,9 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 0-1 */
             {
                 .positions = {
-                    750,  /* Ramp Disposal */
-                    2325, /* Puck prehension */
-                    1500, /* Neutral */
+                    750,    /* Ramp Disposal */
+                    2325,   /* Puck prehension */
+                    1500,   /* Neutral */
                 },
                 .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
@@ -157,9 +157,9 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 0-2 */
             {
                 .positions = {
-                    2500, /* Ramp Disposal */
-                    675,  /* Puck prehension */
-                    1500, /* Neutral */
+                    2500,   /* Ramp Disposal */
+                    675,    /* Puck prehension */
+                    1500,   /* Neutral */
                 },
                 .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
@@ -168,9 +168,9 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 0-3 */
             {
                 .positions = {
-                    2450, /* Ramp Disposal */
-                    575,  /* Puck prehension */
-                    1400, /* Neutral */
+                    2450,   /* Ramp Disposal */
+                    575,    /* Puck prehension */
+                    1400,   /* Neutral */
                 },
                 .default_position = APP_SERVO_STATE_CUP_HOLD,
                 .default_speed = 0,
@@ -190,7 +190,7 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 0-5 */
             {
                 .positions = {
-                     950,   /* Top position */
+                    950,    /* Top position */
                     2000,   /* Bottom position */
                     1500,   /* Default */
                 },
@@ -245,9 +245,9 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 0-10 */
             {
                 .positions = {
-                    1900,   /* Right */
+                    1900,               /* Right */
                     1475,   /* Left  */ // FIXME: réparer la rampe !
-                    1675,   /* Horizontal */
+                    1675,               /* Horizontal */
                 },
                 .default_position = 2,
                 .default_speed = 0,
@@ -287,9 +287,9 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 1-1 */
             {
                 .positions = {
-                    1500, /* */
-                    1500, /* */
-                    1500, /* */
+                    1500,   /* */
+                    1500,   /* */
+                    1500,   /* */
                 },
                 .default_position = 2,
                 .default_speed = 0,
@@ -298,9 +298,9 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 1-2 */
             {
                 .positions = {
-                    1975, /* Top position */
-                    1350, /* Bottom position */
-                    1975, /* Default */
+                    1975,   /* Top position */
+                    1350,   /* Bottom position */
+                    1975,   /* Default */
                 },
                 .default_position = 2,
                 .default_speed = 0,
@@ -309,9 +309,9 @@ static const sd21_conf_t sd21_config_app[] = {
             /* Servo 1-3 */
             {
                 .positions = {
-                    1000, /* Open */
-                    1850, /* Close */
-                    1500, /* Default */
+                    1000,   /* Open */
+                    1850,   /* Close */
+                    1500,   /* Default */
                 },
                 .default_position = 0,
                 .default_speed = 0,
@@ -398,7 +398,7 @@ static const sd21_conf_t sd21_config_app[] = {
             {
                 .positions = {
                     2225,   /* Ramp disposal */
-                    825,   /* Puck prehension */
+                    825,    /* Puck prehension */
                     1575,   /* Neutral */
                 },
                 .default_position = APP_SERVO_STATE_CUP_HOLD,
@@ -409,7 +409,7 @@ static const sd21_conf_t sd21_config_app[] = {
             {
                 .positions = {
                     2200,   /* Ramp disposal */
-                    725,   /* Puck prehension */
+                    725,    /* Puck prehension */
                     1500,   /* Neutral */
                 },
                 .default_position = APP_SERVO_STATE_CUP_HOLD,

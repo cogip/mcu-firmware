@@ -22,8 +22,9 @@ static int pln_cmd_go_next_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (shell_path_index < path->nb_pose - 1)
+    if (shell_path_index < path->nb_pose - 1) {
         shell_path_index++;
+    }
     path_set_current_pose_idx(path, shell_path_index);
 
     return EXIT_SUCCESS;
@@ -36,8 +37,9 @@ static int pln_cmd_go_previous_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (shell_path_index > 0)
+    if (shell_path_index > 0) {
         shell_path_index--;
+    }
     path_set_current_pose_idx(path, shell_path_index);
 
     return EXIT_SUCCESS;
@@ -62,8 +64,9 @@ static int pln_cmd_select_next_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (shell_path_index < path->nb_pose - 1)
+    if (shell_path_index < path->nb_pose - 1) {
         shell_path_index++;
+    }
 
     return EXIT_SUCCESS;
 }
@@ -73,8 +76,9 @@ static int pln_cmd_select_previous_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    if (shell_path_index > 0)
+    if (shell_path_index > 0) {
         shell_path_index--;
+    }
 
     return EXIT_SUCCESS;
 }
@@ -85,9 +89,9 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     (void)argv;
 
     path_t *path = pf_get_path();
-    func_cb_t cb = path_get_pose_at_idx(path, shell_path_index)->act;;
+    func_cb_t cb = path_get_pose_at_idx(path, shell_path_index)->act;
 
-    if(cb != NULL) {
+    if (cb != NULL) {
         puts("Launch callback!");
         (*cb)();
     }
@@ -95,7 +99,8 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-void pln_menu_enter(void) {
+void pln_menu_enter(void)
+{
     ctrl_t *ctrl = pf_get_ctrl();
 
     shell_path_index = 0;

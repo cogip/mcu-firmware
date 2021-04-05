@@ -64,16 +64,16 @@
  *
  * @{
  */
-#define ROBOT_WIDTH         354      /**< Robot width (mm) */
+#define ROBOT_WIDTH         354     /**< Robot width (mm) */
 #define ROBOT_MARGIN \
     (ROBOT_WIDTH / 2)               /**< Point the most far from
-                                      robot center (mm) */
+                                       robot center (mm) */
 
-#define PULSE_PER_MM        10.624   /**< WHEELS_ENCODER_RESOLUTION
+#define PULSE_PER_MM        10.624  /**< WHEELS_ENCODER_RESOLUTION
                                        / WHEELS_PERIMETER */
-#define WHEELS_DISTANCE     2974.72  /**< WHEELS_DISTANCE_MM
-                                       * PULSE_PER_MM */
-#define PULSE_PER_DEGREE    51.91    /**< WHEELS_DISTANCE * 2 * PI
+#define WHEELS_DISTANCE     2974.72 /**< WHEELS_DISTANCE_MM
+                                     * PULSE_PER_MM */
+#define PULSE_PER_DEGREE    51.91   /**< WHEELS_DISTANCE * 2 * PI
                                        / 360 */
 /** @} */
 
@@ -83,7 +83,7 @@
  * @{
  */
 #define PF_START_COUNTDOWN  3   /**< Delay to press a key before the robot
-                                  starts */
+                                   starts */
 #define NB_SHELL_COMMANDS   17  /**< Shell commands array size */
 /** @} */
 
@@ -93,7 +93,7 @@
  * @{
  */
 #define GAME_DURATION_SEC   100 /**< Timeout before completely stop the robot
-                                  once started */
+                                   once started */
 #define CAMP_LEFT 1             /**< Camp left selection for path mirroring */
 #define CAMP_RIGHT 0            /**< Camp left selection for path mirroring */
 /** @} */
@@ -116,8 +116,8 @@
 #define PF_CTRL_BLOCKING_SPEED_TRESHOLD     1   /**< Minimal speed treshold */
 #define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD 1.5 /**< Speed error treshold */
 #define PF_CTRL_BLOCKING_NB_ITERATIONS      40  /**< Number of interation
-                                                  before considering the
-                                                  robot blocked */
+                                                   before considering the
+                                                   robot blocked */
 /** @} */
 
 /**
@@ -157,9 +157,9 @@
 #define OBSTACLE_DYN_SIZE                   400 /**< Obstacle size */
 
 #define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10  /**< Minimum obstacle detection
-                                                  treshold */
+                                                   treshold */
 #define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200 /**< Maximum obstacle detection
-                                                  treshold */
+                                                   treshold */
 /** @} */
 
 
@@ -219,7 +219,7 @@ int pf_is_camp_left(void);
  *
  * @return
  **/
-void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
+void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command);
 
 /**
  * @brief Callback that drives actuators after motion control CTRL_MODE_RUNNING,
@@ -231,7 +231,7 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *m
  *
  * @return
  **/
-void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
+void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command);
 
 /**
  * @brief Callback that drives actuators after motion control CTRL_MODE_STOP,
@@ -243,7 +243,7 @@ void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *
  *
  * @return
  **/
-void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command);
+void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command);
 
 
 /**
@@ -261,7 +261,7 @@ void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params);
  *
  * return   QuadPID controller
  **/
-ctrl_quadpid_t* pf_get_quadpid_ctrl(void);
+ctrl_quadpid_t *pf_get_quadpid_ctrl(void);
 
 
 /**
@@ -269,7 +269,7 @@ ctrl_quadpid_t* pf_get_quadpid_ctrl(void);
  *
  * return   Controller
  **/
-ctrl_t* pf_get_ctrl(void);
+ctrl_t *pf_get_ctrl(void);
 
 /**
  * @brief Initialize all platforms threads
@@ -334,21 +334,21 @@ void motor_drive(polar_t *command);
  * @{
  **/
 static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
-    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING]        = pf_ctrl_pre_running_cb,
-    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING_SPEED]  = pf_ctrl_pre_running_cb,
-    .ctrl_pre_mode_cb[CTRL_MODE_STOP]           = pf_ctrl_pre_running_cb,
-    .ctrl_pre_mode_cb[CTRL_MODE_BLOCKED]        = pf_ctrl_pre_running_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_STOP]          = pf_ctrl_post_stop_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_BLOCKED]       = pf_ctrl_post_stop_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_RUNNING]       = pf_ctrl_post_running_cb,
+    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING] = pf_ctrl_pre_running_cb,
+    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_pre_running_cb,
+    .ctrl_pre_mode_cb[CTRL_MODE_STOP] = pf_ctrl_pre_running_cb,
+    .ctrl_pre_mode_cb[CTRL_MODE_BLOCKED] = pf_ctrl_pre_running_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_STOP] = pf_ctrl_post_stop_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_BLOCKED] = pf_ctrl_post_stop_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_RUNNING] = pf_ctrl_post_running_cb,
     .ctrl_post_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_post_running_cb,
 
-    .ctrl_pre_mode_cb[CTRL_MODE_PASSTHROUGH]   = pf_ctrl_pre_running_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_PASSTHROUGH]  = pf_ctrl_post_running_cb,
+    .ctrl_pre_mode_cb[CTRL_MODE_PASSTHROUGH] = pf_ctrl_pre_running_cb,
+    .ctrl_post_mode_cb[CTRL_MODE_PASSTHROUGH] = pf_ctrl_post_running_cb,
 
-    .blocking_speed_treshold            = PF_CTRL_BLOCKING_SPEED_TRESHOLD,
-    .blocking_speed_error_treshold      = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
-    .blocking_cycles_max                = PF_CTRL_BLOCKING_NB_ITERATIONS,
+    .blocking_speed_treshold = PF_CTRL_BLOCKING_SPEED_TRESHOLD,
+    .blocking_speed_error_treshold = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
+    .blocking_cycles_max = PF_CTRL_BLOCKING_NB_ITERATIONS,
 };
 /** @} */
 
@@ -358,28 +358,28 @@ static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
  */
 static const vl53l0x_conf_t vl53l0x_config[] = {
     {
-        .i2c_dev    = 1,
-        .i2c_addr   = 0x29,
+        .i2c_dev = 1,
+        .i2c_addr = 0x29,
     },
     {
-        .i2c_dev    = 1,
-        .i2c_addr   = 0x29,
+        .i2c_dev = 1,
+        .i2c_addr = 0x29,
     },
     {
-        .i2c_dev    = 1,
-        .i2c_addr   = 0x29,
+        .i2c_dev = 1,
+        .i2c_addr = 0x29,
     },
     {
-        .i2c_dev    = 1,
-        .i2c_addr   = 0x29,
+        .i2c_dev = 1,
+        .i2c_addr = 0x29,
     },
     {
-        .i2c_dev    = 1,
-        .i2c_addr   = 0x29,
+        .i2c_dev = 1,
+        .i2c_addr = 0x29,
     },
     {
-        .i2c_dev    = 1,
-        .i2c_addr   = 0x29,
+        .i2c_dev = 1,
+        .i2c_addr = 0x29,
     },
 };
 
@@ -397,9 +397,9 @@ static const vl53l0x_conf_t vl53l0x_config[] = {
  **/
 static const pca9548_conf_t pca9548_config[] = {
     {
-        .i2c_dev_id         = 1,
-        .i2c_address        = 0x70,
-        .channel_numof      = PCA9548_CHANNEL_MAX,
+        .i2c_dev_id = 1,
+        .i2c_address = 0x70,
+        .channel_numof = PCA9548_CHANNEL_MAX,
     },
 };
 /** @} */
@@ -456,7 +456,7 @@ static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
  * @{
  */
 #define PCA9548_NUMOF (sizeof(pca9548_config) / sizeof(pca9548_config[0]))
-    /**< PCA9548 number */
+/**< PCA9548 number */
 /** @} */
 
 /** @} */

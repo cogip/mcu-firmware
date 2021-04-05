@@ -26,7 +26,7 @@ typedef enum {
  * @brief   I2C configuration structure type
  */
 typedef struct {
-    void*    dummy;
+    void *dummy;
 } i2c_conf_t;
 
 /** Use read reg function from periph common */

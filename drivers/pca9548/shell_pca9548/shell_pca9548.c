@@ -36,7 +36,7 @@ static int pca9548_cmd_next_channel_cb(int argc, char **argv)
     (void)argv;
 
     channel_id = (channel_id >= pca9548_config[dev].channel_numof - 1) ?
-        pca9548_config[dev].channel_numof - 1 : channel_id + 1;
+                 pca9548_config[dev].channel_numof - 1 : channel_id + 1;
 
     return EXIT_SUCCESS;
 }
@@ -71,8 +71,7 @@ static int pca9548_cmd_switch_cb(int argc, char **argv)
 
     uint8_t channel_selected = (uint8_t)atoi(argv[1]);
 
-    switch (channel_selected)
-    {
+    switch (channel_selected) {
         case 0:
         case 1:
         case 2:
@@ -105,7 +104,7 @@ void pca9548_shell_init(void)
         { "p", "Previous channel", pca9548_cmd_previous_channel_cb },
         { "r", "Refresh", pca9548_cmd_refresh_cb },
         { "switch", "Switch to channel <n> (n between 0 and 9)",
-            pca9548_cmd_switch_cb },
+          pca9548_cmd_switch_cb },
         MENU_NULL_CMD,
     };
 

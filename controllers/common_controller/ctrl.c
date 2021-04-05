@@ -10,7 +10,7 @@
 #include "utils.h"
 #include "platform.h"
 
-void ctrl_set_pose_reached(ctrl_t* ctrl)
+void ctrl_set_pose_reached(ctrl_t *ctrl)
 {
     if (ctrl->control.pose_reached) {
         return;
@@ -21,63 +21,64 @@ void ctrl_set_pose_reached(ctrl_t* ctrl)
     ctrl->control.pose_reached = TRUE;
 }
 
-uint32_t ctrl_get_current_cycle(ctrl_t* ctrl)
+uint32_t ctrl_get_current_cycle(ctrl_t *ctrl)
 {
     return ctrl->control.current_cycle;
 }
 
-inline void ctrl_set_pose_intermediate(ctrl_t* ctrl, uint8_t intermediate)
+inline void ctrl_set_pose_intermediate(ctrl_t *ctrl, uint8_t intermediate)
 {
-    if (intermediate)
+    if (intermediate) {
         DEBUG("ctrl: Next pose is intermediate\n");
+    }
 
     ctrl->control.pose_intermediate = intermediate;
 }
 
-inline uint8_t ctrl_is_pose_intermediate(ctrl_t* ctrl)
+inline uint8_t ctrl_is_pose_intermediate(ctrl_t *ctrl)
 {
     return ctrl->control.pose_intermediate;
 }
 
-inline void ctrl_set_allow_reverse(ctrl_t* ctrl, uint8_t allow)
+inline void ctrl_set_allow_reverse(ctrl_t *ctrl, uint8_t allow)
 {
     ctrl->control.allow_reverse = allow;
 }
 
-inline void ctrl_set_anti_blocking_on(ctrl_t* ctrl, uint8_t value)
+inline void ctrl_set_anti_blocking_on(ctrl_t *ctrl, uint8_t value)
 {
     ctrl->control.anti_blocking_on = value;
 }
 
-inline uint8_t ctrl_get_anti_blocking_on(ctrl_t* ctrl)
+inline uint8_t ctrl_get_anti_blocking_on(ctrl_t *ctrl)
 {
     return ctrl->control.anti_blocking_on;
 }
 
-inline uint8_t ctrl_is_pose_reached(ctrl_t* ctrl)
+inline uint8_t ctrl_is_pose_reached(ctrl_t *ctrl)
 {
     return ctrl->control.pose_reached;
 }
 
-inline void ctrl_set_pose_current(ctrl_t* const ctrl, const pose_t* pose_current)
+inline void ctrl_set_pose_current(ctrl_t *const ctrl, const pose_t *pose_current)
 {
     DEBUG("ctrl: New pose current: x=%lf, y=%lf, O=%lf\n",
-            pose_current->x, pose_current->y, pose_current->O);
+          pose_current->x, pose_current->y, pose_current->O);
 
     irq_disable();
     ctrl->control.pose_current = *pose_current;
     irq_enable();
 }
 
-inline const pose_t* ctrl_get_pose_current(ctrl_t* ctrl)
+inline const pose_t *ctrl_get_pose_current(ctrl_t *ctrl)
 {
     return &ctrl->control.pose_current;
 }
 
-inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t pose_order)
+inline void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order)
 {
     DEBUG("ctrl: New pose to reach: x=%lf, y=%lf, O=%lf\n",
-            pose_order.x, pose_order.y, pose_order.O);
+          pose_order.x, pose_order.y, pose_order.O);
 
     irq_disable();
 
@@ -90,20 +91,20 @@ inline void ctrl_set_pose_to_reach(ctrl_t* ctrl, const pose_t pose_order)
     irq_enable();
 }
 
-inline pose_t ctrl_get_pose_to_reach(ctrl_t* ctrl)
+inline pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl)
 {
     return ctrl->control.pose_order;
 }
 
-inline const polar_t* ctrl_get_speed_current(ctrl_t* ctrl)
+inline const polar_t *ctrl_get_speed_current(ctrl_t *ctrl)
 {
     return &ctrl->control.speed_current;
 }
 
-inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t speed_order)
+inline void ctrl_set_speed_order(ctrl_t *ctrl, polar_t speed_order)
 {
     DEBUG("ctrl: New speed order: linear=%lf, angle=%lf\n",
-            speed_order.distance, speed_order.angle);
+          speed_order.distance, speed_order.angle);
 
     irq_disable();
 
@@ -112,7 +113,7 @@ inline void ctrl_set_speed_order(ctrl_t* ctrl, polar_t speed_order)
     irq_enable();
 }
 
-inline const polar_t* ctrl_get_speed_order(ctrl_t* ctrl)
+inline const polar_t *ctrl_get_speed_order(ctrl_t *ctrl)
 {
     return &ctrl->control.speed_order;
 }
@@ -127,7 +128,7 @@ void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb)
     irq_enable();
 }
 
-void ctrl_compute_speed_order(ctrl_t* ctrl)
+void ctrl_compute_speed_order(ctrl_t *ctrl)
 {
     speed_order_cb_t cb = ctrl->control.speed_order_cb;
 
@@ -137,10 +138,10 @@ void ctrl_compute_speed_order(ctrl_t* ctrl)
     }
 }
 
-void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
+void ctrl_set_mode(ctrl_t *ctrl, ctrl_mode_t new_mode)
 {
     /* Ensure we don't set a non existant mode */
-    if (new_mode >= CTRL_MODE_NUMOF)  {
+    if (new_mode >= CTRL_MODE_NUMOF) {
         LOG_WARNING("ctrl: Unknown mode, stopping controller\n");
         ctrl->control.current_mode = CTRL_MODE_STOP;
         return;
@@ -153,21 +154,21 @@ void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
 
 #if ENABLE_DEBUG == 1
         printf("ctrl: New mode: ");
-        switch(new_mode) {
-        case CTRL_MODE_STOP:
-            puts("CTRL_MODE_STOP"); break;
-        case CTRL_MODE_IDLE:
-            puts("CTRL_MODE_IDLE"); break;
-        case CTRL_MODE_BLOCKED:
-            puts("CTRL_MODE_BLOCKED"); break;
-        case CTRL_MODE_RUNNING:
-            puts("CTRL_MODE_RUNNING"); break;
-        case CTRL_MODE_RUNNING_SPEED:
-            puts("CTRL_MODE_RUNNING_SPEED"); break;
-        case CTRL_MODE_PASSTHROUGH:
-            puts("CTRL_MODE_PASSTHROUGH"); break;
-        default:
-            puts("<unknown>"); break;
+        switch (new_mode) {
+            case CTRL_MODE_STOP:
+                puts("CTRL_MODE_STOP"); break;
+            case CTRL_MODE_IDLE:
+                puts("CTRL_MODE_IDLE"); break;
+            case CTRL_MODE_BLOCKED:
+                puts("CTRL_MODE_BLOCKED"); break;
+            case CTRL_MODE_RUNNING:
+                puts("CTRL_MODE_RUNNING"); break;
+            case CTRL_MODE_RUNNING_SPEED:
+                puts("CTRL_MODE_RUNNING_SPEED"); break;
+            case CTRL_MODE_PASSTHROUGH:
+                puts("CTRL_MODE_PASSTHROUGH"); break;
+            default:
+                puts("<unknown>"); break;
         }
 #endif
 
@@ -178,7 +179,7 @@ void ctrl_set_mode(ctrl_t* ctrl, ctrl_mode_t new_mode)
     irq_enable();
 }
 
-inline ctrl_mode_t ctrl_get_mode(ctrl_t* ctrl)
+inline ctrl_mode_t ctrl_get_mode(ctrl_t *ctrl)
 {
     return ctrl->control.current_mode;
 }
@@ -188,7 +189,8 @@ void *task_ctrl_update(void *arg)
     /* bot position on the 'table' (absolute position): */
     polar_t motor_command = { 0, 0 };
 
-    ctrl_t *ctrl = (ctrl_t*)arg;
+    ctrl_t *ctrl = (ctrl_t *)arg;
+
     DEBUG("ctrl: Controller started\n");
 
     for (;;) {
