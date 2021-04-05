@@ -95,11 +95,21 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+void pln_menu_enter(void) {
+    ctrl_t *ctrl = pf_get_ctrl();
+
+    shell_path_index = 0;
+
+    pln_set_allow_change_path_pose(FALSE);
+
+    pln_start(ctrl);
+}
+
 /* Init shell commands */
 void pln_shell_init(void)
 {
     /* Planners menu and commands */
-    shell_menu_t menu = menu_init("Planners menu", "pln_menu", menu_root, NULL);
+    shell_menu_t menu = menu_init("Planners menu", "pln_menu", menu_root, pln_menu_enter);
 
     const shell_command_t planners_menu_commands[] = {
         { "n", "Go to next position", pln_cmd_go_next_cb },
