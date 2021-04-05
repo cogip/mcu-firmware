@@ -16,21 +16,21 @@ static path_pose_t poses[] = {
     /* POSE_INITIAL */
     {
         .pos = {
-                   .x = 1500 - ROBOT_MARGIN,
-                   .y = 300 + ROBOT_MARGIN,
-                   .O = 180,
-               },
+            .x = 1500 - ROBOT_MARGIN,
+            .y = 300 + ROBOT_MARGIN,
+            .O = 180,
+        },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
         .act = NULL,
     },
     /* Game path */
-    {   /* Sortie zone de départ */
+    {                   /* Sortie zone de départ */
         .pos = {
-                   .x = 1275,//1100,
-                   .y = 300 + ROBOT_MARGIN,
-                   .O = 90,
-               },
+            .x = 1275,  //1100,
+            .y = 300 + ROBOT_MARGIN,
+            .O = 90,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = NULL,
@@ -38,20 +38,20 @@ static path_pose_t poses[] = {
     /* Point évitement zone du chaos x=800 y=1100 O=205+90*/
     {
         .pos = {
-                   .x = 1275, //800,
-                   .y = 1300, //1100,
-                   .O = 115,
-               },
+            .x = 1275,          //800,
+            .y = 1300,          //1100,
+            .O = 115,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = NULL,
     },
     {
         .pos = {
-                   .x = 600, //800,
-                   .y = 1300, //1100,
-                   .O = 90,
-               },
+            .x = 600,           //800,
+            .y = 1300,          //1100,
+            .O = 90,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = NULL,
@@ -59,10 +59,10 @@ static path_pose_t poses[] = {
     {
         /* Pré-Point */
         .pos = {
-                   .x = 600,
-                   .y = 1300,
-                   .O = 90,
-               },
+            .x = 600,
+            .y = 1300,
+            .O = 90,
+        },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
         .act = app_front_cup_take,
@@ -71,10 +71,10 @@ static path_pose_t poses[] = {
         /* Point récolte */
         /* TODO /!\ Régulation de vitesse seulement ? */
         .pos = {
-                   .x = 600,
-                   .y = 1361,
-                   .O = 90,
-               },
+            .x = 600,
+            .y = 1361,
+            .O = 90,
+        },
         .allow_reverse = FALSE,
         .max_speed = LOW_SPEED,
         .act = NULL,
@@ -82,10 +82,10 @@ static path_pose_t poses[] = {
     {
         /* Post-Point */
         .pos = {
-                   .x = 600,
-                   .y = 1300,
-                   .O = 90,
-               },
+            .x = 600,
+            .y = 1300,
+            .O = 90,
+        },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = app_front_cup_ramp,
@@ -96,10 +96,10 @@ static path_pose_t poses[] = {
     {
         /* Pré-Point */
         .pos = {
-                   .x = 900,
-                   .y = 1300,
-                   .O = 270,
-               },
+            .x = 900,
+            .y = 1300,
+            .O = 270,
+        },
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
         .act = app_back_cup_take,
@@ -108,10 +108,10 @@ static path_pose_t poses[] = {
         /* Point récolte */
         /* TODO /!\ Régulation de vitesse seulement ? */
         .pos = {
-                   .x = 900,
-                   .y = 1361,
-                   .O = 270,
-               },
+            .x = 900,
+            .y = 1361,
+            .O = 270,
+        },
         .allow_reverse = TRUE,
         .max_speed = LOW_SPEED,
         .act = NULL,
@@ -119,10 +119,10 @@ static path_pose_t poses[] = {
     {
         /* Post-Point */
         .pos = {
-                   .x = 900,
-                   .y = 1300,
-                   .O = 270,
-               },
+            .x = 900,
+            .y = 1300,
+            .O = 270,
+        },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = app_back_cup_ramp,
@@ -133,10 +133,10 @@ static path_pose_t poses[] = {
     {
         /* Point dépose rampe avant */
         .pos = {
-                   .x = 230,
-                   .y = 1310,
-                   .O = 180, // 180: dépose cote gauche
-               },
+            .x = 230,
+            .y = 1310,
+            .O = 180,        // 180: dépose cote gauche
+        },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED, //MAX_SPEED,
         .act = app_front_ramp_right_drop,
@@ -144,10 +144,10 @@ static path_pose_t poses[] = {
     {
         /* Point dépose rampe arrière */
         .pos = {
-                   .x = 230,
-                   .y = 1310,
-                   .O = 0, //  0 == dépose cote droit
-               },
+            .x = 230,
+            .y = 1310,
+            .O = 0,        //  0 == dépose cote droit
+        },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = app_back_ramp_left_drop,
@@ -158,10 +158,10 @@ static path_pose_t poses[] = {
     {
         /* Post-Point récolte 3 palets éloignés balance + orientation vers zone départ */
         .pos = {
-                   .x = 900,
-                   .y = 1300,
-                   .O = 300,
-               },
+            .x = 900,
+            .y = 1300,
+            .O = 300,
+        },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED, //MAX_SPEED,
         .act = app_arms_open,
@@ -169,10 +169,10 @@ static path_pose_t poses[] = {
     {
         /* Point interne à la zone de départ */
         .pos = {
-                   .x = 1100,
-                   .y = 1000,
-                   .O = 300
-               },
+            .x = 1100,
+            .y = 1000,
+            .O = 300
+        },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
         .act = app_arms_close,
@@ -180,10 +180,10 @@ static path_pose_t poses[] = {
     {
         /* Point approche dans couloir vers le petit distributeur */
         .pos = {
-                   .x = 1275,
-                   .y = 1500,
-                   .O = 90,
-               },
+            .x = 1275,
+            .y = 1500,
+            .O = 90,
+        },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = NULL,
@@ -194,10 +194,10 @@ static path_pose_t poses[] = {
     {
         /* Pré-Point */
         .pos = {
-                   .x = 1275,
-                   .y = 1750,
-                   .O = 90,
-               },
+            .x = 1275,
+            .y = 1750,
+            .O = 90,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = app_front_cup_take,
@@ -205,10 +205,10 @@ static path_pose_t poses[] = {
     {
         /* Point petit distributeur */
         .pos = {
-                   .x = 1275,
-                   .y = 1820,
-                   .O = 90,
-               },
+            .x = 1275,
+            .y = 1820,
+            .O = 90,
+        },
         .allow_reverse = FALSE,
         .max_speed = LOW_SPEED,
         .act = NULL,
@@ -216,10 +216,10 @@ static path_pose_t poses[] = {
     {
         /* Post-Point */
         .pos = {
-                   .x = 1275,
-                   .y = 1300,
-                   .O = 90,
-               },
+            .x = 1275,
+            .y = 1300,
+            .O = 90,
+        },
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
         // TODO: /!\ à symétriser fonction de la couleur
@@ -228,10 +228,10 @@ static path_pose_t poses[] = {
     {
         /* Post-Point failsafe pump */
         .pos = {
-                   .x = 1275,
-                   .y = 1200,
-                   .O = 270,
-               },
+            .x = 1275,
+            .y = 1200,
+            .O = 270,
+        },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = app_stop_pumps,
@@ -241,10 +241,10 @@ static path_pose_t poses[] = {
      */
     {   /* Pré-point */
         .pos = {
-                   .x = -150,
-                   .y = 285,
-                   .O = 180,
-               },
+            .x = -150,
+            .y = 285,
+            .O = 180,
+        },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
         .act = app_back_ramp_left_horiz_for_goldenium,
@@ -252,10 +252,10 @@ static path_pose_t poses[] = {
 
     {   /* Point ouverture goldenium */
         .pos = {
-                   .x = -280,
-                   .y = 285,
-                   .O = 180,
-               },
+            .x = -280,
+            .y = 285,
+            .O = 180,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = NULL,
@@ -263,10 +263,10 @@ static path_pose_t poses[] = {
 
     {   /* Post-point */
         .pos = {
-                   .x = -150,
-                   .y = 285,
-                   .O = 180,
-               },
+            .x = -150,
+            .y = 285,
+            .O = 180,
+        },
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
         .act = app_back_ramp_reset,
@@ -276,30 +276,30 @@ static path_pose_t poses[] = {
      */
     {   /* Pré-point */
         .pos = {
-                   .x = -625,
-                   .y = 320,
-                   .O = 270,
-               },
+            .x = -625,
+            .y = 320,
+            .O = 270,
+        },
         .allow_reverse = TRUE,
         .max_speed = NORMAL_SPEED,
         .act = app_goldenium_take,
     },
     {   /* récolte */
         .pos = {
-                   .x = -625,
-                   .y = 250,
-                   .O = 270,
-               },
+            .x = -625,
+            .y = 250,
+            .O = 270,
+        },
         .allow_reverse = FALSE,
         .max_speed = LOW_SPEED,
         .act = NULL,
     },
     {   /* Post-point */
         .pos = {
-                   .x = -625,
-                   .y = 320,
-                   .O = 270,
-               },
+            .x = -625,
+            .y = 320,
+            .O = 270,
+        },
         .allow_reverse = TRUE,
         .max_speed = LOW_SPEED,
         .act = app_goldenium_hold,
@@ -312,50 +312,50 @@ static path_pose_t poses[] = {
      */
     {   /* pré point poussette */
         .pos = {
-                   .x = 90,
-                   .y = 800,
-                   .O = 90,
-               },
+            .x = 90,
+            .y = 800,
+            .O = 90,
+        },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = NULL,
     },
     {   /* pré point poussette */
         .pos = {
-                   .x = 100,
-                   .y = 1150,
-                   .O = 340,
-               },
+            .x = 100,
+            .y = 1150,
+            .O = 340,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = app_arms_open,
     },
     {   /* pré point poussette */
         .pos = {
-                   .x = 1000,
-                   .y = 800,
-                   .O = 340,
-               },
+            .x = 1000,
+            .y = 800,
+            .O = 340,
+        },
         .allow_reverse = FALSE,
         .max_speed = MAX_SPEED,
         .act = app_arms_close,
     },
     {   /* vidange back ramp */
         .pos = {
-                   .x = 1000,
-                   .y = 800,
-                   .O = 90,
-               },
+            .x = 1000,
+            .y = 800,
+            .O = 90,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = app_front_ramp_right_drop,
     },
     {   /* vidange goldenium */
         .pos = {
-                   .x = 1000,
-                   .y = 800,
-                   .O = 0,
-               },
+            .x = 1000,
+            .y = 800,
+            .O = 0,
+        },
         .allow_reverse = FALSE,
         .max_speed = NORMAL_SPEED,
         .act = app_goldenium_drop,
@@ -370,7 +370,7 @@ path_t robot_path = {
     /* static cfg */
     .current_pose_idx = 0,
     .play_in_loop = FALSE,
-    .nb_pose = sizeof(poses)/sizeof(path_pose_t),
+    .nb_pose = sizeof(poses) / sizeof(path_pose_t),
     .poses = poses,
 };
 
@@ -379,12 +379,14 @@ inline const path_pose_t *path_get_current_path_pos(const path_t *path)
     return &path->poses[path->current_pose_idx];
 }
 
-inline const path_pose_t* path_get_pose_at_idx(path_t *path, uint8_t idx)
+inline const path_pose_t *path_get_pose_at_idx(path_t *path, uint8_t idx)
 {
-    if ((idx < path->nb_pose) && (idx > 0))
+    if ((idx < path->nb_pose) && (idx > 0)) {
         return &path->poses[idx];
-    else
+    }
+    else {
         return NULL;
+    }
 }
 
 inline uint8_t path_get_current_pose_idx(path_t *path)

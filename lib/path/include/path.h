@@ -23,8 +23,8 @@ typedef struct {
 
 extern path_t robot_path;
 
-const path_pose_t* path_get_current_path_pos(const path_t *path);
-const path_pose_t* path_get_pose_at_idx(path_t *path, uint8_t idx);
+const path_pose_t *path_get_current_path_pos(const path_t *path);
+const path_pose_t *path_get_pose_at_idx(path_t *path, uint8_t idx);
 uint8_t path_get_current_pose_idx(path_t *path);
 void path_set_current_pose_idx(path_t *path, uint8_t idx);
 void path_reset_current_pose_idx(path_t *path);

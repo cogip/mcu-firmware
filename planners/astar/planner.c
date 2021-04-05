@@ -37,23 +37,23 @@ void pln_set_allow_change_path_pose(uint8_t value)
     allow_change_path_pose = value;
 }
 
-void pln_start(ctrl_t* ctrl)
+void pln_start(ctrl_t *ctrl)
 {
     ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
     pln_started = TRUE;
 }
 
-void pln_stop(ctrl_t* ctrl)
+void pln_stop(ctrl_t *ctrl)
 {
     ctrl_set_mode(ctrl, CTRL_MODE_STOP);
     pln_started = FALSE;
 }
 
-static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
-        path_t* path)
+static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
+                                       path_t *path)
 {
     /* Current final path pose to reach */
-    const path_pose_t* current_path_pos = path_get_current_path_pos(path);
+    const path_pose_t *current_path_pos = path_get_current_path_pos(path);
     /* Pose to reach by the controller */
     pose_t pose_to_reach = ctrl_get_pose_to_reach(ctrl);
     /* Avoidance graph position index. This index increments on each
@@ -96,7 +96,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
             current_path_pos = path_get_current_path_pos(path);
 
             /* As current path pose could have changed, avoidance graph needs
-                * to be recomputed */
+             * to be recomputed */
             avoidance_update = TRUE;
         }
         else if ((!allow_change_path_pose) && (!ctrl_is_pose_intermediate(ctrl))) {
@@ -115,8 +115,9 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
     /* If the robot is blocked */
     if (ctrl->control.current_mode == CTRL_MODE_BLOCKED) {
         DEBUG("planner: Controller is blocked.\n");
-        if (!allow_change_path_pose)
+        if (!allow_change_path_pose) {
             goto trajectory_get_route_update_error;
+        }
         /* Increment the position to reach in the path */
         path_increment_current_pose_idx(path);
         current_path_pos = path_get_current_path_pos(path);
@@ -142,11 +143,13 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
         nb_pose_reachable = path->nb_pose;
         while ((avoidance_index < 0) && (nb_pose_reachable-- > 0)) {
             if (avoidance_index == -1) {
-                if (!allow_change_path_pose)
+                if (!allow_change_path_pose) {
                     goto trajectory_get_route_update_error;
+                }
                 path_increment_current_pose_idx(path);
-                if (current_path_pos == path_get_current_path_pos(path))
+                if (current_path_pos == path_get_current_path_pos(path)) {
                     goto trajectory_get_route_update_error;
+                }
                 current_path_pos = path_get_current_path_pos(path);
                 avoidance_index = update_graph(robot_pose, &(current_path_pos->pos));
             }
@@ -192,7 +195,7 @@ void *task_planner(void *arg)
 
     ctrl_t *ctrl = pf_get_ctrl();
 
-    path_t* path = pf_get_path();
+    path_t *path = pf_get_path();
     if (!path) {
         printf("Machine has no path\n");
     }
@@ -223,7 +226,7 @@ void *task_planner(void *arg)
         /* reverse gear selection is granted per point to reach, in path */
         ctrl_set_allow_reverse(ctrl, current_path_pos->allow_reverse);
 
-        const pose_t* pose_current = ctrl_get_pose_current(ctrl);
+        const pose_t *pose_current = ctrl_get_pose_current(ctrl);
 
         if (trajectory_get_route_update(ctrl, pose_current, path)) {
             ctrl_set_mode(ctrl, CTRL_MODE_STOP);

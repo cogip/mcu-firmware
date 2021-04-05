@@ -42,12 +42,12 @@ void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
     ctrl_quadpid.quadpid_params = ctrl_quadpid_params;
 }
 
-inline ctrl_quadpid_t* pf_get_quadpid_ctrl(void)
+inline ctrl_quadpid_t *pf_get_quadpid_ctrl(void)
 {
     return &ctrl_quadpid;
 }
 
-inline ctrl_t* pf_get_ctrl(void)
+inline ctrl_t *pf_get_ctrl(void)
 {
     return (ctrl_t *)&ctrl_quadpid;
 }
@@ -57,7 +57,7 @@ inline path_t *pf_get_path(void)
     return &robot_path;
 }
 
-void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
+void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command)
 {
     (void)motor_command;
 
@@ -69,16 +69,17 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *m
 
     ctrl_t *ctrl = pf_get_ctrl();
 
-    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP)
-        DEBUG("@robot@,%u,%"PRIu32",@pose_current@,%.2f,%.2f,%.2f\n",
-                    ROBOT_ID,
-                    ctrl->control.current_cycle,
-                    robot_pose->x,
-                    robot_pose->y,
-                    robot_pose->O);
+    if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP) {
+        DEBUG("@robot@,%u,%" PRIu32 ",@pose_current@,%.2f,%.2f,%.2f\n",
+              ROBOT_ID,
+              ctrl->control.current_cycle,
+              robot_pose->x,
+              robot_pose->y,
+              robot_pose->O);
+    }
 }
 
-void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
+void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;
@@ -91,7 +92,7 @@ void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *mot
     motor_drive(motor_command);
 }
 
-void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t* robot_speed, polar_t *motor_command)
+void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;
@@ -113,14 +114,14 @@ int encoder_read(polar_t *robot_speed)
 
     /* Only log info when controller is in interesting enough mode */
     if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP && ctrl_get_mode(ctrl) != CTRL_MODE_IDLE) {
-        DEBUG("@robot@,%u,%"PRIu32",@qdec_speed@,%"PRIi32",%"PRIi32"\n",
-            ROBOT_ID, ctrl->control.current_cycle, left_speed, right_speed);
+        DEBUG("@robot@,%u,%" PRIu32 ",@qdec_speed@,%" PRIi32 ",%" PRIi32 "\n",
+              ROBOT_ID, ctrl->control.current_cycle, left_speed, right_speed);
 
-        DEBUG("@robot@,%u,%"PRIu32",@speed_current@,%.2f,%.2f\n",
-            ROBOT_ID,
-            ctrl->control.current_cycle,
-            robot_speed->distance,
-            robot_speed->angle);
+        DEBUG("@robot@,%u,%" PRIu32 ",@speed_current@,%.2f,%.2f\n",
+              ROBOT_ID,
+              ctrl->control.current_cycle,
+              robot_speed->distance,
+              robot_speed->angle);
     }
 
     return 0;
@@ -141,13 +142,13 @@ void motor_drive(polar_t *command)
 
     /* Only log info when controller is in interesting enough mode */
     if (ctrl_get_mode(ctrl) != CTRL_MODE_STOP && ctrl_get_mode(ctrl) != CTRL_MODE_IDLE) {
-        DEBUG("@robot@,%u,%"PRIu32",@speed_set@,%.4f,%.4f\n",
-                    ROBOT_ID,
-                    ctrl->control.current_cycle,
-                    command->distance,
-                    command->angle);
+        DEBUG("@robot@,%u,%" PRIu32 ",@speed_set@,%.4f,%.4f\n",
+              ROBOT_ID,
+              ctrl->control.current_cycle,
+              command->distance,
+              command->angle);
 
-        DEBUG("@robot@,%u,%"PRIu32",@motor_set@,%"PRIi16",%"PRIi16"\n",
+        DEBUG("@robot@,%u,%" PRIu32 ",@motor_set@,%" PRIi16 ",%" PRIi16 "\n",
               ROBOT_ID, ctrl->control.current_cycle, left_command, right_command);
     }
 
@@ -165,8 +166,9 @@ void pf_vl53l0x_reset(void)
 {
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
         pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_reset_dev(dev) != 0)
+        if (vl53l0x_reset_dev(dev) != 0) {
             DEBUG("ERROR: Sensor %u reset failed !!!\n", dev);
+        }
     }
 }
 
@@ -174,8 +176,9 @@ void pf_vl53l0x_init(void)
 {
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
         pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_init_dev(dev) != 0)
+        if (vl53l0x_init_dev(dev) != 0) {
             DEBUG("ERROR: Sensor %u init failed !!!\n", dev);
+        }
     }
 }
 
@@ -184,7 +187,7 @@ int pf_read_sensors(void)
     int obstacle_found = 0;
     int res = 0;
 
-    ctrl_t* ctrl = (ctrl_t*)pf_get_quadpid_ctrl();
+    ctrl_t *ctrl = (ctrl_t *)pf_get_quadpid_ctrl();
 
     reset_dyn_polygons();
 
@@ -204,8 +207,8 @@ int pf_read_sensors(void)
         DEBUG("Measure sensor %u: %u\n\n", dev, measure);
 
         if ((measure > OBSTACLE_DETECTION_MINIMUM_TRESHOLD)
-                && (measure < OBSTACLE_DETECTION_MAXIMUM_TRESHOLD)) {
-            const pf_sensor_t* sensor = &pf_sensors[dev];
+            && (measure < OBSTACLE_DETECTION_MAXIMUM_TRESHOLD)) {
+            const pf_sensor_t *sensor = &pf_sensors[dev];
             pose_t robot_pose = *ctrl_get_pose_current(ctrl);
 
             res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)measure);
@@ -224,9 +227,11 @@ void pf_shell_read_sensors(pca9548_t dev)
 {
     vl53l0x_t sensor = 0;
     uint8_t channel = pca9548_get_current_channel(dev);
+
     for (sensor = 0; sensor < VL53L0X_NUMOF; sensor++) {
-        if (vl53l0x_channel[sensor] == channel)
+        if (vl53l0x_channel[sensor] == channel) {
             break;
+        }
     }
 
     if (sensor < VL53L0X_NUMOF) {
@@ -252,7 +257,7 @@ static void *_task_countdown(void *arg)
     (void)arg;
     static int countdown = GAME_DURATION_SEC;
 
-    ctrl_t* controller = (ctrl_t*)&ctrl_quadpid;
+    ctrl_t *controller = (ctrl_t *)&ctrl_quadpid;
 
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
@@ -261,7 +266,7 @@ static void *_task_countdown(void *arg)
         }
         else {
             DEBUG("                                      GAME TIME: %d\n",
-                countdown);
+                  countdown);
             countdown--;
         }
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
@@ -300,7 +305,7 @@ void pf_init_tasks(void)
         _task_planner_start_cancel,
         &start_planner,
         "wait planner start cancel"
-    );
+        );
 
     puts("Press Enter to cancel planner start...");
 
@@ -335,7 +340,7 @@ void pf_init_tasks(void)
                   "planner");
 
     /* Wait for start switch */
-    while(!pf_is_game_launched());
+    while (!pf_is_game_launched()) {}
 
     if (start_planner) {
         /* Debug indicator to track the planner started state */
@@ -350,7 +355,7 @@ void pf_init_tasks(void)
             _task_countdown,
             NULL,
             "countdown"
-        );
+            );
 
         /* Start game */
         DEBUG("platform: Start game\n");
@@ -398,14 +403,15 @@ void pf_init(void)
 
     for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
         pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_init_dev(dev) != 0)
+        if (vl53l0x_init_dev(dev) != 0) {
             printf("ERROR: Sensor %u init failed !!!\n", dev);
+        }
     }
 
     ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
 
     /* Get platform path */
-    path_t* path = pf_get_path();
+    path_t *path = pf_get_path();
     if (!path) {
         printf("machine has no path\n");
     }

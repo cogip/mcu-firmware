@@ -30,7 +30,7 @@ void native_motor_driver_qdec_simulation(
     const motor_driver_t motor_driver, uint8_t motor_id,
     int32_t pwm_duty_cycle)
 {
-    static int16_t simu_motor_encoder[QDEC_NUMOF][SIMU_ENC_BUFSIZE] = {0,};
+    static int16_t simu_motor_encoder[QDEC_NUMOF][SIMU_ENC_BUFSIZE] = { 0, };
 
     uint32_t i = 0, id = 0;
     int32_t s = 0;
@@ -46,7 +46,7 @@ void native_motor_driver_qdec_simulation(
 
         for (i = 0; i < SIMU_ENC_BUFSIZE - 1; i++) {
             s += simu_motor_encoder[id][i];
-            simu_motor_encoder[id][i] = simu_motor_encoder[id][i+1];
+            simu_motor_encoder[id][i] = simu_motor_encoder[id][i + 1];
         }
 
         s = (s + simu_motor_encoder[id][i] + pwm_duty_cycle) / (SIMU_ENC_BUFSIZE + 1);
@@ -55,9 +55,9 @@ void native_motor_driver_qdec_simulation(
     }
     else {
         LOG_ERROR("MOTOR-DRIVER=%u"             \
-            "    MOTOR_ID = %u"                 \
-            "    no QDEC device associated",    \
-            motor_driver, motor_id);
+                  "    MOTOR_ID = %u"                 \
+                  "    no QDEC device associated",    \
+                  motor_driver, motor_id);
     }
 }
 

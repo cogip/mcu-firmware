@@ -14,4 +14,4 @@
  *
  * @return
  */
-void sd21_shell_init(const sd21_conf_t* sd21_config_new);
+void sd21_shell_init(const sd21_conf_t *sd21_config_new);

@@ -34,7 +34,8 @@ int vl53l0x_init_dev(vl53l0x_t dev)
     return 0;
 }
 
-int vl53l0x_reset_dev(vl53l0x_t dev) {
+int vl53l0x_reset_dev(vl53l0x_t dev)
+{
     (void) dev;
     return 0;
 }

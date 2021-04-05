@@ -32,7 +32,7 @@
  * Two SD21 specific register can be accessed to get SD21 firmware version and
  * battery voltage. Two functions are provided for that purpose:
  * * sd21_get_version
- * * sd21_get_battery_voltage 
+ * * sd21_get_battery_voltage
  *
  * Position has to be setup in one I2C request of 2 bytes.
  *
@@ -144,7 +144,7 @@ typedef struct {
  *
  * @return
  */
-void sd21_init(const sd21_conf_t* sd21_config_new);
+void sd21_init(const sd21_conf_t *sd21_config_new);
 
 /**
  * @brief Servomotor driving function
@@ -157,7 +157,7 @@ void sd21_init(const sd21_conf_t* sd21_config_new);
  *                          not 0 on failure
  */
 int sd21_servo_control_position(sd21_t dev, uint8_t servo_id,
-        uint16_t position);
+                                uint16_t position);
 
 /**
  * @brief Drive servomotor to given pre defined position
@@ -170,7 +170,7 @@ int sd21_servo_control_position(sd21_t dev, uint8_t servo_id,
  *                          not 0 on failure
  */
 int sd21_servo_reach_position(sd21_t dev, uint8_t servo_id,
-        uint8_t pos_index);
+                              uint8_t pos_index);
 
 /**
  * @brief Drive servomotor to reset position
@@ -211,7 +211,7 @@ double sd21_get_battery_voltage(sd21_t dev);
  * @return                  0 on success
  *                          not 0 on failure
  */
-int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t* position);
+int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t *position);
 
 /**
  * @brief Get Servomotor name.
@@ -221,6 +221,6 @@ int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t* position);
  *
  * @return                  Servomotor name
  */
-const char* sd21_servo_get_name(sd21_t dev, uint8_t servo_id);
+const char *sd21_servo_get_name(sd21_t dev, uint8_t servo_id);
 
 /** @} */

@@ -25,7 +25,7 @@
 #include "debug.h"
 
 /* Controller */
-static ctrl_t* ctrl = NULL;
+static ctrl_t *ctrl = NULL;
 
 int pf_print_state(int argc, char **argv)
 {
@@ -34,30 +34,30 @@ int pf_print_state(int argc, char **argv)
 
     printf(
         "{"
-          "\"mode\": \"%u\", "
-          "\"pose_current\": "
-          "{"
-            "\"O\": \"%lf\", "
-            "\"x\": \"%lf\", "
-            "\"y\": \"%lf\""
-          "}, "
-          "\"pose_order\": "
-          "{"
-            "\"O\": \"%lf\", "
-            "\"x\": \"%lf\", "
-            "\"y\": \"%lf\""
-          "}, "
-          "\"cycle\": \"%"PRIu32"\", "
-          "\"speed_current\": "
-          "{"
-            "\"distance\": \"%lf\", "
-            "\"angle\": \"%lf\""
-          "}, "
-          "\"speed_order\": "
-          "{"
-            "\"distance\": \"%lf\", "
-            "\"angle\": \"%lf\""
-          "}"
+        "\"mode\": \"%u\", "
+        "\"pose_current\": "
+        "{"
+        "\"O\": \"%lf\", "
+        "\"x\": \"%lf\", "
+        "\"y\": \"%lf\""
+        "}, "
+        "\"pose_order\": "
+        "{"
+        "\"O\": \"%lf\", "
+        "\"x\": \"%lf\", "
+        "\"y\": \"%lf\""
+        "}, "
+        "\"cycle\": \"%" PRIu32 "\", "
+        "\"speed_current\": "
+        "{"
+        "\"distance\": \"%lf\", "
+        "\"angle\": \"%lf\""
+        "}, "
+        "\"speed_order\": "
+        "{"
+        "\"distance\": \"%lf\", "
+        "\"angle\": \"%lf\""
+        "}"
         "}\n",
         ctrl->control.current_mode,
         ctrl->control.pose_current.O,
@@ -71,7 +71,7 @@ int pf_print_state(int argc, char **argv)
         ctrl->control.speed_current.angle,
         ctrl->control.speed_order.distance,
         ctrl->control.speed_order.angle
-    );
+        );
 
     return EXIT_SUCCESS;
 }
@@ -106,7 +106,7 @@ int pf_motors_test(int argc, char **argv)
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            printf("    qdec value = %"PRId32"\n", qdec_value);
+            printf("    qdec value = %" PRId32 "\n", qdec_value);
             puts("    Done");
 
             /* Stop */
@@ -124,7 +124,7 @@ int pf_motors_test(int argc, char **argv)
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            printf("    qdec value = %"PRId32"\n", qdec_value);
+            printf("    qdec value = %" PRId32 "\n", qdec_value);
             puts("    Done");
 
             /* Stop */
@@ -149,7 +149,7 @@ void pf_shell_init(void)
     static const shell_command_t global_commands[] = {
         { "_state", "Print current state", pf_print_state },
         { "_dyn_obstacles", "Print dynamic obstacles",
-            avoidance_print_dyn_obstacles },
+          avoidance_print_dyn_obstacles },
 #ifdef MODULE_SHMEM
         SHMEM_SET_KEY_CMD,
 #endif

@@ -11,13 +11,13 @@
  * @ingroup     planners
  * @brief       Trajectory planification module
  *
- * The planner, asociated to a controller, generate the robot course according
+ * The planner, associated to a controller, generates the robot course according
  * to a given path. It also handles avoidance behavior.
  *
  *
  * @{
  * @file
- * @brief       Common planner API and datas
+ * @brief       Common planner API and data
  *
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  * @author      Yannick GICQUEL <yannick.gicquel@gmail.com>
@@ -31,25 +31,25 @@
 /**
  * @brief Start the trajectory planification and the associated controller
  *
- * @param[in]   ctrl            Controller object
+ * @param[in]   ctrl            controller object
  *
  * @return
  */
-void pln_start(ctrl_t* ctrl);
+void pln_start(ctrl_t *ctrl);
 
 /**
  * @brief Stop the trajectory planification and the associated controller
  *
- * @param[in]   ctrl            Controller object
+ * @param[in]   ctrl            controller object
  *
  * @return
  */
-void pln_stop(ctrl_t* ctrl);
+void pln_stop(ctrl_t *ctrl);
 
 /**
  * @brief Periodic task function to process a planner
  *
- * @param[in] arg               Should be NULL
+ * @param[in] arg               should be NULL
  *
  * @return
  */
