@@ -59,7 +59,6 @@
 
 /* Project includes */
 #include "odometry.h"
-#include "pid.h"
 
 /**
  * @brief   Pre-controller callback. Called before the controller process

@@ -1,24 +1,27 @@
 #include "planner.h"
 
+/* System includes */
 #include <stdio.h>
-#include "app.h"
-#include "avoidance.h"
-#include "ctrl.h"
-#include "xtimer.h"
-#include "platform.h"
-#include "trigonometry.h"
-#include "obstacle.h"
-#include <irq.h>
-#include <periph/adc.h>
 
 /* RIOT includes */
-#define ENABLE_DEBUG        (0)
-#include "debug.h"
+#include "irq.h"
+#include "periph/adc.h"
 #include "log.h"
+#include "xtimer.h"
+
+/* Project includes */
+#include "app.h"
+#include "avoidance.h"
+#include "platform.h"
+#include "path.h"
 
 #ifdef MODULE_SHELL_PLANNERS
 #include "shell_planners.h"
 #endif /* MODULE_SHELL_PLANNERS */
+
+/* Enable or disable debug for this file only */
+#define ENABLE_DEBUG        (0)
+#include "debug.h"
 
 static uint8_t pln_started = FALSE;
 
