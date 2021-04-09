@@ -31,6 +31,7 @@ static ctrl_quadpid_t ctrl_quadpid =
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_thread_stack[THREAD_STACKSIZE_LARGE];
+char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
 {
@@ -242,7 +243,7 @@ int pf_is_camp_left(void)
 }
 
 
-static void *pf_task_countdown(void *arg)
+static void *_task_countdown(void *arg)
 {
     (void)arg;
     static int countdown = GAME_DURATION_SEC;
@@ -265,18 +266,62 @@ static void *pf_task_countdown(void *arg)
     return NULL;
 }
 
+static void *_task_planner_start_cancel(void *arg)
+{
+    bool *start_shell = (bool *)arg;
+
+    /* Wait for Enter to be pressed */
+    getchar();
+
+    /* Set a flag and return once done */
+    *start_shell = false;
+
+    puts("Key pressed, do not start planner.");
+
+    return NULL;
+}
+
 void pf_init_tasks(void)
 {
 
-    ctrl_t* controller = (ctrl_t*)&ctrl_quadpid;
+    ctrl_t *controller = pf_get_ctrl();
+    bool start_planner = true;
+    int countdown = PF_START_COUNTDOWN;
+
+    /* Create thread that up a flag on key pressed to not start the planner automatically */
+    kernel_pid_t planner_start_cancel_pid = thread_create(
+        planner_start_cancel_thread_stack,
+        sizeof(planner_start_cancel_thread_stack),
+        THREAD_PRIORITY_MAIN + 1, 0,
+        _task_planner_start_cancel,
+        &start_planner,
+        "wait planner start cancel"
+    );
+
+    puts("Press Enter to cancel planner start...");
+
+    /* Wait for Enter key pressed or countdown */
+    while ((start_planner) && (countdown > 0)) {
+        xtimer_ticks32_t loop_start_time = xtimer_now();
+        printf("%d seconds left...\n", countdown);
+        countdown--;
+        xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
+    }
+
+    /* Stop task_planner_start_cancel thread if still running */
+    thread_t *planner_start_cancel_thread = (thread_t *)thread_get(planner_start_cancel_pid);
+    if (planner_start_cancel_thread) {
+        sched_set_status(planner_start_cancel_thread, STATUS_STOPPED);
+    }
 
     /* Create controller thread */
     thread_create(controller_thread_stack,
                   sizeof(controller_thread_stack),
                   THREAD_PRIORITY_MAIN - 4, 0,
                   task_ctrl_update,
-                  (void*)controller,
+                  (void *)controller,
                   "motion control");
+
     /* Create planner thread */
     thread_create(planner_thread_stack,
                   sizeof(planner_thread_stack),
@@ -285,24 +330,28 @@ void pf_init_tasks(void)
                   NULL,
                   "planner");
 
-
     /* Wait for start switch */
     while(!pf_is_game_launched());
 
-    /* Debug indicator to track the non starting state */
-    gpio_set(GPIO_DEBUG_LED);
+    if (start_planner) {
+        /* Debug indicator to track the planner started state */
+        gpio_set(GPIO_DEBUG_LED);
 
-    /* Create countdown thread */
-    thread_create(countdown_thread_stack,
+        /* Create countdown thread */
+        thread_create(
+            countdown_thread_stack,
             sizeof(countdown_thread_stack),
-            THREAD_PRIORITY_MAIN - 3, 0,
-            pf_task_countdown,
+            THREAD_PRIORITY_MAIN - 3,
+            0,
+            _task_countdown,
             NULL,
-            "countdown");
+            "countdown"
+        );
 
-    /* Start game */
-    DEBUG("platform: Start game\n");
-    pln_start((ctrl_t*)controller);
+        /* Start game */
+        DEBUG("platform: Start game\n");
+        pln_start((ctrl_t *)controller);
+    }
 }
 
 void pf_init(void)
