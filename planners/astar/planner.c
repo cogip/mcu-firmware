@@ -58,7 +58,7 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
     pose_t pose_to_reach = ctrl_get_pose_to_reach(ctrl);
     /* Avoidance graph position index. This index increments on each
      * intermediate pose used to reach the current path pose */
-    static int avoidance_index = 1;
+    static int avoidance_index = -1;
     /* Control variable if there is still at least a reachable pose in the
      * path */
     int nb_pose_reachable = 0;
@@ -78,11 +78,12 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
             /* If the targeted pose is the current path pose to reach, launch
              * the action and update the current path pose to reach to the next
              * one in path, if allowed. */
-            DEBUG("planner: Controller has reach final position.\n");
+            DEBUG("planner: Controller has reached final position.\n");
 
-            /* If it exists launch action associated to the point and increment
-             * the position to reach in the path */
+            /* If in automatic planner mode */
             if (allow_change_path_pose) {
+                /* If it exists launch action associated to the point and increment
+                 * the position to reach in the path */
                 if (current_path_pos->act) {
                     DEBUG("planner: action launched!\n");
                     (*(current_path_pos->act))();
@@ -93,14 +94,20 @@ static int trajectory_get_route_update(ctrl_t* ctrl, const pose_t* robot_pose,
             }
             /* Update current path targeted position in case it has changed */
             current_path_pos = path_get_current_path_pos(path);
+
             /* As current path pose could have changed, avoidance graph needs
-             * to be recomputed */
+                * to be recomputed */
+            avoidance_update = TRUE;
+        }
+        else if ((!allow_change_path_pose) && (!ctrl_is_pose_intermediate(ctrl))) {
+            /* Update current path targeted position in case it has changed */
+            current_path_pos = path_get_current_path_pos(path);
             avoidance_update = TRUE;
         }
         /* If it is an intermediate pose, just go to the next one in
          * avoidance graph */
         else {
-            DEBUG("planner: Controller has reach intermediate position.\n");
+            DEBUG("planner: Controller has reached intermediate position.\n");
             avoidance_index++;
         }
     }
