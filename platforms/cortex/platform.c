@@ -20,6 +20,10 @@
 #include "shell_platforms.h"
 #endif /* MODULE_SHELL_PLATFORMS */
 
+#ifdef MODULE_SHELL_QUADPID
+#include "shell_quadpid.h"
+#endif /* MODULE_SHELL_QUADPID */
+
 /* Controller */
 static ctrl_quadpid_t ctrl_quadpid =
 {
@@ -413,4 +417,8 @@ void pf_init(void)
 
     /* Initialize planner */
     pln_init();
+
+#ifdef MODULE_SHELL_QUADPID
+    ctrl_quadpid_shell_init(&ctrl_quadpid);
+#endif /* MODULE_SHELL_QUADPID */
 }
