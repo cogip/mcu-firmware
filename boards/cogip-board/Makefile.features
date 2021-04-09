@@ -1,4 +1,4 @@
-# define the cpu used by the cogip2018-cortex board
+# define the cpu used by the cogip-board
 CPU = stm32
 CPU_MODEL = stm32f446re
 
