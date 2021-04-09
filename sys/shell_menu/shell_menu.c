@@ -95,7 +95,6 @@ static void _init_main_menu(void)
     if (nb_menus != 0) {
         return;
     }
-    printf("Init main menu\n");
 
     shell_menus[menu_root].name = "Main menu";
     shell_menus[menu_root].current = &shell_menus[menu_root];
