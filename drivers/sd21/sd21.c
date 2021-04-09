@@ -4,6 +4,10 @@
 #include "sd21.h"
 #include "xtimer.h"
 
+#ifdef MODULE_SHELL_SD21
+#include "shell_sd21.h"
+#endif /* MODULE_SHELL_SD21 */
+
 static const sd21_conf_t* sd21_config = NULL;
 static size_t sd21_numof = 0;
 
@@ -164,4 +168,8 @@ void sd21_init(const sd21_conf_t* sd21_config_new)
                 xtimer_usleep(50 * US_PER_MS);
         }
     }
+
+#ifdef MODULE_SHELL_SD21
+    sd21_shell_init(sd21_config);
+#endif
 }
