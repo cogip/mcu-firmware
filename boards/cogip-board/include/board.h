@@ -7,8 +7,8 @@
  */
 
 /**
- * @defgroup    boards_cogip2018-cortex COGIP 2018 Cortex board
- * @ingroup     boards_cogip2018-cortex
+ * @defgroup    boards_cogip-board COGIP 2018 Cortex board
+ * @ingroup     boards_cogip-board
  * @brief       Support for the COGIP 2018 Cortex board
  * @{
  *

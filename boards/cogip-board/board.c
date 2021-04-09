@@ -7,11 +7,11 @@
  */
 
 /**
- * @ingroup     boards_cogip2018-cortex
+ * @ingroup     boards_cogip-board
  * @{
  *
  * @file
- * @brief       Board initialization code for cogip2018-cortex
+ * @brief       Board initialization code for cogip-board
  *
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  *

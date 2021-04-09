@@ -51,7 +51,7 @@ PATH=${PATH}:$HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/
 
 # Simulation target (x86_64 architecture)
 
-Assuming the platform is cogip2019-cortex-simulation
+Assuming the platform is cortex
 
 ## Build
 
