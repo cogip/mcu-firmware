@@ -7,6 +7,11 @@ USEMODULE += cortex
 
 # Shell menus management
 USEMODULE += shell_menu
+USEMODULE += shell_platforms
+USEMODULE += shell_planners
+USEMODULE += shell_quadpid
+USEMODULE += shell_sd21
+USEMODULE += shell_pca9548
 
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
