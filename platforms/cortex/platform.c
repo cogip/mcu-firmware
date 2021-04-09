@@ -307,6 +307,10 @@ void pf_init_tasks(void)
 
 void pf_init(void)
 {
+#ifdef MODULE_SHELL_PLATFORMS
+    pf_shell_init();
+#endif /* MODULE_SHELL_PLATFORMS */
+
     motor_driver_init(MOTOR_DRIVER_DEV(0));
 
     /* Setup qdec periphereal */
@@ -360,8 +364,4 @@ void pf_init(void)
 
     /* Initialize planner */
     pln_init();
-
-#ifdef MODULE_SHELL_PLATFORMS
-    pf_shell_init();
-#endif /* MODULE_SHELL_PLATFORMS */
 }
