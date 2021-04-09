@@ -67,7 +67,7 @@ int shmem_set_key_cmd_cb(int argc, char **argv);
 /* Command to add to the shell */
 #define SHMEM_SET_KEY_CMD                                      \
     {                                                          \
-        "set_shmem_key",                                       \
+        "_set_shmem_key",                                      \
         "Set shared memory key to communicate with simulator", \
         shmem_set_key_cmd_cb                                   \
     }
