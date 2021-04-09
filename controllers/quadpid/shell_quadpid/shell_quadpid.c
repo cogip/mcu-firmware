@@ -57,7 +57,7 @@ typedef struct {
 #define PULSE_PER_SEC              50
 
 /* Quadpid controller */
-static ctrl_quadpid_t* ctrl_quadpid = NULL;
+static ctrl_quadpid_t *ctrl_quadpid = NULL;
 
 /* Index on position to reach according to current linear one */
 uint8_t pose_linear_index = 0;
@@ -729,13 +729,10 @@ static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-/**
- * @brief Initialize quapid controller calibration shell
- *
- * Register quapid controller calibration commands.
- */
-void ctrl_quadpid_shell_init(void)
+void ctrl_quadpid_shell_init(ctrl_quadpid_t *ctrl_quadpid_new)
 {
+    ctrl_quadpid = ctrl_quadpid_new;
+
     /* Add pose calibration command */
     /*shell_command_t cmd_shell_pose = {
         "cp", "Pose PID coefficients tuning",
@@ -744,7 +741,7 @@ void ctrl_quadpid_shell_init(void)
     pf_add_shell_command(&pf_shell_commands, &cmd_shell_pose);*/
 
     /* ctrl_quadpid speed menu and commands */
-    shell_menu_t menu_speed = menu_init("QuadPID controller Speed menu",
+    shell_menu_t menu_speed = menu_init("QuadPID controller speed menu",
             "ctrl_quadpid_speed_menu", menu_root, NULL);
 
     const shell_command_t shell_ctrl_quadpid_speed_menu_commands[] = {
