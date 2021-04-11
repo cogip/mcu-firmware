@@ -4,30 +4,15 @@
 #include <stdint.h>
 
 /* Project includes */
-#include "odometry.h"
-#include "platform.h"
+#include "cogip_defs.h"
 
-#define MAX_POINTS      256
-#define POLY_MAX        16
-#define POLY_MAX_POINTS 6
+#define MAX_POINTS              256
 
 #define GRAPH_MAX_VERTICES      64
 #define DIJKSTRA_MAX_DISTANCE   13000000
 
-#define AVOIDANCE_GRAPH_ERROR               -1
+#define AVOIDANCE_GRAPH_ERROR   -1
 
-/* Vector */
-/* TODO: should it be generic to all core functions ? */
-typedef struct {
-    double x, y;
-} vector_t;
-
-/* Polygon */
-/* TODO: should it be generic to all core functions ? */
-typedef struct {
-    uint8_t count;
-    pose_t points[POLY_MAX_POINTS];
-} polygon_t;
 
 pose_t dijkstra(uint16_t target, uint16_t index);
 pose_t avoidance(uint8_t index);

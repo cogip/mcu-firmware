@@ -2,24 +2,10 @@
 
 #include <stdint.h>
 
+#include "cogip_defs.h"
+
 #define SEGMENT 0
 #define ARC     1
-
-/**
- * \struct pose
- */
-typedef struct {
-    double x;   /*!< x-position [pulse] */
-    double y;   /*!< y-position [pulse] */
-    double O;   /*!< 0-orientation [pulse] */
-} pose_t;
-
-typedef struct {
-    double distance;
-    double angle;
-} polar_t;
-
-int pose_equal(const pose_t *p1, const pose_t *p2);
 
 /**
  * \fn odometry_setup
