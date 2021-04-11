@@ -9,6 +9,10 @@
 #include "lds01.h"
 #include "lds01_params.h"
 
+#ifdef MODULE_SHMEM
+#include "shmem.h"
+#endif
+
 /* Device to use (defined in lds01_params.h) */
 lds01_t lds01 = 0;
 
@@ -165,6 +169,9 @@ static const shell_command_t shell_commands[] = {
     { "stop", "Stop LDS01 device", cmd_stop },
     { "filter", "Set the filter value (max distance)", cmd_set_distance_filter },
     { "data", "Print current values", cmd_data },
+#ifdef MODULE_SHMEM
+    SHMEM_SET_KEY_CMD,
+#endif
     { NULL, NULL, NULL }
 };
 
