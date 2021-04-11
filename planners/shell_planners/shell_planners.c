@@ -67,6 +67,26 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+static int pln_cmd_play_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    pln_set_allow_change_path_pose(TRUE);
+
+    return EXIT_SUCCESS;
+}
+
+static int pln_cmd_stop_cb(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    pln_set_allow_change_path_pose(FALSE);
+
+    return EXIT_SUCCESS;
+}
+
 void pln_menu_enter(void)
 {
     ctrl_t *ctrl = pf_get_ctrl();
@@ -89,6 +109,8 @@ void pln_shell_init(void)
         { "p", "Go to previous position", pln_cmd_go_previous_cb },
         { "s", "Go back to start position", pln_cmd_go_start_cb },
         { "a", "Launch action", pln_cmd_launch_action_cb },
+        { "P", "Play", pln_cmd_play_cb },
+        { "S", "Stop", pln_cmd_stop_cb },
         MENU_NULL_CMD,
     };
 
