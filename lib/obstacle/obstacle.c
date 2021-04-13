@@ -45,18 +45,22 @@ int8_t add_dyn_obstacle(const uint16_t dev, const pose_t *robot_pose, double ang
 
         /* Right points */
         polygon.points[polygon.count] = (pose_t){ .x = ref_pos_right.x + dist * cos(ref_pos_right.O),
-                                                  .y = ref_pos_right.y + dist * sin(ref_pos_right.O) };
+                                                  .y = ref_pos_right.y + dist * sin(ref_pos_right.O),
+                                                  .O = angle };
         polygon.count++;
         polygon.points[polygon.count] = (pose_t){ .x = ref_pos_right.x + (dist + OBSTACLE_DYN_SIZE) * cos(ref_pos_right.O),
-                                                  .y = ref_pos_right.y + (dist + OBSTACLE_DYN_SIZE) * sin(ref_pos_right.O) };
+                                                  .y = ref_pos_right.y + (dist + OBSTACLE_DYN_SIZE) * sin(ref_pos_right.O),
+                                                  .O = angle };
         polygon.count++;
 
         /* Left points */
         polygon.points[polygon.count] = (pose_t){ .x = ref_pos_left.x + (dist + OBSTACLE_DYN_SIZE) * cos(ref_pos_left.O),
-                                                  .y = ref_pos_left.y + (dist + OBSTACLE_DYN_SIZE) * sin(ref_pos_left.O) };
+                                                  .y = ref_pos_left.y + (dist + OBSTACLE_DYN_SIZE) * sin(ref_pos_left.O),
+                                                  .O = angle };
         polygon.count++;
         polygon.points[polygon.count] = (pose_t){ .x = ref_pos_left.x + dist * cos(ref_pos_left.O),
-                                                  .y = ref_pos_left.y + dist * sin(ref_pos_left.O) };
+                                                  .y = ref_pos_left.y + dist * sin(ref_pos_left.O),
+                                                  .O = angle };
         polygon.count++;
         DEBUG("@obstacle@,%u, %+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f,%+.0f\n", dev, polygon.points[0].x, polygon.points[0].y, polygon.points[1].x, polygon.points[1].y, polygon.points[2].x, polygon.points[2].y, polygon.points[3].x, polygon.points[3].y, robot_pose_tmp.O);
         DEBUG("@t@,%+.0f,%+.0f,%+.0f,%+.0f\n", ref_pos_right.x, ref_pos_right.y, ref_pos_left.x, ref_pos_left.y);
