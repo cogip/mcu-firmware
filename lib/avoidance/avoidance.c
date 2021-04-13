@@ -395,10 +395,13 @@ int avoidance_print_dyn_obstacles(int argc, char **argv)
             printf(
                 "{"
                 "\"x\": \"%lf\", "
-                "\"y\": \"%lf\""
+                "\"y\": \"%lf\", "
+                "\"O\": \"%lf\", "
+
                 "}",
                 polygon->points[j].x,
-                polygon->points[j].y
+                polygon->points[j].y,
+                polygon->points[j].O
                 );
         }
         printf("]");
