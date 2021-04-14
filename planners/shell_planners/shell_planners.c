@@ -22,10 +22,7 @@ static int pln_cmd_go_next_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (shell_path_index < path->nb_pose - 1) {
-        shell_path_index++;
-    }
-    path_set_current_pose_idx(path, shell_path_index);
+    path_increment_current_pose_idx(path);
 
     return EXIT_SUCCESS;
 }
@@ -37,10 +34,7 @@ static int pln_cmd_go_previous_cb(int argc, char **argv)
 
     path_t *path = pf_get_path();
 
-    if (shell_path_index > 0) {
-        shell_path_index--;
-    }
-    path_set_current_pose_idx(path, shell_path_index);
+    path_decrement_current_pose_idx(path);
 
     return EXIT_SUCCESS;
 }
@@ -63,11 +57,11 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     (void)argv;
 
     path_t *path = pf_get_path();
-    func_cb_t cb = path_get_pose_at_idx(path, shell_path_index)->act;
+    const path_pose_t *current_path_pos = path_get_current_path_pos(path);
 
-    if (cb != NULL) {
+    if (current_path_pos->act) {
         puts("Launch callback!");
-        (*cb)();
+        (*(current_path_pos->act))();
     }
 
     return EXIT_SUCCESS;
