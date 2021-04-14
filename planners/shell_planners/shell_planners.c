@@ -57,32 +57,6 @@ static int pln_cmd_go_start_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static int pln_cmd_select_next_cb(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    path_t *path = pf_get_path();
-
-    if (shell_path_index < path->nb_pose - 1) {
-        shell_path_index++;
-    }
-
-    return EXIT_SUCCESS;
-}
-
-static int pln_cmd_select_previous_cb(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    if (shell_path_index > 0) {
-        shell_path_index--;
-    }
-
-    return EXIT_SUCCESS;
-}
-
 static int pln_cmd_launch_action_cb(int argc, char **argv)
 {
     (void)argc;
@@ -120,8 +94,6 @@ void pln_shell_init(void)
         { "n", "Go to next position", pln_cmd_go_next_cb },
         { "p", "Go to previous position", pln_cmd_go_previous_cb },
         { "s", "Go back to start position", pln_cmd_go_start_cb },
-        { "N", "Select next position", pln_cmd_select_next_cb },
-        { "P", "Select previous position", pln_cmd_select_previous_cb },
         { "a", "Launch action", pln_cmd_launch_action_cb },
         MENU_NULL_CMD,
     };
