@@ -92,6 +92,12 @@ void lds01_set_distance_filter(const lds01_t lds01, uint16_t new_filter)
     lds01_dev->filter = new_filter;
 }
 
+void lds01_set_min_intensity(const lds01_t lds01, uint16_t new_min_intensity)
+{
+    (void)new_min_intensity;
+    assert(lds01 < LDS01_NUMOF);
+}
+
 void lds01_get_distances(const lds01_t lds01, uint16_t *distances)
 {
     assert(lds01 < LDS01_NUMOF);

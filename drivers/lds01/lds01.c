@@ -42,6 +42,7 @@ typedef struct {
     lds01_params_t params;                  /**< parameters */
     bool running;                           /**< set to true if lds01 is running */
     uint16_t filter;                        /**< distance filter in millimeters */
+    uint16_t min_intensity;                 /**< minimum intensity to consider the data valid */
     mutex_t data_lock;                      /**< lock protecting data access */
     uint16_t distances[LDS01_NB_ANGLES];    /**< distance data */
     uint16_t intensities[LDS01_NB_ANGLES];  /**< intensity data */
@@ -101,7 +102,7 @@ static uint16_t lds01_get_filtered_distance(lds01_dev_t *lds01_dev, uint16_t dis
     if (lds01_dev->filter == 0) {
         return distance;
     }
-    if (intensity == 0 || distance == 0 || distance > lds01_dev->filter) {
+    if (intensity < lds01_dev->min_intensity || distance == 0 || distance > lds01_dev->filter) {
         return lds01_dev->filter;
     }
     return distance;
@@ -154,6 +155,7 @@ int lds01_init(const lds01_t lds01, const lds01_params_t *params)
 
     lds01_dev->params = *params;
     lds01_dev->filter = 0;
+    lds01_dev->min_intensity = 0;
     lds01_reset_data(lds01_dev);
     mutex_init(&lds01_dev->data_lock);
 
@@ -209,6 +211,15 @@ void lds01_set_distance_filter(const lds01_t lds01, uint16_t new_filter)
     lds01_dev_t *lds01_dev = &lds01_devs[lds01];
 
     lds01_dev->filter = new_filter;
+}
+
+void lds01_set_min_intensity(const lds01_t lds01, uint16_t new_min_intensity)
+{
+    assert(lds01 < LDS01_NUMOF);
+
+    lds01_dev_t *lds01_dev = &lds01_devs[lds01];
+
+    lds01_dev->min_intensity = new_min_intensity;
 }
 
 void lds01_get_distances(const lds01_t lds01, uint16_t *distances)

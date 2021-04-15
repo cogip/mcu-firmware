@@ -104,6 +104,14 @@ void lds01_stop(const lds01_t lds01);
 void lds01_set_distance_filter(const lds01_t lds01, uint16_t new_filter);
 
 /**
+ * @brief Set new minimun intensity value used to validate distances
+ *
+ * @param[in]   lds01       lds01 device id
+ * @param[in]   new_filter  value of the new minimun intensity
+ */
+void lds01_set_min_intensity(const lds01_t lds01, uint16_t new_min_intensity);
+
+/**
  * @brief Get distance data
  *
  * @param[in]   lds01      lds01 device id
