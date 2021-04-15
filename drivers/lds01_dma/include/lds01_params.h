@@ -36,7 +36,8 @@ extern "C" {
 static const lds01_params_t lds01_params[] = {
     {
         .uart = UART_DEV(2),
-        .new_frame_cb = NULL
+        .new_frame_cb = NULL,
+        .invert_data = false
     }
 };
 
