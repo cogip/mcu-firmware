@@ -105,7 +105,12 @@ void lds01_get_distances(const lds01_t lds01, uint16_t *distances)
     if (shared_data) {
         for (unsigned int i = 0; i < LDS01_NB_ANGLES; i++) {
             uint16_t distance = shared_data->lidar_distances[i];
-            lds01_dev->distances[i] = lds01_get_filtered_distance(lds01_dev, distance, 1);
+            if (lds01_dev->params.invert_data) {
+                lds01_dev->distances[(LDS01_NB_ANGLES - i) % LDS01_NB_ANGLES] = lds01_get_filtered_distance(lds01_dev, distance, 1);
+            }
+            else {
+                lds01_dev->distances[i] = lds01_get_filtered_distance(lds01_dev, distance, 1);
+            }
         }
     }
 

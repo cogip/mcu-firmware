@@ -280,7 +280,14 @@ void lds01_get_distances(const lds01_t lds01, uint16_t *distances)
     lds01_dev_t *lds01_dev = &lds01_devs[lds01];
 
     mutex_lock(&lds01_dev->data_lock);
-    memcpy((void *)distances, (void *)lds01_dev->distances, LDS01_NB_ANGLES * sizeof(uint16_t));
+    if (lds01_dev->params.invert_data) {
+        for (uint16_t i = 0; i < LDS01_NB_ANGLES; i++) {
+            distances[i] = lds01_dev->distances[(LDS01_NB_ANGLES - i) % LDS01_NB_ANGLES];
+        }
+    }
+    else {
+        memcpy((void *)distances, (void *)lds01_dev->distances, LDS01_NB_ANGLES * sizeof(uint16_t));
+    }
     mutex_unlock(&lds01_dev->data_lock);
 }
 
@@ -291,6 +298,13 @@ void lds01_get_intensities(const lds01_t lds01, uint16_t *intensities)
     lds01_dev_t *lds01_dev = &lds01_devs[lds01];
 
     mutex_lock(&lds01_dev->data_lock);
-    memcpy((void *)intensities, (void *)lds01_dev->intensities, LDS01_NB_ANGLES * sizeof(uint16_t));
+    if (lds01_dev->params.invert_data) {
+        for (uint16_t i = 0; i < LDS01_NB_ANGLES; i++) {
+            intensities[i] = lds01_dev->intensities[(LDS01_NB_ANGLES - i) % LDS01_NB_ANGLES];
+        }
+    }
+    else {
+        memcpy((void *)intensities, (void *)lds01_dev->intensities, LDS01_NB_ANGLES * sizeof(uint16_t));
+    }
     mutex_unlock(&lds01_dev->data_lock);
 }
