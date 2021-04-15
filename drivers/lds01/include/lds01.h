@@ -50,6 +50,7 @@ typedef void (*lds01_new_frame_cb_t)(void);         /**< new frame callback sign
 typedef struct {
     uart_t uart;                        /**< UART device */
     lds01_new_frame_cb_t new_frame_cb;  /**< function called when a new frame is available */
+    bool invert_data;                   /**< invert data (false by default) */
 } lds01_params_t;
 
 /**
