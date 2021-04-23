@@ -29,6 +29,29 @@ extern "C" {
 #endif
 
 /**
+ * @name    DMA streams configuration
+ * @{
+ */
+static const dma_conf_t dma_config[] = {
+    { .stream = 11 },   /* DMA2 Stream 3 - SPI1_TX */
+    { .stream = 10 },   /* DMA2 Stream 2 - SPI1_RX */
+    { .stream = 4 },    /* DMA1 Stream 4 - SPI2_TX */
+    { .stream = 3 },    /* DMA1 Stream 3 - SPI2_RX */
+    { .stream = 5 },    /* DMA1 Stream 5 - SPI3_TX */
+    { .stream = 0 },    /* DMA1 Stream 0 - SPI3_RX */
+};
+
+#define DMA_0_ISR           isr_dma2_stream3
+#define DMA_1_ISR           isr_dma2_stream2
+#define DMA_2_ISR           isr_dma1_stream4
+#define DMA_3_ISR           isr_dma1_stream3
+#define DMA_4_ISR           isr_dma1_stream5
+#define DMA_5_ISR           isr_dma1_stream0
+
+#define DMA_NUMOF           ARRAY_SIZE(dma_config)
+/** @} */
+
+/**
  * @name   UART configuration
  * @{
  */
