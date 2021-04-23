@@ -12,9 +12,12 @@
 
 /* Project includes */
 #include "avoidance.h"
-#include "obstacle.h"
 #include "planner.h"
 #include "platform.h"
+
+/* Platform includes */
+#include "lidar_utils.h"
+#include "lidar_obstacles.h"
 
 #ifdef MODULE_SHELL_PLATFORMS
 #include "shell_platforms.h"
@@ -162,95 +165,16 @@ int pf_is_game_launched(void)
     return !gpio_read(GPIO_STARTER);
 }
 
-void pf_vl53l0x_reset(void)
-{
-    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_reset_dev(dev) != 0) {
-            DEBUG("ERROR: Sensor %u reset failed !!!\n", dev);
-        }
-    }
-}
-
-void pf_vl53l0x_init(void)
-{
-    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_init_dev(dev) != 0) {
-            DEBUG("ERROR: Sensor %u init failed !!!\n", dev);
-        }
-    }
-}
-
-int pf_read_sensors(void)
-{
-    int obstacle_found = 0;
-    int res = 0;
-
-    ctrl_t *ctrl = (ctrl_t *)pf_get_quadpid_ctrl();
-
-    reset_dyn_polygons();
-
-    if (((ctrl_quadpid_t *)ctrl)->quadpid_params.regul == CTRL_REGUL_POSE_PRE_ANGL) {
-        return 0;
-    }
-
-    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-
-        uint16_t measure;
-        irq_disable();
-
-        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        measure = vl53l0x_continuous_ranging_get_measure(dev);
-
-        irq_enable();
-        DEBUG("Measure sensor %u: %u\n\n", dev, measure);
-
-        if ((measure > OBSTACLE_DETECTION_MINIMUM_TRESHOLD)
-            && (measure < OBSTACLE_DETECTION_MAXIMUM_TRESHOLD)) {
-            const pf_sensor_t *sensor = &pf_sensors[dev];
-            pose_t robot_pose = *ctrl_get_pose_current(ctrl);
-
-            res = add_dyn_obstacle(dev, &robot_pose, sensor->angle_offset, sensor->distance_offset, (double)measure);
-
-            if (!res) {
-                obstacle_found = 1;
-            }
-        }
-
-    }
-
-    return obstacle_found;
-}
-
-void pf_shell_read_sensors(pca9548_t dev)
-{
-    vl53l0x_t sensor = 0;
-    uint8_t channel = pca9548_get_current_channel(dev);
-
-    for (sensor = 0; sensor < VL53L0X_NUMOF; sensor++) {
-        if (vl53l0x_channel[sensor] == channel) {
-            break;
-        }
-    }
-
-    if (sensor < VL53L0X_NUMOF) {
-        uint16_t measure = vl53l0x_continuous_ranging_get_measure(dev);
-
-        printf("Measure sensor %u: %u\n\n", sensor, measure);
-    }
-    else {
-        printf("No sensor for this channel %u !\n\n", sensor);
-    }
-}
-
-
 int pf_is_camp_left(void)
 {
     /* Color switch for coords translations */
     return !gpio_read(GPIO_CAMP);
 }
 
+obstacles_t pf_get_dyn_obstacles_id(void)
+{
+    return lidar_obstacles;
+}
 
 static void *_task_countdown(void *arg)
 {
@@ -296,6 +220,10 @@ void pf_init_tasks(void)
     ctrl_t *controller = pf_get_ctrl();
     bool start_planner = true;
     int countdown = PF_START_COUNTDOWN;
+
+    lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
+
+    obstacle_updater_start(ctrl_get_pose_current(controller));
 
     /* Create thread that up a flag on key pressed to not start the planner automatically */
     kernel_pid_t planner_start_cancel_pid = thread_create(
@@ -398,15 +326,6 @@ void pf_init(void)
     }
 
     gpio_clear(GPIO_DEBUG_LED);
-
-    pca9548_init();
-
-    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_init_dev(dev) != 0) {
-            printf("ERROR: Sensor %u init failed !!!\n", dev);
-        }
-    }
 
     ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
 

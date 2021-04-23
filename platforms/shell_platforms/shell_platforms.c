@@ -11,7 +11,8 @@
 #include "periph/qdec.h"
 
 /* Project includes */
-#include "avoidance.h"
+#include "obstacles.h"
+#include "platform.h"
 #include "ctrl.h"
 #include "shell_menu.h"
 #include "shell_platforms.h"
@@ -27,50 +28,26 @@
 /* Controller */
 static ctrl_t *ctrl = NULL;
 
-int pf_print_state(int argc, char **argv)
+static int _cmd_print_state(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
 
     printf(
         "{"
-        "\"mode\": \"%u\", "
-        "\"pose_current\": "
-        "{"
-        "\"O\": \"%lf\", "
-        "\"x\": \"%lf\", "
-        "\"y\": \"%lf\""
-        "}, "
-        "\"pose_order\": "
-        "{"
-        "\"O\": \"%lf\", "
-        "\"x\": \"%lf\", "
-        "\"y\": \"%lf\""
-        "}, "
-        "\"cycle\": \"%" PRIu32 "\", "
-        "\"speed_current\": "
-        "{"
-        "\"distance\": \"%lf\", "
-        "\"angle\": \"%lf\""
-        "}, "
-        "\"speed_order\": "
-        "{"
-        "\"distance\": \"%lf\", "
-        "\"angle\": \"%lf\""
-        "}"
+        "\"mode\":%u,"
+        "\"pose_current\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
+        "\"pose_order\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
+        "\"cycle\":%" PRIu32 ","
+        "\"speed_current\":{\"distance\":%lf,\"angle\":%lf},"
+        "\"speed_order\":{\"distance\":%lf,\"angle\":%lf}"
         "}\n",
         ctrl->control.current_mode,
-        ctrl->control.pose_current.O,
-        ctrl->control.pose_current.x,
-        ctrl->control.pose_current.y,
-        ctrl->control.pose_order.O,
-        ctrl->control.pose_order.x,
-        ctrl->control.pose_order.y,
+        ctrl->control.pose_current.O, ctrl->control.pose_current.x, ctrl->control.pose_current.y,
+        ctrl->control.pose_order.O, ctrl->control.pose_order.x, ctrl->control.pose_order.y,
         ctrl->control.current_cycle,
-        ctrl->control.speed_current.distance,
-        ctrl->control.speed_current.angle,
-        ctrl->control.speed_order.distance,
-        ctrl->control.speed_order.angle
+        ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
+        ctrl->control.speed_order.distance, ctrl->control.speed_order.angle
         );
 
     return EXIT_SUCCESS;
@@ -141,15 +118,24 @@ int pf_motors_test(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+int _cmd_print_obstacles(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    obstacles_print_all_json(stdout);
+
+    return EXIT_SUCCESS;
+}
+
 void pf_shell_init(void)
 {
     ctrl = pf_get_ctrl();
 
     /* Global commands */
     static const shell_command_t global_commands[] = {
-        { "_state", "Print current state", pf_print_state },
-        { "_dyn_obstacles", "Print dynamic obstacles",
-          avoidance_print_dyn_obstacles },
+        { "_state", "Print current state", _cmd_print_state },
+        { "_dyn_obstacles", "Print dynamic obstacles", _cmd_print_obstacles },
 #ifdef MODULE_SHMEM
         SHMEM_SET_KEY_CMD,
 #endif

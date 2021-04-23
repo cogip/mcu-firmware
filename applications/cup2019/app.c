@@ -13,8 +13,6 @@
 
 /* Project includes */
 #include "quadpid.h"
-#include "obstacle.h"
-#include "pca9548.h"
 #include "planner.h"
 #include "app.h"
 #include "app_conf.h"
@@ -27,47 +25,6 @@ int app_is_camp_left(void)
 {
     /* Color switch for coords translations */
     return !gpio_read(GPIO_CAMP);
-}
-
-void app_shell_read_sensors(pca9548_t dev)
-{
-    vl53l0x_t sensor = 0;
-    uint8_t channel = pca9548_get_current_channel(dev);
-
-    for (sensor = 0; sensor < VL53L0X_NUMOF; sensor++) {
-        if (vl53l0x_channel[sensor] == channel) {
-            break;
-        }
-    }
-
-    if (sensor < VL53L0X_NUMOF) {
-        uint16_t measure = vl53l0x_continuous_ranging_get_measure(dev);
-
-        printf("Measure sensor %u: %u\n\n", sensor, measure);
-    }
-    else {
-        printf("No sensor for this channel %u !\n\n", sensor);
-    }
-}
-
-static void app_vl53l0x_reset(void)
-{
-    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_reset_dev(dev) != 0) {
-            DEBUG("ERROR: Sensor %u reset failed !!!\n", dev);
-        }
-    }
-}
-
-static void app_vl53l0x_init(void)
-{
-    for (vl53l0x_t dev = 0; dev < VL53L0X_NUMOF; dev++) {
-        pca9548_set_current_channel(PCA9548_SENSORS, vl53l0x_channel[dev]);
-        if (vl53l0x_init_dev(dev) != 0) {
-            DEBUG("ERROR: Sensor %u init failed !!!\n", dev);
-        }
-    }
 }
 
 static void app_fixed_obstacles_init(void)
@@ -137,9 +94,6 @@ void app_front_cup_ramp(void)
     sd21_servo_reach_position(APP_SERVO_FL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(APP_SERVO_FC_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(APP_SERVO_FR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
-
-    app_vl53l0x_reset();
-    app_vl53l0x_init();
 }
 
 void app_back_cup_take(void)
@@ -186,9 +140,6 @@ void app_back_cup_ramp(void)
     sd21_servo_reach_position(APP_SERVO_BL_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(APP_SERVO_BC_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
     sd21_servo_reach_position(APP_SERVO_BR_ELEVATOR, APP_SERVO_STATE_ELEVATOR_BOTTOM);
-
-    app_vl53l0x_reset();
-    app_vl53l0x_init();
 }
 
 

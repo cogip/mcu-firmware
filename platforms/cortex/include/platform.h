@@ -31,9 +31,8 @@
 #include "quadpid.h"
 #include "odometry.h"
 #include "path.h"
-#include "pca9548.h"
 #include "utils.h"
-#include "vl53l0x.h"
+#include "obstacles.h"
 
 /* RIOT includes */
 #include <periph/qdec.h>
@@ -64,17 +63,17 @@
  *
  * @{
  */
-#define ROBOT_WIDTH         354     /**< Robot width (mm) */
-#define ROBOT_MARGIN \
-    (ROBOT_WIDTH / 2)               /**< Point the most far from
-                                       robot center (mm) */
+#define ROBOT_WIDTH              354                    /**< Robot width (mm) */
+#define ROBOT_MARGIN             (ROBOT_WIDTH / 2)      /**< Point the most far from robot center (mm) */
+#define OBSTACLE_WIDTH           400                    /**< Obscale width */
+#define BEACON_SUPPORT_DIAMETER  70                     /**< Size of the beacon support (a cylinder of 70mm diameter to a cube of 100mm width) */
+#define LIDAR_MIN_DISTANCE       (ROBOT_MARGIN + 100)   /**< Minimum Lidar detection distance */
+#define LIDAR_MAX_DISTANCE       900                    /**< Maximum Lidar detection distance */
+#define LIDAR_MINIMUN_INTENSITY  1000                   /**< Minimum intensity required to validate a Lidar distance */
 
-#define PULSE_PER_MM        10.624  /**< WHEELS_ENCODER_RESOLUTION
-                                       / WHEELS_PERIMETER */
-#define WHEELS_DISTANCE     2974.72 /**< WHEELS_DISTANCE_MM
-                                     * PULSE_PER_MM */
-#define PULSE_PER_DEGREE    51.91   /**< WHEELS_DISTANCE * 2 * PI
-                                       / 360 */
+#define PULSE_PER_MM             10.624                 /**< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER */
+#define WHEELS_DISTANCE          2974.72                /**< WHEELS_DISTANCE_MM * PULSE_PER_MM */
+#define PULSE_PER_DEGREE         51.91                  /**< WHEELS_DISTANCE * 2 * PI / 360 */
 /** @} */
 
 /**
@@ -162,7 +161,6 @@
                                                    treshold */
 /** @} */
 
-
 /**
  * @brief    General sensor structure
  */
@@ -245,7 +243,6 @@ void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *
  **/
 void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command);
 
-
 /**
  * @brief Initialize quadPID controller specific parameters, mainly PID
  * coefficients.
@@ -262,7 +259,6 @@ void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params);
  * return   QuadPID controller
  **/
 ctrl_quadpid_t *pf_get_quadpid_ctrl(void);
-
 
 /**
  * @brief Returns platform controller.
@@ -303,24 +299,6 @@ int encoder_read(polar_t *robot_speed);
 void encoder_reset(void);
 
 /**
- * @brief Parse each sensor to read and store its value.
- * If one measure is lower that the avoidance detection treshold,
- * return True.
- *
- * @return                      0 if no avoidance needed, non 0 if needed
- **/
-int pf_read_sensors(void);
-
-/**
- * @brief Read all I2C sensors through PCA9548 switch
- *
- * param[in]    dev             PCA9548 device id
- *
- * @return
- **/
-void pf_shell_read_sensors(pca9548_t dev);
-
-/**
  * @brief Apply the given command to the motors
  *
  * param[in]    command         Linear and angular speeds command
@@ -328,6 +306,13 @@ void pf_shell_read_sensors(pca9548_t dev);
  * @return
  **/
 void motor_drive(polar_t *command);
+
+/**
+ * @brief Get dynamic obstacles context.
+ *
+ * @return                      id of dynamic obstacles context
+ **/
+obstacles_t pf_get_dyn_obstacles_id(void);
 
 /**
  * @name Platform parameters for QuadPID controller.
@@ -350,113 +335,6 @@ static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
     .blocking_speed_error_treshold = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
     .blocking_cycles_max = PF_CTRL_BLOCKING_NB_ITERATIONS,
 };
-/** @} */
-
-/**
- * @name VL53L0X I2C configuration.
- * @brief Address is identical for all devices as a PCA9548 I2C switch is used.
- */
-static const vl53l0x_conf_t vl53l0x_config[] = {
-    {
-        .i2c_dev = 1,
-        .i2c_addr = 0x29,
-    },
-    {
-        .i2c_dev = 1,
-        .i2c_addr = 0x29,
-    },
-    {
-        .i2c_dev = 1,
-        .i2c_addr = 0x29,
-    },
-    {
-        .i2c_dev = 1,
-        .i2c_addr = 0x29,
-    },
-    {
-        .i2c_dev = 1,
-        .i2c_addr = 0x29,
-    },
-    {
-        .i2c_dev = 1,
-        .i2c_addr = 0x29,
-    },
-};
-
-/**
- * @name VL53L0X number defined by vl53l0x_config size
- * @{
- */
-#define VL53L0X_NUMOF (sizeof(vl53l0x_config) / sizeof(vl53l0x_config[0])) \
-    /**< VL53L0X number */
-/** @} */
-
-/**
- * @name PCA9548 I2C switch configuration
- * @{
- **/
-static const pca9548_conf_t pca9548_config[] = {
-    {
-        .i2c_dev_id = 1,
-        .i2c_address = 0x70,
-        .channel_numof = PCA9548_CHANNEL_MAX,
-    },
-};
-/** @} */
-
-/**
- * @name Relation between VL53L0X id (index of the array)
- * and its PCA9548 port id (value of the array)
- * @{
- */
-static const uint8_t vl53l0x_channel[VL53L0X_NUMOF] = {
-    0,
-    1,
-    2,
-    6,
-    4,
-    5,
-};
-/** @} */
-
-/**
- * @name Physical placement of each VL53L0X sensor on the robot
- * @{
- */
-static const pf_sensor_t pf_sensors[VL53L0X_NUMOF] = {
-    {
-        .angle_offset = 135,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = 180,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = -135,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = -45,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = 0,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = 45,
-        .distance_offset = ROBOT_MARGIN,
-    },
-};
-/** @} */
-
-/**
- * @name PCA9548 number defined by pca9548_config size
- * @{
- */
-#define PCA9548_NUMOF (sizeof(pca9548_config) / sizeof(pca9548_config[0]))
-/**< PCA9548 number */
 /** @} */
 
 /** @} */
