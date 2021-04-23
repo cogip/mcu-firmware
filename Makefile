@@ -1,18 +1,19 @@
 # List all applications
 apps := $(foreach dir,$(wildcard applications/*/Makefile),$(subst Makefile, , $(dir)))
+examples := $(foreach dir,$(wildcard examples/*/Makefile),$(subst Makefile, , $(dir)))
 boards := $(foreach dir,$(wildcard boards/*),$(subst boards/, , $(dir)))
 
-.PHONY: all clean distclean doc docman doclatex docclean help $(apps)
+.PHONY: all clean distclean doc docman doclatex docclean help $(apps) $(examples)
 
-all: $(apps)		## Build all applications (default target)
+all: $(apps) $(examples)	## Build all applications and examples (default target)
 
 clean: PF_TARGET = clean
-clean: $(apps)		## Clean build for all applications
+clean: $(apps) $(examples)	## Clean build for all applications and examples
 
 distclean: PF_TARGET = distclean
 distclean: $(apps)	## Clean build and configuration for all applications
 
-$(apps):
+$(apps) $(examples):
 	"$(MAKE)" MAKEFLAGS="-j$$(nproc)" -C $@ $(PF_TARGET) || exit $$?
 
 doc: 			## Generate doxygen
