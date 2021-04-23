@@ -14,6 +14,7 @@
 #include "avoidance.h"
 #include "platform.h"
 #include "path.h"
+#include "obstacles.h"
 
 #ifdef MODULE_SHELL_PLANNERS
 #include "shell_planners.h"
@@ -63,11 +64,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
      * path */
     int nb_pose_reachable = 0;
     /* Recompute avoidance graph if not 0 */
-    int avoidance_update = FALSE;
-
-    /* Read sensors to know if some obstacles are detected and then if
-     * avoidance graph needs to be recomputed */
-    avoidance_update = pf_read_sensors();
+    int avoidance_update = obstacles_size(pf_get_dyn_obstacles_id());
 
     /* Ask to the controller if the targeted position has been reached */
     if (ctrl_is_pose_reached(ctrl)) {

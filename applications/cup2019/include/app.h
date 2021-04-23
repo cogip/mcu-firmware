@@ -17,8 +17,6 @@
 
 #define USART_CONSOLE   USARTC0
 
-#define PCA9548_SHELL_CB(x) app_shell_read_sensors(x)
-
 /**********/
 /* Servos */
 /**********/
@@ -90,11 +88,6 @@
 #define APP_SERVO_STATE_ARM_CLOSE        1
 
 typedef struct {
-    double angle_offset;
-    double distance_offset;
-} app_sensor_t;
-
-typedef struct {
     uint8_t nb_puck_front_ramp;
     uint8_t nb_puck_back_ramp;
     uint8_t front_ramp_blocked;
@@ -107,33 +100,6 @@ typedef struct {
     uint8_t any_pump_on;
     uint8_t front_fork_occupied;
 } app_actions_context_t;
-
-static const app_sensor_t app_sensors[VL53L0X_NUMOF] = {
-    {
-        .angle_offset = 135,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = 180,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = -135,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = -45,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = 0,
-        .distance_offset = ROBOT_MARGIN,
-    },
-    {
-        .angle_offset = 45,
-        .distance_offset = ROBOT_MARGIN,
-    },
-};
 
 static const sd21_conf_t sd21_config_app[] = {
     {   /* SD12 ID0 */
@@ -420,11 +386,8 @@ static const sd21_conf_t sd21_config_app[] = {
     }
 };
 
-void app_calib_read_sensors(pca9548_t dev);
-
 void app_init(void);
 void app_init_tasks(void);
-int app_read_sensors(void);
 
 void app_stop_pumps(void);
 
