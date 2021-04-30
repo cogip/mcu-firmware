@@ -64,7 +64,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
      * path */
     int nb_pose_reachable = 0;
     /* Recompute avoidance graph if not 0 */
-    int avoidance_update = obstacles_size(pf_get_dyn_obstacles_id());
+    bool avoidance_update = is_colliding(robot_pose, &pose_to_reach);
 
     /* Ask to the controller if the targeted position has been reached */
     if (ctrl_is_pose_reached(ctrl)) {
