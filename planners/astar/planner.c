@@ -101,6 +101,9 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
             current_path_pos = path_get_current_pose(path);
             avoidance_update = TRUE;
         }
+        else if (!is_colliding(robot_pose, &current_path_pos->pos)) {
+            avoidance_update = 1;
+        }
         /* If it is an intermediate pose, just go to the next one in
          * avoidance graph */
         else {
