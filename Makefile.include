@@ -14,6 +14,17 @@ $(foreach pkg,$(pkgs), $(shell ln -sf $(pkg) $(RIOTPKG)/$(notdir $(pkg))))
 QUIET ?= 1
 DEVELHELP ?= 1
 
+define remote-flash-recipe
+	scp $(BINFILE) $(REMOTE_TARGET):/tmp/fw.bin
+	$(GDB) -nx -batch -ex "target extended-remote $(REMOTE_TARGET):3333" -ex "monitor reset halt" -ex "monitor flash write_image erase /tmp/fw.bin 0x08000000" -ex "monitor reset run"
+endef
+
+ifneq ($(REMOTE_TARGET),)
+	TERMPROG=ssh $(REMOTE_TARGET) picocom
+	TERMFLAGS=-q --imap lfcrlf -b $(BAUD) $(PORT)
+	flash-recipe = $(remote-flash-recipe)
+endif
+
 MCUFW_MODULE_DIRS = " \
 					controllers \
 					drivers \
