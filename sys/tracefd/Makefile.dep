@@ -1,0 +1,7 @@
+USEMODULE += xtimer
+
+ifneq ($(CPU),native)
+	USEMODULE += mtd_sdcard
+	USEMODULE += vfs
+	USEMODULE += fatfs_vfs
+endif
