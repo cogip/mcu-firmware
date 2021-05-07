@@ -10,10 +10,7 @@ USEMODULE += shell_commands
 USEMODULE += xtimer
 
 # mcu-firmware modules
-USEMODULE += avoidance
-USEMODULE += obstacles
 USEMODULE += odometry
-USEMODULE += path
 USEMODULE += pid
 USEMODULE += astar
 USEMODULE += quadpid

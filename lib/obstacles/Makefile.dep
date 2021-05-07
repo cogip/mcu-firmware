@@ -1,1 +1,2 @@
 USEMODULE += cogip_defs
+USEMODULE += collisions
