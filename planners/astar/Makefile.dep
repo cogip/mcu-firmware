@@ -1,2 +1,2 @@
 USEMODULE += path
-USEMODULE += obstacles
+USEMODULE += avoidance
