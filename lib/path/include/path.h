@@ -28,6 +28,17 @@
 extern "C" {
 #endif
 
+/*
+Path current status:
+- Current path definition is monolitic and doesn't allow strategic changes during a game. The only current way to change
+path is when the destination point is not reachable.
+
+We want to improve path management by enabling the following features:
+- Define the path with a list of actions, each action is a list of point needed to achieve a specific goal.
+- In 2019 we use a lot of 'approach points', they can be computed when needed
+- Allowing the execution of an action without having to stop the robot
+*/
+
 /**
  * @brief Position type as used in path type
  */
