@@ -1,8 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
+/* Standard includes */
 #include <math.h>
 
+/* Project includes */
 #include "avoidance.h"
+#include "collisions.h"
 #include "obstacles.h"
 #include "platform.h"
 #include "utils.h"
@@ -38,85 +39,6 @@ static uint64_t graph[GRAPH_MAX_VERTICES];
 static pose_t start_position = { .x = 0, .y = 0 };
 static pose_t finish_position = { .x = 0, .y = 0 };
 
-static bool _is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
-{
-    uint8_t i;
-    double d;
-    pose_t a, b;
-    vector_t ab, ap;
-
-    for (i = 0; i < 4; i++) {
-        a = obstacle->points[i];
-        b = (i == 3 ? obstacle->points[0] : obstacle->points[i + 1]);
-
-        ab.x = b.x - a.x;
-        ab.y = b.y - a.y;
-        ap.x = p->x - a.x;
-        ap.y = p->y - a.y;
-
-        d = ab.x * ap.y - ab.y * ap.x;
-
-        if (d <= 0) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool _is_point_in_polygon(const polygon_t *polygon, const pose_t *p)
-{
-    for (uint8_t i = 0; i < polygon->count; i++) {
-        pose_t a = polygon->points[i];
-        pose_t b = (i == (polygon->count - 1) ? polygon->points[0] : polygon->points[i + 1]);
-        vector_t ab, ap;
-
-        ab.x = b.x - a.x;
-        ab.y = b.y - a.y;
-        ap.x = p->x - a.x;
-        ap.y = p->y - a.y;
-
-        if (ab.x * ap.y - ab.y * ap.x <= 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-static double _distance_points(const pose_t *a, const pose_t *b)
-{
-    return sqrt((b->x - a->x) * (b->x - a->x)
-                + (b->y - a->y) * (b->y - a->y));
-}
-
-static bool _is_segment_crossing_line(const pose_t *a, const pose_t *b, const pose_t *o, const pose_t *p)
-{
-    vector_t ao, ap, ab;
-    double det = 0;
-
-    ab.x = b->x - a->x;
-    ab.y = b->y - a->y;
-    ap.x = p->x - a->x;
-    ap.y = p->y - a->y;
-    ao.x = o->x - a->x;
-    ao.y = o->y - a->y;
-
-    det = (ab.x * ap.y - ab.y * ap.x) * (ab.x * ao.y - ab.y * ao.x);
-
-    return (det < 0);
-}
-
-static bool _is_segment_crossing_segment(const pose_t *a, const pose_t *b, const pose_t *o, const pose_t *p)
-{
-    if (!_is_segment_crossing_line(a, b, o, p)) {
-        return false;
-    }
-    if (!_is_segment_crossing_line(o, p, a, b)) {
-        return false;
-    }
-    return true;
-}
-
 static int8_t _get_point_index_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
 {
     for (uint8_t i = 0; i < 4; i++) {
@@ -126,26 +48,6 @@ static int8_t _get_point_index_in_obstacle(const obstacle_t *obstacle, const pos
     }
     return -1;
 }
-
-static bool _is_point_on_segment(const pose_t *a, const pose_t *b, const pose_t *o)
-{
-    bool res = false;
-
-    if ((b->x - a->x) / (b->y - a->y) == (b->x - o->x) / (b->y - o->y)) {
-        if (a->x < b->x) {
-            if ((o->x < b->x) && (o->x > a->x)) {
-                res = true;
-            }
-        }
-        else {
-            if ((o->x < a->x) && (o->x > b->x)) {
-                res = true;
-            }
-        }
-    }
-    return res;
-}
-
 
 static pose_t _dijkstra(uint16_t target, uint16_t index)
 {
@@ -231,26 +133,26 @@ int update_graph(const pose_t *s, const pose_t *f)
     int index = 1;
     obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
 
-    if (!_is_point_in_polygon(&borders, &finish_position)) {
+    if (!collisions_is_point_in_polygon(&finish_position, &borders)) {
         goto update_graph_error_finish_position;
     }
 
     /* Check that start and destination point are not in a polygon */
     for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
         const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-        if (_is_point_in_obstacle(obstacle, &finish_position)) {
+        if (collisions_is_point_in_obstacle(obstacle, &finish_position)) {
             goto update_graph_error_finish_position;
         }
-        if (_is_point_in_obstacle(obstacle, &start_position)) {
+        if (collisions_is_point_in_obstacle(obstacle, &start_position)) {
             // find nearest polygon point
             double min = DIJKSTRA_MAX_DISTANCE;
             const pose_t *pose_tmp = &start_position;
             for (int j = 0; j < 4; j++) {
-                if (!_is_point_in_polygon(&borders, &obstacle->points[j])) {
+                if (!collisions_is_point_in_polygon(&obstacle->points[j], &borders)) {
                     continue;
                 }
 
-                double distance = _distance_points(&start_position, &obstacle->points[j]);
+                double distance = collisions_distance_points(&start_position, &obstacle->points[j]);
                 if (distance < min) {
                     min = distance;
                     pose_tmp = &obstacle->points[j];
@@ -288,7 +190,7 @@ void build_avoidance_graph(void)
         for (int p = 0; p < 4; p++) {
             uint8_t collide = FALSE;
             /* Check if point is inside borders */
-            if (!_is_point_in_polygon(&borders, &obstacle->points[p])) {
+            if (!collisions_is_point_in_polygon(&obstacle->points[p], &borders)) {
                 continue;
             }
 
@@ -298,7 +200,7 @@ void build_avoidance_graph(void)
                 if (i == j) {
                     continue;
                 }
-                if (_is_point_in_obstacle(obstacle2, &obstacle->points[p])) {
+                if (collisions_is_point_in_obstacle(obstacle2, &obstacle->points[p])) {
                     collide = TRUE;
                     break;
                 }
@@ -321,7 +223,7 @@ void build_avoidance_graph(void)
                     for (int v = 0; v < 4; v++) {
                         pose_t p_next = ((v == 3) ? obstacle->points[0] : obstacle->points[v + 1]);
 
-                        if (_is_segment_crossing_segment(&valid_points[p], &valid_points[p2], &obstacle->points[v], &p_next)) {
+                        if (collisions_is_segment_crossing_segment(&valid_points[p], &valid_points[p2], &obstacle->points[v], &p_next)) {
                             collide = TRUE;
                             break;
                         }
@@ -338,7 +240,7 @@ void build_avoidance_graph(void)
                             collide = TRUE;
                             break;
                         }
-                        if (_is_point_on_segment(&valid_points[p], &valid_points[p2], &obstacle->points[v])) {
+                        if (collisions_is_point_on_segment(&valid_points[p], &valid_points[p2], &obstacle->points[v])) {
                             collide = TRUE;
                             break;
                         }
