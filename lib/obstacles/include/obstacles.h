@@ -51,6 +51,7 @@ extern "C" {
  */
 typedef struct {
     uint32_t default_circle_radius;     /**< obstacle default radius */
+    uint32_t default_rectangle_width;   /**< obstacle of rectangle type default width */
     uint32_t min_distance;              /**< minimun distance from origin to create an obstacle */
     uint32_t max_distance;              /**< maximum distance from origin to create an obstacle */
 } obstacles_params_t;
@@ -59,8 +60,9 @@ typedef struct {
  * @brief   Obstacle types
  */
 typedef enum {
-    OBSTACLE_POLYGON,           /**< polygon */
     OBSTACLE_CIRCLE,            /**< circle */
+    OBSTACLE_POLYGON,           /**< polygon */
+    OBSTACLE_RECTANGLE,         /**< rectangle */
 } obstacle_type_t;
 
 /**
@@ -75,8 +77,9 @@ struct obstacle_t {
     obstacle_type_t type;
     coords_t center;
     union {
-        polygon_t polygon;
         circle_t circle;
+        polygon_t polygon;
+        rectangle_t rectangle;
     } form;
 };
 
@@ -192,6 +195,17 @@ bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *
  * @return                  true if point is inside, false otherwise
  */
 bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter);
+
+/**
+ * @brief Check if a segment defined by two points A,B is crossing an obstacle.
+ *
+ * @param[in]   a           point A
+ * @param[in]   b           point B
+ * @param[in]   obstacle    obstacle
+ *
+ * @return                  true if [AB] crosses obstacle, false otherwise
+ */
+bool obstacles_is_segment_crossing_obstacle(const coords_t *a, const coords_t *b, const obstacle_t *obstacle);
 
 /**
  * @brief Find the nearest point of obstacle perimeter from given point.
