@@ -1,9 +1,3 @@
-/* System includes */
-#include <math.h>
-
-/* RIOT includes */
-#include "mutex.h"
-
 /* Project includes */
 #include "collisions.h"
 #include "obstacles.h"
@@ -11,22 +5,14 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
-/* Trigo */
-#define M_PI                  3.14159265358979323846
-#define DEG2RAD(a)            (a * (2.0 * M_PI) / 360.0)
-
-/* Physical properties */
-#define MAX_OBSTACLES         360
-
-
 /**
  * @brief   Obstacles context
  */
 typedef struct {
     obstacles_params_t params;                  /**< parameters */
-    size_t nb_obstacles;
-    obstacle_t obstacles[MAX_OBSTACLES];
-    mutex_t lock;
+    size_t nb_obstacles;                        /**< number of obstacles */
+    obstacle_t obstacles[OBSTACLES_MAX_NUMBER]; /**< obstacles list */
+    mutex_t lock;                               /**< obstacles context protection mutex */
 } obstacles_context_t;
 
 /* Allocate memory for the obstacles contexts */
@@ -56,11 +42,32 @@ double obstacles_default_radius(const obstacles_t obstacles_id)
     return obstacles_context->params.default_radius;
 }
 
-size_t obstacles_size(const obstacles_t obstacles_id)
+uint32_t obstacles_get_min_distance(const obstacles_t obstacles_id)
+{
+    assert(obstacles_id < OBSTACLES_NUMOF);
+    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
+    return obstacles_context->params.min_distance;
+}
+
+uint32_t obstacles_get_max_distance(const obstacles_t obstacles_id)
+{
+    assert(obstacles_id < OBSTACLES_NUMOF);
+    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
+    return obstacles_context->params.max_distance;
+}
+
+size_t obstacles_get_nb_obstacles(const obstacles_t obstacles_id)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
     const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
     return obstacles_context->nb_obstacles;
+}
+
+void obstacles_reset(const obstacles_t obstacles_id)
+{
+    assert(obstacles_id < OBSTACLES_NUMOF);
+    obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
+    obstacles_context->nb_obstacles = 0;
 }
 
 const obstacle_t *obstacles_get(const obstacles_t obstacles_id, size_t n)
@@ -84,7 +91,7 @@ bool obstacles_add(const obstacles_t obstacles_id, const obstacle_t obstacle)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
     obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    if (obstacles_context->nb_obstacles + 1 >= MAX_OBSTACLES) {
+    if (obstacles_context->nb_obstacles + 1 >= OBSTACLES_MAX_NUMBER) {
         return false;
     }
     obstacles_context->obstacles[obstacles_context->nb_obstacles++] = obstacle;
@@ -108,7 +115,7 @@ void obstacles_unlock(const obstacles_t obstacles_id)
 bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter)
 {
     for (size_t obstacles_id = 0; obstacles_id < OBSTACLES_NUMOF; obstacles_id++) {
-        for (size_t j = 0; j < obstacles_size(obstacles_id); j++) {
+        for (size_t j = 0; j < obstacles_get_nb_obstacles(obstacles_id); j++) {
             const obstacle_t *obstacle = obstacles_get(obstacles_id, j);
             if (filter == obstacle) {
                 continue;
@@ -150,42 +157,6 @@ coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
 
     /* Should never happen */
     return *p;
-}
-
-void obstacles_update_from_lidar(const obstacles_t obstacles_id, const pose_t *origin, const uint16_t *distances)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-
-    if (origin == NULL) {
-        return;
-    }
-
-    obstacles_context->nb_obstacles = 0;
-
-    for (uint16_t angle = 0; angle < 360; angle++) {
-        uint16_t distance = distances[angle];
-        if (distance < obstacles_context->params.min_distance || distance >= obstacles_context->params.max_distance) {
-            continue;
-        }
-
-        /* Compute obstacle position */
-        double obstacle_angle = origin->O + angle;
-        obstacle_angle = (int16_t)obstacle_angle % 360;
-        obstacle_angle = DEG2RAD(obstacle_angle);
-
-        obstacles_context->obstacles[obstacles_context->nb_obstacles] = (obstacle_t){
-            .type = OBSTACLE_CIRCLE,
-            .form.circle.center = {
-                .x = origin->coords.x + distance * cos(obstacle_angle),
-                .y = origin->coords.y + distance * sin(obstacle_angle),
-            },
-            .form.circle.radius = obstacles_default_radius(obstacles_id),
-        };
-
-        obstacles_context->nb_obstacles++;
-    }
-
 }
 
 static void _print_list(const obstacles_t obstacles_id, FILE *out)
@@ -231,13 +202,13 @@ void obstacles_print_all_json(FILE *out)
     fflush(out);
 
     for (obstacles_t obstacles_id = 0; obstacles_id < OBSTACLES_NUMOF; obstacles_id++) {
-        if (nb_obstacles > 0 && obstacles_size(obstacles_id) > 0) {
+        if (nb_obstacles > 0 && obstacles_get_nb_obstacles(obstacles_id) > 0) {
             fprintf(out, ", ");
             fflush(out);
         }
 
         _print_list(obstacles_id, out);
-        nb_obstacles += obstacles_size(obstacles_id);
+        nb_obstacles += obstacles_get_nb_obstacles(obstacles_id);
     }
     fprintf(out, "]\n");
     fflush(out);

@@ -132,7 +132,7 @@ int update_graph(const pose_t *s, const pose_t *f)
     }
 
     /* Check that start and destination point are not in an obstacle */
-    for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
+    for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_id); i++) {
         const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
         if (obstacles_is_point_in_obstacle(obstacle, &finish_position.coords)) {
             goto update_graph_error_finish_position;
@@ -161,7 +161,7 @@ void validate_obstacles(void)
     obstacles_dyn_id_t obstacles_dyn_id = pf_get_dyn_obstacles_id();
 
     /* For each obstacle */
-    for (size_t i = 0; i < obstacles_size(obstacles_dyn_id); i++) {
+    for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_dyn_id); i++) {
         const obstacle_t *obstacle = obstacles_get(obstacles_dyn_id, i);
 
         /* Check if point is inside borders */
@@ -214,7 +214,7 @@ bool is_colliding(const pose_t *start, const pose_t *stop)
     obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
 
     /* Check if that segment crosses a polygon */
-    for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
+    for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_id); i++) {
         const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
 
         /* Check if obstacle  is inside borders */
@@ -244,7 +244,7 @@ void build_avoidance_graph(void)
             bool collide = false;
             if (p != p2) {
                 /* Check if that segment crosses a polygon */
-                for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
+                for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_id); i++) {
                     const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
                     if (collisions_is_segment_crossing_circle(&valid_points[p].coords,
                                                               &valid_points[p2].coords, &obstacle->form.circle)) {
