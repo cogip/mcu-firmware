@@ -1,3 +1,6 @@
+/* System includes */
+#include <string.h>
+
 /* Project includes */
 #include "collisions.h"
 #include "obstacles.h"
@@ -131,11 +134,41 @@ bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter
 
 bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *p)
 {
+    /* Temporary object */
+    polygon_t polygon_tmp;
+
     switch (obstacle->type) {
-        case OBSTACLE_POLYGON:
-            return collisions_is_point_in_polygon(&obstacle->form.polygon, p);
         case OBSTACLE_CIRCLE:
             return collisions_is_point_in_circle(&obstacle->form.circle, p);
+        case OBSTACLE_RECTANGLE:
+            polygon_tmp.count = 4;
+            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
+                   polygon_tmp.count * sizeof(coords_t));
+            return collisions_is_point_in_polygon(&polygon_tmp, p);
+        case OBSTACLE_POLYGON:
+            return collisions_is_point_in_polygon(&obstacle->form.polygon, p);
+        default:
+            DEBUG("obstacle: Wrong type, should never happen, return false)");
+    }
+
+    return false;
+}
+
+bool obstacles_is_segment_crossing_obstacle(const coords_t *a, const coords_t *b, const obstacle_t *obstacle)
+{
+    /* Temporary object */
+    polygon_t polygon_tmp;
+
+    switch (obstacle->type) {
+        case OBSTACLE_CIRCLE:
+            return collisions_is_segment_crossing_circle(a, b, &obstacle->form.circle);
+        case OBSTACLE_RECTANGLE:
+            polygon_tmp.count = 4;
+            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
+                   polygon_tmp.count * sizeof(coords_t));
+            return collisions_is_segment_crossing_polygon(a, b, &polygon_tmp);
+        case OBSTACLE_POLYGON:
+            return collisions_is_segment_crossing_polygon(a, b, &obstacle->form.polygon);
         default:
             DEBUG("obstacle: Wrong type, should never happen, return false)");
     }
@@ -146,11 +179,19 @@ bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *
 coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
                                                   const coords_t *p)
 {
+    /* Temporary object */
+    polygon_t polygon_tmp;
+
     switch (obstacle->type) {
-        case OBSTACLE_POLYGON:
-            return collisions_find_nearest_point_in_polygon(&obstacle->form.polygon, p);
         case OBSTACLE_CIRCLE:
             return collisions_find_nearest_point_in_circle(&obstacle->form.circle, p);
+        case OBSTACLE_RECTANGLE:
+            polygon_tmp.count = 4;
+            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
+                   polygon_tmp.count * sizeof(coords_t));
+            return collisions_find_nearest_point_in_polygon(&polygon_tmp, p);
+        case OBSTACLE_POLYGON:
+            return collisions_find_nearest_point_in_polygon(&obstacle->form.polygon, p);
         default:
             DEBUG("obstacle: Wrong type, should never happen, return false)");
     }

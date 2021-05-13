@@ -118,6 +118,18 @@ bool collisions_is_segment_crossing_circle(const coords_t *a, const coords_t *b,
                                            const circle_t *circle);
 
 /**
+ * @brief Check if a segment defined by two points A,B is crossing a polygon.
+ *
+ * @param[in]   a           point A
+ * @param[in]   b           point B
+ * @param[in]   polygon     polygon
+ *
+ * @return                  true if (AB) crosses circle, false otherwise
+ */
+bool collisions_is_segment_crossing_polygon(const coords_t *a, const coords_t *b,
+                                            const polygon_t *polygon);
+
+/**
  * @brief Check if a point C is placed on a segment defined by two points A,B.
  *
  * @param[in]   a           point A

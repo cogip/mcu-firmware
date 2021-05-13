@@ -6,6 +6,16 @@
 /* Project includes */
 #include "collisions.h"
 
+static int8_t _get_point_index_in_polygon(const polygon_t *polygon, const coords_t *p)
+{
+    for (uint8_t i = 0; i < polygon->count; i++) {
+        if ((polygon->points[i].x == p->x) && (polygon->points[i].y == p->y)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 double collisions_distance_points(const coords_t *a, const coords_t *b)
 {
     return sqrt((b->x - a->x) * (b->x - a->x)
@@ -70,6 +80,39 @@ bool collisions_is_segment_crossing_segment(const coords_t *a, const coords_t *b
         return false;
     }
     return true;
+}
+
+bool collisions_is_segment_crossing_polygon(const coords_t *a, const coords_t *b,
+                                            const polygon_t *polygon)
+{
+    /* Check if that segment crosses a polygon */
+    for (int i = 0; i < polygon->count; i++) {
+        coords_t p_next = ((i + 1 == polygon->count) ? polygon->points[0] : polygon->points[i + 1]);
+
+        if (collisions_is_segment_crossing_segment(a, b, &polygon->points[i], &p_next)) {
+            return true;
+        }
+
+        /* If A and B are vertices of the polygon */
+        int8_t index = _get_point_index_in_polygon(polygon, a);
+        int8_t index2 = _get_point_index_in_polygon(polygon, b);
+        /* Consecutive vertices: no collision */
+        if (((index == 0) && (index2 == (polygon->count - 1)))
+            || ((index2 == 0) && (index == (polygon->count - 1)))) {
+            continue;
+        }
+        /* If not consecutive vertices: collision */
+        if ((index >= 0) && (index2 >= 0) && (abs(index - index2) != 1)) {
+            return true;
+        }
+
+        /* If polygon vertice is on segment [AB] */
+        if (collisions_is_point_on_segment(a, b, &polygon->points[i])) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool collisions_is_line_crossing_circle(const coords_t *a, const coords_t *b,

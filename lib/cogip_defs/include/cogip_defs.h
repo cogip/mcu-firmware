@@ -68,6 +68,15 @@ typedef struct {
 } polygon_t;
 
 /**
+ * @brief   Rectangle type
+ */
+typedef struct {
+    double length_x;        /**< length on x axis when angle = 0 */
+    double length_y;        /**< length on y axis when angle = 0 */
+    coords_t points[4];     /**< vertices defining the polygon */
+} rectangle_t;
+
+/**
  * @brief   Circle type
  */
 typedef struct {
