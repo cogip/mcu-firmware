@@ -6,6 +6,7 @@
 
 #include "utils.h"
 
+#if 0
 /*
  * TODO:
  * - Add anti-blocking activation for each point,
@@ -13,7 +14,7 @@
  *    if delivery was bypassed for any reason)
  * - Absolute coordinate recalibration on games frames (?)
  */
-static path_pose_t poses[] = {
+static path_pose_t old_poses[] = {
     /* POSE_INITIAL */
     {
         .pos = {
@@ -365,6 +366,163 @@ static path_pose_t poses[] = {
     /*
      * End of path
      */
+};
+
+#endif
+
+static path_pose_t poses[] = {
+    /* POSE_INITIAL */
+    {
+        .pos = {
+            .coords.x = 1500 - 220,
+            .coords.y = 750,
+            .O = 180,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = MAX_SPEED,
+        .act = NULL,
+    },
+    /* Game path */
+    {                           /* Prise premiers gobelets */
+        .pos = {
+            .coords.x = 1128,
+            .coords.y = 457,
+            .O = 225,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Prise gobelet seul proche zone */
+        .pos = {
+            .coords.x = 544,
+            .coords.y = 400-57,
+            .O = 90,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Prise gobelet seul proche logo */
+        .pos = {
+            .coords.x = 400+40,
+            .coords.y = 800,
+            .O = 90,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Prise gobelet seul proche qrcode - approche*/
+        .pos = {
+            .coords.x = 230-40,
+            .coords.y = 1000,
+            .O = 90,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Prise gobelet seul proche qrcode*/
+        .pos = {
+            .coords.x = 230-40,
+            .coords.y = 1200,
+            .O = 90,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Prise gobelets entrée petit port - approche*/
+        .pos = {
+            .coords.x = 300,
+            .coords.y = 1500,
+            .O = 90,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Prise gobelets entrée petit port - approche*/
+        .pos = {
+            .coords.x = 300,
+            .coords.y = 1655,
+            .O = 90,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Prise gobelets entrée petit port - recul*/
+        .pos = {
+            .coords.x = 300,
+            .coords.y = 1400,
+            .O = 90,
+        },
+        .allow_reverse = TRUE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Direction grand port - poussette des gobelets sur la route */
+        .pos = {
+            .coords.x = 1150,
+            .coords.y = 1050,
+            .O = 270,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Positionnement dans grand port pour laisse les gobelets */
+        .pos = {
+            .coords.x = 1150,
+            .coords.y = 600,
+            .O = 270,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Recul pour déposer gobelets */
+        .pos = {
+            .coords.x = 1150,
+            .coords.y = 1100,
+            .O = 270,
+        },
+        .allow_reverse = TRUE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Direction manche à air */
+        .pos = {
+            .coords.x = 1300,
+            .coords.y = 1750,
+            .O = 180,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* ouverture des 2 manches à air */
+        .pos = {
+            .coords.x = 800,
+            .coords.y = 1750,
+            .O = 180,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
+    {                           /* Direction zone de fin SUD, tout le temps */
+        .pos = {
+            .coords.x = 1250,
+            .coords.y = 1200,
+            .O = 270,
+        },
+        .allow_reverse = FALSE,
+        .max_speed = NORMAL_SPEED,
+        .act = NULL,
+    },
 };
 
 path_t robot_path = {

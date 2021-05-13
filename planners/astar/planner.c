@@ -207,7 +207,8 @@ void *task_planner(void *arg)
 
     path_t *path = pf_get_path();
     if (!path) {
-        tracefd_jlog(tracefd_stdout, "Machine has no path");
+        tracefd_jlog(tracefd_stdout, "Platform has no path");
+        assert(path);
     }
 
     /* object context initialisation */
