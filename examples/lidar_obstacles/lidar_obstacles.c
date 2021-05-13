@@ -1,4 +1,5 @@
 /* System includes */
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,6 +22,10 @@
 
 /* Thread priority */
 #define OBSTACLE_UPDATER_PRIO (THREAD_PRIORITY_MAIN - 1)
+
+/* Trigo */
+#define M_PI                  3.14159265358979323846
+#define DEG2RAD(a)            (a * (2.0 * M_PI) / 360.0)
 
 /* Thread stack */
 static char obstacle_updater_thread_stack[THREAD_STACKSIZE_LARGE];
@@ -101,6 +106,40 @@ static bool _filter_distances(const uint16_t *raw_distances, uint16_t *filtered_
     return true;
 }
 
+/* Update obstacles list from lidar measurements */
+static void _update_dynamic_obstacles_from_lidar(const obstacles_t obstacles_id, const pose_t *origin, const uint16_t *distances)
+{
+    assert(obstacles_id < OBSTACLES_NUMOF);
+
+    if (origin == NULL) {
+        return;
+    }
+
+    obstacles_reset(obstacles_id);
+
+    for (uint16_t angle = 0; angle < 360; angle++) {
+        uint16_t distance = distances[angle];
+        if (distance < obstacles_get_min_distance(obstacles_id) || distance >= obstacles_get_max_distance(obstacles_id)) {
+            continue;
+        }
+
+        /* Compute obstacle position */
+        double obstacle_angle = origin->O + angle;
+        obstacle_angle = (int16_t)obstacle_angle % 360;
+        obstacle_angle = DEG2RAD(obstacle_angle);
+
+        obstacles_add(obstacles_id, (obstacle_t){
+            .type = OBSTACLE_CIRCLE,
+            .form.circle.center = {
+                .x = origin->coords.x + distance * cos(obstacle_angle),
+                .y = origin->coords.y + distance * sin(obstacle_angle),
+            },
+            .form.circle.radius = obstacles_default_radius(obstacles_id),
+        });
+    }
+
+}
+
 /* Thread loop */
 static void *_thread_obstacle_updater(void *arg)
 {
@@ -119,7 +158,7 @@ static void *_thread_obstacle_updater(void *arg)
         }
 
         if (_filter_distances(raw_distances, filtered_distances) == true) {
-            obstacles_update_from_lidar(lidar_obstacles, robot_state, filtered_distances);
+            _update_dynamic_obstacles_from_lidar(lidar_obstacles, robot_state, filtered_distances);
         }
 
         xtimer_periodic_wakeup(&loop_start_time, TASK_PERIOD_MS * US_PER_MS);

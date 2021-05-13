@@ -28,6 +28,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* RIOT includes */
+#include "mutex.h"
+
 /* Project includes */
 #include "cogip_defs.h"
 
@@ -37,6 +40,10 @@ extern "C" {
 
 #ifndef OBSTACLES_NUMOF
 #define OBSTACLES_NUMOF 1   /**< number of used obstacles contexts */
+#endif
+
+#ifndef OBSTACLES_MAX_NUMBER
+#define OBSTACLES_MAX_NUMBER    360
 #endif
 
 /**
@@ -104,11 +111,32 @@ obstacles_t obstacles_init(const obstacles_params_t *obstacles_params);
 double obstacles_default_radius(const obstacles_t obstacles_id);
 
 /**
+ * @brief Return the minimal distance of obstacle detection
+ * @param[in]   obstacles_id  obstacles id
+ * @return                    minimal distance
+ */
+uint32_t obstacles_get_min_distance(const obstacles_t obstacles_id);
+
+/**
+ * @brief Return the maximal distance of obstacle detection
+ * @param[in]   obstacles_id  obstacles id
+ * @return                    maximal distance
+ */
+uint32_t obstacles_get_max_distance(const obstacles_t obstacles_id);
+
+/**
  * @brief Return the number of obstacles
  * @param[in]   obstacles_id  obstacles id
  * @return                    number of obstacles
  */
-size_t obstacles_size(const obstacles_t obstacles_id);
+size_t obstacles_get_nb_obstacles(const obstacles_t obstacles_id);
+
+/**
+ * @brief Reset the list of obstacles
+ * @param[in]   obstacles_id  obstacles id
+ * @return
+ */
+void obstacles_reset(const obstacles_t obstacles_id);
 
 /**
  * @brief Get an obstacle
@@ -174,14 +202,6 @@ bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter
  */
 coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
                                                   const coords_t *p);
-
-/**
- * @brief Update obstacles using data from a Lidar
- * @param[in]   obstacles_id  obstacles id
- * @param[in]   origin        origin of the Lidar data
- * @param[in]   distances     data provided by the Lidar (array of 360 distances, one per angle)
- */
-void obstacles_update_from_lidar(const obstacles_t obstacles_id, const pose_t *origin, const uint16_t *distances);
 
 /**
  * @brief Print specified obstacles in JSON format
