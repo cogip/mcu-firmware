@@ -5,6 +5,7 @@
 /* Project includes */
 #include "collisions.h"
 #include "obstacles.h"
+#include "trigonometry.h"
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"
@@ -37,6 +38,49 @@ obstacles_t obstacles_init(const obstacles_params_t *obstacles_params)
     mutex_init(&obstacles_context->lock);
     obstacles_initialized++;
     return id;
+}
+
+obstacle_t obstacles_rectangle_init(coords_t center, double length_x,
+                                    double length_y, double angle)
+{
+    obstacle_t rect = {
+        .type = OBSTACLE_RECTANGLE,
+        .center = center,
+        .radius = sqrt(length_x * length_x + length_y * length_y) / 2,
+        .angle = angle,
+        .form.rectangle = {
+            .length_x = length_x,
+            .length_y = length_y,
+            .points = {
+                (coords_t){
+                    .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
+                         (center.y - length_y / 2) * sin(DEG2RAD(angle)),
+                    .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
+                         (center.y - length_y / 2) * cos(DEG2RAD(angle)),
+                },
+                (coords_t){
+                    .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
+                         (center.y + length_y / 2) * sin(DEG2RAD(angle)),
+                    .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
+                         (center.y + length_y / 2) * cos(DEG2RAD(angle)),
+                },
+                (coords_t){
+                    .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
+                         (center.y + length_y / 2) * sin(DEG2RAD(angle)),
+                    .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
+                         (center.y + length_y / 2) * cos(DEG2RAD(angle)),
+                },
+                (coords_t){
+                    .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
+                         (center.y - length_y / 2) * sin(DEG2RAD(angle)),
+                    .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
+                         (center.y - length_y / 2) * cos(DEG2RAD(angle)),
+                },
+            }
+        }
+    };
+
+    return rect;
 }
 
 polygon_t obstacles_compute_obstacle_bounding_box(const obstacle_t *obstacle,

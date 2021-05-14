@@ -110,6 +110,19 @@ typedef unsigned int obstacles_dyn_id_t;
 obstacles_t obstacles_init(const obstacles_params_t *obstacles_params);
 
 /**
+ * @brief Initialize a rectangle obstacle
+ *
+ * @param[in]   center      obstacle center
+ * @param[in]   length_x    obstacle length on x axis
+ * @param[in]   length_y    obstacle length on y axis
+ * @param[in]   angle       obstacle rotation angle
+ *
+ * @return                  created obstacle
+ */
+obstacle_t obstacles_rectangle_init(coords_t center, double length_x,
+                                    double length_y, double angle);
+
+/**
  * @brief Return bounding box of an obstacle. This bounding box has nb_vertices
  * and has a radius of ((1 + radius_margin) * radius).
  *
