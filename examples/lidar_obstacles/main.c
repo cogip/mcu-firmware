@@ -39,57 +39,18 @@ static void _init_border_obstacles(void)
 {
     border_obstacles = obstacles_init(&border_obstacles_params);
 
-    obstacles_add(border_obstacles, (obstacle_t){
-        .type = OBSTACLE_POLYGON,
-        .form.polygon = {
-            .points = {
-                (coords_t){ .x = -1500, .y = -10 },
-                (coords_t){ .x = -1500, .y = 0 },
-                (coords_t){ .x = 1500, .y = 0 },
-                (coords_t){ .x = 1500, .y = -10 }
-            },
-            .count = 4,
-        },
-    });
+    obstacles_add(border_obstacles, obstacles_rectangle_init(
+                      (coords_t) { .x = 0, .y = -5 }, 3000, 10, 0));
 
-    obstacles_add(border_obstacles, (obstacle_t){
-        .type = OBSTACLE_POLYGON,
-        .form.polygon = {
-            .points = {
-                (coords_t){ .x = -1500, .y = 2000 },
-                (coords_t){ .x = -1500, .y = 2010 },
-                (coords_t){ .x = 1500, .y = 2010 },
-                (coords_t){ .x = 1500, .y = 2000 }
-            },
-            .count = 4,
-        },
-    });
+    obstacles_add(border_obstacles, obstacles_rectangle_init(
+                      (coords_t) { .x = 0, .y = 2005 }, 3000, 10, 0));
 
-    obstacles_add(border_obstacles, (obstacle_t){
-        .type = OBSTACLE_POLYGON,
-        .form.polygon = {
-            .points = {
-                (coords_t){ .x = -1500, .y = 0 },
-                (coords_t){ .x = -1500, .y = 2000 },
-                (coords_t){ .x = -1510, .y = 2000 },
-                (coords_t){ .x = -1510, .y = 0 }
-            },
-            .count = 4,
-        },
-    });
+    obstacles_add(border_obstacles, obstacles_rectangle_init(
+                      (coords_t) { .x = -1505, .y = 1000 }, 10, 2000, 0));
 
-    obstacles_add(border_obstacles, (obstacle_t){
-        .type = OBSTACLE_POLYGON,
-        .form.polygon = {
-            .points = {
-                (coords_t){ .x = 1500, .y = 0 },
-                (coords_t){ .x = 1500, .y = 2000 },
-                (coords_t){ .x = 1510, .y = 2000 },
-                (coords_t){ .x = 1510, .y = 0 }
-            },
-            .count = 4,
-        },
-    });
+    obstacles_add(border_obstacles, obstacles_rectangle_init(
+                      (coords_t) { .x = 1505, .y = 1000 }, 10, 2000, 0));
+
 }
 
 /* Shell commands */
