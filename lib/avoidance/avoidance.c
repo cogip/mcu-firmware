@@ -1,5 +1,6 @@
 /* Standard includes */
 #include <math.h>
+#include <stdio.h>
 
 /* Project includes */
 #include "avoidance.h"
@@ -43,6 +44,10 @@ static uint64_t graph[GRAPH_MAX_VERTICES];
 static pose_t start_position = { .coords.x = 0, .coords.y = 0 };
 static pose_t finish_position = { .coords.x = 0, .coords.y = 0 };
 
+static int child[GRAPH_MAX_VERTICES];
+
+static bool avoidance_computed_flag = false;
+
 static pose_t _dijkstra(uint16_t target, uint16_t index)
 {
     bool checked[GRAPH_MAX_VERTICES];
@@ -52,7 +57,6 @@ static pose_t _dijkstra(uint16_t target, uint16_t index)
     double weight;
     double min_distance;
     int parent[GRAPH_MAX_VERTICES];
-    int child[GRAPH_MAX_VERTICES];
     /* TODO: start should be a parameter. More clean even if start is always index 0 in our case */
     int start = 0;
 
@@ -107,11 +111,37 @@ static pose_t _dijkstra(uint16_t target, uint16_t index)
         v++;
     }
 
+    avoidance_computed_flag = true;
+
     /* Return point */
     return valid_points[i];
 
 dijkstra_error_no_destination:
+    avoidance_computed_flag = false;
     return start_position;
+}
+
+void avoidance_print_path(FILE *out)
+{
+    int i = 0;
+
+    fprintf(out, "[");
+    fflush(out);
+    if (avoidance_computed_flag) {
+        while (i != 1) {
+            fprintf(out, "{\"x\": %lf, \"y\": %lf},",
+                    valid_points[i].coords.x,
+                    valid_points[i].coords.y
+                    );
+            i = child[i];
+        }
+        fprintf(out, "{\"x\": %lf, \"y\": %lf}",
+                finish_position.coords.x,
+                finish_position.coords.y
+                );
+    }
+    fprintf(out, "]");
+    fflush(out);
 }
 
 pose_t avoidance(uint8_t index)
