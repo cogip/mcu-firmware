@@ -173,33 +173,19 @@ void validate_obstacles(void)
          * box
          */
         if (!obstacles_is_point_in_obstacles(&obstacle->center, obstacle)) {
-            polygon_t aabb = {
-                .points = {
-                    {
-                        .x = obstacle->center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
-                    },
-                    {
-                        .x = obstacle->center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
-                    },
-                    {
-                        .x = obstacle->center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
-                    },
-                    {
-                        .x = obstacle->center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
-                    },
-                },
-                .count = 4,
-            };
+
+            polygon_t bb = obstacles_compute_obstacle_bounding_box(obstacle,
+                                                                   OBSTACLES_BB_NB_VERTICES,
+                                                                   OBSTACLES_BB_RADIUS_MARGIN);
 
             /* Validate bounding box */
-            for (uint8_t j = 0; j < aabb.count; j++) {
-                if ((obstacles_is_point_in_obstacle(&borders, &aabb.points[j]))
-                    && (!obstacles_is_point_in_obstacles(&aabb.points[j], NULL))) {
-                    valid_points[valid_points_count++] = (pose_t){ aabb.points[j], 0 };
+            for (uint8_t j = 0; j < bb.count; j++) {
+                if ((obstacles_is_point_in_obstacle(&borders, &bb.points[j]))
+                    && (!obstacles_is_point_in_obstacles(&bb.points[j],
+                                                         NULL))) {
+                    valid_points[valid_points_count++] = (pose_t){
+                        bb.points[j], 0
+                    };
                 }
             }
         }
@@ -221,7 +207,7 @@ bool is_colliding(const pose_t *start, const pose_t *stop)
         if (!obstacles_is_point_in_obstacle(&borders, &obstacle->center)) {
             continue;
         }
-        if (collisions_is_segment_crossing_circle(&start->coords, &stop->coords, &obstacle->form.circle)) {
+        if (obstacles_is_segment_crossing_obstacle(&start->coords, &stop->coords, obstacle)) {
             return true;
         }
     }
@@ -246,8 +232,8 @@ void build_avoidance_graph(void)
                 /* Check if that segment crosses a polygon */
                 for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_id); i++) {
                     const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-                    if (collisions_is_segment_crossing_circle(&valid_points[p].coords,
-                                                              &valid_points[p2].coords, &obstacle->form.circle)) {
+                    if (obstacles_is_segment_crossing_obstacle(&valid_points[p].coords,
+                                                               &valid_points[p2].coords, obstacle)) {
                         collide = true;
                         break;
                     }
