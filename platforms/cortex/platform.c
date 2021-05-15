@@ -337,7 +337,7 @@ void pf_init(void)
 
     /* mirror the points in place if selected camp is left */
     if (pf_is_camp_left()) {
-        path_horizontal_mirror_all_pos(path);
+        path_horizontal_mirror_all_poses(path);
     }
 
     /* Initialize planner */
