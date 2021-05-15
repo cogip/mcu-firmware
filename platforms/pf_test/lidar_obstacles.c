@@ -28,7 +28,7 @@
 #define DEG2RAD(a)            (a * (2.0 * M_PI) / 360.0)
 
 /* Thread stack */
-static char obstacle_updater_thread_stack[THREAD_STACKSIZE_LARGE];
+static char obstacle_updater_thread_stack[THREAD_STACKSIZE_LARGE * 2];
 
 /* Obstacles id of Lidar detected obstacles*/
 obstacles_t lidar_obstacles = OBSTACLES_NUMOF;
