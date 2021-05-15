@@ -23,7 +23,7 @@ obstacles_t border_obstacles = OBSTACLES_NUMOF;
 
 /* Border obstacles parameters */
 obstacles_params_t border_obstacles_params = {
-    .default_width = 0,
+    .default_radius = 0,
     .min_distance = 0,
 };
 
@@ -40,43 +40,55 @@ static void _init_border_obstacles(void)
     border_obstacles = obstacles_init(&border_obstacles_params);
 
     obstacles_add(border_obstacles, (obstacle_t){
-        .points = {
-            (pose_t){ .x = -1500, .y = -10 },
-            (pose_t){ .x = -1500, .y = 0 },
-            (pose_t){ .x = 1500, .y = 0 },
-            (pose_t){ .x = 1500, .y = -10 }
+        .type = OBSTACLE_POLYGON,
+        .form.polygon = {
+            .points = {
+                (pose_t){ .x = -1500, .y = -10 },
+                (pose_t){ .x = -1500, .y = 0 },
+                (pose_t){ .x = 1500, .y = 0 },
+                (pose_t){ .x = 1500, .y = -10 }
+            },
+            .count = 4,
         },
-        .angle = 0
     });
 
     obstacles_add(border_obstacles, (obstacle_t){
-        .points = {
-            (pose_t){ .x = -1500, .y = 2000 },
-            (pose_t){ .x = -1500, .y = 2010 },
-            (pose_t){ .x = 1500, .y = 2010 },
-            (pose_t){ .x = 1500, .y = 2000 }
+        .type = OBSTACLE_POLYGON,
+        .form.polygon = {
+            .points = {
+                (pose_t){ .x = -1500, .y = 2000 },
+                (pose_t){ .x = -1500, .y = 2010 },
+                (pose_t){ .x = 1500, .y = 2010 },
+                (pose_t){ .x = 1500, .y = 2000 }
+            },
+            .count = 4,
         },
-        .angle = 0
     });
 
     obstacles_add(border_obstacles, (obstacle_t){
-        .points = {
-            (pose_t){ .x = -1500, .y = 0 },
-            (pose_t){ .x = -1500, .y = 2000 },
-            (pose_t){ .x = -1510, .y = 2000 },
-            (pose_t){ .x = -1510, .y = 0 }
+        .type = OBSTACLE_POLYGON,
+        .form.polygon = {
+            .points = {
+                (pose_t){ .x = -1500, .y = 0 },
+                (pose_t){ .x = -1500, .y = 2000 },
+                (pose_t){ .x = -1510, .y = 2000 },
+                (pose_t){ .x = -1510, .y = 0 }
+            },
+            .count = 4,
         },
-        .angle = 0
     });
 
     obstacles_add(border_obstacles, (obstacle_t){
-        .points = {
-            (pose_t){ .x = 1500, .y = 0 },
-            (pose_t){ .x = 1500, .y = 2000 },
-            (pose_t){ .x = 1510, .y = 2000 },
-            (pose_t){ .x = 1510, .y = 0 }
+        .type = OBSTACLE_POLYGON,
+        .form.polygon = {
+            .points = {
+                (pose_t){ .x = 1500, .y = 0 },
+                (pose_t){ .x = 1500, .y = 2000 },
+                (pose_t){ .x = 1510, .y = 2000 },
+                (pose_t){ .x = 1510, .y = 0 }
+            },
+            .count = 4,
         },
-        .angle = 0
     });
 }
 

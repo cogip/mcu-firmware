@@ -17,6 +17,7 @@
  * @brief       Public API for obstacles module
  *
  * @author      Eric Courtois <eric.courtois@gmail.com>
+ * @author      Gilles DOFFE <g.doffe@gmail.com>
  */
 
 #pragma once
@@ -42,20 +43,49 @@ extern "C" {
  * @brief   Obstacles parameters
  */
 typedef struct {
-    uint32_t default_width; /**< Obstacle default width */
-    uint32_t min_distance;  /**< Minimun distance from origin to create an obstacle */
-    uint32_t max_distance;  /**< Maximum distance from origin to create an obstacle */
+    uint32_t default_radius;    /**< obstacle default radius */
+    uint32_t min_distance;      /**< minimun distance from origin to create an obstacle */
+    uint32_t max_distance;      /**< maximum distance from origin to create an obstacle */
 } obstacles_params_t;
 
-typedef struct {
-    pose_t points[4];       /**< Points defining the obstacle */
-    double angle;           /**< Orientation of the obstacle */
-} obstacle_t;
+/**
+ * @brief   Obstacle types
+ */
+typedef enum {
+    OBSTACLE_POLYGON,           /**< polygon */
+    OBSTACLE_CIRCLE,            /**< circle */
+} obstacle_type_t;
+
+/**
+ * Obstacle default definition
+ */
+typedef struct obstacle_t obstacle_t;
+
+/**
+ * @brief    Generic obstacle definition
+ */
+struct obstacle_t {
+    obstacle_type_t type;
+    union {
+        polygon_t polygon;
+        circle_t circle;
+    } form;
+};
 
 /**
  * @brief   Default obstacles identifier definition
  */
 typedef unsigned int obstacles_t;
+
+/**
+ * @brief   Default AABB obstacles table identifier definition
+ */
+typedef unsigned int obstacles_aabb_id_t;
+
+/**
+ * @brief   Default dynamic obstacles table identifier definition
+ */
+typedef unsigned int obstacles_dyn_id_t;
 
 /**
  * @brief Initialize obstacles context
@@ -65,6 +95,13 @@ typedef unsigned int obstacles_t;
  * @return                        id of the initialized obstacles
  */
 obstacles_t obstacles_init(const obstacles_params_t *obstacles_params);
+
+/**
+ * @brief Return the default obstacles radius
+ * @param[in]   obstacles_id  obstacles id
+ * @return                    radius
+ */
+double obstacles_default_radius(const obstacles_t obstacles_id);
 
 /**
  * @brief Return the number of obstacles
@@ -106,6 +143,37 @@ void obstacles_lock(const obstacles_t obstacles_id);
  * @param[in]   obstacles_id  obstacles id
  */
 void obstacles_unlock(const obstacles_t obstacles_id);
+
+/**
+ * @brief Check if the given point is inside the obstacle
+ *
+ * @param[in]   obstacle    obstacle
+ * @param[in]   p           point to check
+ *
+ * @return                  true if point is inside, false otherwise
+ */
+bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p);
+
+/**
+ * @brief Check if the given point is inside an obstacle
+ *
+ * @param[in]   p           point to check
+ * @param[in]   filter      obstacle to filter
+ *
+ * @return                  true if point is inside, false otherwise
+ */
+bool obstacles_is_point_in_obstacles(const pose_t *p, const obstacle_t *filter);
+
+/**
+ * @brief Find the nearest point of obstacle perimeter from given point.
+ *
+ * @param[in]   obstacle    obstacle
+ * @param[in]   p           point to check
+ *
+ * @return                  position of nearest point
+ */
+pose_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
+                                                const pose_t *p);
 
 /**
  * @brief Update obstacles using data from a Lidar
