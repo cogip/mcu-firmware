@@ -380,7 +380,7 @@ void obstacles_print_json(const obstacles_t obstacles_id, FILE *out)
 
     _print_list(obstacles_id, out);
 
-    fprintf(out, "]\n");
+    fprintf(out, "]");
     fflush(out);
 }
 
@@ -400,6 +400,6 @@ void obstacles_print_all_json(FILE *out)
         _print_list(obstacles_id, out);
         nb_obstacles += obstacles_get_nb_obstacles(obstacles_id);
     }
-    fprintf(out, "]\n");
+    fprintf(out, "]");
     fflush(out);
 }

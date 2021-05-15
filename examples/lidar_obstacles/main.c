@@ -64,22 +64,16 @@ static int _cmd_print_state(int argc, char **argv)
         "\"mode\": 0, "
         "\"pose_current\": {\"x\": %lf, \"y\": %lf, \"O\": %lf}, "
         "\"pose_order\": {\"x\": %lf, \"y\": %lf, \"O\": %lf}, "
-        "\"cycle\": %" PRIu32
-        "}\n",
+        "\"cycle\": %" PRIu32,
         robot_state.coords.x, robot_state.coords.y, robot_state.O,
         robot_state.coords.x, robot_state.coords.y, robot_state.O,
         cycle
         );
 
-    return EXIT_SUCCESS;
-}
-
-int _cmd_print_obstacles(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
+    printf(",\"obstacles\":");
     obstacles_print_all_json(stdout);
+
+    printf("}\n");
 
     return EXIT_SUCCESS;
 }
@@ -94,7 +88,6 @@ int main(void)
     /* Add print data command */
     const shell_command_t shell_commands[] = {
         { "_state", "Print current state", _cmd_print_state },
-        { "_dyn_obstacles", "Print obstacles", _cmd_print_obstacles },
         PRINT_LIDAR_DATA_CMD,
 #ifdef MODULE_SHMEM
         SHMEM_SET_KEY_CMD,
