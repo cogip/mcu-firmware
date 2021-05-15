@@ -1,4 +1,5 @@
 /* System includes */
+#include <math.h>
 #include <string.h>
 
 /* Project includes */
@@ -38,7 +39,49 @@ obstacles_t obstacles_init(const obstacles_params_t *obstacles_params)
     return id;
 }
 
-double obstacles_default_circle_radius(const obstacles_t obstacles_id)
+polygon_t obstacles_compute_obstacle_bounding_box(const obstacle_t *obstacle,
+                                                  const uint8_t nb_vertices,
+                                                  const double radius_margin)
+{
+    double radius = obstacle->radius * (1 + radius_margin);
+
+    polygon_t bb;
+
+    bb.count = (nb_vertices < 4) ? 4 : nb_vertices;
+
+    for (uint8_t i = 0; i < bb.count; i++) {
+        bb.points[i].x = obstacle->center.x +
+                         radius * cos(((double)i * 2 * M_PI) / (double)bb.count);
+        bb.points[i].y = obstacle->center.y +
+                         radius * sin(((double)i * 2 * M_PI) / (double)bb.count);
+    }
+
+    return bb;
+}
+
+double obstacles_compute_radius(const obstacle_t *obstacle)
+{
+    /* Temporary object */
+    polygon_t polygon_tmp;
+
+    switch (obstacle->type) {
+        case OBSTACLE_CIRCLE:
+            return obstacle->form.circle.radius;
+        case OBSTACLE_RECTANGLE:
+            polygon_tmp.count = 4;
+            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
+                   polygon_tmp.count * sizeof(coords_t));
+            return collisions_compute_polygon_radius(&polygon_tmp, &obstacle->center);
+        case OBSTACLE_POLYGON:
+            return collisions_compute_polygon_radius(&obstacle->form.polygon, &obstacle->center);
+        default:
+            DEBUG("obstacle: Wrong type, should never happen, return false)");
+    }
+
+    return 0;
+}
+
+double obstacles_get_default_circle_radius(const obstacles_t obstacles_id)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
     const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
@@ -200,6 +243,61 @@ coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
     return *p;
 }
 
+static void _print_circle(const obstacle_t *obstacle, FILE *out)
+{
+    fprintf(
+        out,
+        "{\"x\":%lf,\"y\":%lf,\"radius\":%lf}",
+        obstacle->center.x,
+        obstacle->center.y,
+        obstacle->form.circle.radius
+        );
+    fflush(out);
+}
+
+static void _print_rectangle(const obstacle_t *obstacle, FILE *out)
+{
+    fprintf(
+        out,
+        "{\"x\":%lf,\"y\":%lf,\"angle\":%lf,\"length_x\":%lf,\"length_y\":%lf}",
+        obstacle->center.x,
+        obstacle->center.y,
+        obstacle->angle,
+        obstacle->form.rectangle.length_x,
+        obstacle->form.rectangle.length_y
+        );
+    fflush(out);
+}
+
+static void _print_polygon(const obstacle_t *obstacle, FILE *out)
+{
+    const polygon_t *polygon = &obstacle->form.polygon;
+
+    fprintf(
+        out,
+        "{\"x\":%lf,\"y\":%lf,\"angle\":%lf, \"points\": [",
+        obstacle->center.x,
+        obstacle->center.y,
+        obstacle->angle
+        );
+    fflush(out);
+    for (uint8_t i = 0; i < polygon->count; i++) {
+        if (i > 0) {
+            fprintf(out, ", ");
+            fflush(out);
+        }
+        fprintf(
+            out,
+            "{\"x\": %lf, \"y\": %lf}",
+            polygon->points[i].x,
+            polygon->points[i].y
+            );
+        fflush(out);
+    }
+    fprintf(out, "]}");
+    fflush(out);
+}
+
 static void _print_list(const obstacles_t obstacles_id, FILE *out)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
@@ -211,14 +309,21 @@ static void _print_list(const obstacles_t obstacles_id, FILE *out)
             fflush(out);
         }
 
-        fprintf(
-            out,
-            "{\"x\":%lf,\"y\":%lf,\"radius\":%lf}",
-            obstacles_context->obstacles[i].form.circle.center.x,
-            obstacles_context->obstacles[i].form.circle.center.y,
-            obstacles_context->obstacles[i].form.circle.radius
-            );
-        fflush(out);
+        obstacle_t *obstacle = &obstacles_context->obstacles[i];
+
+        switch (obstacle->type) {
+            case OBSTACLE_CIRCLE:
+                _print_circle(obstacle, out);
+                break;
+            case OBSTACLE_RECTANGLE:
+                _print_rectangle(obstacle, out);
+                break;
+            case OBSTACLE_POLYGON:
+                _print_polygon(obstacle, out);
+                break;
+            default:
+                DEBUG("obstacle: Wrong type, should never happen, return false)");
+        }
     }
 }
 

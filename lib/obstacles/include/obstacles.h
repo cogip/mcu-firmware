@@ -74,13 +74,15 @@ typedef struct obstacle_t obstacle_t;
  * @brief    Generic obstacle definition
  */
 struct obstacle_t {
-    obstacle_type_t type;
-    coords_t center;
+    obstacle_type_t type;           /**< obstacle type */
+    coords_t center;                /**< obstacle center */
+    double radius;                  /**< obstacle circumscribed circle radius */
+    double angle;                   /**< absolute angle */
     union {
         circle_t circle;
         polygon_t polygon;
         rectangle_t rectangle;
-    } form;
+    } form;                         /**< geometric form */
 };
 
 /**
@@ -108,11 +110,31 @@ typedef unsigned int obstacles_dyn_id_t;
 obstacles_t obstacles_init(const obstacles_params_t *obstacles_params);
 
 /**
+ * @brief Return bounding box of an obstacle. This bounding box has nb_vertices
+ * and has a radius of ((1 + radius_margin) * radius).
+ *
+ * @param[in]   obstacle        obstacle
+ * @param[in]   nb_vertices     number of bounding box vertices
+ * @param[in]   radius_margin   radius margin
+ *
+ * @return                      bounding box polygon
+ */
+polygon_t obstacles_compute_obstacle_bounding_box(const obstacle_t *obstacle,
+                                                  const uint8_t nb_points, double radius_margin);
+
+/**
+ * @brief Return the obstacle circumscribed circle radius
+ * @param[in]   obstacle      obstacle
+ * @return                    radius
+ */
+double obstacles_compute_radius(const obstacle_t *obstacle);
+
+/**
  * @brief Return the default circle obstacle radius
  * @param[in]   obstacles_id  obstacles id
  * @return                    radius
  */
-double obstacles_default_circle_radius(const obstacles_t obstacles_id);
+double obstacles_get_default_circle_radius(const obstacles_t obstacles_id);
 
 /**
  * @brief Return the minimal distance of obstacle detection

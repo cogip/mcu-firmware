@@ -24,6 +24,7 @@
 
 /* Project includes */
 #include "obstacles.h"
+#include "utils.h"
 
 /**
  * @brief Compute the distance between two points A and B.
@@ -54,6 +55,26 @@ bool collisions_is_point_in_circle(const circle_t *circle, const coords_t *p);
  * @return                  true if point is in polygon, false otherwise
  */
 bool collisions_is_point_in_polygon(const polygon_t *polygon, const coords_t *p);
+
+/**
+ * @brief Compute polygon center
+ *
+ * @param[in]   polygon     polygon
+ *
+ * @return                  polygon center coordinates
+ */
+coords_t collisions_compute_polygon_center(const polygon_t *polygon);
+
+/**
+ * @brief Return the radius of a polygon (the circle radius which contains all
+ * polygon points). If center is NULL, the center is computed.
+ *
+ * @param[in]   polygon     polygon
+ * @param[in]   center      center of the polygon
+ *
+ * @return                  polygon radius
+ */
+double collisions_compute_polygon_radius(const polygon_t *polygon, const coords_t *center);
 
 /**
  * @brief Check if the given point is inside obstacle, whatever its type.

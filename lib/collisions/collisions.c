@@ -34,6 +34,40 @@ bool collisions_is_point_in_circle(const circle_t *circle, const coords_t *p)
     }
 }
 
+coords_t collisions_compute_polygon_center(const polygon_t *polygon)
+{
+    double sum_x = 0;
+    double sum_y = 0;
+
+    for (uint8_t i = 0; i < polygon->count; i++) {
+        sum_x += polygon->points[i].x;
+        sum_y += polygon->points[i].y;
+    }
+
+    return (coords_t){
+               .x = sum_x / polygon->count,
+               .y = sum_y / polygon->count
+    };
+}
+
+double collisions_compute_polygon_radius(const polygon_t *polygon, const coords_t *center)
+{
+    double radius = 0;
+    coords_t computed_center;
+
+    if (!center) {
+        computed_center = collisions_compute_polygon_center(polygon);
+        center = &computed_center;
+    }
+
+    for (uint8_t i = 0; i < polygon->count; i++) {
+        radius = MAX(radius, collisions_distance_points(center, &polygon->points[i]));
+    }
+
+    return radius;
+}
+
+
 bool collisions_is_point_in_polygon(const polygon_t *polygon, const coords_t *p)
 {
     for (uint8_t i = 0; i < polygon->count; i++) {

@@ -128,13 +128,20 @@ static void _update_dynamic_obstacles_from_lidar(const obstacles_t obstacles_id,
         obstacle_angle = (int16_t)obstacle_angle % 360;
         obstacle_angle = DEG2RAD(obstacle_angle);
 
-        obstacles_add(obstacles_id, (obstacle_t){
+        coords_t center = {
+            .x = origin->coords.x + distance * cos(obstacle_angle),
+            .y = origin->coords.y + distance * sin(obstacle_angle),
+        };
+
+        double radius = obstacles_get_default_circle_radius(obstacles_id);
+
+        obstacles_add(obstacles_id, (obstacle_t) {
             .type = OBSTACLE_CIRCLE,
-            .form.circle.center = {
-                .x = origin->coords.x + distance * cos(obstacle_angle),
-                .y = origin->coords.y + distance * sin(obstacle_angle),
-            },
-            .form.circle.radius = obstacles_default_circle_radius(obstacles_id),
+            .form.circle.center = center,
+            .form.circle.radius = radius,
+            .center = center,
+            .radius = radius,
+            .angle = 0
         });
     }
 

@@ -158,6 +158,7 @@
  * @name Avoidance characteristics
  * @{
  */
+#define OBSTACLES_BB_NB_VERTICES            6                       /**< Obstacle bounding box vertices number */
 #define OBSTACLES_BB_RADIUS_MARGIN          0.2                     /**< Obstacle circle bounding box mark-up */
 #define OBSTACLE_DEFAULT_CIRCLE_RADIUS      400                     /**< Obscale circle radius */
 #define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10                      /**< Minimum obstacle detection treshold */
