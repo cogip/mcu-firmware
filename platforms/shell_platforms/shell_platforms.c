@@ -11,6 +11,7 @@
 #include "periph/qdec.h"
 
 /* Project includes */
+#include "avoidance.h"
 #include "obstacles.h"
 #include "platform.h"
 #include "ctrl.h"
@@ -40,8 +41,8 @@ static int _cmd_print_state(int argc, char **argv)
         "\"pose_order\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
         "\"cycle\":%" PRIu32 ","
         "\"speed_current\":{\"distance\":%lf,\"angle\":%lf},"
-        "\"speed_order\":{\"distance\":%lf,\"angle\":%lf}"
-        "}\n",
+        "\"speed_order\":{\"distance\":%lf,\"angle\":%lf},"
+        "\"path\": ",
         ctrl->control.current_mode,
         ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x, ctrl->control.pose_current.coords.y,
         ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x, ctrl->control.pose_order.coords.y,
@@ -49,6 +50,8 @@ static int _cmd_print_state(int argc, char **argv)
         ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
         ctrl->control.speed_order.distance, ctrl->control.speed_order.angle
         );
+    avoidance_print_path(stdout);
+    printf("}\n");
 
     return EXIT_SUCCESS;
 }
@@ -128,6 +131,17 @@ int _cmd_print_obstacles(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+int _cmd_print_avoidance_path(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    avoidance_print_path(stdout);
+    fprintf(stdout, "\n");
+
+    return EXIT_SUCCESS;
+}
+
 void pf_shell_init(void)
 {
     ctrl = pf_get_ctrl();
@@ -136,6 +150,8 @@ void pf_shell_init(void)
     static const shell_command_t global_commands[] = {
         { "_state", "Print current state", _cmd_print_state },
         { "_dyn_obstacles", "Print dynamic obstacles", _cmd_print_obstacles },
+        { "_avoidance_path", "Print avoidance current path",
+          _cmd_print_avoidance_path },
 #ifdef MODULE_SHMEM
         SHMEM_SET_KEY_CMD,
 #endif
