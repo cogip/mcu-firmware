@@ -41,8 +41,7 @@ static int _cmd_print_state(int argc, char **argv)
         "\"pose_order\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
         "\"cycle\":%" PRIu32 ","
         "\"speed_current\":{\"distance\":%lf,\"angle\":%lf},"
-        "\"speed_order\":{\"distance\":%lf,\"angle\":%lf},"
-        "\"path\": ",
+        "\"speed_order\":{\"distance\":%lf,\"angle\":%lf}",
         ctrl->control.current_mode,
         ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x, ctrl->control.pose_current.coords.y,
         ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x, ctrl->control.pose_order.coords.y,
@@ -50,7 +49,13 @@ static int _cmd_print_state(int argc, char **argv)
         ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
         ctrl->control.speed_order.distance, ctrl->control.speed_order.angle
         );
+
+    printf(",\"path\":");
     avoidance_print_path(stdout);
+
+    printf(",\"obstacles\":");
+    obstacles_print_all_json(stdout);
+
     printf("}\n");
 
     return EXIT_SUCCESS;
@@ -121,16 +126,6 @@ int pf_motors_test(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-int _cmd_print_obstacles(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    obstacles_print_all_json(stdout);
-
-    return EXIT_SUCCESS;
-}
-
 int _cmd_print_avoidance_path(int argc, char **argv)
 {
     (void)argc;
@@ -149,7 +144,6 @@ void pf_shell_init(void)
     /* Global commands */
     static const shell_command_t global_commands[] = {
         { "_state", "Print current state", _cmd_print_state },
-        { "_dyn_obstacles", "Print dynamic obstacles", _cmd_print_obstacles },
         { "_avoidance_path", "Print avoidance current path",
           _cmd_print_avoidance_path },
 #ifdef MODULE_SHMEM
