@@ -59,12 +59,15 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
     pose_t pose_to_reach = ctrl_get_pose_to_reach(ctrl);
     /* Avoidance graph position index. This index increments on each
      * intermediate pose used to reach the current path pose */
-    static int avoidance_index = -1;
+    static int avoidance_index = 1;
+    /* Avoidance graph computing status */
+    bool avoidance_status = false;
     /* Control variable if there is still at least a reachable pose in the
      * path */
     int nb_pose_reachable = 0;
     /* Recompute avoidance graph if not 0 */
-    bool avoidance_update = is_colliding(robot_pose, &pose_to_reach);
+    bool avoidance_update = avoidance_check_recompute(robot_pose,
+                                                      &pose_to_reach);
 
     /* Ask to the controller if the targeted position has been reached */
     if (ctrl_is_pose_reached(ctrl)) {
@@ -79,8 +82,8 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
 
             /* If in automatic planner mode */
             if (allow_change_path_pose) {
-                /* If it exists launch action associated to the point and increment
-                 * the position to reach in the path */
+                /* If it exists launch action associated to the point and
+                 * increment the position to reach in the path */
                 if (current_path_pos->act) {
                     DEBUG("planner: action launched!\n");
                     (*(current_path_pos->act))();
@@ -94,15 +97,17 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
 
             /* As current path pose could have changed, avoidance graph needs
              * to be recomputed */
-            avoidance_update = TRUE;
+            avoidance_update = true;
         }
-        else if ((!allow_change_path_pose) && (!ctrl_is_pose_intermediate(ctrl))) {
+        else if ((!allow_change_path_pose)
+                 && (!ctrl_is_pose_intermediate(ctrl))) {
             /* Update current path targeted position in case it has changed */
             current_path_pos = path_get_current_pose(path);
             avoidance_update = TRUE;
         }
-        else if (!is_colliding(robot_pose, &current_path_pos->pos)) {
-            avoidance_update = 1;
+        else if (!avoidance_check_recompute(robot_pose,
+                                            &current_path_pos->pos)) {
+            avoidance_update = true;
         }
         /* If it is an intermediate pose, just go to the next one in
          * avoidance graph */
@@ -123,7 +128,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
         current_path_pos = path_get_current_pose(path);
         /* As current path pose has changed, avoidance graph needs to be
          * recomputed */
-        avoidance_update = TRUE;
+        avoidance_update = true;
     }
 
     /* If the avoidance graph needs to be recomputed */
@@ -135,14 +140,15 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
          * to reach the targeted path current position.
          * The current intermediate position is then pointed by avoidance_index
          */
-        avoidance_index = update_graph(robot_pose, &(current_path_pos->pos));
+        avoidance_status = avoidance_build_graph(robot_pose,
+                                                 &(current_path_pos->pos));
 
         /* In case the targeted position is not reachable, select the
          * next position in the path. If no position is reachable, return an
          * error */
         nb_pose_reachable = path->nb_poses;
-        while ((avoidance_index < 0) && (nb_pose_reachable-- > 0)) {
-            if (avoidance_index == -1) {
+        while ((!avoidance_status) && (nb_pose_reachable-- > 0)) {
+            if (!avoidance_status) {
                 if (!allow_change_path_pose) {
                     goto trajectory_get_route_update_error;
                 }
@@ -151,18 +157,21 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
                     goto trajectory_get_route_update_error;
                 }
                 current_path_pos = path_get_current_pose(path);
-                avoidance_index = update_graph(robot_pose, &(current_path_pos->pos));
+                avoidance_status = avoidance_build_graph(robot_pose,
+                                                         &(current_path_pos->pos));
             }
         }
         if (nb_pose_reachable < 0) {
             DEBUG("planner: No position reachable!\n");
             goto trajectory_get_route_update_error;
         }
+
+        avoidance_index = 1;
     }
 
     /* At this point the avoidance graph is valid and the next targeted
      * point can be retrieved. */
-    pose_to_reach = avoidance(avoidance_index);
+    pose_to_reach = avoidance_get_pose(avoidance_index);
 
     /* Check if the point to reach is the current path position to reach */
     if ((pose_to_reach.coords.x == current_path_pos->pos.coords.x)
