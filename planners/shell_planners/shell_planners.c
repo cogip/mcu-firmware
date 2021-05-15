@@ -57,7 +57,7 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     (void)argv;
 
     path_t *path = pf_get_path();
-    const path_pose_t *current_path_pos = path_get_current_path_pos(path);
+    const path_pose_t *current_path_pos = path_get_current_pose(path);
 
     if (current_path_pos->act) {
         puts("Launch callback!");
