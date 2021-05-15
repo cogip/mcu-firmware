@@ -54,7 +54,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
                                        path_t *path)
 {
     /* Current final path pose to reach */
-    const path_pose_t *current_path_pos = path_get_current_path_pos(path);
+    const path_pose_t *current_path_pos = path_get_current_pose(path);
     /* Pose to reach by the controller */
     pose_t pose_to_reach = ctrl_get_pose_to_reach(ctrl);
     /* Avoidance graph position index. This index increments on each
@@ -90,7 +90,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
                 path_increment_current_pose_idx(path);
             }
             /* Update current path targeted position in case it has changed */
-            current_path_pos = path_get_current_path_pos(path);
+            current_path_pos = path_get_current_pose(path);
 
             /* As current path pose could have changed, avoidance graph needs
              * to be recomputed */
@@ -98,7 +98,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
         }
         else if ((!allow_change_path_pose) && (!ctrl_is_pose_intermediate(ctrl))) {
             /* Update current path targeted position in case it has changed */
-            current_path_pos = path_get_current_path_pos(path);
+            current_path_pos = path_get_current_pose(path);
             avoidance_update = TRUE;
         }
         /* If it is an intermediate pose, just go to the next one in
@@ -117,7 +117,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
         }
         /* Increment the position to reach in the path */
         path_increment_current_pose_idx(path);
-        current_path_pos = path_get_current_path_pos(path);
+        current_path_pos = path_get_current_pose(path);
         /* As current path pose has changed, avoidance graph needs to be
          * recomputed */
         avoidance_update = TRUE;
@@ -137,17 +137,17 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
         /* In case the targeted position is not reachable, select the
          * next position in the path. If no position is reachable, return an
          * error */
-        nb_pose_reachable = path->nb_pose;
+        nb_pose_reachable = path->nb_poses;
         while ((avoidance_index < 0) && (nb_pose_reachable-- > 0)) {
             if (avoidance_index == -1) {
                 if (!allow_change_path_pose) {
                     goto trajectory_get_route_update_error;
                 }
                 path_increment_current_pose_idx(path);
-                if (current_path_pos == path_get_current_path_pos(path)) {
+                if (current_path_pos == path_get_current_pose(path)) {
                     goto trajectory_get_route_update_error;
                 }
-                current_path_pos = path_get_current_path_pos(path);
+                current_path_pos = path_get_current_pose(path);
                 avoidance_index = update_graph(robot_pose, &(current_path_pos->pos));
             }
         }
@@ -199,7 +199,7 @@ void *task_planner(void *arg)
 
     /* object context initialisation */
     path->current_pose_idx = 0;
-    current_path_pos = path_get_current_path_pos(path);
+    current_path_pos = path_get_current_pose(path);
     initial_pose = current_path_pos->pos;
     ctrl_set_pose_current(ctrl, &initial_pose);
     ctrl_set_speed_order(ctrl, speed_order);
@@ -214,7 +214,7 @@ void *task_planner(void *arg)
             goto yield_point;
         }
 
-        current_path_pos = path_get_current_path_pos(path);
+        current_path_pos = path_get_current_pose(path);
 
         /* Update speed order to max speed defined value in the new point to reach */
         speed_order.distance = path_get_current_max_speed(path);
