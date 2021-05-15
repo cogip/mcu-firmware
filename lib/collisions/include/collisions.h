@@ -38,24 +38,22 @@ double collisions_distance_points(const pose_t *a, const pose_t *b);
 /**
  * @brief Check if the given point is inside a circle.
  *
+ * @param[in]   circle      circle
  * @param[in]   p           point to check
- * @param[in]   center      center of circle
- * @param[in]   radius      radius of circle
  *
  * @return                  true if point is in circle, false otherwise
  */
-bool collisions_is_point_in_circle(const pose_t *p, const pose_t *center,
-                                   const uint32_t radius);
+bool collisions_is_point_in_circle(const circle_t *circle, const pose_t *p);
 
 /**
  * @brief Check if the given point is inside a polygon.
  *
- * @param[in]   p           point to check
  * @param[in]   polygon     polygon
+ * @param[in]   p           point to check
  *
  * @return                  true if point is in polygon, false otherwise
  */
-bool collisions_is_point_in_polygon(const pose_t *p, const polygon_t *polygon);
+bool collisions_is_point_in_polygon(const polygon_t *polygon, const pose_t *p);
 
 /**
  * @brief Check if the given point is inside obstacle, whatever its type.
@@ -100,26 +98,24 @@ bool collisions_is_segment_crossing_segment(const pose_t *a, const pose_t *b,
  *
  * @param[in]   a           point A
  * @param[in]   b           point B
- * @param[in]   center      center of circle
- * @param[in]   radius      radius of circle
+ * @param[in]   circle      circle
  *
  * @return                  true if (AB) crosses circle, false otherwise
  */
 bool collisions_is_line_crossing_circle(const pose_t *a, const pose_t *b,
-                                        const pose_t *center, const uint32_t radius);
+                                        const circle_t *circle);
 
 /**
  * @brief Check if a segment defined by two points A,B is crossing a circle.
  *
  * @param[in]   a           point A
  * @param[in]   b           point B
- * @param[in]   center      center of circle
- * @param[in]   radius      radius of circle
+ * @param[in]   circle      circle
  *
  * @return                  true if [AB] crosses circle, false otherwise
  */
 bool collisions_is_segment_crossing_circle(const pose_t *a, const pose_t *b,
-                                           const pose_t *center, const uint32_t radius);
+                                           const circle_t *circle);
 
 /**
  * @brief Check if a point C is placed on a segment defined by two points A,B.
@@ -151,5 +147,27 @@ double collisions_compute_slope(const pose_t *a, const pose_t *b);
  * @return                  (AB) ordinate
  */
 double collisions_compute_ordinate(double slope, const pose_t *b);
+
+/**
+ * @brief Find the nearest point of polygon perimeter from given point.
+ *
+ * @param[in]   polygon     polygon
+ * @param[in]   p           point to check
+ *
+ * @return                  position of nearest point
+ */
+pose_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
+                                                const pose_t *p);
+
+/**
+ * @brief Find the nearest point of circle perimeter from given point.
+ *
+ * @param[in]   circle      circle
+ * @param[in]   p           point to check
+ *
+ * @return                  position of nearest point
+ */
+pose_t collisions_find_nearest_point_in_circle(const circle_t *circle,
+                                               const pose_t *p);
 
 /** @} */

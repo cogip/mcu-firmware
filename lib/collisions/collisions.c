@@ -12,12 +12,11 @@ double collisions_distance_points(const pose_t *a, const pose_t *b)
                 + (b->y - a->y) * (b->y - a->y));
 }
 
-bool collisions_is_point_in_circle(const pose_t *p, const pose_t *center,
-                                   const uint32_t radius)
+bool collisions_is_point_in_circle(const circle_t *circle, const pose_t *p)
 {
-    double d = collisions_distance_points(center, p);
+    double d = collisions_distance_points(&circle->center, p);
 
-    if (d * d > radius * radius) {
+    if (d * d > circle->radius * circle->radius) {
         return false;
     }
     else {
@@ -25,30 +24,11 @@ bool collisions_is_point_in_circle(const pose_t *p, const pose_t *center,
     }
 }
 
-bool collisions_is_point_in_polygon(const pose_t *p, const polygon_t *polygon)
+bool collisions_is_point_in_polygon(const polygon_t *polygon, const pose_t *p)
 {
     for (uint8_t i = 0; i < polygon->count; i++) {
         pose_t a = polygon->points[i];
         pose_t b = (i == (polygon->count - 1) ? polygon->points[0] : polygon->points[i + 1]);
-        vector_t ab, ap;
-
-        ab.x = b.x - a.x;
-        ab.y = b.y - a.y;
-        ap.x = p->x - a.x;
-        ap.y = p->y - a.y;
-
-        if (ab.x * ap.y - ab.y * ap.x <= 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool collisions_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
-{
-    for (uint8_t i = 0; i < 4; i++) {
-        pose_t a = obstacle->points[i];
-        pose_t b = (i == (4 - 1) ? obstacle->points[0] : obstacle->points[i + 1]);
         vector_t ab, ap;
 
         ab.x = b.x - a.x;
@@ -93,9 +73,9 @@ bool collisions_is_segment_crossing_segment(const pose_t *a, const pose_t *b,
 }
 
 bool collisions_is_line_crossing_circle(const pose_t *a, const pose_t *b,
-                                        const pose_t *center, const uint32_t radius)
+                                        const circle_t *circle)
 {
-    const pose_t *c = center;
+    const pose_t *c = &circle->center;
 
     pose_t vect_ab;
 
@@ -120,7 +100,7 @@ bool collisions_is_line_crossing_circle(const pose_t *a, const pose_t *b,
 
     /* If CI norm is less or equal to the circle radius, point I is inside the
      * circle */
-    if (ci < radius) {
+    if (ci < circle->radius) {
         return true;
     }
     else {
@@ -129,18 +109,18 @@ bool collisions_is_line_crossing_circle(const pose_t *a, const pose_t *b,
 }
 
 bool collisions_is_segment_crossing_circle(const pose_t *a, const pose_t *b,
-                                           const pose_t *center, const uint32_t radius)
+                                           const circle_t *circle)
 {
-    const pose_t *c = center;
+    const pose_t *c = &circle->center;
 
-    if (!collisions_is_line_crossing_circle(a, b, center, radius)) {
+    if (!collisions_is_line_crossing_circle(a, b, circle)) {
         return false;
     }
 
-    if (collisions_is_point_in_circle(a, center, radius)) {
+    if (collisions_is_point_in_circle(circle, a)) {
         return true;
     }
-    if (collisions_is_point_in_circle(b, center, radius)) {
+    if (collisions_is_point_in_circle(circle, b)) {
         return true;
     }
 
@@ -188,4 +168,33 @@ inline double collisions_compute_slope(const pose_t *a, const pose_t *b)
 inline double collisions_compute_ordinate(double slope, const pose_t *b)
 {
     return (b->y - slope * b->x);
+}
+
+pose_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
+                                                const pose_t *p)
+{
+    double min = UINT32_MAX;
+    const pose_t *pose_tmp = p;
+
+    for (int j = 0; j < polygon->count; j++) {
+        double distance = collisions_distance_points(p, &polygon->points[j]);
+        if (distance < min) {
+            min = distance;
+            pose_tmp = &polygon->points[j];
+        }
+    }
+
+    return *pose_tmp;
+}
+
+pose_t collisions_find_nearest_point_in_circle(const circle_t *circle,
+                                               const pose_t *p)
+{
+    double slope = collisions_compute_slope(&circle->center, p);
+
+    return (pose_t) {
+               .x = circle->center.x * cos(slope),
+               .y = circle->center.y * sin(slope),
+               .O = 0,
+    };
 }

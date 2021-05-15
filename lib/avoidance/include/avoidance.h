@@ -1,6 +1,7 @@
 #pragma once
 
 /* Standard includes */
+#include <stdbool.h>
 #include <stdint.h>
 
 /* Project includes */
@@ -16,3 +17,4 @@
 pose_t avoidance(uint8_t index);
 int update_graph(const pose_t *s, const pose_t *f);
 void build_avoidance_graph(void);
+bool is_colliding(const pose_t *start, const pose_t *stop);

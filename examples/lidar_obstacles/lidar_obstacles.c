@@ -13,7 +13,7 @@
 #include "lidar_utils.h"
 #include "obstacles.h"
 
-/* Number of angles without obstacle to ignore between two angles with obstacles */
+/* Number of angles without obstacle to ignore between two angles with obstacle */
 #define NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE 3
 
 /* Periodic task */
@@ -30,9 +30,9 @@ obstacles_t lidar_obstacles = OBSTACLES_NUMOF;
 
 /* Lidar obstacles parameters */
 obstacles_params_t lidar_obstacles_params = {
-    .default_width = OBSTACLE_WIDTH * 2,
-    .min_distance = ROBOT_WIDTH / 2 + 100,
-    .max_distance = LIDAR_MAX_DISTANCE - OBSTACLE_WIDTH / 2 + BEACON_SUPPORT_DIAMETER / 2
+    .default_radius = OBSTACLE_RADIUS,
+    .min_distance = ROBOT_WIDTH / 2,
+    .max_distance = LIDAR_MAX_DISTANCE,
 };
 
 /* Find consecutive obstacles and keep the nearest at the middle */
@@ -76,7 +76,8 @@ static bool _filter_distances(const uint16_t *raw_distances, uint16_t *filtered_
                 continue;
             }
 
-            /* Don't exit the loop if only 3 consecutive angles have no obstacle */
+            /* Don't exit the loop if only NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE consecutive angles have
+             * no obstacle */
             bool continue_loop = false;
             for (uint32_t next = last + 1; next < last + NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE; next++) {
                 if (raw_distances[next % LDS01_NB_ANGLES] < lidar_obstacles_params.max_distance) {
@@ -112,7 +113,7 @@ static void *_thread_obstacle_updater(void *arg)
 
         lds01_get_distances(lidar_get_device(), raw_distances);
         /* A Lidar distance is from the robot center to the edge of beacon support */
-        /* Adjust the distance to point the center of the beacon support width */
+        /* Adjust the distance to point the center of the beacon support radius */
         for (uint32_t i = 0; i < LDS01_NB_ANGLES; i++) {
             raw_distances[i] += BEACON_SUPPORT_DIAMETER / 2;
         }

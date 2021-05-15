@@ -4,6 +4,8 @@
 /* RIOT includes */
 #include "mutex.h"
 
+/* Project includes */
+#include "collisions.h"
 #include "obstacles.h"
 
 #define ENABLE_DEBUG (0)
@@ -45,6 +47,13 @@ obstacles_t obstacles_init(const obstacles_params_t *obstacles_params)
     mutex_init(&obstacles_context->lock);
     obstacles_initialized++;
     return id;
+}
+
+double obstacles_default_radius(const obstacles_t obstacles_id)
+{
+    assert(obstacles_id < OBSTACLES_NUMOF);
+    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
+    return obstacles_context->params.default_radius;
 }
 
 size_t obstacles_size(const obstacles_t obstacles_id)
@@ -96,6 +105,53 @@ void obstacles_unlock(const obstacles_t obstacles_id)
     mutex_unlock(&obstacles_context->lock);
 }
 
+bool obstacles_is_point_in_obstacles(const pose_t *p, const obstacle_t *filter)
+{
+    for (size_t obstacles_id = 0; obstacles_id < OBSTACLES_NUMOF; obstacles_id++) {
+        for (size_t j = 0; j < obstacles_size(obstacles_id); j++) {
+            const obstacle_t *obstacle = obstacles_get(obstacles_id, j);
+            if (filter == obstacle) {
+                continue;
+            }
+            if (obstacles_is_point_in_obstacle(obstacle, p)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
+{
+    switch (obstacle->type) {
+        case OBSTACLE_POLYGON:
+            return collisions_is_point_in_polygon(&obstacle->form.polygon, p);
+        case OBSTACLE_CIRCLE:
+            return collisions_is_point_in_circle(&obstacle->form.circle, p);
+        default:
+            DEBUG("obstacle: Wrong type, should never happen, return false)");
+    }
+
+    return false;
+}
+
+pose_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
+                                                const pose_t *p)
+{
+    switch (obstacle->type) {
+        case OBSTACLE_POLYGON:
+            return collisions_find_nearest_point_in_polygon(&obstacle->form.polygon, p);
+        case OBSTACLE_CIRCLE:
+            return collisions_find_nearest_point_in_circle(&obstacle->form.circle, p);
+        default:
+            DEBUG("obstacle: Wrong type, should never happen, return false)");
+    }
+
+    /* Should never happen */
+    return *p;
+}
+
 void obstacles_update_from_lidar(const obstacles_t obstacles_id, const pose_t *origin, const uint16_t *distances)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
@@ -118,40 +174,13 @@ void obstacles_update_from_lidar(const obstacles_t obstacles_id, const pose_t *o
         obstacle_angle = (int16_t)obstacle_angle % 360;
         obstacle_angle = DEG2RAD(obstacle_angle);
 
-        /* Right reference*/
-        pose_t ref_pos_right = {
-            .x = origin->x + (obstacles_context->params.default_width / 2) * cos(obstacle_angle - M_PI / 2),
-            .y = origin->y + (obstacles_context->params.default_width / 2) * sin(obstacle_angle - M_PI / 2),
-            .O = obstacle_angle
-        };
-
-        /* Left reference */
-        pose_t ref_pos_left = {
-            .x = origin->x + (obstacles_context->params.default_width / 2) * cos(obstacle_angle + M_PI / 2),
-            .y = origin->y + (obstacles_context->params.default_width / 2) * sin(obstacle_angle + M_PI / 2),
-            .O = obstacle_angle
-        };
-
         obstacles_context->obstacles[obstacles_context->nb_obstacles] = (obstacle_t){
-            .angle = obstacle_angle,
-            .points = {
-                {
-                    .x = ref_pos_right.x + (distance - obstacles_context->params.default_width / 2) * cos(ref_pos_right.O),
-                    .y = ref_pos_right.y + (distance - obstacles_context->params.default_width / 2) * sin(ref_pos_right.O)
-                },
-                {
-                    .x = ref_pos_right.x + (distance + obstacles_context->params.default_width / 2) * cos(ref_pos_right.O),
-                    .y = ref_pos_right.y + (distance + obstacles_context->params.default_width / 2) * sin(ref_pos_right.O)
-                },
-                {
-                    .x = ref_pos_left.x + (distance + obstacles_context->params.default_width / 2) * cos(ref_pos_left.O),
-                    .y = ref_pos_left.y + (distance + obstacles_context->params.default_width / 2) * sin(ref_pos_left.O)
-                },
-                {
-                    .x = ref_pos_left.x + (distance - obstacles_context->params.default_width / 2) * cos(ref_pos_left.O),
-                    .y = ref_pos_left.y + (distance - obstacles_context->params.default_width / 2) * sin(ref_pos_left.O)
-                }
-            }
+            .type = OBSTACLE_CIRCLE,
+            .form.circle.center = {
+                .x = origin->x + distance * cos(obstacle_angle),
+                .y = origin->y + distance * sin(obstacle_angle),
+            },
+            .form.circle.radius = obstacles_default_radius(obstacles_id),
         };
 
         obstacles_context->nb_obstacles++;
@@ -170,23 +199,13 @@ static void _print_list(const obstacles_t obstacles_id, FILE *out)
             fflush(out);
         }
 
-        fprintf(out, "{ \"angle\": %lf, \"points\": [", obstacles_context->obstacles[i].angle);
-        fflush(out);
-        for (int8_t j = 0; j < 4; j++) {
-            if (j > 0) {
-                fprintf(out, ", ");
-                fflush(out);
-            }
-            fprintf(
-                out,
-                "{\"x\": %lf, \"y\": %lf, \"O\": %lf}",
-                obstacles_context->obstacles[i].points[j].x,
-                obstacles_context->obstacles[i].points[j].y,
-                obstacles_context->obstacles[i].points[j].O
-                );
-            fflush(out);
-        }
-        fprintf(out, "]}");
+        fprintf(
+            out,
+            "{\"x\":%lf,\"y\":%lf,\"radius\":%lf}",
+            obstacles_context->obstacles[i].form.circle.center.x,
+            obstacles_context->obstacles[i].form.circle.center.y,
+            obstacles_context->obstacles[i].form.circle.radius
+            );
         fflush(out);
     }
 }

@@ -8,27 +8,31 @@
 #include "platform.h"
 #include "utils.h"
 
-static const polygon_t borders = {
-    .points = {
-        {
-            .x = AVOIDANCE_BORDER_X_MIN,
-            .y = AVOIDANCE_BORDER_Y_MIN
+static const obstacle_t borders = {
+    .type = OBSTACLE_POLYGON,
+    .form.polygon = {
+        .points = {
+            {
+                .x = AVOIDANCE_BORDER_X_MIN,
+                .y = AVOIDANCE_BORDER_Y_MIN
+            },
+            {
+                .x = AVOIDANCE_BORDER_X_MAX,
+                .y = AVOIDANCE_BORDER_Y_MIN
+            },
+            {
+                .x = AVOIDANCE_BORDER_X_MAX,
+                .y = AVOIDANCE_BORDER_Y_MAX
+            },
+            {
+                .x = AVOIDANCE_BORDER_X_MIN,
+                .y = AVOIDANCE_BORDER_Y_MAX
+            },
         },
-        {
-            .x = AVOIDANCE_BORDER_X_MAX,
-            .y = AVOIDANCE_BORDER_Y_MIN
-        },
-        {
-            .x = AVOIDANCE_BORDER_X_MAX,
-            .y = AVOIDANCE_BORDER_Y_MAX
-        },
-        {
-            .x = AVOIDANCE_BORDER_X_MIN,
-            .y = AVOIDANCE_BORDER_Y_MAX
-        },
-    },
-    .count = 4,
+        .count = 4,
+    }
 };
+
 
 /* List of visible points */
 static pose_t valid_points[MAX_POINTS];
@@ -39,19 +43,9 @@ static uint64_t graph[GRAPH_MAX_VERTICES];
 static pose_t start_position = { .x = 0, .y = 0 };
 static pose_t finish_position = { .x = 0, .y = 0 };
 
-static int8_t _get_point_index_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
-{
-    for (uint8_t i = 0; i < 4; i++) {
-        if ((obstacle->points[i].x == p->x) && (obstacle->points[i].y == p->y)) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 static pose_t _dijkstra(uint16_t target, uint16_t index)
 {
-    uint8_t checked[GRAPH_MAX_VERTICES];
+    bool checked[GRAPH_MAX_VERTICES];
     double distance[GRAPH_MAX_VERTICES];
     uint16_t v;
     int i;
@@ -63,7 +57,7 @@ static pose_t _dijkstra(uint16_t target, uint16_t index)
     int start = 0;
 
     for (int i = 0; i <= valid_points_count; i++) {
-        checked[i] = FALSE;
+        checked[i] = false;
         distance[i] = DIJKSTRA_MAX_DISTANCE;
         parent[i] = -1;
     }
@@ -74,9 +68,9 @@ static pose_t _dijkstra(uint16_t target, uint16_t index)
         goto dijkstra_error_no_destination;
     }
 
-    while ((v != target) && (checked[v] == FALSE)) {
+    while ((v != target) && (checked[v] == false)) {
         min_distance = DIJKSTRA_MAX_DISTANCE;
-        checked[v] = TRUE;
+        checked[v] = true;
         for (i = 0; i < valid_points_count; i++) {
             if (graph[v] & (1 << i)) {
                 weight = (valid_points[v].x - valid_points[i].x);
@@ -91,7 +85,7 @@ static pose_t _dijkstra(uint16_t target, uint16_t index)
             }
         }
         for (i = 1; i < valid_points_count; i++) {
-            if ((checked[i] == FALSE) && (min_distance > distance[i])) {
+            if ((checked[i] == false) && (min_distance > distance[i])) {
                 min_distance = distance[i];
                 v = i;
             }
@@ -133,33 +127,19 @@ int update_graph(const pose_t *s, const pose_t *f)
     int index = 1;
     obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
 
-    if (!collisions_is_point_in_polygon(&finish_position, &borders)) {
+    if (!obstacles_is_point_in_obstacle(&borders, &finish_position)) {
         goto update_graph_error_finish_position;
     }
 
-    /* Check that start and destination point are not in a polygon */
+    /* Check that start and destination point are not in an obstacle */
     for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
         const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-        if (collisions_is_point_in_obstacle(obstacle, &finish_position)) {
+        if (obstacles_is_point_in_obstacle(obstacle, &finish_position)) {
             goto update_graph_error_finish_position;
         }
-        if (collisions_is_point_in_obstacle(obstacle, &start_position)) {
-            // find nearest polygon point
-            double min = DIJKSTRA_MAX_DISTANCE;
-            const pose_t *pose_tmp = &start_position;
-            for (int j = 0; j < 4; j++) {
-                if (!collisions_is_point_in_polygon(&obstacle->points[j], &borders)) {
-                    continue;
-                }
-
-                double distance = collisions_distance_points(&start_position, &obstacle->points[j]);
-                if (distance < min) {
-                    min = distance;
-                    pose_tmp = &obstacle->points[j];
-                }
-            }
-
-            start_position = *pose_tmp;
+        if (obstacles_is_point_in_obstacle(obstacle, &start_position)) {
+            start_position = obstacles_find_nearest_point_in_obstacle(obstacle,
+                                                                      &start_position);
             index = 0;
         }
     }
@@ -176,76 +156,99 @@ update_graph_error_finish_position:
     return AVOIDANCE_GRAPH_ERROR;
 }
 
+void validate_obstacles(void)
+{
+    obstacles_dyn_id_t obstacles_dyn_id = pf_get_dyn_obstacles_id();
+
+    /* For each obstacle */
+    for (size_t i = 0; i < obstacles_size(obstacles_dyn_id); i++) {
+        const obstacle_t *obstacle = obstacles_get(obstacles_dyn_id, i);
+
+        /* Check if point is inside borders */
+        if (!obstacles_is_point_in_obstacle(&borders, &obstacle->form.circle.center)) {
+            continue;
+        }
+
+        /* If that point is not in an other polygon, shape it in a bounding
+         * box
+         */
+        if (!obstacles_is_point_in_obstacles(&obstacle->form.circle.center, obstacle)) {
+            polygon_t aabb = {
+                .points = {
+                    {
+                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                    },
+                    {
+                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                    },
+                    {
+                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                    },
+                    {
+                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                    },
+                },
+                .count = 4,
+            };
+
+            /* Validate bounding box */
+            for (uint8_t j = 0; j < aabb.count; j++) {
+                if ((obstacles_is_point_in_obstacle(&borders, &aabb.points[j]))
+                    && (!obstacles_is_point_in_obstacles(&aabb.points[j], NULL))) {
+                    valid_points[valid_points_count++] = aabb.points[j];
+                }
+            }
+        }
+    }
+}
+
+/* Build obstacle graph
+ * Each obstacle is a polygon.
+ * List all visible points: all points not contained in a polygon */
+bool is_colliding(const pose_t *start, const pose_t *stop)
+{
+    obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
+
+    /* Check if that segment crosses a polygon */
+    for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
+        const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
+
+        /* Check if obstacle  is inside borders */
+        if (!obstacles_is_point_in_obstacle(&borders, &obstacle->form.circle.center)) {
+            continue;
+        }
+        if (collisions_is_segment_crossing_circle(start, stop, &obstacle->form.circle)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /* Build obstacle graph
  * Each obstacle is a polygon.
  * List all visible points: all points not contained in a polygon */
 void build_avoidance_graph(void)
 {
+    validate_obstacles();
+
     obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
-
-    /* For each polygon */
-    for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
-        const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-        /* and for each vertice of that polygon */
-        for (int p = 0; p < 4; p++) {
-            uint8_t collide = FALSE;
-            /* Check if point is inside borders */
-            if (!collisions_is_point_in_polygon(&obstacle->points[p], &borders)) {
-                continue;
-            }
-
-            /* Check if this vertice is not inside an other polygon */
-            for (size_t j = 0; j < obstacles_size(obstacles_id); j++) {
-                const obstacle_t *obstacle2 = obstacles_get(obstacles_id, j);
-                if (i == j) {
-                    continue;
-                }
-                if (collisions_is_point_in_obstacle(obstacle2, &obstacle->points[p])) {
-                    collide = TRUE;
-                    break;
-                }
-            }
-            /* If that point is not in an other polygon, add it to the list of valid points */
-            if (!collide) {
-                valid_points[valid_points_count++] = obstacle->points[p];
-            }
-        }
-    }
 
     /* For each segment of the valid points list */
     for (int p = 0; p < valid_points_count; p++) {
         for (int p2 = p + 1; p2 < valid_points_count; p2++) {
-            uint8_t collide = FALSE;
+            bool collide = false;
             if (p != p2) {
                 /* Check if that segment crosses a polygon */
                 for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
                     const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-                    for (int v = 0; v < 4; v++) {
-                        pose_t p_next = ((v == 3) ? obstacle->points[0] : obstacle->points[v + 1]);
-
-                        if (collisions_is_segment_crossing_segment(&valid_points[p], &valid_points[p2], &obstacle->points[v], &p_next)) {
-                            collide = TRUE;
-                            break;
-                        }
-                        /* Special case of internal crossing of a polygon */
-                        int8_t index = _get_point_index_in_obstacle(obstacle, &valid_points[p]);
-                        int8_t index2 = _get_point_index_in_obstacle(obstacle, &valid_points[p2]);
-                        if ((index == 0) && (index2 == 3)) {
-                            continue;
-                        }
-                        if ((index2 == 0) && (index == 3)) {
-                            continue;
-                        }
-                        if ((index >= 0) && (index2 >= 0) && (abs(index - index2) != 1)) {
-                            collide = TRUE;
-                            break;
-                        }
-                        if (collisions_is_point_on_segment(&valid_points[p], &valid_points[p2], &obstacle->points[v])) {
-                            collide = TRUE;
-                            break;
-                        }
-                    }
-                    if (collide) {
+                    if (collisions_is_segment_crossing_circle(&valid_points[p],
+                                                              &valid_points[p2], &obstacle->form.circle)) {
+                        collide = true;
                         break;
                     }
                 }

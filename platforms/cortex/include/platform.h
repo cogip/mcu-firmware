@@ -65,11 +65,7 @@
  */
 #define ROBOT_WIDTH              354                    /**< Robot width (mm) */
 #define ROBOT_MARGIN             (ROBOT_WIDTH / 2)      /**< Point the most far from robot center (mm) */
-#define OBSTACLE_WIDTH           400                    /**< Obscale width */
 #define BEACON_SUPPORT_DIAMETER  70                     /**< Size of the beacon support (a cylinder of 70mm diameter to a cube of 100mm width) */
-#define LIDAR_MIN_DISTANCE       (ROBOT_MARGIN + 100)   /**< Minimum Lidar detection distance */
-#define LIDAR_MAX_DISTANCE       900                    /**< Maximum Lidar detection distance */
-#define LIDAR_MINIMUN_INTENSITY  1000                   /**< Minimum intensity required to validate a Lidar distance */
 
 #define PULSE_PER_MM             10.624                 /**< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER */
 #define WHEELS_DISTANCE          2974.72                /**< WHEELS_DISTANCE_MM * PULSE_PER_MM */
@@ -120,6 +116,15 @@
 /** @} */
 
 /**
+ * @name LIDAR characteristics
+ * @{
+ */
+#define LIDAR_MIN_DISTANCE                  (ROBOT_MARGIN)          /**< Minimum Lidar detection distance */
+#define LIDAR_MAX_DISTANCE                  1200                    /**< Maximum Lidar detection distance */
+#define LIDAR_MINIMUN_INTENSITY             1000                    /**< Minimum intensity required to validate a Lidar distance */
+/** @} */
+
+/**
  * @name Avoidance borders
  * Borders in which the robot can move (mm)
  * @{
@@ -153,12 +158,10 @@
  * @name Avoidance characteristics
  * @{
  */
-#define OBSTACLE_DYN_SIZE                   400 /**< Obstacle size */
-
-#define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10  /**< Minimum obstacle detection
-                                                   treshold */
-#define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200 /**< Maximum obstacle detection
-                                                   treshold */
+#define OBSTACLES_BB_RADIUS_MARGIN          0.2                     /**< Obstacle circle bounding box mark-up */
+#define OBSTACLE_RADIUS                     400                     /**< Obscale circle radius */
+#define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10                      /**< Minimum obstacle detection treshold */
+#define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200                     /**< Maximum obstacle detection treshold */
 /** @} */
 
 /**
