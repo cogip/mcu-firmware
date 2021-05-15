@@ -7,8 +7,8 @@
  */
 
 /**
- * @defgroup    sys_obstacles Obstacles module
- * @ingroup     sys
+ * @defgroup    lib_obstacles Obstacles module
+ * @ingroup     lib
  * @brief       Obstacles module
  *
  *
