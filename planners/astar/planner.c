@@ -24,11 +24,11 @@
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
 
-static uint8_t pln_started = FALSE;
+static uint8_t pln_started = false;
 
 /* Planner can automatically change next path pose to reach when current pose
  * is reached */
-static uint8_t allow_change_path_pose = TRUE;
+static uint8_t allow_change_path_pose = true;
 
 /* Periodic task */
 #define TASK_PERIOD_MS      (50)
@@ -41,13 +41,13 @@ void pln_set_allow_change_path_pose(uint8_t value)
 void pln_start(ctrl_t *ctrl)
 {
     ctrl_set_mode(ctrl, CTRL_MODE_RUNNING);
-    pln_started = TRUE;
+    pln_started = true;
 }
 
 void pln_stop(ctrl_t *ctrl)
 {
     ctrl_set_mode(ctrl, CTRL_MODE_STOP);
-    pln_started = FALSE;
+    pln_started = false;
 }
 
 static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
@@ -103,7 +103,7 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
                  && (!ctrl_is_pose_intermediate(ctrl))) {
             /* Update current path targeted position in case it has changed */
             current_path_pos = path_get_current_pose(path);
-            avoidance_update = TRUE;
+            avoidance_update = true;
         }
         else if (!avoidance_check_recompute(robot_pose,
                                             &current_path_pos->pos)) {
@@ -178,11 +178,11 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
         && (pose_to_reach.coords.y == current_path_pos->pos.coords.y)) {
         DEBUG("planner: Reaching final position\n");
         pose_to_reach.O = current_path_pos->pos.O;
-        ctrl_set_pose_intermediate(ctrl, FALSE);
+        ctrl_set_pose_intermediate(ctrl, false);
     }
     else {
         DEBUG("planner: Reaching intermediate position\n");
-        ctrl_set_pose_intermediate(ctrl, TRUE);
+        ctrl_set_pose_intermediate(ctrl, true);
     }
 
     ctrl_set_pose_to_reach(ctrl, pose_to_reach);
