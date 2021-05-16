@@ -13,20 +13,20 @@ static const obstacle_t borders = {
     .form.polygon = {
         .points = {
             {
-                .x = AVOIDANCE_BORDER_X_MIN,
-                .y = AVOIDANCE_BORDER_Y_MIN
+                .coords.x = AVOIDANCE_BORDER_X_MIN,
+                .coords.y = AVOIDANCE_BORDER_Y_MIN
             },
             {
-                .x = AVOIDANCE_BORDER_X_MAX,
-                .y = AVOIDANCE_BORDER_Y_MIN
+                .coords.x = AVOIDANCE_BORDER_X_MAX,
+                .coords.y = AVOIDANCE_BORDER_Y_MIN
             },
             {
-                .x = AVOIDANCE_BORDER_X_MAX,
-                .y = AVOIDANCE_BORDER_Y_MAX
+                .coords.x = AVOIDANCE_BORDER_X_MAX,
+                .coords.y = AVOIDANCE_BORDER_Y_MAX
             },
             {
-                .x = AVOIDANCE_BORDER_X_MIN,
-                .y = AVOIDANCE_BORDER_Y_MAX
+                .coords.x = AVOIDANCE_BORDER_X_MIN,
+                .coords.y = AVOIDANCE_BORDER_Y_MAX
             },
         },
         .count = 4,
@@ -40,8 +40,8 @@ static uint8_t valid_points_count = 0;
 
 static uint64_t graph[GRAPH_MAX_VERTICES];
 
-static pose_t start_position = { .x = 0, .y = 0 };
-static pose_t finish_position = { .x = 0, .y = 0 };
+static pose_t start_position = { .coords.x = 0, .coords.y = 0 };
+static pose_t finish_position = { .coords.x = 0, .coords.y = 0 };
 
 static pose_t _dijkstra(uint16_t target, uint16_t index)
 {
@@ -73,10 +73,10 @@ static pose_t _dijkstra(uint16_t target, uint16_t index)
         checked[v] = true;
         for (i = 0; i < valid_points_count; i++) {
             if (graph[v] & (1 << i)) {
-                weight = (valid_points[v].x - valid_points[i].x);
-                weight *= (valid_points[v].x - valid_points[i].x);
-                weight += (valid_points[v].y - valid_points[i].y)
-                          * (valid_points[v].y - valid_points[i].y);
+                weight = (valid_points[v].coords.x - valid_points[i].coords.x);
+                weight *= (valid_points[v].coords.x - valid_points[i].coords.x);
+                weight += (valid_points[v].coords.y - valid_points[i].coords.y)
+                          * (valid_points[v].coords.y - valid_points[i].coords.y);
                 weight = sqrt(weight);
                 if ((weight >= 0) && (distance[i] > (distance[v] + weight))) {
                     distance[i] = distance[v] + weight;
@@ -176,20 +176,20 @@ void validate_obstacles(void)
             polygon_t aabb = {
                 .points = {
                     {
-                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .coords.x = obstacle->form.circle.center.coords.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .coords.y = obstacle->form.circle.center.coords.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .coords.x = obstacle->form.circle.center.coords.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .coords.y = obstacle->form.circle.center.coords.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .coords.x = obstacle->form.circle.center.coords.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .coords.y = obstacle->form.circle.center.coords.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .coords.x = obstacle->form.circle.center.coords.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .coords.y = obstacle->form.circle.center.coords.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                 },
                 .count = 4,

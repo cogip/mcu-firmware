@@ -8,8 +8,8 @@
 
 double collisions_distance_points(const pose_t *a, const pose_t *b)
 {
-    return sqrt((b->x - a->x) * (b->x - a->x)
-                + (b->y - a->y) * (b->y - a->y));
+    return sqrt((b->coords.x - a->coords.x) * (b->coords.x - a->coords.x)
+                + (b->coords.y - a->coords.y) * (b->coords.y - a->coords.y));
 }
 
 bool collisions_is_point_in_circle(const circle_t *circle, const pose_t *p)
@@ -31,10 +31,10 @@ bool collisions_is_point_in_polygon(const polygon_t *polygon, const pose_t *p)
         pose_t b = (i == (polygon->count - 1) ? polygon->points[0] : polygon->points[i + 1]);
         vector_t ab, ap;
 
-        ab.x = b.x - a.x;
-        ab.y = b.y - a.y;
-        ap.x = p->x - a.x;
-        ap.y = p->y - a.y;
+        ab.x = b.coords.x - a.coords.x;
+        ab.y = b.coords.y - a.coords.y;
+        ap.x = p->coords.x - a.coords.x;
+        ap.y = p->coords.y - a.coords.y;
 
         if (ab.x * ap.y - ab.y * ap.x <= 0) {
             return false;
@@ -48,12 +48,12 @@ bool collisions_is_segment_crossing_line(const pose_t *a, const pose_t *b, const
     vector_t ac, ad, ab;
     double det = 0;
 
-    ab.x = b->x - a->x;
-    ab.y = b->y - a->y;
-    ad.x = d->x - a->x;
-    ad.y = d->y - a->y;
-    ac.x = c->x - a->x;
-    ac.y = c->y - a->y;
+    ab.x = b->coords.x - a->coords.x;
+    ab.y = b->coords.y - a->coords.y;
+    ad.x = d->coords.x - a->coords.x;
+    ad.y = d->coords.y - a->coords.y;
+    ac.x = c->coords.x - a->coords.x;
+    ac.y = c->coords.y - a->coords.y;
 
     det = (ab.x * ad.y - ab.y * ad.x) * (ab.x * ac.y - ab.y * ac.x);
 
@@ -77,14 +77,14 @@ bool collisions_is_line_crossing_circle(const pose_t *a, const pose_t *b,
 {
     const pose_t *c = &circle->center;
 
-    pose_t vect_ab;
+    vector_t vect_ab;
 
-    vect_ab.x = b->x - a->x;
-    vect_ab.y = b->y - a->y;
+    vect_ab.x = b->coords.x - a->coords.x;
+    vect_ab.y = b->coords.y - a->coords.y;
 
-    pose_t vect_ac;
-    vect_ac.x = c->x - a->x;
-    vect_ac.y = c->y - a->y;
+    vector_t vect_ac;
+    vect_ac.x = c->coords.x - a->coords.x;
+    vect_ac.y = c->coords.y - a->coords.y;
 
     /* Norm of vector V */
     double numerator = vect_ab.x * vect_ac.y - vect_ab.y * vect_ac.x;
@@ -124,13 +124,13 @@ bool collisions_is_segment_crossing_circle(const pose_t *a, const pose_t *b,
         return true;
     }
 
-    pose_t vect_ab, vect_ac, vect_bc;
-    vect_ab.x = b->x - a->x;
-    vect_ab.y = b->y - a->y;
-    vect_ac.x = c->x - a->x;
-    vect_ac.y = c->y - a->y;
-    vect_bc.x = c->x - b->x;
-    vect_bc.y = c->y - b->y;
+    vector_t vect_ab, vect_ac, vect_bc;
+    vect_ab.x = b->coords.x - a->coords.x;
+    vect_ab.y = b->coords.y - a->coords.y;
+    vect_ac.x = c->coords.x - a->coords.x;
+    vect_ac.y = c->coords.y - a->coords.y;
+    vect_bc.x = c->coords.x - b->coords.x;
+    vect_bc.y = c->coords.y - b->coords.y;
 
     double scal1 = vect_ab.x * vect_ac.x + vect_ab.y * vect_ac.y;
     double scal2 = (-vect_ab.x) * vect_bc.x + (-vect_ab.y) * vect_bc.y;
@@ -145,14 +145,14 @@ bool collisions_is_point_on_segment(const pose_t *a, const pose_t *b, const pose
 {
     bool res = false;
 
-    if ((b->x - a->x) / (b->y - a->y) == (b->x - c->x) / (b->y - c->y)) {
-        if (a->x < b->x) {
-            if ((c->x < b->x) && (c->x > a->x)) {
+    if ((b->coords.x - a->coords.x) / (b->coords.y - a->coords.y) == (b->coords.x - c->coords.x) / (b->coords.y - c->coords.y)) {
+        if (a->coords.x < b->coords.x) {
+            if ((c->coords.x < b->coords.x) && (c->coords.x > a->coords.x)) {
                 res = true;
             }
         }
         else {
-            if ((c->x < a->x) && (c->x > b->x)) {
+            if ((c->coords.x < a->coords.x) && (c->coords.x > b->coords.x)) {
                 res = true;
             }
         }
@@ -162,12 +162,12 @@ bool collisions_is_point_on_segment(const pose_t *a, const pose_t *b, const pose
 
 inline double collisions_compute_slope(const pose_t *a, const pose_t *b)
 {
-    return (b->y - a->y) / (b->x - a->x);
+    return (b->coords.y - a->coords.y) / (b->coords.x - a->coords.x);
 }
 
 inline double collisions_compute_ordinate(double slope, const pose_t *b)
 {
-    return (b->y - slope * b->x);
+    return (b->coords.y - slope * b->coords.x);
 }
 
 pose_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
@@ -193,8 +193,8 @@ pose_t collisions_find_nearest_point_in_circle(const circle_t *circle,
     double slope = collisions_compute_slope(&circle->center, p);
 
     return (pose_t) {
-               .x = circle->center.x * cos(slope),
-               .y = circle->center.y * sin(slope),
+               .coords.x = circle->center.coords.x * cos(slope),
+               .coords.y = circle->center.coords.y * sin(slope),
                .O = 0,
     };
 }

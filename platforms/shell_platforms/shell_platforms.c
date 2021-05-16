@@ -43,8 +43,8 @@ static int _cmd_print_state(int argc, char **argv)
         "\"speed_order\":{\"distance\":%lf,\"angle\":%lf}"
         "}\n",
         ctrl->control.current_mode,
-        ctrl->control.pose_current.O, ctrl->control.pose_current.x, ctrl->control.pose_current.y,
-        ctrl->control.pose_order.O, ctrl->control.pose_order.x, ctrl->control.pose_order.y,
+        ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x, ctrl->control.pose_current.coords.y,
+        ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x, ctrl->control.pose_order.coords.y,
         ctrl->control.current_cycle,
         ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
         ctrl->control.speed_order.distance, ctrl->control.speed_order.angle

@@ -30,17 +30,6 @@ extern "C" {
 #define POLY_MAX                16  /**< Maximum number of polygons */
 #define POLY_MAX_POINTS         6   /**< Maximum number of vertices composing a polygon */
 
-
-/**
- * @brief   Position type
- */
-typedef struct {
-    double x;   /**< x-position */
-    double y;   /**< y-position */
-    double O;   /**< 0-orientation */
-} pose_t;
-
-
 /**
  * @brief   Polar type
  */
@@ -50,12 +39,25 @@ typedef struct {
 } polar_t;
 
 /**
- * @brief   Vector type
+ * @brief   Coordinates type
  */
 typedef struct {
     double x;   /**< x-position */
     double y;   /**< y-position */
-} vector_t;
+} coords_t;
+
+/**
+ * @brief   Vector type
+ */
+typedef coords_t vector_t;
+
+/**
+ * @brief   Position type
+ */
+typedef struct {
+    coords_t coords;    /**< coordinates */
+    double O;           /**< 0-orientation */
+} pose_t;
 
 /**
  * @brief   Polygon type
@@ -85,7 +87,7 @@ static inline int pose_equal(const pose_t *p1, const pose_t *p2)
 {
     if ((p1 != NULL) && (p2 != NULL)) {
         return p1 == p2
-               || (p1->x == p2->x && p1->y == p2->y && p1->O == p2->O);
+               || (p1->coords.x == p2->coords.x && p1->coords.y == p2->coords.y && p1->O == p2->O);
     }
     else {
         return 0;

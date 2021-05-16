@@ -655,15 +655,15 @@ static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
 static path_pose_t poses_calibration[] = {
     {
         .pos = {
-            .x = 0,
-            .y = 0,
+            .coords.x = 0,
+            .coords.y = 0,
             .O = 90,
         },
     },
     {
         .pos = {
-            .x = 500,
-            .y = 500,
+            .coords.x = 500,
+            .coords.y = 500,
             .O = 0,
         },
     },

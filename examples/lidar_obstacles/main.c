@@ -30,8 +30,8 @@ obstacles_params_t border_obstacles_params = {
 uint32_t cycle = 1;
 
 pose_t robot_state = {
-    .x = 0.0,
-    .y = 1000.0,
+    .coords.x = 0.0,
+    .coords.y = 1000.0,
     .O = 0.0
 };
 
@@ -43,10 +43,10 @@ static void _init_border_obstacles(void)
         .type = OBSTACLE_POLYGON,
         .form.polygon = {
             .points = {
-                (pose_t){ .x = -1500, .y = -10 },
-                (pose_t){ .x = -1500, .y = 0 },
-                (pose_t){ .x = 1500, .y = 0 },
-                (pose_t){ .x = 1500, .y = -10 }
+                (pose_t){ .coords.x = -1500, .coords.y = -10 },
+                (pose_t){ .coords.x = -1500, .coords.y = 0 },
+                (pose_t){ .coords.x = 1500, .coords.y = 0 },
+                (pose_t){ .coords.x = 1500, .coords.y = -10 }
             },
             .count = 4,
         },
@@ -56,10 +56,10 @@ static void _init_border_obstacles(void)
         .type = OBSTACLE_POLYGON,
         .form.polygon = {
             .points = {
-                (pose_t){ .x = -1500, .y = 2000 },
-                (pose_t){ .x = -1500, .y = 2010 },
-                (pose_t){ .x = 1500, .y = 2010 },
-                (pose_t){ .x = 1500, .y = 2000 }
+                (pose_t){ .coords.x = -1500, .coords.y = 2000 },
+                (pose_t){ .coords.x = -1500, .coords.y = 2010 },
+                (pose_t){ .coords.x = 1500, .coords.y = 2010 },
+                (pose_t){ .coords.x = 1500, .coords.y = 2000 }
             },
             .count = 4,
         },
@@ -69,10 +69,10 @@ static void _init_border_obstacles(void)
         .type = OBSTACLE_POLYGON,
         .form.polygon = {
             .points = {
-                (pose_t){ .x = -1500, .y = 0 },
-                (pose_t){ .x = -1500, .y = 2000 },
-                (pose_t){ .x = -1510, .y = 2000 },
-                (pose_t){ .x = -1510, .y = 0 }
+                (pose_t){ .coords.x = -1500, .coords.y = 0 },
+                (pose_t){ .coords.x = -1500, .coords.y = 2000 },
+                (pose_t){ .coords.x = -1510, .coords.y = 2000 },
+                (pose_t){ .coords.x = -1510, .coords.y = 0 }
             },
             .count = 4,
         },
@@ -82,10 +82,10 @@ static void _init_border_obstacles(void)
         .type = OBSTACLE_POLYGON,
         .form.polygon = {
             .points = {
-                (pose_t){ .x = 1500, .y = 0 },
-                (pose_t){ .x = 1500, .y = 2000 },
-                (pose_t){ .x = 1510, .y = 2000 },
-                (pose_t){ .x = 1510, .y = 0 }
+                (pose_t){ .coords.x = 1500, .coords.y = 0 },
+                (pose_t){ .coords.x = 1500, .coords.y = 2000 },
+                (pose_t){ .coords.x = 1510, .coords.y = 2000 },
+                (pose_t){ .coords.x = 1510, .coords.y = 0 }
             },
             .count = 4,
         },
@@ -105,8 +105,8 @@ static int _cmd_print_state(int argc, char **argv)
         "\"pose_order\": {\"x\": %lf, \"y\": %lf, \"O\": %lf}, "
         "\"cycle\": %" PRIu32
         "}\n",
-        robot_state.x, robot_state.y, robot_state.O,
-        robot_state.x, robot_state.y, robot_state.O,
+        robot_state.coords.x, robot_state.coords.y, robot_state.O,
+        robot_state.coords.x, robot_state.coords.y, robot_state.O,
         cycle
         );
 
