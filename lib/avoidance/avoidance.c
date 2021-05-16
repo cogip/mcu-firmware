@@ -165,31 +165,31 @@ void validate_obstacles(void)
         const obstacle_t *obstacle = obstacles_get(obstacles_dyn_id, i);
 
         /* Check if point is inside borders */
-        if (!obstacles_is_point_in_obstacle(&borders, &obstacle->form.circle.center)) {
+        if (!obstacles_is_point_in_obstacle(&borders, &obstacle->center)) {
             continue;
         }
 
         /* If that point is not in an other polygon, shape it in a bounding
          * box
          */
-        if (!obstacles_is_point_in_obstacles(&obstacle->form.circle.center, obstacle)) {
+        if (!obstacles_is_point_in_obstacles(&obstacle->center, obstacle)) {
             polygon_t aabb = {
                 .points = {
                     {
-                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                 },
                 .count = 4,
@@ -218,7 +218,7 @@ bool is_colliding(const pose_t *start, const pose_t *stop)
         const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
 
         /* Check if obstacle  is inside borders */
-        if (!obstacles_is_point_in_obstacle(&borders, &obstacle->form.circle.center)) {
+        if (!obstacles_is_point_in_obstacle(&borders, &obstacle->center)) {
             continue;
         }
         if (collisions_is_segment_crossing_circle(&start->coords, &stop->coords, &obstacle->form.circle)) {
