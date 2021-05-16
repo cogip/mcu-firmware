@@ -35,11 +35,11 @@ obstacles_t obstacles_init(const obstacles_params_t *obstacles_params)
     return id;
 }
 
-double obstacles_default_radius(const obstacles_t obstacles_id)
+double obstacles_default_circle_radius(const obstacles_t obstacles_id)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
     const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    return obstacles_context->params.default_radius;
+    return obstacles_context->params.default_circle_radius;
 }
 
 uint32_t obstacles_get_min_distance(const obstacles_t obstacles_id)

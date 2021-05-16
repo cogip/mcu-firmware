@@ -159,7 +159,7 @@
  * @{
  */
 #define OBSTACLES_BB_RADIUS_MARGIN          0.2                     /**< Obstacle circle bounding box mark-up */
-#define OBSTACLE_RADIUS                     400                     /**< Obscale circle radius */
+#define OBSTACLE_DEFAULT_CIRCLE_RADIUS      400                     /**< Obscale circle radius */
 #define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10                      /**< Minimum obstacle detection treshold */
 #define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200                     /**< Maximum obstacle detection treshold */
 /** @} */

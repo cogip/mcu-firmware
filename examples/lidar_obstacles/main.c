@@ -23,7 +23,7 @@ obstacles_t border_obstacles = OBSTACLES_NUMOF;
 
 /* Border obstacles parameters */
 obstacles_params_t border_obstacles_params = {
-    .default_radius = 0,
+    .default_circle_radius = 0,
     .min_distance = 0,
 };
 
