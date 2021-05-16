@@ -122,6 +122,27 @@ static int cmd_set_distance_filter(int argc, char **argv)
 }
 
 /**
+ * @brief Set intensity threshold command
+ *
+ * @param[in]   argc    Number of arguments
+ * @param[in]   argv    Arguments list
+ *
+ * @return              0
+ */
+static int cmd_set_intensity_threshold(int argc, char **argv)
+{
+    if (argc < 2) {
+        printf("usage: %s <threshold_value>\n", argv[0]);
+        return 1;
+    }
+
+    uint32_t new_threshold = strtoul(argv[1], NULL, 0);
+    lds01_set_min_intensity(lds01, new_threshold);
+
+    return 0;
+}
+
+/**
  * @brief Print data command
  *
  * Print current distances and intensities in JSON format.
@@ -164,6 +185,7 @@ static const shell_command_t shell_commands[] = {
     { "start", "Start LDS01 device", cmd_start },
     { "stop", "Stop LDS01 device", cmd_stop },
     { "filter", "Set the filter value (max distance)", cmd_set_distance_filter },
+    { "intensity_threshold", "Set the intensity threshold", cmd_set_intensity_threshold },
     { "data", "Print current values", cmd_data },
     { NULL, NULL, NULL }
 };
