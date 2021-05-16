@@ -50,9 +50,9 @@ extern "C" {
  * @brief   Obstacles parameters
  */
 typedef struct {
-    uint32_t default_radius;    /**< obstacle default radius */
-    uint32_t min_distance;      /**< minimun distance from origin to create an obstacle */
-    uint32_t max_distance;      /**< maximum distance from origin to create an obstacle */
+    uint32_t default_circle_radius;     /**< obstacle default radius */
+    uint32_t min_distance;              /**< minimun distance from origin to create an obstacle */
+    uint32_t max_distance;              /**< maximum distance from origin to create an obstacle */
 } obstacles_params_t;
 
 /**
@@ -105,11 +105,11 @@ typedef unsigned int obstacles_dyn_id_t;
 obstacles_t obstacles_init(const obstacles_params_t *obstacles_params);
 
 /**
- * @brief Return the default obstacles radius
+ * @brief Return the default circle obstacle radius
  * @param[in]   obstacles_id  obstacles id
  * @return                    radius
  */
-double obstacles_default_radius(const obstacles_t obstacles_id);
+double obstacles_default_circle_radius(const obstacles_t obstacles_id);
 
 /**
  * @brief Return the minimal distance of obstacle detection

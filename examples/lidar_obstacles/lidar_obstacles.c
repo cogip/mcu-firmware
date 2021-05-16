@@ -35,7 +35,7 @@ obstacles_t lidar_obstacles = OBSTACLES_NUMOF;
 
 /* Lidar obstacles parameters */
 obstacles_params_t lidar_obstacles_params = {
-    .default_radius = OBSTACLE_RADIUS,
+    .default_circle_radius = OBSTACLE_DEFAULT_CIRCLE_RADIUS,
     .min_distance = ROBOT_WIDTH / 2,
     .max_distance = LIDAR_MAX_DISTANCE,
 };
@@ -134,7 +134,7 @@ static void _update_dynamic_obstacles_from_lidar(const obstacles_t obstacles_id,
                 .x = origin->coords.x + distance * cos(obstacle_angle),
                 .y = origin->coords.y + distance * sin(obstacle_angle),
             },
-            .form.circle.radius = obstacles_default_radius(obstacles_id),
+            .form.circle.radius = obstacles_default_circle_radius(obstacles_id),
         });
     }
 
