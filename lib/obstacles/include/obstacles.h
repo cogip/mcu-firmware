@@ -152,7 +152,7 @@ void obstacles_unlock(const obstacles_t obstacles_id);
  *
  * @return                  true if point is inside, false otherwise
  */
-bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p);
+bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *p);
 
 /**
  * @brief Check if the given point is inside an obstacle
@@ -162,7 +162,7 @@ bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
  *
  * @return                  true if point is inside, false otherwise
  */
-bool obstacles_is_point_in_obstacles(const pose_t *p, const obstacle_t *filter);
+bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter);
 
 /**
  * @brief Find the nearest point of obstacle perimeter from given point.
@@ -172,8 +172,8 @@ bool obstacles_is_point_in_obstacles(const pose_t *p, const obstacle_t *filter);
  *
  * @return                  position of nearest point
  */
-pose_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
-                                                const pose_t *p);
+coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
+                                                  const coords_t *p);
 
 /**
  * @brief Update obstacles using data from a Lidar

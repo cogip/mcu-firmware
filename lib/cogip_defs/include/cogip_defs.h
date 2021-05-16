@@ -63,15 +63,15 @@ typedef struct {
  * @brief   Polygon type
  */
 typedef struct {
-    uint8_t count;                  /**< number of vertices in the polygon */
-    pose_t points[POLY_MAX_POINTS]; /**< vertices defining the polygon */
+    uint8_t count;                      /**< number of vertices in the polygon */
+    coords_t points[POLY_MAX_POINTS];   /**< vertices defining the polygon */
 } polygon_t;
 
 /**
  * @brief   Circle type
  */
 typedef struct {
-    pose_t center;                  /**< circle center */
+    coords_t center;                /**< circle center */
     double radius;                  /**< circle radius */
 } circle_t;
 

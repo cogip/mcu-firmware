@@ -105,7 +105,7 @@ void obstacles_unlock(const obstacles_t obstacles_id)
     mutex_unlock(&obstacles_context->lock);
 }
 
-bool obstacles_is_point_in_obstacles(const pose_t *p, const obstacle_t *filter)
+bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter)
 {
     for (size_t obstacles_id = 0; obstacles_id < OBSTACLES_NUMOF; obstacles_id++) {
         for (size_t j = 0; j < obstacles_size(obstacles_id); j++) {
@@ -122,7 +122,7 @@ bool obstacles_is_point_in_obstacles(const pose_t *p, const obstacle_t *filter)
     return false;
 }
 
-bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
+bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *p)
 {
     switch (obstacle->type) {
         case OBSTACLE_POLYGON:
@@ -136,8 +136,8 @@ bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p)
     return false;
 }
 
-pose_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
-                                                const pose_t *p)
+coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
+                                                  const coords_t *p)
 {
     switch (obstacle->type) {
         case OBSTACLE_POLYGON:
@@ -177,8 +177,8 @@ void obstacles_update_from_lidar(const obstacles_t obstacles_id, const pose_t *o
         obstacles_context->obstacles[obstacles_context->nb_obstacles] = (obstacle_t){
             .type = OBSTACLE_CIRCLE,
             .form.circle.center = {
-                .coords.x = origin->coords.x + distance * cos(obstacle_angle),
-                .coords.y = origin->coords.y + distance * sin(obstacle_angle),
+                .x = origin->coords.x + distance * cos(obstacle_angle),
+                .y = origin->coords.y + distance * sin(obstacle_angle),
             },
             .form.circle.radius = obstacles_default_radius(obstacles_id),
         };
@@ -202,8 +202,8 @@ static void _print_list(const obstacles_t obstacles_id, FILE *out)
         fprintf(
             out,
             "{\"x\":%lf,\"y\":%lf,\"radius\":%lf}",
-            obstacles_context->obstacles[i].form.circle.center.coords.x,
-            obstacles_context->obstacles[i].form.circle.center.coords.y,
+            obstacles_context->obstacles[i].form.circle.center.x,
+            obstacles_context->obstacles[i].form.circle.center.y,
             obstacles_context->obstacles[i].form.circle.radius
             );
         fflush(out);
