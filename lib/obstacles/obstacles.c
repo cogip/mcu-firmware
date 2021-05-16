@@ -177,8 +177,8 @@ void obstacles_update_from_lidar(const obstacles_t obstacles_id, const pose_t *o
         obstacles_context->obstacles[obstacles_context->nb_obstacles] = (obstacle_t){
             .type = OBSTACLE_CIRCLE,
             .form.circle.center = {
-                .x = origin->x + distance * cos(obstacle_angle),
-                .y = origin->y + distance * sin(obstacle_angle),
+                .coords.x = origin->coords.x + distance * cos(obstacle_angle),
+                .coords.y = origin->coords.y + distance * sin(obstacle_angle),
             },
             .form.circle.radius = obstacles_default_radius(obstacles_id),
         };
@@ -202,8 +202,8 @@ static void _print_list(const obstacles_t obstacles_id, FILE *out)
         fprintf(
             out,
             "{\"x\":%lf,\"y\":%lf,\"radius\":%lf}",
-            obstacles_context->obstacles[i].form.circle.center.x,
-            obstacles_context->obstacles[i].form.circle.center.y,
+            obstacles_context->obstacles[i].form.circle.center.coords.x,
+            obstacles_context->obstacles[i].form.circle.center.coords.y,
             obstacles_context->obstacles[i].form.circle.radius
             );
         fflush(out);

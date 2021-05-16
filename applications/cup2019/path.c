@@ -17,8 +17,8 @@ static path_pose_t poses[] = {
     /* POSE_INITIAL */
     {
         .pos = {
-            .x = 1500 - ROBOT_MARGIN,
-            .y = 300 + ROBOT_MARGIN,
+            .coords.x = 1500 - ROBOT_MARGIN,
+            .coords.y = 300 + ROBOT_MARGIN,
             .O = 180,
         },
         .allow_reverse = FALSE,
@@ -26,10 +26,10 @@ static path_pose_t poses[] = {
         .act = NULL,
     },
     /* Game path */
-    {                   /* Sortie zone de départ */
+    {                           /* Sortie zone de départ */
         .pos = {
-            .x = 1275,  //1100,
-            .y = 300 + ROBOT_MARGIN,
+            .coords.x = 1275,   //1100,
+            .coords.y = 300 + ROBOT_MARGIN,
             .O = 90,
         },
         .allow_reverse = FALSE,
@@ -39,8 +39,8 @@ static path_pose_t poses[] = {
     /* Point évitement zone du chaos x=800 y=1100 O=205+90*/
     {
         .pos = {
-            .x = 1275,          //800,
-            .y = 1300,          //1100,
+            .coords.x = 1275,           //800,
+            .coords.y = 1300,           //1100,
             .O = 115,
         },
         .allow_reverse = FALSE,
@@ -49,8 +49,8 @@ static path_pose_t poses[] = {
     },
     {
         .pos = {
-            .x = 600,           //800,
-            .y = 1300,          //1100,
+            .coords.x = 600,            //800,
+            .coords.y = 1300,           //1100,
             .O = 90,
         },
         .allow_reverse = FALSE,
@@ -60,8 +60,8 @@ static path_pose_t poses[] = {
     {
         /* Pré-Point */
         .pos = {
-            .x = 600,
-            .y = 1300,
+            .coords.x = 600,
+            .coords.y = 1300,
             .O = 90,
         },
         .allow_reverse = FALSE,
@@ -72,8 +72,8 @@ static path_pose_t poses[] = {
         /* Point récolte */
         /* TODO /!\ Régulation de vitesse seulement ? */
         .pos = {
-            .x = 600,
-            .y = 1361,
+            .coords.x = 600,
+            .coords.y = 1361,
             .O = 90,
         },
         .allow_reverse = FALSE,
@@ -83,8 +83,8 @@ static path_pose_t poses[] = {
     {
         /* Post-Point */
         .pos = {
-            .x = 600,
-            .y = 1300,
+            .coords.x = 600,
+            .coords.y = 1300,
             .O = 90,
         },
         .allow_reverse = TRUE,
@@ -97,8 +97,8 @@ static path_pose_t poses[] = {
     {
         /* Pré-Point */
         .pos = {
-            .x = 900,
-            .y = 1300,
+            .coords.x = 900,
+            .coords.y = 1300,
             .O = 270,
         },
         .allow_reverse = TRUE,
@@ -109,8 +109,8 @@ static path_pose_t poses[] = {
         /* Point récolte */
         /* TODO /!\ Régulation de vitesse seulement ? */
         .pos = {
-            .x = 900,
-            .y = 1361,
+            .coords.x = 900,
+            .coords.y = 1361,
             .O = 270,
         },
         .allow_reverse = TRUE,
@@ -120,8 +120,8 @@ static path_pose_t poses[] = {
     {
         /* Post-Point */
         .pos = {
-            .x = 900,
-            .y = 1300,
+            .coords.x = 900,
+            .coords.y = 1300,
             .O = 270,
         },
         .allow_reverse = TRUE,
@@ -134,8 +134,8 @@ static path_pose_t poses[] = {
     {
         /* Point dépose rampe avant */
         .pos = {
-            .x = 230,
-            .y = 1310,
+            .coords.x = 230,
+            .coords.y = 1310,
             .O = 180,        // 180: dépose cote gauche
         },
         .allow_reverse = FALSE,
@@ -145,8 +145,8 @@ static path_pose_t poses[] = {
     {
         /* Point dépose rampe arrière */
         .pos = {
-            .x = 230,
-            .y = 1310,
+            .coords.x = 230,
+            .coords.y = 1310,
             .O = 0,        //  0 == dépose cote droit
         },
         .allow_reverse = TRUE,
@@ -159,8 +159,8 @@ static path_pose_t poses[] = {
     {
         /* Post-Point récolte 3 palets éloignés balance + orientation vers zone départ */
         .pos = {
-            .x = 900,
-            .y = 1300,
+            .coords.x = 900,
+            .coords.y = 1300,
             .O = 300,
         },
         .allow_reverse = FALSE,
@@ -170,8 +170,8 @@ static path_pose_t poses[] = {
     {
         /* Point interne à la zone de départ */
         .pos = {
-            .x = 1100,
-            .y = 1000,
+            .coords.x = 1100,
+            .coords.y = 1000,
             .O = 300
         },
         .allow_reverse = FALSE,
@@ -181,8 +181,8 @@ static path_pose_t poses[] = {
     {
         /* Point approche dans couloir vers le petit distributeur */
         .pos = {
-            .x = 1275,
-            .y = 1500,
+            .coords.x = 1275,
+            .coords.y = 1500,
             .O = 90,
         },
         .allow_reverse = TRUE,
@@ -195,8 +195,8 @@ static path_pose_t poses[] = {
     {
         /* Pré-Point */
         .pos = {
-            .x = 1275,
-            .y = 1750,
+            .coords.x = 1275,
+            .coords.y = 1750,
             .O = 90,
         },
         .allow_reverse = FALSE,
@@ -206,8 +206,8 @@ static path_pose_t poses[] = {
     {
         /* Point petit distributeur */
         .pos = {
-            .x = 1275,
-            .y = 1820,
+            .coords.x = 1275,
+            .coords.y = 1820,
             .O = 90,
         },
         .allow_reverse = FALSE,
@@ -217,8 +217,8 @@ static path_pose_t poses[] = {
     {
         /* Post-Point */
         .pos = {
-            .x = 1275,
-            .y = 1300,
+            .coords.x = 1275,
+            .coords.y = 1300,
             .O = 90,
         },
         .allow_reverse = TRUE,
@@ -229,8 +229,8 @@ static path_pose_t poses[] = {
     {
         /* Post-Point failsafe pump */
         .pos = {
-            .x = 1275,
-            .y = 1200,
+            .coords.x = 1275,
+            .coords.y = 1200,
             .O = 270,
         },
         .allow_reverse = TRUE,
@@ -242,8 +242,8 @@ static path_pose_t poses[] = {
      */
     {   /* Pré-point */
         .pos = {
-            .x = -150,
-            .y = 285,
+            .coords.x = -150,
+            .coords.y = 285,
             .O = 180,
         },
         .allow_reverse = FALSE,
@@ -253,8 +253,8 @@ static path_pose_t poses[] = {
 
     {   /* Point ouverture goldenium */
         .pos = {
-            .x = -280,
-            .y = 285,
+            .coords.x = -280,
+            .coords.y = 285,
             .O = 180,
         },
         .allow_reverse = FALSE,
@@ -264,8 +264,8 @@ static path_pose_t poses[] = {
 
     {   /* Post-point */
         .pos = {
-            .x = -150,
-            .y = 285,
+            .coords.x = -150,
+            .coords.y = 285,
             .O = 180,
         },
         .allow_reverse = TRUE,
@@ -277,8 +277,8 @@ static path_pose_t poses[] = {
      */
     {   /* Pré-point */
         .pos = {
-            .x = -625,
-            .y = 320,
+            .coords.x = -625,
+            .coords.y = 320,
             .O = 270,
         },
         .allow_reverse = TRUE,
@@ -287,8 +287,8 @@ static path_pose_t poses[] = {
     },
     {   /* récolte */
         .pos = {
-            .x = -625,
-            .y = 250,
+            .coords.x = -625,
+            .coords.y = 250,
             .O = 270,
         },
         .allow_reverse = FALSE,
@@ -297,8 +297,8 @@ static path_pose_t poses[] = {
     },
     {   /* Post-point */
         .pos = {
-            .x = -625,
-            .y = 320,
+            .coords.x = -625,
+            .coords.y = 320,
             .O = 270,
         },
         .allow_reverse = TRUE,
@@ -313,8 +313,8 @@ static path_pose_t poses[] = {
      */
     {   /* pré point poussette */
         .pos = {
-            .x = 90,
-            .y = 800,
+            .coords.x = 90,
+            .coords.y = 800,
             .O = 90,
         },
         .allow_reverse = TRUE,
@@ -323,8 +323,8 @@ static path_pose_t poses[] = {
     },
     {   /* pré point poussette */
         .pos = {
-            .x = 100,
-            .y = 1150,
+            .coords.x = 100,
+            .coords.y = 1150,
             .O = 340,
         },
         .allow_reverse = FALSE,
@@ -333,8 +333,8 @@ static path_pose_t poses[] = {
     },
     {   /* pré point poussette */
         .pos = {
-            .x = 1000,
-            .y = 800,
+            .coords.x = 1000,
+            .coords.y = 800,
             .O = 340,
         },
         .allow_reverse = FALSE,
@@ -343,8 +343,8 @@ static path_pose_t poses[] = {
     },
     {   /* vidange back ramp */
         .pos = {
-            .x = 1000,
-            .y = 800,
+            .coords.x = 1000,
+            .coords.y = 800,
             .O = 90,
         },
         .allow_reverse = FALSE,
@@ -353,8 +353,8 @@ static path_pose_t poses[] = {
     },
     {   /* vidange goldenium */
         .pos = {
-            .x = 1000,
-            .y = 800,
+            .coords.x = 1000,
+            .coords.y = 800,
             .O = 0,
         },
         .allow_reverse = FALSE,

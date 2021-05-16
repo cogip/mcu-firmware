@@ -14,8 +14,8 @@
 static path_pose_t poses[] = {
     {
         .pos = {
-            .x = -1200,
-            .y = 1000,
+            .coords.x = -1200,
+            .coords.y = 1000,
             .O = 0,
         },
         .allow_reverse = TRUE,
@@ -24,8 +24,8 @@ static path_pose_t poses[] = {
     },
     {
         .pos = {
-            .x = 1200,
-            .y = 1000,
+            .coords.x = 1200,
+            .coords.y = 1000,
             .O = 180,
         },
         .allow_reverse = TRUE,
@@ -34,8 +34,8 @@ static path_pose_t poses[] = {
     },
     {
         .pos = {
-            .x = -1200,
-            .y = 1000,
+            .coords.x = -1200,
+            .coords.y = 1000,
             .O = 0,
         },
         .allow_reverse = TRUE,

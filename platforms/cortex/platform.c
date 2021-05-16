@@ -76,8 +76,8 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *m
         DEBUG("@robot@,%u,%" PRIu32 ",@pose_current@,%.2f,%.2f,%.2f\n",
               ROBOT_ID,
               ctrl->control.current_cycle,
-              robot_pose->x,
-              robot_pose->y,
+              robot_pose->coords.x,
+              robot_pose->coords.y,
               robot_pose->O);
     }
 }
