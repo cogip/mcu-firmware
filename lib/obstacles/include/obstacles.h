@@ -73,6 +73,7 @@ typedef struct obstacle_t obstacle_t;
  */
 struct obstacle_t {
     obstacle_type_t type;
+    coords_t center;
     union {
         polygon_t polygon;
         circle_t circle;
