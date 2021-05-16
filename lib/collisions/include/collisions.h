@@ -33,7 +33,7 @@
  *
  * @return                  distance between A and B
  */
-double collisions_distance_points(const pose_t *a, const pose_t *b);
+double collisions_distance_points(const coords_t *a, const coords_t *b);
 
 /**
  * @brief Check if the given point is inside a circle.
@@ -43,7 +43,7 @@ double collisions_distance_points(const pose_t *a, const pose_t *b);
  *
  * @return                  true if point is in circle, false otherwise
  */
-bool collisions_is_point_in_circle(const circle_t *circle, const pose_t *p);
+bool collisions_is_point_in_circle(const circle_t *circle, const coords_t *p);
 
 /**
  * @brief Check if the given point is inside a polygon.
@@ -53,7 +53,7 @@ bool collisions_is_point_in_circle(const circle_t *circle, const pose_t *p);
  *
  * @return                  true if point is in polygon, false otherwise
  */
-bool collisions_is_point_in_polygon(const polygon_t *polygon, const pose_t *p);
+bool collisions_is_point_in_polygon(const polygon_t *polygon, const coords_t *p);
 
 /**
  * @brief Check if the given point is inside obstacle, whatever its type.
@@ -63,7 +63,7 @@ bool collisions_is_point_in_polygon(const polygon_t *polygon, const pose_t *p);
  *
  * @return                  true if point is in polygon, false otherwise
  */
-bool collisions_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p);
+bool collisions_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *p);
 
 /**
  * @brief Check if a segment defined by two points A,B is crossing line
@@ -76,8 +76,8 @@ bool collisions_is_point_in_obstacle(const obstacle_t *obstacle, const pose_t *p
  *
  * @return                  true if [AB] crosses (CD), false otherwise
  */
-bool collisions_is_segment_crossing_line(const pose_t *a, const pose_t *b,
-                                         const pose_t *o, const pose_t *p);
+bool collisions_is_segment_crossing_line(const coords_t *a, const coords_t *b,
+                                         const coords_t *o, const coords_t *p);
 
 /**
  * @brief Check if a segment defined by two points A,B is crossing segment
@@ -90,8 +90,8 @@ bool collisions_is_segment_crossing_line(const pose_t *a, const pose_t *b,
  *
  * @return                  true if [AB] crosses [CD], false otherwise
  */
-bool collisions_is_segment_crossing_segment(const pose_t *a, const pose_t *b,
-                                            const pose_t *o, const pose_t *p);
+bool collisions_is_segment_crossing_segment(const coords_t *a, const coords_t *b,
+                                            const coords_t *o, const coords_t *p);
 
 /**
  * @brief Check if a line defined by two points A,B is crossing a circle.
@@ -102,7 +102,7 @@ bool collisions_is_segment_crossing_segment(const pose_t *a, const pose_t *b,
  *
  * @return                  true if (AB) crosses circle, false otherwise
  */
-bool collisions_is_line_crossing_circle(const pose_t *a, const pose_t *b,
+bool collisions_is_line_crossing_circle(const coords_t *a, const coords_t *b,
                                         const circle_t *circle);
 
 /**
@@ -114,7 +114,7 @@ bool collisions_is_line_crossing_circle(const pose_t *a, const pose_t *b,
  *
  * @return                  true if [AB] crosses circle, false otherwise
  */
-bool collisions_is_segment_crossing_circle(const pose_t *a, const pose_t *b,
+bool collisions_is_segment_crossing_circle(const coords_t *a, const coords_t *b,
                                            const circle_t *circle);
 
 /**
@@ -126,7 +126,7 @@ bool collisions_is_segment_crossing_circle(const pose_t *a, const pose_t *b,
  *
  * @return                  true if C is on [AB], false otherwise
  */
-bool collisions_is_point_on_segment(const pose_t *a, const pose_t *b, const pose_t *c);
+bool collisions_is_point_on_segment(const coords_t *a, const coords_t *b, const coords_t *c);
 
 /**
  * @brief Compute slope of a line defined by two points A,B.
@@ -136,7 +136,7 @@ bool collisions_is_point_on_segment(const pose_t *a, const pose_t *b, const pose
  *
  * @return                  (AB) slope
  */
-double collisions_compute_slope(const pose_t *a, const pose_t *b);
+double collisions_compute_slope(const coords_t *a, const coords_t *b);
 
 /**
  * @brief Compute ordinate of a line defined by two points A,B.
@@ -146,7 +146,7 @@ double collisions_compute_slope(const pose_t *a, const pose_t *b);
  *
  * @return                  (AB) ordinate
  */
-double collisions_compute_ordinate(double slope, const pose_t *b);
+double collisions_compute_ordinate(double slope, const coords_t *b);
 
 /**
  * @brief Find the nearest point of polygon perimeter from given point.
@@ -156,8 +156,8 @@ double collisions_compute_ordinate(double slope, const pose_t *b);
  *
  * @return                  position of nearest point
  */
-pose_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
-                                                const pose_t *p);
+coords_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
+                                                  const coords_t *p);
 
 /**
  * @brief Find the nearest point of circle perimeter from given point.
@@ -167,7 +167,7 @@ pose_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
  *
  * @return                  position of nearest point
  */
-pose_t collisions_find_nearest_point_in_circle(const circle_t *circle,
-                                               const pose_t *p);
+coords_t collisions_find_nearest_point_in_circle(const circle_t *circle,
+                                                 const coords_t *p);
 
 /** @} */

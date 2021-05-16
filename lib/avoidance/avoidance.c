@@ -13,20 +13,20 @@ static const obstacle_t borders = {
     .form.polygon = {
         .points = {
             {
-                .coords.x = AVOIDANCE_BORDER_X_MIN,
-                .coords.y = AVOIDANCE_BORDER_Y_MIN
+                .x = AVOIDANCE_BORDER_X_MIN,
+                .y = AVOIDANCE_BORDER_Y_MIN
             },
             {
-                .coords.x = AVOIDANCE_BORDER_X_MAX,
-                .coords.y = AVOIDANCE_BORDER_Y_MIN
+                .x = AVOIDANCE_BORDER_X_MAX,
+                .y = AVOIDANCE_BORDER_Y_MIN
             },
             {
-                .coords.x = AVOIDANCE_BORDER_X_MAX,
-                .coords.y = AVOIDANCE_BORDER_Y_MAX
+                .x = AVOIDANCE_BORDER_X_MAX,
+                .y = AVOIDANCE_BORDER_Y_MAX
             },
             {
-                .coords.x = AVOIDANCE_BORDER_X_MIN,
-                .coords.y = AVOIDANCE_BORDER_Y_MAX
+                .x = AVOIDANCE_BORDER_X_MIN,
+                .y = AVOIDANCE_BORDER_Y_MAX
             },
         },
         .count = 4,
@@ -127,19 +127,19 @@ int update_graph(const pose_t *s, const pose_t *f)
     int index = 1;
     obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
 
-    if (!obstacles_is_point_in_obstacle(&borders, &finish_position)) {
+    if (!obstacles_is_point_in_obstacle(&borders, &finish_position.coords)) {
         goto update_graph_error_finish_position;
     }
 
     /* Check that start and destination point are not in an obstacle */
     for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
         const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-        if (obstacles_is_point_in_obstacle(obstacle, &finish_position)) {
+        if (obstacles_is_point_in_obstacle(obstacle, &finish_position.coords)) {
             goto update_graph_error_finish_position;
         }
-        if (obstacles_is_point_in_obstacle(obstacle, &start_position)) {
-            start_position = obstacles_find_nearest_point_in_obstacle(obstacle,
-                                                                      &start_position);
+        if (obstacles_is_point_in_obstacle(obstacle, &start_position.coords)) {
+            start_position.coords = obstacles_find_nearest_point_in_obstacle(obstacle,
+                                                                             &start_position.coords);
             index = 0;
         }
     }
@@ -176,20 +176,20 @@ void validate_obstacles(void)
             polygon_t aabb = {
                 .points = {
                     {
-                        .coords.x = obstacle->form.circle.center.coords.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .coords.y = obstacle->form.circle.center.coords.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .coords.x = obstacle->form.circle.center.coords.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .coords.y = obstacle->form.circle.center.coords.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .coords.x = obstacle->form.circle.center.coords.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .coords.y = obstacle->form.circle.center.coords.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->form.circle.center.x - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                     {
-                        .coords.x = obstacle->form.circle.center.coords.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
-                        .coords.y = obstacle->form.circle.center.coords.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
+                        .x = obstacle->form.circle.center.x + (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius,
+                        .y = obstacle->form.circle.center.y - (1 + OBSTACLES_BB_RADIUS_MARGIN) * obstacle->form.circle.radius
                     },
                 },
                 .count = 4,
@@ -199,7 +199,7 @@ void validate_obstacles(void)
             for (uint8_t j = 0; j < aabb.count; j++) {
                 if ((obstacles_is_point_in_obstacle(&borders, &aabb.points[j]))
                     && (!obstacles_is_point_in_obstacles(&aabb.points[j], NULL))) {
-                    valid_points[valid_points_count++] = aabb.points[j];
+                    valid_points[valid_points_count++] = (pose_t){ aabb.points[j], 0 };
                 }
             }
         }
@@ -221,7 +221,7 @@ bool is_colliding(const pose_t *start, const pose_t *stop)
         if (!obstacles_is_point_in_obstacle(&borders, &obstacle->form.circle.center)) {
             continue;
         }
-        if (collisions_is_segment_crossing_circle(start, stop, &obstacle->form.circle)) {
+        if (collisions_is_segment_crossing_circle(&start->coords, &stop->coords, &obstacle->form.circle)) {
             return true;
         }
     }
@@ -246,8 +246,8 @@ void build_avoidance_graph(void)
                 /* Check if that segment crosses a polygon */
                 for (size_t i = 0; i < obstacles_size(obstacles_id); i++) {
                     const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-                    if (collisions_is_segment_crossing_circle(&valid_points[p],
-                                                              &valid_points[p2], &obstacle->form.circle)) {
+                    if (collisions_is_segment_crossing_circle(&valid_points[p].coords,
+                                                              &valid_points[p2].coords, &obstacle->form.circle)) {
                         collide = true;
                         break;
                     }
