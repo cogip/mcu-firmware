@@ -11,7 +11,7 @@
  * @ingroup     sys
  * @brief       Trace file descriptor module
  *
- * This module provides an API to write trace files on sdcard.
+ * This module provides an API to print traces on `stderr`, `stdout` or files on sdcard.
  *
  * Since it may be difficult to determine when to close the files
  * to effectively flush data on disk, and to avoid opening/closing files
@@ -45,11 +45,21 @@ extern "C" {
 
 /**
  * @def TRACEFD_NUMOF
- * @brief Number of trace file descriptors
+ * @brief Number of trace file descriptors specific to the application
  */
 #ifndef TRACEFD_NUMOF
-#  define TRACEFD_NUMOF 1
+#  define TRACEFD_NUMOF 0
 #endif
+
+/**
+ * @brief Number of default trace file descriptors
+ */
+#define TRACEFD_NUMOF_DEFAULT 2
+
+/**
+ * @brief Number of trace file descriptors (default + specific)
+ */
+#define TRACEFD_NUMOF_ALL (TRACEFD_NUMOF_DEFAULT + TRACEFD_NUMOF)
 
 /**
  * @def TRACEFD_MAX_PATH
@@ -64,7 +74,7 @@ extern "C" {
  * @brief Interval in ms between two flush of all files
  */
 #ifndef TRACEFD_FLUSH_INTERVAL
-#  define TRACEFD_FLUSH_INTERVAL 1000
+#  define TRACEFD_FLUSH_INTERVAL 50
 #endif
 
 /**
@@ -72,7 +82,7 @@ extern "C" {
  * @brief Files flusher thread priority
  */
 #ifndef TRACEFD_THREAD_PRIORITY
-#  define TRACEFD_THREAD_PRIORITY THREAD_PRIORITY_MIN
+#  define TRACEFD_THREAD_PRIORITY (THREAD_PRIORITY_MAIN - 1)
 #endif
 
 /**
@@ -89,12 +99,31 @@ extern "C" {
 typedef unsigned int tracefd_t;
 
 /**
+ * @brief   Default tracefd descriptor for stderr
+ */
+extern tracefd_t tracefd_stderr;
+
+/**
+ * @brief   Default tracefd descriptor for stdout
+ */
+extern tracefd_t tracefd_stdout;
+
+
+/**
  * @brief Initialize trace file descriptor context,
+ *        also starts the files flusher thread.
+ * @param[in]   filename          name of the trace file
+ * @return                        trace file descriptor
+ */
+void tracefd_init(void);
+
+/**
+ * @brief Create a new trace file descriptor context,
  *        also starts the files flusher thread
  * @param[in]   filename          name of the trace file
  * @return                        trace file descriptor
  */
-tracefd_t tracefd_init(const char *filename);
+tracefd_t tracefd_new(const char *filename);
 
 /**
  * @brief Open the trace file
@@ -122,11 +151,23 @@ void tracefd_unlock(const tracefd_t tracefd);
 
 /**
  * @brief Print formatted string in the trace file
+ *        File descriptor must be locked/unlocked manually before/after
+ *        calling this function.
  * @param[in]   tracefd  trace file descriptor
  * @param[in]   format   format string
  * @param[in]   ...      arguments
  */
 void tracefd_printf(const tracefd_t tracefd, const char *format, ...);
+
+/**
+ * @brief Print formatted string in the trace file in a JSON log message.
+ *        The message must not contain '\n' nor '"'.
+ *        File descriptor is automatically locked/unlocked around print.
+ * @param[in]   tracefd  trace file descriptor
+ * @param[in]   format   format string
+ * @param[in]   ...      arguments
+ */
+void tracefd_jlog(const tracefd_t tracefd, const char *format, ...);
 
 /**
  * @brief Flush the trace file (close and re-open)

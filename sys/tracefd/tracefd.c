@@ -24,7 +24,13 @@ typedef struct {
 } tracefd_context_t;
 
 /* Allocate memory for the tracefd contexts */
-tracefd_context_t tracefd_contexts[TRACEFD_NUMOF];
+tracefd_context_t tracefd_contexts[TRACEFD_NUMOF_ALL];
+
+/* Default tracefd descriptor for stderr */
+tracefd_t tracefd_stderr = 0;
+
+/* Default tracefd descriptor for stdout */
+tracefd_t tracefd_stdout = 1;
 
 /* Number of initialized tracefd */
 tracefd_t tracefd_initialized = 0;
@@ -47,19 +53,40 @@ static void *_thread_files_flusher(void *arg)
             thread_sleep();
         }
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        printf("Flush files.\n");
         tracefd_flush_all();
         xtimer_periodic_wakeup(&loop_start_time, TRACEFD_FLUSH_INTERVAL * US_PER_MS);
     }
     return EXIT_SUCCESS;
 }
 
-tracefd_t tracefd_init(const char *filename)
+static inline void _check_initialized(void)
 {
-    assert(tracefd_initialized < TRACEFD_NUMOF);
-    assert(strlen(TRACEFD_ROOT_DIR) + strlen(filename) + 1 < TRACEFD_MAX_PATH);
-
     if (tracefd_initialized == 0) {
+        tracefd_init();
+    }
+}
+
+void tracefd_init(void)
+{
+    assert(tracefd_initialized < TRACEFD_NUMOF_ALL);
+
+    if (tracefd_initialized > 0) {
+        return;
+    }
+
+    /* Init stderr descriptor */
+    tracefd_context_t *stderr_context = &tracefd_contexts[tracefd_stderr];
+    stderr_context->fd = stderr;
+    mutex_init(&stderr_context->lock);
+    tracefd_initialized++;
+
+    /* Init stdout descriptor */
+    tracefd_context_t *stdout_context = &tracefd_contexts[tracefd_stdout];
+    stdout_context->fd = stdout;
+    mutex_init(&stdout_context->lock);
+    tracefd_initialized++;
+
+    if (TRACEFD_NUMOF > 0) {
         tracefd_init_root_dir();
 
         files_flusher_pid = thread_create(
@@ -74,6 +101,13 @@ tracefd_t tracefd_init(const char *filename)
 
         tracefd_start_files_flusher();
     }
+}
+
+tracefd_t tracefd_new(const char *filename)
+{
+    _check_initialized();
+    assert(tracefd_initialized < TRACEFD_NUMOF_ALL);
+    assert(strlen(TRACEFD_ROOT_DIR) + strlen(filename) + 1 < TRACEFD_MAX_PATH);
 
     tracefd_t id = tracefd_initialized;
     tracefd_context_t *context = &tracefd_contexts[id];
@@ -111,23 +145,23 @@ void tracefd_close(const tracefd_t tracefd)
 
 void tracefd_lock(const tracefd_t tracefd)
 {
+    _check_initialized();
     assert(tracefd < tracefd_initialized);
     tracefd_context_t *context = &tracefd_contexts[tracefd];
-    if (context->fd == NULL) {
-        tracefd_open(tracefd);
-    }
     mutex_lock(&context->lock);
 }
 
 void tracefd_unlock(const tracefd_t tracefd)
 {
+    _check_initialized();
     assert(tracefd < tracefd_initialized);
     tracefd_context_t *context = &tracefd_contexts[tracefd];
-    mutex_lock(&context->lock);
+    mutex_unlock(&context->lock);
 }
 
 void tracefd_printf(const tracefd_t tracefd, const char *format, ...)
 {
+    _check_initialized();
     assert(tracefd < tracefd_initialized);
     const tracefd_context_t *context = &tracefd_contexts[tracefd];
     assert(context->fd);
@@ -136,21 +170,49 @@ void tracefd_printf(const tracefd_t tracefd, const char *format, ...)
     va_start(argp, format);
     vfprintf(context->fd, format, argp);
     va_end(argp);
+    fflush(context->fd);
+}
+
+void tracefd_jlog(const tracefd_t tracefd, const char *format, ...)
+{
+    _check_initialized();
+    assert(tracefd < tracefd_initialized);
+    const tracefd_context_t *context = &tracefd_contexts[tracefd];
+    assert(context->fd);
+
+    tracefd_lock(tracefd);
+
+    fprintf(context->fd, "{\"log\": \"");
+    fflush(context->fd);
+
+    va_list argp;
+    va_start(argp, format);
+    vfprintf(context->fd, format, argp);
+    va_end(argp);
+    fflush(context->fd);
+
+    fprintf(context->fd, "\"}\n");
+    fflush(context->fd);
+
+    tracefd_unlock(tracefd);
 }
 
 void tracefd_flush(const tracefd_t tracefd)
 {
+    _check_initialized();
     assert(tracefd < tracefd_initialized);
     tracefd_context_t *context = &tracefd_contexts[tracefd];
+    tracefd_lock(tracefd);
     if (context->fd) {
         tracefd_close(tracefd);
     }
     tracefd_open(tracefd);
+    tracefd_unlock(tracefd);
 }
 
 void tracefd_flush_all(void)
 {
-    for (tracefd_t tracefd = 0; tracefd < tracefd_initialized; tracefd++) {
+    for (tracefd_t tracefd = TRACEFD_NUMOF_DEFAULT; tracefd < tracefd_initialized; tracefd++) {
         tracefd_flush(tracefd);
     }
 }
@@ -162,6 +224,5 @@ void tracefd_start_files_flusher(void)
 
 void tracefd_stop_files_flusher(void)
 {
-    printf("tracefd_stop_files_flusher()\n");
     sleep_files_flusher_thread = true;
 }
