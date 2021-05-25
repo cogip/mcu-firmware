@@ -14,10 +14,13 @@
 #include "avoidance.h"
 #include "planner.h"
 #include "platform.h"
+#include "avoidance.h"
+#include "tracefd.h"
 
 /* Platform includes */
 #include "lidar_utils.h"
 #include "lidar_obstacles.h"
+#include "trace_utils.h"
 
 #ifdef MODULE_SHELL_PLATFORMS
 #include "shell_platforms.h"
@@ -39,6 +42,52 @@ char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_thread_stack[THREAD_STACKSIZE_LARGE];
 char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
+
+static bool trace_on = false;
+
+bool pf_trace_on(void)
+{
+    return trace_on;
+}
+
+void pf_set_trace_mode(bool state)
+{
+    trace_on = state;
+}
+
+void pf_print_state(tracefd_t out)
+{
+    ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
+
+    tracefd_lock(out);
+
+    tracefd_printf(
+        out,
+        "{"
+        "\"mode\":%u,"
+        "\"pose_current\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
+        "\"pose_order\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
+        "\"cycle\":%" PRIu32 ","
+        "\"speed_current\":{\"distance\":%lf,\"angle\":%lf},"
+        "\"speed_order\":{\"distance\":%lf,\"angle\":%lf}",
+        ctrl->control.current_mode,
+        ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x, ctrl->control.pose_current.coords.y,
+        ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x, ctrl->control.pose_order.coords.y,
+        ctrl->control.current_cycle,
+        ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
+        ctrl->control.speed_order.distance, ctrl->control.speed_order.angle
+        );
+
+    tracefd_printf(out, ",\"path\":");
+    avoidance_print_path(out);
+
+    tracefd_printf(out, ",\"obstacles\":");
+    obstacles_print_all_json(out);
+
+    tracefd_printf(out, "}\n");
+
+    tracefd_unlock(out);
+}
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
 {
@@ -209,7 +258,7 @@ static void *_task_planner_start_cancel(void *arg)
     /* Set a flag and return once done */
     *start_shell = false;
 
-    puts("Key pressed, do not start planner.");
+    tracefd_jlog(tracefd_stdout, "Key pressed, do not start planner.");
 
     return NULL;
 }
@@ -235,12 +284,12 @@ void pf_init_tasks(void)
         "wait planner start cancel"
         );
 
-    puts("Press Enter to cancel planner start...");
+    tracefd_jlog(tracefd_stdout, "Press Enter to cancel planner start...");
 
     /* Wait for Enter key pressed or countdown */
     while ((start_planner) && (countdown > 0)) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        printf("%d seconds left...\n", countdown);
+        tracefd_jlog(tracefd_stdout, "%d seconds left...", countdown);
         countdown--;
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }
@@ -269,6 +318,8 @@ void pf_init_tasks(void)
 
     /* Wait for start switch */
     while (!pf_is_game_launched()) {}
+
+    trace_start();
 
     if (start_planner) {
         /* Debug indicator to track the planner started state */

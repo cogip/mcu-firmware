@@ -15,6 +15,7 @@
 #include "platform.h"
 #include "path.h"
 #include "obstacles.h"
+#include "tracefd.h"
 
 #ifdef MODULE_SHELL_PLANNERS
 #include "shell_planners.h"
@@ -200,13 +201,13 @@ void *task_planner(void *arg)
     polar_t speed_order = { 0, 0 };
     const path_pose_t *current_path_pos = NULL;
 
-    printf("Game planner starting\n");
+    tracefd_jlog(tracefd_stdout, "Game planner starting");
 
     ctrl_t *ctrl = pf_get_ctrl();
 
     path_t *path = pf_get_path();
     if (!path) {
-        printf("Machine has no path\n");
+        tracefd_jlog(tracefd_stdout, "Machine has no path");
     }
 
     /* object context initialisation */
@@ -217,7 +218,7 @@ void *task_planner(void *arg)
     ctrl_set_speed_order(ctrl, speed_order);
     ctrl_set_pose_reached(ctrl);
 
-    printf("Game planner started\n");
+    tracefd_jlog(tracefd_stdout, "Game planner started");
 
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();

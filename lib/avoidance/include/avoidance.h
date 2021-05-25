@@ -34,6 +34,7 @@
 
 /* Project includes */
 #include "cogip_defs.h"
+#include "tracefd.h"
 
 /**
  * @name Dijkstra avoidance parameters
@@ -78,10 +79,10 @@ bool avoidance_check_recompute(const pose_t *start,
 /**
  * @brief Print list of intermediate positions to reach wanted path position
  *
- * @param[in]   out     file descriptor used to print avoidance path
+ * @param[in]   out     tracefd descriptor used to print avoidance path
  *
  * @return
  */
-void avoidance_print_path(FILE *out);
+void avoidance_print_path(tracefd_t out);
 
 /** @} */

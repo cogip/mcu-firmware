@@ -1,1 +1,2 @@
 USEMODULE += obstacles
+USEMODULE += tracefd
