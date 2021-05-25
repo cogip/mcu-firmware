@@ -202,3 +202,22 @@ void menu_start(void)
 
     shell_run((shell_command_t *)&current_menu, line_buf, SHELL_DEFAULT_BUFSIZE);
 }
+
+void menu_rename_command(const char *old, const char *new)
+{
+    /* Rename command in all menus */
+    for (shell_menu_t menu = 0; menu < nb_menus; menu++) {
+        for (shell_command_t *cmd = shell_menus[menu].shell_commands; cmd->name != NULL; cmd++) {
+            if (strcmp(cmd->name, old) == 0) {
+                cmd->name = new;
+            }
+        }
+    }
+
+    /* Rename command in current menu */
+    for (shell_command_t *cmd = current_menu.shell_commands; cmd->name != NULL; cmd++) {
+        if (strcmp(cmd->name, old) == 0) {
+            cmd->name = new;
+        }
+    }
+}
