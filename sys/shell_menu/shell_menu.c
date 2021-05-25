@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "shell_menu.h"
+#include "tracefd.h"
 
 #define MENU_MAX_DESC_SIZE 128
 
@@ -48,19 +49,23 @@ static int _display_json_help(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    printf("{\"name\": \"%s\", \"entries\": [", current_menu.name);
+    tracefd_lock(tracefd_stdout);
+    tracefd_printf(tracefd_stdout, "{\"name\":\"%s\",\"entries\":[", current_menu.name);
     shell_command_t *cmd = (shell_command_t *)&current_menu;
     for (; cmd->name != NULL; cmd++) {
         if (cmd != (shell_command_t *)&current_menu) {
-            printf(", ");
+            tracefd_printf(tracefd_stdout, ",");
         }
-        printf(
-            "{\"cmd\": \"%s\", \"desc\": \"%s\"}",
+        tracefd_printf(
+            tracefd_stdout,
+            "{\"cmd\":\"%s\",\"desc\":\"%s\"}",
             cmd->name,
             cmd->desc
             );
     }
-    printf("]}\n");
+    tracefd_printf(tracefd_stdout, "]}\n");
+    tracefd_unlock(tracefd_stdout);
+
     return EXIT_SUCCESS;
 }
 
@@ -176,7 +181,7 @@ void menu_enter(const shell_menu_t menu)
         shell_menus[menu].previous = current_menu.current;
     }
     memcpy(&current_menu, &shell_menus[menu], sizeof(shell_menu_data_t));
-    printf("Enter shell menu: %s\n", current_menu.name);
+    tracefd_jlog(tracefd_stdout, "Enter shell menu: %s", current_menu.name);
     if (current_menu.enter_cb) {
         current_menu.enter_cb();
     }
@@ -185,9 +190,9 @@ void menu_enter(const shell_menu_t menu)
 void menu_exit(void)
 {
     if (current_menu.previous) {
-        printf("Exit shell menu: %s\n", current_menu.name);
+        tracefd_jlog(tracefd_stdout, "Exit shell menu: %s", current_menu.name);
         memcpy(&current_menu, current_menu.previous, sizeof(shell_menu_data_t));
-        printf("Enter shell menu: %s\n", current_menu.name);
+        tracefd_jlog(tracefd_stdout, "Enter shell menu: %s", current_menu.name);
     }
 }
 
