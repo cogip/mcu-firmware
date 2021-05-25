@@ -1,13 +1,33 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "shell.h"
 #include "shell_menu.h"
+
+bool trace_on = false;
 
 static int cmd_global(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
     puts("Execute global command");
+    return 0;
+}
+
+static int cmd_trace_on_off(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+    if (trace_on) {
+        puts("Deactivate traces");
+        menu_rename_command("trace_off", "trace_on");
+        trace_on = false;
+    }
+    else {
+        puts("Activate traces");
+        menu_rename_command("trace_on", "trace_off");
+        trace_on = true;
+    }
     return 0;
 }
 
@@ -108,6 +128,7 @@ void app_init(void)
 {
     static shell_command_t global_commands[] = {
         { "global", "Global command", cmd_global },
+        { "trace_on", "Activate/deactivate trace", cmd_trace_on_off },
         MENU_NULL_CMD
     };
 

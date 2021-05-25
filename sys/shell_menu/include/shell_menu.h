@@ -125,3 +125,11 @@ void menu_exit(void);
  * @brief        Start the main menu.
  */
 void menu_start(void);
+
+/**
+ * @brief        Rename a command.
+ *
+ * @param[in]    old        old command name
+ * @param[in]    new        new command name
+ */
+void menu_rename_command(const char *old, const char *new);
