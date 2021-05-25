@@ -33,6 +33,7 @@
 
 /* Project includes */
 #include "cogip_defs.h"
+#include "tracefd.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -256,15 +257,15 @@ coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
 /**
  * @brief Print specified obstacles in JSON format
  * @param[in]   obstacles_id  obstacles id
- * @param[in]   out           file descriptor used to print obstacles
+ * @param[in]   out           tracefd descriptor used to print obstacles
  */
-void obstacles_print_json(const obstacles_t obstacles_id, FILE *out);
+void obstacles_print_json(const obstacles_t obstacles_id, tracefd_t out);
 
 /**
  * @brief Print all obstacles in JSON format
- * @param[in]   out           file descriptor used to print obstacles
+ * @param[in]   out           tracefd descriptor used to print obstacles
  */
-void obstacles_print_all_json(FILE *out);
+void obstacles_print_all_json(tracefd_t out);
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,4 @@
 USEMODULE += cogip_defs
 USEMODULE += collisions
 USEMODULE += trigonometry
+USEMODULE += tracefd

@@ -159,6 +159,31 @@ typedef struct {
 } pf_sensor_t;
 
 /**
+ * @brief Get trace mode status
+ *
+ * @return                      true if trace mode is activited, false otherwise
+ */
+bool pf_trace_on(void);
+
+/**
+ * @brief Change trace mode status
+ *
+ * param[in]    state           true/false to activate/deactivate trace mode
+ *
+ * @return
+ */
+void pf_set_trace_mode(bool state);
+
+/**
+ * @brief Print current robot state in JSON format
+ *
+ * param[in]    out             tracefd descriptor used to print state
+ *
+ * @return
+ */
+void pf_print_state(tracefd_t out);
+
+/**
  * @brief Get platform path
  *
  * @return                      Platform path

@@ -287,21 +287,20 @@ coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
     return *p;
 }
 
-static void _print_circle(const obstacle_t *obstacle, FILE *out)
+static void _print_circle(const obstacle_t *obstacle, tracefd_t out)
 {
-    fprintf(
+    tracefd_printf(
         out,
         "{\"x\":%lf,\"y\":%lf,\"radius\":%lf}",
         obstacle->center.x,
         obstacle->center.y,
         obstacle->form.circle.radius
         );
-    fflush(out);
 }
 
-static void _print_rectangle(const obstacle_t *obstacle, FILE *out)
+static void _print_rectangle(const obstacle_t *obstacle, tracefd_t out)
 {
-    fprintf(
+    tracefd_printf(
         out,
         "{\"x\":%lf,\"y\":%lf,\"angle\":%lf,\"length_x\":%lf,\"length_y\":%lf}",
         obstacle->center.x,
@@ -310,47 +309,41 @@ static void _print_rectangle(const obstacle_t *obstacle, FILE *out)
         obstacle->form.rectangle.length_x,
         obstacle->form.rectangle.length_y
         );
-    fflush(out);
 }
 
-static void _print_polygon(const obstacle_t *obstacle, FILE *out)
+static void _print_polygon(const obstacle_t *obstacle, tracefd_t out)
 {
     const polygon_t *polygon = &obstacle->form.polygon;
 
-    fprintf(
+    tracefd_printf(
         out,
         "{\"x\":%lf,\"y\":%lf,\"angle\":%lf, \"points\": [",
         obstacle->center.x,
         obstacle->center.y,
         obstacle->angle
         );
-    fflush(out);
     for (uint8_t i = 0; i < polygon->count; i++) {
         if (i > 0) {
-            fprintf(out, ", ");
-            fflush(out);
+            tracefd_printf(out, ", ");
         }
-        fprintf(
+        tracefd_printf(
             out,
             "{\"x\": %lf, \"y\": %lf}",
             polygon->points[i].x,
             polygon->points[i].y
             );
-        fflush(out);
     }
-    fprintf(out, "]}");
-    fflush(out);
+    tracefd_printf(out, "]}");
 }
 
-static void _print_list(const obstacles_t obstacles_id, FILE *out)
+static void _print_list(const obstacles_t obstacles_id, tracefd_t out)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
     obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
 
     for (uint8_t i = 0; i < obstacles_context->nb_obstacles; i++) {
         if (i > 0) {
-            fprintf(out, ", ");
-            fflush(out);
+            tracefd_printf(out, ",");
         }
 
         obstacle_t *obstacle = &obstacles_context->obstacles[i];
@@ -371,35 +364,30 @@ static void _print_list(const obstacles_t obstacles_id, FILE *out)
     }
 }
 
-void obstacles_print_json(const obstacles_t obstacles_id, FILE *out)
+void obstacles_print_json(const obstacles_t obstacles_id, tracefd_t out)
 {
     assert(obstacles_id < OBSTACLES_NUMOF);
 
-    fprintf(out, "[");
-    fflush(out);
+    tracefd_printf(out, "[");
 
     _print_list(obstacles_id, out);
 
-    fprintf(out, "]");
-    fflush(out);
+    tracefd_printf(out, "]");
 }
 
-void obstacles_print_all_json(FILE *out)
+void obstacles_print_all_json(tracefd_t out)
 {
     size_t nb_obstacles = 0;
 
-    fprintf(out, "[");
-    fflush(out);
+    tracefd_printf(out, "[");
 
     for (obstacles_t obstacles_id = 0; obstacles_id < OBSTACLES_NUMOF; obstacles_id++) {
         if (nb_obstacles > 0 && obstacles_get_nb_obstacles(obstacles_id) > 0) {
-            fprintf(out, ", ");
-            fflush(out);
+            tracefd_printf(out, ",");
         }
 
         _print_list(obstacles_id, out);
         nb_obstacles += obstacles_get_nb_obstacles(obstacles_id);
     }
-    fprintf(out, "]");
-    fflush(out);
+    tracefd_printf(out, "]");
 }

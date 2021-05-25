@@ -16,5 +16,7 @@ USEMODULE += shell_menu
 INCLUDES += -I$(CURDIR)/include
 
 CFLAGS += -DOBSTACLES_NUMOF=2
+CFLAGS += -DCONFIG_SHELL_NO_ECHO
+CFLAGS += -DCONFIG_SHELL_NO_PROMPT
 
 include ../../Makefile.include

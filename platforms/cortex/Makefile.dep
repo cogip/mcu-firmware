@@ -19,6 +19,7 @@ USEMODULE += trigonometry
 USEMODULE += utils
 USEMODULE += cogip_defs
 USEMODULE += lds01_dma
+USEMODULE += tracefd
 
 # Board features required
 FEATURES_REQUIRED += periph_i2c

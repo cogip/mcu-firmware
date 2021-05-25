@@ -341,28 +341,30 @@ bool avoidance_check_recompute(const pose_t *start,
 /**
  * Print avoidance computed path
  */
-void avoidance_print_path(FILE *out)
+void avoidance_print_path(tracefd_t out)
 {
     uint8_t i = 0;
 
-    fprintf(out, "[");
-    fflush(out);
+    tracefd_printf(out, "[");
     /* Print only if avoidance has already been computed successfully */
     if (_is_avoidance_computed) {
         /* Print all intermediate poses */
         while (i != 1) {
-            fprintf(out, "{\"x\": %lf, \"y\": %lf},",
-                    _valid_points[i].coords.x,
-                    _valid_points[i].coords.y
-                    );
+            tracefd_printf(
+                out,
+                "{\"x\": %lf, \"y\": %lf},",
+                _valid_points[i].coords.x,
+                _valid_points[i].coords.y
+                );
             i = _child[i];
         }
         /* Print also finish pose */
-        fprintf(out, "{\"x\": %lf, \"y\": %lf}",
-                finish_pose.coords.x,
-                finish_pose.coords.y
-                );
+        tracefd_printf(
+            out,
+            "{\"x\": %lf, \"y\": %lf}",
+            finish_pose.coords.x,
+            finish_pose.coords.y
+            );
     }
-    fprintf(out, "]");
-    fflush(out);
+    tracefd_printf(out, "]");
 }

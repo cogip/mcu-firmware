@@ -74,7 +74,7 @@ extern "C" {
  * @brief Interval in ms between two flush of all files
  */
 #ifndef TRACEFD_FLUSH_INTERVAL
-#  define TRACEFD_FLUSH_INTERVAL 50
+#  define TRACEFD_FLUSH_INTERVAL 1000
 #endif
 
 /**
