@@ -93,8 +93,8 @@ static void _print_state(void)
         tracefd_stdout,
         "{"
         "\"mode\":0,"
-        "\"pose_current\":{\"x\":%lf,\"y\":%lf,\"O\":%lf},"
-        "\"pose_order\":{\"x\":%lf,\"y\":%lf,\"O\":%lf},"
+        "\"pose_current\":{\"x\":%.3lf,\"y\":%.3lf,\"O\":%.3lf},"
+        "\"pose_order\":{\"x\":%.3lf,\"y\":%.3lf,\"O\":%.3lf},"
         "\"cycle\":%" PRIu32,
         robot_state.coords.x, robot_state.coords.y, robot_state.O,
         robot_state.coords.x, robot_state.coords.y, robot_state.O,

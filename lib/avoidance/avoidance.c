@@ -352,7 +352,7 @@ void avoidance_print_path(tracefd_t out)
         while (i != 1) {
             tracefd_printf(
                 out,
-                "{\"x\": %lf, \"y\": %lf},",
+                "{\"x\":%.3lf,\"y\":%.3lf},",
                 _valid_points[i].coords.x,
                 _valid_points[i].coords.y
                 );
@@ -361,7 +361,7 @@ void avoidance_print_path(tracefd_t out)
         /* Print also finish pose */
         tracefd_printf(
             out,
-            "{\"x\": %lf, \"y\": %lf}",
+            "{\"x\":%.3lf,\"y\":%.3lf}",
             finish_pose.coords.x,
             finish_pose.coords.y
             );

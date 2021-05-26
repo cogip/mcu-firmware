@@ -67,11 +67,11 @@ void pf_print_state(tracefd_t out)
         out,
         "{"
         "\"mode\":%u,"
-        "\"pose_current\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
-        "\"pose_order\":{\"O\":%lf,\"x\":%lf,\"y\":%lf},"
+        "\"pose_current\":{\"O\":%.3lf,\"x\":%.3lf,\"y\":%.3lf},"
+        "\"pose_order\":{\"O\":%.3lf,\"x\":%.3lf,\"y\":%.3lf},"
         "\"cycle\":%" PRIu32 ","
-        "\"speed_current\":{\"distance\":%lf,\"angle\":%lf},"
-        "\"speed_order\":{\"distance\":%lf,\"angle\":%lf}",
+        "\"speed_current\":{\"distance\":%.3lf,\"angle\":%.3lf},"
+        "\"speed_order\":{\"distance\":%.3lf,\"angle\":%.3lf}",
         ctrl->control.current_mode,
         ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x, ctrl->control.pose_current.coords.y,
         ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x, ctrl->control.pose_order.coords.y,

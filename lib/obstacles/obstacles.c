@@ -291,7 +291,7 @@ static void _print_circle(const obstacle_t *obstacle, tracefd_t out)
 {
     tracefd_printf(
         out,
-        "{\"x\":%lf,\"y\":%lf,\"radius\":%lf}",
+        "{\"x\":%.3lf,\"y\":%.3lf,\"radius\":%.3lf}",
         obstacle->center.x,
         obstacle->center.y,
         obstacle->form.circle.radius
@@ -302,7 +302,7 @@ static void _print_rectangle(const obstacle_t *obstacle, tracefd_t out)
 {
     tracefd_printf(
         out,
-        "{\"x\":%lf,\"y\":%lf,\"angle\":%lf,\"length_x\":%lf,\"length_y\":%lf}",
+        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"length_x\":%.3lf,\"length_y\":%.3lf}",
         obstacle->center.x,
         obstacle->center.y,
         obstacle->angle,
@@ -317,18 +317,18 @@ static void _print_polygon(const obstacle_t *obstacle, tracefd_t out)
 
     tracefd_printf(
         out,
-        "{\"x\":%lf,\"y\":%lf,\"angle\":%lf, \"points\": [",
+        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"points\":[",
         obstacle->center.x,
         obstacle->center.y,
         obstacle->angle
         );
     for (uint8_t i = 0; i < polygon->count; i++) {
         if (i > 0) {
-            tracefd_printf(out, ", ");
+            tracefd_printf(out, ",");
         }
         tracefd_printf(
             out,
-            "{\"x\": %lf, \"y\": %lf}",
+            "{\"x\":%.3lf,\"y\":%.3lf}",
             polygon->points[i].x,
             polygon->points[i].y
             );
