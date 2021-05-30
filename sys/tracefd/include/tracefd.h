@@ -37,7 +37,7 @@
 #pragma once
 
 /* Standard includes */
-#include <stdio.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -113,7 +113,6 @@ extern tracefd_t tracefd_stdout;
  * @brief Initialize trace file descriptor context,
  *        also starts the files flusher thread.
  * @param[in]   filename          name of the trace file
- * @return                        trace file descriptor
  */
 void tracefd_init(void);
 
@@ -121,7 +120,8 @@ void tracefd_init(void);
  * @brief Create a new trace file descriptor context,
  *        also starts the files flusher thread
  * @param[in]   filename          name of the trace file
- * @return                        trace file descriptor
+ * @return                        trace file descriptor in case of success
+ *                                TRACEFD_NUMOF_ALL is case of error
  */
 tracefd_t tracefd_new(const char *filename);
 
