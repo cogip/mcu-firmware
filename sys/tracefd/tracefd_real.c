@@ -40,9 +40,9 @@ static vfs_mount_t flash_mount = {
     .private_data = &fs_desc,
 };
 
-void tracefd_init_root_dir(void)
+bool tracefd_init_root_dir(void)
 {
     fatfs_mtd_devs[fs_desc.vol_idx] = (mtd_dev_t *)&mtd_sdcard_dev;
     int res = vfs_mount(&flash_mount);
-    assert(res >= 0);
+    return (res == 0);
 }

@@ -36,7 +36,9 @@ static void *_thread_trace(void *arg)
         if (pf_trace_on()) {
             pf_print_state(tracefd_stdout);
         }
-        pf_print_state(tracefd_sdcard);
+        if (tracefd_sdcard < TRACEFD_NUMOF_ALL) {
+            pf_print_state(tracefd_sdcard);
+        }
 
         xtimer_periodic_wakeup(&loop_start_time, TASK_PERIOD_MS * US_PER_MS);
     }
@@ -47,7 +49,9 @@ static void *_thread_trace(void *arg)
 void trace_start(void)
 {
     tracefd_sdcard = tracefd_new(TRACE_FILE);
-    tracefd_open(tracefd_sdcard);
+    if (tracefd_sdcard < TRACEFD_NUMOF_ALL) {
+        tracefd_open(tracefd_sdcard);
+    }
 
     /* Start the trace thread */
     thread_create(

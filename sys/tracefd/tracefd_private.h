@@ -24,13 +24,13 @@
 #pragma once
 
 /* Standard includes */
-#include <stdio.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void tracefd_init_root_dir(void);
+bool tracefd_init_root_dir(void);
 
 #ifdef __cplusplus
 }

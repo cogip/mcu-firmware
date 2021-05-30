@@ -86,9 +86,7 @@ void tracefd_init(void)
     mutex_init(&stdout_context->lock);
     tracefd_initialized++;
 
-    if (TRACEFD_NUMOF > 0) {
-        tracefd_init_root_dir();
-
+    if (TRACEFD_NUMOF > 0 && tracefd_init_root_dir()) {
         files_flusher_pid = thread_create(
             files_flusher_thread_stack,
             sizeof(files_flusher_thread_stack),
@@ -118,10 +116,13 @@ tracefd_t tracefd_new(const char *filename)
 
     /* Create or truncate the file */
     FILE *fd = fopen(context->filename, "w");
-    assert(fd);
-    fclose(fd);
-
-    return id;
+    if (fd) {
+        fclose(fd);
+        return id;
+    }
+    else {
+        return TRACEFD_NUMOF_ALL;
+    }
 }
 
 void tracefd_open(const tracefd_t tracefd)
