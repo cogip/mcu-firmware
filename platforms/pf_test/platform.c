@@ -17,6 +17,7 @@
 #include "avoidance.h"
 #include "tracefd.h"
 
+/* Platform includes */
 #include "lidar_utils.h"
 #include "lidar_obstacles.h"
 #include "trace_utils.h"
