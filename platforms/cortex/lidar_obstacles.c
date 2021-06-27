@@ -36,8 +36,8 @@ obstacles_t lidar_obstacles = OBSTACLES_NUMOF;
 /* Lidar obstacles parameters */
 obstacles_params_t lidar_obstacles_params = {
     .default_circle_radius = OBSTACLE_DEFAULT_CIRCLE_RADIUS,
-    .min_distance = ROBOT_WIDTH / 2,
-    .max_distance = LIDAR_MAX_DISTANCE - OBSTACLE_DEFAULT_CIRCLE_RADIUS + BEACON_SUPPORT_DIAMETER / 2
+    .min_distance = ROBOT_MARGIN,
+    .max_distance = LIDAR_MAX_DISTANCE,
 };
 
 /* Find consecutive obstacles and keep the nearest at the middle */
