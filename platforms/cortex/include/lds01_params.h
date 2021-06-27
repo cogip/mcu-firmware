@@ -31,7 +31,7 @@ extern void new_frame_available_cb(void);
  */
 static const lds01_params_t lds01_params[] = {
     {
-        .uart = UART_DEV(2),
+        .uart = UART_DEV(1),
         .new_frame_cb = new_frame_available_cb,
         .invert_data = true
     }
