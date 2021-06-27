@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 COGIP Robotics association
+ * Copyright (C) 2021 COGIP Robotics association
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -29,14 +29,10 @@
 /* Project includes */
 #include "ctrl.h"
 #include "quadpid.h"
+#include "obstacles.h"
 #include "odometry.h"
 #include "path.h"
 #include "utils.h"
-#include "obstacles.h"
-
-/* RIOT includes */
-#include <periph/qdec.h>
-#include <shell.h>
 
 #define ROBOT_ID            0       /**< Robot ID for logs */
 
@@ -172,23 +168,6 @@ typedef struct {
     double angle_offset;        /**< angle offset from robot front axis */
     double distance_offset;     /**< distance from robot center */
 } pf_sensor_t;
-
-/**
- * @brief   States of possible actions
- */
-typedef struct {
-    uint8_t nb_puck_front_ramp;     /**< Number of pucks in the front ramp */
-    uint8_t nb_puck_back_ramp;      /**< Number of pucks in the back ramp */
-    uint8_t front_ramp_blocked;     /**< Pucks blocked in front ramp */
-    uint8_t back_ramp_blocked;      /**< Pucks blocked in back ramp */
-    uint8_t front_arms_opened;      /**< Front arms state */
-    uint8_t goldenium_opened;       /**< Goldenium lift opened */
-    uint8_t goldenium_taken;        /**< Goldenium inside the robot */
-    uint8_t red_puck_on_hold_front; /**< Red puck lifted on front */
-    uint8_t red_puck_on_hold_back;  /**< Red puck lifted on back */
-    uint8_t any_pump_on;            /**< All pumps are turned on */
-    uint8_t front_fork_occupied;    /**< Front fork status */
-} pf_actions_context_t;
 
 /**
  * @brief Get trace mode status
@@ -364,6 +343,5 @@ static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
     .blocking_speed_error_treshold = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
     .blocking_cycles_max = PF_CTRL_BLOCKING_NB_ITERATIONS,
 };
-/** @} */
 
 /** @} */

@@ -30,8 +30,8 @@
 /* Project includes */
 #include "ctrl.h"
 #include "quadpid.h"
-#include "odometry.h"
 #include "obstacles.h"
+#include "odometry.h"
 #include "path.h"
 #include "utils.h"
 
@@ -41,13 +41,13 @@
  * @name Robot mechanical properties
  *
  * To be computed :
- *  - PULSE_PER_MM		    : Number of pulses per mm of coding wheel
- *  - WHEELS_DISTANCE		: Distance between coding wheels (pulses)
- *  - PULSE_PER_DEGREE		: Number of pulses per degree of coding wheel
+ *  - PULSE_PER_MM          : Number of pulses per mm of coding wheel
+ *  - WHEELS_DISTANCE       : Distance between coding wheels (pulses)
+ *  - PULSE_PER_DEGREE      : Number of pulses per degree of coding wheel
  *
  * Must be known :
- *  - WHEELS_DIAMETER		: Coding wheel diameter (mm)
- *  - WHEELS_DISTANCE_MM	: Distance between coding wheels (mm)
+ *  - WHEELS_DIAMETER       : Coding wheel diameter (mm)
+ *  - WHEELS_DISTANCE_MM    : Distance between coding wheels (mm)
  *  - WHEELS_ENCODER_RESOLUTION: Number of pulses by turn of coding wheels
  *
  * Intermediate calculation:
@@ -222,7 +222,7 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *m
  *
  * param[in]    robot_pose      Not used
  * param[in]    robot_speed     Not used
- * param[in]    motor_command   Motion command to sent to the motors
+ * param[in]    motor_command   Motion command to send to the motors
  *
  * @return
  **/
@@ -311,6 +311,10 @@ void motor_drive(polar_t *command);
  **/
 obstacles_t pf_get_dyn_obstacles_id(void);
 
+/**
+ * @name Platform parameters for QuadPID controller.
+ * @{
+ **/
 static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
     .ctrl_pre_mode_cb[CTRL_MODE_RUNNING] = pf_ctrl_pre_running_cb,
     .ctrl_pre_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_pre_running_cb,
