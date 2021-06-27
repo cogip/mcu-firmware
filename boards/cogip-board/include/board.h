@@ -21,7 +21,6 @@
 #pragma once
 
 #include "motor_driver.h"
-#include "platform.h"
 
 #ifdef __cplusplus
 extern "C" {
