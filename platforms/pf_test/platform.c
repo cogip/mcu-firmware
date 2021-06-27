@@ -227,7 +227,7 @@ void pf_init(void)
 #endif /* MODULE_SHELL_PLATFORMS */
 
     /* Debug LED */
-    if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT) == 0) {
+    if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT)) {
         puts("WARNING: GPIO_DEBUG_LED not initialized!");
     }
     gpio_clear(GPIO_DEBUG_LED);
