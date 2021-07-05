@@ -176,7 +176,7 @@ static const i2c_conf_t i2c_config[] = {
     },
     {
         .dev = I2C2,
-        .speed = I2C_SPEED_FAST,
+        .speed = I2C_SPEED_NORMAL,
         .scl_pin = GPIO_PIN(PORT_B, 10),
         .sda_pin = GPIO_PIN(PORT_C, 12),
         .scl_af = GPIO_AF4,
