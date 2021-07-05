@@ -103,8 +103,9 @@ static int sd21_cmd_reset_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    sd21_get_current_position();
     sd21_servo_control_position(dev, servo_id, SD21_SERVO_POS_MID);
+
+    sd21_get_current_position();
 
     return EXIT_SUCCESS;
 }
