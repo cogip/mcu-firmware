@@ -196,6 +196,12 @@ static void *_task_countdown(void *arg)
 
     ctrl_t *controller = pf_get_ctrl();
 
+    while (!pf_is_game_launched()) {}
+
+    /* Start game */
+    DEBUG("platform: Start game\n");
+    pln_start((ctrl_t *)controller);
+
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
         if (countdown < 0) {
@@ -355,9 +361,5 @@ void pf_init_tasks(void)
             NULL,
             "countdown"
             );
-
-        /* Start game */
-        DEBUG("platform: Start game\n");
-        pln_start((ctrl_t *)controller);
     }
 }
