@@ -175,7 +175,7 @@ void sd21_shell_init(const sd21_conf_t *sd21_config_new)
     shell_menu_t menu = menu_init("SD21 menu", "sd21_menu", menu_root, NULL);
 
     const shell_command_t shell_sd21_menu_commands[] = {
-        { "d", "sd21 device", sd21_cmd_device_cb },
+        { "d", "sd21 device <d>", sd21_cmd_device_cb },
         { "o", "Opened position", sd21_cmd_opened_cb },
         { "c", "Closed position", sd21_cmd_closed_cb },
         { "n", "Next servomotor", sd21_cmd_next_servo_cb },
