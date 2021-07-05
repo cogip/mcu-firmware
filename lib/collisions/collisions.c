@@ -267,10 +267,15 @@ coords_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
 coords_t collisions_find_nearest_point_in_circle(const circle_t *circle,
                                                  const coords_t *p)
 {
-    double slope = collisions_compute_slope(&circle->center, p);
+    vector_t vect = {
+        .x = p->x - circle->center.x,
+        .y = p->y - circle->center.y,
+    };
+
+    double vect_norm = sqrt(vect.x * vect.x + vect.y * vect.y);
 
     return (coords_t) {
-               .x = circle->center.x * cos(slope),
-               .y = circle->center.y * sin(slope),
+               .x = circle->center.x + (vect.x / vect_norm) * circle->radius,
+               .y = circle->center.y + (vect.y / vect_norm) * circle->radius,
     };
 }
