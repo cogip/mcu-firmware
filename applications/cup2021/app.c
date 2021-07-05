@@ -15,6 +15,9 @@ void app_init(void)
     /* Init quadpid controller */
     pf_init_quadpid_params(ctrl_quadpid_params);
 
+    /* Init servomotors to their default position */
+    sd21_init(sd21_config_app);
+
     _fixed_obstacles_init();
 }
 
