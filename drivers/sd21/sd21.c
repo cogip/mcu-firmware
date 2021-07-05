@@ -56,10 +56,11 @@ sd21_write_twi_cmd_err:
     return -1;
 }
 
-static int sd21_read_twi_cmd(sd21_t dev, uint8_t servo_id, void *data,
-                             size_t size, uint8_t offset)
+static int sd21_read_twi_cmd(sd21_t dev, uint8_t servo_id, uint16_t *data,
+                             uint8_t offset)
 {
     const sd21_conf_t *sd21 = &sd21_config[dev];
+    uint8_t tmp[3]; /* 1 byte for address + 2 bytes for data */
 
     uint8_t reg = (servo_id) * 3 + offset;
     int ret = 0;
@@ -71,12 +72,14 @@ static int sd21_read_twi_cmd(sd21_t dev, uint8_t servo_id, void *data,
         goto sd21_read_twi_cmd_err;
     }
 
-    ret = i2c_read_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, data, size,
-                        0);
+    ret = i2c_read_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, tmp,
+                        3, 0);
 
     if (ret) {
         goto sd21_read_twi_cmd_err;
     }
+
+    *data = (tmp[2] << 8) + tmp[1];
 
     i2c_release(sd21->i2c_dev_id);
 
@@ -129,8 +132,7 @@ int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t *position)
 
     sd21_get_servo(dev, servo_id);
 
-    return sd21_read_twi_cmd(dev, servo_id, (void *)position,
-                             sizeof(*position), 1);
+    return sd21_read_twi_cmd(dev, servo_id, (void *)position, 1);
 }
 
 const char *sd21_servo_get_name(sd21_t dev, uint8_t servo_id)
