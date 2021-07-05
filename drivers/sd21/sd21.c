@@ -24,8 +24,8 @@ static const sd21_servo_t *sd21_get_servo(sd21_t dev, uint8_t servo_id)
     return &sd21->servos[servo_id];
 }
 
-static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id, const void *data,
-                              size_t size, uint8_t offset)
+static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id,
+                              const uint16_t *data, uint8_t offset)
 {
     const sd21_conf_t *sd21 = &sd21_config[dev];
 
@@ -39,7 +39,7 @@ static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id, const void *data,
         goto sd21_write_twi_cmd_err;
     }
 
-    ret = i2c_write_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, data, size,
+    ret = i2c_write_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, data, 2,
                          0);
     if (ret) {
         goto sd21_write_twi_cmd_err;
@@ -101,7 +101,7 @@ int sd21_servo_control_position(sd21_t dev, uint8_t servo_id,
         position = SD21_SERVO_POS_MAX;
     }
 
-    return sd21_write_twi_cmd(dev, servo_id, &position, sizeof(position), 1);
+    return sd21_write_twi_cmd(dev, servo_id, &position, 1);
 }
 
 int sd21_servo_reach_position(sd21_t dev, uint8_t servo_id, uint8_t pos_index)
