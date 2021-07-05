@@ -191,7 +191,7 @@ static const i2c_conf_t i2c_config[] = {
 #define I2C_0_ISR   isr_i2c3_ev
 #define I2C_1_ISR   isr_i2c2_ev
 
-#define I2C_NUMOF   (sizeof(i2c_config) / sizeof(i2c_config[0]))
+#define I2C_NUMOF   ARRAY_SIZE(i2c_config)
 /** @} */
 
 /**
@@ -215,7 +215,7 @@ static const spi_conf_t spi_config[] = {
     },
 };
 
-#define SPI_NUMOF           (sizeof(spi_config) / sizeof(spi_config[0]))
+#define SPI_NUMOF   ARRAY_SIZE(spi_config)
 /** @} */
 
 /**
