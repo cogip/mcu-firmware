@@ -52,6 +52,7 @@ static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id, const void *data,
     return 0;
 
 sd21_write_twi_cmd_err:
+    irq_enable();
     return -1;
 }
 
@@ -82,6 +83,7 @@ static int sd21_read_twi_cmd(sd21_t dev, uint8_t servo_id, void *data,
     irq_enable();
 
 sd21_read_twi_cmd_err:
+    irq_enable();
     return -1;
 }
 
