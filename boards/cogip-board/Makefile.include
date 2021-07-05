@@ -1,11 +1,8 @@
-# add the common stm32 header files from RIOT repository to the include path
-INCLUDES += -I$(RIOTBASE)/boards/common/stm32/include
+# We use shared STM32 configuration snippets
+INCLUDES += -I$(RIOTBOARD)/common/stm32/include
 
-# this board uses openocd with st-link
-PROGRAMMER ?= openocd
+# Default board USB port on host (FTDI based)
+PORT = "/dev/ttyUSB0"
 
-# this board has an on-board ST-link adapter
-OPENOCD_DEBUG_ADAPTER ?= stlink
-
-# openocd programmer is supported
-PROGRAMMERS_SUPPORTED += openocd
+# Setup of programmer and serial is shared between STM32 based boards
+include $(RIOTMAKE)/boards/stm32.inc.mk
