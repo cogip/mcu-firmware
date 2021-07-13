@@ -202,8 +202,9 @@ int lds01_init(const lds01_t lds01, const lds01_params_t *params)
     }
 
     /* Initialize UART RX */
-    gpio_init(GPIO_PIN(PORT_C, 11), GPIO_IN_PU);
-    gpio_init_af(GPIO_PIN(PORT_C, 11), GPIO_AF7);
+    gpio_init(uart_config[lds01_dev->params.uart].rx_pin, GPIO_IN_PU);
+    gpio_init_af(uart_config[lds01_dev->params.uart].rx_pin, \
+                 uart_config[lds01_dev->params.uart].rx_af);
 
     USART3->CR1 |= USART_CR1_RE | USART_CR1_RXNEIE;
     USART3->CR3 |= USART_CR3_DMAR;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 COGIP Robotics association
+ * Copyright (C) 2021 COGIP Robotics association
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -29,14 +29,10 @@
 /* Project includes */
 #include "ctrl.h"
 #include "quadpid.h"
+#include "obstacles.h"
 #include "odometry.h"
 #include "path.h"
 #include "utils.h"
-#include "obstacles.h"
-
-/* RIOT includes */
-#include <periph/qdec.h>
-#include <shell.h>
 
 #define ROBOT_ID            0       /**< Robot ID for logs */
 
@@ -63,13 +59,13 @@
  *
  * @{
  */
-#define ROBOT_WIDTH              354                    /**< Robot width (mm) */
+#define ROBOT_WIDTH              440                    /**< Robot width (mm) */
 #define ROBOT_MARGIN             (ROBOT_WIDTH / 2)      /**< Point the most far from robot center (mm) */
 #define BEACON_SUPPORT_DIAMETER  70                     /**< Size of the beacon support (a cylinder of 70mm diameter to a cube of 100mm width) */
 
 #define PULSE_PER_MM             10.624                 /**< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER */
-#define WHEELS_DISTANCE          2974.72                /**< WHEELS_DISTANCE_MM * PULSE_PER_MM */
-#define PULSE_PER_DEGREE         51.91                  /**< WHEELS_DISTANCE * 2 * PI / 360 */
+#define WHEELS_DISTANCE          4451.456               /**< WHEELS_DISTANCE_MM * PULSE_PER_MM */
+#define PULSE_PER_DEGREE         77.69                  /**< WHEELS_DISTANCE * 2 * PI / 360 */
 /** @} */
 
 /**
@@ -119,9 +115,8 @@
  * @name LIDAR characteristics
  * @{
  */
-#define LIDAR_MIN_DISTANCE                  (ROBOT_MARGIN)          /**< Minimum Lidar detection distance */
-#define LIDAR_MAX_DISTANCE                  1200                    /**< Maximum Lidar detection distance */
-#define LIDAR_MINIMUN_INTENSITY             1000                    /**< Minimum intensity required to validate a Lidar distance */
+#define LIDAR_MAX_DISTANCE                  700                     /**< Maximum Lidar detection distance */
+#define LIDAR_MINIMUN_INTENSITY             800                     /**< Minimum intensity required to validate a Lidar distance */
 /** @} */
 
 /**
@@ -159,10 +154,8 @@
  * @{
  */
 #define OBSTACLES_BB_NB_VERTICES            6                       /**< Obstacle bounding box vertices number */
-#define OBSTACLES_BB_RADIUS_MARGIN          0.2                     /**< Obstacle circle bounding box mark-up */
-#define OBSTACLE_DEFAULT_CIRCLE_RADIUS      400                     /**< Obscale circle radius */
-#define OBSTACLE_DETECTION_MINIMUM_TRESHOLD 10                      /**< Minimum obstacle detection treshold */
-#define OBSTACLE_DETECTION_MAXIMUM_TRESHOLD 200                     /**< Maximum obstacle detection treshold */
+#define OBSTACLES_BB_RADIUS_MARGIN          0.4                     /**< Obstacle circle bounding box mark-up */
+#define OBSTACLE_DEFAULT_CIRCLE_RADIUS      ROBOT_WIDTH             /**< Obscale circle radius */
 /** @} */
 
 /**
@@ -172,23 +165,6 @@ typedef struct {
     double angle_offset;        /**< angle offset from robot front axis */
     double distance_offset;     /**< distance from robot center */
 } pf_sensor_t;
-
-/**
- * @brief   States of possible actions
- */
-typedef struct {
-    uint8_t nb_puck_front_ramp;     /**< Number of pucks in the front ramp */
-    uint8_t nb_puck_back_ramp;      /**< Number of pucks in the back ramp */
-    uint8_t front_ramp_blocked;     /**< Pucks blocked in front ramp */
-    uint8_t back_ramp_blocked;      /**< Pucks blocked in back ramp */
-    uint8_t front_arms_opened;      /**< Front arms state */
-    uint8_t goldenium_opened;       /**< Goldenium lift opened */
-    uint8_t goldenium_taken;        /**< Goldenium inside the robot */
-    uint8_t red_puck_on_hold_front; /**< Red puck lifted on front */
-    uint8_t red_puck_on_hold_back;  /**< Red puck lifted on back */
-    uint8_t any_pump_on;            /**< All pumps are turned on */
-    uint8_t front_fork_occupied;    /**< Front fork status */
-} pf_actions_context_t;
 
 /**
  * @brief Get trace mode status
@@ -364,6 +340,5 @@ static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
     .blocking_speed_error_treshold = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
     .blocking_cycles_max = PF_CTRL_BLOCKING_NB_ITERATIONS,
 };
-/** @} */
 
 /** @} */

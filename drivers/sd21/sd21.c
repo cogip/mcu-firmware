@@ -24,8 +24,8 @@ static const sd21_servo_t *sd21_get_servo(sd21_t dev, uint8_t servo_id)
     return &sd21->servos[servo_id];
 }
 
-static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id, const void *data,
-                              size_t size, uint8_t offset)
+static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id,
+                              const uint16_t *data, uint8_t offset)
 {
     const sd21_conf_t *sd21 = &sd21_config[dev];
 
@@ -34,85 +34,59 @@ static int sd21_write_twi_cmd(sd21_t dev, uint8_t servo_id, const void *data,
 
     irq_disable();
 
-    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        ret = i2c_acquire(sd21->i2c_dev_id);
-        if (!ret) {
-            break;
-        }
-    }
+    ret = i2c_acquire(sd21->i2c_dev_id);
     if (ret) {
         goto sd21_write_twi_cmd_err;
     }
 
-    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        ret = i2c_write_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, data,
-                             size, 0);
-        if (!ret) {
-            break;
-        }
-        xtimer_usleep(20 * US_PER_MS);
-    }
+    ret = i2c_write_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, data, 2,
+                         0);
     if (ret) {
         goto sd21_write_twi_cmd_err;
     }
 
-    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        i2c_release(sd21->i2c_dev_id);
-    }
-    if (ret) {
-        goto sd21_write_twi_cmd_err;
-    }
+    i2c_release(sd21->i2c_dev_id);
 
     irq_enable();
 
     return 0;
 
 sd21_write_twi_cmd_err:
+    irq_enable();
     return -1;
 }
 
-static int sd21_read_twi_cmd(sd21_t dev, uint8_t servo_id, void *data,
-                             size_t size, uint8_t offset)
+static int sd21_read_twi_cmd(sd21_t dev, uint8_t servo_id, uint16_t *data,
+                             uint8_t offset)
 {
     const sd21_conf_t *sd21 = &sd21_config[dev];
+    uint8_t tmp[3]; /* 1 byte for address + 2 bytes for data */
 
     uint8_t reg = (servo_id) * 3 + offset;
     int ret = 0;
 
     irq_disable();
 
-    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        ret = i2c_acquire(sd21->i2c_dev_id);
-        if (!ret) {
-            break;
-        }
-    }
+    ret = i2c_acquire(sd21->i2c_dev_id);
     if (ret) {
         goto sd21_read_twi_cmd_err;
     }
 
-    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        ret = i2c_read_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, data,
-                            size, 0);
-        if (!ret) {
-            break;
-        }
-        xtimer_usleep(20 * US_PER_MS);
-    }
+    ret = i2c_read_regs(sd21->i2c_dev_id, sd21->i2c_address, reg, tmp,
+                        3, 0);
+
     if (ret) {
         goto sd21_read_twi_cmd_err;
     }
 
-    for (int i = SD21_I2C_RETRIES; i > 0; i--) {
-        i2c_release(sd21->i2c_dev_id);
-    }
-    if (ret) {
-        goto sd21_read_twi_cmd_err;
-    }
+    *data = (tmp[2] << 8) + tmp[1];
+
+    i2c_release(sd21->i2c_dev_id);
 
     irq_enable();
 
 sd21_read_twi_cmd_err:
+    irq_enable();
     return -1;
 }
 
@@ -127,7 +101,7 @@ int sd21_servo_control_position(sd21_t dev, uint8_t servo_id,
         position = SD21_SERVO_POS_MAX;
     }
 
-    return sd21_write_twi_cmd(dev, servo_id, &position, sizeof(position), 1);
+    return sd21_write_twi_cmd(dev, servo_id, &position, 1);
 }
 
 int sd21_servo_reach_position(sd21_t dev, uint8_t servo_id, uint8_t pos_index)
@@ -158,8 +132,7 @@ int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t *position)
 
     sd21_get_servo(dev, servo_id);
 
-    return sd21_read_twi_cmd(dev, servo_id, (void *)position,
-                             sizeof(*position), 1);
+    return sd21_read_twi_cmd(dev, servo_id, (void *)position, 1);
 }
 
 const char *sd21_servo_get_name(sd21_t dev, uint8_t servo_id)

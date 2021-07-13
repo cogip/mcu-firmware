@@ -65,9 +65,9 @@ static const uart_conf_t uart_config[] = {
         .tx_af = GPIO_AF7,
         .bus = APB1,
         .irqn = USART2_IRQn,
-#ifdef UART_USE_DMA
-        .dma_stream = 6,
-        .dma_chan = 4
+#ifdef MODULE_PERIPH_DMA
+        .dma = DMA_STREAM_UNDEF,
+        .dma_chan = UINT8_MAX,
 #endif
     },
     {
@@ -75,13 +75,13 @@ static const uart_conf_t uart_config[] = {
         .rcc_mask = RCC_APB1ENR_USART3EN,
         .rx_pin = GPIO_PIN(PORT_C, 5),
         .tx_pin = GPIO_PIN(PORT_C, 10),
-        .rx_af = GPIO_AF8,
-        .tx_af = GPIO_AF8,
-        .bus = APB2,
+        .rx_af = GPIO_AF7,
+        .tx_af = GPIO_AF7,
+        .bus = APB1,
         .irqn = USART3_IRQn,
-#ifdef UART_USE_DMA
-        .dma_stream = 6,
-        .dma_chan = 4
+#ifdef MODULE_PERIPH_DMA
+        .dma = DMA_STREAM_UNDEF,
+        .dma_chan = UINT8_MAX,
 #endif
     }
 };
@@ -91,7 +91,7 @@ static const uart_conf_t uart_config[] = {
 #define UART_1_ISR      (isr_usart6)
 #define UART_1_DMA_ISR  (isr_dma1_stream6)
 
-#define UART_NUMOF      (sizeof(uart_config) / sizeof(uart_config[0]))
+#define UART_NUMOF      ARRAY_SIZE(uart_config)
 /** @} */
 
 /**
@@ -176,7 +176,7 @@ static const i2c_conf_t i2c_config[] = {
     },
     {
         .dev = I2C2,
-        .speed = I2C_SPEED_FAST,
+        .speed = I2C_SPEED_NORMAL,
         .scl_pin = GPIO_PIN(PORT_B, 10),
         .sda_pin = GPIO_PIN(PORT_C, 12),
         .scl_af = GPIO_AF4,
@@ -191,7 +191,7 @@ static const i2c_conf_t i2c_config[] = {
 #define I2C_0_ISR   isr_i2c3_ev
 #define I2C_1_ISR   isr_i2c2_ev
 
-#define I2C_NUMOF   (sizeof(i2c_config) / sizeof(i2c_config[0]))
+#define I2C_NUMOF   ARRAY_SIZE(i2c_config)
 /** @} */
 
 /**
@@ -215,7 +215,7 @@ static const spi_conf_t spi_config[] = {
     },
 };
 
-#define SPI_NUMOF           (sizeof(spi_config) / sizeof(spi_config[0]))
+#define SPI_NUMOF   ARRAY_SIZE(spi_config)
 /** @} */
 
 /**

@@ -28,9 +28,7 @@ static uint16_t sd21_get_current_position(void)
     sd21_servo_get_position(dev, servo_id, &current_position);
 
     /* Print current position on same line */
-    print_str("Current position: ");
-    print_u32_dec(current_position);
-    print_str("    \r");
+    tracefd_jlog(tracefd_stdout, "Current position: %u", current_position);
 
     return current_position;
 }
@@ -65,7 +63,7 @@ static int sd21_cmd_device_cb(int argc, char **argv)
 
     /* Check arguments */
     if (argc != 2) {
-        puts("Bad number of arguments!");
+        tracefd_jlog(tracefd_stdout, "Bad number of arguments!");
 
         return EXIT_FAILURE;
     }
@@ -83,7 +81,7 @@ static int sd21_cmd_next_servo_cb(int argc, char **argv)
     sd21_get_current_position();
     servo_id = (servo_id >= sd21_config[dev].servos_nb - 1) ?
                sd21_config[dev].servos_nb - 1 : servo_id + 1;
-    printf("\n\n%s\n", sd21_servo_get_name(dev, servo_id));
+    tracefd_jlog(tracefd_stdout, "Current servo: %s", sd21_servo_get_name(dev, servo_id));
 
     return EXIT_SUCCESS;
 }
@@ -95,7 +93,7 @@ static int sd21_cmd_previous_servo_cb(int argc, char **argv)
 
     sd21_get_current_position();
     servo_id = (servo_id == 0) ? 0 : servo_id - 1;
-    printf("\n\n%s\n", sd21_servo_get_name(dev, servo_id));
+    tracefd_jlog(tracefd_stdout, "Current servo: %s", sd21_servo_get_name(dev, servo_id));
 
     return EXIT_SUCCESS;
 }
@@ -105,8 +103,9 @@ static int sd21_cmd_reset_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    sd21_get_current_position();
     sd21_servo_control_position(dev, servo_id, SD21_SERVO_POS_MID);
+
+    sd21_get_current_position();
 
     return EXIT_SUCCESS;
 }
@@ -139,7 +138,7 @@ static int sd21_cmd_switch_cb(int argc, char **argv)
 
     /* Check arguments */
     if (argc != 2) {
-        puts("Bad number of arguments!");
+        tracefd_jlog(tracefd_stdout, "Bad number of arguments!");
         return EXIT_FAILURE;
     }
 
@@ -176,7 +175,7 @@ void sd21_shell_init(const sd21_conf_t *sd21_config_new)
     shell_menu_t menu = menu_init("SD21 menu", "sd21_menu", menu_root, NULL);
 
     const shell_command_t shell_sd21_menu_commands[] = {
-        { "d", "sd21 device", sd21_cmd_device_cb },
+        { "d", "sd21 device <d>", sd21_cmd_device_cb },
         { "o", "Opened position", sd21_cmd_opened_cb },
         { "c", "Closed position", sd21_cmd_closed_cb },
         { "n", "Next servomotor", sd21_cmd_next_servo_cb },
