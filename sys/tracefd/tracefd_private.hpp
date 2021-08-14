@@ -23,17 +23,14 @@
 
 #pragma once
 
-/* Standard includes */
-#include <stdbool.h>
+namespace cogip {
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace tracefd {
 
-bool tracefd_init_root_dir(void);
+bool init_root_dir(void);
 
-#ifdef __cplusplus
-}
-#endif
+} // namespace tracefd
+
+} // namespace cogip
 
 /** @} */

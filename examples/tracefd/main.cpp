@@ -1,43 +1,63 @@
-/* System includes */
-#include <stdio.h>
-#include <stdlib.h>
+// RIOT includes
+#include "riot/chrono.hpp"
+#include "riot/thread.hpp"
 
-/* RIOT includes */
-#include "xtimer.h"
-
-/* Project includes */
-#include "tracefd.h"
+// Project includes
+#include "tracefd.hpp"
 
 int main(void)
 {
-    tracefd_t tracefd;
+    cogip::tracefd::out.printf("\n== Trace file descriptor example ==\n");
 
-    tracefd_printf(tracefd_stdout, "\n== Trace file descriptor example ==\n");
+    cogip::tracefd::out.printf("Example 1: write in a file and close it\n");
+    std::string filename1 = "example1.txt";
+    cogip::tracefd::file *tracefd1;
+    try {
+        tracefd1 = new cogip::tracefd::file(filename1);
+    }
+    catch(std::runtime_error &e) {
+        tracefd1 = nullptr;
+    }
+    // if/else statements are separated from try/catch to simulate that the files
+    // can be initialized in one file, but used somewhere else.
+    if (tracefd1) {
+        tracefd1->open();
+        tracefd1->printf("Trace example 1\n");
+        tracefd1->close();
+    }
+    else {
+        cogip::tracefd::out.printf("Example 1 failed\n");
+    }
 
-    tracefd_printf(tracefd_stdout, "Example 1: write in a file and close it\n");
-    tracefd = tracefd_new("example1.txt");
-    tracefd_open(tracefd);
-    tracefd_printf(tracefd, "Trace example 1\n");
-    tracefd_close(tracefd);
+    cogip::tracefd::out.printf("Example 2: write in a file and do not close it\n");
+    try {
+        cogip::tracefd::file tracefd2("example2.txt");
+        tracefd2.open();
+        tracefd2.printf("Trace example 2\n");
+    }
+    catch(...) {
+        cogip::tracefd::out.printf("Example 2 failed\n");
+    }
 
-    tracefd_printf(tracefd_stdout, "Example 2: write in a file and do not close it\n");
-    tracefd = tracefd_new("example2.txt");
-    tracefd_open(tracefd);
-    tracefd_printf(tracefd, "Trace example 2\n");
-    tracefd_printf(tracefd_stdout, "  Wait 2s to be sure the files flusher thread has operated.\n");
-    xtimer_sleep(2);
+    cogip::tracefd::out.printf("Wait 2s to be sure the files flusher thread has operated.\n");
+    riot::this_thread::sleep_for(std::chrono::seconds(2));
 
-    tracefd_printf(tracefd_stdout, "Stop files flusher thread\n");
-    tracefd_stop_files_flusher();
+    cogip::tracefd::out.printf("Stop files flusher thread\n");
+    cogip::tracefd::stop_files_flusher();
 
-    tracefd_printf(tracefd_stdout, "Example 3: write in a file and do not close it\n");
-    tracefd = tracefd_new("example3.txt");
-    tracefd_open(tracefd);
-    tracefd_printf(tracefd, "Trace example 3\n");
+    try {
+        cogip::tracefd::out.printf("Example 3: write in a file and do not close it\n");
+        cogip::tracefd::file tracefd3("example3.txt");
+        tracefd3.open();
+        tracefd3.printf("Trace example 3\n");
+    }
+    catch(...) {
+        cogip::tracefd::out.printf("Example 3 failed\n");
+    }
 
-    tracefd_printf(tracefd_stdout, "== End of example ==\n");
+    cogip::tracefd::out.printf("== End of example ==\n");
 
-    tracefd_printf(tracefd_stdout, "On real hardware, without automatic flushing, 'example3.txt' should be empty.\n\n");
+    cogip::tracefd::out.printf("On real hardware, without automatic flushing, 'example3.txt' should be empty.\n\n");
 
     return 0;
 }

@@ -1,9 +1,9 @@
-SRC = tracefd.c
+SRCXX = tracefd.cpp
 
 ifeq ($(CPU),native)
-	SRC += tracefd_native.c
+	SRCXX += tracefd_native.cpp
 else
-	SRC += tracefd_real.c
+	SRCXX += tracefd_real.cpp
 endif
 
 include $(RIOTBASE)/Makefile.base

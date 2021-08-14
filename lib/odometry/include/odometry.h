@@ -7,6 +7,10 @@
 #define SEGMENT 0
 #define ARC     1
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * \fn odometry_setup
  * \brief odometry pose_t and wheels_distance setup
@@ -24,3 +28,7 @@ void odometry_setup(double d);
 void odometry_update(pose_t *p,
                      polar_t *robot_speed,
                      const uint8_t approximation);
+
+#ifdef __cplusplus
+}
+#endif

@@ -1,19 +1,19 @@
-#include "path.h"
+#include "path.hpp"
 
-#include "platform.h"
+#include "platform.hpp"
 #include "utils.h"
 
-inline const path_pose_t *path_get_current_pose(const path_t *path)
+const path_pose_t *path_get_current_pose(const path_t *path)
 {
     return &path->poses[path->current_pose_idx];
 }
 
-inline void path_reset_current_pose_idx(path_t *path)
+void path_reset_current_pose_idx(path_t *path)
 {
     path->current_pose_idx = 0;
 }
 
-inline void path_increment_current_pose_idx(path_t *path)
+void path_increment_current_pose_idx(path_t *path)
 {
     if (path->current_pose_idx < path->nb_poses - 1) {
         path->current_pose_idx += 1;
@@ -23,7 +23,7 @@ inline void path_increment_current_pose_idx(path_t *path)
     }
 }
 
-inline void path_decrement_current_pose_idx(path_t *path)
+void path_decrement_current_pose_idx(path_t *path)
 {
     if (path->current_pose_idx > 0) {
         path->current_pose_idx -= 1;
@@ -33,7 +33,7 @@ inline void path_decrement_current_pose_idx(path_t *path)
     }
 }
 
-inline uint8_t path_get_current_max_speed(const path_t *path)
+uint8_t path_get_current_max_speed(const path_t *path)
 {
     const path_pose_t *current_path_pos = &path->poses[path->current_pose_idx];
 

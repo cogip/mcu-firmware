@@ -1,4 +1,4 @@
-NATIVEINCLUDES += -DNATIVE_INCLUDES
+NATIVEINCLUDES += -DNATIVE_INCLUDES -DBOARD_NATIVE
 NATIVEINCLUDES += -I$(RIOTBOARD)/native/include/
 NATIVEINCLUDES += -I$(RIOTBASE)/core/include/
 NATIVEINCLUDES += -I$(RIOTBASE)/drivers/include/
@@ -20,7 +20,7 @@ export CGANNOTATE ?= cg_annotate
 export GPROF ?= gprof
 
 # basic cflags:
-CFLAGS += -Wall -Wextra -pedantic $(CFLAGS_DBG)
+CFLAGS += -Wall -Wextra $(CFLAGS_DBG)
 CFLAGS_DBG ?= -g3
 
 # default std set to gnu11 if not overwritten by user

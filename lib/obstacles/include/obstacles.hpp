@@ -11,7 +11,6 @@
  * @ingroup     lib
  * @brief       Obstacles module
  *
- *
  * @{
  * @file
  * @brief       Public API for obstacles module
@@ -22,119 +21,23 @@
 
 #pragma once
 
-/* Standard includes */
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+// Standard includes
+#include <cstdint>
+#include <list>
 
-/* RIOT includes */
-#include "mutex.h"
+// RIOT includes
+#include "native_sched.h"
+#include "riot/mutex.hpp"
 
-/* Project includes */
+// Project includes
 #include "cogip_defs.h"
-#include "tracefd.h"
+#include "tracefd.hpp"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifndef OBSTACLES_NUMOF
-#define OBSTACLES_NUMOF 1   /**< number of used obstacles contexts */
-#endif
-
-#ifndef OBSTACLES_MAX_NUMBER
-#define OBSTACLES_MAX_NUMBER    360
-#endif
-
-/**
- * @brief   Obstacles parameters
- */
-typedef struct {
-    uint32_t default_circle_radius;     /**< obstacle default radius */
-    uint32_t default_rectangle_width;   /**< obstacle of rectangle type default width */
-    uint32_t min_distance;              /**< minimun distance from origin to create an obstacle */
-    uint32_t max_distance;              /**< maximum distance from origin to create an obstacle */
-} obstacles_params_t;
-
-/**
- * @brief   Obstacle types
- */
-typedef enum {
-    OBSTACLE_CIRCLE,            /**< circle */
-    OBSTACLE_POLYGON,           /**< polygon */
-    OBSTACLE_RECTANGLE,         /**< rectangle */
-} obstacle_type_t;
-
-/**
- * Obstacle default definition
- */
-typedef struct obstacle_t obstacle_t;
-
-/**
- * @brief    Generic obstacle definition
- */
-struct obstacle_t {
-    obstacle_type_t type;           /**< obstacle type */
-    coords_t center;                /**< obstacle center */
-    double radius;                  /**< obstacle circumscribed circle radius */
-    double angle;                   /**< absolute angle */
-    union {
-        circle_t circle;
-        polygon_t polygon;
-        rectangle_t rectangle;
-    } form;                         /**< geometric form */
-};
-
-/**
- * @brief   Default obstacles identifier definition
- */
-typedef unsigned int obstacles_t;
-
+#if 0 // Unused?
 /**
  * @brief   Default AABB obstacles table identifier definition
  */
 typedef unsigned int obstacles_aabb_id_t;
-
-/**
- * @brief   Default dynamic obstacles table identifier definition
- */
-typedef unsigned int obstacles_dyn_id_t;
-
-/**
- * @brief Initialize obstacles context
- *
- * @param[in]   obstacles_params  obstacles parameters
- *
- * @return                        id of the initialized obstacles
- */
-obstacles_t obstacles_init(const obstacles_params_t *obstacles_params);
-
-/**
- * @brief Initialize a rectangle obstacle
- *
- * @param[in]   center      obstacle center
- * @param[in]   length_x    obstacle length on x axis
- * @param[in]   length_y    obstacle length on y axis
- * @param[in]   angle       obstacle rotation angle
- *
- * @return                  created obstacle
- */
-obstacle_t obstacles_rectangle_init(coords_t center, double length_x,
-                                    double length_y, double angle);
-
-/**
- * @brief Return bounding box of an obstacle. This bounding box has nb_vertices
- * and has a radius of ((1 + radius_margin) * radius).
- *
- * @param[in]   obstacle        obstacle
- * @param[in]   nb_vertices     number of bounding box vertices
- * @param[in]   radius_margin   radius margin
- *
- * @return                      bounding box polygon
- */
-polygon_t obstacles_compute_obstacle_bounding_box(const obstacle_t *obstacle,
-                                                  const uint8_t nb_points, double radius_margin);
 
 /**
  * @brief Return the obstacle circumscribed circle radius
@@ -142,133 +45,141 @@ polygon_t obstacles_compute_obstacle_bounding_box(const obstacle_t *obstacle,
  * @return                    radius
  */
 double obstacles_compute_radius(const obstacle_t *obstacle);
-
-/**
- * @brief Return the default circle obstacle radius
- * @param[in]   obstacles_id  obstacles id
- * @return                    radius
- */
-double obstacles_get_default_circle_radius(const obstacles_t obstacles_id);
-
-/**
- * @brief Return the minimal distance of obstacle detection
- * @param[in]   obstacles_id  obstacles id
- * @return                    minimal distance
- */
-uint32_t obstacles_get_min_distance(const obstacles_t obstacles_id);
-
-/**
- * @brief Return the maximal distance of obstacle detection
- * @param[in]   obstacles_id  obstacles id
- * @return                    maximal distance
- */
-uint32_t obstacles_get_max_distance(const obstacles_t obstacles_id);
-
-/**
- * @brief Return the number of obstacles
- * @param[in]   obstacles_id  obstacles id
- * @return                    number of obstacles
- */
-size_t obstacles_get_nb_obstacles(const obstacles_t obstacles_id);
-
-/**
- * @brief Reset the list of obstacles
- * @param[in]   obstacles_id  obstacles id
- * @return
- */
-void obstacles_reset(const obstacles_t obstacles_id);
-
-/**
- * @brief Get an obstacle
- * @param[in]   obstacles_id  obstacles id
- * @param[in]   n             index of the obstacle to get
- * @return                    pointer to the nth obstacle
- */
-const obstacle_t *obstacles_get(const obstacles_t obstacles_id, size_t n);
-
-/**
- * @brief Get all obstacles
- * @param[in]   obstacles_id  obstacles id
- * @return                    pointer the list of obstacles
- */
-const obstacle_t *obstacles_get_all(const obstacles_t obstacles_id);
-
-/**
- * @brief Add an obstacle
- * @param[in]   obstacles_id  obstacles id
- * @return                    true if the obstacle was successfully added, false otherwise
- */
-bool obstacles_add(const obstacles_t obstacles_id, const obstacle_t obstacle);
-
-/**
- * @brief Lock obstacles data
- * @param[in]   obstacles_id  obstacles id to initialize
- */
-void obstacles_lock(const obstacles_t obstacles_id);
-
-/**
- * @brief Unlock obstacles data
- * @param[in]   obstacles_id  obstacles id
- */
-void obstacles_unlock(const obstacles_t obstacles_id);
-
-/**
- * @brief Check if the given point is inside the obstacle
- *
- * @param[in]   obstacle    obstacle
- * @param[in]   p           point to check
- *
- * @return                  true if point is inside, false otherwise
- */
-bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *p);
-
-/**
- * @brief Check if the given point is inside an obstacle
- *
- * @param[in]   p           point to check
- * @param[in]   filter      obstacle to filter
- *
- * @return                  true if point is inside, false otherwise
- */
-bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter);
-
-/**
- * @brief Check if a segment defined by two points A,B is crossing an obstacle.
- *
- * @param[in]   a           point A
- * @param[in]   b           point B
- * @param[in]   obstacle    obstacle
- *
- * @return                  true if [AB] crosses obstacle, false otherwise
- */
-bool obstacles_is_segment_crossing_obstacle(const coords_t *a, const coords_t *b, const obstacle_t *obstacle);
-
-/**
- * @brief Find the nearest point of obstacle perimeter from given point.
- *
- * @param[in]   obstacle    obstacle
- * @param[in]   p           point to check
- *
- * @return                  position of nearest point
- */
-coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
-                                                  const coords_t *p);
-
-/**
- * @brief Print specified obstacles in JSON format
- * @param[in]   obstacles_id  obstacles id
- * @param[in]   out           tracefd descriptor used to print obstacles
- */
-void obstacles_print_json(const obstacles_t obstacles_id, tracefd_t out);
-
-/**
- * @brief Print all obstacles in JSON format
- * @param[in]   out           tracefd descriptor used to print obstacles
- */
-void obstacles_print_all_json(tracefd_t out);
-
-#ifdef __cplusplus
-}
 #endif
+
+namespace cogip {
+
+namespace obstacles {
+
+class obstacle {
+public:
+    /// @brief Constructor
+    /// @param[in]   center     obstacle center
+    /// @param[in]   radius     obstacle circumscribed circle radius
+    /// @param[in]   angle      absolute angle
+    obstacle(coords_t center, double radius, double angle);
+    virtual ~obstacle() {};
+
+    /// @brief Return bounding box of an obstacle. This bounding box has nb_vertices
+    ///        and has a radius of ((1 + radius_margin) * radius).
+    /// @param[in]   nb_vertices     number of bounding box vertices
+    /// @param[in]   radius_margin   radius margin
+    /// @return                      bounding box polygon
+    polygon_t bounding_box(const uint8_t nb_vertices, double radius_margin) const;
+
+    /// @brief Check if the given point is inside the obstacle
+    /// @param[in]   p               point to check
+    /// @return                      true if point is inside, false otherwise
+    virtual bool is_point_inside(const coords_t &p) const = 0;
+
+    /// @brief Check if a segment defined by two points A,B is crossing an obstacle.
+    /// @param[in]   a               point A
+    /// @param[in]   b               point B
+    /// @param[in]   obstacle        obstacle
+    /// @return                      true if [AB] crosses obstacle, false otherwise
+    virtual bool is_segment_crossing(const coords_t &a, const coords_t &b) const = 0;
+
+    /// @brief Find the nearest point of obstacle perimeter from given point.
+    /// @param[in]   p               point to check
+    /// @return                      position of nearest point
+    virtual coords_t nearest_point(const coords_t &p) const = 0;
+
+    /// @brief Print obstacles in JSON format
+    /// @param[out]   out            Trace file descriptor
+    virtual void print_json(cogip::tracefd::file &out) const = 0;
+
+    /// @brief Return obstacle center
+    const coords_t &center() const { return center_; };
+
+    /// @brief Return obstacle circumscribed circle radius
+    double radius() const { return radius_; };
+
+    /// @brief Return absolute angle
+    double angle() const { return angle_; };
+
+protected:
+    coords_t center_;                //// obstacle center
+    double radius_;                  //// obstacle circumscribed circle radius
+    double angle_;                   //// absolute angle
+};
+
+class rectangle : public obstacle {
+public:
+    rectangle(coords_t center, double angle,
+              double length_x, double length_y);
+
+    bool is_point_inside(const coords_t &p) const;
+    bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
+    coords_t nearest_point(const coords_t &p) const;
+    void print_json(cogip::tracefd::file &out) const;
+
+private:
+    rectangle_t rectangle_;
+};
+
+class circle : public obstacle {
+public:
+    circle(coords_t center, double radius, double angle);
+
+    bool is_point_inside(const coords_t &p) const;
+    bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
+    coords_t nearest_point(const coords_t &p) const;
+    void print_json(cogip::tracefd::file &out) const;
+
+private:
+    circle_t circle_;
+};
+
+class polygon : public obstacle {
+public:
+    polygon(const std::list<coords_t> *points);
+
+    bool is_point_inside(const coords_t &p) const;
+    bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
+    coords_t nearest_point(const coords_t &p) const;
+    void print_json(cogip::tracefd::file &out) const;
+
+private:
+    polygon_t polygon_;
+};
+
+class list: public std::list<obstacle *> {
+public:
+    list(uint32_t default_circle_radius = 0,
+         uint32_t default_rectangle_width = 0,
+         uint32_t min_distance = 0,
+         uint32_t max_distance = 0);
+    ~list();
+
+    uint32_t default_circle_radius() { return default_circle_radius_; };
+    uint32_t default_rectangle_width() { return default_rectangle_width_; };
+    uint32_t min_distance() { return min_distance_; };
+    uint32_t max_distance() { return max_distance_; };
+    void lock() { mutex_.lock(); };
+    void unlock() { mutex_.unlock(); };
+    void print_json(cogip::tracefd::file &out) const;
+    void clear();
+
+private:
+    uint32_t default_circle_radius_;     /// obstacle default radius
+    uint32_t default_rectangle_width_;   /// obstacle of rectangle type default width
+    uint32_t min_distance_;              /// minimun distance from origin to create an obstacle
+    uint32_t max_distance_;              /// maximum distance from origin to create an obstacle
+    riot::mutex mutex_;                  /// mutex protecting file access
+};
+
+/// @brief Check if the given point is inside an obstacle
+/// @param[in]   p           point to check
+/// @param[in]   filter      obstacle to filter
+/// @return                  true if point is inside, false otherwise
+bool is_point_in_obstacles(const coords_t &p, const obstacle *filter);
+
+/// @brief Print all obstacles from all lists
+/// @param[in]   out         trace file descriptor
+void print_all_json(cogip::tracefd::file &out);
+
+} // namespace obstacles
+
+} // namespace cogip
 
 /** @} */

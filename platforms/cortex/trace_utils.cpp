@@ -1,20 +1,19 @@
-/* System includes */
-#include <stdlib.h>
+#include "trace_utils.hpp"
 
-/* RIOT includes */
-#include "xtimer.h"
+// RIOT includes
+#include "riot/chrono.hpp"
+#include "riot/thread.hpp"
 
-/* Application includes */
-#include "trace_utils.h"
-#include "tracefd.h"
-#include "platform.h"
-#include "obstacles.h"
+// Application includes
+#include "tracefd.hpp"
+#include "platform.hpp"
+#include "obstacles.hpp"
 
 /* Trace filename */
 #define TRACE_FILE "trace.txt"
 
 /* Trace file descriptor on sdcard */
-static tracefd_t tracefd_sdcard;
+static cogip::tracefd::file *tracefd_sdcard;
 
 /* Periodic task */
 #define TASK_PERIOD_MS 60
@@ -30,17 +29,14 @@ static void *_thread_trace(void *arg)
 {
     (void)arg;
 
-    for (;;) {
-        xtimer_ticks32_t loop_start_time = xtimer_now();
-
+    while (true) {
         if (pf_trace_on()) {
-            pf_print_state(tracefd_stdout);
+            pf_print_state(cogip::tracefd::out);
         }
-        if (tracefd_sdcard < TRACEFD_NUMOF_ALL) {
-            pf_print_state(tracefd_sdcard);
+        if (tracefd_sdcard) {
+            pf_print_state(*tracefd_sdcard);
         }
-
-        xtimer_periodic_wakeup(&loop_start_time, TASK_PERIOD_MS * US_PER_MS);
+        riot::this_thread::sleep_for(std::chrono::milliseconds(TASK_PERIOD_MS));
     }
 
     return NULL;
@@ -48,9 +44,12 @@ static void *_thread_trace(void *arg)
 
 void trace_start(void)
 {
-    tracefd_sdcard = tracefd_new(TRACE_FILE);
-    if (tracefd_sdcard < TRACEFD_NUMOF_ALL) {
-        tracefd_open(tracefd_sdcard);
+    try {
+        tracefd_sdcard = new cogip::tracefd::file(TRACE_FILE);
+        tracefd_sdcard->open();
+    }
+    catch(std::runtime_error &) {
+        tracefd_sdcard = nullptr;
     }
 
     /* Start the trace thread */

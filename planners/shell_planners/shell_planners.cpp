@@ -1,16 +1,17 @@
-#include <stdio.h>
+#include "shell_planners.hpp"
+#include "planner.hpp"
 
 /* Standard includes */
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
 
 /* RIOT includes */
 #include "fmt.h"
 #include "xtimer.h"
 
 /* Project includes */
-#include "planner.h"
-#include "platform.h"
-#include "shell_planners.h"
+#include "shell_menu.hpp"
+#include "platform.hpp"
 
 /* Shell command array */
 static uint8_t shell_path_index;
@@ -102,17 +103,19 @@ void pln_menu_enter(void)
 void pln_shell_init(void)
 {
     /* Planners menu and commands */
-    shell_menu_t menu = menu_init("Planners menu", "pln_menu", menu_root, pln_menu_enter);
+    cogip::shell::menu *menu = new cogip::shell::menu(
+        "Planners menu", "pln_menu", &cogip::shell::root_menu, pln_menu_enter);
 
-    const shell_command_t planners_menu_commands[] = {
-        { "n", "Go to next position", pln_cmd_go_next_cb },
-        { "p", "Go to previous position", pln_cmd_go_previous_cb },
-        { "s", "Go back to start position", pln_cmd_go_start_cb },
-        { "a", "Launch action", pln_cmd_launch_action_cb },
-        { "P", "Play", pln_cmd_play_cb },
-        { "S", "Stop", pln_cmd_stop_cb },
-        MENU_NULL_CMD,
-    };
-
-    menu_add_list(menu, planners_menu_commands);
+    menu->push_back(new cogip::shell::command(
+        "n", "Go to next position", pln_cmd_go_next_cb));
+    menu->push_back(new cogip::shell::command(
+        "p", "Go to previous position", pln_cmd_go_previous_cb));
+    menu->push_back(new cogip::shell::command(
+        "s", "Go back to start position", pln_cmd_go_start_cb));
+    menu->push_back(new cogip::shell::command(
+        "a", "Launch action", pln_cmd_launch_action_cb));
+    menu->push_back(new cogip::shell::command(
+        "P", "Play", pln_cmd_play_cb));
+    menu->push_back(new cogip::shell::command(
+        "S", "Stop", pln_cmd_stop_cb));
 }

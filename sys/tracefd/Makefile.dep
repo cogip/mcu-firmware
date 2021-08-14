@@ -1,4 +1,7 @@
-USEMODULE += xtimer
+# Use newlib instead of newlib_nano to support C++ exceptions
+DISABLE_MODULE += newlib_nano
+
+USEMODULE += cpp11-compat
 
 ifneq ($(CPU),native)
 	USEMODULE += mtd_sdcard

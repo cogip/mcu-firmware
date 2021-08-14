@@ -11,13 +11,13 @@
 #include "periph/qdec.h"
 
 /* Project includes */
-#include "avoidance.h"
-#include "obstacles.h"
-#include "platform.h"
-#include "ctrl.h"
-#include "shell_menu.h"
-#include "shell_platforms.h"
-#include "tracefd.h"
+#include "avoidance.hpp"
+#include "obstacles.hpp"
+#include "platform.hpp"
+#include "ctrl.hpp"
+#include "shell_menu.hpp"
+#include "shell_platforms.hpp"
+#include "tracefd.hpp"
 
 #ifdef MODULE_SHMEM
 #include "shmem.h"
@@ -35,11 +35,11 @@ static int _cmd_trace_on_off(int argc, char **argv)
     (void)argc;
     (void)argv;
     if (pf_trace_on()) {
-        menu_rename_command("_trace_off", "_trace_on");
+        cogip::shell::rename_command("_trace_off", "_trace_on");
         pf_set_trace_mode(false);
     }
     else {
-        menu_rename_command("_trace_on", "_trace_off");
+        cogip::shell::rename_command("_trace_on", "_trace_off");
         pf_set_trace_mode(true);
     }
     return 0;
@@ -50,7 +50,7 @@ static int _cmd_print_state(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pf_print_state(tracefd_stdout);
+    pf_print_state(cogip::tracefd::out);
 
     return EXIT_SUCCESS;
 }
@@ -73,43 +73,43 @@ int pf_motors_test(int argc, char **argv)
             int32_t qdec_value = 0;
             int timeout = 3000;
 
-            tracefd_jlog(tracefd_stdout, "### Testing motor %d of motor driver %d", j, i);
+            cogip::tracefd::out.logf("### Testing motor %d of motor driver %d", j, i);
 
             /* Reset qdec */
             qdec_read_and_reset(QDEC_DEV(nb_motors + j));
 
             /* Forward */
-            tracefd_jlog(tracefd_stdout, "    Forward move");
+            cogip::tracefd::out.logf("    Forward move");
             motor_set(i, j, pwm_resolution / 4);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            tracefd_jlog(tracefd_stdout, "    qdec value = %" PRId32, qdec_value);
-            tracefd_jlog(tracefd_stdout, "    Done");
+            cogip::tracefd::out.logf("    qdec value = %" PRId32, qdec_value);
+            cogip::tracefd::out.logf("    Done");
 
             /* Stop */
             timeout = 3000;
             qdec_value = 0;
-            tracefd_jlog(tracefd_stdout, "    Stop");
+            cogip::tracefd::out.logf("    Stop");
             motor_set(i, j, 0);
             xtimer_usleep(3 * US_PER_SEC);
-            tracefd_jlog(tracefd_stdout, "    Done");
+            cogip::tracefd::out.logf("    Done");
 
             /* Backward */
-            tracefd_jlog(tracefd_stdout, "    Backward move");
+            cogip::tracefd::out.logf("    Backward move");
             motor_set(i, j, -pwm_resolution / 4);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            tracefd_jlog(tracefd_stdout, "    qdec value = %" PRId32, qdec_value);
-            tracefd_jlog(tracefd_stdout, "    Done");
+            cogip::tracefd::out.logf("    qdec value = %" PRId32, qdec_value);
+            cogip::tracefd::out.logf("    Done");
 
             /* Stop */
-            tracefd_jlog(tracefd_stdout, "    Stop");
+            cogip::tracefd::out.logf("    Stop");
             motor_set(i, j, 0);
-            tracefd_jlog(tracefd_stdout, "    Done");
+            cogip::tracefd::out.logf("    Done");
         }
 
         nb_motors += nb_motors_tmp;
@@ -125,10 +125,10 @@ int _cmd_print_avoidance_path(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    tracefd_lock(tracefd_stdout);
-    avoidance_print_path(tracefd_stdout);
-    tracefd_printf(tracefd_stdout, "\n");
-    tracefd_unlock(tracefd_stdout);
+    cogip::tracefd::out.lock();
+    avoidance_print_path(cogip::tracefd::out);
+    cogip::tracefd::out.printf("\n");
+    cogip::tracefd::out.unlock();
 
     return EXIT_SUCCESS;
 }
@@ -138,24 +138,23 @@ void pf_shell_init(void)
     ctrl = pf_get_ctrl();
 
     /* Global commands */
-    static const shell_command_t global_commands[] = {
-        { "_state", "Print current state", _cmd_print_state },
-        { "_avoidance_path", "Print avoidance current path", _cmd_print_avoidance_path },
-        { "_trace_on", "Activate/deactivate trace", _cmd_trace_on_off },
+    cogip::shell::add_global_command(new cogip::shell::command(
+        "_state", "Print current state", _cmd_print_state
+    ));
+    cogip::shell::add_global_command(new cogip::shell::command(
+        "_avoidance_path", "Print avoidance current path", _cmd_print_avoidance_path
+    ));
+    cogip::shell::add_global_command(new cogip::shell::command(
+        "_trace_on", "Activate/deactivate trace", _cmd_trace_on_off
+    ));
 #ifdef MODULE_SHMEM
-        SHMEM_SET_KEY_CMD,
+    cogip::shell::add_global_command(new cogip::shell::command(SHMEM_SET_KEY_CMD));
 #endif
-        MENU_NULL_CMD
-    };
-    menu_set_global_commands(global_commands);
 
     /* Platforms menu and commands */
-    shell_menu_t menu = menu_init("Platforms menu", "pf_menu", menu_root, NULL);
+    cogip::shell::menu *menu = new cogip::shell::menu(
+        "Platforms menu", "pf_menu", &cogip::shell::root_menu);
 
-    const shell_command_t shell_platforms_menu_commands[] = {
-        { "mt", "Test all DC motors", pf_motors_test },
-        MENU_NULL_CMD,
-    };
-
-    menu_add_list(menu, shell_platforms_menu_commands);
+    menu->push_back(new cogip::shell::command(
+        "mt", "Test all DC motors", pf_motors_test));
 }

@@ -1,135 +1,108 @@
-/*
- * Copyright (C) 2021 COGIP Robotics association <cogip35@gmail.com>
- *
- * This file is subject to the terms and conditions of the GNU Lesser
- * General Public License v2.1. See the file LICENSE in the top level
- * directory for more details.
- */
+// Copyright (C) 2021 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
 
-/**
- * @defgroup    sys_shell_menu Shell menu
- * @ingroup     sys
- * @brief       Menus for shell
- *
- * @{
- *
- * @file
- * @brief       Shell menu interface definition
- *
- * @author      Eric Courtois <eric.courtois@gmail.com>
- */
+/// @defgroup    sys_shell_menu Shell menu
+/// @ingroup     sys
+/// @brief       Menus for shell
+/// @{
+/// @file
+/// @brief       Shell menu interface definition
+/// @author      Eric Courtois <eric.courtois@gmail.com>
 
 #pragma once
 
-/* RIOT includes */
+// System includes
+#include <string>
+#include <list>
+
+// RIOT includes
 #include "shell.h"
 
-/* Project includes */
+// Project includes
 #include "utils.h"
 
-/**
- * @brief       Max shell commands by menu
- */
+/// @def NB_SHELL_COMMANDS
+/// @brief Max shell commands by menu
 #ifndef NB_SHELL_COMMANDS
 #  define NB_SHELL_COMMANDS 20
 #endif
 
-/**
- * @brief       Max shell menus
- */
-#ifndef NB_SHELL_MENUS
-#  define NB_SHELL_MENUS 10
-#endif
+namespace cogip {
 
-/**
- * @brief       Null command used to terminate arrays of commands
- */
-#define MENU_NULL_CMD { NULL, NULL, NULL }
+namespace shell {
 
-/**
- * @brief       Typedef for shell_menu identifier.
- */
-typedef unsigned int shell_menu_t;
+class command {
+public:
+    /// @brief        Constructor.
+    /// @param[in]    name      command name
+    /// @param[in]    desc      description to print in the "help" command.
+    /// @param[in]    handler   the callback function
+    command(const std::string &name, const std::string &desc, shell_command_handler_t handler);
 
-/**
- * @brief       Root menu.
- */
-extern const shell_menu_t menu_root;
+    /// @brief        Destructor.
+    ~command();
 
-/**
- * @brief       Typedef for shell_menu structure.
- */
-typedef struct shell_menu shell_menu_data_t;
+    /// @brief        Return the name of this command.
+    const std::string & name(void) const { return name_; };
 
-/**
- * @brief       Shell menu linked list element.
- */
-struct shell_menu {
-    shell_command_t shell_commands[NB_SHELL_COMMANDS];  /**< Copy of the menu currently used */
-    shell_menu_data_t *current;                         /**< Pointer to the real current shell_commands */
-    shell_menu_data_t *previous;                        /**< Pointer to the real previous shell_commands */
-    const char *name;                                   /**< Menu name */
-    const char *cmd;                                    /**< Command to enter this menu */
-    func_cb_t enter_cb;                                 /**< Function to execute at menu entry */
+    /// @brief        Return the name of this menu.
+    /// @param[in]    name      new command name
+    void set_name(const std::string & name) { name_ = name; };
+
+    /// @brief        Return the description of this command.
+    const std::string & desc(void) const { return desc_; };
+
+    /// @brief        Return the name of this command.
+    shell_command_handler_t handler(void) const { return handler_; };
+
+private:
+    std::string name_;                 /// name of the command
+    std::string desc_;                 /// description to print in the "help" command
+    shell_command_handler_t handler_;  /// the callback function
 };
 
-/**
- * @brief        Add a a list of global commands to all menus. Should be called before any menu_init().
- *
- * @param[in]    menu      menu
- * @param[in]    command   command to add
- */
-void menu_set_global_commands(const shell_command_t command[]);
+class menu : public std::list<command *> {
+public:
+    /// @brief        Constructor.
+    /// @param[in]    name      name of the menu
+    /// @param[in]    cmd       command name to enter the menu
+    /// @param[in]    parent    parent menu (optional)
+    /// @param[in]    enter_cb  callback function executed at menu entry (optional)
+    menu(const std::string &name, const std::string &cmd,
+         menu *parent = nullptr, func_cb_t enter_cb = nullptr);
 
-/**
- * @brief        Initialize a menu.
- *
- * @param[in]    name      name of the menu
- * @param[in]    cmd       shell command to enter the menu
- * @param[in]    parent    parent menu
- * @param[in]    enter_cb  callback function executed at menu entry (can be NULL)
- *
- * @return                 menu identifer
- */
-shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t parent, func_cb_t enter_cb);
+    /// @brief        Enter this menu.
+    void enter(void) const;
 
-/**
- * @brief        Add a command to a menu.
- *
- * @param[in]    menu      menu identifier
- * @param[in]    command   command to add
- */
-void menu_add_one(const shell_menu_t menu, const shell_command_t *command);
+    /// @brief        Return the name of this menu.
+    const std::string & name(void) const { return name_; };
 
-/**
- * @brief        Add a list of command to a menu.
- *
- * @param[in]    menu       menu identifier
- * @param[in]    commands   list of commands to add
- */
-void menu_add_list(const shell_menu_t menu, const shell_command_t commands[]);
+    /// @brief        Return the parent of this menu.
+    const menu * parent(void) const { return parent_; };
 
-/**
- * @brief        Enter a new menu.
- *
- * @param[in]    menu       new menu identifier
- */
-void menu_enter(const shell_menu_t menu);
+private:
+    std::string name_;                 /// menu name
+    std::string cmd_;                  /// command to enter this menu
+    menu *parent_;                     /// pointer to the parent menu
+    func_cb_t enter_cb_;               /// function to execute at menu entry
+};
 
-/**
- * @brief        Exit current menu and go back to previous menu.
- */
-void menu_exit(void);
+/// @brief        Start the main menu.
+void start(void);
 
-/**
- * @brief        Start the main menu.
- */
-void menu_start(void);
+/// @brief        Add a global command that will be available in all menus.
+/// @param[in]    command   global command to add
+void add_global_command(command * global_command);
 
-/**
- * @brief        Rename a command.
- *
- * @param[in]    old        old command name
- * @param[in]    new        new command name
- */
-void menu_rename_command(const char *old, const char *new);
+/// @brief        Rename a command.
+/// @param[in]    old_name  old command name
+/// @param[in]    new_name  new command name
+void rename_command(const std::string &old_name, const std::string &new_name);
+
+extern menu root_menu;  /// Root menu
+
+} // namespace shell
+
+} // namespace cogip

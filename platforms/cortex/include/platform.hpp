@@ -27,11 +27,11 @@
 #pragma once
 
 /* Project includes */
-#include "ctrl.h"
-#include "quadpid.h"
-#include "obstacles.h"
+#include "ctrl.hpp"
+#include "quadpid.hpp"
+#include "obstacles.hpp"
 #include "odometry.h"
-#include "path.h"
+#include "path.hpp"
 #include "utils.h"
 
 #define ROBOT_ID            0       /**< Robot ID for logs */
@@ -75,7 +75,6 @@
  */
 #define PF_START_COUNTDOWN  3   /**< Delay to press a key before the robot
                                    starts */
-#define NB_SHELL_COMMANDS   17  /**< Shell commands array size */
 /** @} */
 
 /**
@@ -189,7 +188,7 @@ void pf_set_trace_mode(bool state);
  *
  * @return
  */
-void pf_print_state(tracefd_t out);
+void pf_print_state(cogip::tracefd::file &out);
 
 /**
  * @brief Get platform path
@@ -313,29 +312,33 @@ void encoder_reset(void);
 void motor_drive(polar_t *command);
 
 /**
- * @brief Get dynamic obstacles context.
+ * @brief Get dynamic obstacles list.
  *
- * @return                      id of dynamic obstacles context
+ * @return                      dynamic obstacles list
  **/
-obstacles_t pf_get_dyn_obstacles_id(void);
+cogip::obstacles::list * pf_get_dyn_obstacles(void);
 
 /**
  * @name Platform parameters for QuadPID controller.
  * @{
  **/
 static const ctrl_platform_configuration_t ctrl_pf_quadpid_conf = {
-    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING] = pf_ctrl_pre_running_cb,
-    .ctrl_pre_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_pre_running_cb,
-    .ctrl_pre_mode_cb[CTRL_MODE_STOP] = pf_ctrl_pre_running_cb,
-    .ctrl_pre_mode_cb[CTRL_MODE_BLOCKED] = pf_ctrl_pre_running_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_STOP] = pf_ctrl_post_stop_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_BLOCKED] = pf_ctrl_post_stop_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_RUNNING] = pf_ctrl_post_running_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_RUNNING_SPEED] = pf_ctrl_post_running_cb,
-
-    .ctrl_pre_mode_cb[CTRL_MODE_PASSTHROUGH] = pf_ctrl_pre_running_cb,
-    .ctrl_post_mode_cb[CTRL_MODE_PASSTHROUGH] = pf_ctrl_post_running_cb,
-
+    .ctrl_pre_mode_cb = {
+        pf_ctrl_pre_running_cb,  // CTRL_MODE_STOP
+        nullptr,                 // CTRL_MODE_IDLE
+        pf_ctrl_pre_running_cb,  // CTRL_MODE_BLOCKED
+        pf_ctrl_pre_running_cb,  // CTRL_MODE_RUNNING
+        pf_ctrl_pre_running_cb,  // CTRL_MODE_RUNNING_SPEED
+        pf_ctrl_pre_running_cb,  // CTRL_MODE_PASSTHROUGH
+    },
+    .ctrl_post_mode_cb = {
+        pf_ctrl_post_stop_cb,    // CTRL_MODE_STOP
+        nullptr,                 // CTRL_MODE_IDLE
+        pf_ctrl_post_stop_cb,    // CTRL_MODE_BLOCKED
+        pf_ctrl_post_running_cb, // CTRL_MODE_RUNNING
+        pf_ctrl_post_running_cb, // CTRL_MODE_RUNNING_SPEED
+        pf_ctrl_post_running_cb, // CTRL_MODE_PASSTHROUGH
+    },
     .blocking_speed_treshold = PF_CTRL_BLOCKING_SPEED_TRESHOLD,
     .blocking_speed_error_treshold = PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD,
     .blocking_cycles_max = PF_CTRL_BLOCKING_NB_ITERATIONS,

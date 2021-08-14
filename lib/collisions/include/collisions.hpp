@@ -23,7 +23,7 @@
 
 
 /* Project includes */
-#include "obstacles.h"
+#include "obstacles.hpp"
 #include "utils.h"
 
 /**
@@ -84,7 +84,7 @@ double collisions_compute_polygon_radius(const polygon_t *polygon, const coords_
  *
  * @return                  true if point is in polygon, false otherwise
  */
-bool collisions_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *p);
+bool collisions_is_point_in_obstacle(const cogip::obstacles::obstacle *obstacle, const coords_t *p);
 
 /**
  * @brief Check if a segment defined by two points A,B is crossing line

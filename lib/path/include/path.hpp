@@ -24,10 +24,6 @@
 #include "utils.h"
 #include "odometry.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * @brief Position type as used in path type
  */
@@ -93,9 +89,5 @@ uint8_t path_get_current_max_speed(const path_t *path);
  * @param[out]    path    robot path
  */
 void path_horizontal_mirror_all_poses(const path_t *path);
-
-#ifdef __cplusplus
-}
-#endif
 
 /** @} */

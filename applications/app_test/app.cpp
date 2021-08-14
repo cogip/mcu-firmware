@@ -1,7 +1,7 @@
 /* Project includes */
-#include "app.h"
-#include "app_conf.h"
-#include "platform.h"
+#include "app.hpp"
+#include "app_conf.hpp"
+#include "platform.hpp"
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
