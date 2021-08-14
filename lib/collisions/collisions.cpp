@@ -4,7 +4,7 @@
 #include <math.h>
 
 /* Project includes */
-#include "collisions.h"
+#include "collisions.hpp"
 
 static int8_t _get_point_index_in_polygon(const polygon_t *polygon, const coords_t *p)
 {
@@ -44,9 +44,9 @@ coords_t collisions_compute_polygon_center(const polygon_t *polygon)
         sum_y += polygon->points[i].y;
     }
 
-    return (coords_t){
-               .x = sum_x / polygon->count,
-               .y = sum_y / polygon->count
+    return {
+        sum_x / polygon->count,
+        sum_y / polygon->count
     };
 }
 

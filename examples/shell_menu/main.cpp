@@ -1,8 +1,6 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include <cstdio>
 
-#include "shell.h"
-#include "shell_menu.h"
+#include "shell_menu.hpp"
 
 bool trace_on = false;
 
@@ -20,12 +18,12 @@ static int cmd_trace_on_off(int argc, char **argv)
     (void)argv;
     if (trace_on) {
         puts("Deactivate traces");
-        menu_rename_command("trace_off", "trace_on");
+        cogip::shell::rename_command("trace_off", "trace_on");
         trace_on = false;
     }
     else {
         puts("Activate traces");
-        menu_rename_command("trace_on", "trace_off");
+        cogip::shell::rename_command("trace_on", "trace_off");
         trace_on = true;
     }
     return 0;
@@ -94,52 +92,37 @@ void module1_enter_callback(void)
 
 void module1_init(void)
 {
-    shell_menu_t menu = menu_init("Module 1 menu", "mod1", menu_root, module1_enter_callback);
-    static const shell_command_t menu_commands[] = {
-        { "cmd_1", "Module 1 command 1", cmd_1_1 },
-        { "cmd_2", "Module 1 command 2", cmd_1_2 },
-        MENU_NULL_CMD
-    };
-
-    menu_add_list(menu, menu_commands);
+    cogip::shell::menu *menu = new cogip::shell::menu(
+        "Module 1 menu", "mod1", &cogip::shell::root_menu, module1_enter_callback);
+    menu->push_back(new cogip::shell::command("cmd_1", "Module 1 command 1", cmd_1_1));
+    menu->push_back(new cogip::shell::command("cmd_2", "Module 1 command 2", cmd_1_2));
 }
 
 void module2_init(void)
 {
-    shell_menu_t menu = menu_init("Module 2 menu", "mod2", menu_root, NULL);
-    static const shell_command_t menu_commands[] = {
-        { "cmd_1", "Module 2 command 1", cmd_2_1 },
-        { "cmd_2", "Module 2 command 2", cmd_2_2 },
-        MENU_NULL_CMD
-    };
+    cogip::shell::menu *menu = new cogip::shell::menu(
+        "Module 2 menu", "mod2", &cogip::shell::root_menu);
+    menu->push_back(new cogip::shell::command("cmd_1", "Module 2 command 1", cmd_2_1));
+    menu->push_back(new cogip::shell::command("cmd_2", "Module 2 command 2", cmd_2_2));
 
-    menu_add_list(menu, menu_commands);
-
-    /* Add a sub menu in the module */
-    shell_menu_t sub_menu = menu_init("Module 2 sub-menu", "mod2_sub", menu, NULL);
-    static const shell_command_t sub_menu_commands[] = {
-        { "cmd_1", "Module 2 sub-menu command", cmd_2_1_sub },
-        MENU_NULL_CMD
-    };
-    menu_add_list(sub_menu, sub_menu_commands);
+    // Add a sub menu in the module
+    cogip::shell::menu *sub_menu = new cogip::shell::menu(
+        "Module 2 sub-menu", "mod2_sub", menu);
+    sub_menu->push_back(
+        new cogip::shell::command("cmd_1", "Module 2 sub-menu command", cmd_2_1_sub));
 }
 
 void app_init(void)
 {
-    static shell_command_t global_commands[] = {
-        { "global", "Global command", cmd_global },
-        { "trace_on", "Activate/deactivate trace", cmd_trace_on_off },
-        MENU_NULL_CMD
-    };
+    cogip::shell::add_global_command(
+        new cogip::shell::command("global", "Global command", cmd_global));
+    cogip::shell::add_global_command(
+        new cogip::shell::command("trace_on", "Activate/deactivate trace", cmd_trace_on_off));
 
-    menu_set_global_commands(global_commands);
-
-    const shell_command_t main_menu_commands[] = {
-        { "cmd_1", "Command 1", cmd_1 },
-        { "cmd_2", "Command 2", cmd_2 },
-        MENU_NULL_CMD
-    };
-    menu_add_list(menu_root, main_menu_commands);
+    cogip::shell::root_menu.push_back(
+        new cogip::shell::command("cmd_1", "Command 1", cmd_1));
+    cogip::shell::root_menu.push_back(
+        new cogip::shell::command("cmd_2", "Command 2", cmd_2));
 }
 
 int main(void)
@@ -150,8 +133,8 @@ int main(void)
     module1_init();
     module2_init();
 
-    /* Start shell */
-    menu_start();
+    // Start shell
+    cogip::shell::start();
 
     return 0;
 }

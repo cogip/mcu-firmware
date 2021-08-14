@@ -1,70 +1,50 @@
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "shell_menu.hpp"
 
-#include "shell_menu.h"
-#include "tracefd.h"
+// System includes
+#include <cassert>
+#include <set>
+#include <map>
 
-#define MENU_MAX_DESC_SIZE 128
+// Project includes
+#include "tracefd.hpp"
 
-const shell_menu_t menu_root = 0;
+namespace cogip {
 
-static shell_menu_data_t shell_menus[NB_SHELL_MENUS];
-static shell_menu_data_t current_menu;
-static unsigned int nb_menus = 0;
-static const shell_command_t *global_commands = NULL;
-static char menu_desc[NB_SHELL_MENUS][MENU_MAX_DESC_SIZE];
+namespace shell {
 
-static shell_menu_t _find_menu_by_command(const char *cmd)
-{
-    shell_menu_t menu;
+menu root_menu("Main", "");                     /// Root menu
 
-    for (menu = 1; menu < nb_menus; menu++) {
-        if (strcmp(cmd, shell_menus[menu].cmd) == 0) {
-            break;
-        }
-    }
+// Definition of static variables
+static std::map<std::string, menu *> all_menus; /// Map containings all menus indexed by cmd
+static std::set<command *> all_commands;        /// All commands
+static std::list<command *> global_commands;    /// Global commands, available in all menus
+static const menu *current_menu = nullptr;      /// Pointer to the current menu
 
-    return menu;
-}
+// Shell commands used by RIOT shell module.
+// It is updated each a menu is entered or exited.
+static shell_command_t current_commands[NB_SHELL_COMMANDS];
 
-static int _cmd_enter_sub_menu(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    shell_menu_t menu = _find_menu_by_command(argv[0]);
-
-    if (menu < nb_menus) {
-        menu_enter(menu);
-    }
-
-    return 0;
-}
-
-
+// Callbacks for default global commands
 static int _display_json_help(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
 
-    tracefd_lock(tracefd_stdout);
-    tracefd_printf(tracefd_stdout, "{\"name\":\"%s\",\"entries\":[", current_menu.name);
-    shell_command_t *cmd = (shell_command_t *)&current_menu;
+    cogip::tracefd::out.lock();
+    cogip::tracefd::out.printf("{\"name\":\"%s\",\"entries\":[", current_menu->name().c_str());
+    shell_command_t *cmd = current_commands;
     for (; cmd->name != NULL; cmd++) {
-        if (cmd != (shell_command_t *)&current_menu) {
-            tracefd_printf(tracefd_stdout, ",");
+        if (cmd != current_commands) {
+            cogip::tracefd::out.printf(",");
         }
-        tracefd_printf(
-            tracefd_stdout,
+        cogip::tracefd::out.printf(
             "{\"cmd\":\"%s\",\"desc\":\"%s\"}",
             cmd->name,
             cmd->desc
             );
     }
-    tracefd_printf(tracefd_stdout, "]}\n");
-    tracefd_unlock(tracefd_stdout);
+    cogip::tracefd::out.printf("]}\n");
+    cogip::tracefd::out.unlock();
 
     return EXIT_SUCCESS;
 }
@@ -74,155 +54,132 @@ static int _exit_menu(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    menu_exit();
+    if (current_menu->parent()) {
+        cogip::tracefd::out.logf("Exit shell menu: %s", current_menu->name().c_str());
+        current_menu->parent()->enter();
+    }
 
     return EXIT_SUCCESS;
 }
 
-const shell_command_t cmd_exit_menu = {
-    "exit", "Exit current menu",
-    _exit_menu
-};
-
-const shell_command_t cmd_help_json = {
-    "_help_json", "Display available commands in JSON format",
-    _display_json_help
-};
-
-void menu_set_global_commands(const shell_command_t command[])
+// Callback executed to enter a sub-menu
+static int _cmd_enter_sub_menu(int argc, char **argv)
 {
-    global_commands = command;
-    menu_add_list(menu_root, global_commands);
+    (void)argc;
+    (void)argv;
+
+    auto it = all_menus.find(argv[0]);
+    if (it != all_menus.end()) {
+        it->second->enter();
+    }
+
+    return EXIT_SUCCESS;
 }
 
-static void _init_main_menu(void)
+// command methods
+command::command(const ::std::string &name, const ::std::string &desc, shell_command_handler_t handler)
+    : name_(name), desc_(desc), handler_(handler)
 {
-    if (nb_menus != 0) {
-        return;
-    }
-
-    shell_menus[menu_root].name = "Main menu";
-    shell_menus[menu_root].current = &shell_menus[menu_root];
-    shell_menus[menu_root].previous = NULL;
-    for (uint8_t i = 0; i < NB_SHELL_COMMANDS; i++) {
-        shell_menus[menu_root].shell_commands[i] = (const shell_command_t)MENU_NULL_CMD;
-    }
-    nb_menus++;
-
-    menu_add_one(menu_root, &cmd_exit_menu);
-    menu_add_one(menu_root, &cmd_help_json);
+    all_commands.insert(this);
 }
 
-shell_menu_t menu_init(const char *name, const char *cmd, const shell_menu_t parent, func_cb_t enter_cb)
+command::~command()
 {
-    _init_main_menu();
-
-    assert(nb_menus < NB_SHELL_MENUS);
-    assert(parent < nb_menus);
-
-    shell_menu_t menu = _find_menu_by_command(cmd);
-    assert(menu == nb_menus);
-
-    menu = nb_menus++;
-
-    shell_menus[menu].name = name;
-    shell_menus[menu].cmd = cmd;
-    shell_menus[menu].current = &shell_menus[menu];
-    shell_menus[menu].previous = NULL;
-    shell_menus[menu].enter_cb = enter_cb;
-
-    for (uint8_t i = 0; i < NB_SHELL_COMMANDS; i++) {
-        shell_menus[menu].shell_commands[i] = (const shell_command_t)MENU_NULL_CMD;
-    }
-
-    menu_add_one(menu, &cmd_exit_menu);
-    menu_add_one(menu, &cmd_help_json);
-
-    if (global_commands) {
-        menu_add_list(menu, global_commands);
-    }
-
-    sprintf(menu_desc[menu], "Enter %s", name);
-    const shell_command_t enter_cmd = { cmd, menu_desc[menu], _cmd_enter_sub_menu };
-    menu_add_one(parent, &enter_cmd);
-
-    return menu;
+    all_commands.erase(this);
 }
 
-void menu_add_one(const shell_menu_t menu, const shell_command_t *command)
+// menu methods
+menu::menu(
+    const std::string &name, const std::string &cmd,
+    menu *parent, func_cb_t enter_cb) : name_(name), cmd_(cmd), parent_(parent)
 {
-    if (menu == menu_root) {
-        _init_main_menu();
+    enter_cb_ = enter_cb;
+
+    if (cmd != "") {
+        assert(all_menus.count(cmd) == 0);
+        all_menus[cmd] = this;
     }
 
-    assert(menu < nb_menus);
-
-    uint8_t command_id = 0;
-
-    for (shell_command_t *cmd = shell_menus[menu].shell_commands; cmd->name != NULL; cmd++, command_id++) {}
-
-    assert(command_id < NB_SHELL_COMMANDS);
-
-    shell_menus[menu].shell_commands[command_id++] = *command;
-}
-
-void menu_add_list(const shell_menu_t menu, const shell_command_t commands[])
-{
-    for (const shell_command_t *cmd = commands; cmd->name != NULL; cmd++) {
-        menu_add_one(menu, cmd);
+    std::string menu_desc = "Enter " + name;
+    if (parent) {
+        parent->push_back(new command(cmd, menu_desc, _cmd_enter_sub_menu));
     }
 }
 
-void menu_enter(const shell_menu_t menu)
+void menu::enter(void) const
 {
-    assert(menu < nb_menus);
+    const menu *previous_menu = current_menu;
+    current_menu = this;
 
-    if (menu != menu_root) {
-        shell_menus[menu].previous = current_menu.current;
+    assert (global_commands.size() + current_menu->size() <= NB_SHELL_COMMANDS);
+
+    size_t i = 0;
+    for (auto cmd: global_commands) {
+        current_commands[i].name = cmd->name().c_str();
+        current_commands[i].desc = cmd->desc().c_str();
+        current_commands[i].handler = cmd->handler();
+        i++;
     }
-    memcpy(&current_menu, &shell_menus[menu], sizeof(shell_menu_data_t));
-    tracefd_jlog(tracefd_stdout, "Enter shell menu: %s", current_menu.name);
-    if (current_menu.enter_cb) {
-        current_menu.enter_cb();
+
+    for (auto cmd: *current_menu) {
+        current_commands[i].name = cmd->name().c_str();
+        current_commands[i].desc = cmd->desc().c_str();
+        current_commands[i].handler = cmd->handler();
+        i++;
+    }
+
+    for (; i < NB_SHELL_COMMANDS; i++) {
+        current_commands[i].name = nullptr;
+        current_commands[i].desc = nullptr;
+        current_commands[i].handler = nullptr;
+        i++;
+    }
+
+    cogip::tracefd::out.logf("Enter shell menu: %s", current_menu->name().c_str());
+
+    if (current_menu != previous_menu && enter_cb_) {
+        enter_cb_();
     }
 }
 
-void menu_exit(void)
+// Global functions
+void start(void)
 {
-    if (current_menu.previous) {
-        tracefd_jlog(tracefd_stdout, "Exit shell menu: %s", current_menu.name);
-        memcpy(&current_menu, current_menu.previous, sizeof(shell_menu_data_t));
-        tracefd_jlog(tracefd_stdout, "Enter shell menu: %s", current_menu.name);
-    }
-}
-
-void menu_start(void)
-{
-    _init_main_menu();
-
     char line_buf[SHELL_DEFAULT_BUFSIZE];
 
-    /* Push main menu */
-    menu_enter(menu_root);
+    // Add default global commands
+    add_global_command(new command("_help_json", "Display available commands in JSON format", _display_json_help));
+    add_global_command(new command("exit", "Exit current menu", _exit_menu));
 
-    shell_run((shell_command_t *)&current_menu, line_buf, SHELL_DEFAULT_BUFSIZE);
+    // Enter the root menu
+    root_menu.enter();
+
+    shell_run(current_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 }
 
-void menu_rename_command(const char *old, const char *new)
+void add_global_command(command *command)
 {
-    /* Rename command in all menus */
-    for (shell_menu_t menu = 0; menu < nb_menus; menu++) {
-        for (shell_command_t *cmd = shell_menus[menu].shell_commands; cmd->name != NULL; cmd++) {
-            if (strcmp(cmd->name, old) == 0) {
-                cmd->name = new;
-            }
+    global_commands.push_back(command);
+    all_commands.insert(command);
+
+    // Reload current menu
+    if (current_menu) {
+        current_menu->enter();
+    }
+}
+
+void rename_command(const std::string &old_name, const std::string &new_name)
+{
+    for (auto cmd: all_commands) {
+        if (cmd->name() == old_name) {
+            cmd->set_name(new_name);
         }
     }
 
-    /* Rename command in current menu */
-    for (shell_command_t *cmd = current_menu.shell_commands; cmd->name != NULL; cmd++) {
-        if (strcmp(cmd->name, old) == 0) {
-            cmd->name = new;
-        }
-    }
+    // Reload menu
+    current_menu->enter();
 }
+
+} // namespace shell
+
+} // namespace cogip

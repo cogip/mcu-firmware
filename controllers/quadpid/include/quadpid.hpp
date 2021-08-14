@@ -40,7 +40,7 @@
 #include <stdint.h>
 
 /* Project includes */
-#include "ctrl.h"
+#include "ctrl.hpp"
 #include "odometry.h"
 #include "pid.h"
 
@@ -161,11 +161,14 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, polar_t *command);
  *           Setup callbacks for each controller mode.
  */
 static const ctrl_configuration_t ctrl_quadpid_conf = {
-    .ctrl_mode_cb[CTRL_MODE_STOP] = ctrl_quadpid_stop,
-    .ctrl_mode_cb[CTRL_MODE_BLOCKED] = ctrl_quadpid_stop,
-    .ctrl_mode_cb[CTRL_MODE_RUNNING] = ctrl_quadpid_ingame,
-    .ctrl_mode_cb[CTRL_MODE_RUNNING_SPEED] = ctrl_quadpid_running_speed,
-    .ctrl_mode_cb[CTRL_MODE_PASSTHROUGH] = ctrl_quadpid_nopid,
+    .ctrl_mode_cb = {
+        ctrl_quadpid_stop,          // CTRL_MODE_STOP
+        nullptr,                    // CTRL_MODE_IDLE
+        ctrl_quadpid_stop,          // CTRL_MODE_BLOCKED
+        ctrl_quadpid_ingame,        // CTRL_MODE_RUNNING
+        ctrl_quadpid_running_speed, // CTRL_MODE_RUNNING_SPEED
+        ctrl_quadpid_nopid          // CTRL_MODE_PASSTHROUGH
+    }
 };
 
 /** @} */

@@ -50,6 +50,10 @@
 /* RIOT includes */
 #include "periph/i2c.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Note:    All following macros can be overrided by setting CFLAGS variable in
  *          Makefile. Example
@@ -215,5 +219,9 @@ int sd21_servo_get_position(sd21_t dev, uint8_t servo_id, uint16_t *position);
  * @return                  Servomotor name
  */
 const char *sd21_servo_get_name(sd21_t dev, uint8_t servo_id);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */

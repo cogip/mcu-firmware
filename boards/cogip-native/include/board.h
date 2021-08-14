@@ -28,14 +28,13 @@
 
 /* Project includes */
 #include "periph_conf.h"
-#include "platform.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #ifdef MODULE_MTD
 #include "mtd_native.h"
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 #define PCA9548_SENSORS 0
@@ -175,8 +174,10 @@ void native_motor_driver_qdec_simulation( \
  */
 static const motor_driver_config_t motor_driver_config[] = {
     {
-        .mode = MOTOR_DRIVER_1_DIR_BRAKE,
         .pwm_dev = 0,
+        .mode = MOTOR_DRIVER_1_DIR_BRAKE,
+        .mode_brake = MOTOR_BRAKE_LOW,
+        .pwm_mode = PWM_LEFT,
         .pwm_frequency = 20000U,
         .pwm_resolution = 1000U,
         .nb_motors = 2,

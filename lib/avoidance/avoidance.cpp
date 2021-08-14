@@ -3,39 +3,35 @@
 #include <stdio.h>
 
 /* Project includes */
-#include "avoidance.h"
-#include "collisions.h"
-#include "obstacles.h"
-#include "platform.h"
+#include "avoidance.hpp"
+#include "collisions.hpp"
+#include "obstacles.hpp"
+#include "platform.hpp"
 #include "utils.h"
 
 #define START_INDEX     0
 #define FINISH_INDEX    1
 
-static const obstacle_t _borders = {
-    .type = OBSTACLE_POLYGON,
-    .form.polygon = {
-        .points = {
-            {
-                .x = AVOIDANCE_BORDER_X_MIN,
-                .y = AVOIDANCE_BORDER_Y_MIN
-            },
-            {
-                .x = AVOIDANCE_BORDER_X_MAX,
-                .y = AVOIDANCE_BORDER_Y_MIN
-            },
-            {
-                .x = AVOIDANCE_BORDER_X_MAX,
-                .y = AVOIDANCE_BORDER_Y_MAX
-            },
-            {
-                .x = AVOIDANCE_BORDER_X_MIN,
-                .y = AVOIDANCE_BORDER_Y_MAX
-            },
-        },
-        .count = 4,
-    }
+static const std::list<coords_t> border_points = {
+    {
+        .x = AVOIDANCE_BORDER_X_MIN,
+        .y = AVOIDANCE_BORDER_Y_MIN
+    },
+    {
+        .x = AVOIDANCE_BORDER_X_MAX,
+        .y = AVOIDANCE_BORDER_Y_MIN
+    },
+    {
+        .x = AVOIDANCE_BORDER_X_MAX,
+        .y = AVOIDANCE_BORDER_Y_MAX
+    },
+    {
+        .x = AVOIDANCE_BORDER_X_MIN,
+        .y = AVOIDANCE_BORDER_Y_MAX
+    },
 };
+
+static const cogip::obstacles::polygon _borders(&border_points);
 
 /* Array of valid points */
 static pose_t _valid_points[GRAPH_MAX_VERTICES];
@@ -54,8 +50,8 @@ static uint8_t _valid_points_count = 0;
 static uint64_t _graph[GRAPH_MAX_VERTICES];
 
 /* Start and finish poses */
-static pose_t start_pose = { .coords.x = 0, .coords.y = 0 };
-static pose_t finish_pose = { .coords.x = 0, .coords.y = 0 };
+static pose_t start_pose = { .coords = { .x = 0, .y = 0 }, .O = 0 };
+static pose_t finish_pose = { .coords = { .x = 0, .y = 0 }, .O = 0 };
 
 /**
  * Avoidance path with child direction hierarchy.
@@ -84,33 +80,28 @@ static bool _is_avoidance_computed = false;
  */
 static void _validate_obstacles_points(void)
 {
-    obstacles_dyn_id_t obstacles_dyn_id = pf_get_dyn_obstacles_id();
+    cogip::obstacles::list *obstacles_dyn = pf_get_dyn_obstacles();
 
     /* For each obstacle */
-    for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_dyn_id); i++) {
-        const obstacle_t *obstacle = obstacles_get(obstacles_dyn_id, i);
+    for (auto obstacle: *obstacles_dyn) {
 
         /* Check if obstacle center is inside _borders */
-        if (!obstacles_is_point_in_obstacle(&_borders, &obstacle->center)) {
+        if (!_borders.is_point_inside(obstacle->center())) {
             continue;
         }
 
         /* If that point is not in an other polygon, shape it in a bounding
          * box */
-        if (!obstacles_is_point_in_obstacles(&obstacle->center, obstacle)) {
+        if (!cogip::obstacles::is_point_in_obstacles(obstacle->center(), obstacle)) {
 
-            polygon_t bb = obstacles_compute_obstacle_bounding_box(obstacle,
-                                                                   OBSTACLES_BB_NB_VERTICES,
-                                                                   OBSTACLES_BB_RADIUS_MARGIN);
+            polygon_t bb = obstacle->bounding_box(OBSTACLES_BB_NB_VERTICES,
+                                                  OBSTACLES_BB_RADIUS_MARGIN);
 
             /* Validate bounding box points */
             for (uint8_t j = 0; j < bb.count; j++) {
-                if ((obstacles_is_point_in_obstacle(&_borders, &bb.points[j]))
-                    && (!obstacles_is_point_in_obstacles(&bb.points[j],
-                                                         NULL))) {
-                    _valid_points[_valid_points_count++] = (pose_t){
-                        bb.points[j], 0
-                    };
+                if (_borders.is_point_inside(bb.points[j])
+                    && (!cogip::obstacles::is_point_in_obstacles(bb.points[j], nullptr))) {
+                    _valid_points[_valid_points_count++] = { .coords = bb.points[j], .O = 0 };
                 }
             }
         }
@@ -126,7 +117,7 @@ static void _build_avoidance_graph(void)
     _validate_obstacles_points();
 
     /* Get all dynamic obstacles */
-    obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
+    cogip::obstacles::list *obstacles = pf_get_dyn_obstacles();
 
     /* For each segment of the valid points list */
     for (int p = 0; p < _valid_points_count; p++) {
@@ -134,10 +125,9 @@ static void _build_avoidance_graph(void)
             bool collide = false;
             if (p != p2) {
                 /* Check if that segment crosses a polygon */
-                for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_id); i++) {
-                    const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-                    if (obstacles_is_segment_crossing_obstacle(&_valid_points[p].coords,
-                                                               &_valid_points[p2].coords, obstacle)) {
+                for (auto obstacle: *obstacles) {
+                    if (obstacle->is_segment_crossing(_valid_points[p].coords,
+                                                      _valid_points[p2].coords)) {
                         collide = true;
                         break;
                     }
@@ -281,22 +271,20 @@ bool avoidance_build_graph(const pose_t *s, const pose_t *f)
 {
     start_pose = *s;
     finish_pose = *f;
-    obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
+    cogip::obstacles::list *obstacles = pf_get_dyn_obstacles();
 
-    if (!obstacles_is_point_in_obstacle(&_borders, &finish_pose.coords)) {
+    if (!_borders.is_point_inside(finish_pose.coords)) {
         _is_avoidance_computed = false;
         goto update_graph_error_finish_pose;
     }
 
     /* Check that start and destination point are not in an obstacle */
-    for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_id); i++) {
-        const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
-        if (obstacles_is_point_in_obstacle(obstacle, &finish_pose.coords)) {
+    for (auto obstacle: *obstacles) {
+        if (obstacle->is_point_inside(finish_pose.coords)) {
             goto update_graph_error_finish_pose;
         }
-        if (obstacles_is_point_in_obstacle(obstacle, &start_pose.coords)) {
-            start_pose.coords = obstacles_find_nearest_point_in_obstacle(obstacle,
-                                                                         &start_pose.coords);
+        if (obstacle->is_point_inside(start_pose.coords)) {
+            start_pose.coords = obstacle->nearest_point(start_pose.coords);
         }
     }
 
@@ -319,18 +307,17 @@ bool avoidance_check_recompute(const pose_t *start,
                                const pose_t *stop)
 {
     /* Get dynamic obstacle list */
-    obstacles_t obstacles_id = pf_get_dyn_obstacles_id();
+    cogip::obstacles::list *obstacles = pf_get_dyn_obstacles();
 
     /* Check if that segment crosses a polygon */
-    for (size_t i = 0; i < obstacles_get_nb_obstacles(obstacles_id); i++) {
-        const obstacle_t *obstacle = obstacles_get(obstacles_id, i);
+    for (auto obstacle: *obstacles) {
 
         /* Check if obstacle is inside _borders */
-        if (!obstacles_is_point_in_obstacle(&_borders, &obstacle->center)) {
+        if (!_borders.is_point_inside(obstacle->center())) {
             continue;
         }
         /* Check if start to finish pose segment is crossing an obtacle */
-        if (obstacles_is_segment_crossing_obstacle(&start->coords, &stop->coords, obstacle)) {
+        if (obstacle->is_segment_crossing(start->coords, stop->coords)) {
             return true;
         }
     }
@@ -341,17 +328,16 @@ bool avoidance_check_recompute(const pose_t *start,
 /**
  * Print avoidance computed path
  */
-void avoidance_print_path(tracefd_t out)
+void avoidance_print_path(cogip::tracefd::file &out)
 {
     uint8_t i = 0;
 
-    tracefd_printf(out, "[");
+    out.printf("[");
     /* Print only if avoidance has already been computed successfully */
     if (_is_avoidance_computed) {
         /* Print all intermediate poses */
         while (i != 1) {
-            tracefd_printf(
-                out,
+            out.printf(
                 "{\"x\":%.3lf,\"y\":%.3lf},",
                 _valid_points[i].coords.x,
                 _valid_points[i].coords.y
@@ -359,12 +345,11 @@ void avoidance_print_path(tracefd_t out)
             i = _child[i];
         }
         /* Print also finish pose */
-        tracefd_printf(
-            out,
+        out.printf(
             "{\"x\":%.3lf,\"y\":%.3lf}",
             finish_pose.coords.x,
             finish_pose.coords.y
             );
     }
-    tracefd_printf(out, "]");
+    out.printf("]");
 }

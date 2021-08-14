@@ -1,7 +1,7 @@
-#include "planner.h"
+#include "planner.hpp"
 
 /* System includes */
-#include <stdio.h>
+#include <cstdio>
 
 /* RIOT includes */
 #include "irq.h"
@@ -10,15 +10,15 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "app.h"
-#include "avoidance.h"
-#include "platform.h"
-#include "path.h"
-#include "obstacles.h"
-#include "tracefd.h"
+#include "app.hpp"
+#include "avoidance.hpp"
+#include "platform.hpp"
+#include "path.hpp"
+#include "obstacles.hpp"
+#include "tracefd.hpp"
 
 #ifdef MODULE_SHELL_PLANNERS
-#include "shell_planners.h"
+#include "shell_planners.hpp"
 #endif /* MODULE_SHELL_PLANNERS */
 
 /* Enable or disable debug for this file only */
@@ -200,14 +200,15 @@ void *task_planner(void *arg)
     pose_t initial_pose = { { 0, 0 }, 0 };
     polar_t speed_order = { 0, 0 };
     const path_pose_t *current_path_pos = NULL;
+    const pose_t *pose_current = NULL;
 
-    tracefd_jlog(tracefd_stdout, "Game planner starting");
+    cogip::tracefd::out.logf("Game planner starting");
 
     ctrl_t *ctrl = pf_get_ctrl();
 
     path_t *path = pf_get_path();
     if (!path) {
-        tracefd_jlog(tracefd_stdout, "Machine has no path");
+        cogip::tracefd::out.logf("Machine has no path");
     }
 
     /* object context initialisation */
@@ -218,7 +219,7 @@ void *task_planner(void *arg)
     ctrl_set_speed_order(ctrl, speed_order);
     ctrl_set_pose_reached(ctrl);
 
-    tracefd_jlog(tracefd_stdout, "Game planner started");
+    cogip::tracefd::out.logf("Game planner started");
 
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
@@ -236,7 +237,7 @@ void *task_planner(void *arg)
         /* reverse gear selection is granted per point to reach, in path */
         ctrl_set_allow_reverse(ctrl, current_path_pos->allow_reverse);
 
-        const pose_t *pose_current = ctrl_get_pose_current(ctrl);
+        pose_current = ctrl_get_pose_current(ctrl);
 
         if (trajectory_get_route_update(ctrl, pose_current, path)) {
             ctrl_set_mode(ctrl, CTRL_MODE_STOP);

@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Set integral limit to PWM max (check in RIOT) for integrator windup */
 #define INTEGRAL_LIMIT  2000
 
@@ -39,3 +43,7 @@ void pid_reset(PID_t *pid);
  * \return the variable that will be adjusted by the pid
  */
 double pid_ctrl(PID_t *pid, const double error);
+
+#ifdef __cplusplus
+}
+#endif

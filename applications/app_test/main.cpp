@@ -1,8 +1,6 @@
-#include <stdio.h>
-
-#include "app.h"
-#include "platform.h"
-#include "shell_menu.h"
+#include "app.hpp"
+#include "platform.hpp"
+#include "shell_menu.hpp"
 
 int main(void)
 {
@@ -12,8 +10,8 @@ int main(void)
     pf_init_tasks();
     app_init_tasks();
 
-    /* Start shell */
-    menu_start();
+    // Start shell
+    cogip::shell::start();
 
     return 0;
 }

@@ -104,7 +104,7 @@ static inline int pose_equal(const pose_t *p1, const pose_t *p2)
 }
 
 #ifdef __cplusplus
-extern "C" {
+} /* extern "C" */
 #endif
 
 /** @} */

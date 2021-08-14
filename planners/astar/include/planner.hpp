@@ -26,7 +26,7 @@
 #pragma once
 
 /* Project includes */
-#include "ctrl.h"
+#include "ctrl.hpp"
 
 /**
  * @brief Start the trajectory planification and the associated controller

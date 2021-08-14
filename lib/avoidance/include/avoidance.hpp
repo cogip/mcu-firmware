@@ -29,12 +29,11 @@
 #pragma once
 
 /* Standard includes */
-#include <stdbool.h>
-#include <stdint.h>
+#include <cstdint>
 
 /* Project includes */
 #include "cogip_defs.h"
-#include "tracefd.h"
+#include "tracefd.hpp"
 
 /**
  * @name Dijkstra avoidance parameters
@@ -83,6 +82,6 @@ bool avoidance_check_recompute(const pose_t *start,
  *
  * @return
  */
-void avoidance_print_path(tracefd_t out);
+void avoidance_print_path(cogip::tracefd::file &out);
 
 /** @} */

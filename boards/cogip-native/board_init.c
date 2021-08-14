@@ -18,7 +18,6 @@
 #include "board.h"
 
 #include "board_internal.h"
-#include "platform.h"
 
 #ifdef MODULE_MTD
 #include "mtd_native.h"

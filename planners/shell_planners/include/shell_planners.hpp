@@ -1,7 +1,5 @@
 #pragma once
 
-#include "shell_menu.h"
-
 /**
  * @brief Initialize quadpid shell, mainly adds commands to RIOT shell.
  *

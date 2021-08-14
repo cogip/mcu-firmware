@@ -39,8 +39,6 @@ MCUFW_MODULE_DIRS = " \
 shell_module_dirs = $(wildcard $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/*/shell_*/.))
 EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/) $(shell_module_dirs:%=%/..)
 
-$(warning $(EXTERNAL_MODULE_DIRS))
-
 # RIOT Makefile include
 include $(RIOTBASE)/Makefile.include
 

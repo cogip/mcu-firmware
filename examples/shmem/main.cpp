@@ -1,8 +1,8 @@
-#include <assert.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
 
 #include "shmem.h"
-#include "shell_menu.h"
+#include "shell_menu.hpp"
 
 static int print_data_cmd_cb(int argc, char **argv)
 {
@@ -31,22 +31,15 @@ int main(void)
 {
     puts("\n== shmem example ==");
 
-    /* make set_key command available in all menus */
-    static const shell_command_t global_commands[] = {
-        SHMEM_SET_KEY_CMD,
-        MENU_NULL_CMD
-    };
-    menu_set_global_commands(global_commands);
+    // make set_key command available in all menus
+    cogip::shell::add_global_command(new cogip::shell::command(SHMEM_SET_KEY_CMD));
 
-    /* Add print data command */
-    const shell_command_t print_data_cmd = {
-        "data", "Print data from the shared memory",
-        print_data_cmd_cb
-    };
-    menu_add_one(menu_root, &print_data_cmd);
+    // Add print data command
+    cogip::shell::root_menu.push_back(new cogip::shell::command(
+        "data", "Print data from the shared memory", print_data_cmd_cb));
 
-    /* Start shell */
-    menu_start();
+    // Start shell
+    cogip::shell::start();
 
     return 0;
 }

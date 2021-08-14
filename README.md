@@ -32,7 +32,7 @@ $ git clone https://github.com/cogip/mcu-firmware.git
 To install toolchain and development on ubuntu 20.04:
 
 ```bash
-$ sudo apt install build-essential gcc-8 gcc-8-multilib gcc-multilib openocd python-serial
+$ sudo apt install build-essential gcc-multilib g++-multilib openocd python-serial
 ```
 Minimal gcc version: 8.1
 

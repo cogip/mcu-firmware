@@ -1,13 +1,17 @@
-/* System includes */
+// Module includes
+#include "tracefd.hpp"
+#include "tracefd_private.hpp"
+
+// System includes
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-/* Module includes */
-#include "tracefd.h"
-#include "tracefd_private.h"
+namespace cogip {
 
-bool tracefd_init_root_dir(void)
+namespace tracefd {
+
+bool init_root_dir(void)
 {
     struct stat st;
     int res = 0;
@@ -18,3 +22,7 @@ bool tracefd_init_root_dir(void)
     }
     return (res == 0);
 }
+
+} // namespace file
+
+} // namespace cogip

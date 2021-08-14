@@ -11,10 +11,10 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "ctrl.h"
+#include "ctrl.hpp"
 #include "odometry.h"
-#include "platform.h"
-#include "quadpid.h"
+#include "platform.hpp"
+#include "quadpid.hpp"
 #include "trigonometry.h"
 
 /**

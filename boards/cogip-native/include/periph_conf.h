@@ -85,8 +85,6 @@ extern "C" {
 #ifndef I2C_NUMOF
 #define I2C_NUMOF (8U)
 #endif
-
-static const i2c_conf_t i2c_config[I2C_NUMOF];
 /** @} */
 
 

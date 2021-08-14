@@ -1,107 +1,18 @@
+#include "obstacles.hpp"
+
 /* System includes */
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
+#include <set>
 
 /* Project includes */
-#include "collisions.h"
-#include "obstacles.h"
+#include "collisions.hpp"
 #include "trigonometry.h"
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
-/**
- * @brief   Obstacles context
- */
-typedef struct {
-    obstacles_params_t params;                  /**< parameters */
-    size_t nb_obstacles;                        /**< number of obstacles */
-    obstacle_t obstacles[OBSTACLES_MAX_NUMBER]; /**< obstacles list */
-    mutex_t lock;                               /**< obstacles context protection mutex */
-} obstacles_context_t;
-
-/* Allocate memory for the obstacles contexts */
-obstacles_context_t obstacles_contexts[OBSTACLES_NUMOF];
-
-/* Number of initialized obstacles */
-obstacles_t obstacles_initialized = 0;
-
-obstacles_context_t obstacles_contexts[OBSTACLES_NUMOF];
-
-obstacles_t obstacles_init(const obstacles_params_t *obstacles_params)
-{
-    assert(obstacles_initialized < OBSTACLES_NUMOF);
-    obstacles_t id = obstacles_initialized;
-    obstacles_context_t *obstacles_context = &obstacles_contexts[id];
-    obstacles_context->params = *obstacles_params;
-    obstacles_context->nb_obstacles = 0;
-    mutex_init(&obstacles_context->lock);
-    obstacles_initialized++;
-    return id;
-}
-
-obstacle_t obstacles_rectangle_init(coords_t center, double length_x,
-                                    double length_y, double angle)
-{
-    obstacle_t rect = {
-        .type = OBSTACLE_RECTANGLE,
-        .center = center,
-        .radius = sqrt(length_x * length_x + length_y * length_y) / 2,
-        .angle = angle,
-        .form.rectangle = {
-            .length_x = length_x,
-            .length_y = length_y,
-            .points = {
-                (coords_t){
-                    .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
-                         (center.y - length_y / 2) * sin(DEG2RAD(angle)),
-                    .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
-                         (center.y - length_y / 2) * cos(DEG2RAD(angle)),
-                },
-                (coords_t){
-                    .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
-                         (center.y + length_y / 2) * sin(DEG2RAD(angle)),
-                    .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
-                         (center.y + length_y / 2) * cos(DEG2RAD(angle)),
-                },
-                (coords_t){
-                    .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
-                         (center.y + length_y / 2) * sin(DEG2RAD(angle)),
-                    .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
-                         (center.y + length_y / 2) * cos(DEG2RAD(angle)),
-                },
-                (coords_t){
-                    .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
-                         (center.y - length_y / 2) * sin(DEG2RAD(angle)),
-                    .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
-                         (center.y - length_y / 2) * cos(DEG2RAD(angle)),
-                },
-            }
-        }
-    };
-
-    return rect;
-}
-
-polygon_t obstacles_compute_obstacle_bounding_box(const obstacle_t *obstacle,
-                                                  const uint8_t nb_vertices,
-                                                  const double radius_margin)
-{
-    double radius = obstacle->radius * (1 + radius_margin);
-
-    polygon_t bb;
-
-    bb.count = (nb_vertices < 4) ? 4 : nb_vertices;
-
-    for (uint8_t i = 0; i < bb.count; i++) {
-        bb.points[i].x = obstacle->center.x +
-                         radius * cos(((double)i * 2 * M_PI) / (double)bb.count);
-        bb.points[i].y = obstacle->center.y +
-                         radius * sin(((double)i * 2 * M_PI) / (double)bb.count);
-    }
-
-    return bb;
-}
+#if 0
 
 double obstacles_compute_radius(const obstacle_t *obstacle)
 {
@@ -124,270 +35,263 @@ double obstacles_compute_radius(const obstacle_t *obstacle)
 
     return 0;
 }
+#endif
 
-double obstacles_get_default_circle_radius(const obstacles_t obstacles_id)
+namespace cogip {
+
+namespace obstacles {
+
+static std::set<list const *> all_obstacles;
+
+// obstacle
+obstacle::obstacle(
+    coords_t center, double radius, double angle)
+    : center_(center), radius_(radius), angle_(angle)
 {
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    return obstacles_context->params.default_circle_radius;
 }
 
-uint32_t obstacles_get_min_distance(const obstacles_t obstacles_id)
+polygon_t obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) const
 {
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    return obstacles_context->params.min_distance;
-}
+    double radius = radius_ * (1 + radius_margin);
 
-uint32_t obstacles_get_max_distance(const obstacles_t obstacles_id)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    return obstacles_context->params.max_distance;
-}
+    polygon_t bb;
 
-size_t obstacles_get_nb_obstacles(const obstacles_t obstacles_id)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    return obstacles_context->nb_obstacles;
-}
+    bb.count = (nb_vertices < 4) ? 4 : nb_vertices;
 
-void obstacles_reset(const obstacles_t obstacles_id)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    obstacles_context->nb_obstacles = 0;
-}
-
-const obstacle_t *obstacles_get(const obstacles_t obstacles_id, size_t n)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    if (n >= obstacles_context->nb_obstacles) {
-        return NULL;
+    for (uint8_t i = 0; i < bb.count; i++) {
+        bb.points[i].x = center_.x +
+                         radius * cos(((double)i * 2 * M_PI) / (double)bb.count);
+        bb.points[i].y = center_.y +
+                         radius * sin(((double)i * 2 * M_PI) / (double)bb.count);
     }
-    return &obstacles_context->obstacles[n];
+
+    return bb;
 }
 
-const obstacle_t *obstacles_get_all(const obstacles_t obstacles_id)
+// rectangle
+rectangle::rectangle(
+    coords_t center, double angle,
+    double length_x, double length_y)
+    : obstacle(center, 0, angle)
 {
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    const obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    return obstacles_context->obstacles;
+    radius_ = sqrt(length_x * length_x + length_y * length_y) / 2;
+    rectangle_ = {
+        .length_x = length_x,
+        .length_y = length_y,
+        .points = {
+            (coords_t){
+                .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
+                        (center.y - length_y / 2) * sin(DEG2RAD(angle)),
+                .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
+                        (center.y - length_y / 2) * cos(DEG2RAD(angle)),
+            },
+            (coords_t){
+                .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
+                        (center.y + length_y / 2) * sin(DEG2RAD(angle)),
+                .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
+                        (center.y + length_y / 2) * cos(DEG2RAD(angle)),
+            },
+            (coords_t){
+                .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
+                        (center.y + length_y / 2) * sin(DEG2RAD(angle)),
+                .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
+                        (center.y + length_y / 2) * cos(DEG2RAD(angle)),
+            },
+            (coords_t){
+                .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
+                        (center.y - length_y / 2) * sin(DEG2RAD(angle)),
+                .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
+                        (center.y - length_y / 2) * cos(DEG2RAD(angle)),
+            },
+        }
+    };
 }
 
-bool obstacles_add(const obstacles_t obstacles_id, const obstacle_t obstacle)
+bool rectangle::is_point_inside(const coords_t &p) const {
+    polygon_t polygon_tmp;
+    polygon_tmp.count = 4;
+    memcpy(polygon_tmp.points, rectangle_.points,
+            polygon_tmp.count * sizeof(coords_t));
+    return collisions_is_point_in_polygon(&polygon_tmp, &p);
+}
+
+bool rectangle::is_segment_crossing(const coords_t &a, const coords_t &b) const
 {
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    if (obstacles_context->nb_obstacles + 1 >= OBSTACLES_MAX_NUMBER) {
-        return false;
+    polygon_t polygon_tmp;
+    polygon_tmp.count = 4;
+    memcpy(polygon_tmp.points, rectangle_.points,
+            polygon_tmp.count * sizeof(coords_t));
+    return collisions_is_segment_crossing_polygon(&a, &b, &polygon_tmp);
+}
+
+coords_t rectangle::nearest_point(const coords_t &p) const
+{
+    polygon_t polygon_tmp;
+    polygon_tmp.count = 4;
+    memcpy(polygon_tmp.points, rectangle_.points,
+            polygon_tmp.count * sizeof(coords_t));
+    return collisions_find_nearest_point_in_polygon(&polygon_tmp, &p);
+}
+
+void rectangle::print_json(cogip::tracefd::file &out) const
+{
+    out.printf(
+        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"length_x\":%.3lf,\"length_y\":%.3lf}",
+        center_.x,
+        center_.y,
+        angle_,
+        rectangle_.length_x,
+        rectangle_.length_y
+        );
+}
+
+// circle
+circle::circle(coords_t center, double radius, double angle)
+    : obstacle(center, radius, angle)
+{
+    circle_.center = center;
+    circle_.radius = radius;
+}
+
+bool circle::is_point_inside(const coords_t &p) const {
+    return collisions_is_point_in_circle(&circle_, &p);
+}
+
+bool circle::is_segment_crossing(const coords_t &a, const coords_t &b) const
+{
+    return collisions_is_segment_crossing_circle(&a, &b, &circle_);
+}
+
+coords_t circle::nearest_point(const coords_t &p) const
+{
+    return collisions_find_nearest_point_in_circle(&circle_, &p);
+}
+
+void circle::print_json(cogip::tracefd::file &out) const
+{
+    out.printf(
+        "{\"x\":%.3lf,\"y\":%.3lf,\"radius\":%.3lf}",
+        center_.x,
+        center_.y,
+        circle_.radius
+        );
+}
+
+// polygon
+polygon::polygon(const std::list<coords_t> *points)
+    : obstacle({0, 0}, 0, 0)
+{
+    polygon_.count = 0;
+    for (auto point: *points) {
+        polygon_.points[polygon_.count++] = point;
     }
-    obstacles_context->obstacles[obstacles_context->nb_obstacles++] = obstacle;
-    return true;
 }
 
-void obstacles_lock(const obstacles_t obstacles_id)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    mutex_lock(&obstacles_context->lock);
+bool polygon::is_point_inside(const coords_t &p) const {
+    return collisions_is_point_in_polygon(&polygon_, &p);
 }
 
-void obstacles_unlock(const obstacles_t obstacles_id)
+bool polygon::is_segment_crossing(const coords_t &a, const coords_t &b) const
 {
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-    mutex_unlock(&obstacles_context->lock);
+    return collisions_is_segment_crossing_polygon(&a, &b, &polygon_);
 }
 
-bool obstacles_is_point_in_obstacles(const coords_t *p, const obstacle_t *filter)
+coords_t polygon::nearest_point(const coords_t &p) const
 {
-    for (size_t obstacles_id = 0; obstacles_id < OBSTACLES_NUMOF; obstacles_id++) {
-        for (size_t j = 0; j < obstacles_get_nb_obstacles(obstacles_id); j++) {
-            const obstacle_t *obstacle = obstacles_get(obstacles_id, j);
+    return collisions_find_nearest_point_in_polygon(&polygon_, &p);
+}
+
+void polygon::print_json(cogip::tracefd::file &out) const
+{
+    out.printf(
+        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"points\":[",
+        center_.x,
+        center_.y,
+        angle_
+        );
+    for (uint8_t i = 0; i < polygon_.count; i++) {
+        if (i > 0) {
+            out.printf(",");
+        }
+        out.printf(
+            "{\"x\":%.3lf,\"y\":%.3lf}",
+            polygon_.points[i].x,
+            polygon_.points[i].y
+            );
+    }
+    out.printf("]}");
+}
+
+// list
+list::list(
+    uint32_t default_circle_radius,
+    uint32_t default_rectangle_width,
+    uint32_t min_distance,
+    uint32_t max_distance)
+    : default_circle_radius_(default_circle_radius), default_rectangle_width_(default_rectangle_width),
+      min_distance_(min_distance), max_distance_(max_distance)
+{
+    all_obstacles.insert(this);
+}
+
+list::~list()
+{
+    all_obstacles.erase(this);
+}
+
+void list::clear()
+{
+    for (auto obs: *this) {
+        delete obs;
+    }
+    std::list<obstacle *>::clear();
+}
+
+void list::print_json(cogip::tracefd::file &out) const
+{
+    size_t i = 0;
+    for (auto obs: *this) {
+        if (i++ > 0) {
+            out.printf(",");
+        }
+
+        obs->print_json(out);
+    }
+}
+
+// Global functions
+void print_all_json(cogip::tracefd::file &out)
+{
+    size_t nb_obstacles = 0;
+
+    out.printf("[");
+
+    for (auto l: all_obstacles) {
+        if (nb_obstacles > 0 && l->size() > 0) {
+            out.printf(",");
+        }
+
+        l->print_json(out);
+        nb_obstacles += l->size();
+    }
+    out.printf("]");
+}
+
+bool is_point_in_obstacles(const coords_t &p, const obstacle *filter)
+{
+    for (auto obstacles: all_obstacles) {
+        for (auto obstacle: *obstacles) {
             if (filter == obstacle) {
                 continue;
             }
-            if (obstacles_is_point_in_obstacle(obstacle, p)) {
+            if (obstacle->is_point_inside(p)) {
                 return true;
             }
         }
     }
-
     return false;
 }
 
-bool obstacles_is_point_in_obstacle(const obstacle_t *obstacle, const coords_t *p)
-{
-    /* Temporary object */
-    polygon_t polygon_tmp;
+} // namespace obstacles
 
-    switch (obstacle->type) {
-        case OBSTACLE_CIRCLE:
-            return collisions_is_point_in_circle(&obstacle->form.circle, p);
-        case OBSTACLE_RECTANGLE:
-            polygon_tmp.count = 4;
-            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
-                   polygon_tmp.count * sizeof(coords_t));
-            return collisions_is_point_in_polygon(&polygon_tmp, p);
-        case OBSTACLE_POLYGON:
-            return collisions_is_point_in_polygon(&obstacle->form.polygon, p);
-        default:
-            DEBUG("obstacle: Wrong type, should never happen, return false)");
-    }
-
-    return false;
-}
-
-bool obstacles_is_segment_crossing_obstacle(const coords_t *a, const coords_t *b, const obstacle_t *obstacle)
-{
-    /* Temporary object */
-    polygon_t polygon_tmp;
-
-    switch (obstacle->type) {
-        case OBSTACLE_CIRCLE:
-            return collisions_is_segment_crossing_circle(a, b, &obstacle->form.circle);
-        case OBSTACLE_RECTANGLE:
-            polygon_tmp.count = 4;
-            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
-                   polygon_tmp.count * sizeof(coords_t));
-            return collisions_is_segment_crossing_polygon(a, b, &polygon_tmp);
-        case OBSTACLE_POLYGON:
-            return collisions_is_segment_crossing_polygon(a, b, &obstacle->form.polygon);
-        default:
-            DEBUG("obstacle: Wrong type, should never happen, return false)");
-    }
-
-    return false;
-}
-
-coords_t obstacles_find_nearest_point_in_obstacle(const obstacle_t *obstacle,
-                                                  const coords_t *p)
-{
-    /* Temporary object */
-    polygon_t polygon_tmp;
-
-    switch (obstacle->type) {
-        case OBSTACLE_CIRCLE:
-            return collisions_find_nearest_point_in_circle(&obstacle->form.circle, p);
-        case OBSTACLE_RECTANGLE:
-            polygon_tmp.count = 4;
-            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
-                   polygon_tmp.count * sizeof(coords_t));
-            return collisions_find_nearest_point_in_polygon(&polygon_tmp, p);
-        case OBSTACLE_POLYGON:
-            return collisions_find_nearest_point_in_polygon(&obstacle->form.polygon, p);
-        default:
-            DEBUG("obstacle: Wrong type, should never happen, return false)");
-    }
-
-    /* Should never happen */
-    return *p;
-}
-
-static void _print_circle(const obstacle_t *obstacle, tracefd_t out)
-{
-    tracefd_printf(
-        out,
-        "{\"x\":%.3lf,\"y\":%.3lf,\"radius\":%.3lf}",
-        obstacle->center.x,
-        obstacle->center.y,
-        obstacle->form.circle.radius
-        );
-}
-
-static void _print_rectangle(const obstacle_t *obstacle, tracefd_t out)
-{
-    tracefd_printf(
-        out,
-        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"length_x\":%.3lf,\"length_y\":%.3lf}",
-        obstacle->center.x,
-        obstacle->center.y,
-        obstacle->angle,
-        obstacle->form.rectangle.length_x,
-        obstacle->form.rectangle.length_y
-        );
-}
-
-static void _print_polygon(const obstacle_t *obstacle, tracefd_t out)
-{
-    const polygon_t *polygon = &obstacle->form.polygon;
-
-    tracefd_printf(
-        out,
-        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"points\":[",
-        obstacle->center.x,
-        obstacle->center.y,
-        obstacle->angle
-        );
-    for (uint8_t i = 0; i < polygon->count; i++) {
-        if (i > 0) {
-            tracefd_printf(out, ",");
-        }
-        tracefd_printf(
-            out,
-            "{\"x\":%.3lf,\"y\":%.3lf}",
-            polygon->points[i].x,
-            polygon->points[i].y
-            );
-    }
-    tracefd_printf(out, "]}");
-}
-
-static void _print_list(const obstacles_t obstacles_id, tracefd_t out)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-    obstacles_context_t *obstacles_context = &obstacles_contexts[obstacles_id];
-
-    for (uint8_t i = 0; i < obstacles_context->nb_obstacles; i++) {
-        if (i > 0) {
-            tracefd_printf(out, ",");
-        }
-
-        obstacle_t *obstacle = &obstacles_context->obstacles[i];
-
-        switch (obstacle->type) {
-            case OBSTACLE_CIRCLE:
-                _print_circle(obstacle, out);
-                break;
-            case OBSTACLE_RECTANGLE:
-                _print_rectangle(obstacle, out);
-                break;
-            case OBSTACLE_POLYGON:
-                _print_polygon(obstacle, out);
-                break;
-            default:
-                DEBUG("obstacle: Wrong type, should never happen, return false)");
-        }
-    }
-}
-
-void obstacles_print_json(const obstacles_t obstacles_id, tracefd_t out)
-{
-    assert(obstacles_id < OBSTACLES_NUMOF);
-
-    tracefd_printf(out, "[");
-
-    _print_list(obstacles_id, out);
-
-    tracefd_printf(out, "]");
-}
-
-void obstacles_print_all_json(tracefd_t out)
-{
-    size_t nb_obstacles = 0;
-
-    tracefd_printf(out, "[");
-
-    for (obstacles_t obstacles_id = 0; obstacles_id < OBSTACLES_NUMOF; obstacles_id++) {
-        if (nb_obstacles > 0 && obstacles_get_nb_obstacles(obstacles_id) > 0) {
-            tracefd_printf(out, ",");
-        }
-
-        _print_list(obstacles_id, out);
-        nb_obstacles += obstacles_get_nb_obstacles(obstacles_id);
-    }
-    tracefd_printf(out, "]");
-}
+} // namespace cogip

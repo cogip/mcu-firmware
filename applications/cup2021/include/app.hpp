@@ -39,73 +39,73 @@ static const sd21_conf_t sd21_config_app[] = {
         .servos = {
             /* Servo 0-1 */
             {
-                .positions = {
+                {                          // .positions
                     1950,   /* Open */
                     1050,   /* Closed */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
-                .default_speed = 0,
-                .name = "S0-1: Left buoy extender"
+                SD21_SERVO_POS_CLOSE,      // .default_position
+                0,                         // .default_speed
+                "S0-1: Left buoy extender" // .name
             },
             /* Servo 0-2 */
             {
-                .positions = {
+                {                          // .positions
                     1050,   /* Open */
                     1950,   /* Closed */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
-                .default_speed = 0,
-                .name = "S0-2: Right buoy extender"
+                SD21_SERVO_POS_CLOSE,       // .default_position
+                0,                          // .default_speed
+                "S0-2: Right buoy extender" // .name
             },
             /* Servo 0-3 */
             {
-                .positions = {
+                {                        // .positions
                     1700,   /* Open */
                     1600,   /* Closed */
                 },
-                .default_position = SD21_SERVO_POS_OPEN,
-                .default_speed = 0,
-                .name = "S0-3: Left buoy holder"
+                SD21_SERVO_POS_OPEN,     // .default_position
+                0,                       // .default_speed
+                "S0-3: Left buoy holder" // .name
             },
             /* Servo 0-4 */
             {
-                .positions = {
+                {                         // .positions
                     1350,   /* Open */
                     1450,   /* Closed */
                 },
-                .default_position = SD21_SERVO_POS_OPEN,
-                .default_speed = 0,
-                .name = "S0-4: Right buoy holder"
+                SD21_SERVO_POS_OPEN,      // .default_position
+                0,                        // .default_speed
+                "S0-4: Right buoy holder" // .name
             },
             /* Servo 0-5 */
             {
-                .positions = {
+                {                         // .positions
                     1000,   /* Open */
                     1975,   /* Closed */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
-                .default_speed = 0,
-                .name = "S0-5: Left arm"
+                SD21_SERVO_POS_CLOSE,     // .default_position
+                0,                        // .default_speed
+                "S0-5: Left arm"          // .name
             },
             /* Servo 0-6 */
             {
-                .positions = {
+                {                         // .positions
                     2000,   /* Open */
                     950,    /* Closed */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
-                .default_speed = 0,
-                .name = "S0-6: Right arm"
+                SD21_SERVO_POS_CLOSE,     // .default_position
+                0,                        // .default_speed
+                "S0-6: Right arm"         // .name
             },
             /* Servo 0-7 */
             {
-                .positions = {
+                {                         // .positions
                     1000,   /* Open */
                     2000,   /* Closed */
                 },
-                .default_position = SD21_SERVO_POS_CLOSE,
-                .default_speed = 0,
-                .name = "S0-7: Flag"
+                SD21_SERVO_POS_CLOSE,     // .default_position
+                0,                        // .default_speed
+                "S0-7: Flag"              // .name
             },
         },
     },

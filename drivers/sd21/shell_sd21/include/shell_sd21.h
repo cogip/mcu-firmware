@@ -2,6 +2,10 @@
 
 #include "sd21.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief SD21 duty cycle step
  */
@@ -15,3 +19,7 @@
  * @return
  */
 void sd21_shell_init(const sd21_conf_t *sd21_config_new);
+
+#ifdef __cplusplus
+}
+#endif

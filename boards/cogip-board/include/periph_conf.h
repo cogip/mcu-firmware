@@ -211,7 +211,11 @@ static const spi_conf_t spi_config[] = {
         .sclk_af = GPIO_AF5,
         .cs_af = GPIO_AF5,
         .rccmask = RCC_APB1ENR_SPI2EN,
-        .apbbus = APB1
+        .apbbus = APB1,
+        .tx_dma = 0,
+        .tx_dma_chan = 0,
+        .rx_dma = 0,
+        .rx_dma_chan = 0
     },
 };
 

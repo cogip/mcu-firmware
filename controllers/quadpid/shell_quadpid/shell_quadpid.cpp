@@ -9,9 +9,9 @@
 #include "xtimer.h"
 
 /* Project includes */
-#include "platform.h"
-#include "shell_menu.h"
-#include "shell_quadpid.h"
+#include "platform.hpp"
+#include "shell_menu.hpp"
+#include "shell_quadpid.hpp"
 
 /**
  * @brief Impulse function parameters
@@ -237,7 +237,7 @@ static void ctrl_quadpid_pose_shell_seq(ctrl_t *ctrl_quadpid, pose_t pos)
     /* Speed order is fixed to maximum speed */
     polar_t speed_order = {
         .distance = MAX_SPEED,
-        .angle = MAX_SPEED / 2,
+        .angle = MAX_SPEED / 2
     };
 
     /* Send the speed order and the position to reach to the controller */
@@ -269,6 +269,8 @@ static void pid_reset_all(ctrl_quadpid_t *ctrl_quadpid)
         .kp = 1.0,
         .ki = 0.0,
         .kd = 0.0,
+        .ti = 0,
+        .previous_error = 0
     };
 
     /* Reset all PIDs */
@@ -655,20 +657,29 @@ static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
 static path_pose_t poses_calibration[] = {
     {
         .pos = {
-            .coords.x = 0,
-            .coords.y = 0,
+            .coords = {
+                .x = 0,
+                .y = 0
+            },
             .O = 90,
         },
+        .allow_reverse = 0,
+        .max_speed = 0,
+        .act = nullptr
     },
     {
         .pos = {
-            .coords.x = 500,
-            .coords.y = 500,
+            .coords = {
+                .x = 500,
+                .y = 500
+            },
             .O = 0,
         },
+        .allow_reverse = 0,
+        .max_speed = 0,
+        .act = nullptr
     },
 };
-
 
 /**
  * @brief Encoders reset command
@@ -775,50 +786,40 @@ void ctrl_quadpid_shell_init(ctrl_quadpid_t *ctrl_quadpid_new)
        pf_add_shell_command(&pf_shell_commands, &cmd_shell_pose);*/
 
     /* ctrl_quadpid speed menu and commands */
-    shell_menu_t menu_speed = menu_init("QuadPID controller speed menu",
-                                        "ctrl_quadpid_speed_menu", menu_root, NULL);
+    cogip::shell::menu *menu_speed = new cogip::shell::menu(
+        "QuadPID controller speed menu", "ctrl_quadpid_speed_menu", &cogip::shell::root_menu);
 
-    const shell_command_t shell_ctrl_quadpid_speed_menu_commands[] = {
-        { "l", "Linear speed characterization",
-          ctrl_quadpid_speed_cmd_linear_speed_cb },
-        { "a", "Angular speed characterization",
-          ctrl_quadpid_speed_cmd_angular_speed_cb },
-        { "L", "Linear speed PID test",
-          ctrl_quadpid_speed_cmd_linear_pid_cb },
-        { "A", "Angular speed PID test",
-          ctrl_quadpid_speed_cmd_angular_pid_cb },
-        { "p", "Set linear Kp to <kp>",
-          ctrl_quadpid_speed_cmd_set_linear_kp_cb },
-        { "i", "Set linear Ki to <ki>",
-          ctrl_quadpid_speed_cmd_set_linear_ki_cb },
-        { "d", "Set linear Kd to <kd>",
-          ctrl_quadpid_speed_cmd_set_linear_kd_cb },
-        { "P", "Set angular Kp to <kp>",
-          ctrl_quadpid_speed_cmd_set_angular_kp_cb },
-        { "I", "Set angular Ki to <ki>",
-          ctrl_quadpid_speed_cmd_set_angular_ki_cb },
-        { "D", "Set angular Kd to <kd>",
-          ctrl_quadpid_speed_cmd_set_angular_kd_cb },
-        { "r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)",
-          ctrl_quadpid_speed_cmd_reset_coef_cb },
-        MENU_NULL_CMD,
-    };
-
-    menu_add_list(menu_speed, shell_ctrl_quadpid_speed_menu_commands);
+    menu_speed->push_back(new cogip::shell::command(
+        "l", "Linear speed characterization", ctrl_quadpid_speed_cmd_linear_speed_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "a", "Angular speed characterization", ctrl_quadpid_speed_cmd_angular_speed_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "L", "Linear speed PID test", ctrl_quadpid_speed_cmd_linear_pid_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "A", "Angular speed PID test", ctrl_quadpid_speed_cmd_angular_pid_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "p", "Set linear Kp to <kp>", ctrl_quadpid_speed_cmd_set_linear_kp_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "i", "Set linear Ki to <ki>", ctrl_quadpid_speed_cmd_set_linear_ki_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "d", "Set linear Kd to <kd>", ctrl_quadpid_speed_cmd_set_linear_kd_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "P", "Set angular Kp to <kp>", ctrl_quadpid_speed_cmd_set_angular_kp_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "I", "Set angular Ki to <ki>", ctrl_quadpid_speed_cmd_set_angular_ki_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "D", "Set angular Kd to <kd>", ctrl_quadpid_speed_cmd_set_angular_kd_cb));
+    menu_speed->push_back(new cogip::shell::command(
+        "r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)", ctrl_quadpid_speed_cmd_reset_coef_cb));
 
     /* ctrl_quadpid pose menu and commands */
-    shell_menu_t menu_pose = menu_init("QuadPID controller pose menu",
-                                       "ctrl_quadpid_pose_menu", menu_root, NULL);
+    cogip::shell::menu *menu_pose = new cogip::shell::menu(
+        "QuadPID controller pose menu", "ctrl_quadpid_pose_menu", &cogip::shell::root_menu);
 
-    const shell_command_t shell_ctrl_quadpid_pose_menu_commands[] = {
-        { "a", "Speed linear Kp calibration to <kp>",
-          ctrl_quadpid_pose_cmd_linear_kp_cb },
-        { "A", "Speed angular Kp calibration to <kp>",
-          ctrl_quadpid_pose_cmd_angular_kp_cb },
-        { "e", "Encoder reset command",
-          ctrl_quadpid_pose_cmd_reset_cb },
-        MENU_NULL_CMD,
-    };
-
-    menu_add_list(menu_pose, shell_ctrl_quadpid_pose_menu_commands);
+    menu_pose->push_back(new cogip::shell::command(
+        "a", "Speed linear Kp calibration to <kp>", ctrl_quadpid_pose_cmd_linear_kp_cb));
+    menu_pose->push_back(new cogip::shell::command(
+        "A", "Speed angular Kp calibration to <kp>", ctrl_quadpid_pose_cmd_angular_kp_cb));
+    menu_pose->push_back(new cogip::shell::command(
+        "e", "Encoder reset command", ctrl_quadpid_pose_cmd_reset_cb));
 }

@@ -1,33 +1,26 @@
-/* System includes */
-#include <thread.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
 /* RIOT includes */
 #include "log.h"
-#include "shell.h"
 #include "xtimer.h"
 #include "periph/qdec.h"
 
 /* Project includes */
-#include "obstacles.h"
-#include "planner.h"
-#include "platform.h"
-#include "avoidance.h"
-#include "tracefd.h"
+#include "obstacles.hpp"
+#include "planner.hpp"
+#include "platform.hpp"
+#include "avoidance.hpp"
+#include "tracefd.hpp"
 
 /* Platform includes */
-#include "lidar_utils.h"
-#include "lidar_obstacles.h"
-#include "trace_utils.h"
+#include "lidar_utils.hpp"
+#include "lidar_obstacles.hpp"
+#include "trace_utils.hpp"
 
 #ifdef MODULE_SHELL_PLATFORMS
-#include "shell_platforms.h"
+#include "shell_platforms.hpp"
 #endif /* MODULE_SHELL_PLATFORMS */
 
 #ifdef MODULE_SHELL_QUADPID
-#include "shell_quadpid.h"
+#include "shell_quadpid.hpp"
 #endif /* MODULE_SHELL_QUADPID */
 
 #define ENABLE_DEBUG        (0)
@@ -38,6 +31,29 @@ static ctrl_quadpid_t ctrl_quadpid =
 {
     .conf = &ctrl_quadpid_conf,
     .pf_conf = &ctrl_pf_quadpid_conf,
+    .control = {
+        .pose_order = { { 0 ,0 }, 0 },
+        .pose_current = { { 0 ,0 }, 0 },
+        .speed_order{ 0, 0 },
+        .speed_current = { 0, 0 },
+        .speed_order_cb = 0,
+        .pose_reached = 0,
+        .pose_intermediate = 0,
+        .allow_reverse = 0,
+        .anti_blocking_on = 0,
+        .blocking_cycles = 0,
+        .current_mode = CTRL_MODE_STOP,
+        .current_cycle = 0
+    },
+    .quadpid_params = {
+        .linear_speed_pid = { 0, 0, 0, 0, 0 },
+        .angular_speed_pid = { 0, 0, 0, 0, 0 },
+        .linear_pose_pid = { 0, 0, 0, 0, 0 },
+        .angular_pose_pid = { 0, 0, 0, 0, 0 },
+        .min_distance_for_angular_switch = 0,
+        .min_angle_for_pose_reached = 0,
+        .regul = CTRL_REGUL_IDLE
+    }
 };
 
 /* Thread stacks */
@@ -58,14 +74,13 @@ void pf_set_trace_mode(bool state)
     trace_on = state;
 }
 
-void pf_print_state(tracefd_t out)
+void pf_print_state(cogip::tracefd::file &out)
 {
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
 
-    tracefd_lock(out);
+    out.lock();
 
-    tracefd_printf(
-        out,
+    out.printf(
         "{"
         "\"mode\":%u,"
         "\"pose_current\":{\"O\":%.3lf,\"x\":%.3lf,\"y\":%.3lf},"
@@ -81,15 +96,15 @@ void pf_print_state(tracefd_t out)
         ctrl->control.speed_order.distance, ctrl->control.speed_order.angle
         );
 
-    tracefd_printf(out, ",\"path\":");
+    out.printf(",\"path\":");
     avoidance_print_path(out);
 
-    tracefd_printf(out, ",\"obstacles\":");
-    obstacles_print_all_json(out);
+    out.printf(",\"obstacles\":");
+    cogip::obstacles::print_all_json(out);
 
-    tracefd_printf(out, "}\n");
+    out.printf("}\n");
 
-    tracefd_unlock(out);
+    out.unlock();
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -97,17 +112,17 @@ void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
     ctrl_quadpid.quadpid_params = ctrl_quadpid_params;
 }
 
-inline ctrl_quadpid_t *pf_get_quadpid_ctrl(void)
+ctrl_quadpid_t *pf_get_quadpid_ctrl(void)
 {
     return &ctrl_quadpid;
 }
 
-inline ctrl_t *pf_get_ctrl(void)
+ctrl_t *pf_get_ctrl(void)
 {
     return (ctrl_t *)&ctrl_quadpid;
 }
 
-inline path_t *pf_get_path(void)
+path_t *pf_get_path(void)
 {
     return &robot_path;
 }
@@ -184,7 +199,7 @@ int pf_is_camp_left(void)
     return !gpio_read(GPIO_CAMP);
 }
 
-obstacles_t pf_get_dyn_obstacles_id(void)
+cogip::obstacles::list *pf_get_dyn_obstacles(void)
 {
     return lidar_obstacles;
 }
@@ -227,7 +242,7 @@ static void *_task_planner_start_cancel(void *arg)
     /* Set a flag and return once done */
     *start_shell = false;
 
-    tracefd_jlog(tracefd_stdout, "Key pressed, do not start planner.");
+    cogip::tracefd::out.logf("Key pressed, do not start planner.");
 
     return NULL;
 }
@@ -266,7 +281,6 @@ void pf_init(void)
     if (gpio_init(GPIO_STARTER, GPIO_IN_PU) != 0) {
         puts("WARNING: GPIO_STARTER not initialized!");
     }
-
 
     gpio_clear(GPIO_DEBUG_LED);
 
@@ -309,12 +323,12 @@ void pf_init_tasks(void)
         "wait planner start cancel"
         );
 
-    tracefd_jlog(tracefd_stdout, "Press Enter to cancel planner start...");
+    cogip::tracefd::out.logf("Press Enter to cancel planner start...");
 
     /* Wait for Enter key pressed or countdown */
     while ((start_planner) && (countdown > 0)) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
-        tracefd_jlog(tracefd_stdout, "%d seconds left...", countdown);
+        cogip::tracefd::out.logf("%d seconds left...", countdown);
         countdown--;
         xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
     }

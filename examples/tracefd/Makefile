@@ -5,8 +5,6 @@ BOARD ?= nucleo-f446re
 
 USEMODULE += tracefd
 
-CFLAGS += -DTRACEFD_NUMOF=3
-
 ifneq ($(CPU),native)
 	CFLAGS += "-DSD_CARD_SPI_MODE=SPI_MODE_3"
 	CFLAGS += "-DSDCARD_SPI_PARAM_SPI=SPI_DEV(0)"

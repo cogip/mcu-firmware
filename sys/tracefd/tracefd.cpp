@@ -1,92 +1,50 @@
-/* System includes */
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
+// Module includes
+#include "tracefd.hpp"
+#include "tracefd_private.hpp"
 
-/* RIOT includes */
-#include "mutex.h"
-#include "xtimer.h"
+// System includes
+#include <cstdarg>
 
-/* Module includes */
-#include "tracefd.h"
-#include "tracefd_private.h"
+// RIOT includes
+#include "riot/chrono.hpp"
+#include "riot/thread.hpp"
 
-#define ENABLE_DEBUG (0)
-#include "debug.h"
+namespace cogip {
 
-/**
- * @brief   Trace file descriptor parameters
- */
-typedef struct {
-    FILE *fd;                           /**< file descriptor */
-    char filename[TRACEFD_MAX_PATH];    /**< filename */
-    mutex_t lock;                       /**< lock protecting file access */
-} tracefd_context_t;
+namespace tracefd {
 
-/* Allocate memory for the tracefd contexts */
-tracefd_context_t tracefd_contexts[TRACEFD_NUMOF_ALL];
+file out(stdout);
+file err(stderr);
 
-/* Default tracefd descriptor for stderr */
-tracefd_t tracefd_stderr = 0;
+static bool initialized = false;
+static std::vector<file *> all_files;
+static riot::mutex thread_lock;
 
-/* Default tracefd descriptor for stdout */
-tracefd_t tracefd_stdout = 1;
-
-/* Number of initialized tracefd */
-tracefd_t tracefd_initialized = 0;
-
-/* Files flusher thread PID */
+// Files flusher thread PID
 kernel_pid_t files_flusher_pid = -1;
 
-/* Files flusher thread stack */
+// Files flusher thread stack
 static char files_flusher_thread_stack[THREAD_STACKSIZE_DEFAULT];
-
-/* Flag set to true to make files flusher thread sleep */
-bool sleep_files_flusher_thread = false;
 
 static void *_thread_files_flusher(void *arg)
 {
     (void)arg;
-    for (;;) {
-        if (sleep_files_flusher_thread) {
-            sleep_files_flusher_thread = false;
-            thread_sleep();
-        }
-        xtimer_ticks32_t loop_start_time = xtimer_now();
-        tracefd_flush_all();
-        xtimer_periodic_wakeup(&loop_start_time, TRACEFD_FLUSH_INTERVAL * US_PER_MS);
+    while (true) {
+        thread_lock.lock();
+        thread_lock.unlock();
+        cogip::tracefd::flush_all();
+        riot::this_thread::sleep_for(std::chrono::milliseconds(TRACEFD_FLUSH_INTERVAL));
     }
     return EXIT_SUCCESS;
 }
 
-static inline void _check_initialized(void)
+static void _initialize(void)
 {
-    if (tracefd_initialized == 0) {
-        tracefd_init();
-    }
-}
-
-void tracefd_init(void)
-{
-    assert(tracefd_initialized < TRACEFD_NUMOF_ALL);
-
-    if (tracefd_initialized > 0) {
+    if (initialized) {
         return;
     }
 
-    /* Init stderr descriptor */
-    tracefd_context_t *stderr_context = &tracefd_contexts[tracefd_stderr];
-    stderr_context->fd = stderr;
-    mutex_init(&stderr_context->lock);
-    tracefd_initialized++;
-
-    /* Init stdout descriptor */
-    tracefd_context_t *stdout_context = &tracefd_contexts[tracefd_stdout];
-    stdout_context->fd = stdout;
-    mutex_init(&stdout_context->lock);
-    tracefd_initialized++;
-
-    if (TRACEFD_NUMOF > 0 && tracefd_init_root_dir()) {
+    if (init_root_dir()) {
         files_flusher_pid = thread_create(
             files_flusher_thread_stack,
             sizeof(files_flusher_thread_stack),
@@ -96,134 +54,119 @@ void tracefd_init(void)
             NULL,
             "Trace file flusher"
             );
+    }
 
-        tracefd_start_files_flusher();
+    initialized = true;
+    start_files_flusher();
+}
+
+void flush_all(void)
+{
+    for (auto trace_file: all_files) {
+        trace_file->flush();
     }
 }
 
-tracefd_t tracefd_new(const char *filename)
+void start_files_flusher(void)
 {
-    _check_initialized();
-    assert(tracefd_initialized < TRACEFD_NUMOF_ALL);
-    assert(strlen(TRACEFD_ROOT_DIR) + strlen(filename) + 1 < TRACEFD_MAX_PATH);
-
-    tracefd_t id = tracefd_initialized;
-    tracefd_context_t *context = &tracefd_contexts[id];
-    sprintf(context->filename, "%s/%s", TRACEFD_ROOT_DIR, filename);
-    context->fd = NULL;
-    mutex_init(&context->lock);
-    tracefd_initialized++;
-
-    /* Create or truncate the file */
-    FILE *fd = fopen(context->filename, "w");
-    if (fd) {
-        fclose(fd);
-        return id;
-    }
-    else {
-        return TRACEFD_NUMOF_ALL;
-    }
+    thread_lock.unlock();
 }
 
-void tracefd_open(const tracefd_t tracefd)
+void stop_files_flusher(void)
 {
-    assert(tracefd < tracefd_initialized);
-    tracefd_context_t *context = &tracefd_contexts[tracefd];
-    if (context->fd == NULL) {
-        context->fd = fopen(context->filename, "a");
-    }
+    thread_lock.lock();
 }
 
-void tracefd_close(const tracefd_t tracefd)
+file::file(const std::string & filename)
 {
-    assert(tracefd < tracefd_initialized);
-    tracefd_context_t *context = &tracefd_contexts[tracefd];
-    if (context->fd) {
-        fclose(context->fd);
-        context->fd = NULL;
+    if (! initialized) {
+        _initialize();
+    }
+
+    filename_ = std::string(TRACEFD_ROOT_DIR) + "/" + filename;
+    // Create or truncate the file
+    file_ = fopen(filename_.c_str(), "w");
+    if (! file_) {
+        throw std::runtime_error("Can't open file");
+    }
+
+    fclose(file_);
+    file_ = nullptr;
+
+    all_files.push_back(this);
+}
+
+file::file(FILE *f) : file_(f), filename_("buitin")
+{
+}
+
+void file::open(void)
+{
+    if (file_ == nullptr) {
+        file_ = fopen(filename_.c_str(), "a");
     }
 }
 
-void tracefd_lock(const tracefd_t tracefd)
+void file::close(void)
 {
-    _check_initialized();
-    assert(tracefd < tracefd_initialized);
-    tracefd_context_t *context = &tracefd_contexts[tracefd];
-    mutex_lock(&context->lock);
+    if (file_) {
+        fclose(file_);
+        file_ = nullptr;
+    }
 }
 
-void tracefd_unlock(const tracefd_t tracefd)
+void file::lock(void)
 {
-    _check_initialized();
-    assert(tracefd < tracefd_initialized);
-    tracefd_context_t *context = &tracefd_contexts[tracefd];
-    mutex_unlock(&context->lock);
+    mutex_.lock();
 }
 
-void tracefd_printf(const tracefd_t tracefd, const char *format, ...)
+void file::unlock(void)
 {
-    _check_initialized();
-    assert(tracefd < tracefd_initialized);
-    const tracefd_context_t *context = &tracefd_contexts[tracefd];
-    assert(context->fd);
+    mutex_.unlock();
+}
+
+void file::printf(const char *format, ...)
+{
+    assert(file_);
 
     va_list argp;
     va_start(argp, format);
-    vfprintf(context->fd, format, argp);
+    vfprintf(file_, format, argp);
     va_end(argp);
-    fflush(context->fd);
+    fflush(file_);
 }
 
-void tracefd_jlog(const tracefd_t tracefd, const char *format, ...)
+void file::logf(const char *format, ...)
 {
-    _check_initialized();
-    assert(tracefd < tracefd_initialized);
-    const tracefd_context_t *context = &tracefd_contexts[tracefd];
-    assert(context->fd);
+    assert(file_);
 
-    tracefd_lock(tracefd);
+    lock();
 
-    fprintf(context->fd, "{\"log\": \"");
-    fflush(context->fd);
+    fprintf(file_, "{\"log\": \"");
+    fflush(file_);
 
     va_list argp;
     va_start(argp, format);
-    vfprintf(context->fd, format, argp);
+    vfprintf(file_, format, argp);
     va_end(argp);
-    fflush(context->fd);
+    fflush(file_);
 
-    fprintf(context->fd, "\"}\n");
-    fflush(context->fd);
+    fprintf(file_, "\"}\n");
+    fflush(file_);
 
-    tracefd_unlock(tracefd);
+    unlock();
 }
 
-void tracefd_flush(const tracefd_t tracefd)
+void file::flush(void)
 {
-    _check_initialized();
-    assert(tracefd < tracefd_initialized);
-    tracefd_context_t *context = &tracefd_contexts[tracefd];
-    tracefd_lock(tracefd);
-    if (context->fd) {
-        tracefd_close(tracefd);
+    lock();
+    if (file_) {
+        close();
     }
-    tracefd_open(tracefd);
-    tracefd_unlock(tracefd);
+    open();
+    unlock();
 }
 
-void tracefd_flush_all(void)
-{
-    for (tracefd_t tracefd = TRACEFD_NUMOF_DEFAULT; tracefd < tracefd_initialized; tracefd++) {
-        tracefd_flush(tracefd);
-    }
-}
+} // namespace tracefd
 
-void tracefd_start_files_flusher(void)
-{
-    thread_wakeup(files_flusher_pid);
-}
-
-void tracefd_stop_files_flusher(void)
-{
-    sleep_files_flusher_thread = true;
-}
+} // namespace cogip

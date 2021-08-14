@@ -146,7 +146,7 @@ typedef struct {
 
     const uint16_t blocking_speed_treshold;         /**< Blocking speed
                                                          treshold */
-    const uint16_t blocking_speed_error_treshold;   /**< Blocking speed error
+    const double blocking_speed_error_treshold;   /**< Blocking speed error
                                                          treshold */
     const uint16_t blocking_cycles_max;             /**< Blocking cycles
                                                          maximum number */

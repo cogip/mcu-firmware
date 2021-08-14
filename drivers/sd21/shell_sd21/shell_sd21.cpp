@@ -1,7 +1,6 @@
-#include <stdio.h>
-
 /* Standard includes */
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 /* RIOT includes */
 #include "fmt.h"
@@ -9,9 +8,9 @@
 /* Project includes */
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
-#include "platform.h"
+#include "platform.hpp"
 #include "sd21.h"
-#include "shell_menu.h"
+#include "shell_menu.hpp"
 #include "shell_sd21.h"
 #include "utils.h"
 
@@ -28,7 +27,7 @@ static uint16_t sd21_get_current_position(void)
     sd21_servo_get_position(dev, servo_id, &current_position);
 
     /* Print current position on same line */
-    tracefd_jlog(tracefd_stdout, "Current position: %u", current_position);
+    cogip::tracefd::out.logf("Current position: %u", current_position);
 
     return current_position;
 }
@@ -63,7 +62,7 @@ static int sd21_cmd_device_cb(int argc, char **argv)
 
     /* Check arguments */
     if (argc != 2) {
-        tracefd_jlog(tracefd_stdout, "Bad number of arguments!");
+        cogip::tracefd::out.logf("Bad number of arguments!");
 
         return EXIT_FAILURE;
     }
@@ -81,7 +80,7 @@ static int sd21_cmd_next_servo_cb(int argc, char **argv)
     sd21_get_current_position();
     servo_id = (servo_id >= sd21_config[dev].servos_nb - 1) ?
                sd21_config[dev].servos_nb - 1 : servo_id + 1;
-    tracefd_jlog(tracefd_stdout, "Current servo: %s", sd21_servo_get_name(dev, servo_id));
+    cogip::tracefd::out.logf("Current servo: %s", sd21_servo_get_name(dev, servo_id));
 
     return EXIT_SUCCESS;
 }
@@ -93,7 +92,7 @@ static int sd21_cmd_previous_servo_cb(int argc, char **argv)
 
     sd21_get_current_position();
     servo_id = (servo_id == 0) ? 0 : servo_id - 1;
-    tracefd_jlog(tracefd_stdout, "Current servo: %s", sd21_servo_get_name(dev, servo_id));
+    cogip::tracefd::out.logf("Current servo: %s", sd21_servo_get_name(dev, servo_id));
 
     return EXIT_SUCCESS;
 }
@@ -138,7 +137,7 @@ static int sd21_cmd_switch_cb(int argc, char **argv)
 
     /* Check arguments */
     if (argc != 2) {
-        tracefd_jlog(tracefd_stdout, "Bad number of arguments!");
+        cogip::tracefd::out.logf("Bad number of arguments!");
         return EXIT_FAILURE;
     }
 
@@ -166,29 +165,32 @@ static int sd21_cmd_switch_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+extern "C"
 void sd21_shell_init(const sd21_conf_t *sd21_config_new)
 {
     /* SD21 new_config */
     sd21_config = sd21_config_new;
 
     /* SD21 menu and commands */
-    shell_menu_t menu = menu_init("SD21 menu", "sd21_menu", menu_root, NULL);
+    cogip::shell::menu *menu = new cogip::shell::menu(
+        "SD21 menu", "sd21_menu", &cogip::shell::root_menu);
 
-    const shell_command_t shell_sd21_menu_commands[] = {
-        { "d", "sd21 device <d>", sd21_cmd_device_cb },
-        { "o", "Opened position", sd21_cmd_opened_cb },
-        { "c", "Closed position", sd21_cmd_closed_cb },
-        { "n", "Next servomotor", sd21_cmd_next_servo_cb },
-        { "p", "Previous servomotor", sd21_cmd_previous_servo_cb },
-        { "r", "Reset to center position", sd21_cmd_reset_cb },
-        { "+", "Add "STR (SD21_SERVO_POS_STEP)"microseconds to current position",
-          sd21_cmd_add_cb },
-        { "-", "Substract "STR (SD21_SERVO_POS_STEP) "microseconds \
-            from current position", sd21_cmd_sub_cb },
-        { "switch", "Switch to predefined position <n> (n between 0 and 9)",
-          sd21_cmd_switch_cb },
-        MENU_NULL_CMD,
-    };
-
-    menu_add_list(menu, shell_sd21_menu_commands);
+    menu->push_back(new cogip::shell::command(
+        "d", "sd21 device <d>", sd21_cmd_device_cb));
+    menu->push_back(new cogip::shell::command(
+        "o", "Opened position", sd21_cmd_opened_cb));
+    menu->push_back(new cogip::shell::command(
+        "c", "Closed position", sd21_cmd_closed_cb));
+    menu->push_back(new cogip::shell::command(
+        "n", "Next servomotor", sd21_cmd_next_servo_cb));
+    menu->push_back(new cogip::shell::command(
+        "p", "Previous servomotor", sd21_cmd_previous_servo_cb));
+    menu->push_back(new cogip::shell::command(
+        "r", "Reset to center position", sd21_cmd_reset_cb));
+    menu->push_back(new cogip::shell::command(
+        "+", "Add " STR(SD21_SERVO_POS_STEP) "microseconds to current position", sd21_cmd_add_cb));
+    menu->push_back(new cogip::shell::command(
+        "-", "Substract " STR(SD21_SERVO_POS_STEP) "microseconds from current position", sd21_cmd_sub_cb));
+    menu->push_back(new cogip::shell::command(
+        "switch", "Switch to predefined position <n> (n between 0 and 9)", sd21_cmd_switch_cb));
 }
