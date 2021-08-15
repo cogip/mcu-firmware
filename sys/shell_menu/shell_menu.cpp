@@ -6,7 +6,7 @@
 #include <map>
 
 // Project includes
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 
 namespace cogip {
 

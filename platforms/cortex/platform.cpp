@@ -8,7 +8,7 @@
 #include "planner.hpp"
 #include "platform.hpp"
 #include "avoidance.hpp"
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 
 /* Platform includes */
 #include "lidar_utils.hpp"
@@ -74,7 +74,7 @@ void pf_set_trace_mode(bool state)
     trace_on = state;
 }
 
-void pf_print_state(cogip::tracefd::file &out)
+void pf_print_state(cogip::tracefd::File &out)
 {
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
 

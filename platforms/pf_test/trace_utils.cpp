@@ -4,7 +4,7 @@
 #include "riot/thread.hpp"
 
 // Application includes
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 #include "platform.hpp"
 #include "obstacles.hpp"
 
@@ -12,7 +12,7 @@
 #define TRACE_FILE "trace.txt"
 
 /* Trace file descriptor on sdcard */
-static cogip::tracefd::file *tracefd_sdcard;
+static cogip::tracefd::File *tracefd_sdcard;
 
 /* Periodic task */
 #define TASK_PERIOD_MS 60
@@ -44,7 +44,7 @@ static void *_thread_trace(void *arg)
 void trace_start(void)
 {
     try {
-        tracefd_sdcard = new cogip::tracefd::file(TRACE_FILE);
+        tracefd_sdcard = new cogip::tracefd::File(TRACE_FILE);
         tracefd_sdcard->open();
     }
     catch(std::runtime_error &) {

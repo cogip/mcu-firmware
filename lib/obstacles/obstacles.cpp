@@ -133,7 +133,7 @@ coords_t rectangle::nearest_point(const coords_t &p) const
     return collisions_find_nearest_point_in_polygon(&polygon_tmp, &p);
 }
 
-void rectangle::print_json(cogip::tracefd::file &out) const
+void rectangle::print_json(cogip::tracefd::File &out) const
 {
     out.printf(
         "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"length_x\":%.3lf,\"length_y\":%.3lf}",
@@ -167,7 +167,7 @@ coords_t circle::nearest_point(const coords_t &p) const
     return collisions_find_nearest_point_in_circle(&circle_, &p);
 }
 
-void circle::print_json(cogip::tracefd::file &out) const
+void circle::print_json(cogip::tracefd::File &out) const
 {
     out.printf(
         "{\"x\":%.3lf,\"y\":%.3lf,\"radius\":%.3lf}",
@@ -201,7 +201,7 @@ coords_t polygon::nearest_point(const coords_t &p) const
     return collisions_find_nearest_point_in_polygon(&polygon_, &p);
 }
 
-void polygon::print_json(cogip::tracefd::file &out) const
+void polygon::print_json(cogip::tracefd::File &out) const
 {
     out.printf(
         "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"points\":[",
@@ -247,7 +247,7 @@ void list::clear()
     std::list<obstacle *>::clear();
 }
 
-void list::print_json(cogip::tracefd::file &out) const
+void list::print_json(cogip::tracefd::File &out) const
 {
     size_t i = 0;
     for (auto obs: *this) {
@@ -260,7 +260,7 @@ void list::print_json(cogip::tracefd::file &out) const
 }
 
 // Global functions
-void print_all_json(cogip::tracefd::file &out)
+void print_all_json(cogip::tracefd::File &out)
 {
     size_t nb_obstacles = 0;
 

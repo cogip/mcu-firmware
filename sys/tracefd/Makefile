@@ -1,4 +1,4 @@
-SRCXX = tracefd.cpp
+SRCXX = tracefd.cpp File.cpp
 
 ifeq ($(CPU),native)
 	SRCXX += tracefd_native.cpp

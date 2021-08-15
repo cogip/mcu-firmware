@@ -15,7 +15,7 @@
 #include "platform.hpp"
 #include "path.hpp"
 #include "obstacles.hpp"
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 
 #ifdef MODULE_SHELL_PLANNERS
 #include "shell_planners.hpp"

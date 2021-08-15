@@ -6,7 +6,7 @@
 #include "cogip_defs.h"
 #include "shell_menu.hpp"
 #include "obstacles.hpp"
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 
 // Application includes
 #include "common_defs.h"
