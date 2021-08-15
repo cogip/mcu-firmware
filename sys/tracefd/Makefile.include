@@ -3,3 +3,4 @@ USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_tracefd)
 
 CXXEXFLAGS += -std=c++11
 CXXEXFLAGS += -fno-rtti
+CXXEXFLAGS += -Wno-pedantic
