@@ -3,7 +3,7 @@
 #include "riot/thread.hpp"
 
 // Project includes
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 
 int main(void)
 {
@@ -11,9 +11,9 @@ int main(void)
 
     cogip::tracefd::out.printf("Example 1: write in a file and close it\n");
     std::string filename1 = "example1.txt";
-    cogip::tracefd::file *tracefd1;
+    cogip::tracefd::File *tracefd1;
     try {
-        tracefd1 = new cogip::tracefd::file(filename1);
+        tracefd1 = new cogip::tracefd::File(filename1);
     }
     catch(std::runtime_error &e) {
         tracefd1 = nullptr;
@@ -31,7 +31,7 @@ int main(void)
 
     cogip::tracefd::out.printf("Example 2: write in a file and do not close it\n");
     try {
-        cogip::tracefd::file tracefd2("example2.txt");
+        cogip::tracefd::File tracefd2("example2.txt");
         tracefd2.open();
         tracefd2.printf("Trace example 2\n");
     }
@@ -47,7 +47,7 @@ int main(void)
 
     try {
         cogip::tracefd::out.printf("Example 3: write in a file and do not close it\n");
-        cogip::tracefd::file tracefd3("example3.txt");
+        cogip::tracefd::File tracefd3("example3.txt");
         tracefd3.open();
         tracefd3.printf("Trace example 3\n");
     }

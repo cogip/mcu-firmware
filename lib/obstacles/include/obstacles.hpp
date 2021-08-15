@@ -31,7 +31,7 @@
 
 // Project includes
 #include "cogip_defs.h"
-#include "tracefd.hpp"
+#include "tracefd/File.hpp"
 
 #if 0 // Unused?
 /**
@@ -86,7 +86,7 @@ public:
 
     /// @brief Print obstacles in JSON format
     /// @param[out]   out            Trace file descriptor
-    virtual void print_json(cogip::tracefd::file &out) const = 0;
+    virtual void print_json(cogip::tracefd::File &out) const = 0;
 
     /// @brief Return obstacle center
     const coords_t &center() const { return center_; };
@@ -111,7 +111,7 @@ public:
     bool is_point_inside(const coords_t &p) const;
     bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
     coords_t nearest_point(const coords_t &p) const;
-    void print_json(cogip::tracefd::file &out) const;
+    void print_json(cogip::tracefd::File &out) const;
 
 private:
     rectangle_t rectangle_;
@@ -124,7 +124,7 @@ public:
     bool is_point_inside(const coords_t &p) const;
     bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
     coords_t nearest_point(const coords_t &p) const;
-    void print_json(cogip::tracefd::file &out) const;
+    void print_json(cogip::tracefd::File &out) const;
 
 private:
     circle_t circle_;
@@ -137,7 +137,7 @@ public:
     bool is_point_inside(const coords_t &p) const;
     bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
     coords_t nearest_point(const coords_t &p) const;
-    void print_json(cogip::tracefd::file &out) const;
+    void print_json(cogip::tracefd::File &out) const;
 
 private:
     polygon_t polygon_;
@@ -157,7 +157,7 @@ public:
     uint32_t max_distance() { return max_distance_; };
     void lock() { mutex_.lock(); };
     void unlock() { mutex_.unlock(); };
-    void print_json(cogip::tracefd::file &out) const;
+    void print_json(cogip::tracefd::File &out) const;
     void clear();
 
 private:
@@ -176,7 +176,7 @@ bool is_point_in_obstacles(const coords_t &p, const obstacle *filter);
 
 /// @brief Print all obstacles from all lists
 /// @param[in]   out         trace file descriptor
-void print_all_json(cogip::tracefd::file &out);
+void print_all_json(cogip::tracefd::File &out);
 
 } // namespace obstacles
 

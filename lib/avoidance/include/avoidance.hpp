@@ -33,7 +33,7 @@
 
 /* Project includes */
 #include "cogip_defs.h"
-#include "tracefd.hpp"
+#include "tracefd/File.hpp"
 
 /**
  * @name Dijkstra avoidance parameters
@@ -82,6 +82,6 @@ bool avoidance_check_recompute(const pose_t *start,
  *
  * @return
  */
-void avoidance_print_path(cogip::tracefd::file &out);
+void avoidance_print_path(cogip::tracefd::File &out);
 
 /** @} */

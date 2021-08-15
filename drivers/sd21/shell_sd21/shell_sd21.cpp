@@ -13,6 +13,7 @@
 #include "shell_menu.hpp"
 #include "shell_sd21.h"
 #include "utils.h"
+#include "tracefd/tracefd.hpp"
 
 static const sd21_conf_t *sd21_config = NULL;
 

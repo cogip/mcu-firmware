@@ -11,7 +11,7 @@
 // Project includes
 #include "lds01.h"
 #include "lds01_params.h"
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 
 // Lidar device to use (defined in lds01_params.h)
 lds01_t lds01 = 0;

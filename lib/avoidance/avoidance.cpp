@@ -328,7 +328,7 @@ bool avoidance_check_recompute(const pose_t *start,
 /**
  * Print avoidance computed path
  */
-void avoidance_print_path(cogip::tracefd::file &out)
+void avoidance_print_path(cogip::tracefd::File &out)
 {
     uint8_t i = 0;
 

@@ -17,7 +17,7 @@
 #include "ctrl.hpp"
 #include "shell_menu.hpp"
 #include "shell_platforms.hpp"
-#include "tracefd.hpp"
+#include "tracefd/tracefd.hpp"
 
 #ifdef MODULE_SHMEM
 #include "shmem.h"

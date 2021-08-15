@@ -24,12 +24,13 @@
 
 #pragma once
 
-// Standard includes
-#include <string>
-#include <vector>
+#include "tracefd/File.hpp"
 
-// RIOT includes
-#include "riot/mutex.hpp"
+/// @def TRACEFD_ROOT_DIR
+/// @brief Base directory of trace files
+#ifndef TRACEFD_ROOT_DIR
+#  define TRACEFD_ROOT_DIR "/tmp/sdcard"
+#endif
 
 /// @def TRACEFD_FLUSH_INTERVAL
 /// @brief Interval in ms between two flush of all files
@@ -53,56 +54,10 @@ namespace cogip {
 
 namespace tracefd {
 
-class file {
-public:
-    /// Constructor based on file name.
-    /// Create a new trace file descriptor, also starts the files flusher thread.
-    /// @param[in]   filename   name of the trace file
-    file(const std::string & filename);
+extern File out;                /// trace descriptor bound to stdout
+extern File err;                /// trace descriptor bound to stderr
 
-    /// Constructor based on file descriptor.
-    /// Only used to initialize `out` and `err` descriptors.
-    /// @param[in]   f                 file descriptor
-    file(FILE *f);
-
-    /// Open the trace file
-    void open(void);
-
-    /// Close the trace file
-    void close(void);
-
-    /// Lock the trace file
-    void lock(void);
-
-    /// Unlock the trace file
-    void unlock(void);
-
-    /// Print formatted string in the trace file.
-    /// File descriptor must be locked/unlocked manually before/after
-    /// calling this function.
-    /// @param[in]   format     format string
-    /// @param[in]   ...        arguments
-    void printf(const char *format, ...);
-
-    /// Print formatted string in the trace file in a JSON log message.
-    /// The message must not contain '\n' nor '"'.
-    /// File descriptor is automatically locked/unlocked around print.
-    /// @param[in]   format     format string
-    /// @param[in]   ...        arguments
-    void logf(const char *format, ...);
-
-    /// Flush the trace file (close and re-open).
-    void flush(void);
-
-private:
-    FILE * file_;               /// file descriptor
-    std::string filename_;      /// filename
-    riot::mutex mutex_;         /// mutex protecting file access
-};
-
-extern file out;                /// trace descriptor bound to stdout
-extern file err;                /// trace descriptor bound to stderr
-
+void initialize_tracefd(void);  /// Initialize root dir and flusher thread
 void flush_all(void);           /// Flush all the trace files
 void start_files_flusher(void); /// Start the files flusher thread
 void stop_files_flusher(void);  /// Stop the files flusher thread
@@ -111,4 +66,4 @@ void stop_files_flusher(void);  /// Stop the files flusher thread
 
 } // namespace cogip
 
-/** @} */
+/// @}

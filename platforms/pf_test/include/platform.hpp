@@ -181,7 +181,7 @@ void pf_set_trace_mode(bool state);
  *
  * @return
  */
-void pf_print_state(cogip::tracefd::file &out);
+void pf_print_state(cogip::tracefd::File &out);
 
 /**
  * @brief Get platform path
