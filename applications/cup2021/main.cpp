@@ -1,6 +1,6 @@
 #include "app.hpp"
 #include "platform.hpp"
-#include "shell_menu.hpp"
+#include "shell_menu/shell_menu.hpp"
 
 int main(void)
 {

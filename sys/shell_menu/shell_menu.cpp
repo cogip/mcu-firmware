@@ -1,9 +1,5 @@
-#include "shell_menu.hpp"
-
-// System includes
-#include <cassert>
-#include <set>
-#include <map>
+#include "shell_menu/shell_menu.hpp"
+#include "shell_menu_private.hpp"
 
 // Project includes
 #include "tracefd/tracefd.hpp"
@@ -12,17 +8,12 @@ namespace cogip {
 
 namespace shell {
 
-menu root_menu("Main", "");                     /// Root menu
-
-// Definition of static variables
-static std::map<std::string, menu *> all_menus; /// Map containings all menus indexed by cmd
-static std::set<command *> all_commands;        /// All commands
-static std::list<command *> global_commands;    /// Global commands, available in all menus
-static const menu *current_menu = nullptr;      /// Pointer to the current menu
-
-// Shell commands used by RIOT shell module.
-// It is updated each a menu is entered or exited.
-static shell_command_t current_commands[NB_SHELL_COMMANDS];
+Menu root_menu("Main", "");
+std::map<std::string, Menu *> all_menus;
+std::set<Command *> all_commands;
+std::list<Command *> global_commands;
+const Menu *current_menu = nullptr;
+shell_command_t current_commands[NB_SHELL_COMMANDS];
 
 // Callbacks for default global commands
 static int _display_json_help(int argc, char **argv)
@@ -62,94 +53,13 @@ static int _exit_menu(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-// Callback executed to enter a sub-menu
-static int _cmd_enter_sub_menu(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    auto it = all_menus.find(argv[0]);
-    if (it != all_menus.end()) {
-        it->second->enter();
-    }
-
-    return EXIT_SUCCESS;
-}
-
-// command methods
-command::command(const ::std::string &name, const ::std::string &desc, shell_command_handler_t handler)
-    : name_(name), desc_(desc), handler_(handler)
-{
-    all_commands.insert(this);
-}
-
-command::~command()
-{
-    all_commands.erase(this);
-}
-
-// menu methods
-menu::menu(
-    const std::string &name, const std::string &cmd,
-    menu *parent, func_cb_t enter_cb) : name_(name), cmd_(cmd), parent_(parent)
-{
-    enter_cb_ = enter_cb;
-
-    if (cmd != "") {
-        assert(all_menus.count(cmd) == 0);
-        all_menus[cmd] = this;
-    }
-
-    std::string menu_desc = "Enter " + name;
-    if (parent) {
-        parent->push_back(new command(cmd, menu_desc, _cmd_enter_sub_menu));
-    }
-}
-
-void menu::enter(void) const
-{
-    const menu *previous_menu = current_menu;
-    current_menu = this;
-
-    assert (global_commands.size() + current_menu->size() <= NB_SHELL_COMMANDS);
-
-    size_t i = 0;
-    for (auto cmd: global_commands) {
-        current_commands[i].name = cmd->name().c_str();
-        current_commands[i].desc = cmd->desc().c_str();
-        current_commands[i].handler = cmd->handler();
-        i++;
-    }
-
-    for (auto cmd: *current_menu) {
-        current_commands[i].name = cmd->name().c_str();
-        current_commands[i].desc = cmd->desc().c_str();
-        current_commands[i].handler = cmd->handler();
-        i++;
-    }
-
-    for (; i < NB_SHELL_COMMANDS; i++) {
-        current_commands[i].name = nullptr;
-        current_commands[i].desc = nullptr;
-        current_commands[i].handler = nullptr;
-        i++;
-    }
-
-    cogip::tracefd::out.logf("Enter shell menu: %s", current_menu->name().c_str());
-
-    if (current_menu != previous_menu && enter_cb_) {
-        enter_cb_();
-    }
-}
-
-// Global functions
 void start(void)
 {
     char line_buf[SHELL_DEFAULT_BUFSIZE];
 
     // Add default global commands
-    add_global_command(new command("_help_json", "Display available commands in JSON format", _display_json_help));
-    add_global_command(new command("exit", "Exit current menu", _exit_menu));
+    add_global_command(new Command("_help_json", "Display available commands in JSON format", _display_json_help));
+    add_global_command(new Command("exit", "Exit current menu", _exit_menu));
 
     // Enter the root menu
     root_menu.enter();
@@ -157,7 +67,7 @@ void start(void)
     shell_run(current_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 }
 
-void add_global_command(command *command)
+void add_global_command(Command *command)
 {
     global_commands.push_back(command);
     all_commands.insert(command);

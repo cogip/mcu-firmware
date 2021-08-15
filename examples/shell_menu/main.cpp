@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "shell_menu.hpp"
+#include "shell_menu/shell_menu.hpp"
 
 bool trace_on = false;
 
@@ -92,37 +92,37 @@ void module1_enter_callback(void)
 
 void module1_init(void)
 {
-    cogip::shell::menu *menu = new cogip::shell::menu(
+    cogip::shell::Menu *menu = new cogip::shell::Menu(
         "Module 1 menu", "mod1", &cogip::shell::root_menu, module1_enter_callback);
-    menu->push_back(new cogip::shell::command("cmd_1", "Module 1 command 1", cmd_1_1));
-    menu->push_back(new cogip::shell::command("cmd_2", "Module 1 command 2", cmd_1_2));
+    menu->push_back(new cogip::shell::Command("cmd_1", "Module 1 command 1", cmd_1_1));
+    menu->push_back(new cogip::shell::Command("cmd_2", "Module 1 command 2", cmd_1_2));
 }
 
 void module2_init(void)
 {
-    cogip::shell::menu *menu = new cogip::shell::menu(
+    cogip::shell::Menu *menu = new cogip::shell::Menu(
         "Module 2 menu", "mod2", &cogip::shell::root_menu);
-    menu->push_back(new cogip::shell::command("cmd_1", "Module 2 command 1", cmd_2_1));
-    menu->push_back(new cogip::shell::command("cmd_2", "Module 2 command 2", cmd_2_2));
+    menu->push_back(new cogip::shell::Command("cmd_1", "Module 2 command 1", cmd_2_1));
+    menu->push_back(new cogip::shell::Command("cmd_2", "Module 2 command 2", cmd_2_2));
 
     // Add a sub menu in the module
-    cogip::shell::menu *sub_menu = new cogip::shell::menu(
+    cogip::shell::Menu *sub_menu = new cogip::shell::Menu(
         "Module 2 sub-menu", "mod2_sub", menu);
     sub_menu->push_back(
-        new cogip::shell::command("cmd_1", "Module 2 sub-menu command", cmd_2_1_sub));
+        new cogip::shell::Command("cmd_1", "Module 2 sub-menu command", cmd_2_1_sub));
 }
 
 void app_init(void)
 {
     cogip::shell::add_global_command(
-        new cogip::shell::command("global", "Global command", cmd_global));
+        new cogip::shell::Command("global", "Global command", cmd_global));
     cogip::shell::add_global_command(
-        new cogip::shell::command("trace_on", "Activate/deactivate trace", cmd_trace_on_off));
+        new cogip::shell::Command("trace_on", "Activate/deactivate trace", cmd_trace_on_off));
 
     cogip::shell::root_menu.push_back(
-        new cogip::shell::command("cmd_1", "Command 1", cmd_1));
+        new cogip::shell::Command("cmd_1", "Command 1", cmd_1));
     cogip::shell::root_menu.push_back(
-        new cogip::shell::command("cmd_2", "Command 2", cmd_2));
+        new cogip::shell::Command("cmd_2", "Command 2", cmd_2));
 }
 
 int main(void)
