@@ -4,7 +4,7 @@
 
 // Project includes
 #include "cogip_defs.h"
-#include "shell_menu.hpp"
+#include "shell_menu/shell_menu.hpp"
 #include "obstacles.hpp"
 #include "tracefd/tracefd.hpp"
 
@@ -89,12 +89,12 @@ int main(void)
 
     // Add print data command
     cogip::shell::root_menu.push_back(
-        new cogip::shell::command("_trace_on", "Activate/deactivate trace", _cmd_trace_on_off));
+        new cogip::shell::Command("_trace_on", "Activate/deactivate trace", _cmd_trace_on_off));
     cogip::shell::root_menu.push_back(
-        new cogip::shell::command("_lidar_data", "Print Lidar data", lidar_cmd_print_data));
+        new cogip::shell::Command("_lidar_data", "Print Lidar data", lidar_cmd_print_data));
 
 #ifdef MODULE_SHMEM
-    cogip::shell::root_menu.push_back(new cogip::shell::command(SHMEM_SET_KEY_CMD));
+    cogip::shell::root_menu.push_back(new cogip::shell::Command(SHMEM_SET_KEY_CMD));
 #endif
 
     _init_border_obstacles();

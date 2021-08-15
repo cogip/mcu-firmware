@@ -15,7 +15,7 @@
 #include "obstacles.hpp"
 #include "platform.hpp"
 #include "ctrl.hpp"
-#include "shell_menu.hpp"
+#include "shell_menu/shell_menu.hpp"
 #include "shell_platforms.hpp"
 #include "tracefd/tracefd.hpp"
 
@@ -138,23 +138,23 @@ void pf_shell_init(void)
     ctrl = pf_get_ctrl();
 
     /* Global commands */
-    cogip::shell::add_global_command(new cogip::shell::command(
+    cogip::shell::add_global_command(new cogip::shell::Command(
         "_state", "Print current state", _cmd_print_state
     ));
-    cogip::shell::add_global_command(new cogip::shell::command(
+    cogip::shell::add_global_command(new cogip::shell::Command(
         "_avoidance_path", "Print avoidance current path", _cmd_print_avoidance_path
     ));
-    cogip::shell::add_global_command(new cogip::shell::command(
+    cogip::shell::add_global_command(new cogip::shell::Command(
         "_trace_on", "Activate/deactivate trace", _cmd_trace_on_off
     ));
 #ifdef MODULE_SHMEM
-    cogip::shell::add_global_command(new cogip::shell::command(SHMEM_SET_KEY_CMD));
+    cogip::shell::add_global_command(new cogip::shell::Command(SHMEM_SET_KEY_CMD));
 #endif
 
     /* Platforms menu and commands */
-    cogip::shell::menu *menu = new cogip::shell::menu(
+    cogip::shell::Menu *menu = new cogip::shell::Menu(
         "Platforms menu", "pf_menu", &cogip::shell::root_menu);
 
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "mt", "Test all DC motors", pf_motors_test));
 }

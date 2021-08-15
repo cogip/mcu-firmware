@@ -2,7 +2,7 @@
 #include <cstdio>
 
 #include "shmem.h"
-#include "shell_menu.hpp"
+#include "shell_menu/shell_menu.hpp"
 
 static int print_data_cmd_cb(int argc, char **argv)
 {
@@ -32,10 +32,10 @@ int main(void)
     puts("\n== shmem example ==");
 
     // make set_key command available in all menus
-    cogip::shell::add_global_command(new cogip::shell::command(SHMEM_SET_KEY_CMD));
+    cogip::shell::add_global_command(new cogip::shell::Command(SHMEM_SET_KEY_CMD));
 
     // Add print data command
-    cogip::shell::root_menu.push_back(new cogip::shell::command(
+    cogip::shell::root_menu.push_back(new cogip::shell::Command(
         "data", "Print data from the shared memory", print_data_cmd_cb));
 
     // Start shell

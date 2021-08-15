@@ -10,7 +10,7 @@
 #include "debug.h"
 #include "platform.hpp"
 #include "sd21.h"
-#include "shell_menu.hpp"
+#include "shell_menu/shell_menu.hpp"
 #include "shell_sd21.h"
 #include "utils.h"
 #include "tracefd/tracefd.hpp"
@@ -173,25 +173,25 @@ void sd21_shell_init(const sd21_conf_t *sd21_config_new)
     sd21_config = sd21_config_new;
 
     /* SD21 menu and commands */
-    cogip::shell::menu *menu = new cogip::shell::menu(
+    cogip::shell::Menu *menu = new cogip::shell::Menu(
         "SD21 menu", "sd21_menu", &cogip::shell::root_menu);
 
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "d", "sd21 device <d>", sd21_cmd_device_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "o", "Opened position", sd21_cmd_opened_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "c", "Closed position", sd21_cmd_closed_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "n", "Next servomotor", sd21_cmd_next_servo_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "p", "Previous servomotor", sd21_cmd_previous_servo_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "r", "Reset to center position", sd21_cmd_reset_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "+", "Add " STR(SD21_SERVO_POS_STEP) "microseconds to current position", sd21_cmd_add_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "-", "Substract " STR(SD21_SERVO_POS_STEP) "microseconds from current position", sd21_cmd_sub_cb));
-    menu->push_back(new cogip::shell::command(
+    menu->push_back(new cogip::shell::Command(
         "switch", "Switch to predefined position <n> (n between 0 and 9)", sd21_cmd_switch_cb));
 }
