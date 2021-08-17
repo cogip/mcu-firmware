@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#include "cogip_defs.h"
+#include "cogip_defs/cogip_defs.h"
 
 #define SEGMENT 0
 #define ARC     1

@@ -32,7 +32,7 @@
 #include <cstdint>
 
 /* Project includes */
-#include "cogip_defs.h"
+#include "cogip_defs/cogip_defs.h"
 #include "tracefd/File.hpp"
 
 /**
