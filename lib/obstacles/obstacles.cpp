@@ -47,65 +47,36 @@ polygon_t obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) cons
 rectangle::rectangle(
     coords_t center, double angle,
     double length_x, double length_y)
-    : obstacle(center, 0, angle)
+    : length_x_(length_x), length_y_(length_y)
 {
+    center_ = center;
     radius_ = sqrt(length_x * length_x + length_y * length_y) / 2;
-    rectangle_ = {
-        .length_x = length_x,
-        .length_y = length_y,
-        .points = {
-            (coords_t){
-                .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
-                        (center.y - length_y / 2) * sin(DEG2RAD(angle)),
-                .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
-                        (center.y - length_y / 2) * cos(DEG2RAD(angle)),
-            },
-            (coords_t){
-                .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
-                        (center.y + length_y / 2) * sin(DEG2RAD(angle)),
-                .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
-                        (center.y + length_y / 2) * cos(DEG2RAD(angle)),
-            },
-            (coords_t){
-                .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
-                        (center.y + length_y / 2) * sin(DEG2RAD(angle)),
-                .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
-                        (center.y + length_y / 2) * cos(DEG2RAD(angle)),
-            },
-            (coords_t){
-                .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
-                        (center.y - length_y / 2) * sin(DEG2RAD(angle)),
-                .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
-                        (center.y - length_y / 2) * cos(DEG2RAD(angle)),
-            },
-        }
+    angle_ = angle;
+    polygon_.count = 4;
+    polygon_.points[0] = (coords_t){
+        .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
+                (center.y - length_y / 2) * sin(DEG2RAD(angle)),
+        .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
+                (center.y - length_y / 2) * cos(DEG2RAD(angle)),
     };
-}
-
-bool rectangle::is_point_inside(const coords_t &p) const {
-    polygon_t polygon_tmp;
-    polygon_tmp.count = 4;
-    memcpy(polygon_tmp.points, rectangle_.points,
-            polygon_tmp.count * sizeof(coords_t));
-    return collisions_is_point_in_polygon(&polygon_tmp, &p);
-}
-
-bool rectangle::is_segment_crossing(const coords_t &a, const coords_t &b) const
-{
-    polygon_t polygon_tmp;
-    polygon_tmp.count = 4;
-    memcpy(polygon_tmp.points, rectangle_.points,
-            polygon_tmp.count * sizeof(coords_t));
-    return collisions_is_segment_crossing_polygon(&a, &b, &polygon_tmp);
-}
-
-coords_t rectangle::nearest_point(const coords_t &p) const
-{
-    polygon_t polygon_tmp;
-    polygon_tmp.count = 4;
-    memcpy(polygon_tmp.points, rectangle_.points,
-            polygon_tmp.count * sizeof(coords_t));
-    return collisions_find_nearest_point_in_polygon(&polygon_tmp, &p);
+    polygon_.points[1] = (coords_t){
+        .x = (center.x - length_x / 2) * cos(DEG2RAD(angle)) -
+                (center.y + length_y / 2) * sin(DEG2RAD(angle)),
+        .y = (center.x - length_x / 2) * sin(DEG2RAD(angle)) +
+                (center.y + length_y / 2) * cos(DEG2RAD(angle)),
+    };
+    polygon_.points[2] = (coords_t){
+        .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
+                (center.y + length_y / 2) * sin(DEG2RAD(angle)),
+        .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
+                (center.y + length_y / 2) * cos(DEG2RAD(angle)),
+    };
+    polygon_.points[3] = (coords_t){
+        .x = (center.x + length_x / 2) * cos(DEG2RAD(angle)) -
+                (center.y - length_y / 2) * sin(DEG2RAD(angle)),
+        .y = (center.x + length_x / 2) * sin(DEG2RAD(angle)) +
+                (center.y - length_y / 2) * cos(DEG2RAD(angle)),
+    };
 }
 
 void rectangle::print_json(cogip::tracefd::File &out) const
@@ -115,8 +86,8 @@ void rectangle::print_json(cogip::tracefd::File &out) const
         center_.x,
         center_.y,
         angle_,
-        rectangle_.length_x,
-        rectangle_.length_y
+        length_x_,
+        length_y_
         );
 }
 
@@ -157,8 +128,10 @@ polygon::polygon(const std::list<coords_t> *points)
     : obstacle({0, 0}, 0, 0)
 {
     polygon_.count = 0;
-    for (auto point: *points) {
-        polygon_.points[polygon_.count++] = point;
+    if (points) {
+        for (auto point: *points) {
+            polygon_.points[polygon_.count++] = point;
+        }
     }
 }
 
