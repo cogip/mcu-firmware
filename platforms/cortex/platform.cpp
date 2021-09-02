@@ -89,8 +89,8 @@ void pf_print_state(cogip::tracefd::File &out)
         "\"speed_current\":{\"distance\":%.3lf,\"angle\":%.3lf},"
         "\"speed_order\":{\"distance\":%.3lf,\"angle\":%.3lf}",
         ctrl->control.current_mode,
-        ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x, ctrl->control.pose_current.coords.y,
-        ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x, ctrl->control.pose_order.coords.y,
+        ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x(), ctrl->control.pose_current.coords.y(),
+        ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x(), ctrl->control.pose_order.coords.y(),
         ctrl->control.current_cycle,
         ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
         ctrl->control.speed_order.distance, ctrl->control.speed_order.angle

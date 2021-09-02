@@ -45,7 +45,7 @@ void path_horizontal_mirror_all_poses(const path_t *path)
     for (int i = 0; i < path->nb_poses; i++) {
         pose_t *pos = (pose_t *)&path->poses[i].pos;
 
-        pos->coords.x *= -1;
+        pos->coords.set_x(-pos->coords.x());
         pos->O = 180 - pos->O;
         pos->O = ((int)pos->O) % 360;
     }

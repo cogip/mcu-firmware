@@ -42,8 +42,8 @@ odometry_by_segment(pose_t *p, const double distance, const double angle)
 
     O_rad = DEG2RAD(p->O);
 
-    p->coords.x += distance * cos(O_rad);
-    p->coords.y += distance * sin(O_rad);
+    p->coords.set_x(p->coords.x() + distance * cos(O_rad));
+    p->coords.set_y(p->coords.y() + distance * sin(O_rad));
     p->O += angle;
 
     limit_angle(p);
@@ -64,22 +64,22 @@ odometry_by_arc(pose_t *p, const double distance, const double angle)
 
     if (angle == 0.0) {
         /* robot pose */
-        p->coords.x += distance * cos(O_rad);
-        p->coords.y += distance * sin(O_rad);
+        p->coords.set_x(p->coords.x() + distance * cos(O_rad));
+        p->coords.set_y(p->coords.y() + distance * sin(O_rad));
     }
     else {
-        /* radius and angle oh the arc */
+        /* radius and angle of the arc */
         double a = DEG2RAD(angle);
         double r = distance / a;
 
-        /* coordinates of the center oh the arc */
-        double xo = p->coords.x - r * sin(O_rad);
-        double yo = p->coords.y + r * cos(O_rad);
+        /* coordinates of the center of the arc */
+        double xo = p->coords.x() - r * sin(O_rad);
+        double yo = p->coords.y() + r * cos(O_rad);
 
         /* robot pose */
         p->O += angle;
-        p->coords.x = xo + r * sin(O_rad);
-        p->coords.y = yo - r * cos(O_rad);
+        p->coords.set_x(xo + r * sin(O_rad));
+        p->coords.set_y(yo - r * cos(O_rad));
 
         limit_angle(p);
     }

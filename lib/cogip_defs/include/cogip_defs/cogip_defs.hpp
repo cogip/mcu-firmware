@@ -23,6 +23,8 @@
 #include <cstddef>
 #include <cstdint>
 
+#include "cogip_defs/Coords.hpp"
+
 #define POLY_MAX                16  /**< Maximum number of polygons */
 #define POLY_MAX_POINTS         6   /**< Maximum number of vertices composing a polygon */
 
@@ -35,49 +37,36 @@ typedef struct {
 } polar_t;
 
 /**
- * @brief   Coordinates type
- */
-typedef struct {
-    double x;   /**< x-position */
-    double y;   /**< y-position */
-} coords_t;
-
-/**
- * @brief   Vector type
- */
-typedef coords_t vector_t;
-
-/**
  * @brief   Position type
  */
 typedef struct {
-    coords_t coords;    /**< coordinates */
-    double O;           /**< 0-orientation */
+    cogip::cogip_defs::Coords coords;    /**< coordinates */
+    double O;                            /**< 0-orientation */
 } pose_t;
 
 /**
  * @brief   Polygon type
  */
 typedef struct {
-    uint8_t count;                      /**< number of vertices in the polygon */
-    coords_t points[POLY_MAX_POINTS];   /**< vertices defining the polygon */
+    uint8_t count;                                       /**< number of vertices in the polygon */
+    cogip::cogip_defs::Coords points[POLY_MAX_POINTS];   /**< vertices defining the polygon */
 } polygon_t;
 
 /**
  * @brief   Rectangle type
  */
 typedef struct {
-    double length_x;        /**< length on x axis when angle = 0 */
-    double length_y;        /**< length on y axis when angle = 0 */
-    coords_t points[4];     /**< vertices defining the polygon */
+    double length_x;                         /**< length on x axis when angle = 0 */
+    double length_y;                         /**< length on y axis when angle = 0 */
+    cogip::cogip_defs::Coords points[4];     /**< vertices defining the polygon */
 } rectangle_t;
 
 /**
  * @brief   Circle type
  */
 typedef struct {
-    coords_t center;                /**< circle center */
-    double radius;                  /**< circle radius */
+    cogip::cogip_defs::Coords center;   /**< circle center */
+    double radius;                      /**< circle radius */
 } circle_t;
 
 /**
@@ -92,7 +81,7 @@ static inline int pose_equal(const pose_t *p1, const pose_t *p2)
 {
     if ((p1 != NULL) && (p2 != NULL)) {
         return p1 == p2
-               || (p1->coords.x == p2->coords.x && p1->coords.y == p2->coords.y && p1->O == p2->O);
+               || (p1->coords.x() == p2->coords.x() && p1->coords.y() == p2->coords.y() && p1->O == p2->O);
     }
     else {
         return 0;

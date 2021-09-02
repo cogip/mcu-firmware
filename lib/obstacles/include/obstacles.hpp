@@ -57,7 +57,7 @@ public:
     /// @param[in]   center     obstacle center
     /// @param[in]   radius     obstacle circumscribed circle radius
     /// @param[in]   angle      absolute angle
-    obstacle(coords_t center, double radius, double angle);
+    obstacle(const cogip_defs::Coords &center, double radius, double angle);
 
     /// @brief Destructor
     virtual ~obstacle() {};
@@ -72,26 +72,26 @@ public:
     /// @brief Check if the given point is inside the obstacle
     /// @param[in]   p               point to check
     /// @return                      true if point is inside, false otherwise
-    virtual bool is_point_inside(const coords_t &p) const = 0;
+    virtual bool is_point_inside(const cogip_defs::Coords &p) const = 0;
 
     /// @brief Check if a segment defined by two points A,B is crossing an obstacle.
     /// @param[in]   a               point A
     /// @param[in]   b               point B
     /// @param[in]   obstacle        obstacle
     /// @return                      true if [AB] crosses obstacle, false otherwise
-    virtual bool is_segment_crossing(const coords_t &a, const coords_t &b) const = 0;
+    virtual bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const = 0;
 
     /// @brief Find the nearest point of obstacle perimeter from given point.
     /// @param[in]   p               point to check
     /// @return                      position of nearest point
-    virtual coords_t nearest_point(const coords_t &p) const = 0;
+    virtual cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const = 0;
 
     /// @brief Print obstacles in JSON format
     /// @param[out]   out            Trace file descriptor
     virtual void print_json(cogip::tracefd::File &out) const = 0;
 
     /// @brief Return obstacle center
-    const coords_t &center() const { return center_; };
+    const cogip_defs::Coords &center() const { return center_; };
 
     /// @brief Return obstacle circumscribed circle radius
     double radius() const { return radius_; };
@@ -100,18 +100,18 @@ public:
     double angle() const { return angle_; };
 
 protected:
-    coords_t center_;                //// obstacle center
+    cogip_defs::Coords center_;      //// obstacle center
     double radius_;                  //// obstacle circumscribed circle radius
     double angle_;                   //// absolute angle
 };
 
 class circle : public obstacle {
 public:
-    circle(coords_t center, double radius, double angle);
+    circle(const cogip::cogip_defs::Coords &center, double radius, double angle);
 
-    bool is_point_inside(const coords_t &p) const;
-    bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
-    coords_t nearest_point(const coords_t &p) const;
+    bool is_point_inside(const cogip_defs::Coords &p) const;
+    bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
+    cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const;
     void print_json(cogip::tracefd::File &out) const;
 
 private:
@@ -119,18 +119,18 @@ private:
     /// @param[in]   a           point A
     /// @param[in]   b           point B
     /// @return                  true if (AB) crosses circle, false otherwise
-    bool is_line_crossing_circle(const coords_t &a, const coords_t &b) const;
+    bool is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
 
     circle_t circle_;
 };
 
 class polygon : public obstacle {
 public:
-    polygon(const std::list<coords_t> *points = nullptr);
+    polygon(const std::list<cogip_defs::Coords> *points = nullptr);
 
-    bool is_point_inside(const coords_t &p) const;
-    bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
-    coords_t nearest_point(const coords_t &p) const;
+    bool is_point_inside(const cogip_defs::Coords &p) const;
+    bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
+    cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const;
     void print_json(cogip::tracefd::File &out) const;
 
 protected:
@@ -139,7 +139,7 @@ protected:
 
 class rectangle : public polygon {
 public:
-    rectangle(coords_t center, double angle,
+    rectangle(const cogip_defs::Coords &center, double angle,
               double length_x, double length_y);
 
     void print_json(cogip::tracefd::File &out) const;
@@ -178,7 +178,7 @@ private:
 /// @param[in]   p           point to check
 /// @param[in]   filter      obstacle to filter
 /// @return                  true if point is inside, false otherwise
-bool is_point_in_obstacles(const coords_t &p, const obstacle *filter);
+bool is_point_in_obstacles(const cogip_defs::Coords &p, const obstacle *filter);
 
 /// @brief Print all obstacles from all lists
 /// @param[in]   out         trace file descriptor

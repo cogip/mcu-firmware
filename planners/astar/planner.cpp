@@ -74,8 +74,8 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
     if (ctrl_is_pose_reached(ctrl)) {
         /* If the targeted pose has been reached, check if it is the
          * current path pose */
-        if ((pose_to_reach.coords.x == current_path_pos->pos.coords.x)
-            && (pose_to_reach.coords.y == current_path_pos->pos.coords.y)) {
+        if ((pose_to_reach.coords.x() == current_path_pos->pos.coords.x())
+            && (pose_to_reach.coords.y() == current_path_pos->pos.coords.y())) {
             /* If the targeted pose is the current path pose to reach, launch
              * the action and update the current path pose to reach to the next
              * one in path, if allowed. */
@@ -175,8 +175,8 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const pose_t *robot_pose,
     pose_to_reach = avoidance_get_pose(avoidance_index);
 
     /* Check if the point to reach is the current path position to reach */
-    if ((pose_to_reach.coords.x == current_path_pos->pos.coords.x)
-        && (pose_to_reach.coords.y == current_path_pos->pos.coords.y)) {
+    if ((pose_to_reach.coords.x() == current_path_pos->pos.coords.x())
+        && (pose_to_reach.coords.y() == current_path_pos->pos.coords.y())) {
         DEBUG("planner: Reaching final position\n");
         pose_to_reach.O = current_path_pos->pos.O;
         ctrl_set_pose_intermediate(ctrl, false);
