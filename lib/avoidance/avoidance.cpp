@@ -4,7 +4,6 @@
 
 /* Project includes */
 #include "avoidance.hpp"
-#include "collisions.hpp"
 #include "obstacles.hpp"
 #include "platform.hpp"
 #include "utils.h"

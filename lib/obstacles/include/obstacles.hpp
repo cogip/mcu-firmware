@@ -58,6 +58,8 @@ public:
     /// @param[in]   radius     obstacle circumscribed circle radius
     /// @param[in]   angle      absolute angle
     obstacle(coords_t center, double radius, double angle);
+
+    /// @brief Destructor
     virtual ~obstacle() {};
 
     /// @brief Return bounding box of an obstacle. This bounding box has nb_vertices
@@ -113,6 +115,12 @@ public:
     void print_json(cogip::tracefd::File &out) const;
 
 private:
+    /// @brief Check if a line defined by two points A,B is crossing a circle.
+    /// @param[in]   a           point A
+    /// @param[in]   b           point B
+    /// @return                  true if (AB) crosses circle, false otherwise
+    bool is_line_crossing_circle(const coords_t &a, const coords_t &b) const;
+
     circle_t circle_;
 };
 
