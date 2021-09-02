@@ -53,15 +53,6 @@ typedef struct {
 } polygon_t;
 
 /**
- * @brief   Rectangle type
- */
-typedef struct {
-    double length_x;                         /**< length on x axis when angle = 0 */
-    double length_y;                         /**< length on y axis when angle = 0 */
-    cogip::cogip_defs::Coords points[4];     /**< vertices defining the polygon */
-} rectangle_t;
-
-/**
  * @brief Check equality of the pose
  *
  * @param[in]   p1   first pose to compare
