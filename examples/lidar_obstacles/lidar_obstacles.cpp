@@ -12,6 +12,7 @@
 #include "common_defs.h"
 #include "lidar_utils.hpp"
 #include "obstacles.hpp"
+#include "cogip_defs/Coords.hpp"
 
 // Number of angles without obstacle to ignore between two angles with obstacle
 #define NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE 3
@@ -116,9 +117,9 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::list * obstac
         obstacle_angle = (int16_t)obstacle_angle % 360;
         obstacle_angle = DEG2RAD(obstacle_angle);
 
-        coords_t center = {
-            .x = origin->coords.x + distance * cos(obstacle_angle),
-            .y = origin->coords.y + distance * sin(obstacle_angle)
+        cogip::cogip_defs::Coords center = {
+            origin->coords.x() + distance * cos(obstacle_angle),
+            origin->coords.y() + distance * sin(obstacle_angle)
         };
 
         double radius = obstacles->default_circle_radius();

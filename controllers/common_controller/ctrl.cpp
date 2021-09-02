@@ -63,7 +63,7 @@ uint8_t ctrl_is_pose_reached(ctrl_t *ctrl)
 void ctrl_set_pose_current(ctrl_t *const ctrl, const pose_t *pose_current)
 {
     DEBUG("ctrl: New pose current: x=%lf, y=%lf, O=%lf\n",
-          pose_current->coords.x, pose_current->coords.y, pose_current->O);
+          pose_current->coords.x(), pose_current->coords.y(), pose_current->O);
 
     irq_disable();
     ctrl->control.pose_current = *pose_current;
@@ -78,7 +78,7 @@ const pose_t *ctrl_get_pose_current(ctrl_t *ctrl)
 void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order)
 {
     DEBUG("ctrl: New pose to reach: x=%lf, y=%lf, O=%lf\n",
-          pose_order.coords.x, pose_order.coords.y, pose_order.O);
+          pose_order.coords.x(), pose_order.coords.y(), pose_order.O);
 
     irq_disable();
 

@@ -7,26 +7,27 @@
 #include "obstacles.hpp"
 #include "platform.hpp"
 #include "utils.h"
+#include "cogip_defs/Coords.hpp"
 
 #define START_INDEX     0
 #define FINISH_INDEX    1
 
-static const std::list<coords_t> border_points = {
+static const std::list<cogip::cogip_defs::Coords> border_points = {
     {
-        .x = AVOIDANCE_BORDER_X_MIN,
-        .y = AVOIDANCE_BORDER_Y_MIN
+        AVOIDANCE_BORDER_X_MIN,
+        AVOIDANCE_BORDER_Y_MIN
     },
     {
-        .x = AVOIDANCE_BORDER_X_MAX,
-        .y = AVOIDANCE_BORDER_Y_MIN
+        AVOIDANCE_BORDER_X_MAX,
+        AVOIDANCE_BORDER_Y_MIN
     },
     {
-        .x = AVOIDANCE_BORDER_X_MAX,
-        .y = AVOIDANCE_BORDER_Y_MAX
+        AVOIDANCE_BORDER_X_MAX,
+        AVOIDANCE_BORDER_Y_MAX
     },
     {
-        .x = AVOIDANCE_BORDER_X_MIN,
-        .y = AVOIDANCE_BORDER_Y_MAX
+        AVOIDANCE_BORDER_X_MIN,
+        AVOIDANCE_BORDER_Y_MAX
     },
 };
 
@@ -49,8 +50,8 @@ static uint8_t _valid_points_count = 0;
 static uint64_t _graph[GRAPH_MAX_VERTICES];
 
 /* Start and finish poses */
-static pose_t start_pose = { .coords = { .x = 0, .y = 0 }, .O = 0 };
-static pose_t finish_pose = { .coords = { .x = 0, .y = 0 }, .O = 0 };
+static pose_t start_pose = { .coords = { 0, 0 }, .O = 0 };
+static pose_t finish_pose = { .coords = { 0, 0 }, .O = 0 };
 
 /**
  * Avoidance path with child direction hierarchy.
@@ -206,10 +207,10 @@ static bool _dijkstra(void)
             if (_graph[v] & (1 << i)) {
                 /* Compute edge weight between checked vertex and next one in
                  * graph */
-                double weight = (_valid_points[v].coords.x - _valid_points[i].coords.x);
-                weight *= (_valid_points[v].coords.x - _valid_points[i].coords.x);
-                weight += (_valid_points[v].coords.y - _valid_points[i].coords.y)
-                          * (_valid_points[v].coords.y - _valid_points[i].coords.y);
+                double weight = (_valid_points[v].coords.x() - _valid_points[i].coords.x());
+                weight *= (_valid_points[v].coords.x() - _valid_points[i].coords.x());
+                weight += (_valid_points[v].coords.y() - _valid_points[i].coords.y())
+                          * (_valid_points[v].coords.y() - _valid_points[i].coords.y());
                 weight = sqrt(weight);
 
                 /* If the weight is not null and lower than the actual weight
@@ -338,16 +339,16 @@ void avoidance_print_path(cogip::tracefd::File &out)
         while (i != 1) {
             out.printf(
                 "{\"x\":%.3lf,\"y\":%.3lf},",
-                _valid_points[i].coords.x,
-                _valid_points[i].coords.y
+                _valid_points[i].coords.x(),
+                _valid_points[i].coords.y()
                 );
             i = _child[i];
         }
         /* Print also finish pose */
         out.printf(
             "{\"x\":%.3lf,\"y\":%.3lf}",
-            finish_pose.coords.x,
-            finish_pose.coords.y
+            finish_pose.coords.x(),
+            finish_pose.coords.y()
             );
     }
     out.printf("]");

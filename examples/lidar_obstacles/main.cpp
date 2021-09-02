@@ -22,10 +22,10 @@
 uint32_t cycle = 1;
 
 pose_t robot_state = {
-    .coords = {
-        .x = 0.0,
-        .y = 1000.0
-    },
+    .coords = cogip::cogip_defs::Coords(
+        0.0,
+        1000.0
+    ),
     .O = 0.0
 };
 
@@ -70,8 +70,8 @@ static void _print_state(void)
         "\"pose_current\":{\"x\":%.3lf,\"y\":%.3lf,\"O\":%.3lf},"
         "\"pose_order\":{\"x\":%.3lf,\"y\":%.3lf,\"O\":%.3lf},"
         "\"cycle\":%" PRIu32,
-        robot_state.coords.x, robot_state.coords.y, robot_state.O,
-        robot_state.coords.x, robot_state.coords.y, robot_state.O,
+        robot_state.coords.x(), robot_state.coords.y(), robot_state.O,
+        robot_state.coords.x(), robot_state.coords.y(), robot_state.O,
         cycle
         );
 

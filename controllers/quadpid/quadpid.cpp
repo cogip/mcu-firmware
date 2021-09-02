@@ -32,8 +32,8 @@ static polar_t compute_position_error(const ctrl_quadpid_t *ctrl,
 
     (void)ctrl;
 
-    x = pose_order->coords.x - pose_current->coords.x;
-    y = pose_order->coords.y - pose_current->coords.y;
+    x = pose_order->coords.x() - pose_current->coords.x();
+    y = pose_order->coords.y() - pose_current->coords.y();
 
     O = limit_angle_rad(atan2(y, x) - DEG2RAD(pose_current->O));
 
@@ -208,8 +208,8 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, polar_t *command)
     DEBUG("@robot@,%u,%" PRIu32 ",@pose_order@,%.2f,%.2f,%.2f\n",
           ROBOT_ID,
           ctrl->control.current_cycle,
-          pose_order.coords.x,
-          pose_order.coords.y,
+          pose_order.coords.x(),
+          pose_order.coords.y(),
           pose_order.O);
 
     /* position correction */
