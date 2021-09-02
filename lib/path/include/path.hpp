@@ -22,7 +22,7 @@
 
 /* Project includes */
 #include "utils.h"
-#include "odometry.h"
+#include "odometry.hpp"
 
 /**
  * @brief Position type as used in path type

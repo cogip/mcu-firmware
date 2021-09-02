@@ -31,7 +31,7 @@
 #include "ctrl.hpp"
 #include "quadpid.hpp"
 #include "obstacles.hpp"
-#include "odometry.h"
+#include "odometry.hpp"
 #include "path.hpp"
 #include "utils.h"
 

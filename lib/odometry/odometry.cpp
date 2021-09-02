@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "odometry.h"
+#include "odometry.hpp"
 #include "trigonometry.h"
 #include "utils.h"
 

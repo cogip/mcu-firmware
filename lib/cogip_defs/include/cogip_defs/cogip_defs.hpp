@@ -20,12 +20,8 @@
 #pragma once
 
 /* Standard includes */
-#include <stddef.h>
-#include <stdint.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <cstddef>
+#include <cstdint>
 
 #define POLY_MAX                16  /**< Maximum number of polygons */
 #define POLY_MAX_POINTS         6   /**< Maximum number of vertices composing a polygon */
@@ -102,9 +98,5 @@ static inline int pose_equal(const pose_t *p1, const pose_t *p2)
         return 0;
     }
 }
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 /** @} */
