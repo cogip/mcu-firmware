@@ -120,8 +120,6 @@ private:
     /// @param[in]   b           point B
     /// @return                  true if (AB) crosses circle, false otherwise
     bool is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
-
-    circle_t circle_;
 };
 
 class polygon : public obstacle {
