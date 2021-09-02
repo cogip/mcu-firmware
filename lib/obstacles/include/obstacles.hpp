@@ -103,20 +103,6 @@ protected:
     double angle_;                   //// absolute angle
 };
 
-class rectangle : public obstacle {
-public:
-    rectangle(coords_t center, double angle,
-              double length_x, double length_y);
-
-    bool is_point_inside(const coords_t &p) const;
-    bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
-    coords_t nearest_point(const coords_t &p) const;
-    void print_json(cogip::tracefd::File &out) const;
-
-private:
-    rectangle_t rectangle_;
-};
-
 class circle : public obstacle {
 public:
     circle(coords_t center, double radius, double angle);
@@ -132,15 +118,27 @@ private:
 
 class polygon : public obstacle {
 public:
-    polygon(const std::list<coords_t> *points);
+    polygon(const std::list<coords_t> *points = nullptr);
 
     bool is_point_inside(const coords_t &p) const;
     bool is_segment_crossing(const coords_t &a, const coords_t &b) const;
     coords_t nearest_point(const coords_t &p) const;
     void print_json(cogip::tracefd::File &out) const;
 
-private:
+protected:
     polygon_t polygon_;
+};
+
+class rectangle : public polygon {
+public:
+    rectangle(coords_t center, double angle,
+              double length_x, double length_y);
+
+    void print_json(cogip::tracefd::File &out) const;
+
+private:
+    double length_x_;        /// length on X axis when angle = 0
+    double length_y_;        /// length on Y axis when angle = 0
 };
 
 class list: public std::list<obstacle *> {
