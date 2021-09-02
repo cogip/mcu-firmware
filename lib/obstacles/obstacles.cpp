@@ -142,14 +142,12 @@ void rectangle::print_json(cogip::tracefd::File &out) const
 circle::circle(const cogip_defs::Coords &center, double radius, double angle)
     : obstacle(center, radius, angle)
 {
-    circle_.center = center;
-    circle_.radius = radius;
 }
 
 bool circle::is_point_inside(const cogip_defs::Coords &p) const {
-    double d = circle_.center.distance(p);
+    double d = center_.distance(p);
 
-    if (d * d > circle_.radius * circle_.radius) {
+    if (d * d > radius_ * radius_) {
         return false;
     }
     else {
@@ -159,7 +157,7 @@ bool circle::is_point_inside(const cogip_defs::Coords &p) const {
 
 bool circle::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
-    const cogip_defs::Coords &c = circle_.center;
+    const cogip_defs::Coords &c = center_;
 
     if (!is_line_crossing_circle(a, b)) {
         return false;
@@ -188,15 +186,15 @@ bool circle::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::
 cogip_defs::Coords circle::nearest_point(const cogip_defs::Coords &p) const
 {
     cogip_defs::Coords vect(
-        p.x() - circle_.center.x(),
-        p.y() - circle_.center.y()
+        p.x() - center_.x(),
+        p.y() - center_.y()
     );
 
     double vect_norm = sqrt(vect.x() * vect.x() + vect.y() * vect.y());
 
     return cogip_defs::Coords(
-        circle_.center.x() + (vect.x() / vect_norm) * circle_.radius,
-        circle_.center.y() + (vect.y() / vect_norm) * circle_.radius
+        center_.x() + (vect.x() / vect_norm) * radius_,
+        center_.y() + (vect.y() / vect_norm) * radius_
     );
 }
 
@@ -206,13 +204,13 @@ void circle::print_json(cogip::tracefd::File &out) const
         "{\"x\":%.3lf,\"y\":%.3lf,\"radius\":%.3lf}",
         center_.x(),
         center_.y(),
-        circle_.radius
+        radius_
         );
 }
 
 bool circle::is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
-    const cogip_defs::Coords &c = circle_.center;
+    const cogip_defs::Coords &c = center_;
 
     cogip_defs::Coords vect_ab(b.x() - a.x(), b.y() - a.y());
     cogip_defs::Coords vect_ac(c.x() - a.x(), c.y() - a.y());
@@ -231,7 +229,7 @@ bool circle::is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_de
 
     /* If CI norm is less or equal to the circle radius, point I is inside the
      * circle */
-    if (ci < circle_.radius) {
+    if (ci < radius_) {
         return true;
     }
     else {

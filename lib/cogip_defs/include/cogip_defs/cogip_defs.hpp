@@ -62,14 +62,6 @@ typedef struct {
 } rectangle_t;
 
 /**
- * @brief   Circle type
- */
-typedef struct {
-    cogip::cogip_defs::Coords center;   /**< circle center */
-    double radius;                      /**< circle radius */
-} circle_t;
-
-/**
  * @brief Check equality of the pose
  *
  * @param[in]   p1   first pose to compare
