@@ -58,7 +58,7 @@
 #include <stdint.h>
 
 /* Project includes */
-#include "odometry.h"
+#include "odometry.hpp"
 
 /**
  * @brief   Pre-controller callback. Called before the controller process

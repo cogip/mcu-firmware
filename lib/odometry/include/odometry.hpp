@@ -1,15 +1,11 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 
-#include "cogip_defs/cogip_defs.h"
+#include "cogip_defs/cogip_defs.hpp"
 
 #define SEGMENT 0
 #define ARC     1
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /**
  * \fn odometry_setup
@@ -28,7 +24,3 @@ void odometry_setup(double d);
 void odometry_update(pose_t *p,
                      polar_t *robot_speed,
                      const uint8_t approximation);
-
-#ifdef __cplusplus
-}
-#endif

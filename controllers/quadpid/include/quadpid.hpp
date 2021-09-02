@@ -41,7 +41,7 @@
 
 /* Project includes */
 #include "ctrl.hpp"
-#include "odometry.h"
+#include "odometry.hpp"
 #include "pid.h"
 
 /**
