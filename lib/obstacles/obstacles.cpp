@@ -12,31 +12,6 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
-#if 0
-
-double obstacles_compute_radius(const obstacle_t *obstacle)
-{
-    /* Temporary object */
-    polygon_t polygon_tmp;
-
-    switch (obstacle->type) {
-        case OBSTACLE_CIRCLE:
-            return obstacle->form.circle.radius;
-        case OBSTACLE_RECTANGLE:
-            polygon_tmp.count = 4;
-            memcpy(polygon_tmp.points, obstacle->form.rectangle.points,
-                   polygon_tmp.count * sizeof(coords_t));
-            return collisions_compute_polygon_radius(&polygon_tmp, &obstacle->center);
-        case OBSTACLE_POLYGON:
-            return collisions_compute_polygon_radius(&obstacle->form.polygon, &obstacle->center);
-        default:
-            DEBUG("obstacle: Wrong type, should never happen, return false)");
-    }
-
-    return 0;
-}
-#endif
-
 namespace cogip {
 
 namespace obstacles {

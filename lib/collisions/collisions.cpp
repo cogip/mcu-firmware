@@ -6,6 +6,8 @@
 /* Project includes */
 #include "collisions.hpp"
 
+static bool _is_point_on_segment(const coords_t *a, const coords_t *b, const coords_t *c);
+
 static int8_t _get_point_index_in_polygon(const polygon_t *polygon, const coords_t *p)
 {
     for (uint8_t i = 0; i < polygon->count; i++) {
@@ -16,7 +18,15 @@ static int8_t _get_point_index_in_polygon(const polygon_t *polygon, const coords
     return -1;
 }
 
-double collisions_distance_points(const coords_t *a, const coords_t *b)
+/**
+ * @brief Compute the distance between two points A and B.
+ *
+ * @param[in]   a           point A
+ * @param[in]   b           point B
+ *
+ * @return                  distance between A and B
+ */
+static double _distance_points(const coords_t *a, const coords_t *b)
 {
     return sqrt((b->x - a->x) * (b->x - a->x)
                 + (b->y - a->y) * (b->y - a->y));
@@ -24,7 +34,7 @@ double collisions_distance_points(const coords_t *a, const coords_t *b)
 
 bool collisions_is_point_in_circle(const circle_t *circle, const coords_t *p)
 {
-    double d = collisions_distance_points(&circle->center, p);
+    double d = _distance_points(&circle->center, p);
 
     if (d * d > circle->radius * circle->radius) {
         return false;
@@ -33,40 +43,6 @@ bool collisions_is_point_in_circle(const circle_t *circle, const coords_t *p)
         return true;
     }
 }
-
-coords_t collisions_compute_polygon_center(const polygon_t *polygon)
-{
-    double sum_x = 0;
-    double sum_y = 0;
-
-    for (uint8_t i = 0; i < polygon->count; i++) {
-        sum_x += polygon->points[i].x;
-        sum_y += polygon->points[i].y;
-    }
-
-    return {
-        sum_x / polygon->count,
-        sum_y / polygon->count
-    };
-}
-
-double collisions_compute_polygon_radius(const polygon_t *polygon, const coords_t *center)
-{
-    double radius = 0;
-    coords_t computed_center;
-
-    if (!center) {
-        computed_center = collisions_compute_polygon_center(polygon);
-        center = &computed_center;
-    }
-
-    for (uint8_t i = 0; i < polygon->count; i++) {
-        radius = MAX(radius, collisions_distance_points(center, &polygon->points[i]));
-    }
-
-    return radius;
-}
-
 
 bool collisions_is_point_in_polygon(const polygon_t *polygon, const coords_t *p)
 {
@@ -87,7 +63,18 @@ bool collisions_is_point_in_polygon(const polygon_t *polygon, const coords_t *p)
     return true;
 }
 
-bool collisions_is_segment_crossing_line(const coords_t *a, const coords_t *b, const coords_t *c, const coords_t *d)
+/**
+ * @brief Check if a segment defined by two points A,B is crossing line
+ * defined by two other points C,D.
+ *
+ * @param[in]   a           point A
+ * @param[in]   b           point B
+ * @param[in]   c           point C
+ * @param[in]   d           point D
+ *
+ * @return                  true if [AB] crosses (CD), false otherwise
+ */
+static bool _is_segment_crossing_line(const coords_t *a, const coords_t *b, const coords_t *c, const coords_t *d)
 {
     vector_t ac, ad, ab;
     double det = 0;
@@ -104,13 +91,24 @@ bool collisions_is_segment_crossing_line(const coords_t *a, const coords_t *b, c
     return (det < 0);
 }
 
-bool collisions_is_segment_crossing_segment(const coords_t *a, const coords_t *b,
+/**
+ * @brief Check if a segment defined by two points A,B is crossing segment
+ * defined by two other points C,D.
+ *
+ * @param[in]   a           point A
+ * @param[in]   b           point B
+ * @param[in]   c           point C
+ * @param[in]   d           point D
+ *
+ * @return                  true if [AB] crosses [CD], false otherwise
+ */
+static bool _is_segment_crossing_segment(const coords_t *a, const coords_t *b,
                                             const coords_t *c, const coords_t *d)
 {
-    if (!collisions_is_segment_crossing_line(a, b, c, d)) {
+    if (!_is_segment_crossing_line(a, b, c, d)) {
         return false;
     }
-    if (!collisions_is_segment_crossing_line(c, d, a, b)) {
+    if (!_is_segment_crossing_line(c, d, a, b)) {
         return false;
     }
     return true;
@@ -123,7 +121,7 @@ bool collisions_is_segment_crossing_polygon(const coords_t *a, const coords_t *b
     for (int i = 0; i < polygon->count; i++) {
         coords_t p_next = ((i + 1 == polygon->count) ? polygon->points[0] : polygon->points[i + 1]);
 
-        if (collisions_is_segment_crossing_segment(a, b, &polygon->points[i], &p_next)) {
+        if (_is_segment_crossing_segment(a, b, &polygon->points[i], &p_next)) {
             return true;
         }
 
@@ -141,7 +139,7 @@ bool collisions_is_segment_crossing_polygon(const coords_t *a, const coords_t *b
         }
 
         /* If polygon vertice is on segment [AB] */
-        if (collisions_is_point_on_segment(a, b, &polygon->points[i])) {
+        if (_is_point_on_segment(a, b, &polygon->points[i])) {
             return true;
         }
     }
@@ -149,7 +147,16 @@ bool collisions_is_segment_crossing_polygon(const coords_t *a, const coords_t *b
     return false;
 }
 
-bool collisions_is_line_crossing_circle(const coords_t *a, const coords_t *b,
+/**
+ * @brief Check if a line defined by two points A,B is crossing a circle.
+ *
+ * @param[in]   a           point A
+ * @param[in]   b           point B
+ * @param[in]   circle      circle
+ *
+ * @return                  true if (AB) crosses circle, false otherwise
+ */
+static bool _is_line_crossing_circle(const coords_t *a, const coords_t *b,
                                         const circle_t *circle)
 {
     const coords_t *c = &circle->center;
@@ -190,7 +197,7 @@ bool collisions_is_segment_crossing_circle(const coords_t *a, const coords_t *b,
 {
     const coords_t *c = &circle->center;
 
-    if (!collisions_is_line_crossing_circle(a, b, circle)) {
+    if (!_is_line_crossing_circle(a, b, circle)) {
         return false;
     }
 
@@ -218,7 +225,16 @@ bool collisions_is_segment_crossing_circle(const coords_t *a, const coords_t *b,
     return false;
 }
 
-bool collisions_is_point_on_segment(const coords_t *a, const coords_t *b, const coords_t *c)
+/**
+ * @brief Check if a point C is placed on a segment defined by two points A,B.
+ *
+ * @param[in]   a           point A
+ * @param[in]   b           point B
+ * @param[in]   c           point C
+ *
+ * @return                  true if C is on [AB], false otherwise
+ */
+static bool _is_point_on_segment(const coords_t *a, const coords_t *b, const coords_t *c)
 {
     bool res = false;
 
@@ -237,16 +253,6 @@ bool collisions_is_point_on_segment(const coords_t *a, const coords_t *b, const 
     return res;
 }
 
-inline double collisions_compute_slope(const coords_t *a, const coords_t *b)
-{
-    return (b->y - a->y) / (b->x - a->x);
-}
-
-inline double collisions_compute_ordinate(double slope, const coords_t *b)
-{
-    return (b->y - slope * b->x);
-}
-
 coords_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
                                                   const coords_t *p)
 {
@@ -254,7 +260,7 @@ coords_t collisions_find_nearest_point_in_polygon(const polygon_t *polygon,
     const coords_t *tmp = p;
 
     for (int j = 0; j < polygon->count; j++) {
-        double distance = collisions_distance_points(p, &polygon->points[j]);
+        double distance = _distance_points(p, &polygon->points[j]);
         if (distance < min) {
             min = distance;
             tmp = &polygon->points[j];
