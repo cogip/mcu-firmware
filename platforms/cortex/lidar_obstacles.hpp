@@ -4,7 +4,7 @@
 #include "cogip_defs/Pose.hpp"
 
 // Project includes
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 
 // Obstacles of Lidar detected obstacles
 extern cogip::obstacles::List *lidar_obstacles;

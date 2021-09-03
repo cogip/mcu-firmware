@@ -4,7 +4,7 @@
 
 // Project includes
 #include "shell_menu/shell_menu.hpp"
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "tracefd/tracefd.hpp"
 
 // Application includes

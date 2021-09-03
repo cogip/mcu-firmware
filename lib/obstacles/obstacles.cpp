@@ -1,4 +1,4 @@
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 
 /* System includes */
 #include <cmath>
