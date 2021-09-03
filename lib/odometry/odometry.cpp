@@ -16,56 +16,56 @@ void odometry_setup(double d)
  * \fn void limit_angle (void)
  * \brief limit angle from -pi to +pi
  */
-static void limit_angle(pose_t *p)
+static void limit_angle(cogip::cogip_defs::Pose &p)
 {
     /* limit angle from -pi to +pi */
-    if (p->O > (M_PI * wheels_distance)) { /* > +pi */
-        p->O -= 2.0 * (M_PI * wheels_distance);
+    if (p.O() > (M_PI * wheels_distance)) { /* > +pi */
+        p.set_O(p.O() - 2.0 * (M_PI * wheels_distance));
     }
 
-    if (p->O < -(M_PI * wheels_distance)) { /* < -pi */
-        p->O += 2.0 * (M_PI * wheels_distance);
+    if (p.O() < -(M_PI * wheels_distance)) { /* < -pi */
+        p.set_O(p.O() + 2.0 * (M_PI * wheels_distance));
     }
 }
 
 /**
  * \fn void odometry_by_segment (const double distance, const double angle)
- * \brief update new robot pose_t (x, y, O) approximated by straight line
+ * \brief update new robot pose (x, y, O) approximated by straight line
  *		segments
  * \param distance : delta value for distance [pulse]
  * \param angle : delta value for angle [pulse]
  */
 static void
-odometry_by_segment(pose_t *p, const double distance, const double angle)
+odometry_by_segment(cogip::cogip_defs::Pose &p, const double distance, const double angle)
 {
     double O_rad;
 
-    O_rad = DEG2RAD(p->O);
+    O_rad = DEG2RAD(p.O());
 
-    p->coords.set_x(p->coords.x() + distance * cos(O_rad));
-    p->coords.set_y(p->coords.y() + distance * sin(O_rad));
-    p->O += angle;
+    p.set_x(p.x() + distance * cos(O_rad));
+    p.set_y(p.y() + distance * sin(O_rad));
+    p.set_O(p.O() + angle);
 
     limit_angle(p);
 }
 
 /**
  * \fn void odometry_by_arc (const double distance, const double angle)
- * \brief update new robot pose_t (x, y, O) approximated by an arc
+ * \brief update new robot pose (x, y, O) approximated by an arc
  * \param distance : delta value for distance [pulse]
  * \param angle : delta value for angle [pulse]
  */
 static void
-odometry_by_arc(pose_t *p, const double distance, const double angle)
+odometry_by_arc(cogip::cogip_defs::Pose &p, const double distance, const double angle)
 {
     double O_rad;
 
-    O_rad = DEG2RAD(p->O);
+    O_rad = DEG2RAD(p.O());
 
     if (angle == 0.0) {
         /* robot pose */
-        p->coords.set_x(p->coords.x() + distance * cos(O_rad));
-        p->coords.set_y(p->coords.y() + distance * sin(O_rad));
+        p.set_x(p.x() + distance * cos(O_rad));
+        p.set_y(p.y() + distance * sin(O_rad));
     }
     else {
         /* radius and angle of the arc */
@@ -73,20 +73,20 @@ odometry_by_arc(pose_t *p, const double distance, const double angle)
         double r = distance / a;
 
         /* coordinates of the center of the arc */
-        double xo = p->coords.x() - r * sin(O_rad);
-        double yo = p->coords.y() + r * cos(O_rad);
+        double xo = p.x() - r * sin(O_rad);
+        double yo = p.y() + r * cos(O_rad);
 
         /* robot pose */
-        p->O += angle;
-        p->coords.set_x(xo + r * sin(O_rad));
-        p->coords.set_y(yo - r * cos(O_rad));
+        p.set_O(p.O() + angle);
+        p.set_x(xo + r * sin(O_rad));
+        p.set_y(yo - r * cos(O_rad));
 
         limit_angle(p);
     }
 }
 
 void
-odometry_update(pose_t *p, polar_t *robot_speed, const uint8_t approximation)
+odometry_update(cogip::cogip_defs::Pose &p, polar_t *robot_speed, const uint8_t approximation)
 {
     if (approximation == ARC) {
         odometry_by_arc(p, robot_speed->distance, robot_speed->angle);

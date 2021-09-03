@@ -221,7 +221,7 @@ int pf_is_camp_left(void);
  *
  * @return
  **/
-void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command);
+void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command);
 
 /**
  * @brief Callback that drives actuators after motion control CTRL_MODE_RUNNING,
@@ -233,7 +233,7 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *m
  *
  * @return
  **/
-void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command);
+void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command);
 
 /**
  * @brief Callback that drives actuators after motion control CTRL_MODE_STOP,
@@ -245,7 +245,7 @@ void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *
  *
  * @return
  **/
-void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command);
+void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command);
 
 /**
  * @brief Initialize quadPID controller specific parameters, mainly PID

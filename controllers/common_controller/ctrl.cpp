@@ -60,29 +60,29 @@ uint8_t ctrl_is_pose_reached(ctrl_t *ctrl)
     return ctrl->control.pose_reached;
 }
 
-void ctrl_set_pose_current(ctrl_t *const ctrl, const pose_t *pose_current)
+void ctrl_set_pose_current(ctrl_t *const ctrl, const cogip::cogip_defs::Pose &pose_current)
 {
     DEBUG("ctrl: New pose current: x=%lf, y=%lf, O=%lf\n",
-          pose_current->coords.x(), pose_current->coords.y(), pose_current->O);
+          pose_current.x(), pose_current.y(), pose_current.O());
 
     irq_disable();
-    ctrl->control.pose_current = *pose_current;
+    ctrl->control.pose_current = pose_current;
     irq_enable();
 }
 
-const pose_t *ctrl_get_pose_current(ctrl_t *ctrl)
+const cogip::cogip_defs::Pose &ctrl_get_pose_current(ctrl_t *ctrl)
 {
-    return &ctrl->control.pose_current;
+    return ctrl->control.pose_current;
 }
 
-void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order)
+void ctrl_set_pose_to_reach(ctrl_t *ctrl, const cogip::cogip_defs::Pose &pose_order)
 {
     DEBUG("ctrl: New pose to reach: x=%lf, y=%lf, O=%lf\n",
-          pose_order.coords.x(), pose_order.coords.y(), pose_order.O);
+          pose_order.x(), pose_order.y(), pose_order.O());
 
     irq_disable();
 
-    if (!pose_equal(&ctrl->control.pose_order, &pose_order)) {
+    if (!(ctrl->control.pose_order == pose_order)) {
         ctrl->control.blocking_cycles = 0;
         ctrl->control.pose_order = pose_order;
         ctrl->control.pose_reached = FALSE;
@@ -91,7 +91,7 @@ void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order)
     irq_enable();
 }
 
-pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl)
+cogip::cogip_defs::Pose ctrl_get_pose_to_reach(ctrl_t *ctrl)
 {
     return ctrl->control.pose_order;
 }
@@ -201,7 +201,7 @@ void *task_ctrl_update(void *arg)
         ctrl_pre_mode_cb_t pre_mode_cb = ctrl->pf_conf->ctrl_pre_mode_cb[current_mode];
 
         if (pre_mode_cb) {
-            pre_mode_cb(&ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
+            pre_mode_cb(ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
         }
 
         ctrl_mode_cb_t mode_cb = ctrl->conf->ctrl_mode_cb[current_mode];
@@ -213,7 +213,7 @@ void *task_ctrl_update(void *arg)
         ctrl_post_mode_cb_t post_mode_cb = ctrl->pf_conf->ctrl_post_mode_cb[current_mode];
 
         if (post_mode_cb) {
-            post_mode_cb(&ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
+            post_mode_cb(ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
         }
 
         /* Current cycle finished */

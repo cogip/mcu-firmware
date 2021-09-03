@@ -18,24 +18,25 @@
 #include "trigonometry.h"
 
 /**
- * \fn polar_t compute_position_error(const pose_t p1, const pose_t p2)
+ * \fn polar_t compute_position_error(const cogip::cogip_defs::Pose &p1, const cogip::cogip_defs::Pose &p2)
  * \brief compute error between 2 poses
  * \param p1 : setpoint pose
  * \param p2 : measure pose
  * \return distance and angle errors between 2 poses
  */
 static polar_t compute_position_error(const ctrl_quadpid_t *ctrl,
-                                      const pose_t *pose_order, const pose_t *pose_current)
+                                      const cogip::cogip_defs::Pose &pose_order,
+                                      const cogip::cogip_defs::Pose &pose_current)
 {
     polar_t error;
     double x, y, O;
 
     (void)ctrl;
 
-    x = pose_order->coords.x() - pose_current->coords.x();
-    y = pose_order->coords.y() - pose_current->coords.y();
+    x = pose_order.x() - pose_current.x();
+    y = pose_order.y() - pose_current.y();
 
-    O = limit_angle_rad(atan2(y, x) - DEG2RAD(pose_current->O));
+    O = limit_angle_rad(atan2(y, x) - DEG2RAD(pose_current.O()));
 
     error.angle = RAD2DEG(O);
     error.distance = sqrt(square(x) + square(y));
@@ -187,7 +188,7 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, polar_t *command)
 {
     const polar_t *speed_order = NULL;
 
-    const pose_t *pose_current = ctrl_get_pose_current(ctrl);
+    const cogip::cogip_defs::Pose &pose_current = ctrl_get_pose_current(ctrl);
     const polar_t *speed_current = ctrl_get_speed_current(ctrl);
 
     ctrl_quadpid_t *ctrl_quadpid = (ctrl_quadpid_t *)ctrl;
@@ -197,20 +198,20 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, polar_t *command)
     /* compute position error */
     polar_t pos_err;
 
-    /* get next pose_t to reach */
-    const pose_t pose_order = ctrl_get_pose_to_reach((ctrl_t *)ctrl_quadpid);
+    /* get next pose to reach */
+    cogip::cogip_defs::Pose pose_order = ctrl_get_pose_to_reach((ctrl_t *)ctrl_quadpid);
 
     /* get speed order */
     speed_order = ctrl_get_speed_order((ctrl_t *)ctrl_quadpid);
 
-    pos_err = compute_position_error(ctrl_quadpid, &pose_order, pose_current);
+    pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
     DEBUG("@robot@,%u,%" PRIu32 ",@pose_order@,%.2f,%.2f,%.2f\n",
           ROBOT_ID,
           ctrl->control.current_cycle,
-          pose_order.coords.x(),
-          pose_order.coords.y(),
-          pose_order.O);
+          pose_order.x(),
+          pose_order.y(),
+          pose_order.O());
 
     /* position correction */
     if (ctrl_quadpid->quadpid_params.regul != CTRL_REGUL_POSE_ANGL
@@ -245,7 +246,7 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, polar_t *command)
 
         /* final orientation error */
         if (!ctrl_quadpid->control.pose_intermediate) {
-            pos_err.angle = limit_angle_deg(pose_order.O - pose_current->O);
+            pos_err.angle = limit_angle_deg(pose_order.O() - pose_current.O());
         }
         else {
             pos_err.angle = 0;

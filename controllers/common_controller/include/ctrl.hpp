@@ -66,7 +66,7 @@
  * This callback is used to prepare the call to the controller mode callback
  * ctrl_mode_cb[] according to the current mode.
  */
-typedef void (*ctrl_pre_mode_cb_t)(pose_t *, polar_t *, polar_t *);
+typedef void (*ctrl_pre_mode_cb_t)(cogip::cogip_defs::Pose &, polar_t *, polar_t *);
 
 /**
  * @brief   Post-controller callback. Called after the controller process
@@ -74,7 +74,7 @@ typedef void (*ctrl_pre_mode_cb_t)(pose_t *, polar_t *, polar_t *);
  * This callback is used for post treatment of the controller mode callback
  * ctrl_mode_cb[] according to the current mode.
  */
-typedef void (*ctrl_post_mode_cb_t)(pose_t *, polar_t *, polar_t *);
+typedef void (*ctrl_post_mode_cb_t)(cogip::cogip_defs::Pose &, polar_t *, polar_t *);
 
 /**
  *@brief    Controllers working mode
@@ -112,8 +112,8 @@ typedef polar_t (*speed_order_cb_t)(ctrl_t *ctrl);
  * @brief    Controller general structure
  */
 typedef struct {
-    pose_t pose_order;                  /**< Position order */
-    pose_t pose_current;                /**< Current position */
+    cogip::cogip_defs::Pose pose_order;   /**< Position order */
+    cogip::cogip_defs::Pose pose_current; /**< Current position */
     polar_t speed_order;                /**< Speed order to reach the position */
     polar_t speed_current;              /**< Current speed reaching the position */
     speed_order_cb_t speed_order_cb;    /**< Optional @ref speed_order_cb_t. */
@@ -268,7 +268,7 @@ uint8_t ctrl_is_pose_reached(ctrl_t *ctrl);
  *
  * @return
  */
-void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order);
+void ctrl_set_pose_to_reach(ctrl_t *ctrl, const cogip::cogip_defs::Pose &pose_order);
 
 /**
  * @brief Get pose order
@@ -277,7 +277,7 @@ void ctrl_set_pose_to_reach(ctrl_t *ctrl, const pose_t pose_order);
  *
  * @return                      Pose to reach
  */
-pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl);
+cogip::cogip_defs::Pose ctrl_get_pose_to_reach(ctrl_t *ctrl);
 
 /**
  * @brief Set current pose
@@ -287,7 +287,7 @@ pose_t ctrl_get_pose_to_reach(ctrl_t *ctrl);
  *
  * @return
  */
-void ctrl_set_pose_current(ctrl_t *const ctrl, const pose_t *pose_current);
+void ctrl_set_pose_current(ctrl_t *const ctrl, const cogip::cogip_defs::Pose &pose_current);
 
 /**
  * @brief Get current pose
@@ -296,7 +296,7 @@ void ctrl_set_pose_current(ctrl_t *const ctrl, const pose_t *pose_current);
  *
  * @return                      Current pose
  */
-const pose_t *ctrl_get_pose_current(ctrl_t *ctrl);
+const cogip::cogip_defs::Pose &ctrl_get_pose_current(ctrl_t *ctrl);
 
 /**
  * @brief Set speed order

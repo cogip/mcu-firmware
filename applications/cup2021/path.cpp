@@ -11,37 +11,19 @@
 // - Absolute coordinate recalibration on games frames (?)
 static path_pose_t poses[] = {
     {
-        .pos = {
-            .coords = {
-                .x = -1200,
-                .y = 1000
-            },
-            .O = 0,
-        },
+        .pos = { -1200, 1000, 0 },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = NULL,
     },
     {
-        .pos = {
-            .coords = {
-                .x = 1200,
-                .y = 1000
-            },
-            .O = 180,
-        },
+        .pos = { 1200, 1000, 180 },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = NULL,
     },
     {
-        .pos = {
-            .coords = {
-                .x = -1200,
-                .y = 1000
-            },
-            .O = 0,
-        },
+        .pos = { -1200, 1000, 0 },
         .allow_reverse = TRUE,
         .max_speed = MAX_SPEED,
         .act = NULL,

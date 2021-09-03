@@ -1,6 +1,6 @@
 #pragma once
 
-// Application includes
-#include "cogip_defs/cogip_defs.hpp"
+// Project includes
+#include "cogip_defs/Pose.hpp"
 
-void obstacle_updater_start(const pose_t *robot_state);
+void obstacle_updater_start(const cogip::cogip_defs::Pose &robot_state);

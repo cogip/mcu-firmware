@@ -33,6 +33,7 @@
 
 /* Project includes */
 #include "cogip_defs/cogip_defs.hpp"
+#include "cogip_defs/Pose.hpp"
 #include "tracefd/File.hpp"
 
 /**
@@ -50,7 +51,7 @@
  *
  * @return              wanted pose if found, start position otherwise
  */
-pose_t avoidance_get_pose(uint8_t index);
+cogip::cogip_defs::Pose avoidance_get_pose(uint8_t index);
 
 /**
  * @brief Build avoidance graph, listing all path possibilities between start
@@ -61,7 +62,7 @@ pose_t avoidance_get_pose(uint8_t index);
  *
  * @return              true if recompute is needed, false otherwise
  */
-bool avoidance_build_graph(const pose_t *s, const pose_t *f);
+bool avoidance_build_graph(const cogip::cogip_defs::Pose &s, const cogip::cogip_defs::Pose &f);
 
 /**
  * @brief Check if avoidance should be recomputed by checking if an obstacle is
@@ -72,8 +73,8 @@ bool avoidance_build_graph(const pose_t *s, const pose_t *f);
  *
  * @return              true if recompute is needed, false otherwise
  */
-bool avoidance_check_recompute(const pose_t *start,
-                               const pose_t *stop);
+bool avoidance_check_recompute(const cogip::cogip_defs::Pose &start,
+                               const cogip::cogip_defs::Pose &stop);
 
 /**
  * @brief Print list of intermediate positions to reach wanted path position

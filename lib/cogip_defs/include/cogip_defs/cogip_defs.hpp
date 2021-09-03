@@ -23,8 +23,6 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "cogip_defs/Coords.hpp"
-
 /**
  * @brief   Polar type
  */
@@ -32,32 +30,5 @@ typedef struct {
     double distance;    /**< distance */
     double angle;       /**< angle */
 } polar_t;
-
-/**
- * @brief   Position type
- */
-typedef struct {
-    cogip::cogip_defs::Coords coords;    /**< coordinates */
-    double O;                            /**< 0-orientation */
-} pose_t;
-
-/**
- * @brief Check equality of the pose
- *
- * @param[in]   p1   first pose to compare
- * @param[in]   p2   second pose to compare
- *
- * @return              1 if poses are equal, not 0 otherwise
- */
-static inline int pose_equal(const pose_t *p1, const pose_t *p2)
-{
-    if ((p1 != NULL) && (p2 != NULL)) {
-        return p1 == p2
-               || (p1->coords.x() == p2->coords.x() && p1->coords.y() == p2->coords.y() && p1->O == p2->O);
-    }
-    else {
-        return 0;
-    }
-}
 
 /** @} */
