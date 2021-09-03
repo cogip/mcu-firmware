@@ -199,7 +199,7 @@ int pf_is_camp_left(void)
     return !gpio_read(GPIO_CAMP);
 }
 
-cogip::obstacles::list *pf_get_dyn_obstacles(void)
+cogip::obstacles::List *pf_get_dyn_obstacles(void)
 {
     return lidar_obstacles;
 }

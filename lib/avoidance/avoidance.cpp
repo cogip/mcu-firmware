@@ -31,7 +31,7 @@ static const std::list<cogip::cogip_defs::Coords> border_points = {
     },
 };
 
-static const cogip::obstacles::polygon _borders(&border_points);
+static const cogip::obstacles::Polygon _borders(&border_points);
 
 /* Array of valid points */
 static pose_t _valid_points[GRAPH_MAX_VERTICES];
@@ -80,7 +80,7 @@ static bool _is_avoidance_computed = false;
  */
 static void _validate_obstacles_points(void)
 {
-    cogip::obstacles::list *obstacles_dyn = pf_get_dyn_obstacles();
+    cogip::obstacles::List *obstacles_dyn = pf_get_dyn_obstacles();
 
     /* For each obstacle */
     for (auto obstacle: *obstacles_dyn) {
@@ -117,7 +117,7 @@ static void _build_avoidance_graph(void)
     _validate_obstacles_points();
 
     /* Get all dynamic obstacles */
-    cogip::obstacles::list *obstacles = pf_get_dyn_obstacles();
+    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
 
     /* For each segment of the valid points list */
     for (int p = 0; p < _valid_points_count; p++) {
@@ -271,7 +271,7 @@ bool avoidance_build_graph(const pose_t *s, const pose_t *f)
 {
     start_pose = *s;
     finish_pose = *f;
-    cogip::obstacles::list *obstacles = pf_get_dyn_obstacles();
+    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
 
     if (!_borders.is_point_inside(finish_pose.coords)) {
         _is_avoidance_computed = false;
@@ -307,7 +307,7 @@ bool avoidance_check_recompute(const pose_t *start,
                                const pose_t *stop)
 {
     /* Get dynamic obstacle list */
-    cogip::obstacles::list *obstacles = pf_get_dyn_obstacles();
+    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
 
     /* Check if that segment crosses a polygon */
     for (auto obstacle: *obstacles) {

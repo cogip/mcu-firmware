@@ -194,7 +194,7 @@ int pf_is_camp_left(void)
     return 1;
 }
 
-cogip::obstacles::list *pf_get_dyn_obstacles(void)
+cogip::obstacles::List *pf_get_dyn_obstacles(void)
 {
     return lidar_obstacles;
 }

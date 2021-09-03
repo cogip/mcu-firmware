@@ -7,6 +7,6 @@
 #include "obstacles.hpp"
 
 // Obstacles of Lidar detected obstacles
-extern cogip::obstacles::list *lidar_obstacles;
+extern cogip::obstacles::List *lidar_obstacles;
 
 void obstacle_updater_start(const pose_t *robot_state);

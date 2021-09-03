@@ -25,12 +25,12 @@
 #define DEG2RAD(a)            (a * (2.0 * M_PI) / 360.0)
 
 // Obstacles id of Lidar detected obstacles
-cogip::obstacles::list * lidar_obstacles = nullptr;
+cogip::obstacles::List * lidar_obstacles = nullptr;
 
 riot::thread *obstacle_updater_thread = nullptr;
 
 // Find consecutive obstacles and keep the nearest at the middle
-static bool _filter_distances(cogip::obstacles::list * lidar_obstacles,
+static bool _filter_distances(cogip::obstacles::List * lidar_obstacles,
                               const uint16_t *raw_distances, uint16_t *filtered_distances)
 {
     for (uint32_t i = 0; i < LDS01_NB_ANGLES; i++) {
@@ -97,7 +97,7 @@ static bool _filter_distances(cogip::obstacles::list * lidar_obstacles,
 }
 
 // Update obstacles list from lidar measurements
-static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::list * obstacles,
+static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstacles,
                                                  const pose_t *origin, const uint16_t *distances)
 {
     if (origin == NULL) {
@@ -124,7 +124,7 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::list * obstac
 
         double radius = obstacles->default_circle_radius();
 
-        obstacles->push_back(new cogip::obstacles::circle(center, radius, 0));
+        obstacles->push_back(new cogip::obstacles::Circle(center, radius, 0));
     }
 }
 
@@ -152,7 +152,7 @@ static void _thread_obstacle_updater(const pose_t *robot_state)
 
 void obstacle_updater_start(const pose_t *robot_state)
 {
-    lidar_obstacles = new cogip::obstacles::list(
+    lidar_obstacles = new cogip::obstacles::List(
         OBSTACLE_DEFAULT_CIRCLE_RADIUS, // default_circle_radius
         0,                              // default_rectangle_width
         ROBOT_WIDTH / 2,                // min_distance
