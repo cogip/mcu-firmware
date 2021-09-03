@@ -146,21 +146,21 @@ static double func_impulse(impulse_cfg_t *cfg, uint32_t time)
  *
  * @return                  computed speed order
  */
-static polar_t func_impulse_on_speed_order(ctrl_t *ctrl)
+static cogip::cogip_defs::Polar func_impulse_on_speed_order(ctrl_t *ctrl)
 {
     double set_point = 0;
-    polar_t speed_order = { 0, 0 };
+    cogip::cogip_defs::Polar speed_order;
 
     set_point = func_impulse(current_impulse_cfg,
                              ctrl_get_current_cycle(ctrl));
 
     if (current_impulse_cfg->is_linear) {
-        speed_order.distance = set_point;
-        speed_order.angle = 0;
+        speed_order.set_distance(set_point);
+        speed_order.set_angle(0);
     }
     else {
-        speed_order.distance = 0;
-        speed_order.angle = set_point;
+        speed_order.set_distance(0);
+        speed_order.set_angle(set_point);
     }
 
     return speed_order;
@@ -235,10 +235,7 @@ static void shell_seq_speed_pid_only(ctrl_t *ctrl_quadpid)
 static void ctrl_quadpid_pose_shell_seq(ctrl_t *ctrl_quadpid, const cogip::cogip_defs::Pose &pos)
 {
     /* Speed order is fixed to maximum speed */
-    polar_t speed_order = {
-        .distance = MAX_SPEED,
-        .angle = MAX_SPEED / 2
-    };
+    cogip::cogip_defs::Polar speed_order(MAX_SPEED, MAX_SPEED / 2);
 
     /* Send the speed order and the position to reach to the controller */
     ctrl_set_pose_to_reach(ctrl_quadpid, pos);

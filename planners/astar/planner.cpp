@@ -198,7 +198,7 @@ void *task_planner(void *arg)
 {
     (void)arg;
     cogip::cogip_defs::Pose initial_pose;
-    polar_t speed_order = { 0, 0 };
+    cogip::cogip_defs::Polar speed_order;
     const path_pose_t *current_path_pos = NULL;
 
     cogip::tracefd::out.logf("Game planner starting");
@@ -230,8 +230,8 @@ void *task_planner(void *arg)
         current_path_pos = path_get_current_pose(path);
 
         /* Update speed order to max speed defined value in the new point to reach */
-        speed_order.distance = path_get_current_max_speed(path);
-        speed_order.angle = speed_order.distance / 2;
+        speed_order.set_distance(path_get_current_max_speed(path));
+        speed_order.set_angle(speed_order.distance() / 2);
 
         /* reverse gear selection is granted per point to reach, in path */
         ctrl_set_allow_reverse(ctrl, current_path_pos->allow_reverse);

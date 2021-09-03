@@ -66,7 +66,9 @@
  * This callback is used to prepare the call to the controller mode callback
  * ctrl_mode_cb[] according to the current mode.
  */
-typedef void (*ctrl_pre_mode_cb_t)(cogip::cogip_defs::Pose &, polar_t *, polar_t *);
+typedef void (*ctrl_pre_mode_cb_t)(cogip::cogip_defs::Pose &,
+                                   cogip::cogip_defs::Polar &,
+                                   cogip::cogip_defs::Polar &);
 
 /**
  * @brief   Post-controller callback. Called after the controller process
@@ -74,7 +76,9 @@ typedef void (*ctrl_pre_mode_cb_t)(cogip::cogip_defs::Pose &, polar_t *, polar_t
  * This callback is used for post treatment of the controller mode callback
  * ctrl_mode_cb[] according to the current mode.
  */
-typedef void (*ctrl_post_mode_cb_t)(cogip::cogip_defs::Pose &, polar_t *, polar_t *);
+typedef void (*ctrl_post_mode_cb_t)(cogip::cogip_defs::Pose &,
+                                    cogip::cogip_defs::Polar &,
+                                    cogip::cogip_defs::Polar &);
 
 /**
  *@brief    Controllers working mode
@@ -106,7 +110,7 @@ typedef struct ctrl_t ctrl_t;
  *
  * @return                      New computed speed order
  */
-typedef polar_t (*speed_order_cb_t)(ctrl_t *ctrl);
+typedef cogip::cogip_defs::Polar (*speed_order_cb_t)(ctrl_t *ctrl);
 
 /**
  * @brief    Controller general structure
@@ -114,8 +118,8 @@ typedef polar_t (*speed_order_cb_t)(ctrl_t *ctrl);
 typedef struct {
     cogip::cogip_defs::Pose pose_order;   /**< Position order */
     cogip::cogip_defs::Pose pose_current; /**< Current position */
-    polar_t speed_order;                /**< Speed order to reach the position */
-    polar_t speed_current;              /**< Current speed reaching the position */
+    cogip::cogip_defs::Polar speed_order;   /**< Speed order to reach the position */
+    cogip::cogip_defs::Polar speed_current; /**< Current speed reaching the position */
     speed_order_cb_t speed_order_cb;    /**< Optional @ref speed_order_cb_t. */
 
     uint8_t pose_reached;               /**< Boolean set when pose_order is reached */
@@ -164,7 +168,7 @@ typedef struct {
  * @return                      0 on success
  * @return                      not 0 on error
  */
-typedef int (*ctrl_mode_cb_t)(ctrl_t *ctrl, polar_t *command);
+typedef int (*ctrl_mode_cb_t)(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
 
 /**
  * @brief   Controller modes callbacks definitions
@@ -310,7 +314,7 @@ const cogip::cogip_defs::Pose &ctrl_get_pose_current(ctrl_t *ctrl);
  *
  * @return                      Nothing
  */
-void ctrl_set_speed_order(ctrl_t *ctrl, polar_t speed_order);
+void ctrl_set_speed_order(ctrl_t *ctrl, const cogip::cogip_defs::Polar &speed_order);
 
 /**
  * @brief Get speed order
@@ -319,7 +323,7 @@ void ctrl_set_speed_order(ctrl_t *ctrl, polar_t speed_order);
  *
  * @return                      Speed order
  */
-const polar_t *ctrl_get_speed_order(ctrl_t *ctrl);
+const cogip::cogip_defs::Polar &ctrl_get_speed_order(ctrl_t *ctrl);
 
 /**
  * @brief Register a speed_order callback.
@@ -364,7 +368,7 @@ void ctrl_compute_speed_order(ctrl_t *ctrl);
  *
  * @return                      Current speed
  */
-const polar_t *ctrl_get_speed_current(ctrl_t *ctrl);
+const cogip::cogip_defs::Polar &ctrl_get_speed_current(ctrl_t *ctrl);
 
 /**
  * @brief Set current mode

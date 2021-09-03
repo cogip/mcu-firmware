@@ -86,13 +86,16 @@ odometry_by_arc(cogip::cogip_defs::Pose &p, const double distance, const double 
 }
 
 void
-odometry_update(cogip::cogip_defs::Pose &p, polar_t *robot_speed, const uint8_t approximation)
+odometry_update(
+    cogip::cogip_defs::Pose &p,
+    const cogip::cogip_defs::Polar &robot_speed,
+    const uint8_t approximation)
 {
     if (approximation == ARC) {
-        odometry_by_arc(p, robot_speed->distance, robot_speed->angle);
+        odometry_by_arc(p, robot_speed.distance(), robot_speed.angle());
     }
     else {
         odometry_by_segment(p,
-                            robot_speed->distance, robot_speed->angle);
+                            robot_speed.distance(), robot_speed.angle());
     }
 }

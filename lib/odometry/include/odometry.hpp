@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "cogip_defs/cogip_defs.hpp"
+#include "cogip_defs/Polar.hpp"
 #include "cogip_defs/Pose.hpp"
 
 #define SEGMENT 0
@@ -23,5 +23,5 @@ void odometry_setup(double d);
  * \param approximation : SEGMENT (default) or ARC
  */
 void odometry_update(cogip::cogip_defs::Pose &p,
-                     polar_t *robot_speed,
+                     const cogip::cogip_defs::Polar &robot_speed,
                      const uint8_t approximation);

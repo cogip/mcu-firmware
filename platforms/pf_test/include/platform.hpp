@@ -214,7 +214,9 @@ int pf_is_camp_left(void);
  *
  * @return
  **/
-void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command);
+void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
+                            cogip::cogip_defs::Polar &robot_speed,
+                            cogip::cogip_defs::Polar &motor_command);
 
 /**
  * @brief Callback that drives actuators after motion control CTRL_MODE_RUNNING,
@@ -226,7 +228,9 @@ void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_
  *
  * @return
  **/
-void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command);
+void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose,
+                             cogip::cogip_defs::Polar &robot_speed,
+                             cogip::cogip_defs::Polar &motor_command);
 
 /**
  * @brief Callback that drives actuators after motion control CTRL_MODE_STOP,
@@ -238,7 +242,9 @@ void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot
  *
  * @return
  **/
-void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command);
+void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose,
+                          cogip::cogip_defs::Polar &robot_speed,
+                          cogip::cogip_defs::Polar &motor_command);
 
 /**
  * @brief Initialize quadPID controller specific parameters, mainly PID
@@ -286,7 +292,7 @@ void pf_init(void);
  *
  * @return                      0 if success, non 0 on error
  **/
-int encoder_read(polar_t *robot_speed);
+int encoder_read(cogip::cogip_defs::Polar &robot_speed);
 
 /**
  * @brief Reset quadrature encoders buffers
@@ -302,7 +308,7 @@ void encoder_reset(void);
  *
  * @return
  **/
-void motor_drive(polar_t *command);
+void motor_drive(const cogip::cogip_defs::Polar &command);
 
 /**
  * @brief Get dynamic obstacles list.

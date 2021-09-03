@@ -32,7 +32,6 @@
 #include <cstdint>
 
 /* Project includes */
-#include "cogip_defs/cogip_defs.hpp"
 #include "cogip_defs/Pose.hpp"
 #include "tracefd/File.hpp"
 
