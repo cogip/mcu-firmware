@@ -232,7 +232,7 @@ static void shell_seq_speed_pid_only(ctrl_t *ctrl_quadpid)
 }
 
 /* Position calibration sequence */
-static void ctrl_quadpid_pose_shell_seq(ctrl_t *ctrl_quadpid, pose_t pos)
+static void ctrl_quadpid_pose_shell_seq(ctrl_t *ctrl_quadpid, const cogip::cogip_defs::Pose &pos)
 {
     /* Speed order is fixed to maximum speed */
     polar_t speed_order = {
@@ -656,25 +656,13 @@ static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
 /* Calibration path for linear PID */
 static path_pose_t poses_calibration[] = {
     {
-        .pos = {
-            .coords = {
-                .x = 0,
-                .y = 0
-            },
-            .O = 90,
-        },
+        .pos = { 0, 0, 90 },
         .allow_reverse = 0,
         .max_speed = 0,
         .act = nullptr
     },
     {
-        .pos = {
-            .coords = {
-                .x = 500,
-                .y = 500
-            },
-            .O = 0,
-        },
+        .pos = { 500, 500, 0 },
         .allow_reverse = 0,
         .max_speed = 0,
         .act = nullptr
@@ -730,7 +718,7 @@ static int ctrl_quadpid_pose_cmd_linear_kp_cb(int argc, char **argv)
     }
 
     encoder_reset();
-    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
     pose_linear_index ^= 1;
     ctrl_quadpid->quadpid_params.linear_pose_pid.kp = kp;
 
@@ -765,7 +753,7 @@ static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
     }
 
     encoder_reset();
-    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, &poses_calibration[pose_linear_index].pos);
+    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
     pose_linear_index ^= 1;
     ctrl_quadpid->quadpid_params.angular_pose_pid.kp = kp;
 

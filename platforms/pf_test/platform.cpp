@@ -33,8 +33,8 @@ static ctrl_quadpid_t ctrl_quadpid =
     .conf = &ctrl_quadpid_conf,
     .pf_conf = &ctrl_pf_quadpid_conf,
     .control = {
-        .pose_order = { { 0, 0 }, 0 },
-        .pose_current = { { 0 ,0 }, 0 },
+        .pose_order = { 0, 0, 0 },
+        .pose_current = { 0 ,0, 0 },
         .speed_order{ 0, 0 },
         .speed_current = { 0, 0 },
         .speed_order_cb = 0,
@@ -90,8 +90,8 @@ void pf_print_state(cogip::tracefd::File &out)
         "\"speed_current\":{\"distance\":%.3lf,\"angle\":%.3lf},"
         "\"speed_order\":{\"distance\":%.3lf,\"angle\":%.3lf}",
         ctrl->control.current_mode,
-        ctrl->control.pose_current.O, ctrl->control.pose_current.coords.x(), ctrl->control.pose_current.coords.y(),
-        ctrl->control.pose_order.O, ctrl->control.pose_order.coords.x(), ctrl->control.pose_order.coords.y(),
+        ctrl->control.pose_current.O(), ctrl->control.pose_current.x(), ctrl->control.pose_current.y(),
+        ctrl->control.pose_order.O(), ctrl->control.pose_order.x(), ctrl->control.pose_order.y(),
         ctrl->control.current_cycle,
         ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
         ctrl->control.speed_order.distance, ctrl->control.speed_order.angle
@@ -128,7 +128,7 @@ path_t *pf_get_path(void)
     return &robot_path;
 }
 
-void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command)
+void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command)
 {
     (void)motor_command;
 
@@ -139,7 +139,7 @@ void pf_ctrl_pre_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *m
     odometry_update(robot_pose, robot_speed, SEGMENT);
 }
 
-void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command)
+void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;
@@ -152,7 +152,7 @@ void pf_ctrl_post_stop_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *mot
     motor_drive(motor_command);
 }
 
-void pf_ctrl_post_running_cb(pose_t *robot_pose, polar_t *robot_speed, polar_t *motor_command)
+void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;

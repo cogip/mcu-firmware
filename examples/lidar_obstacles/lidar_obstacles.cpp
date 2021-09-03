@@ -13,6 +13,7 @@
 #include "lidar_utils.hpp"
 #include "obstacles.hpp"
 #include "cogip_defs/Coords.hpp"
+#include "cogip_defs/Pose.hpp"
 
 // Number of angles without obstacle to ignore between two angles with obstacle
 #define NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE 3
@@ -98,12 +99,9 @@ static bool _filter_distances(cogip::obstacles::List * lidar_obstacles,
 
 // Update obstacles list from lidar measurements
 static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstacles,
-                                                 const pose_t *origin, const uint16_t *distances)
+                                                 const cogip::cogip_defs::Pose &origin,
+                                                 const uint16_t *distances)
 {
-    if (origin == NULL) {
-        return;
-    }
-
     obstacles->clear();
 
     for (uint16_t angle = 0; angle < 360; angle++) {
@@ -113,13 +111,13 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstac
         }
 
         // Compute obstacle position
-        double obstacle_angle = origin->O + angle;
+        double obstacle_angle = origin.O() + angle;
         obstacle_angle = (int16_t)obstacle_angle % 360;
         obstacle_angle = DEG2RAD(obstacle_angle);
 
         cogip::cogip_defs::Coords center = {
-            origin->coords.x() + distance * cos(obstacle_angle),
-            origin->coords.y() + distance * sin(obstacle_angle)
+            origin.x() + distance * cos(obstacle_angle),
+            origin.y() + distance * sin(obstacle_angle)
         };
 
         double radius = obstacles->default_circle_radius();
@@ -129,7 +127,7 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstac
 }
 
 // Thread loop
-static void _thread_obstacle_updater(const pose_t *robot_state)
+static void _thread_obstacle_updater(const cogip::cogip_defs::Pose &robot_state)
 {
     uint16_t raw_distances[LDS01_NB_ANGLES];
     uint16_t filtered_distances[LDS01_NB_ANGLES];
@@ -150,7 +148,7 @@ static void _thread_obstacle_updater(const pose_t *robot_state)
     }
 }
 
-void obstacle_updater_start(const pose_t *robot_state)
+void obstacle_updater_start(const cogip::cogip_defs::Pose &robot_state)
 {
     lidar_obstacles = new cogip::obstacles::List(
         OBSTACLE_DEFAULT_CIRCLE_RADIUS, // default_circle_radius

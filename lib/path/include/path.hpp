@@ -28,7 +28,7 @@
  * @brief Position type as used in path type
  */
 typedef struct {
-    pose_t pos;
+    cogip::cogip_defs::Pose pos;
     uint8_t allow_reverse;
     double max_speed;
     func_cb_t act;
@@ -41,7 +41,7 @@ typedef struct {
     /* static cfg */
     uint8_t play_in_loop; /* for unit tests */
     uint8_t nb_poses;
-    const path_pose_t *poses;
+    path_pose_t *poses;
 
     /* dynamic variables */
     uint8_t current_pose_idx;
@@ -88,6 +88,6 @@ uint8_t path_get_current_max_speed(const path_t *path);
  * @brief Mirror all points in path to match the two possible sides of the game
  * @param[out]    path    robot path
  */
-void path_horizontal_mirror_all_poses(const path_t *path);
+void path_horizontal_mirror_all_poses(path_t *path);
 
 /** @} */

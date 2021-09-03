@@ -40,13 +40,13 @@ uint8_t path_get_current_max_speed(const path_t *path)
     return MIN(current_path_pos->max_speed, MAX_SPEED);
 }
 
-void path_horizontal_mirror_all_poses(const path_t *path)
+void path_horizontal_mirror_all_poses(path_t *path)
 {
     for (int i = 0; i < path->nb_poses; i++) {
-        pose_t *pos = (pose_t *)&path->poses[i].pos;
+        cogip::cogip_defs::Pose &pos = path->poses[i].pos;
 
-        pos->coords.set_x(-pos->coords.x());
-        pos->O = 180 - pos->O;
-        pos->O = ((int)pos->O) % 360;
+        pos.set_x(-pos.x());
+        pos.set_O(180 - pos.O());
+        pos.set_O(((int)pos.O()) % 360);
     }
 }

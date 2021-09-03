@@ -58,7 +58,7 @@ public:
         const Coords other  ///< [in] point to compare
         ) const { return x_ == other.x_ && y_ == other.y_; };
 
-private:
+protected:
     double x_;              ///< x-position
     double y_;              ///< y-position
 };
