@@ -101,7 +101,8 @@ typedef struct {
  * @return                      not 0 on error
  */
 int ctrl_quadpid_speed(ctrl_quadpid_t *ctrl,
-                       polar_t *command, const polar_t *speed_current);
+                       cogip::cogip_defs::Polar &command,
+                       const cogip::cogip_defs::Polar &speed_current);
 
 /**
  * @brief   QuadPID CTRL_MODE_STOP callback.
@@ -114,7 +115,7 @@ int ctrl_quadpid_speed(ctrl_quadpid_t *ctrl,
  * @return                      0 on success
  * @return                      not 0 on error
  */
-int ctrl_quadpid_stop(ctrl_t *ctrl, polar_t *command);
+int ctrl_quadpid_stop(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
 
 /**
  * @brief   QuadPID CTRL_MODE_PASSTHROUGH callback.
@@ -127,7 +128,7 @@ int ctrl_quadpid_stop(ctrl_t *ctrl, polar_t *command);
  * @return                      0 on success
  * @return                      not 0 on error
  */
-int ctrl_quadpid_nopid(ctrl_t *ctrl, polar_t *command);
+int ctrl_quadpid_nopid(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
 
 /**
  * @brief   QuadPID CTRL_MODE_RUNNING_SPEED callback.
@@ -140,7 +141,7 @@ int ctrl_quadpid_nopid(ctrl_t *ctrl, polar_t *command);
  * @return                      0 on success
  * @return                      not 0 on error
  */
-int ctrl_quadpid_running_speed(ctrl_t *ctrl, polar_t *command);
+int ctrl_quadpid_running_speed(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
 
 /**
  * @brief   QuadPID CTRL_MODE_RUNNING callback.
@@ -153,7 +154,7 @@ int ctrl_quadpid_running_speed(ctrl_t *ctrl, polar_t *command);
  * @return                      0 on success
  * @return                      not 0 on error
  */
-int ctrl_quadpid_ingame(ctrl_t *ctrl, polar_t *command);
+int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
 
 
 /**

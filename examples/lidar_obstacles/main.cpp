@@ -3,7 +3,6 @@
 #include "riot/thread.hpp"
 
 // Project includes
-#include "cogip_defs/cogip_defs.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "obstacles.hpp"
 #include "tracefd/tracefd.hpp"

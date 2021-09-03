@@ -96,15 +96,15 @@ cogip::cogip_defs::Pose ctrl_get_pose_to_reach(ctrl_t *ctrl)
     return ctrl->control.pose_order;
 }
 
-const polar_t *ctrl_get_speed_current(ctrl_t *ctrl)
+const cogip::cogip_defs::Polar &ctrl_get_speed_current(ctrl_t *ctrl)
 {
-    return &ctrl->control.speed_current;
+    return ctrl->control.speed_current;
 }
 
-void ctrl_set_speed_order(ctrl_t *ctrl, polar_t speed_order)
+void ctrl_set_speed_order(ctrl_t *ctrl, const cogip::cogip_defs::Polar &speed_order)
 {
     DEBUG("ctrl: New speed order: linear=%lf, angle=%lf\n",
-          speed_order.distance, speed_order.angle);
+          speed_order.distance(), speed_order.angle());
 
     irq_disable();
 
@@ -113,9 +113,9 @@ void ctrl_set_speed_order(ctrl_t *ctrl, polar_t speed_order)
     irq_enable();
 }
 
-const polar_t *ctrl_get_speed_order(ctrl_t *ctrl)
+const cogip::cogip_defs::Polar &ctrl_get_speed_order(ctrl_t *ctrl)
 {
-    return &ctrl->control.speed_order;
+    return ctrl->control.speed_order;
 }
 
 void ctrl_register_speed_order_cb(ctrl_t *ctrl, speed_order_cb_t speed_order_cb)
@@ -187,7 +187,7 @@ ctrl_mode_t ctrl_get_mode(ctrl_t *ctrl)
 void *task_ctrl_update(void *arg)
 {
     /* bot position on the 'table' (absolute position): */
-    polar_t motor_command = { 0, 0 };
+    cogip::cogip_defs::Polar motor_command;
 
     ctrl_t *ctrl = (ctrl_t *)arg;
 
@@ -201,19 +201,19 @@ void *task_ctrl_update(void *arg)
         ctrl_pre_mode_cb_t pre_mode_cb = ctrl->pf_conf->ctrl_pre_mode_cb[current_mode];
 
         if (pre_mode_cb) {
-            pre_mode_cb(ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
+            pre_mode_cb(ctrl->control.pose_current, ctrl->control.speed_current, motor_command);
         }
 
         ctrl_mode_cb_t mode_cb = ctrl->conf->ctrl_mode_cb[current_mode];
 
         if (mode_cb) {
-            mode_cb(ctrl, &motor_command);
+            mode_cb(ctrl, motor_command);
         }
 
         ctrl_post_mode_cb_t post_mode_cb = ctrl->pf_conf->ctrl_post_mode_cb[current_mode];
 
         if (post_mode_cb) {
-            post_mode_cb(ctrl->control.pose_current, &ctrl->control.speed_current, &motor_command);
+            post_mode_cb(ctrl->control.pose_current, ctrl->control.speed_current, motor_command);
         }
 
         /* Current cycle finished */

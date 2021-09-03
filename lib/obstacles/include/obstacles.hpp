@@ -30,7 +30,6 @@
 #include "riot/mutex.hpp"
 
 // Project includes
-#include "cogip_defs/cogip_defs.hpp"
 #include "cogip_defs/Polygon.hpp"
 #include "tracefd/File.hpp"
 

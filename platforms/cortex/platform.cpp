@@ -92,8 +92,8 @@ void pf_print_state(cogip::tracefd::File &out)
         ctrl->control.pose_current.O(), ctrl->control.pose_current.x(), ctrl->control.pose_current.y(),
         ctrl->control.pose_order.O(), ctrl->control.pose_order.x(), ctrl->control.pose_order.y(),
         ctrl->control.current_cycle,
-        ctrl->control.speed_current.distance, ctrl->control.speed_current.angle,
-        ctrl->control.speed_order.distance, ctrl->control.speed_order.angle
+        ctrl->control.speed_current.distance(), ctrl->control.speed_current.angle(),
+        ctrl->control.speed_order.distance(), ctrl->control.speed_order.angle()
         );
 
     out.printf(",\"path\":");
@@ -127,7 +127,9 @@ path_t *pf_get_path(void)
     return &robot_path;
 }
 
-void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command)
+void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
+                            cogip::cogip_defs::Polar &robot_speed,
+                            cogip::cogip_defs::Polar &motor_command)
 {
     (void)motor_command;
 
@@ -138,20 +140,24 @@ void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_
     odometry_update(robot_pose, robot_speed, SEGMENT);
 }
 
-void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command)
+void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose,
+                          cogip::cogip_defs::Polar &robot_speed,
+                          cogip::cogip_defs::Polar &motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;
 
     /* Set distance and angle command to 0 to stop the robot*/
-    motor_command->distance = 0;
-    motor_command->angle = 0;
+    motor_command.set_distance(0);
+    motor_command.set_angle(0);
 
     /* Send command to motors */
     motor_drive(motor_command);
 }
 
-void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot_speed, polar_t *motor_command)
+void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose,
+                             cogip::cogip_defs::Polar &robot_speed,
+                             cogip::cogip_defs::Polar &motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;
@@ -160,14 +166,14 @@ void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose, polar_t *robot
     motor_drive(motor_command);
 }
 
-int encoder_read(polar_t *robot_speed)
+int encoder_read(cogip::cogip_defs::Polar &robot_speed)
 {
     int32_t left_speed = qdec_read_and_reset(HBRIDGE_MOTOR_LEFT) * QDEC_LEFT_POLARITY;
     int32_t right_speed = qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
 
     /* update speed */
-    robot_speed->distance = ((right_speed + left_speed) / 2.0) / PULSE_PER_MM;
-    robot_speed->angle = (right_speed - left_speed) / PULSE_PER_DEGREE;
+    robot_speed.set_distance(((right_speed + left_speed) / 2.0) / PULSE_PER_MM);
+    robot_speed.set_angle((right_speed - left_speed) / PULSE_PER_DEGREE);
 
     return 0;
 }
@@ -178,10 +184,10 @@ void encoder_reset(void)
     qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
 }
 
-void motor_drive(polar_t *command)
+void motor_drive(const cogip::cogip_defs::Polar &command)
 {
-    int16_t right_command = (int16_t) (command->distance + command->angle);
-    int16_t left_command = (int16_t) (command->distance - command->angle);
+    int16_t right_command = (int16_t) (command.distance() + command.angle());
+    int16_t left_command = (int16_t) (command.distance() - command.angle());
 
     motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_LEFT, left_command);
     motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_RIGHT, right_command);
