@@ -1,10 +1,8 @@
 #pragma once
 
-// Application includes
-#include "cogip_defs/Pose.hpp"
-
 // Project includes
-#include "obstacles/obstacles.hpp"
+#include "cogip_defs/Pose.hpp"
+#include "obstacles/List.hpp"
 
 // Obstacles of Lidar detected obstacles
 extern cogip::obstacles::List *lidar_obstacles;

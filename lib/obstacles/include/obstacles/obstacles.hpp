@@ -143,31 +143,6 @@ private:
     double length_y_;        /// length on Y axis when angle = 0
 };
 
-class List: public std::list<Obstacle *> {
-public:
-    List(uint32_t default_circle_radius = 0,
-         uint32_t default_rectangle_width = 0,
-         uint32_t min_distance = 0,
-         uint32_t max_distance = 0);
-    ~List();
-
-    uint32_t default_circle_radius() { return default_circle_radius_; };
-    uint32_t default_rectangle_width() { return default_rectangle_width_; };
-    uint32_t min_distance() { return min_distance_; };
-    uint32_t max_distance() { return max_distance_; };
-    void lock() { mutex_.lock(); };
-    void unlock() { mutex_.unlock(); };
-    void print_json(cogip::tracefd::File &out) const;
-    void clear();
-
-private:
-    uint32_t default_circle_radius_;     /// obstacle default radius
-    uint32_t default_rectangle_width_;   /// obstacle of rectangle type default width
-    uint32_t min_distance_;              /// minimun distance from origin to create an obstacle
-    uint32_t max_distance_;              /// maximum distance from origin to create an obstacle
-    riot::mutex mutex_;                  /// mutex protecting file access
-};
-
 /// @brief Check if the given point is inside an obstacle
 /// @param[in]   p           point to check
 /// @param[in]   filter      obstacle to filter
