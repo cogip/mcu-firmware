@@ -1,7 +1,7 @@
 #pragma once
 
 // Project includes
-#include "obstacles/obstacles.hpp"
+#include "obstacles/Polygon.hpp"
 
 #include "sd21.h"
 

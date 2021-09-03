@@ -23,11 +23,6 @@
 
 // Standard includes
 #include <cstdint>
-#include <list>
-
-// RIOT includes
-#include "native_sched.h"
-#include "riot/mutex.hpp"
 
 // Project includes
 #include "cogip_defs/Polygon.hpp"
@@ -119,16 +114,6 @@ private:
     /// @param[in]   b           point B
     /// @return                  true if (AB) crosses circle, false otherwise
     bool is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
-};
-
-class Polygon : public Obstacle, public cogip_defs::Polygon {
-public:
-    Polygon(const std::list<cogip_defs::Coords> *points = nullptr);
-
-    bool is_point_inside(const cogip_defs::Coords &p) const;
-    bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
-    cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const;
-    void print_json(cogip::tracefd::File &out) const;
 };
 
 /// @brief Check if the given point is inside an obstacle
