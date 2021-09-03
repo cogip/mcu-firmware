@@ -75,14 +75,14 @@ static void _validate_obstacles_points(void)
          * box */
         if (!cogip::obstacles::is_point_in_obstacles(obstacle->center(), obstacle)) {
 
-            polygon_t bb = obstacle->bounding_box(OBSTACLES_BB_NB_VERTICES,
-                                                  OBSTACLES_BB_RADIUS_MARGIN);
+            cogip::cogip_defs::Polygon bb = obstacle->bounding_box(OBSTACLES_BB_NB_VERTICES,
+                                                                   OBSTACLES_BB_RADIUS_MARGIN);
 
             /* Validate bounding box points */
-            for (uint8_t j = 0; j < bb.count; j++) {
-                if (borders->is_point_inside(bb.points[j])
-                    && (!cogip::obstacles::is_point_in_obstacles(bb.points[j], nullptr))) {
-                    _valid_points[_valid_points_count++] = { .coords = bb.points[j], .O = 0 };
+            for (auto &point: bb) {
+                if (borders->is_point_inside(point)
+                    && (!cogip::obstacles::is_point_in_obstacles(point, nullptr))) {
+                    _valid_points[_valid_points_count++] = { .coords = point, .O = 0 };
                 }
             }
         }
