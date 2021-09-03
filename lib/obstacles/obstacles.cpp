@@ -99,25 +99,25 @@ Rectangle::Rectangle(
     center_ = center;
     radius_ = sqrt(length_x * length_x + length_y * length_y) / 2;
     angle_ = angle;
-    polygon_.push_back(cogip_defs::Coords(
+    push_back(cogip_defs::Coords(
         (center.x() - length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() - length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() - length_x / 2) * sin(DEG2RAD(angle)) +
             (center.y() - length_y / 2) * cos(DEG2RAD(angle))
     ));
-    polygon_.push_back(cogip_defs::Coords(
+    push_back(cogip_defs::Coords(
         (center.x() - length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() + length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() - length_x / 2) * sin(DEG2RAD(angle)) +
             (center.y() + length_y / 2) * cos(DEG2RAD(angle))
     ));
-    polygon_.push_back(cogip_defs::Coords(
+    push_back(cogip_defs::Coords(
         (center.x() + length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() + length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() + length_x / 2) * sin(DEG2RAD(angle)) +
             (center.y() + length_y / 2) * cos(DEG2RAD(angle))
     ));
-    polygon_.push_back(cogip_defs::Coords(
+    push_back(cogip_defs::Coords(
         (center.x() + length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() - length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() + length_x / 2) * sin(DEG2RAD(angle)) +
@@ -242,15 +242,15 @@ Polygon::Polygon(const std::list<cogip_defs::Coords> *points)
 {
     if (points) {
         for (const auto &point: *points) {
-            polygon_.push_back(point);
+            push_back(point);
         }
     }
 }
 
 bool Polygon::is_point_inside(const cogip_defs::Coords &p) const {
-    for (size_t i = 0; i < polygon_.size(); i++) {
-        cogip_defs::Coords a = polygon_[i];
-        cogip_defs::Coords b = (i == (polygon_.size() - 1) ? polygon_[0] : polygon_[i + 1]);
+    for (size_t i = 0; i < size(); i++) {
+        cogip_defs::Coords a = at(i);
+        cogip_defs::Coords b = (i == (size() - 1) ? at(0) : at(i + 1));
         cogip_defs::Coords ab(b.x() - a.x(), b.y() - a.y());
         cogip_defs::Coords ap(p.x() - a.x(), p.y() - a.y());
 
@@ -264,19 +264,19 @@ bool Polygon::is_point_inside(const cogip_defs::Coords &p) const {
 bool Polygon::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
     /* Check if that segment crosses a polygon */
-    for (size_t i = 0; i < polygon_.size(); i++) {
-        const cogip_defs::Coords &p_next = ((i + 1 == polygon_.size()) ? polygon_[0] : polygon_[i + 1]);
+    for (size_t i = 0; i < size(); i++) {
+        const cogip_defs::Coords &p_next = ((i + 1 == size()) ? at(0) : at(i + 1));
 
-        if (_is_segment_crossing_segment(a, b, polygon_[i], p_next)) {
+        if (_is_segment_crossing_segment(a, b, at(i), p_next)) {
             return true;
         }
 
         /* If A and B are vertices of the polygon */
-        int index = polygon_.point_index(a);
-        int index2 = polygon_.point_index(b);
+        int index = point_index(a);
+        int index2 = point_index(b);
         /* Consecutive vertices: no collision */
-        if (((index == 0) && (index2 == ((int)polygon_.size() - 1)))
-            || ((index2 == 0) && (index == ((int)polygon_.size() - 1)))) {
+        if (((index == 0) && (index2 == ((int)size() - 1)))
+            || ((index2 == 0) && (index == ((int)size() - 1)))) {
             continue;
         }
         /* If not consecutive vertices: collision */
@@ -285,7 +285,7 @@ bool Polygon::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs:
         }
 
         /* If polygon vertice is on segment [AB] */
-        if (polygon_[i].on_segment(a, b)) {
+        if (at(i).on_segment(a, b)) {
             return true;
         }
     }
@@ -298,7 +298,7 @@ cogip_defs::Coords Polygon::nearest_point(const cogip_defs::Coords &p) const
     double min = UINT32_MAX;
     cogip_defs::Coords tmp = p;
 
-    for (const auto &point: polygon_) {
+    for (const auto &point: *this) {
         double distance = p.distance(point);
         if (distance < min) {
             min = distance;
@@ -317,8 +317,8 @@ void Polygon::print_json(cogip::tracefd::File &out) const
         center_.y(),
         angle_
         );
-    for (auto it = polygon_.begin(); it != polygon_.end(); it++) {
-        if (it != polygon_.begin()) {
+    for (auto it = begin(); it != end(); it++) {
+        if (it != begin()) {
             out.printf(",");
         }
         out.printf(
