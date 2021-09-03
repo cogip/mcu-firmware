@@ -4,7 +4,7 @@
 #include "periph/qdec.h"
 
 /* Project includes */
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "planner.hpp"
 #include "platform.hpp"
 #include "avoidance.hpp"

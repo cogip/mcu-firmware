@@ -11,7 +11,7 @@
 #include "lds01.h"
 
 // Application includes
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "platform.hpp"
 
 // Number of angles without obstacle to ignore between two angles with obstacle

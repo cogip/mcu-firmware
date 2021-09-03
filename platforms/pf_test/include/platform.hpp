@@ -30,7 +30,7 @@
 /* Project includes */
 #include "ctrl.hpp"
 #include "quadpid.hpp"
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "odometry.hpp"
 #include "path.hpp"
 #include "utils.h"

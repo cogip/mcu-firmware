@@ -11,7 +11,7 @@
 // Application includes
 #include "common_defs.h"
 #include "lidar_utils.hpp"
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "cogip_defs/Coords.hpp"
 #include "cogip_defs/Pose.hpp"
 

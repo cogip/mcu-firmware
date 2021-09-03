@@ -5,7 +5,7 @@
 
 /* Project includes */
 #include "board.h"
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "planner.hpp"
 #include "platform.hpp"
 #include "avoidance.hpp"

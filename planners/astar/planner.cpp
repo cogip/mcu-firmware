@@ -14,7 +14,7 @@
 #include "avoidance.hpp"
 #include "platform.hpp"
 #include "path.hpp"
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "tracefd/tracefd.hpp"
 
 #ifdef MODULE_SHELL_PLANNERS

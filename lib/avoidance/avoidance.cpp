@@ -5,7 +5,7 @@
 /* Project includes */
 #include "app.hpp"
 #include "avoidance.hpp"
-#include "obstacles.hpp"
+#include "obstacles/obstacles.hpp"
 #include "platform.hpp"
 #include "utils.h"
 #include "cogip_defs/Coords.hpp"
