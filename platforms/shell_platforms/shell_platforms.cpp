@@ -12,7 +12,6 @@
 
 /* Project includes */
 #include "avoidance.hpp"
-#include "obstacles/obstacles.hpp"
 #include "platform.hpp"
 #include "ctrl.hpp"
 #include "shell_menu/shell_menu.hpp"
