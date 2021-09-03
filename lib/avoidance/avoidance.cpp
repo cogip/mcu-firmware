@@ -6,6 +6,7 @@
 #include "app.hpp"
 #include "avoidance.hpp"
 #include "obstacles/obstacles.hpp"
+#include "obstacles/List.hpp"
 #include "platform.hpp"
 #include "utils.h"
 #include "cogip_defs/Coords.hpp"
