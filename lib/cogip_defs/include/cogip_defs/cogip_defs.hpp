@@ -25,9 +25,6 @@
 
 #include "cogip_defs/Coords.hpp"
 
-#define POLY_MAX                16  /**< Maximum number of polygons */
-#define POLY_MAX_POINTS         6   /**< Maximum number of vertices composing a polygon */
-
 /**
  * @brief   Polar type
  */
@@ -43,14 +40,6 @@ typedef struct {
     cogip::cogip_defs::Coords coords;    /**< coordinates */
     double O;                            /**< 0-orientation */
 } pose_t;
-
-/**
- * @brief   Polygon type
- */
-typedef struct {
-    uint8_t count;                                       /**< number of vertices in the polygon */
-    cogip::cogip_defs::Coords points[POLY_MAX_POINTS];   /**< vertices defining the polygon */
-} polygon_t;
 
 /**
  * @brief Check equality of the pose

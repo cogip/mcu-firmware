@@ -31,6 +31,7 @@
 
 // Project includes
 #include "cogip_defs/cogip_defs.hpp"
+#include "cogip_defs/Polygon.hpp"
 #include "tracefd/File.hpp"
 
 #if 0 // Unused?
@@ -67,7 +68,7 @@ public:
     /// @param[in]   nb_vertices     number of bounding box vertices
     /// @param[in]   radius_margin   radius margin
     /// @return                      bounding box polygon
-    polygon_t bounding_box(const uint8_t nb_vertices, double radius_margin) const;
+    cogip_defs::Polygon bounding_box(const uint8_t nb_vertices, double radius_margin) const;
 
     /// @brief Check if the given point is inside the obstacle
     /// @param[in]   p               point to check
@@ -131,7 +132,7 @@ public:
     void print_json(cogip::tracefd::File &out) const;
 
 protected:
-    polygon_t polygon_;
+    cogip_defs::Polygon polygon_;
 };
 
 class Rectangle : public Polygon {

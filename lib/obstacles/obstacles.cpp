@@ -73,18 +73,18 @@ Obstacle::Obstacle(
 {
 }
 
-polygon_t Obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) const
+cogip_defs::Polygon Obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) const
 {
     double radius = radius_ * (1 + radius_margin);
 
-    polygon_t bb;
+    cogip_defs::Polygon bb;
 
-    bb.count = (nb_vertices < 4) ? 4 : nb_vertices;
+    uint8_t nb_points = (nb_vertices < 4) ? 4 : nb_vertices;
 
-    for (uint8_t i = 0; i < bb.count; i++) {
-        bb.points[i] = cogip_defs::Coords(
-            center_.x() + radius * cos(((double)i * 2 * M_PI) / (double)bb.count),
-            center_.y() + radius * sin(((double)i * 2 * M_PI) / (double)bb.count));
+    for (uint8_t i = 0; i < nb_points; i++) {
+        bb.push_back(cogip_defs::Coords(
+            center_.x() + radius * cos(((double)i * 2 * M_PI) / (double)nb_points),
+            center_.y() + radius * sin(((double)i * 2 * M_PI) / (double)nb_points)));
     }
 
     return bb;
@@ -99,31 +99,30 @@ Rectangle::Rectangle(
     center_ = center;
     radius_ = sqrt(length_x * length_x + length_y * length_y) / 2;
     angle_ = angle;
-    polygon_.count = 4;
-    polygon_.points[0] = cogip_defs::Coords(
+    polygon_.push_back(cogip_defs::Coords(
         (center.x() - length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() - length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() - length_x / 2) * sin(DEG2RAD(angle)) +
             (center.y() - length_y / 2) * cos(DEG2RAD(angle))
-    );
-    polygon_.points[1] = cogip_defs::Coords(
+    ));
+    polygon_.push_back(cogip_defs::Coords(
         (center.x() - length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() + length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() - length_x / 2) * sin(DEG2RAD(angle)) +
             (center.y() + length_y / 2) * cos(DEG2RAD(angle))
-    );
-    polygon_.points[2] = cogip_defs::Coords(
+    ));
+    polygon_.push_back(cogip_defs::Coords(
         (center.x() + length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() + length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() + length_x / 2) * sin(DEG2RAD(angle)) +
             (center.y() + length_y / 2) * cos(DEG2RAD(angle))
-    );
-    polygon_.points[3] = cogip_defs::Coords(
+    ));
+    polygon_.push_back(cogip_defs::Coords(
         (center.x() + length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() - length_y / 2) * sin(DEG2RAD(angle)),
         (center.x() + length_x / 2) * sin(DEG2RAD(angle)) +
             (center.y() - length_y / 2) * cos(DEG2RAD(angle))
-    );
+    ));
 }
 
 void Rectangle::print_json(cogip::tracefd::File &out) const
@@ -241,18 +240,17 @@ bool Circle::is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_de
 Polygon::Polygon(const std::list<cogip_defs::Coords> *points)
     : Obstacle(cogip_defs::Coords(0.0, 0.0), 0, 0)
 {
-    polygon_.count = 0;
     if (points) {
-        for (auto point: *points) {
-            polygon_.points[polygon_.count++] = point;
+        for (const auto &point: *points) {
+            polygon_.push_back(point);
         }
     }
 }
 
 bool Polygon::is_point_inside(const cogip_defs::Coords &p) const {
-    for (uint8_t i = 0; i < polygon_.count; i++) {
-        cogip_defs::Coords a = polygon_.points[i];
-        cogip_defs::Coords b = (i == (polygon_.count - 1) ? polygon_.points[0] : polygon_.points[i + 1]);
+    for (size_t i = 0; i < polygon_.size(); i++) {
+        cogip_defs::Coords a = polygon_[i];
+        cogip_defs::Coords b = (i == (polygon_.size() - 1) ? polygon_[0] : polygon_[i + 1]);
         cogip_defs::Coords ab(b.x() - a.x(), b.y() - a.y());
         cogip_defs::Coords ap(p.x() - a.x(), p.y() - a.y());
 
@@ -263,32 +261,22 @@ bool Polygon::is_point_inside(const cogip_defs::Coords &p) const {
     return true;
 }
 
-static int8_t _get_point_index_in_polygon(const polygon_t *polygon, const cogip_defs::Coords &p)
-{
-    for (uint8_t i = 0; i < polygon->count; i++) {
-        if ((polygon->points[i].x() == p.x()) && (polygon->points[i].y() == p.y())) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 bool Polygon::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
     /* Check if that segment crosses a polygon */
-    for (int i = 0; i < polygon_.count; i++) {
-        const cogip_defs::Coords &p_next = ((i + 1 == polygon_.count) ? polygon_.points[0] : polygon_.points[i + 1]);
+    for (size_t i = 0; i < polygon_.size(); i++) {
+        const cogip_defs::Coords &p_next = ((i + 1 == polygon_.size()) ? polygon_[0] : polygon_[i + 1]);
 
-        if (_is_segment_crossing_segment(a, b, polygon_.points[i], p_next)) {
+        if (_is_segment_crossing_segment(a, b, polygon_[i], p_next)) {
             return true;
         }
 
         /* If A and B are vertices of the polygon */
-        int8_t index = _get_point_index_in_polygon(&polygon_, a);
-        int8_t index2 = _get_point_index_in_polygon(&polygon_, b);
+        int index = polygon_.point_index(a);
+        int index2 = polygon_.point_index(b);
         /* Consecutive vertices: no collision */
-        if (((index == 0) && (index2 == (polygon_.count - 1)))
-            || ((index2 == 0) && (index == (polygon_.count - 1)))) {
+        if (((index == 0) && (index2 == ((int)polygon_.size() - 1)))
+            || ((index2 == 0) && (index == ((int)polygon_.size() - 1)))) {
             continue;
         }
         /* If not consecutive vertices: collision */
@@ -297,7 +285,7 @@ bool Polygon::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs:
         }
 
         /* If polygon vertice is on segment [AB] */
-        if (polygon_.points[i].on_segment(a, b)) {
+        if (polygon_[i].on_segment(a, b)) {
             return true;
         }
     }
@@ -310,11 +298,11 @@ cogip_defs::Coords Polygon::nearest_point(const cogip_defs::Coords &p) const
     double min = UINT32_MAX;
     cogip_defs::Coords tmp = p;
 
-    for (int j = 0; j < polygon_.count; j++) {
-        double distance = p.distance(polygon_.points[j]);
+    for (const auto &point: polygon_) {
+        double distance = p.distance(point);
         if (distance < min) {
             min = distance;
-            tmp = polygon_.points[j];
+            tmp = point;
         }
     }
 
@@ -329,14 +317,14 @@ void Polygon::print_json(cogip::tracefd::File &out) const
         center_.y(),
         angle_
         );
-    for (uint8_t i = 0; i < polygon_.count; i++) {
-        if (i > 0) {
+    for (auto it = polygon_.begin(); it != polygon_.end(); it++) {
+        if (it != polygon_.begin()) {
             out.printf(",");
         }
         out.printf(
             "{\"x\":%.3lf,\"y\":%.3lf}",
-            polygon_.points[i].x(),
-            polygon_.points[i].y()
+            it->x(),
+            it->y()
             );
     }
     out.printf("]}");
