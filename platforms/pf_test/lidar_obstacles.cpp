@@ -12,7 +12,7 @@
 
 // Application includes
 #include "lidar_utils.hpp"
-#include "obstacles/obstacles.hpp"
+#include "obstacles/Circle.hpp"
 #include "platform.hpp"
 
 // Number of angles without obstacle to ignore between two angles with obstacle

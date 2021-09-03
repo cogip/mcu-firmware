@@ -99,23 +99,6 @@ protected:
     double angle_;                   //// absolute angle
 };
 
-class Circle : public Obstacle {
-public:
-    Circle(const cogip::cogip_defs::Coords &center, double radius, double angle);
-
-    bool is_point_inside(const cogip_defs::Coords &p) const;
-    bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
-    cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const;
-    void print_json(cogip::tracefd::File &out) const;
-
-private:
-    /// @brief Check if a line defined by two points A,B is crossing a circle.
-    /// @param[in]   a           point A
-    /// @param[in]   b           point B
-    /// @return                  true if (AB) crosses circle, false otherwise
-    bool is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
-};
-
 /// @brief Check if the given point is inside an obstacle
 /// @param[in]   p           point to check
 /// @param[in]   filter      obstacle to filter
