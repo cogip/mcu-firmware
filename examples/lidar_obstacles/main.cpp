@@ -36,11 +36,11 @@ static bool trace_on = false;
 
 static void _init_border_obstacles(void)
 {
-    cogip::obstacles::list *border_obstacles = new cogip::obstacles::list();
-    border_obstacles->push_back(new cogip::obstacles::rectangle({ 0, -5 }, 0, 3000, 10));
-    border_obstacles->push_back(new cogip::obstacles::rectangle({ 0, 2005 }, 0, 3000, 10));
-    border_obstacles->push_back(new cogip::obstacles::rectangle({ -1505, 1000 }, 0, 10, 2000));
-    border_obstacles->push_back(new cogip::obstacles::rectangle({ 1505, 1000 }, 0, 10, 2000));
+    cogip::obstacles::List *border_obstacles = new cogip::obstacles::List();
+    border_obstacles->push_back(new cogip::obstacles::Rectangle({ 0, -5 }, 0, 3000, 10));
+    border_obstacles->push_back(new cogip::obstacles::Rectangle({ 0, 2005 }, 0, 3000, 10));
+    border_obstacles->push_back(new cogip::obstacles::Rectangle({ -1505, 1000 }, 0, 10, 2000));
+    border_obstacles->push_back(new cogip::obstacles::Rectangle({ 1505, 1000 }, 0, 10, 2000));
 }
 
 static int _cmd_trace_on_off(int argc, char **argv)

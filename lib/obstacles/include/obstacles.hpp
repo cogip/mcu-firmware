@@ -51,16 +51,16 @@ namespace cogip {
 
 namespace obstacles {
 
-class obstacle {
+class Obstacle {
 public:
     /// @brief Constructor
     /// @param[in]   center     obstacle center
     /// @param[in]   radius     obstacle circumscribed circle radius
     /// @param[in]   angle      absolute angle
-    obstacle(const cogip_defs::Coords &center, double radius, double angle);
+    Obstacle(const cogip_defs::Coords &center, double radius, double angle);
 
     /// @brief Destructor
-    virtual ~obstacle() {};
+    virtual ~Obstacle() {};
 
     /// @brief Return bounding box of an obstacle. This bounding box has nb_vertices
     ///        and has a radius of ((1 + radius_margin) * radius).
@@ -77,7 +77,6 @@ public:
     /// @brief Check if a segment defined by two points A,B is crossing an obstacle.
     /// @param[in]   a               point A
     /// @param[in]   b               point B
-    /// @param[in]   obstacle        obstacle
     /// @return                      true if [AB] crosses obstacle, false otherwise
     virtual bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const = 0;
 
@@ -105,9 +104,9 @@ protected:
     double angle_;                   //// absolute angle
 };
 
-class circle : public obstacle {
+class Circle : public Obstacle {
 public:
-    circle(const cogip::cogip_defs::Coords &center, double radius, double angle);
+    Circle(const cogip::cogip_defs::Coords &center, double radius, double angle);
 
     bool is_point_inside(const cogip_defs::Coords &p) const;
     bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
@@ -122,9 +121,9 @@ private:
     bool is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
 };
 
-class polygon : public obstacle {
+class Polygon : public Obstacle {
 public:
-    polygon(const std::list<cogip_defs::Coords> *points = nullptr);
+    Polygon(const std::list<cogip_defs::Coords> *points = nullptr);
 
     bool is_point_inside(const cogip_defs::Coords &p) const;
     bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
@@ -135,9 +134,9 @@ protected:
     polygon_t polygon_;
 };
 
-class rectangle : public polygon {
+class Rectangle : public Polygon {
 public:
-    rectangle(const cogip_defs::Coords &center, double angle,
+    Rectangle(const cogip_defs::Coords &center, double angle,
               double length_x, double length_y);
 
     void print_json(cogip::tracefd::File &out) const;
@@ -147,13 +146,13 @@ private:
     double length_y_;        /// length on Y axis when angle = 0
 };
 
-class list: public std::list<obstacle *> {
+class List: public std::list<Obstacle *> {
 public:
-    list(uint32_t default_circle_radius = 0,
+    List(uint32_t default_circle_radius = 0,
          uint32_t default_rectangle_width = 0,
          uint32_t min_distance = 0,
          uint32_t max_distance = 0);
-    ~list();
+    ~List();
 
     uint32_t default_circle_radius() { return default_circle_radius_; };
     uint32_t default_rectangle_width() { return default_rectangle_width_; };
@@ -176,7 +175,7 @@ private:
 /// @param[in]   p           point to check
 /// @param[in]   filter      obstacle to filter
 /// @return                  true if point is inside, false otherwise
-bool is_point_in_obstacles(const cogip_defs::Coords &p, const obstacle *filter);
+bool is_point_in_obstacles(const cogip_defs::Coords &p, const Obstacle *filter);
 
 /// @brief Print all obstacles from all lists
 /// @param[in]   out         trace file descriptor

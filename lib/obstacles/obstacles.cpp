@@ -16,7 +16,7 @@ namespace cogip {
 
 namespace obstacles {
 
-static std::set<list const *> all_obstacles;
+static std::set<List const *> all_obstacles;
 
 /**
  * @brief Check if a segment defined by two points A,B is crossing line
@@ -66,14 +66,14 @@ static bool _is_segment_crossing_segment(
     return true;
 }
 
-// obstacle
-obstacle::obstacle(
+// Obstacle
+Obstacle::Obstacle(
     const cogip_defs::Coords &center, double radius, double angle)
     : center_(center), radius_(radius), angle_(angle)
 {
 }
 
-polygon_t obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) const
+polygon_t Obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) const
 {
     double radius = radius_ * (1 + radius_margin);
 
@@ -90,8 +90,8 @@ polygon_t obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) cons
     return bb;
 }
 
-// rectangle
-rectangle::rectangle(
+// Rectangle
+Rectangle::Rectangle(
     const cogip_defs::Coords &center, double angle,
     double length_x, double length_y)
     : length_x_(length_x), length_y_(length_y)
@@ -126,7 +126,7 @@ rectangle::rectangle(
     );
 }
 
-void rectangle::print_json(cogip::tracefd::File &out) const
+void Rectangle::print_json(cogip::tracefd::File &out) const
 {
     out.printf(
         "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"length_x\":%.3lf,\"length_y\":%.3lf}",
@@ -139,12 +139,12 @@ void rectangle::print_json(cogip::tracefd::File &out) const
 }
 
 // circle
-circle::circle(const cogip_defs::Coords &center, double radius, double angle)
-    : obstacle(center, radius, angle)
+Circle::Circle(const cogip_defs::Coords &center, double radius, double angle)
+    : Obstacle(center, radius, angle)
 {
 }
 
-bool circle::is_point_inside(const cogip_defs::Coords &p) const {
+bool Circle::is_point_inside(const cogip_defs::Coords &p) const {
     double d = center_.distance(p);
 
     if (d * d > radius_ * radius_) {
@@ -155,7 +155,7 @@ bool circle::is_point_inside(const cogip_defs::Coords &p) const {
     }
 }
 
-bool circle::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
+bool Circle::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
     const cogip_defs::Coords &c = center_;
 
@@ -183,7 +183,7 @@ bool circle::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::
     return false;
 }
 
-cogip_defs::Coords circle::nearest_point(const cogip_defs::Coords &p) const
+cogip_defs::Coords Circle::nearest_point(const cogip_defs::Coords &p) const
 {
     cogip_defs::Coords vect(
         p.x() - center_.x(),
@@ -198,7 +198,7 @@ cogip_defs::Coords circle::nearest_point(const cogip_defs::Coords &p) const
     );
 }
 
-void circle::print_json(cogip::tracefd::File &out) const
+void Circle::print_json(cogip::tracefd::File &out) const
 {
     out.printf(
         "{\"x\":%.3lf,\"y\":%.3lf,\"radius\":%.3lf}",
@@ -208,7 +208,7 @@ void circle::print_json(cogip::tracefd::File &out) const
         );
 }
 
-bool circle::is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
+bool Circle::is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
     const cogip_defs::Coords &c = center_;
 
@@ -237,9 +237,9 @@ bool circle::is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_de
     }
 }
 
-// polygon
-polygon::polygon(const std::list<cogip_defs::Coords> *points)
-    : obstacle(cogip_defs::Coords(0.0, 0.0), 0, 0)
+// Polygon
+Polygon::Polygon(const std::list<cogip_defs::Coords> *points)
+    : Obstacle(cogip_defs::Coords(0.0, 0.0), 0, 0)
 {
     polygon_.count = 0;
     if (points) {
@@ -249,7 +249,7 @@ polygon::polygon(const std::list<cogip_defs::Coords> *points)
     }
 }
 
-bool polygon::is_point_inside(const cogip_defs::Coords &p) const {
+bool Polygon::is_point_inside(const cogip_defs::Coords &p) const {
     for (uint8_t i = 0; i < polygon_.count; i++) {
         cogip_defs::Coords a = polygon_.points[i];
         cogip_defs::Coords b = (i == (polygon_.count - 1) ? polygon_.points[0] : polygon_.points[i + 1]);
@@ -273,7 +273,7 @@ static int8_t _get_point_index_in_polygon(const polygon_t *polygon, const cogip_
     return -1;
 }
 
-bool polygon::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
+bool Polygon::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
     /* Check if that segment crosses a polygon */
     for (int i = 0; i < polygon_.count; i++) {
@@ -305,7 +305,7 @@ bool polygon::is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs:
     return false;
 }
 
-cogip_defs::Coords polygon::nearest_point(const cogip_defs::Coords &p) const
+cogip_defs::Coords Polygon::nearest_point(const cogip_defs::Coords &p) const
 {
     double min = UINT32_MAX;
     cogip_defs::Coords tmp = p;
@@ -321,7 +321,7 @@ cogip_defs::Coords polygon::nearest_point(const cogip_defs::Coords &p) const
     return tmp;
 }
 
-void polygon::print_json(cogip::tracefd::File &out) const
+void Polygon::print_json(cogip::tracefd::File &out) const
 {
     out.printf(
         "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"points\":[",
@@ -342,8 +342,8 @@ void polygon::print_json(cogip::tracefd::File &out) const
     out.printf("]}");
 }
 
-// list
-list::list(
+// List
+List::List(
     uint32_t default_circle_radius,
     uint32_t default_rectangle_width,
     uint32_t min_distance,
@@ -354,20 +354,20 @@ list::list(
     all_obstacles.insert(this);
 }
 
-list::~list()
+List::~List()
 {
     all_obstacles.erase(this);
 }
 
-void list::clear()
+void List::clear()
 {
     for (auto obs: *this) {
         delete obs;
     }
-    std::list<obstacle *>::clear();
+    std::list<Obstacle *>::clear();
 }
 
-void list::print_json(cogip::tracefd::File &out) const
+void List::print_json(cogip::tracefd::File &out) const
 {
     size_t i = 0;
     for (auto obs: *this) {
@@ -397,7 +397,7 @@ void print_all_json(cogip::tracefd::File &out)
     out.printf("]");
 }
 
-bool is_point_in_obstacles(const cogip_defs::Coords &p, const obstacle *filter)
+bool is_point_in_obstacles(const cogip_defs::Coords &p, const Obstacle *filter)
 {
     for (auto obstacles: all_obstacles) {
         for (auto obstacle: *obstacles) {
