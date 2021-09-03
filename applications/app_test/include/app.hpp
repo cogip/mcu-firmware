@@ -1,7 +1,7 @@
 #pragma once
 
 // Project includes
-#include "obstacles/obstacles.hpp"
+#include "obstacles/Polygon.hpp"
 
 /*
  * Machine parameters
