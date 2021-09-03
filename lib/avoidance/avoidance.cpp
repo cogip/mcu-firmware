@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 /* Project includes */
+#include "app.hpp"
 #include "avoidance.hpp"
 #include "obstacles.hpp"
 #include "platform.hpp"
@@ -11,27 +12,6 @@
 
 #define START_INDEX     0
 #define FINISH_INDEX    1
-
-static const std::list<cogip::cogip_defs::Coords> border_points = {
-    {
-        AVOIDANCE_BORDER_X_MIN,
-        AVOIDANCE_BORDER_Y_MIN
-    },
-    {
-        AVOIDANCE_BORDER_X_MAX,
-        AVOIDANCE_BORDER_Y_MIN
-    },
-    {
-        AVOIDANCE_BORDER_X_MAX,
-        AVOIDANCE_BORDER_Y_MAX
-    },
-    {
-        AVOIDANCE_BORDER_X_MIN,
-        AVOIDANCE_BORDER_Y_MAX
-    },
-};
-
-static const cogip::obstacles::Polygon _borders(&border_points);
 
 /* Array of valid points */
 static pose_t _valid_points[GRAPH_MAX_VERTICES];
@@ -81,12 +61,13 @@ static bool _is_avoidance_computed = false;
 static void _validate_obstacles_points(void)
 {
     cogip::obstacles::List *obstacles_dyn = pf_get_dyn_obstacles();
+    const cogip::obstacles::Polygon *borders = app_get_borders();
 
     /* For each obstacle */
     for (auto obstacle: *obstacles_dyn) {
 
-        /* Check if obstacle center is inside _borders */
-        if (!_borders.is_point_inside(obstacle->center())) {
+        /* Check if obstacle center is inside borders */
+        if (!borders->is_point_inside(obstacle->center())) {
             continue;
         }
 
@@ -99,7 +80,7 @@ static void _validate_obstacles_points(void)
 
             /* Validate bounding box points */
             for (uint8_t j = 0; j < bb.count; j++) {
-                if (_borders.is_point_inside(bb.points[j])
+                if (borders->is_point_inside(bb.points[j])
                     && (!cogip::obstacles::is_point_in_obstacles(bb.points[j], nullptr))) {
                     _valid_points[_valid_points_count++] = { .coords = bb.points[j], .O = 0 };
                 }
@@ -272,8 +253,9 @@ bool avoidance_build_graph(const pose_t *s, const pose_t *f)
     start_pose = *s;
     finish_pose = *f;
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
+    const cogip::obstacles::Polygon *borders = app_get_borders();
 
-    if (!_borders.is_point_inside(finish_pose.coords)) {
+    if (!borders->is_point_inside(finish_pose.coords)) {
         _is_avoidance_computed = false;
         goto update_graph_error_finish_pose;
     }
@@ -308,12 +290,13 @@ bool avoidance_check_recompute(const pose_t *start,
 {
     /* Get dynamic obstacle list */
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
+    const cogip::obstacles::Polygon *borders = app_get_borders();
 
     /* Check if that segment crosses a polygon */
     for (auto obstacle: *obstacles) {
 
-        /* Check if obstacle is inside _borders */
-        if (!_borders.is_point_inside(obstacle->center())) {
+        /* Check if obstacle is inside borders */
+        if (!borders->is_point_inside(obstacle->center())) {
             continue;
         }
         /* Check if start to finish pose segment is crossing an obtacle */
