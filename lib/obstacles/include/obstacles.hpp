@@ -122,7 +122,7 @@ private:
     bool is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
 };
 
-class Polygon : public Obstacle {
+class Polygon : public Obstacle, public cogip_defs::Polygon {
 public:
     Polygon(const std::list<cogip_defs::Coords> *points = nullptr);
 
@@ -130,9 +130,6 @@ public:
     bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const;
     cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const;
     void print_json(cogip::tracefd::File &out) const;
-
-protected:
-    cogip_defs::Polygon polygon_;
 };
 
 class Rectangle : public Polygon {
