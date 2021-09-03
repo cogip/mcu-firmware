@@ -131,18 +131,6 @@ public:
     void print_json(cogip::tracefd::File &out) const;
 };
 
-class Rectangle : public Polygon {
-public:
-    Rectangle(const cogip_defs::Coords &center, double angle,
-              double length_x, double length_y);
-
-    void print_json(cogip::tracefd::File &out) const;
-
-private:
-    double length_x_;        /// length on X axis when angle = 0
-    double length_y_;        /// length on Y axis when angle = 0
-};
-
 /// @brief Check if the given point is inside an obstacle
 /// @param[in]   p           point to check
 /// @param[in]   filter      obstacle to filter
