@@ -11,14 +11,10 @@
 
 #pragma once
 
-#include "obstacles/obstacles.hpp"
+#include "obstacles/Obstacle.hpp"
 
 // System includes
 #include <list>
-
-// Project includes
-#include "cogip_defs/Coords.hpp"
-#include "cogip_defs/Polygon.hpp"
 
 namespace cogip {
 

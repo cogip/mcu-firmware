@@ -20,7 +20,7 @@
 #include "riot/mutex.hpp"
 
 // Project includes
-#include "obstacles/obstacles.hpp"
+#include "obstacles/Obstacle.hpp"
 #include "tracefd/File.hpp"
 
 namespace cogip {

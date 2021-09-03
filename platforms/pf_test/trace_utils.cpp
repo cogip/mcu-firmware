@@ -6,7 +6,6 @@
 // Application includes
 #include "tracefd/tracefd.hpp"
 #include "platform.hpp"
-#include "obstacles/obstacles.hpp"
 
 /* Trace filename */
 #define TRACE_FILE "trace.txt"

@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "obstacles/obstacles.hpp"
+#include "obstacles/Obstacle.hpp"
 
 namespace cogip {
 
