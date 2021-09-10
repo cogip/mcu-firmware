@@ -33,6 +33,7 @@ public:
     void print_json(cogip::tracefd::File &out) const override;
 
 private:
+    double angle_;                        ///< angle of the rectangle
     double length_x_;                     ///< length on X axis when angle = 0
     double length_y_;                     ///< length on Y axis when angle = 0
 };

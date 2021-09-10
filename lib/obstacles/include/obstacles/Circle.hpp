@@ -23,8 +23,7 @@ public:
     /// Constructor
     Circle(
         const cogip::cogip_defs::Coords &center, ///< [in] center of the circle
-        double radius,                           ///< [in] radius of the circle
-        double angle                             ///< [in] angle of the obstacle
+        double radius                            ///< [in] radius of the circle
         );
 
     bool is_point_inside(const cogip_defs::Coords &p) const override;

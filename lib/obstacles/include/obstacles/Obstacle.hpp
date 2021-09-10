@@ -29,8 +29,7 @@ public:
     /// Constructor
     Obstacle(
         const cogip_defs::Coords &center, ///< [in] obstacle center
-        double radius,                    ///< [in] obstacle circumscribed circle radius
-        double angle                      ///< [in] absolute angle
+        double radius                     ///< [in] obstacle circumscribed circle radius
         );
 
     /// Destructor
@@ -74,13 +73,9 @@ public:
     /// Return obstacle circumscribed circle radius.
     double radius() const { return radius_; };
 
-    /// Return absolute angle.
-    double angle() const { return angle_; };
-
 protected:
     cogip_defs::Coords center_;           ///< obstacle center
     double radius_;                       ///< obstacle circumscribed circle radius
-    double angle_;                        ///< absolute angle
 };
 
 } // namespace obstacles

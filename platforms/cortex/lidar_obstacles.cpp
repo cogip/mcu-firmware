@@ -125,7 +125,7 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstac
 
         double radius = obstacles->default_circle_radius();
 
-        obstacles->push_back(new cogip::obstacles::Circle(center, radius, 0));
+        obstacles->push_back(new cogip::obstacles::Circle(center, radius));
     }
 }
 
