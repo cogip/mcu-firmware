@@ -756,6 +756,7 @@ WARN_LOGFILE           =
 INPUT                  = \
                          ../../controllers \
                          ../../drivers \
+                         ../../lib \
                          ../../planners \
                          ../../platforms
 
