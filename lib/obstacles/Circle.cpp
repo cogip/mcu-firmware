@@ -7,8 +7,8 @@ namespace cogip {
 
 namespace obstacles {
 
-Circle::Circle(const cogip_defs::Coords &center, double radius, double angle)
-    : Obstacle(center, radius, angle)
+Circle::Circle(const cogip_defs::Coords &center, double radius)
+    : Obstacle(center, radius)
 {
 }
 

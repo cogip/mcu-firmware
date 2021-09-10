@@ -13,11 +13,10 @@ namespace obstacles {
 Rectangle::Rectangle(
     const cogip_defs::Coords &center, double angle,
     double length_x, double length_y)
-    : length_x_(length_x), length_y_(length_y)
+    : angle_(angle), length_x_(length_x), length_y_(length_y)
 {
     center_ = center;
     radius_ = sqrt(length_x * length_x + length_y * length_y) / 2;
-    angle_ = angle;
     push_back(cogip_defs::Coords(
         (center.x() - length_x / 2) * cos(DEG2RAD(angle)) -
             (center.y() - length_y / 2) * sin(DEG2RAD(angle)),

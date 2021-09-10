@@ -11,8 +11,8 @@ namespace cogip {
 namespace obstacles {
 
 Obstacle::Obstacle(
-    const cogip_defs::Coords &center, double radius, double angle)
-    : center_(center), radius_(radius), angle_(angle)
+    const cogip_defs::Coords &center, double radius)
+    : center_(center), radius_(radius)
 {
 }
 

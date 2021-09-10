@@ -47,7 +47,7 @@ static bool _is_segment_crossing_segment(
 }
 
 Polygon::Polygon(const std::list<cogip_defs::Coords> *points)
-    : Obstacle(cogip_defs::Coords(0.0, 0.0), 0, 0)
+    : Obstacle(cogip_defs::Coords(0.0, 0.0), 0)
 {
     if (points) {
         for (const auto &point: *points) {
@@ -121,10 +121,9 @@ cogip_defs::Coords Polygon::nearest_point(const cogip_defs::Coords &p) const
 void Polygon::print_json(cogip::tracefd::File &out) const
 {
     out.printf(
-        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"points\":[",
+        "{\"x\":%.3lf,\"y\":%.3lf,\"points\":[",
         center_.x(),
-        center_.y(),
-        angle_
+        center_.y()
         );
     for (auto it = begin(); it != end(); it++) {
         if (it != begin()) {
