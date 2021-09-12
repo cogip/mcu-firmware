@@ -1,0 +1,16 @@
+digraph "Drivers"
+{
+  bgcolor="transparent";
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=box];
+  rankdir=LR;
+  Node3 [label="LDS01 LiDAR driver",height=0.2,width=0.4,color="black",URL="$group__driver__lds01__dma.html",tooltip="LDS01 (aka HLS-LFCD2) LiDAR driver."];
+  Node5 [label="Servomotors SD21 board\l driver",height=0.2,width=0.4,color="black",URL="$group__sd21.html",tooltip="Servomotors SD21 board driver."];
+  Node1 [label="Drivers",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 [label="LDS01 LiDAR driver",height=0.2,width=0.4,color="black",URL="$group__driver__lds01.html",tooltip="LDS01 (aka HLS-LFCD2) LiDAR driver."];
+  Node4 [label="switch PCA9548 driver",height=0.2,width=0.4,color="black",URL="$group__I2C.html",tooltip="I2C switch PCA9548 driver."];
+  Node1->Node2 [shape=plaintext, dir="back", style="solid"];
+  Node1->Node3 [shape=plaintext, dir="back", style="solid"];
+  Node1->Node4 [shape=plaintext, dir="back", style="solid"];
+  Node1->Node5 [shape=plaintext, dir="back", style="solid"];
+}

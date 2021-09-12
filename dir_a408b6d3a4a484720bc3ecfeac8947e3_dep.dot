@@ -1,0 +1,13 @@
+digraph "sys" {
+  bgcolor=transparent;
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_a408b6d3a4a484720bc3ecfeac8947e3 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_a408b6d3a4a484720bc3ecfeac8947e3.html"];
+    dir_a408b6d3a4a484720bc3ecfeac8947e3 [shape=plaintext label="sys"];
+    dir_1f5bd6bb2d2367b2350e8a0b9980943f [shape=box label="shell_menu" color="red" fillcolor="white" style="filled" URL="dir_1f5bd6bb2d2367b2350e8a0b9980943f.html"];
+    dir_19e22b60f37a90798854f6aaede0dc06 [shape=box label="shmem" color="red" fillcolor="white" style="filled" URL="dir_19e22b60f37a90798854f6aaede0dc06.html"];
+    dir_eb029e738dbe02df480f19e94dbe34e4 [shape=box label="tracefd" color="red" fillcolor="white" style="filled" URL="dir_eb029e738dbe02df480f19e94dbe34e4.html"];
+  }
+}

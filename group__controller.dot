@@ -1,0 +1,10 @@
+digraph "Common"
+{
+  bgcolor="transparent";
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=box];
+  rankdir=LR;
+  Node2 [label="Motion controllers",height=0.2,width=0.4,color="black",URL="$group__controllers.html",tooltip=" "];
+  Node1 [label="Common",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Actuators motion speed and position controller."];
+  Node2->Node1 [shape=plaintext, dir="back", style="solid"];
+}

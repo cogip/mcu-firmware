@@ -1,0 +1,13 @@
+digraph "controllers" {
+  bgcolor=transparent;
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_87b6ed4386158a4d6cd0ecd5fb5bd5c2 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_87b6ed4386158a4d6cd0ecd5fb5bd5c2.html"];
+    dir_87b6ed4386158a4d6cd0ecd5fb5bd5c2 [shape=plaintext label="controllers"];
+    dir_a82ce13c1d67d5a20951674cd6ee18e7 [shape=box label="common_controller" color="red" fillcolor="white" style="filled" URL="dir_a82ce13c1d67d5a20951674cd6ee18e7.html"];
+    dir_c5424d814684ccb69990ace141dc03c3 [shape=box label="quadpid" color="red" fillcolor="white" style="filled" URL="dir_c5424d814684ccb69990ace141dc03c3.html"];
+  }
+  dir_c5424d814684ccb69990ace141dc03c3->dir_a82ce13c1d67d5a20951674cd6ee18e7 [headlabel="1", labeldistance=1.5 headhref="dir_000009_000001.html"];
+}

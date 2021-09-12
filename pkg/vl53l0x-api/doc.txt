@@ -1,6 +1,0 @@
-/**
- * @defgroup pkg_vl53l0x-api   vl53l0x ST API
- * @ingroup  pkg
- * @brief    Provides the vl53l0x ST API already patched for RIOT
- * @see      https://github.com/gdoffe/vl53l0x-api
- */

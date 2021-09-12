@@ -1,0 +1,12 @@
+digraph "Test platform"
+{
+  bgcolor="transparent";
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=box];
+  rankdir=LR;
+  Node3 [label="Cortex platform",height=0.2,width=0.4,color="black",URL="$group__platform__cortex.html",tooltip="COGIP robotic base platform definition."];
+  Node1 [label="Test platform",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="COGIP test platform definition."];
+  Node2 [label="Hardware platform",height=0.2,width=0.4,color="black",URL="$group__platforms.html",tooltip=" "];
+  Node2->Node1 [shape=plaintext, dir="back", style="solid"];
+  Node1->Node3 [shape=plaintext, label="pf_sensor_t", color="orange", dir="none", style="dashed"];
+}

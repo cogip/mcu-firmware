@@ -1,3 +1,0 @@
-USEMODULE_INCLUDES_shell_quadpid := $(LAST_MAKEFILEDIR)/include
-USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_shell_quadpid)
-

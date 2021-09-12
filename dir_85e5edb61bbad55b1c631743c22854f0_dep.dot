@@ -1,0 +1,14 @@
+digraph "lib/obstacles/include/obstacles" {
+  bgcolor=transparent;
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_bf7f9e32951bd82ab92ae7d6f94847de {
+    graph [ bgcolor="#ddddee", pencolor="black", label="include" fontname="Helvetica", fontsize="10", URL="dir_bf7f9e32951bd82ab92ae7d6f94847de.html"]
+  dir_85e5edb61bbad55b1c631743c22854f0 [shape=box, label="obstacles", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_85e5edb61bbad55b1c631743c22854f0.html"];
+  }
+  dir_a408b6d3a4a484720bc3ecfeac8947e3 [shape=box label="sys" color="red" URL="dir_a408b6d3a4a484720bc3ecfeac8947e3.html"];
+  dir_0c3eddcb6e07b193326c2c00e3955a2a [shape=box label="cogip_defs" color="red" URL="dir_0c3eddcb6e07b193326c2c00e3955a2a.html"];
+  dir_85e5edb61bbad55b1c631743c22854f0->dir_a408b6d3a4a484720bc3ecfeac8947e3 [headlabel="3", labeldistance=1.5 headhref="dir_000031_000008.html"];
+  dir_85e5edb61bbad55b1c631743c22854f0->dir_0c3eddcb6e07b193326c2c00e3955a2a [headlabel="3", labeldistance=1.5 headhref="dir_000031_000005.html"];
+}

@@ -1,3 +1,0 @@
-USEMODULE += shell_menu
-USEMODULE += tracefd
-

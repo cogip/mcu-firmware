@@ -1,3 +1,0 @@
-USEMODULE += path
-USEMODULE += avoidance
-USEMODULE += tracefd

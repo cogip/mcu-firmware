@@ -1,7 +1,0 @@
-ifeq ($(CPU),native)
-	USEMODULE += shmem
-else
-	FEATURES_REQUIRED += periph_dma
-endif
-
-FEATURES_REQUIRED += periph_uart

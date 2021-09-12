@@ -1,9 +1,0 @@
-FEATURES_REQUIRED += periph_i2c
-
-USEMODULE += vl53l0x-api-core
-USEMODULE += vl53l0x-api-platform
-USEMODULE += vl53l0x-api-contrib
-
-ifeq ($(CPU),native)
-	USEMODULE += shmem
-endif

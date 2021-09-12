@@ -1,0 +1,14 @@
+digraph "lib/avoidance/include" {
+  bgcolor=transparent;
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_f57e433e13174b372cd029d1fbe06e9a {
+    graph [ bgcolor="#ddddee", pencolor="black", label="avoidance" fontname="Helvetica", fontsize="10", URL="dir_f57e433e13174b372cd029d1fbe06e9a.html"]
+  dir_da7720d374a03ee631a9b5a0a632d065 [shape=box, label="include", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_da7720d374a03ee631a9b5a0a632d065.html"];
+  }
+  dir_a408b6d3a4a484720bc3ecfeac8947e3 [shape=box label="sys" color="red" URL="dir_a408b6d3a4a484720bc3ecfeac8947e3.html"];
+  dir_0c3eddcb6e07b193326c2c00e3955a2a [shape=box label="cogip_defs" color="red" URL="dir_0c3eddcb6e07b193326c2c00e3955a2a.html"];
+  dir_da7720d374a03ee631a9b5a0a632d065->dir_a408b6d3a4a484720bc3ecfeac8947e3 [headlabel="1", labeldistance=1.5 headhref="dir_000026_000008.html"];
+  dir_da7720d374a03ee631a9b5a0a632d065->dir_0c3eddcb6e07b193326c2c00e3955a2a [headlabel="1", labeldistance=1.5 headhref="dir_000026_000005.html"];
+}

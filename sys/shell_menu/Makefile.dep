@@ -1,4 +1,0 @@
-USEMODULE += shell
-USEMODULE += shell_commands
-USEMODULE += utils
-USEMODULE += tracefd
