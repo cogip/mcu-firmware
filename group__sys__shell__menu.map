@@ -1,0 +1,6 @@
+<map id="Shell menu" name="Shell menu">
+<area shape="rect" id="node1" href="$group__sys.html" title=" " alt="" coords="5,42,136,67"/>
+<area shape="rect" id="node4" title="Menus for shell." alt="" coords="185,42,280,67"/>
+<area shape="rect" id="node2" href="$group__sys__tracefd.html" title="Trace file descriptor module. This module provides an API to print traces on stderr,..." alt="" coords="364,5,513,45"/>
+<area shape="rect" id="node3" href="$group__lib__obstacles.html" title="Obstacles module." alt="" coords="369,70,508,95"/>
+</map>

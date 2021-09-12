@@ -1,0 +1,5 @@
+<map id="cogip::obstacles::Circle" name="cogip::obstacles::Circle">
+<area shape="rect" id="node1" title="Circle obstacle defined by its center and radius." alt="" coords="15,185,187,212"/>
+<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="5,109,197,136"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="30,5,173,47"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="cogip::cogip_defs::Polygon" name="cogip::cogip_defs::Polygon">
+<area shape="rect" id="node1" title="A polygon defined by a list of coordinates." alt="" coords="34,80,177,121"/>
+<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="12,169,199,196"/>
+<area shape="rect" id="node2" title=" " alt="" coords="22,5,189,32"/>
+<area shape="rect" id="node4" href="$classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Obstacle." alt="" coords="5,244,205,271"/>
+</map>

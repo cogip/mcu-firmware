@@ -1,0 +1,9 @@
+<map id="ctrl_configuration_t" name="ctrl_configuration_t">
+<area shape="rect" id="node1" title="Controller modes callbacks definitions." alt="" coords="5,229,152,256"/>
+<area shape="rect" id="node2" href="$structctrl__t.html" title="Controller default definition." alt="" coords="159,319,214,345"/>
+<area shape="rect" id="node3" href="$structctrl__control__t.html" title="Controller general structure." alt="" coords="185,229,292,256"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="89,96,231,137"/>
+<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="255,103,430,130"/>
+<area shape="rect" id="node6" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="271,5,414,47"/>
+<area shape="rect" id="node7" href="$structctrl__platform__configuration__t.html" title="Controllers pre and post callbacks for each mode." alt="" coords="316,229,527,256"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="5,39,197,65"/>
+<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Circle.html" title="Circle obstacle defined by its center and radius." alt="" coords="245,13,417,40"/>
+<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Polygon.html" title=" " alt="" coords="300,64,363,91"/>
+<area shape="rect" id="node4" href="$classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Obstacle." alt="" coords="465,5,665,32"/>
+<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title="A polygon defined by a list of coordinates." alt="" coords="494,57,637,98"/>
+<area shape="rect" id="node6" href="$classcogip_1_1obstacles_1_1List.html" title="List of obstacles." alt="" coords="486,123,645,149"/>
+</map>

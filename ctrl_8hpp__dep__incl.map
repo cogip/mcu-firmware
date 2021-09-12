@@ -1,0 +1,8 @@
+<map id="controllers/common_controller/include/ctrl.hpp" name="controllers/common_controller/include/ctrl.hpp">
+<area shape="rect" id="node1" title="Common controllers API and datas." alt="" coords="276,5,428,61"/>
+<area shape="rect" id="node2" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="216,109,373,151"/>
+<area shape="rect" id="node4" href="$cortex_2include_2platform_8hpp.html" title="Define hardware properties of Cortex platform. Units:" alt="" coords="5,206,187,247"/>
+<area shape="rect" id="node5" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="402,206,587,247"/>
+<area shape="rect" id="node6" href="$planner_8hpp.html" title="Common planner API and data." alt="" coords="449,109,615,151"/>
+<area shape="rect" id="node3" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="211,199,378,255"/>
+</map>

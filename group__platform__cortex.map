@@ -1,0 +1,5 @@
+<map id="Cortex platform" name="Cortex platform">
+<area shape="rect" id="node1" title="COGIP robotic base platform definition." alt="" coords="200,7,325,33"/>
+<area shape="rect" id="node2" href="$group__platforms__pf__test.html" title="COGIP test platform definition." alt="" coords="449,7,557,33"/>
+<area shape="rect" id="node3" href="$group__platforms.html" title=" " alt="" coords="5,7,151,33"/>
+</map>

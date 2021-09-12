@@ -1,0 +1,7 @@
+<map id="cogip::cogip_defs::Pose::set_coords" name="cogip::cogip_defs::Pose::set_coords">
+<area shape="rect" id="node1" title="Set coordinates." alt="" coords="5,71,148,112"/>
+<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Pose.html#a475ce5473bfd306d352a7a45e5e439a2" title="Return coordinates." alt="" coords="196,5,339,47"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Coords.html#ae6736852dc2d28c35bfdebbc3e8f24b5" title="Return X coordinate." alt="" coords="196,71,339,112"/>
+<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Coords.html#a6ab61e358c49f66805cca1957c20b2e2" title="Return Y coordinate." alt="" coords="196,136,339,177"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Coords.html#a6cc92701a0d2ee01f3f681e380899301" title="Constructor." alt="" coords="387,5,529,47"/>
+</map>

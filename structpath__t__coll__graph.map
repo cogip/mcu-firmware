@@ -1,0 +1,6 @@
+<map id="path_t" name="path_t">
+<area shape="rect" id="node1" title="Path type." alt="" coords="61,275,124,301"/>
+<area shape="rect" id="node2" href="$structpath__pose__t.html" title="Position type as used in path type." alt="" coords="42,185,143,212"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="5,96,180,123"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="21,5,164,47"/>
+</map>

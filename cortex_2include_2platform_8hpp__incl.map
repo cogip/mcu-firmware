@@ -1,0 +1,22 @@
+<map id="platforms/cortex/include/platform.hpp" name="platforms/cortex/include/platform.hpp">
+<area shape="rect" id="node1" title="Define hardware properties of Cortex platform. Units:" alt="" coords="305,5,486,47"/>
+<area shape="rect" id="node2" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="248,169,319,196"/>
+<area shape="rect" id="node4" href="$odometry_8hpp_source.html" title=" " alt="" coords="228,244,339,271"/>
+<area shape="rect" id="node9" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="159,95,261,121"/>
+<area shape="rect" id="node11" href="$List_8hpp.html" title="List obstacles class declaration." alt="" coords="649,169,787,196"/>
+<area shape="rect" id="node19" href="$path_8hpp.html" title="Public API for path module." alt="" coords="395,95,473,121"/>
+<area shape="rect" id="node20" href="$utils_8h_source.html" title=" " alt="" coords="469,169,532,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="89,244,160,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="365,319,431,345"/>
+<area shape="rect" id="node6" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="5,319,161,345"/>
+<area shape="rect" id="node7" href="$Pose_8hpp.html" title="Pose class declaration." alt="" coords="186,319,341,345"/>
+<area shape="rect" id="node8" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="384,393,553,420"/>
+<area shape="rect" id="node10" href="$pid_8h_source.html" title=" " alt="" coords="117,169,172,196"/>
+<area shape="rect" id="node12" title=" " alt="" coords="633,393,696,420"/>
+<area shape="rect" id="node13" title=" " alt="" coords="755,244,875,271"/>
+<area shape="rect" id="node14" title=" " alt="" coords="904,393,1023,420"/>
+<area shape="rect" id="node15" href="$Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="507,244,681,271"/>
+<area shape="rect" id="node17" href="$File_8hpp.html" title="File class declaration." alt="" coords="797,319,919,345"/>
+<area shape="rect" id="node16" href="$cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="506,319,682,345"/>
+<area shape="rect" id="node18" title=" " alt="" coords="821,393,879,420"/>
+</map>

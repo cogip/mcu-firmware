@@ -1,0 +1,11 @@
+<map id="controllers/quadpid/include/quadpid.hpp" name="controllers/quadpid/include/quadpid.hpp">
+<area shape="rect" id="node1" title="QuadPID controllers API and datas." alt="" coords="67,5,224,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="17,169,87,196"/>
+<area shape="rect" id="node3" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="74,95,145,121"/>
+<area shape="rect" id="node4" href="$odometry_8hpp_source.html" title=" " alt="" coords="119,169,230,196"/>
+<area shape="rect" id="node9" href="$pid_8h_source.html" title=" " alt="" coords="221,95,275,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,244,72,271"/>
+<area shape="rect" id="node6" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="97,244,253,271"/>
+<area shape="rect" id="node7" href="$Pose_8hpp.html" title="Pose class declaration." alt="" coords="277,244,432,271"/>
+<area shape="rect" id="node8" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="270,319,439,345"/>
+</map>

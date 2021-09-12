@@ -1,0 +1,12 @@
+<map id="ctrl_quadpid_t" name="ctrl_quadpid_t">
+<area shape="rect" id="node1" title="QuadPID controller specific structure based on ctrl_t." alt="" coords="1419,89,1533,116"/>
+<area shape="rect" id="node2" href="$structctrl__control__t.html" title="Controller general structure." alt="" coords="575,79,681,105"/>
+<area shape="rect" id="node8" href="$structctrl__t.html" title="Controller default definition." alt="" coords="835,47,890,73"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="213,41,356,82"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="197,108,372,135"/>
+<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="5,101,148,142"/>
+<area shape="rect" id="node6" href="$structctrl__platform__configuration__t.html" title="Controllers pre and post callbacks for each mode." alt="" coords="523,5,733,32"/>
+<area shape="rect" id="node7" href="$structctrl__configuration__t.html" title="Controller modes callbacks definitions." alt="" coords="1086,64,1233,91"/>
+<area shape="rect" id="node9" href="$structctrl__quadpid__parameters__t.html" title="QuadPID controller specific configuration." alt="" coords="1061,184,1257,211"/>
+<area shape="rect" id="node10" href="$structPID__t.html" title=" " alt="" coords="835,204,891,231"/>
+</map>

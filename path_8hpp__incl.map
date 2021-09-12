@@ -1,0 +1,9 @@
+<map id="lib/path/include/path.hpp" name="lib/path/include/path.hpp">
+<area shape="rect" id="node1" title="Public API for path module." alt="" coords="27,5,210,32"/>
+<area shape="rect" id="node2" href="$utils_8h_source.html" title=" " alt="" coords="33,80,95,107"/>
+<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="119,80,230,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,155,72,181"/>
+<area shape="rect" id="node5" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="97,155,253,181"/>
+<area shape="rect" id="node6" href="$Pose_8hpp.html" title="Pose class declaration." alt="" coords="277,155,432,181"/>
+<area shape="rect" id="node7" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="270,229,439,256"/>
+</map>
