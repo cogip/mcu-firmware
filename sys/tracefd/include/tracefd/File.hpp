@@ -21,28 +21,31 @@ namespace cogip {
 
 namespace tracefd {
 
+/// Trace file class.
 class File {
 public:
     /// Constructor based on file name.
     /// Create a new trace file descriptor, also starts the files flusher thread.
-    /// @param[in]   filename   name of the trace file
-    File(const std::string & filename);
+    File(
+        const std::string & filename  /// [in] name of the trace file
+        );
 
     /// Constructor based on file descriptor.
     /// Only used to initialize `out` and `err` descriptors.
-    /// @param[in]   f                 file descriptor
-    File(FILE *f);
+    File(
+        FILE *f                       /// [in] file descriptor
+        );
 
-    /// Open the trace file
+    /// Open the trace file.
     void open(void);
 
-    /// Close the trace file
+    /// Close the trace file.
     void close(void);
 
-    /// Lock the trace file
+    /// Lock the trace file.
     void lock(void);
 
-    /// Unlock the trace file
+    /// Unlock the trace file.
     void unlock(void);
 
     /// Print formatted string in the trace file.
@@ -63,9 +66,9 @@ public:
     void flush(void);
 
 private:
-    FILE * file_;               /// file descriptor
-    std::string filename_;      /// filename
-    riot::mutex mutex_;         /// mutex protecting file access
+    FILE * file_;                     ///< file descriptor
+    std::string filename_;            ///< filename
+    riot::mutex mutex_;               ///< mutex protecting file access
 };
 
 } // namespace tracefd

@@ -26,26 +26,22 @@
 
 #include "tracefd/File.hpp"
 
-/// @def TRACEFD_ROOT_DIR
-/// @brief Base directory of trace files
+/// Base directory of trace files.
 #ifndef TRACEFD_ROOT_DIR
 #  define TRACEFD_ROOT_DIR "/tmp/sdcard"
 #endif
 
-/// @def TRACEFD_FLUSH_INTERVAL
-/// @brief Interval in ms between two flush of all files
+/// Interval in ms between two flush of all files.
 #ifndef TRACEFD_FLUSH_INTERVAL
 #  define TRACEFD_FLUSH_INTERVAL 1000
 #endif
 
-/// @def TRACEFD_THREAD_PRIORITY
-/// @brief Files flusher thread priority
+/// Files flusher thread priority.
 #ifndef TRACEFD_THREAD_PRIORITY
 #  define TRACEFD_THREAD_PRIORITY (THREAD_PRIORITY_MAIN - 1)
 #endif
 
-/// @def TRACEFD_ROOT_DIR
-/// @brief Base directory of trace files
+/// Base directory of trace files.
 #ifndef TRACEFD_ROOT_DIR
 #  define TRACEFD_ROOT_DIR "/tmp/sdcard"
 #endif
@@ -54,13 +50,20 @@ namespace cogip {
 
 namespace tracefd {
 
-extern File out;                /// trace descriptor bound to stdout
-extern File err;                /// trace descriptor bound to stderr
+extern File out;                ///< trace descriptor bound to stdout
+extern File err;                ///< trace descriptor bound to stderr
 
-void initialize_tracefd(void);  /// Initialize root dir and flusher thread
-void flush_all(void);           /// Flush all the trace files
-void start_files_flusher(void); /// Start the files flusher thread
-void stop_files_flusher(void);  /// Stop the files flusher thread
+/// Initialize root dir and flusher thread.
+void initialize_tracefd(void);
+
+/// Flush all the trace files.
+void flush_all(void);
+
+/// Start the files flusher thread.
+void start_files_flusher(void);
+
+/// Stop the files flusher thread.
+void stop_files_flusher(void);
 
 } // namespace tracefd
 
