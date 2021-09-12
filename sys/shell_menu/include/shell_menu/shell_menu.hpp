@@ -16,30 +16,29 @@
 #include "shell_menu/Command.hpp"
 #include "shell_menu/Menu.hpp"
 
-/// @def NB_SHELL_COMMANDS
-/// @brief Max shell commands by menu
 #ifndef NB_SHELL_COMMANDS
-#  define NB_SHELL_COMMANDS 20
+#  define NB_SHELL_COMMANDS 20    ///< max shell commands per menu
 #endif
 
 namespace cogip {
 
 namespace shell {
 
-/// Root menu
-extern Menu root_menu;
+extern Menu root_menu;            ///< root menu
 
-/// @brief        Start the main menu.
+/// Start the main menu.
 void start(void);
 
-/// @brief        Add a global command that will be available in all menus.
-/// @param[in]    command   global command to add
-void add_global_command(Command * global_command);
+/// Add a global command that will be available in all menus.
+void add_global_command(
+    Command * global_command      ///< [in] global command to add
+    );
 
-/// @brief        Rename a command.
-/// @param[in]    old_name  old command name
-/// @param[in]    new_name  new command name
-void rename_command(const std::string &old_name, const std::string &new_name);
+/// Rename a command.
+void rename_command(
+    const std::string &old_name,  ///< [in] old command name
+    const std::string &new_name   ///< [in] new command name
+    );
 
 } // namespace shell
 

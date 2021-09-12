@@ -24,30 +24,35 @@ namespace cogip {
 
 namespace shell {
 
+/// Menu class.
+/// A menu contains a list of Command class.
+/// It has a name and a command to enter it.
+/// A callback can be specified to be executed at menu entry.
+/// It is linked to its parent menu.
 class Menu : public std::list<Command *> {
 public:
-    /// @brief        Constructor.
-    /// @param[in]    name      name of the menu
-    /// @param[in]    cmd       command name to enter the menu
-    /// @param[in]    parent    parent menu (optional)
-    /// @param[in]    enter_cb  callback function executed at menu entry (optional)
-    Menu(const std::string &name, const std::string &cmd,
-         Menu *parent = nullptr, func_cb_t enter_cb = nullptr);
+    /// Constructor.
+    Menu(
+        const std::string &name,      ///< [in] name of the menu
+        const std::string &cmd,       ///< [in] command name to enter the menu
+        Menu *parent = nullptr,       ///< [in] parent menu (optional)
+        func_cb_t enter_cb = nullptr  ///< [in] callback function executed at menu entry (optional)
+        );
 
-    /// @brief        Enter this menu.
+    /// Enter this menu.
     void enter(void) const;
 
-    /// @brief        Return the name of this menu.
+    /// Return the name of this menu.
     const std::string & name(void) const { return name_; };
 
-    /// @brief        Return the parent of this menu.
+    /// Return the parent of this menu.
     const Menu * parent(void) const { return parent_; };
 
 private:
-    std::string name_;                 /// menu name
-    std::string cmd_;                  /// command to enter this menu
-    Menu *parent_;                     /// pointer to the parent menu
-    func_cb_t enter_cb_;               /// function to execute at menu entry
+    std::string name_;                ///< menu name
+    std::string cmd_;                 ///< command to enter this menu
+    Menu *parent_;                    ///< pointer to the parent menu
+    func_cb_t enter_cb_;              ///< function to execute at menu entry
 };
 
 } // namespace shell

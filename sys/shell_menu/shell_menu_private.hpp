@@ -20,13 +20,13 @@ namespace cogip {
 
 namespace shell {
 
-extern std::map<std::string, Menu *> all_menus; /// Map containings all menus indexed by cmd
-extern std::set<Command *> all_commands;        /// All commands
-extern std::list<Command *> global_commands;    /// Global commands, available in all menus
-extern const Menu *current_menu;                /// Pointer to the current menu
+extern std::map<std::string, Menu *> all_menus; ///< map containings all menus indexed by cmd
+extern std::set<Command *> all_commands;        ///< all commands
+extern std::list<Command *> global_commands;    ///< flobal commands, available in all menus
+extern const Menu *current_menu;                ///< pointer to the current menu
 
-// Shell commands used by RIOT shell module.
-// It is updated each a menu is entered or exited.
+/// Shell commands used by RIOT shell module.
+/// It is updated each time a menu is entered or exited.
 extern shell_command_t current_commands[NB_SHELL_COMMANDS];
 
 } // namespace shell
