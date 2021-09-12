@@ -22,9 +22,11 @@ namespace tracefd {
 
 class File;
 
-/// List of all initialized files
+/// List of all initialized files.
 extern std::vector<File *> all_files;
 
+/// Initialize root directory.
+/// @return true if initialization succeeded, false otherwise
 bool init_root_dir(void);
 
 } // namespace tracefd
