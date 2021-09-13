@@ -1,7 +1,6 @@
-#include <cstddef>
-#include <kernel_defines.h>
+#include <vector>
 
-#include "path/path.hpp"
+#include "path/Path.hpp"
 #include "platform.hpp"
 
 // TODO:
@@ -9,7 +8,7 @@
 // - For each actions: keep a status if its done (to avoid multiple puck capture
 //    if delivery was bypassed for any reason)
 // - Absolute coordinate recalibration on games frames (?)
-static cogip::path::Pose poses[] = {
+static std::vector<cogip::path::Pose> poses = {
     {
         -1200, 1000, 0,
         MAX_SPEED
@@ -24,10 +23,4 @@ static cogip::path::Pose poses[] = {
     },
 };
 
-path_t robot_path = {
-    // static cfg
-    .play_in_loop = TRUE,
-    .nb_poses = ARRAY_SIZE(poses),
-    .poses = poses,
-    .current_pose_idx = 0
-};
+cogip::path::Path robot_path(poses, true);

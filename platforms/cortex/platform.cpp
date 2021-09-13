@@ -9,6 +9,7 @@
 #include "platform.hpp"
 #include "avoidance.hpp"
 #include "tracefd/tracefd.hpp"
+#include "path/path.hpp"
 
 /* Platform includes */
 #include "lidar_utils.hpp"
@@ -122,9 +123,9 @@ ctrl_t *pf_get_ctrl(void)
     return (ctrl_t *)&ctrl_quadpid;
 }
 
-path_t *pf_get_path(void)
+cogip::path::Path &pf_get_path(void)
 {
-    return &robot_path;
+    return robot_path;
 }
 
 void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
@@ -292,13 +293,9 @@ void pf_init(void)
 
     ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
 
-    /* Get platform path */
-    path_t *path = pf_get_path();
-    assert(path);
-
     /* mirror the points in place if selected camp is left */
     if (pf_is_camp_left()) {
-        path_horizontal_mirror_all_poses(path);
+        pf_get_path().horizontal_mirror_all_poses();
     }
 
     /* Initialize planner */

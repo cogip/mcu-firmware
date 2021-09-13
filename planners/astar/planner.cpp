@@ -13,7 +13,7 @@
 #include "app.hpp"
 #include "avoidance.hpp"
 #include "platform.hpp"
-#include "path/path.hpp"
+#include "path/Path.hpp"
 #include "tracefd/tracefd.hpp"
 
 #ifdef MODULE_SHELL_PLANNERS
@@ -51,10 +51,10 @@ void pln_stop(ctrl_t *ctrl)
 }
 
 static int trajectory_get_route_update(ctrl_t *ctrl, const cogip::cogip_defs::Pose &robot_pose,
-                                       path_t *path)
+                                       cogip::path::Path &path)
 {
     /* Current final path pose to reach */
-    const cogip::path::Pose *current_path_pos = path_get_current_pose(path);
+    cogip::path::Pose current_path_pos = path.current_pose();
     /* Pose to reach by the controller */
     cogip::cogip_defs::Pose pose_to_reach = ctrl_get_pose_to_reach(ctrl);
     /* Avoidance graph position index. This index increments on each
@@ -73,8 +73,8 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const cogip::cogip_defs::Po
     if (ctrl_is_pose_reached(ctrl)) {
         /* If the targeted pose has been reached, check if it is the
          * current path pose */
-        if ((pose_to_reach.x() == current_path_pos->x())
-            && (pose_to_reach.y() == current_path_pos->y())) {
+        if ((pose_to_reach.x() == current_path_pos.x())
+            && (pose_to_reach.y() == current_path_pos.y())) {
             /* If the targeted pose is the current path pose to reach, launch
              * the action and update the current path pose to reach to the next
              * one in path, if allowed. */
@@ -85,13 +85,13 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const cogip::cogip_defs::Po
                 /* If it exists launch action associated to the point and
                  * increment the position to reach in the path */
                 DEBUG("planner: action launched!\n");
-                current_path_pos->act();
+                current_path_pos.act();
                 DEBUG("planner: action finished!\n");
                 DEBUG("planner: Increment position.\n");
-                path_increment_current_pose_idx(path);
+                path++;
             }
             /* Update current path targeted position in case it has changed */
-            current_path_pos = path_get_current_pose(path);
+            current_path_pos = path.current_pose();
 
             /* As current path pose could have changed, avoidance graph needs
              * to be recomputed */
@@ -100,11 +100,11 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const cogip::cogip_defs::Po
         else if ((!allow_change_path_pose)
                  && (!ctrl_is_pose_intermediate(ctrl))) {
             /* Update current path targeted position in case it has changed */
-            current_path_pos = path_get_current_pose(path);
+            current_path_pos = path.current_pose();
             avoidance_update = true;
         }
         else if (!avoidance_check_recompute(robot_pose,
-                                            *current_path_pos)) {
+                                            current_path_pos)) {
             avoidance_update = true;
         }
         /* If it is an intermediate pose, just go to the next one in
@@ -122,8 +122,8 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const cogip::cogip_defs::Po
             goto trajectory_get_route_update_error;
         }
         /* Increment the position to reach in the path */
-        path_increment_current_pose_idx(path);
-        current_path_pos = path_get_current_pose(path);
+        path++;
+        current_path_pos = path.current_pose();
         /* As current path pose has changed, avoidance graph needs to be
          * recomputed */
         avoidance_update = true;
@@ -139,24 +139,24 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const cogip::cogip_defs::Po
          * The current intermediate position is then pointed by avoidance_index
          */
         avoidance_status = avoidance_build_graph(robot_pose,
-                                                 *current_path_pos);
+                                                 current_path_pos);
 
         /* In case the targeted position is not reachable, select the
          * next position in the path. If no position is reachable, return an
          * error */
-        nb_pose_reachable = path->nb_poses;
+        nb_pose_reachable = path.size();
         while ((!avoidance_status) && (nb_pose_reachable-- > 0)) {
             if (!avoidance_status) {
                 if (!allow_change_path_pose) {
                     goto trajectory_get_route_update_error;
                 }
-                path_increment_current_pose_idx(path);
-                if (current_path_pos == path_get_current_pose(path)) {
+                path++;
+                if (current_path_pos == path.current_pose()) {
                     goto trajectory_get_route_update_error;
                 }
-                current_path_pos = path_get_current_pose(path);
+                current_path_pos = path.current_pose();
                 avoidance_status = avoidance_build_graph(robot_pose,
-                                                         *current_path_pos);
+                                                         current_path_pos);
             }
         }
         if (nb_pose_reachable < 0) {
@@ -172,10 +172,10 @@ static int trajectory_get_route_update(ctrl_t *ctrl, const cogip::cogip_defs::Po
     pose_to_reach = avoidance_get_pose(avoidance_index);
 
     /* Check if the point to reach is the current path position to reach */
-    if ((pose_to_reach.x() == current_path_pos->x())
-        && (pose_to_reach.y() == current_path_pos->y())) {
+    if ((pose_to_reach.x() == current_path_pos.x())
+        && (pose_to_reach.y() == current_path_pos.y())) {
         DEBUG("planner: Reaching final position\n");
-        pose_to_reach.set_O(current_path_pos->O());
+        pose_to_reach.set_O(current_path_pos.O());
         ctrl_set_pose_intermediate(ctrl, false);
     }
     else {
@@ -194,23 +194,18 @@ trajectory_get_route_update_error:
 void *task_planner(void *arg)
 {
     (void)arg;
-    cogip::cogip_defs::Pose initial_pose;
     cogip::cogip_defs::Polar speed_order;
-    const cogip::path::Pose *current_path_pos = nullptr;
 
     cogip::tracefd::out.logf("Game planner starting");
 
     ctrl_t *ctrl = pf_get_ctrl();
 
-    path_t *path = pf_get_path();
-    if (!path) {
-        cogip::tracefd::out.logf("Machine has no path");
-    }
+    cogip::path::Path &path = pf_get_path();
+    path.reset_current_pose_index();
 
     /* object context initialisation */
-    path->current_pose_idx = 0;
-    current_path_pos = path_get_current_pose(path);
-    initial_pose = *current_path_pos;
+    cogip::path::Pose current_path_pos = path.current_pose();
+    cogip::cogip_defs::Pose initial_pose = current_path_pos;
     ctrl_set_pose_current(ctrl, initial_pose);
     ctrl_set_speed_order(ctrl, speed_order);
     ctrl_set_pose_reached(ctrl);
@@ -224,14 +219,14 @@ void *task_planner(void *arg)
             goto yield_point;
         }
 
-        current_path_pos = path_get_current_pose(path);
+        current_path_pos = path.current_pose();
 
         /* Update speed order to max speed defined value in the new point to reach */
-        speed_order.set_distance(path_get_current_max_speed(path));
+        speed_order.set_distance(path.current_max_speed());
         speed_order.set_angle(speed_order.distance() / 2);
 
         /* reverse gear selection is granted per point to reach, in path */
-        ctrl_set_allow_reverse(ctrl, current_path_pos->allow_reverse());
+        ctrl_set_allow_reverse(ctrl, current_path_pos.allow_reverse());
 
         if (trajectory_get_route_update(ctrl, ctrl_get_pose_current(ctrl), path)) {
             ctrl_set_mode(ctrl, CTRL_MODE_STOP);

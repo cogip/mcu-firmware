@@ -32,7 +32,7 @@
 #include "quadpid.hpp"
 #include "obstacles/List.hpp"
 #include "odometry.hpp"
-#include "path/path.hpp"
+#include "path/Path.hpp"
 #include "utils.h"
 
 #define ROBOT_ID            0       /**< Robot ID for logs */
@@ -188,7 +188,7 @@ void pf_print_state(cogip::tracefd::File &out);
  *
  * @return                      Platform path
  */
-path_t *pf_get_path(void);
+cogip::path::Path &pf_get_path(void);
 
 /**
  * @brief Check if a game is started
