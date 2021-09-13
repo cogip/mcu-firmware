@@ -21,9 +21,7 @@ static int pln_cmd_go_next_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    path_t *path = pf_get_path();
-
-    path_increment_current_pose_idx(path);
+    pf_get_path()++;
 
     return EXIT_SUCCESS;
 }
@@ -33,9 +31,7 @@ static int pln_cmd_go_previous_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    path_t *path = pf_get_path();
-
-    path_decrement_current_pose_idx(path);
+    pf_get_path()--;
 
     return EXIT_SUCCESS;
 }
@@ -45,9 +41,7 @@ static int pln_cmd_go_start_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    path_t *path = pf_get_path();
-
-    path_reset_current_pose_idx(path);
+    pf_get_path().reset_current_pose_index();
 
     return EXIT_SUCCESS;
 }
@@ -57,11 +51,10 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    path_t *path = pf_get_path();
-    const cogip::path::Pose *current_path_pos = path_get_current_pose(path);
+    const cogip::path::Pose &current_path_pos = pf_get_path().current_pose();
 
     puts("Launch callback!");
-    current_path_pos->act();
+    current_path_pos.act();
 
     return EXIT_SUCCESS;
 }
