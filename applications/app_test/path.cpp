@@ -1,7 +1,7 @@
 #include <cstddef>
 #include <kernel_defines.h>
 
-#include "path.hpp"
+#include "path/path.hpp"
 #include "platform.hpp"
 
 // TODO:
