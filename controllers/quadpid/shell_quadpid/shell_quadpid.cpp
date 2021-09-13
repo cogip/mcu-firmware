@@ -12,6 +12,7 @@
 #include "platform.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "shell_quadpid.hpp"
+#include "path/Pose.hpp"
 
 /**
  * @brief Impulse function parameters
@@ -651,18 +652,16 @@ static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
 }
 
 /* Calibration path for linear PID */
-static path_pose_t poses_calibration[] = {
+static cogip::path::Pose poses_calibration[] = {
     {
-        .pos = { 0, 0, 90 },
-        .allow_reverse = 0,
-        .max_speed = 0,
-        .act = nullptr
+        0, 0, 90,
+        0.0,
+        false
     },
     {
-        .pos = { 500, 500, 0 },
-        .allow_reverse = 0,
-        .max_speed = 0,
-        .act = nullptr
+        500, 500, 0,
+        0.0,
+        false
     },
 };
 
@@ -692,7 +691,7 @@ static int ctrl_quadpid_pose_cmd_reset_cb(int argc, char **argv)
 static void *ctrl_quadpid_pose_thread_cmd_linear_kp(void *arg)
 {
     (void)arg;
-    ctrl_quadpid_pose_shell_seq((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
+    ctrl_quadpid_pose_shell_seq((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index]);
     return 0;
 }
 
@@ -715,7 +714,7 @@ static int ctrl_quadpid_pose_cmd_linear_kp_cb(int argc, char **argv)
     }
 
     encoder_reset();
-    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
+    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index]);
     pose_linear_index ^= 1;
     ctrl_quadpid->quadpid_params.linear_pose_pid.kp = kp;
 
@@ -727,7 +726,7 @@ static int ctrl_quadpid_pose_cmd_linear_kp_cb(int argc, char **argv)
 static void *ctrl_quadpid_pose_thread_cmd_angular_kp(void *arg)
 {
     (void)arg;
-    ctrl_quadpid_pose_shell_seq((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
+    ctrl_quadpid_pose_shell_seq((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index]);
     return 0;
 }
 
@@ -750,7 +749,7 @@ static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
     }
 
     encoder_reset();
-    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index].pos);
+    ctrl_set_pose_current((ctrl_t *)ctrl_quadpid, poses_calibration[pose_linear_index]);
     pose_linear_index ^= 1;
     ctrl_quadpid->quadpid_params.angular_pose_pid.kp = kp;
 
