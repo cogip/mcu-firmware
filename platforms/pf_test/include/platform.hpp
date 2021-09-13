@@ -32,7 +32,7 @@
 #include "quadpid.hpp"
 #include "obstacles/List.hpp"
 #include "odometry.hpp"
-#include "path.hpp"
+#include "path/path.hpp"
 #include "utils.h"
 
 #define ROBOT_ID            0       /**< Robot ID for logs */

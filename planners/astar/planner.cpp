@@ -13,7 +13,7 @@
 #include "app.hpp"
 #include "avoidance.hpp"
 #include "platform.hpp"
-#include "path.hpp"
+#include "path/path.hpp"
 #include "tracefd/tracefd.hpp"
 
 #ifdef MODULE_SHELL_PLANNERS
