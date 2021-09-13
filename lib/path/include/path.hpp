@@ -17,22 +17,14 @@
  * @brief       Public API for path module
  *
  * @author      Stephen Clymans <sclymans@gmail.com>
+ * @author      Eric Courtois <eric.courtois@gmail.com>
  */
 #pragma once
 
 /* Project includes */
 #include "utils.h"
 #include "odometry.hpp"
-
-/**
- * @brief Position type as used in path type
- */
-typedef struct {
-    cogip::cogip_defs::Pose pos;
-    uint8_t allow_reverse;
-    double max_speed;
-    func_cb_t act;
-} path_pose_t;
+#include "path/Pose.hpp"
 
 /**
  * @brief Path type
@@ -41,7 +33,7 @@ typedef struct {
     /* static cfg */
     uint8_t play_in_loop; /* for unit tests */
     uint8_t nb_poses;
-    path_pose_t *poses;
+    cogip::path::Pose *poses;
 
     /* dynamic variables */
     uint8_t current_pose_idx;
@@ -57,7 +49,7 @@ extern path_t robot_path;
  * @param[in]    path    robot path
  * @return               current position of the path
  */
-const path_pose_t *path_get_current_pose(const path_t *path);
+const cogip::path::Pose *path_get_current_pose(const path_t *path);
 
 /**
  * @brief Reset current position to index 0

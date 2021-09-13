@@ -9,24 +9,18 @@
 // - For each actions: keep a status if its done (to avoid multiple puck capture
 //    if delivery was bypassed for any reason)
 // - Absolute coordinate recalibration on games frames (?)
-static path_pose_t poses[] = {
+static cogip::path::Pose poses[] = {
     {
-        .pos = { -1200, 1000, 0 },
-        .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED,
-        .act = NULL,
+        -1200, 1000, 0,
+        MAX_SPEED
     },
     {
-        .pos = { 1200, 1000, 180 },
-        .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED,
-        .act = NULL,
+        1200, 1000, 180,
+        MAX_SPEED
     },
     {
-        .pos = { -1200, 1000, 0 },
-        .allow_reverse = TRUE,
-        .max_speed = MAX_SPEED,
-        .act = NULL,
+        -1200, 1000, 0,
+        MAX_SPEED
     },
 };
 

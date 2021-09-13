@@ -3,7 +3,7 @@
 #include "platform.hpp"
 #include "utils.h"
 
-const path_pose_t *path_get_current_pose(const path_t *path)
+const cogip::path::Pose *path_get_current_pose(const path_t *path)
 {
     return &path->poses[path->current_pose_idx];
 }
@@ -35,15 +35,15 @@ void path_decrement_current_pose_idx(path_t *path)
 
 uint8_t path_get_current_max_speed(const path_t *path)
 {
-    const path_pose_t *current_path_pos = &path->poses[path->current_pose_idx];
+    const cogip::path::Pose &current_path_pos = path->poses[path->current_pose_idx];
 
-    return MIN(current_path_pos->max_speed, MAX_SPEED);
+    return MIN(current_path_pos.max_speed(), MAX_SPEED);
 }
 
 void path_horizontal_mirror_all_poses(path_t *path)
 {
     for (int i = 0; i < path->nb_poses; i++) {
-        cogip::cogip_defs::Pose &pos = path->poses[i].pos;
+        cogip::path::Pose &pos = path->poses[i];
 
         pos.set_x(-pos.x());
         pos.set_O(180 - pos.O());
