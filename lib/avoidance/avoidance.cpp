@@ -62,13 +62,13 @@ static bool _is_avoidance_computed = false;
 static void _validate_obstacles_points(void)
 {
     cogip::obstacles::List *obstacles_dyn = pf_get_dyn_obstacles();
-    const cogip::obstacles::Polygon *borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = app_get_borders();
 
     /* For each obstacle */
     for (auto obstacle: *obstacles_dyn) {
 
         /* Check if obstacle center is inside borders */
-        if (!borders->is_point_inside(obstacle->center())) {
+        if (!borders.is_point_inside(obstacle->center())) {
             continue;
         }
 
@@ -81,7 +81,7 @@ static void _validate_obstacles_points(void)
 
             /* Validate bounding box points */
             for (auto &point: bb) {
-                if (borders->is_point_inside(point)
+                if (borders.is_point_inside(point)
                     && (!cogip::obstacles::is_point_in_obstacles(point, nullptr))) {
                     _valid_points[_valid_points_count++] = { point.x(), point.y(), 0 };
                 }
@@ -254,9 +254,9 @@ bool avoidance_build_graph(const cogip::cogip_defs::Pose &s, const cogip::cogip_
     start_pose = s;
     finish_pose = f;
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
-    const cogip::obstacles::Polygon *borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = app_get_borders();
 
-    if (!borders->is_point_inside(finish_pose)) {
+    if (!borders.is_point_inside(finish_pose)) {
         _is_avoidance_computed = false;
         goto update_graph_error_finish_pose;
     }
@@ -291,13 +291,13 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Pose &start,
 {
     /* Get dynamic obstacle list */
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
-    const cogip::obstacles::Polygon *borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = app_get_borders();
 
     /* Check if that segment crosses a polygon */
     for (auto obstacle: *obstacles) {
 
         /* Check if obstacle is inside borders */
-        if (!borders->is_point_inside(obstacle->center())) {
+        if (!borders.is_point_inside(obstacle->center())) {
             continue;
         }
         /* Check if start to finish pose segment is crossing an obtacle */
