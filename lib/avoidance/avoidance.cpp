@@ -110,26 +110,24 @@ static void _build_avoidance_graph(void)
     for (int p = 0; p < _valid_points_count; p++) {
         for (int p2 = p + 1; p2 < _valid_points_count; p2++) {
             bool collide = false;
-            if (p != p2) {
-                /* Check if that segment crosses a polygon */
-                for (auto obstacle: *obstacles) {
-                    if (obstacle->is_segment_crossing(_valid_points[p],
-                                                      _valid_points[p2])) {
-                        collide = true;
-                        break;
-                    }
+            /* Check if that segment crosses a polygon */
+            for (auto obstacle: *obstacles) {
+                if (obstacle->is_segment_crossing(_valid_points[p],
+                                                  _valid_points[p2])) {
+                    collide = true;
+                    break;
                 }
-                /* If no collision, both points of the segment are added to
-                 * the graph with distance between them */
-                if ((p < GRAPH_MAX_VERTICES) && (p2 < GRAPH_MAX_VERTICES)) {
-                    if (!collide) {
-                        _graph[p] |= (1 << p2);
-                        _graph[p2] |= (1 << p);
-                    }
-                    else {
-                        _graph[p] &= ~(1 << p2);
-                        _graph[p2] &= ~(1 << p);
-                    }
+            }
+            /* If no collision, both points of the segment are added to
+             * the graph with distance between them */
+            if ((p < GRAPH_MAX_VERTICES) && (p2 < GRAPH_MAX_VERTICES)) {
+                if (!collide) {
+                    _graph[p] |= (1 << p2);
+                    _graph[p2] |= (1 << p);
+                }
+                else {
+                    _graph[p] &= ~(1 << p2);
+                    _graph[p2] &= ~(1 << p);
                 }
             }
         }
