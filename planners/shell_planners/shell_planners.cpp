@@ -11,6 +11,7 @@
 
 /* Project includes */
 #include "shell_menu/shell_menu.hpp"
+#include "app.hpp"
 #include "platform.hpp"
 
 /* Shell command array */
@@ -21,7 +22,7 @@ static int pln_cmd_go_next_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pf_get_path()++;
+    app_get_path()++;
 
     return EXIT_SUCCESS;
 }
@@ -31,7 +32,7 @@ static int pln_cmd_go_previous_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pf_get_path()--;
+    app_get_path()--;
 
     return EXIT_SUCCESS;
 }
@@ -41,7 +42,7 @@ static int pln_cmd_go_start_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pf_get_path().reset_current_pose_index();
+    app_get_path().reset_current_pose_index();
 
     return EXIT_SUCCESS;
 }
@@ -51,7 +52,7 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    const cogip::path::Pose &current_path_pos = pf_get_path().current_pose();
+    const cogip::path::Pose &current_path_pos = app_get_path().current_pose();
 
     puts("Launch callback!");
     current_path_pos.act();

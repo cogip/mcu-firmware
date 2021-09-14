@@ -184,13 +184,6 @@ void pf_set_trace_mode(bool state);
 void pf_print_state(cogip::tracefd::File &out);
 
 /**
- * @brief Get platform path
- *
- * @return                      Platform path
- */
-cogip::path::Path &pf_get_path(void);
-
-/**
  * @brief Check if a game is started
  *
  * @return                      Return 1(true) if started, 0(false) otherwise

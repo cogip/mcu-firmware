@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "path/Path.hpp"
+#include "app.hpp"
 #include "platform.hpp"
 
 // TODO:
@@ -23,4 +24,12 @@ static std::vector<cogip::path::Pose> poses = {
     },
 };
 
-cogip::path::Path robot_path(poses, true);
+cogip::path::Path *_path = nullptr;
+
+cogip::path::Path &app_get_path(void)
+{
+    if (! _path) {
+        _path = new cogip::path::Path(poses, true);
+    }
+    return *_path;
+}

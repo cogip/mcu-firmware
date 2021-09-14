@@ -10,7 +10,7 @@
 #include "platform.hpp"
 #include "avoidance.hpp"
 #include "tracefd/tracefd.hpp"
-#include "path/path.hpp"
+#include "path/Path.hpp"
 
 /* Platform includes */
 #include "lidar_utils.hpp"
@@ -122,11 +122,6 @@ ctrl_quadpid_t *pf_get_quadpid_ctrl(void)
 ctrl_t *pf_get_ctrl(void)
 {
     return (ctrl_t *)&ctrl_quadpid;
-}
-
-cogip::path::Path &pf_get_path(void)
-{
-    return robot_path;
 }
 
 void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
