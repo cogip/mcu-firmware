@@ -115,9 +115,8 @@ static const sd21_conf_t sd21_config_app[] = {
     },
 };
 
-/// @brief Return a polygon obstacle delimitng the table borders.
-/// @return                      table borders
-const cogip::obstacles::Polygon *app_get_borders(void);
+/// Return a polygon obstacle delimitng the table borders.
+const cogip::obstacles::Polygon &app_get_borders(void);
 
 /// Return the path of current application.
 cogip::path::Path &app_get_path(void);
