@@ -1,5 +1,0 @@
-<map id="path_pose_t" name="path_pose_t">
-<area shape="rect" id="node1" title="Position type as used in path type." alt="" coords="42,185,143,212"/>
-<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="5,96,180,123"/>
-<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="21,5,164,47"/>
-</map>

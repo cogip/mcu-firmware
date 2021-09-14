@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('cortex_2include_2platform_8hpp.html','
 <code>#include &quot;<a class="el" href="quadpid_8hpp_source.html">quadpid.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="List_8hpp_source.html">obstacles/List.hpp</a>&quot;</code><br />
 <code>#include &quot;odometry.hpp&quot;</code><br />
-<code>#include &quot;<a class="el" href="path_8hpp_source.html">path.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Path_8hpp_source.html">path/Path.hpp</a>&quot;</code><br />
 <code>#include &quot;utils.h&quot;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for platform.hpp:</div>
@@ -154,26 +154,27 @@ $(document).ready(function(){initNavTree('cortex_2include_2platform_8hpp.html','
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="cortex_2include_2platform_8hpp__incl.png" border="0" usemap="#platforms_2cortex_2include_2platform_8hpp" alt=""/></div>
 <map name="platforms_2cortex_2include_2platform_8hpp" id="platforms_2cortex_2include_2platform_8hpp">
-<area shape="rect" title="Define hardware properties of Cortex platform. Units:" alt="" coords="305,5,486,47"/>
-<area shape="rect" href="ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="248,169,319,196"/>
-<area shape="rect" href="odometry_8hpp_source.html" title=" " alt="" coords="228,244,339,271"/>
-<area shape="rect" href="quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="159,95,261,121"/>
-<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="649,169,787,196"/>
-<area shape="rect" href="path_8hpp.html" title="Public API for path module." alt="" coords="395,95,473,121"/>
-<area shape="rect" href="utils_8h_source.html" title=" " alt="" coords="469,169,532,196"/>
-<area shape="rect" title=" " alt="" coords="89,244,160,271"/>
-<area shape="rect" title=" " alt="" coords="365,319,431,345"/>
-<area shape="rect" href="Polar_8hpp.html" title="Polar class declaration." alt="" coords="5,319,161,345"/>
-<area shape="rect" href="Pose_8hpp.html" title="Pose class declaration." alt="" coords="186,319,341,345"/>
-<area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="384,393,553,420"/>
-<area shape="rect" href="pid_8h_source.html" title=" " alt="" coords="117,169,172,196"/>
-<area shape="rect" title=" " alt="" coords="633,393,696,420"/>
-<area shape="rect" title=" " alt="" coords="755,244,875,271"/>
-<area shape="rect" title=" " alt="" coords="904,393,1023,420"/>
-<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="507,244,681,271"/>
-<area shape="rect" href="File_8hpp.html" title="File class declaration." alt="" coords="797,319,919,345"/>
-<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="506,319,682,345"/>
-<area shape="rect" title=" " alt="" coords="821,393,879,420"/>
+<area shape="rect" title="Define hardware properties of Cortex platform. Units:" alt="" coords="279,5,461,47"/>
+<area shape="rect" href="ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="79,169,149,196"/>
+<area shape="rect" href="odometry_8hpp_source.html" title=" " alt="" coords="100,244,211,271"/>
+<area shape="rect" href="quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="152,95,255,121"/>
+<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="354,169,493,196"/>
+<area shape="rect" href="Path_8hpp.html" title="Path declaration." alt="" coords="837,95,948,121"/>
+<area shape="rect" href="utils_8h_source.html" title=" " alt="" coords="849,244,912,271"/>
+<area shape="rect" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" title=" " alt="" coords="270,319,337,345"/>
+<area shape="rect" href="Polar_8hpp.html" title="Polar class declaration." alt="" coords="39,319,195,345"/>
+<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="507,319,662,345"/>
+<area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="615,393,784,420"/>
+<area shape="rect" href="pid_8h_source.html" title=" " alt="" coords="173,169,228,196"/>
+<area shape="rect" title=" " alt="" coords="919,393,981,420"/>
+<area shape="rect" title=" " alt="" coords="442,244,562,271"/>
+<area shape="rect" title=" " alt="" coords="212,393,331,420"/>
+<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="586,244,759,271"/>
+<area shape="rect" href="File_8hpp.html" title="File class declaration." alt="" coords="361,319,483,345"/>
+<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="737,319,913,345"/>
+<area shape="rect" title=" " alt="" coords="393,393,451,420"/>
+<area shape="rect" href="path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="835,169,950,196"/>
 </map>
 </div>
 </div>
@@ -203,9 +204,6 @@ Functions</h2></td></tr>
 <tr class="memitem:gac80e892a7623dddeb945d663b43fc38d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__cortex.html#gac80e892a7623dddeb945d663b43fc38d">pf_print_state</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out)</td></tr>
 <tr class="memdesc:gac80e892a7623dddeb945d663b43fc38d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print current robot state in JSON format.  <a href="group__platform__cortex.html#gac80e892a7623dddeb945d663b43fc38d">More...</a><br /></td></tr>
 <tr class="separator:gac80e892a7623dddeb945d663b43fc38d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4274323068bddcbcbd6310d9b27943a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structpath__t.html">path_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__cortex.html#ga4274323068bddcbcbd6310d9b27943a3">pf_get_path</a> (void)</td></tr>
-<tr class="memdesc:ga4274323068bddcbcbd6310d9b27943a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get platform path.  <a href="group__platform__cortex.html#ga4274323068bddcbcbd6310d9b27943a3">More...</a><br /></td></tr>
-<tr class="separator:ga4274323068bddcbcbd6310d9b27943a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae1a6aab08a0179e854ade7561e3dc079"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__cortex.html#gae1a6aab08a0179e854ade7561e3dc079">pf_is_game_launched</a> (void)</td></tr>
 <tr class="memdesc:gae1a6aab08a0179e854ade7561e3dc079"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a game is started.  <a href="group__platform__cortex.html#gae1a6aab08a0179e854ade7561e3dc079">More...</a><br /></td></tr>
 <tr class="separator:gae1a6aab08a0179e854ade7561e3dc079"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -430,7 +428,7 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Sep 12 2021 16:01:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Sep 14 2021 10:19:12 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -130,6 +130,7 @@ $(document).ready(function(){initNavTree('hierarchy.html',''); initResizable(); 
 <map name="cogip_1_1cogip__defs_1_1Coords" id="cogip_1_1cogip__defs_1_1Coords">
 <area shape="rect" href="classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="5,5,148,47"/>
 <area shape="rect" href="classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="196,13,371,39"/>
+<area shape="rect" href="classcogip_1_1path_1_1Pose.html" title="Position class as used in Path." alt="" coords="419,13,552,39"/>
 </map>
 </td></tr>
 <tr><td><img src="inherit_graph_1.png" border="0" usemap="#cogip_1_1cogip__defs_1_1Polar" alt=""/>
@@ -145,6 +146,7 @@ $(document).ready(function(){initNavTree('hierarchy.html',''); initResizable(); 
 <area shape="rect" href="classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Obstacle." alt="" coords="465,5,665,32"/>
 <area shape="rect" href="classcogip_1_1cogip__defs_1_1Polygon.html" title="A polygon defined by a list of coordinates." alt="" coords="494,57,637,98"/>
 <area shape="rect" href="classcogip_1_1obstacles_1_1List.html" title="List of obstacles." alt="" coords="486,123,645,149"/>
+<area shape="rect" href="classcogip_1_1path_1_1Path.html" title="Path class." alt="" coords="500,173,631,200"/>
 </map>
 </td></tr>
 <tr><td><img src="inherit_graph_3.png" border="0" usemap="#cogip_1_1shell_1_1Command" alt=""/>
@@ -198,47 +200,37 @@ $(document).ready(function(){initNavTree('hierarchy.html',''); initResizable(); 
 <area shape="rect" href="structlds01__params__t.html" title="LDS01 parameters." alt="" coords="5,5,131,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_13.png" border="0" usemap="#path__pose__t" alt=""/>
-<map name="path__pose__t" id="path__pose__t">
-<area shape="rect" href="structpath__pose__t.html" title="Position type as used in path type." alt="" coords="5,5,107,32"/>
-</map>
-</td></tr>
-<tr><td><img src="inherit_graph_14.png" border="0" usemap="#path__t" alt=""/>
-<map name="path__t" id="path__t">
-<area shape="rect" href="structpath__t.html" title="Path type." alt="" coords="5,5,68,32"/>
-</map>
-</td></tr>
-<tr><td><img src="inherit_graph_15.png" border="0" usemap="#pca9548__conf__t" alt=""/>
+<tr><td><img src="inherit_graph_13.png" border="0" usemap="#pca9548__conf__t" alt=""/>
 <map name="pca9548__conf__t" id="pca9548__conf__t">
 <area shape="rect" href="structpca9548__conf__t.html" title="PCA9548 configuration." alt="" coords="5,5,129,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_16.png" border="0" usemap="#pf__sensor__t" alt=""/>
+<tr><td><img src="inherit_graph_14.png" border="0" usemap="#pf__sensor__t" alt=""/>
 <map name="pf__sensor__t" id="pf__sensor__t">
 <area shape="rect" href="structpf__sensor__t.html" title="General sensor structure." alt="" coords="5,5,103,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_17.png" border="0" usemap="#PID" alt=""/>
+<tr><td><img src="inherit_graph_15.png" border="0" usemap="#PID" alt=""/>
 <map name="PID" id="PID">
 <area shape="rect" href="structPID.html" title=" " alt="" coords="5,5,49,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_18.png" border="0" usemap="#PID__t" alt=""/>
+<tr><td><img src="inherit_graph_16.png" border="0" usemap="#PID__t" alt=""/>
 <map name="PID__t" id="PID__t">
 <area shape="rect" href="structPID__t.html" title=" " alt="" coords="5,5,61,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_19.png" border="0" usemap="#sd21__conf__t" alt=""/>
+<tr><td><img src="inherit_graph_17.png" border="0" usemap="#sd21__conf__t" alt=""/>
 <map name="sd21__conf__t" id="sd21__conf__t">
 <area shape="rect" href="structsd21__conf__t.html" title="SD21 configuration." alt="" coords="5,5,105,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_20.png" border="0" usemap="#sd21__servo__t" alt=""/>
+<tr><td><img src="inherit_graph_18.png" border="0" usemap="#sd21__servo__t" alt=""/>
 <map name="sd21__servo__t" id="sd21__servo__t">
 <area shape="rect" href="structsd21__servo__t.html" title="Servomotor properties." alt="" coords="5,5,113,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_21.png" border="0" usemap="#shmem__data__t" alt=""/>
+<tr><td><img src="inherit_graph_19.png" border="0" usemap="#shmem__data__t" alt=""/>
 <map name="shmem__data__t" id="shmem__data__t">
 <area shape="rect" href="structshmem__data__t.html" title=" " alt="" coords="5,5,124,32"/>
 </map>
@@ -248,7 +240,7 @@ $(document).ready(function(){initNavTree('hierarchy.html',''); initResizable(); 
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Sep 12 2021 16:01:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Sep 14 2021 10:19:12 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

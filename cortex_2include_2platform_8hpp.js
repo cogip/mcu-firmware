@@ -39,7 +39,6 @@ var cortex_2include_2platform_8hpp =
     [ "pf_ctrl_pre_running_cb", "group__platform__cortex.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b", null ],
     [ "pf_get_ctrl", "group__platform__cortex.html#gada66418f7a25f83900babc9406aeb623", null ],
     [ "pf_get_dyn_obstacles", "group__platform__cortex.html#ga4710e211e29d3b2da545113781f99a64", null ],
-    [ "pf_get_path", "group__platform__cortex.html#ga4274323068bddcbcbd6310d9b27943a3", null ],
     [ "pf_get_quadpid_ctrl", "group__platform__cortex.html#ga76464c76865b8a010f137488bf519fe3", null ],
     [ "pf_init", "group__platform__cortex.html#gad2d77ae9a60de6fba2ff595654fb94e0", null ],
     [ "pf_init_quadpid_params", "group__platform__cortex.html#ga096df40041a3b5fba1c96cd90524be73", null ],

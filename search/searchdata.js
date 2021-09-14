@@ -9,7 +9,7 @@ var indexSectionsWithContent =
   6: "clps",
   7: "cs",
   8: "cs",
-  9: "acdhlmoqst"
+  9: "acdhlmopqst"
 };
 
 var indexSectionNames =

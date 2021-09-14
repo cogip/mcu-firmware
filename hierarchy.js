@@ -2,7 +2,9 @@ var hierarchy =
 [
     [ "cogip::shell::Command", "classcogip_1_1shell_1_1Command.html", null ],
     [ "cogip::cogip_defs::Coords", "classcogip_1_1cogip__defs_1_1Coords.html", [
-      [ "cogip::cogip_defs::Pose", "classcogip_1_1cogip__defs_1_1Pose.html", null ]
+      [ "cogip::cogip_defs::Pose", "classcogip_1_1cogip__defs_1_1Pose.html", [
+        [ "cogip::path::Pose", "classcogip_1_1path_1_1Pose.html", null ]
+      ] ]
     ] ],
     [ "ctrl_configuration_t", "structctrl__configuration__t.html", null ],
     [ "ctrl_control_t", "structctrl__control__t.html", null ],
@@ -21,8 +23,6 @@ var hierarchy =
         [ "cogip::obstacles::Rectangle", "classcogip_1_1obstacles_1_1Rectangle.html", null ]
       ] ]
     ] ],
-    [ "path_pose_t", "structpath__pose__t.html", null ],
-    [ "path_t", "structpath__t.html", null ],
     [ "pca9548_conf_t", "structpca9548__conf__t.html", null ],
     [ "pf_sensor_t", "structpf__sensor__t.html", null ],
     [ "PID", "structPID.html", null ],
@@ -35,6 +35,7 @@ var hierarchy =
       [ "cogip::cogip_defs::Polygon", "classcogip_1_1cogip__defs_1_1Polygon.html", [
         [ "cogip::obstacles::Polygon", "classcogip_1_1obstacles_1_1Polygon.html", null ]
       ] ],
-      [ "cogip::obstacles::List", "classcogip_1_1obstacles_1_1List.html", null ]
+      [ "cogip::obstacles::List", "classcogip_1_1obstacles_1_1List.html", null ],
+      [ "cogip::path::Path", "classcogip_1_1path_1_1Path.html", null ]
     ] ]
 ];

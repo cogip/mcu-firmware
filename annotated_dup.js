@@ -8,8 +8,6 @@ var annotated_dup =
     [ "ctrl_quadpid_t", "structctrl__quadpid__t.html", "structctrl__quadpid__t" ],
     [ "ctrl_t", "structctrl__t.html", "structctrl__t" ],
     [ "lds01_params_t", "structlds01__params__t.html", "structlds01__params__t" ],
-    [ "path_pose_t", "structpath__pose__t.html", "structpath__pose__t" ],
-    [ "path_t", "structpath__t.html", "structpath__t" ],
     [ "pca9548_conf_t", "structpca9548__conf__t.html", "structpca9548__conf__t" ],
     [ "pf_sensor_t", "structpf__sensor__t.html", "structpf__sensor__t" ],
     [ "PID", "structPID.html", null ],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quadruple_20pid_20actuator_20motion_20controller_656',['Quadruple PID actuator motion controller',['../group__quadpid.html',1,'']]]
+  ['path_20module_656',['Path module',['../group__lib__path.html',1,'']]]
 ];

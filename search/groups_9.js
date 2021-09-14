@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['trajectory_20planners_663',['Trajectory planners',['../group__planners.html',1,'']]],
-  ['test_20platform_664',['Test platform',['../group__platforms__pf__test.html',1,'']]],
-  ['trace_20file_20descriptor_20module_665',['Trace file descriptor module',['../group__sys__tracefd.html',1,'']]]
+  ['switch_20pca9548_20driver_658',['switch PCA9548 driver',['../group__I2C.html',1,'']]],
+  ['simple_20trajectory_20planification_20module_659',['Simple trajectory planification module',['../group__planner.html',1,'']]],
+  ['servomotors_20sd21_20board_20driver_660',['Servomotors SD21 board driver',['../group__sd21.html',1,'']]],
+  ['system_20modules_661',['System modules',['../group__sys.html',1,'']]],
+  ['shell_20menu_662',['Shell menu',['../group__sys__shell__menu.html',1,'']]],
+  ['shared_20memory_20module_663',['Shared memory module',['../group__sys__shmem.html',1,'']]]
 ];
