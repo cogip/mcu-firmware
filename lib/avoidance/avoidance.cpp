@@ -72,20 +72,25 @@ static void _validate_obstacles_points(void)
             continue;
         }
 
-        /* If that point is not in an other polygon, shape it in a bounding
-         * box */
-        if (!cogip::obstacles::is_point_in_obstacles(obstacle->center(), obstacle)) {
+        /* Check if the center of this obstacle is not in an other obstacle */
+        if (cogip::obstacles::is_point_in_obstacles(obstacle->center(), obstacle)) {
+            continue;
+        }
 
-            cogip::cogip_defs::Polygon bb = obstacle->bounding_box(OBSTACLES_BB_NB_VERTICES,
-                                                                   OBSTACLES_BB_RADIUS_MARGIN);
+        /* Build a bounding box around the obstacle center */
+        cogip::cogip_defs::Polygon bb = obstacle->bounding_box(OBSTACLES_BB_NB_VERTICES,
+                                                               OBSTACLES_BB_RADIUS_MARGIN);
 
-            /* Validate bounding box points */
-            for (auto &point: bb) {
-                if (borders.is_point_inside(point)
-                    && (!cogip::obstacles::is_point_in_obstacles(point, nullptr))) {
-                    _valid_points[_valid_points_count++] = { point.x(), point.y(), 0 };
-                }
+        /* Validate bounding box points */
+        for (auto &point: bb) {
+            if (!borders.is_point_inside(point)) {
+                continue;
             }
+            if (cogip::obstacles::is_point_in_obstacles(point, nullptr)) {
+                continue;
+            }
+            /* Found a valid point */
+            _valid_points[_valid_points_count++] = { point.x(), point.y(), 0 };
         }
     }
 }
