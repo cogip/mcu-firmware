@@ -200,7 +200,7 @@ void *task_planner(void *arg)
 
     ctrl_t *ctrl = pf_get_ctrl();
 
-    cogip::path::Path &path = pf_get_path();
+    cogip::path::Path &path = app_get_path();
     path.reset_current_pose_index();
 
     /* object context initialisation */
