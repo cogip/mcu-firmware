@@ -1,6 +1,7 @@
 /* Standard includes */
 #include <math.h>
 #include <stdio.h>
+#include <deque>
 
 /* Project includes */
 #include "app.hpp"
@@ -35,22 +36,9 @@ static cogip::cogip_defs::Pose start_pose;
 static cogip::cogip_defs::Pose finish_pose;
 
 /**
- * Avoidance path with child direction hierarchy.
- * Starting index of this array is 0 which is the start pose. And value of
- * child array at this index is the index of the next path point. Last child
- * point is the final pose which has index 1.
- * For instance:
- *   _child[0]  = 12
- *   _child[12] = 8
- *   _child[8]  = 5
- *   _child[5]  = 22
- *   _child[22] = 1
- *
- * Path is then:
- *   _valid_points[0] (start_pose) -> _valid_points[12] -> _valid_points[8]
- *   -> _valid_points[5] -> _valid_points[22] -> _valid_points[1] (finish_pose)
- **/
-static int _child[GRAPH_MAX_VERTICES];
+ * Indexes of valid points from the start pose to the final pose
+ */
+static std::deque<int> _children;
 
 /* Flag to indicate if a path has been successfully computed */
 static bool _is_avoidance_computed = false;
@@ -162,11 +150,11 @@ static bool _dijkstra(void)
         checked[i] = false;
         /* All distances set to infinite */
         distance[i] = DIJKSTRA_MAX_DISTANCE;
-        /* No parents */
+        /* No parent */
         parent[i] = -1;
-        /* No childs */
-        _child[i] = -1;
     }
+    /* No child */
+    _children.clear();
 
     /* Start point has a weight of 0 */
     distance[start] = 0;
@@ -221,7 +209,7 @@ static bool _dijkstra(void)
     /* Build child path from start to finish pose, by reversing parent path */
     i = 1;
     while (parent[i] >= 0) {
-        _child[parent[i]] = i;
+        _children.push_front(parent[i]);
         i = parent[i];
     }
 
@@ -237,13 +225,10 @@ dijkstra_error_no_destination:
  */
 cogip::cogip_defs::Pose avoidance_get_pose(uint8_t index)
 {
-    /* Find n child in graph */
-    uint8_t i = 0;
-    uint8_t j = 0;
+    uint8_t i = 1;
 
-    while ((i != 1) && (j < index)) {
-        i = _child[i];
-        j++;
+    if (index < _children.size()) {
+        i = _children[index];
     }
 
     return _valid_points[i];
@@ -317,19 +302,16 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Pose &start,
  */
 void avoidance_print_path(cogip::tracefd::File &out)
 {
-    uint8_t i = 0;
-
     out.printf("[");
     /* Print only if avoidance has already been computed successfully */
     if (_is_avoidance_computed) {
         /* Print all intermediate poses */
-        while (i != 1) {
+        for (auto i: _children) {
             out.printf(
                 "{\"x\":%.3lf,\"y\":%.3lf},",
                 _valid_points[i].x(),
                 _valid_points[i].y()
                 );
-            i = _child[i];
         }
         /* Print also finish pose */
         out.printf(
