@@ -1,5 +1,4 @@
 #include "shell_planners.hpp"
-#include "planners/astar/planner.hpp"
 
 /* Standard includes */
 #include <cstdlib>
@@ -13,6 +12,8 @@
 #include "shell_menu/shell_menu.hpp"
 #include "app.hpp"
 #include "platform.hpp"
+
+static cogip::planners::Planner *planner = nullptr;
 
 /* Shell command array */
 static uint8_t shell_path_index;
@@ -65,7 +66,7 @@ static int pln_cmd_play_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pln_set_allow_change_path_pose(TRUE);
+    planner->set_allow_change_path_pose(true);
 
     return EXIT_SUCCESS;
 }
@@ -75,25 +76,25 @@ static int pln_cmd_stop_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pln_set_allow_change_path_pose(FALSE);
+    planner->set_allow_change_path_pose(false);
 
     return EXIT_SUCCESS;
 }
 
 void pln_menu_enter(void)
 {
-    ctrl_t *ctrl = pf_get_ctrl();
-
     shell_path_index = 0;
 
-    pln_set_allow_change_path_pose(FALSE);
+    planner->set_allow_change_path_pose(false);
 
-    pln_start(ctrl);
+    planner->start();
 }
 
 /* Init shell commands */
-void pln_shell_init(void)
+void pln_shell_init(cogip::planners::Planner *pln)
 {
+    planner = pln;
+
     /* Planners menu and commands */
     cogip::shell::Menu *menu = new cogip::shell::Menu(
         "Planners menu", "pln_menu", &cogip::shell::root_menu, pln_menu_enter);

@@ -4,9 +4,10 @@
 #include "periph/qdec.h"
 
 /* Project includes */
+#include "app.hpp"
 #include "board.h"
 #include "obstacles/obstacles.hpp"
-#include "planners/astar/planner.hpp"
+#include "planners/astar/AstarPlanner.hpp"
 #include "platform.hpp"
 #include "avoidance.hpp"
 #include "tracefd/tracefd.hpp"
@@ -58,10 +59,12 @@ static ctrl_quadpid_t ctrl_quadpid =
     }
 };
 
+/* Planner */
+cogip::planners::Planner *planner = nullptr;
+
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
-char planner_thread_stack[THREAD_STACKSIZE_LARGE];
 char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool trace_on = false;
@@ -206,12 +209,10 @@ static void *_task_countdown(void *arg)
     (void)arg;
     static int countdown = GAME_DURATION_SEC;
 
-    ctrl_t *controller = pf_get_ctrl();
-
     for (;;) {
         xtimer_ticks32_t loop_start_time = xtimer_now();
         if (countdown < 0) {
-            pln_stop(controller);
+            planner->stop();
         }
         else {
             DEBUG("GAME TIME: %d\n", countdown);
@@ -270,7 +271,7 @@ void pf_init(void)
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
 
     /* Initialize planner */
-    pln_init();
+    planner = new cogip::planners::AstarPlanner(pf_get_ctrl(), app_get_path());
 
 #ifdef MODULE_SHELL_QUADPID
     ctrl_quadpid_shell_init(&ctrl_quadpid);
@@ -323,15 +324,7 @@ void pf_init_tasks(void)
         "motion control"
         );
 
-    /* Create planner thread */
-    thread_create(
-        planner_thread_stack,
-        sizeof(planner_thread_stack),
-        THREAD_PRIORITY_MAIN - 2, 0,
-        task_planner,
-        NULL,
-        "planner"
-        );
+    planner->start_thread();
 
     trace_start();
 
@@ -352,6 +345,6 @@ void pf_init_tasks(void)
 
         /* Start game */
         DEBUG("platform: Start game\n");
-        pln_start((ctrl_t *)controller);
+        planner->start();
     }
 }
