@@ -1,5 +1,5 @@
 #include "shell_planners.hpp"
-#include "planner.hpp"
+#include "planners/astar/planner.hpp"
 
 /* Standard includes */
 #include <cstdlib>

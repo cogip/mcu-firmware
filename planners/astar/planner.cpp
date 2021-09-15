@@ -1,4 +1,4 @@
-#include "planner.hpp"
+#include "planners/astar/planner.hpp"
 
 /* System includes */
 #include <cstdio>
