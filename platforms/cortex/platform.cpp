@@ -6,7 +6,7 @@
 /* Project includes */
 #include "app.hpp"
 #include "obstacles/obstacles.hpp"
-#include "planner.hpp"
+#include "planners/astar/planner.hpp"
 #include "platform.hpp"
 #include "avoidance.hpp"
 #include "tracefd/tracefd.hpp"
