@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['switch_20pca9548_20driver_658',['switch PCA9548 driver',['../group__I2C.html',1,'']]],
-  ['simple_20trajectory_20planification_20module_659',['Simple trajectory planification module',['../group__planner.html',1,'']]],
-  ['servomotors_20sd21_20board_20driver_660',['Servomotors SD21 board driver',['../group__sd21.html',1,'']]],
-  ['system_20modules_661',['System modules',['../group__sys.html',1,'']]],
-  ['shell_20menu_662',['Shell menu',['../group__sys__shell__menu.html',1,'']]],
-  ['shared_20memory_20module_663',['Shared memory module',['../group__sys__shmem.html',1,'']]]
+  ['switch_20pca9548_20driver_671',['switch PCA9548 driver',['../group__I2C.html',1,'']]],
+  ['servomotors_20sd21_20board_20driver_672',['Servomotors SD21 board driver',['../group__sd21.html',1,'']]],
+  ['system_20modules_673',['System modules',['../group__sys.html',1,'']]],
+  ['shell_20menu_674',['Shell menu',['../group__sys__shell__menu.html',1,'']]],
+  ['shared_20memory_20module_675',['Shared memory module',['../group__sys__shmem.html',1,'']]]
 ];

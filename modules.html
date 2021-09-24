@@ -146,15 +146,14 @@ $(document).ready(function(){initNavTree('modules.html',''); initResizable(); })
 <tr id="row_4_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__sys__shmem.html" target="_self">Shared memory module</a></td><td class="desc">Shared memory module </td></tr>
 <tr id="row_4_1_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__sys__shell__menu.html" target="_self">Shell menu</a></td><td class="desc">Menus for shell </td></tr>
 <tr id="row_4_2_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__sys__tracefd.html" target="_self">Trace file descriptor module</a></td><td class="desc">Trace file descriptor module. This module provides an API to print traces on <code>stderr</code>, <code>stdout</code> or files on sdcard. Since it may be difficult to determine when to close the files to effectively flush data on disk, and to avoid opening/closing files around each printf, this module starts a thread that periodically closes/opens files to flush data. This thread can be disabled to allow manual handling of opening/closing files. Using the lock/unlock API, it is possible to execute consecutive prints in thread safe manner. The module relies on 'sdcard_spi' driver, so SPI parameters must be provided in the board/platform/application. Native boards are also supported, files being written in '/tmp' </td></tr>
-<tr id="row_5_"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_5_" class="arrow" onclick="toggleFolder('5_')">&#9660;</span><a class="el" href="group__planners.html" target="_self">Trajectory planners</a></td><td class="desc"></td></tr>
-<tr id="row_5_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__planner.html" target="_self">Simple trajectory planification module</a></td><td class="desc">Trajectory planification module </td></tr>
+<tr id="row_5_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__planners.html" target="_self">Trajectory planners</a></td><td class="desc">Trajectory planification module. The planner, associated to a controller, generates the robot course according to a given path. It also handles avoidance behavior </td></tr>
 </table>
 </div><!-- directory -->
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Sep 14 2021 10:19:12 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Sep 24 2021 00:09:39 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

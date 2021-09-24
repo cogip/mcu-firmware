@@ -17,6 +17,10 @@ var namespacecogip =
       [ "Path", "classcogip_1_1path_1_1Path.html", "classcogip_1_1path_1_1Path" ],
       [ "Pose", "classcogip_1_1path_1_1Pose.html", "classcogip_1_1path_1_1Pose" ]
     ] ],
+    [ "planners", null, [
+      [ "AstarPlanner", "classcogip_1_1planners_1_1AstarPlanner.html", "classcogip_1_1planners_1_1AstarPlanner" ],
+      [ "Planner", "classcogip_1_1planners_1_1Planner.html", "classcogip_1_1planners_1_1Planner" ]
+    ] ],
     [ "shell", null, [
       [ "Command", "classcogip_1_1shell_1_1Command.html", "classcogip_1_1shell_1_1Command" ],
       [ "Menu", "classcogip_1_1shell_1_1Menu.html", "classcogip_1_1shell_1_1Menu" ]

@@ -1,4 +1,5 @@
 var group__planners =
 [
-    [ "Simple trajectory planification module", "group__planner.html", "group__planner" ]
+    [ "AstarPlanner.hpp", "AstarPlanner_8hpp.html", null ],
+    [ "Planner.hpp", "Planner_8hpp.html", null ]
 ];

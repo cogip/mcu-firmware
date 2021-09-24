@@ -27,6 +27,9 @@ var hierarchy =
     [ "pf_sensor_t", "structpf__sensor__t.html", null ],
     [ "PID", "structPID.html", null ],
     [ "PID_t", "structPID__t.html", null ],
+    [ "cogip::planners::Planner", "classcogip_1_1planners_1_1Planner.html", [
+      [ "cogip::planners::AstarPlanner", "classcogip_1_1planners_1_1AstarPlanner.html", null ]
+    ] ],
     [ "cogip::cogip_defs::Polar", "classcogip_1_1cogip__defs_1_1Polar.html", null ],
     [ "sd21_conf_t", "structsd21__conf__t.html", null ],
     [ "sd21_servo_t", "structsd21__servo__t.html", null ],
