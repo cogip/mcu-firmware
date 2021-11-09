@@ -81,14 +81,14 @@ static const uart_conf_t uart_config[] = {
 #endif
     },
     {
-        .dev = USART1,
-        .rcc_mask = RCC_APB2ENR_USART1EN,
-        .rx_pin = GPIO_PIN(PORT_A, 10),
-        .tx_pin = GPIO_PIN(PORT_A, 9),
-        .rx_af = GPIO_AF7,
-        .tx_af = GPIO_AF7,
-        .bus = APB2,
-        .irqn = USART1_IRQn,
+        .dev = UART4,
+        .rcc_mask = RCC_APB1ENR_UART4EN,
+        .rx_pin = GPIO_PIN(PORT_A, 1),
+        .tx_pin = GPIO_PIN(PORT_A, 0),
+        .rx_af = GPIO_AF8,
+        .tx_af = GPIO_AF8,
+        .bus = APB1,
+        .irqn = UART4_IRQn,
 #ifdef MODULE_PERIPH_DMA
         .dma = DMA_STREAM_UNDEF,
         .dma_chan = UINT8_MAX,
@@ -111,7 +111,7 @@ static const uart_conf_t uart_config[] = {
 };
 
 #define UART_0_ISR          (isr_usart2)
-#define UART_1_ISR          (isr_usart1)
+#define UART_1_ISR          (isr_uart4)
 #define UART_2_ISR          (isr_usart3)
 
 #define UART_NUMOF          ARRAY_SIZE(uart_config)
