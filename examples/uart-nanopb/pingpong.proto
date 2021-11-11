@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+// All message type names are prefixed with "PB_" to avoid collisions
+// C++ classes already defined in code and Protobuf generated types.
+
+message PB_ReqHello {
+    int32 number = 1;
+}
+
+message PB_RespHello {
+    int32 number = 1;
+}
+
+enum PB_ColorType {
+    NONE = 0;
+    RED = 1;
+    GREEN = 2;
+    BLUE = 3;
+}
+
+message PB_Pose {
+    double x = 1;
+    double y = 2;
+    double angle = 3;
+}
+
+message PB_ReqPing {
+    PB_ColorType color = 1;
+}
+
+message PB_RespPing {
+    PB_ColorType color = 1;
+}
+
+message PB_ReqPong {
+    PB_Pose pose = 1;
+}
+
+message PB_RespPong {
+    PB_Pose new_pose = 1;
+}
+
+message PB_Request {
+    oneof request {
+        PB_ReqHello hello = 1;
+        PB_ReqPing ping = 2;
+        PB_ReqPong pong = 3;
+    }
+}
+
+message PB_Response {
+    oneof response {
+        PB_RespHello hello = 1;
+        PB_RespPing ping = 2;
+        PB_RespPong pong = 3;
+    }
+}

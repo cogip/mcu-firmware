@@ -52,6 +52,7 @@ Makefile.local
 
 # Python compiled files
 *.pyc
+__pycache__
 
 # Ignore download cache
 .dlcache
@@ -62,3 +63,6 @@ scan-build/
 # Symbolic links
 pkg/*
 !pkg/vl53l0x-api
+
+# Protobuf generated files
+*_pb2.py
