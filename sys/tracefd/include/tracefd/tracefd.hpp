@@ -6,7 +6,7 @@
 /// @defgroup    sys_tracefd Trace file descriptor module
 /// @ingroup     sys
 /// @brief       Trace file descriptor module.
-///              This module provides an API to print traces on `stderr`, `stdout` or files on sdcard.
+/// @details     This module provides an API to print traces on `stderr`, `stdout` or files on sdcard.
 ///              Since it may be difficult to determine when to close the files
 ///              to effectively flush data on disk, and to avoid opening/closing files
 ///              around each printf, this module starts a thread that
@@ -26,24 +26,20 @@
 
 #include "tracefd/File.hpp"
 
-/// Base directory of trace files.
 #ifndef TRACEFD_ROOT_DIR
-#  define TRACEFD_ROOT_DIR "/tmp/sdcard"
+#  define TRACEFD_ROOT_DIR "/tmp/sdcard"  ///< base directory of trace files
 #endif
 
-/// Interval in ms between two flush of all files.
 #ifndef TRACEFD_FLUSH_INTERVAL
-#  define TRACEFD_FLUSH_INTERVAL 1000
+#  define TRACEFD_FLUSH_INTERVAL 1000     ///< interval in ms between two flushes of all files
 #endif
 
-/// Files flusher thread priority.
 #ifndef TRACEFD_THREAD_PRIORITY
-#  define TRACEFD_THREAD_PRIORITY (THREAD_PRIORITY_MAIN - 1)
+#  define TRACEFD_THREAD_PRIORITY (THREAD_PRIORITY_MAIN - 1)  ///< files flusher thread priority
 #endif
 
-/// Base directory of trace files.
 #ifndef TRACEFD_ROOT_DIR
-#  define TRACEFD_ROOT_DIR "/tmp/sdcard"
+#  define TRACEFD_ROOT_DIR "/tmp/sdcard"  ///< base directory of trace files
 #endif
 
 namespace cogip {
