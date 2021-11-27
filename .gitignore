@@ -62,6 +62,7 @@ scan-build/
 # Symbolic links
 pkg/*
 !pkg/vl53l0x-api
+!pkg/embedded-proto
 
 # Protobuf generated files
 *_pb2.py

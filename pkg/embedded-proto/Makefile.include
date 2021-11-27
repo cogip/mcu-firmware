@@ -1,0 +1,5 @@
+# Include directory containing headers from EmbbedProto source code
+INCLUDES += -I$(PKGDIRBASE)/embedded-proto/src
+
+# Include directory containing generated headers
+INCLUDES += -I$(BINDIR)/$(APPLICATION_MODULE)

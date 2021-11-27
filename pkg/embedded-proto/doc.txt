@@ -1,0 +1,8 @@
+/**
+ * @defgroup pkg_embedded-proto EmbeddedProto library
+ * @ingroup  pkg
+ * @ingroup  sys
+ * @brief    Provides a protocol buffers C++ library to RIOT
+ *
+ * @see      https://github.com/Embedded-AMS/EmbeddedProto
+ */
