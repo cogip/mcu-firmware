@@ -13,6 +13,8 @@
 
 #include "cogip_defs/Coords.hpp"
 
+#include "PB_Pose.hpp"
+
 namespace cogip {
 
 namespace cogip_defs {
@@ -26,6 +28,9 @@ public:
         double y=0.0,         ///< [in] Y coordinate
         double O=0.0          ///< [in] 0-orientation
         ) : Coords(x, y), O_(O) {};
+
+    /// Constructor from Protobuf class
+    Pose(const PB_Pose &pose) : Coords(pose.get_x(), pose.get_y()), O_(pose.get_angle()) {};
 
     /// Return coordinates.
     Coords coords(void) const { return Coords(x_, y_); };
@@ -48,6 +53,15 @@ public:
     bool operator == (
         const Pose other      ///< [in] pose to compare
         ) const { return x_ == other.x_ && y_ == other.y_ && O_ == other.O_; };
+
+    /// Copy data to Protobuf message.
+    void pb_copy(
+        PB_Pose &pose         ///< [out] Protobuf message to fill
+        ) const {
+        pose.set_x(x_);
+        pose.set_y(y_);
+        pose.set_angle(O_);
+    };
 
 private:
     double O_;                ///< 0-orientation
