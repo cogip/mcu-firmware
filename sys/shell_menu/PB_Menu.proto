@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "PB_Command.proto";
+
+package cogip.shell;
+
+message PB_Menu {
+    string name = 1;
+    repeated PB_Command entries = 3;
+}

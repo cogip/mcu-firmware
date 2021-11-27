@@ -43,7 +43,7 @@ Menu::Menu(
     }
 }
 
-void Menu::enter(void) const
+void Menu::enter(void)
 {
     const Menu *previous_menu = current_menu;
     current_menu = this;
@@ -74,8 +74,29 @@ void Menu::enter(void) const
 
     cogip::tracefd::out.logf("Enter shell menu: %s", current_menu->name().c_str());
 
+    if (uart_protobuf) {
+        update_pb_message();
+        uart_protobuf->send_message(0, pb_message_);
+    }
+
     if (current_menu != previous_menu && enter_cb_) {
         enter_cb_();
+    }
+}
+
+void Menu::update_pb_message(void)
+{
+    pb_message_.clear();
+    pb_message_.mutable_name() = name_.c_str();
+
+    for (auto cmd: global_commands) {
+        cmd->update_pb_message();
+        pb_message_.add_entries(cmd->pb_message());
+    }
+
+    for (auto cmd: *current_menu) {
+        cmd->update_pb_message();
+        pb_message_.add_entries(cmd->pb_message());
     }
 }
 

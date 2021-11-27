@@ -16,10 +16,6 @@
 #include "shell_menu/Command.hpp"
 #include "shell_menu/Menu.hpp"
 
-#ifndef NB_SHELL_COMMANDS
-#  define NB_SHELL_COMMANDS 20    ///< max shell commands per menu
-#endif
-
 namespace cogip {
 
 namespace shell {
@@ -38,6 +34,12 @@ void add_global_command(
 void rename_command(
     const std::string &old_name,  ///< [in] old command name
     const std::string &new_name   ///< [in] new command name
+    );
+
+/// Register an UartProtobuf instance that will be used to send entered menus
+/// in Protobuf format over UART.
+void register_uartpb(
+    cogip::uartpb::UartProtobuf *uartpb_ptr
     );
 
 } // namespace shell
