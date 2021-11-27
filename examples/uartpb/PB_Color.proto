@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package cogip.cogip_defs;
+
+enum PB_Color {
+    NONE = 0;
+    RED = 1;
+    GREEN = 2;
+    BLUE = 3;
+}
