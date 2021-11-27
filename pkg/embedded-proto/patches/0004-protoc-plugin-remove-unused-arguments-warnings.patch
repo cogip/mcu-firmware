@@ -1,0 +1,138 @@
+From 927edfe40777c1c81b51f41d1fbb09c2fdef1bbb Mon Sep 17 00:00:00 2001
+From: Eric Courtois <eric.courtois@gmail.com>
+Date: Sat, 20 Nov 2021 20:37:33 +0100
+Subject: [PATCH 4/4] protoc plugin: remove unused arguments warnings
+
+RIOT is compiled using -Wall -Werror, so functions with unused arguments
+generate compilation errors.
+So add dummy use of these arguments to remove warnings.
+
+Signed-off-by: Eric Courtois <eric.courtois@gmail.com>
+---
+ src/Fields.cpp      | 13 +++++++++++++
+ src/RepeatedField.h |  1 +
+ 2 files changed, 14 insertions(+)
+
+diff --git a/src/Fields.cpp b/src/Fields.cpp
+index 234f09e..e17c309 100644
+--- a/src/Fields.cpp
++++ b/src/Fields.cpp
+@@ -42,6 +42,7 @@ namespace EmbeddedProto
+ 
+   Error int32::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::VARINT), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -52,6 +53,7 @@ namespace EmbeddedProto
+ 
+   Error int64::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::VARINT), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -62,6 +64,7 @@ namespace EmbeddedProto
+ 
+   Error uint32::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::VARINT), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -72,6 +75,7 @@ namespace EmbeddedProto
+ 
+   Error uint64::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::VARINT), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -82,6 +86,7 @@ namespace EmbeddedProto
+ 
+   Error sint32::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::VARINT), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -92,6 +97,7 @@ namespace EmbeddedProto
+ 
+   Error sint64::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::VARINT), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -102,6 +108,7 @@ namespace EmbeddedProto
+ 
+   Error boolean::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::VARINT), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -112,6 +119,7 @@ namespace EmbeddedProto
+ 
+   Error fixed32::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::FIXED32), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -122,6 +130,7 @@ namespace EmbeddedProto
+ 
+   Error fixed64::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::FIXED64), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -132,6 +141,7 @@ namespace EmbeddedProto
+ 
+   Error sfixed32::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::FIXED32), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -142,6 +152,7 @@ namespace EmbeddedProto
+ 
+   Error sfixed64::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::FIXED64), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -152,6 +163,7 @@ namespace EmbeddedProto
+ 
+   Error floatfixed::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::FIXED32), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+@@ -162,6 +174,7 @@ namespace EmbeddedProto
+ 
+   Error doublefixed::serialize_with_id(uint32_t field_number, WriteBufferInterface& buffer, const bool optional) const
+   { 
++    (void)optional;
+     Error return_value = WireFormatter::SerializeVarint(WireFormatter::MakeTag(field_number, WireFormatter::WireType::FIXED64), buffer);
+     if(Error::NO_ERRORS == return_value)
+     {
+diff --git a/src/RepeatedField.h b/src/RepeatedField.h
+index 60ac6cf..33720db 100644
+--- a/src/RepeatedField.h
++++ b/src/RepeatedField.h
+@@ -128,6 +128,7 @@ namespace EmbeddedProto
+ 
+       Error serialize(WriteBufferInterface& buffer) const final
+       {
++        (void)buffer;
+         // This function should not be called on a repeated field.
+         return Error::BUFFER_FULL;
+       };
+-- 
+2.25.1
+
