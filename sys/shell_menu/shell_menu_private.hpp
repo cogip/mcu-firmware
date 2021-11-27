@@ -12,6 +12,7 @@
 #pragma once
 
 #include "shell_menu/shell_menu.hpp"
+#include "uartpb/UartProtobuf.hpp"
 
 #include <map>
 #include <set>
@@ -20,10 +21,11 @@ namespace cogip {
 
 namespace shell {
 
-extern std::map<std::string, Menu *> all_menus; ///< map containings all menus indexed by cmd
-extern std::set<Command *> all_commands;        ///< all commands
-extern std::list<Command *> global_commands;    ///< flobal commands, available in all menus
-extern const Menu *current_menu;                ///< pointer to the current menu
+extern std::map<std::string, Menu *> all_menus;     ///< map containing all menus indexed by cmd
+extern std::set<Command *> all_commands;            ///< all commands
+extern std::list<Command *> global_commands;        ///< global commands, available in all menus
+extern Menu *current_menu;                          ///< pointer to the current menu
+extern cogip::uartpb::UartProtobuf *uart_protobuf;  ///< UartProtocol instance used to send new menu over UART
 
 /// Shell commands used by RIOT shell module.
 /// It is updated each time a menu is entered or exited.

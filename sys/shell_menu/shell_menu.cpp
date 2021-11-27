@@ -12,8 +12,9 @@ Menu root_menu("Main", "");
 std::map<std::string, Menu *> all_menus;
 std::set<Command *> all_commands;
 std::list<Command *> global_commands;
-const Menu *current_menu = nullptr;
+Menu *current_menu = nullptr;
 shell_command_t current_commands[NB_SHELL_COMMANDS];
+cogip::uartpb::UartProtobuf *uart_protobuf = nullptr;
 
 // Callbacks for default global commands
 static int _display_json_help(int argc, char **argv)
@@ -88,6 +89,11 @@ void rename_command(const std::string &old_name, const std::string &new_name)
 
     // Reload menu
     current_menu->enter();
+}
+
+void register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)
+{
+    uart_protobuf = uartpb_ptr;
 }
 
 } // namespace shell

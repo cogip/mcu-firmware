@@ -19,6 +19,13 @@
 
 // Project includes
 #include "utils.h"
+#include "uartpb/UartProtobuf.hpp"
+
+#include "PB_Menu.hpp"
+
+#ifndef NB_SHELL_COMMANDS
+#  define NB_SHELL_COMMANDS 20    ///< max shell commands per menu
+#endif
 
 namespace cogip {
 
@@ -31,6 +38,12 @@ namespace shell {
 /// It is linked to its parent menu.
 class Menu : public std::list<Command *> {
 public:
+    /// Protobuf message type. Shortcut for original template type.
+    using PB_Message = PB_Menu<
+        COMMAND_NAME_MAX_LENGTH, NB_SHELL_COMMANDS,
+        COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH
+        >;
+
     /// Constructor.
     Menu(
         const std::string &name,      ///< [in] name of the menu
@@ -40,19 +53,23 @@ public:
         );
 
     /// Enter this menu.
-    void enter(void) const;
+    void enter(void);
 
     /// Return the name of this menu.
     const std::string & name(void) const { return name_; };
 
     /// Return the parent of this menu.
-    const Menu * parent(void) const { return parent_; };
+    Menu * parent(void) const { return parent_; };
+
+    /// Update the Protobuf message describing this menu.
+    void update_pb_message(void);
 
 private:
     std::string name_;                ///< menu name
     std::string cmd_;                 ///< command to enter this menu
     Menu *parent_;                    ///< pointer to the parent menu
     func_cb_t enter_cb_;              ///< function to execute at menu entry
+    PB_Message pb_message_;           ///< Protobuf message describing this menu.
 };
 
 } // namespace shell

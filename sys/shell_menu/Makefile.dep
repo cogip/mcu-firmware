@@ -1,4 +1,7 @@
+USEPKG += embedded-proto
+
 USEMODULE += shell
 USEMODULE += shell_commands
+USEMODULE += uartpb
 USEMODULE += utils
 USEMODULE += tracefd
