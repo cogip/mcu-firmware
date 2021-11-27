@@ -1,5 +1,8 @@
 USEMODULE_INCLUDES_cogip_defs := $(LAST_MAKEFILEDIR)/include
 USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_cogip_defs)
 
+PROTOBUF_PATH_cogip_defs := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_cogip_defs)
+
 # https://gcc.gnu.org/gcc-7/changes.html
 CXXEXFLAGS += -Wno-psabi
