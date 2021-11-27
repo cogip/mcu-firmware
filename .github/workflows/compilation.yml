@@ -31,9 +31,13 @@ jobs:
     - name: Install toolchain
       run: |
         sudo apt-get update
-        sudo apt-get install -qq build-essential gcc-multilib g++-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi uncrustify
+        sudo apt-get install -qq build-essential gcc-multilib g++-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi uncrustify protobuf-compiler
         gcc --version
         arm-none-eabi-gcc --version
+    - name: Install Python packages
+      run: |
+        sudo apt-get install -qq python3-pip
+        sudo python3 -m pip install -r mcu-firmware/requirements.txt
     - name: Compile
       run: |
         cd mcu-firmware

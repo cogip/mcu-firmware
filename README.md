@@ -29,10 +29,12 @@ $ git clone https://github.com/cogip/mcu-firmware.git
 
 ## Requirements
 
+### Toolchain
+
 To install toolchain and development on ubuntu 20.04:
 
 ```bash
-$ sudo apt install build-essential gcc-multilib g++-multilib openocd python-serial
+$ sudo apt install build-essential gcc-multilib g++-multilib openocd
 ```
 Minimal gcc version: 8.1
 
@@ -47,6 +49,15 @@ $ tar xf gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2
 Edit ~/.bashrc file and add $HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/ to $PATH variable:
 ```bash
 PATH=${PATH}:$HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/
+```
+
+### Python Virtual Environment
+
+```bash
+$ sudo apt install  python3-pip python3-venv
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r mcu-firmware/requirements.txt
 ```
 
 # Simulation target (x86_64 architecture)

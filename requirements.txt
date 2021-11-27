@@ -1,0 +1,8 @@
+# For `make term`
+pyserial==3.5
+
+# For embedded-proto package
+# See RIOT/build/pkg/embedded-proto/requirements.txt
+Jinja2==2.11.3
+MarkupSafe==1.1.1
+six==1.12.0
