@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1shell_1_1Command.html','
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">cogip::shell::Command Class Reference</div>  </div>
@@ -132,10 +133,17 @@ $(document).ready(function(){initNavTree('classcogip_1_1shell_1_1Command.html','
 <div class="textblock"><p><a class="el" href="classcogip_1_1shell_1_1Command.html" title="Command class.">Command</a> class. </p>
 <p>This class is a C++ wrapper around RIOT shell_command_t struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Command_8hpp_source.html#l00027">27</a> of file <a class="el" href="Command_8hpp_source.html">Command.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Command_8hpp_source.html#l00036">36</a> of file <a class="el" href="Command_8hpp_source.html">Command.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="Command_8hpp_source.html">Command.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ad930f371d92e8924714fe297c6579bac"><td class="memItemLeft" align="right" valign="top"><a id="ad930f371d92e8924714fe297c6579bac"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">PB_Message</a> = PB_Command&lt; COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH &gt;</td></tr>
+<tr class="memdesc:ad930f371d92e8924714fe297c6579bac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protobuf message type. Shortcut for original template type. <br /></td></tr>
+<tr class="separator:ad930f371d92e8924714fe297c6579bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a839b58214e8769cd74568c3a85a2da93"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Command.html#a839b58214e8769cd74568c3a85a2da93">Command</a> (const std::string &amp;<a class="el" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>, const std::string &amp;<a class="el" href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">desc</a>, shell_command_handler_t <a class="el" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">handler</a>)</td></tr>
@@ -160,6 +168,14 @@ const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a cl
 shell_command_handler_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">handler</a> (void) const</td></tr>
 <tr class="memdesc:ab132de1ca200cbefbf636b3b58059729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of this command. <br /></td></tr>
 <tr class="separator:ab132de1ca200cbefbf636b3b58059729"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08573e94f578484fbf8f5c0866e22b0d"><td class="memItemLeft" align="right" valign="top"><a id="a08573e94f578484fbf8f5c0866e22b0d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Command.html#a08573e94f578484fbf8f5c0866e22b0d">update_pb_message</a> (void)</td></tr>
+<tr class="memdesc:a08573e94f578484fbf8f5c0866e22b0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the Protobuf message describing this menu. <br /></td></tr>
+<tr class="separator:a08573e94f578484fbf8f5c0866e22b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf020fc65ae0d3a56e18ee06249f7502"><td class="memItemLeft" align="right" valign="top"><a id="aaf020fc65ae0d3a56e18ee06249f7502"></a>
+const <a class="el" href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">PB_Message</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Command.html#aaf020fc65ae0d3a56e18ee06249f7502">pb_message</a> (void) const</td></tr>
+<tr class="memdesc:aaf020fc65ae0d3a56e18ee06249f7502"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the Protobuf message. <br /></td></tr>
+<tr class="separator:aaf020fc65ae0d3a56e18ee06249f7502"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a839b58214e8769cd74568c3a85a2da93"></a>
@@ -239,7 +255,7 @@ shell_command_handler_t&#160;</td><td class="memItemRight" valign="bottom"><a cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Command_8hpp_source.html#l00043">43</a> of file <a class="el" href="Command_8hpp_source.html">Command.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Command_8hpp_source.html#l00055">55</a> of file <a class="el" href="Command_8hpp_source.html">Command.hpp</a>.</p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -261,7 +277,7 @@ shell_command_handler_t&#160;</td><td class="memItemRight" valign="bottom"><a cl
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri Sep 24 2021 00:09:39 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

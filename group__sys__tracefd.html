@@ -121,17 +121,17 @@ $(document).ready(function(){initNavTree('group__sys__tracefd.html',''); initRes
 <div class="header">
   <div class="summary">
 <a href="#files">Files</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">Trace file descriptor module<div class="ingroups"><a class="el" href="group__sys.html">System modules</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Trace file descriptor module. This module provides an API to print traces on <code>stderr</code>, <code>stdout</code> or files on sdcard. Since it may be difficult to determine when to close the files to effectively flush data on disk, and to avoid opening/closing files around each printf, this module starts a thread that periodically closes/opens files to flush data. This thread can be disabled to allow manual handling of opening/closing files. Using the lock/unlock API, it is possible to execute consecutive prints in thread safe manner. The module relies on 'sdcard_spi' driver, so SPI parameters must be provided in the board/platform/application. Native boards are also supported, files being written in '/tmp'.  
+<p>Trace file descriptor module.  
 <a href="#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Trace file descriptor module. This module provides an API to print traces on <code>stderr</code>, <code>stdout</code> or files on sdcard. Since it may be difficult to determine when to close the files to effectively flush data on disk, and to avoid opening/closing files around each printf, this module starts a thread that periodically closes/opens files to flush data. This thread can be disabled to allow manual handling of opening/closing files. Using the lock/unlock API, it is possible to execute consecutive prints in thread safe manner. The module relies on 'sdcard_spi' driver, so SPI parameters must be provided in the board/platform/application. Native boards are also supported, files being written in '/tmp'. </p>
+<p>Trace file descriptor module. </p>
+<p>This module provides an API to print traces on <code>stderr</code>, <code>stdout</code> or files on sdcard. Since it may be difficult to determine when to close the files to effectively flush data on disk, and to avoid opening/closing files around each printf, this module starts a thread that periodically closes/opens files to flush data. This thread can be disabled to allow manual handling of opening/closing files. Using the lock/unlock API, it is possible to execute consecutive prints in thread safe manner. The module relies on 'sdcard_spi' driver, so SPI parameters must be provided in the board/platform/application. Native boards are also supported, files being written in '/tmp'. </p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for Trace file descriptor module:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -140,7 +140,7 @@ $(document).ready(function(){initNavTree('group__sys__tracefd.html',''); initRes
 <div class="center"><img src="group__sys__tracefd.png" border="0" usemap="#group____sys____tracefd" alt=""/></div>
 <map name="group____sys____tracefd" id="group____sys____tracefd">
 <area shape="rect" href="group__sys.html" title=" " alt="" coords="5,31,136,56"/>
-<area shape="rect" title="Trace file descriptor module. This module provides an API to print traces on stderr,..." alt="" coords="185,23,335,63"/>
+<area shape="rect" title="Trace file descriptor module." alt="" coords="185,23,335,63"/>
 <area shape="rect" href="group__lib__obstacles.html" title="Obstacles module." alt="" coords="419,5,557,31"/>
 <area shape="rect" href="group__sys__shell__menu.html" title="Menus for shell." alt="" coords="441,55,535,80"/>
 </map>
@@ -158,32 +158,26 @@ Files</h2></td></tr>
 <tr class="memdesc:tracefd__private_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Private API for Trace file descriptor module This header provides function declarations that have different implementations whether the module is compiled for a native CPU or a real hardware. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacecogip"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecogip.html">cogip</a></td></tr>
-<tr class="memdesc:namespacecogip"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base directory of trace files. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ga31f015a8cfafc5e6f27b9f8466575c2b"><td class="memItemLeft" align="right" valign="top"><a id="ga31f015a8cfafc5e6f27b9f8466575c2b"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sys__tracefd.html#ga31f015a8cfafc5e6f27b9f8466575c2b">TRACEFD_ROOT_DIR</a>&#160;&#160;&#160;&quot;/tmp/sdcard&quot;</td></tr>
-<tr class="memdesc:ga31f015a8cfafc5e6f27b9f8466575c2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base directory of trace files. <br /></td></tr>
+<tr class="memdesc:ga31f015a8cfafc5e6f27b9f8466575c2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">base directory of trace files <br /></td></tr>
 <tr class="separator:ga31f015a8cfafc5e6f27b9f8466575c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa6cbb066b94e76ce05102a3fafd54490"><td class="memItemLeft" align="right" valign="top"><a id="gaa6cbb066b94e76ce05102a3fafd54490"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sys__tracefd.html#gaa6cbb066b94e76ce05102a3fafd54490">TRACEFD_FLUSH_INTERVAL</a>&#160;&#160;&#160;1000</td></tr>
-<tr class="memdesc:gaa6cbb066b94e76ce05102a3fafd54490"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interval in ms between two flush of all files. <br /></td></tr>
+<tr class="memdesc:gaa6cbb066b94e76ce05102a3fafd54490"><td class="mdescLeft">&#160;</td><td class="mdescRight">interval in ms between two flushes of all files <br /></td></tr>
 <tr class="separator:gaa6cbb066b94e76ce05102a3fafd54490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga61367f941d6ec3f36b607133349cd22b"><td class="memItemLeft" align="right" valign="top"><a id="ga61367f941d6ec3f36b607133349cd22b"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sys__tracefd.html#ga61367f941d6ec3f36b607133349cd22b">TRACEFD_THREAD_PRIORITY</a>&#160;&#160;&#160;(THREAD_PRIORITY_MAIN - 1)</td></tr>
-<tr class="memdesc:ga61367f941d6ec3f36b607133349cd22b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Files flusher thread priority. <br /></td></tr>
+<tr class="memdesc:ga61367f941d6ec3f36b607133349cd22b"><td class="mdescLeft">&#160;</td><td class="mdescRight">files flusher thread priority <br /></td></tr>
 <tr class="separator:ga61367f941d6ec3f36b607133349cd22b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri Sep 24 2021 00:09:39 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['unlock_558',['unlock',['../classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1',1,'cogip::obstacles::List::unlock()'],['../classcogip_1_1tracefd_1_1File.html#ae0a68f381e7074323fe257039ed7df64',1,'cogip::tracefd::File::unlock()']]]
+  ['task_5fctrl_5fupdate_602',['task_ctrl_update',['../group__controller.html#ga4808b57587274de0f1294499b6c01336',1,'ctrl.hpp']]],
+  ['task_5fplanner_603',['task_planner',['../classcogip_1_1planners_1_1AstarPlanner.html#afcb4c4ae45eab4fcf126f2f24e61a3dd',1,'cogip::planners::AstarPlanner::task_planner()'],['../classcogip_1_1planners_1_1Planner.html#af4a4781c620ae1bebe21c3b843707257',1,'cogip::planners::Planner::task_planner()']]]
 ];

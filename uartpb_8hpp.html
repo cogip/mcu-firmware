@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Namespace List</title>
+    <title>sys/uartpb/include/uartpb/uartpb.hpp File Reference</title>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="jquery.min.js"></script>
     <script src="jquery.powertip.min.js"></script>
@@ -100,7 +100,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('namespaces.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('uartpb_8hpp.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -119,20 +119,59 @@ $(document).ready(function(){initNavTree('namespaces.html',''); initResizable();
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
-<div class="title">Namespace List</div>  </div>
+<div class="title">uartpb.hpp File Reference<div class="ingroups"><a class="el" href="group__sys.html">System modules</a> &raquo; <a class="el" href="group__sys__uartpb.html">UART Protobuf module</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all documented namespaces with brief descriptions:</div><div class="directory">
-<table class="directory">
-<tr id="row_0_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">N</span></span><a class="el" href="namespacecogip.html" target="_self">cogip</a></td><td class="desc">Base directory of trace files </td></tr>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Eric Courtois <a href="#" onclick="location.href='mai'+'lto:'+'eri'+'c.'+'cou'+'rt'+'ois'+'@g'+'mai'+'l.'+'com'; return false;">eric.<span style="display: none;">.nosp@m.</span>cour<span style="display: none;">.nosp@m.</span>tois@<span style="display: none;">.nosp@m.</span>gmai<span style="display: none;">.nosp@m.</span>l.com</a> </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="uartpb_8hpp_source.html">uartpb.hpp</a>.</p>
+</div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="uartpb_8hpp__dep__incl.png" border="0" usemap="#sys_2uartpb_2include_2uartpb_2uartpb_8hppdep" alt=""/></div>
+<map name="sys_2uartpb_2include_2uartpb_2uartpb_8hppdep" id="sys_2uartpb_2include_2uartpb_2uartpb_8hppdep">
+<area shape="rect" title=" " alt="" coords="142,5,285,47"/>
+<area shape="rect" href="ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="5,95,176,136"/>
+<area shape="rect" href="UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="122,184,305,225"/>
+<area shape="rect" href="WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="251,95,424,136"/>
+<area shape="rect" href="Menu_8hpp.html" title="Menu class declaration." alt="" coords="63,273,238,315"/>
+<area shape="rect" href="shell__menu__private_8hpp.html" title="Shell menu private variables." alt="" coords="134,452,293,493"/>
+<area shape="rect" href="shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="39,363,247,404"/>
+</map>
+</div>
+</div>
+<p><a href="uartpb_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga8a0fef50aef48e661fe39616a4dcbac8"><td class="memItemLeft" align="right" valign="top">
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sys__uartpb.html#ga8a0fef50aef48e661fe39616a4dcbac8">UARTPB_READER_PRIO</a>&#160;&#160;&#160;(THREAD_PRIORITY_MAIN - 1)</td></tr>
+<tr class="memdesc:ga8a0fef50aef48e661fe39616a4dcbac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">message reader thread priority <br /></td></tr>
+<tr class="separator:ga8a0fef50aef48e661fe39616a4dcbac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaee193c15950ce3df6cf32e356ba44d19"><td class="memItemLeft" align="right" valign="top">
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sys__uartpb.html#gaee193c15950ce3df6cf32e356ba44d19">UARTPB_READER_STACKSIZE</a>&#160;&#160;&#160;THREAD_STACKSIZE_MAIN</td></tr>
+<tr class="memdesc:gaee193c15950ce3df6cf32e356ba44d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">message reader thread stask size <br /></td></tr>
+<tr class="separator:gaee193c15950ce3df6cf32e356ba44d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab220a996741b8d0f15692ea83e8aa879"><td class="memItemLeft" align="right" valign="top">
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sys__uartpb.html#gab220a996741b8d0f15692ea83e8aa879">UARTPB_INPUT_MESSAGE_LENGTH_MAX</a>&#160;&#160;&#160;128</td></tr>
+<tr class="memdesc:gab220a996741b8d0f15692ea83e8aa879"><td class="mdescLeft">&#160;</td><td class="mdescRight">max incoming message length <br /></td></tr>
+<tr class="separator:gab220a996741b8d0f15692ea83e8aa879"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafb04dcb448f82d1d09b69b316f9cc62b"><td class="memItemLeft" align="right" valign="top">
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b">UARTPB_OUTPUT_MESSAGE_LENGTH_MAX</a>&#160;&#160;&#160;512</td></tr>
+<tr class="memdesc:gafb04dcb448f82d1d09b69b316f9cc62b"><td class="mdescLeft">&#160;</td><td class="mdescRight">max outgoing message length <br /></td></tr>
+<tr class="separator:gafb04dcb448f82d1d09b69b316f9cc62b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- directory -->
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri Sep 24 2021 00:09:39 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -137,54 +137,72 @@ $(document).ready(function(){initNavTree('Command_8hpp_source.html',''); initRes
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// RIOT includes</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;shell.h&quot;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacecogip.html">cogip</a> {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;PB_Command.hpp&quot;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>shell {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html">   27</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1shell_1_1Command.html">Command</a> {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Command.html#a839b58214e8769cd74568c3a85a2da93">Command</a>(</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">const</span> std::string &amp;<a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>,         </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">const</span> std::string &amp;<a class="code" href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">desc</a>,         </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        shell_command_handler_t <a class="code" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">handler</a>  </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        );</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Command.html#afa0c740b25d7616ada2ae0bb9841196f">~Command</a>();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">   40</a></span>&#160;    <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> name_; };</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#a206284854e56e7c282e4faa8817a1e0b">   43</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Command.html#a206284854e56e7c282e4faa8817a1e0b">set_name</a>(</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>         </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        ) { name_ = <a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>; };</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">   48</a></span>&#160;    <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">desc</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> desc_; };</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">   51</a></span>&#160;    shell_command_handler_t <a class="code" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">handler</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> handler_; };</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    std::string name_;                   </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    std::string desc_;                   </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    shell_command_handler_t handler_;    </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;};</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#ifndef COMMAND_NAME_MAX_LENGTH</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#  define COMMAND_NAME_MAX_LENGTH 16</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#ifndef COMMAND_DESC_MAX_LENGTH</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#  define COMMAND_DESC_MAX_LENGTH 128</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>shell {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html">   36</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1shell_1_1Command.html">Command</a> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">   39</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">PB_Message</a> = PB_Command&lt;COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH&gt;;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Command.html#a839b58214e8769cd74568c3a85a2da93">Command</a>(</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">const</span> std::string &amp;<a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>,         </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">const</span> std::string &amp;<a class="code" href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">desc</a>,         </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        shell_command_handler_t <a class="code" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">handler</a>  </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        );</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Command.html#afa0c740b25d7616ada2ae0bb9841196f">~Command</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">   52</a></span>&#160;    <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> name_; };</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#a206284854e56e7c282e4faa8817a1e0b">   55</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Command.html#a206284854e56e7c282e4faa8817a1e0b">set_name</a>(</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>         </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        ) { name_ = <a class="code" href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">name</a>; };</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;} <span class="comment">// namespace shell</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">   60</a></span>&#160;    <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">desc</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> desc_; };</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">   63</a></span>&#160;    shell_command_handler_t <a class="code" href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">handler</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> handler_; };</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Command.html#a08573e94f578484fbf8f5c0866e22b0d">update_pb_message</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Command.html#aaf020fc65ae0d3a56e18ee06249f7502">   69</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">PB_Message</a> &amp;<a class="code" href="classcogip_1_1shell_1_1Command.html#aaf020fc65ae0d3a56e18ee06249f7502">pb_message</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> pb_message_; };</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::string name_;                   </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::string desc_;                   </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    shell_command_handler_t handler_;    </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">PB_Message</a> pb_message_;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;};</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;} <span class="comment">// namespace shell</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_a839b58214e8769cd74568c3a85a2da93"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#a839b58214e8769cd74568c3a85a2da93">cogip::shell::Command::Command</a></div><div class="ttdeci">Command(const std::string &amp;name, const std::string &amp;desc, shell_command_handler_t handler)</div><div class="ttdoc">Constructor.</div></div>
-<div class="ttc" id="anamespacecogip_html"><div class="ttname"><a href="namespacecogip.html">cogip</a></div><div class="ttdoc">Base directory of trace files.</div><div class="ttdef"><b>Definition:</b> <a href="Coords_8hpp_source.html#l00014">Coords.hpp:14</a></div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_ad8e613cf3e7b096f56c5cae0fe120077"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">cogip::shell::Command::name</a></div><div class="ttdeci">const std::string &amp; name(void) const</div><div class="ttdoc">Return the name of this command.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00040">Command.hpp:40</a></div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_a190e2f464f8dc614cd190c6fa0ae8bdf"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">cogip::shell::Command::desc</a></div><div class="ttdeci">const std::string &amp; desc(void) const</div><div class="ttdoc">Return the description of this command.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00048">Command.hpp:48</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_a08573e94f578484fbf8f5c0866e22b0d"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#a08573e94f578484fbf8f5c0866e22b0d">cogip::shell::Command::update_pb_message</a></div><div class="ttdeci">void update_pb_message(void)</div><div class="ttdoc">Update the Protobuf message describing this menu.</div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_ad8e613cf3e7b096f56c5cae0fe120077"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077">cogip::shell::Command::name</a></div><div class="ttdeci">const std::string &amp; name(void) const</div><div class="ttdoc">Return the name of this command.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00052">Command.hpp:52</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_a190e2f464f8dc614cd190c6fa0ae8bdf"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#a190e2f464f8dc614cd190c6fa0ae8bdf">cogip::shell::Command::desc</a></div><div class="ttdeci">const std::string &amp; desc(void) const</div><div class="ttdoc">Return the description of this command.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00060">Command.hpp:60</a></div></div>
 <div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_afa0c740b25d7616ada2ae0bb9841196f"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#afa0c740b25d7616ada2ae0bb9841196f">cogip::shell::Command::~Command</a></div><div class="ttdeci">~Command()</div><div class="ttdoc">Destructor.</div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_ab132de1ca200cbefbf636b3b58059729"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">cogip::shell::Command::handler</a></div><div class="ttdeci">shell_command_handler_t handler(void) const</div><div class="ttdoc">Return the name of this command.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00051">Command.hpp:51</a></div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_a206284854e56e7c282e4faa8817a1e0b"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#a206284854e56e7c282e4faa8817a1e0b">cogip::shell::Command::set_name</a></div><div class="ttdeci">void set_name(const std::string &amp;name)</div><div class="ttdoc">Return the name of this menu.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00043">Command.hpp:43</a></div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html">cogip::shell::Command</a></div><div class="ttdoc">Command class.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00027">Command.hpp:27</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_ab132de1ca200cbefbf636b3b58059729"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729">cogip::shell::Command::handler</a></div><div class="ttdeci">shell_command_handler_t handler(void) const</div><div class="ttdoc">Return the name of this command.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00063">Command.hpp:63</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_a206284854e56e7c282e4faa8817a1e0b"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#a206284854e56e7c282e4faa8817a1e0b">cogip::shell::Command::set_name</a></div><div class="ttdeci">void set_name(const std::string &amp;name)</div><div class="ttdoc">Return the name of this menu.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00055">Command.hpp:55</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_ad930f371d92e8924714fe297c6579bac"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">cogip::shell::Command::PB_Message</a></div><div class="ttdeci">PB_Command&lt; COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH &gt; PB_Message</div><div class="ttdoc">Protobuf message type. Shortcut for original template type.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00039">Command.hpp:39</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html_aaf020fc65ae0d3a56e18ee06249f7502"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html#aaf020fc65ae0d3a56e18ee06249f7502">cogip::shell::Command::pb_message</a></div><div class="ttdeci">const PB_Message &amp; pb_message(void) const</div><div class="ttdoc">Return the Protobuf message.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00069">Command.hpp:69</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Command_html"><div class="ttname"><a href="classcogip_1_1shell_1_1Command.html">cogip::shell::Command</a></div><div class="ttdoc">Command class.</div><div class="ttdef"><b>Definition:</b> <a href="Command_8hpp_source.html#l00036">Command.hpp:36</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri Sep 24 2021 00:09:39 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

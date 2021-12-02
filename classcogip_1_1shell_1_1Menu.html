@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1shell_1_1Menu.html','');
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">cogip::shell::Menu Class Reference</div>  </div>
@@ -132,7 +133,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1shell_1_1Menu.html','');
 <div class="textblock"><p><a class="el" href="classcogip_1_1shell_1_1Menu.html" title="Menu class.">Menu</a> class. </p>
 <p>A menu contains a list of <a class="el" href="classcogip_1_1shell_1_1Command.html" title="Command class.">Command</a> class. It has a name and a command to enter it. A callback can be specified to be executed at menu entry. It is linked to its parent menu. </p>
 
-<p class="definition">Definition at line <a class="el" href="Menu_8hpp_source.html#l00032">32</a> of file <a class="el" href="Menu_8hpp_source.html">Menu.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Menu_8hpp_source.html#l00039">39</a> of file <a class="el" href="Menu_8hpp_source.html">Menu.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="Menu_8hpp_source.html">Menu.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -158,23 +159,34 @@ $(document).ready(function(){initNavTree('classcogip_1_1shell_1_1Menu.html','');
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:abef872faf68678da5e8f050231365b61"><td class="memItemLeft" align="right" valign="top"><a id="abef872faf68678da5e8f050231365b61"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#abef872faf68678da5e8f050231365b61">PB_Message</a> = PB_Menu&lt; COMMAND_NAME_MAX_LENGTH, <a class="el" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a>, COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH &gt;</td></tr>
+<tr class="memdesc:abef872faf68678da5e8f050231365b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protobuf message type. Shortcut for original template type. <br /></td></tr>
+<tr class="separator:abef872faf68678da5e8f050231365b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac0e489282e9331bd3f177e122c10c69b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b">Menu</a> (const std::string &amp;<a class="el" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">name</a>, const std::string &amp;cmd, <a class="el" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *<a class="el" href="classcogip_1_1shell_1_1Menu.html#a77b71420b715fe571ca41ad556a25a17">parent</a>=nullptr, func_cb_t enter_cb=nullptr)</td></tr>
+<tr class="memitem:ac0e489282e9331bd3f177e122c10c69b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b">Menu</a> (const std::string &amp;<a class="el" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">name</a>, const std::string &amp;cmd, <a class="el" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *<a class="el" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">parent</a>=nullptr, func_cb_t enter_cb=nullptr)</td></tr>
 <tr class="memdesc:ac0e489282e9331bd3f177e122c10c69b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b">More...</a><br /></td></tr>
 <tr class="separator:ac0e489282e9331bd3f177e122c10c69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad74366e2f7dbdd28a696b0adec5b3f4b"><td class="memItemLeft" align="right" valign="top"><a id="ad74366e2f7dbdd28a696b0adec5b3f4b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#ad74366e2f7dbdd28a696b0adec5b3f4b">enter</a> (void) const</td></tr>
-<tr class="memdesc:ad74366e2f7dbdd28a696b0adec5b3f4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enter this menu. <br /></td></tr>
-<tr class="separator:ad74366e2f7dbdd28a696b0adec5b3f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e63226f196a0da8d35dcda2dbf72908"><td class="memItemLeft" align="right" valign="top"><a id="a9e63226f196a0da8d35dcda2dbf72908"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#a9e63226f196a0da8d35dcda2dbf72908">enter</a> (void)</td></tr>
+<tr class="memdesc:a9e63226f196a0da8d35dcda2dbf72908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enter this menu. <br /></td></tr>
+<tr class="separator:a9e63226f196a0da8d35dcda2dbf72908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f551988c9e6df31da585edfba8d2d39"><td class="memItemLeft" align="right" valign="top"><a id="a4f551988c9e6df31da585edfba8d2d39"></a>
 const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">name</a> (void) const</td></tr>
 <tr class="memdesc:a4f551988c9e6df31da585edfba8d2d39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of this menu. <br /></td></tr>
 <tr class="separator:a4f551988c9e6df31da585edfba8d2d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77b71420b715fe571ca41ad556a25a17"><td class="memItemLeft" align="right" valign="top"><a id="a77b71420b715fe571ca41ad556a25a17"></a>
-const <a class="el" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#a77b71420b715fe571ca41ad556a25a17">parent</a> (void) const</td></tr>
-<tr class="memdesc:a77b71420b715fe571ca41ad556a25a17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the parent of this menu. <br /></td></tr>
-<tr class="separator:a77b71420b715fe571ca41ad556a25a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76cb41413135fa4e947ef3efd85847b9"><td class="memItemLeft" align="right" valign="top"><a id="a76cb41413135fa4e947ef3efd85847b9"></a>
+<a class="el" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">parent</a> (void) const</td></tr>
+<tr class="memdesc:a76cb41413135fa4e947ef3efd85847b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the parent of this menu. <br /></td></tr>
+<tr class="separator:a76cb41413135fa4e947ef3efd85847b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d76f5f2ff4a23301412ef888194dc72"><td class="memItemLeft" align="right" valign="top"><a id="a7d76f5f2ff4a23301412ef888194dc72"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72">update_pb_message</a> (void)</td></tr>
+<tr class="memdesc:a7d76f5f2ff4a23301412ef888194dc72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the Protobuf message describing this menu. <br /></td></tr>
+<tr class="separator:a7d76f5f2ff4a23301412ef888194dc72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac0e489282e9331bd3f177e122c10c69b"></a>
@@ -235,7 +247,7 @@ const <a class="el" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *&#160;</td
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri Sep 24 2021 00:09:39 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

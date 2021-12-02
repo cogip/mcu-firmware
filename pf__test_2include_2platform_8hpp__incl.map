@@ -2,22 +2,23 @@
 <area shape="rect" id="node1" title="Define hardware properties of test platform. Units:" alt="" coords="277,5,463,47"/>
 <area shape="rect" id="node2" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="79,169,149,196"/>
 <area shape="rect" id="node4" href="$odometry_8hpp_source.html" title=" " alt="" coords="100,244,211,271"/>
-<area shape="rect" id="node9" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="152,95,255,121"/>
-<area shape="rect" id="node11" href="$List_8hpp.html" title="List obstacles class declaration." alt="" coords="354,169,493,196"/>
-<area shape="rect" id="node19" href="$Path_8hpp.html" title="Path declaration." alt="" coords="837,95,948,121"/>
-<area shape="rect" id="node21" href="$utils_8h_source.html" title=" " alt="" coords="849,244,912,271"/>
+<area shape="rect" id="node10" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="152,95,255,121"/>
+<area shape="rect" id="node12" href="$List_8hpp.html" title="List obstacles class declaration." alt="" coords="354,169,493,196"/>
+<area shape="rect" id="node20" href="$Path_8hpp.html" title="Path declaration." alt="" coords="837,95,948,121"/>
+<area shape="rect" id="node22" href="$utils_8h_source.html" title=" " alt="" coords="849,244,912,271"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,244,76,271"/>
 <area shape="rect" id="node5" title=" " alt="" coords="270,319,337,345"/>
 <area shape="rect" id="node6" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="39,319,195,345"/>
 <area shape="rect" id="node7" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="507,319,662,345"/>
-<area shape="rect" id="node8" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="615,393,784,420"/>
-<area shape="rect" id="node10" href="$pid_8h_source.html" title=" " alt="" coords="173,169,228,196"/>
-<area shape="rect" id="node12" title=" " alt="" coords="919,393,981,420"/>
-<area shape="rect" id="node13" title=" " alt="" coords="442,244,562,271"/>
-<area shape="rect" id="node14" title=" " alt="" coords="212,393,331,420"/>
-<area shape="rect" id="node15" href="$Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="586,244,759,271"/>
-<area shape="rect" id="node17" href="$File_8hpp.html" title="File class declaration." alt="" coords="361,319,483,345"/>
-<area shape="rect" id="node16" href="$cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="737,319,913,345"/>
-<area shape="rect" id="node18" title=" " alt="" coords="393,393,451,420"/>
-<area shape="rect" id="node20" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="835,169,950,196"/>
+<area shape="rect" id="node8" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="637,393,807,420"/>
+<area shape="rect" id="node9" title=" " alt="" coords="508,393,613,420"/>
+<area shape="rect" id="node11" href="$pid_8h_source.html" title=" " alt="" coords="173,169,228,196"/>
+<area shape="rect" id="node13" title=" " alt="" coords="919,393,981,420"/>
+<area shape="rect" id="node14" title=" " alt="" coords="442,244,562,271"/>
+<area shape="rect" id="node15" title=" " alt="" coords="212,393,331,420"/>
+<area shape="rect" id="node16" href="$Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="586,244,759,271"/>
+<area shape="rect" id="node18" href="$File_8hpp.html" title="File class declaration." alt="" coords="361,319,483,345"/>
+<area shape="rect" id="node17" href="$cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="737,319,913,345"/>
+<area shape="rect" id="node19" title=" " alt="" coords="393,393,451,420"/>
+<area shape="rect" id="node21" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="835,169,950,196"/>
 </map>
