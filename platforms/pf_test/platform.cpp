@@ -12,6 +12,9 @@
 #include "avoidance.hpp"
 #include "tracefd/tracefd.hpp"
 #include "path/Path.hpp"
+#include "shell_menu/shell_menu.hpp"
+#include "uartpb/UartProtobuf.hpp"
+#include "uartpb/ReadBuffer.hpp"
 
 /* Platform includes */
 #include "lidar_utils.hpp"
@@ -68,6 +71,13 @@ char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool trace_on = false;
+
+enum MessageType {
+    MSG_MENU = 0,
+    MSG_RESET = 1
+};
+
+cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
 bool pf_trace_on(void)
 {
@@ -283,6 +293,23 @@ void pf_init_tasks(void)
     ctrl_t *controller = pf_get_ctrl();
     bool start_planner = true;
     int countdown = PF_START_COUNTDOWN;
+
+    /* Initialize UARTPB */
+    uartpb = new cogip::uartpb::UartProtobuf(
+        message_handler,
+        UART_DEV(1)
+        );
+
+    bool uartpb_res = uartpb->connect();
+    if (! uartpb_res) {
+        uartpb = nullptr;
+        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
+    }
+    else {
+        cogip::shell::register_uartpb(uartpb);
+        uartpb->start_reader();
+        uartpb->send_message((uint8_t)MSG_RESET);
+    }
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 

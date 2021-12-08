@@ -12,3 +12,7 @@ ifneq ($(CPU),native)
 	CFLAGS += "-DSDCARD_SPI_PARAM_MOSI=GPIO_PIN(PORT_B, 5)"
 	CFLAGS += "-DSDCARD_SPI_PARAM_MISO=GPIO_PIN(PORT_B, 4)"
 endif
+
+ifeq ($(CPU),native)
+	CFLAGS += -DUART_NUMOF=2
+endif
