@@ -81,7 +81,9 @@ void UartProtobuf::message_reader()
             uint8_t c = ringbuffer_get_one(&rx_buf_);
             read_buffer_.push(c);
         }
-        message_handler_(message_type, read_buffer_);
+        if (message_handler_) {
+            message_handler_(message_type, read_buffer_);
+        }
     }
 }
 
