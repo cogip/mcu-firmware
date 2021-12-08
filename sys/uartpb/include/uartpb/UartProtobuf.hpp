@@ -52,10 +52,11 @@ void *message_reader_wrapper(
 /// Generic UART Protobuf communication class.
 class UartProtobuf {
 public:
+    using message_handler_t = void (*)(uint8_t message_type, cogip::uartpb::ReadBuffer &);
+
     /// Class constructor.
     UartProtobuf(
-        void (*message_handler)(uint8_t message_type, cogip::uartpb::ReadBuffer &),
-                                                  ///< [in] callback to process the message after decoding
+        message_handler_t message_handler,        ///< [in] callback to process the message after decoding
         uart_t uart_dev,                          ///< [in] UART device
         uint32_t uart_speed=230400U               ///< [in] UART baud rate
         );

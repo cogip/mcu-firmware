@@ -12,7 +12,7 @@ namespace cogip {
 namespace uartpb {
 
 UartProtobuf::UartProtobuf(
-    void (*message_handler)(uint8_t message_type, cogip::uartpb::ReadBuffer &),
+    message_handler_t message_handler,
     uart_t uart_dev, uint32_t uart_speed) :
     uart_dev_(uart_dev), uart_speed_(uart_speed)
 {
