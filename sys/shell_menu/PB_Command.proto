@@ -3,6 +3,6 @@ syntax = "proto3";
 package cogip.shell;
 
 message PB_Command {
-    string name = 1;
+    string cmd = 1;
     string desc = 2;
 }
