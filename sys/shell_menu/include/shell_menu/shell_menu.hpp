@@ -21,6 +21,8 @@ namespace cogip {
 namespace shell {
 
 extern Menu root_menu;            ///< root menu
+extern Menu *current_menu;        ///< pointer to the current menu
+extern std::list<Command *> global_commands;  ///< global commands, available in all menus
 
 /// Start the main menu.
 void start(void);

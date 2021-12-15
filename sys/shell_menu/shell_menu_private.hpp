@@ -23,8 +23,6 @@ namespace shell {
 
 extern std::map<std::string, Menu *> all_menus;     ///< map containing all menus indexed by cmd
 extern std::set<Command *> all_commands;            ///< all commands
-extern std::list<Command *> global_commands;        ///< global commands, available in all menus
-extern Menu *current_menu;                          ///< pointer to the current menu
 extern cogip::uartpb::UartProtobuf *uart_protobuf;  ///< UartProtocol instance used to send new menu over UART
 
 /// Shell commands used by RIOT shell module.
