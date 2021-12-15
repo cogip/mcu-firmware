@@ -21,6 +21,8 @@
 #include "lidar_obstacles.hpp"
 #include "trace_utils.hpp"
 
+#include "PB_Command.hpp"
+
 #ifdef MODULE_SHELL_PLATFORMS
 #include "shell_platforms.hpp"
 #endif /* MODULE_SHELL_PLATFORMS */
@@ -31,6 +33,9 @@
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
+
+/// Maximum number of arguments to shell command callbacks
+#define MAX_COMMAND_ARGS 8
 
 /* Controller */
 static ctrl_quadpid_t ctrl_quadpid =
@@ -72,7 +77,11 @@ char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool trace_on = false;
 
-enum MessageType {
+enum InputMessageType {
+    MSG_COMMAND = 0
+};
+
+enum OutputMessageType {
     MSG_MENU = 0,
     MSG_RESET = 1
 };
@@ -247,6 +256,89 @@ static void *_task_planner_start_cancel(void *arg)
     cogip::tracefd::out.logf("Key pressed, do not start planner.");
 
     return NULL;
+}
+
+/// Execute a shell command callback using arguments from Protobuf message.
+/// Command name is in the 'cmd' attribute of the Protobuf message.
+/// Arguments are in a space-separated string in 'desc' attribute of the Protobuf message.
+static void run_command(cogip::shell::Command *command, const cogip::shell::Command::PB_Message *pb_command)
+{
+    // Computed number of arguments
+    int argc = 0;
+    // List of arguments null-separated
+    char args[COMMAND_DESC_MAX_LENGTH];
+    // Array of pointers to each argument
+    char *argv[MAX_COMMAND_ARGS];
+    // First argument is the command
+    argv[argc++] = (char *)pb_command->cmd();
+    if (pb_command->get_desc().get_length() != 0) {
+        // If there are arguments to pass to the command in the 'desc' attribute
+        size_t i;
+        // Copy first argument pointer to 'argv'
+        argv[argc++] = args;
+        for (i = 0; i < pb_command->get_desc().get_length(); i++) {
+            if (i >= COMMAND_DESC_MAX_LENGTH || argc >= MAX_COMMAND_ARGS) {
+                printf("Skip command '%s %s': arguments too long\n", pb_command->cmd(), pb_command->desc());
+                return;
+            }
+            char c = pb_command->desc()[i];
+            // Copy each argument in 'args'
+            args[i] = c;
+            if (c == ' ') {
+                // Insert a null character between each argument
+                args[i] = '\0';
+                // Copy next argument pointer to 'argv'
+                argv[argc++] = args + i + 1;
+            }
+        }
+        // Add null-character after last argument
+        args[i] = '\0';
+    }
+    // Execute shell command callback
+    command->handler()(argc, argv);
+}
+
+// Handle a Protobuf command message
+static void handle_command(const cogip::shell::Command::PB_Message *pb_command)
+{
+    // Search the command in current menu command
+    for (auto command: *cogip::shell::current_menu) {
+        if (command->name() == pb_command->cmd()) {
+            run_command(command, pb_command);
+            return;
+        }
+    }
+
+    // If command was not found in current menu,
+    // search the command in global commands
+    for (auto command: cogip::shell::global_commands) {
+        if (command->name() == pb_command->cmd()) {
+            run_command(command, pb_command);
+            return;
+        }
+    }
+}
+
+// Read incoming Protobuf message and call the corresponding message handler
+void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
+{
+    typedef void (*response_handler_t)(const EmbeddedProto::MessageInterface *);
+    EmbeddedProto::MessageInterface *message = nullptr;
+    response_handler_t response_handler = nullptr;
+    switch (message_type) {
+        case MSG_COMMAND:
+            message = new cogip::shell::Command::PB_Message();
+            response_handler = (response_handler_t)handle_command;
+            break;
+        default:
+            printf("Unknown response type: %u\n", message_type);
+            break;
+    }
+
+    if (message && response_handler) {
+        message->deserialize(buffer);
+        response_handler(message);
+    }
 }
 
 void pf_init(void)
