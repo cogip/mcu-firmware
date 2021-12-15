@@ -19,7 +19,7 @@ Command::~Command()
 void Command::update_pb_message(void)
 {
     pb_message_.clear();
-    pb_message_.mutable_name() = name_.c_str();
+    pb_message_.mutable_cmd() = name_.c_str();
     pb_message_.mutable_desc() = desc_.c_str();
 }
 
