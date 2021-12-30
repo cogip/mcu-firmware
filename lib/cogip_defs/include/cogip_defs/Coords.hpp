@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "PB_Coords.hpp"
+
 namespace cogip {
 
 namespace cogip_defs {
@@ -23,6 +25,9 @@ public:
         double x=0.0,       ///< [in] X coordinate
         double y=0.0        ///< [in] Y coordinate
         ) : x_(x), y_(y) {};
+
+    /// Constructor from Protobuf class
+    Coords(const PB_Coords &coords) : x_(coords.get_x()), y_(coords.get_y()) {};
 
     /// Return X coordinate.
     double x(void) const { return x_; };
@@ -57,6 +62,14 @@ public:
     bool operator == (
         const Coords other  ///< [in] point to compare
         ) const { return x_ == other.x_ && y_ == other.y_; };
+
+    /// Copy data to Protobuf message.
+    void pb_copy(
+        PB_Coords &coords   ///< [out] Protobuf message to fill
+        ) const {
+        coords.set_x(x_);
+        coords.set_y(y_);
+    };
 
 protected:
     double x_;              ///< x-position
