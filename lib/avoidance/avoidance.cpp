@@ -16,7 +16,7 @@
 #define FINISH_INDEX    1
 
 /* Array of valid points */
-static cogip::cogip_defs::Pose _valid_points[GRAPH_MAX_VERTICES];
+static cogip::cogip_defs::Coords _valid_points[GRAPH_MAX_VERTICES];
 /* Number of valid points */
 static uint8_t _valid_points_count = 0;
 
@@ -32,8 +32,8 @@ static uint8_t _valid_points_count = 0;
 static uint64_t _graph[GRAPH_MAX_VERTICES];
 
 /* Start and finish poses */
-static cogip::cogip_defs::Pose start_pose;
-static cogip::cogip_defs::Pose finish_pose;
+static cogip::cogip_defs::Coords start_pose;
+static cogip::cogip_defs::Coords finish_pose;
 
 /**
  * Indexes of valid points from the start pose to the final pose
@@ -78,7 +78,7 @@ static void _validate_obstacles_points(void)
                 continue;
             }
             /* Found a valid point */
-            _valid_points[_valid_points_count++] = { point.x(), point.y(), 0 };
+            _valid_points[_valid_points_count++] = { point.x(), point.y() };
         }
     }
 }
@@ -221,9 +221,9 @@ dijkstra_error_no_destination:
 }
 
 /**
- * Return given index pose in the avoidance path.
+ * Return given index coordinates in the avoidance path.
  */
-cogip::cogip_defs::Pose avoidance_get_pose(uint8_t index)
+cogip::cogip_defs::Coords avoidance_get_pose(uint8_t index)
 {
     uint8_t i = 1;
 
@@ -237,7 +237,7 @@ cogip::cogip_defs::Pose avoidance_get_pose(uint8_t index)
 /**
  * Build avoidance graph.
  */
-bool avoidance_build_graph(const cogip::cogip_defs::Pose &s, const cogip::cogip_defs::Pose &f)
+bool avoidance_build_graph(const cogip::cogip_defs::Coords &s, const cogip::cogip_defs::Coords &f)
 {
     start_pose = s;
     finish_pose = f;
@@ -255,7 +255,7 @@ bool avoidance_build_graph(const cogip::cogip_defs::Pose &s, const cogip::cogip_
             goto update_graph_error_finish_pose;
         }
         if (obstacle->is_point_inside(start_pose)) {
-            start_pose.set_coords(obstacle->nearest_point(start_pose));
+            start_pose = obstacle->nearest_point(start_pose);
         }
     }
 
@@ -274,8 +274,8 @@ update_graph_error_finish_pose:
 /**
  * Check if the given segment collides an obstacle.
  **/
-bool avoidance_check_recompute(const cogip::cogip_defs::Pose &start,
-                               const cogip::cogip_defs::Pose &stop)
+bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
+                               const cogip::cogip_defs::Coords &stop)
 {
     /* Get dynamic obstacle list */
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();

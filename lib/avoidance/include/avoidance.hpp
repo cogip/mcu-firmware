@@ -32,7 +32,7 @@
 #include <cstdint>
 
 /* Project includes */
-#include "cogip_defs/Pose.hpp"
+#include "cogip_defs/Coords.hpp"
 #include "tracefd/File.hpp"
 
 /**
@@ -61,7 +61,7 @@ cogip::cogip_defs::Pose avoidance_get_pose(uint8_t index);
  *
  * @return              true if recompute is needed, false otherwise
  */
-bool avoidance_build_graph(const cogip::cogip_defs::Pose &s, const cogip::cogip_defs::Pose &f);
+bool avoidance_build_graph(const cogip::cogip_defs::Coords &s, const cogip::cogip_defs::Coords &f);
 
 /**
  * @brief Check if avoidance should be recomputed by checking if an obstacle is
@@ -72,8 +72,8 @@ bool avoidance_build_graph(const cogip::cogip_defs::Pose &s, const cogip::cogip_
  *
  * @return              true if recompute is needed, false otherwise
  */
-bool avoidance_check_recompute(const cogip::cogip_defs::Pose &start,
-                               const cogip::cogip_defs::Pose &stop);
+bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
+                               const cogip::cogip_defs::Coords &stop);
 
 /**
  * @brief Print list of intermediate positions to reach wanted path position
