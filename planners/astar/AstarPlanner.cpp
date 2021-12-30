@@ -134,7 +134,7 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
 
     // At this point the avoidance graph is valid and the next targeted
     // point can be retrieved.
-    pose_to_reach = avoidance_get_pose(avoidance_index);
+    pose_to_reach.set_coords(avoidance_get_pose(avoidance_index));
 
     // Check if the point to reach is the current path position to reach
     if ((pose_to_reach.x() == current_path_pos.x())
