@@ -5,6 +5,6 @@ package cogip.cogip_defs;
 message PB_Pose {
     double x = 1;
     double y = 2;
-    double angle = 3;
+    double O = 3;
 }
 
