@@ -17,7 +17,7 @@ static cogip::tracefd::File *tracefd_sdcard;
 #define TASK_PERIOD_MS 60
 
 /* Thread stack */
-static char trace_thread_stack[THREAD_STACKSIZE_LARGE];
+static char trace_thread_stack[THREAD_STACKSIZE_MEDIUM];
 
 /* Thread priority */
 #define TRACE_PRIO (THREAD_PRIORITY_MAIN - 1)
@@ -29,7 +29,7 @@ static void *_thread_trace(void *arg)
 
     while (true) {
         if (pf_trace_on()) {
-            pf_print_state(cogip::tracefd::out);
+            pf_send_pb_state();
         }
         if (tracefd_sdcard) {
             pf_print_state(*tracefd_sdcard);

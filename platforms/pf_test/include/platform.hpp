@@ -166,15 +166,6 @@ typedef struct {
 bool pf_trace_on(void);
 
 /**
- * @brief Change trace mode status
- *
- * param[in]    state           true/false to activate/deactivate trace mode
- *
- * @return
- */
-void pf_set_trace_mode(bool state);
-
-/**
  * @brief Print current robot state in JSON format
  *
  * param[in]    out             tracefd descriptor used to print state
@@ -182,6 +173,12 @@ void pf_set_trace_mode(bool state);
  * @return
  */
 void pf_print_state(cogip::tracefd::File &out);
+
+/**
+ * @brief Send current robot state in Protobuf format over UART
+ * @return
+ */
+void pf_send_pb_state(void);
 
 /**
  * @brief Check if a game is started

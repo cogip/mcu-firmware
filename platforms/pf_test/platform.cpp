@@ -22,6 +22,7 @@
 #include "trace_utils.hpp"
 
 #include "PB_Command.hpp"
+#include "PB_State.hpp"
 
 #ifdef MODULE_SHELL_PLATFORMS
 #include "shell_platforms.hpp"
@@ -69,33 +70,36 @@ static ctrl_quadpid_t ctrl_quadpid =
 
 /* Planner */
 cogip::planners::Planner *planner = nullptr;
+bool start_planner = true;
 
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
-static bool trace_on = false;
+static size_t connected_monitors = 0;
+PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER> pb_state;
 
 enum InputMessageType {
-    MSG_COMMAND = 0
+    MSG_COMMAND = 0,
+    MSG_BREAK = 1,
+    MSG_COPILOT_CONNECTED = 2,
+    MSG_COPILOT_DISCONNECTED = 3,
+    MSG_MONITOR_CONNECTED = 4,
+    MSG_MONITOR_DISCONNECTED = 5
 };
 
 enum OutputMessageType {
     MSG_MENU = 0,
-    MSG_RESET = 1
+    MSG_RESET = 1,
+    MSG_STATE = 2
 };
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
 bool pf_trace_on(void)
 {
-    return trace_on;
-}
-
-void pf_set_trace_mode(bool state)
-{
-    trace_on = state;
+    return (connected_monitors > 0);
 }
 
 void pf_print_state(cogip::tracefd::File &out)
@@ -129,6 +133,26 @@ void pf_print_state(cogip::tracefd::File &out)
     out.printf("}\n");
 
     out.unlock();
+}
+
+void pf_send_pb_state(void)
+{
+    if (uartpb == nullptr) {
+        return;
+    }
+
+    ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
+    pb_state.clear();
+    pb_state.set_mode((PB_Mode)ctrl->control.current_mode);
+    ctrl->control.pose_current.pb_copy(pb_state.mutable_pose_current());
+    ctrl->control.pose_order.pb_copy(pb_state.mutable_pose_order());
+    pb_state.mutable_cycle() = ctrl->control.current_cycle;
+    ctrl->control.speed_current.pb_copy(pb_state.mutable_speed_current());
+    ctrl->control.speed_order.pb_copy(pb_state.mutable_speed_order());
+    avoidance_pb_copy_path(pb_state.mutable_path());
+    cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
+
+    uartpb->send_message((uint8_t)MSG_STATE, pb_state);
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -330,6 +354,27 @@ void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
             message = new cogip::shell::Command::PB_Message();
             response_handler = (response_handler_t)handle_command;
             break;
+        case MSG_BREAK:
+            start_planner = false;
+            break;
+        case MSG_COPILOT_CONNECTED:
+            puts("Copilot connected");
+            if (cogip::shell::current_menu) {
+                cogip::shell::current_menu->send_pb_message();
+            }
+            break;
+        case MSG_COPILOT_DISCONNECTED:
+            puts("Copilot disconnected");
+            connected_monitors = 0;
+            break;
+        case MSG_MONITOR_CONNECTED:
+            connected_monitors++;
+            printf("Monitor connected (%u)\n", connected_monitors);
+            break;
+        case MSG_MONITOR_DISCONNECTED:
+            connected_monitors--;
+            printf("Monitor disconnected (%u)\n", connected_monitors);
+            break;
         default:
             printf("Unknown response type: %u\n", message_type);
             break;
@@ -383,7 +428,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-    bool start_planner = true;
     int countdown = PF_START_COUNTDOWN;
 
     /* Initialize UARTPB */

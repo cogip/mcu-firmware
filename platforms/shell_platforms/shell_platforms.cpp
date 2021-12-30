@@ -29,21 +29,6 @@
 /* Controller */
 static ctrl_t *ctrl = NULL;
 
-static int _cmd_trace_on_off(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-    if (pf_trace_on()) {
-        cogip::shell::rename_command("_trace_off", "_trace_on");
-        pf_set_trace_mode(false);
-    }
-    else {
-        cogip::shell::rename_command("_trace_on", "_trace_off");
-        pf_set_trace_mode(true);
-    }
-    return 0;
-}
-
 static int _cmd_print_state(int argc, char **argv)
 {
     (void)argc;
@@ -142,9 +127,6 @@ void pf_shell_init(void)
     ));
     cogip::shell::add_global_command(new cogip::shell::Command(
         "_avoidance_path", "Print avoidance current path", _cmd_print_avoidance_path
-    ));
-    cogip::shell::add_global_command(new cogip::shell::Command(
-        "_trace_on", "Activate/deactivate trace", _cmd_trace_on_off
     ));
 #ifdef MODULE_SHMEM
     cogip::shell::add_global_command(new cogip::shell::Command(SHMEM_SET_KEY_CMD));
