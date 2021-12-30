@@ -30,7 +30,7 @@ void UartProtobuf::start_reader()
 {
     reader_pid_ = thread_create(
         reader_stack_, sizeof(reader_stack_), UARTPB_READER_PRIO,
-        0, message_reader_wrapper, (void *)this, "reader");
+        0, message_reader_wrapper, (void *)this, "Protobuf reader");
 }
 
 void UartProtobuf::uart_rx_cb(uint8_t data)
