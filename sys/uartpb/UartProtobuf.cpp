@@ -46,6 +46,15 @@ void UartProtobuf::uart_rx_cb(uint8_t data)
     if (msg_length_bytes_received_ < msg_length_bytes_number_) {
         ((uint8_t *)&msg_length_)[msg_length_bytes_received_++] = data;
         msg_bytes_received_ = 0;
+        if (msg_length_bytes_received_ == msg_length_bytes_number_ && msg_length_ == 0) {
+            // Special case where the message content is empty.
+            // Directly send the message with its type and no content.
+            msg_t msg;
+            msg.type = msg_type_;
+            msg.content.value = msg_length_;
+            msg_send(&msg, reader_pid_);
+            msg_type_ = UINT8_MAX;
+        }
         return;
     }
 
