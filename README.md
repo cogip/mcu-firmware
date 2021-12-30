@@ -23,7 +23,7 @@ both are required to generate the firwmare binaries.
 ## Cloning repositories
 
 ```bash
-$ git clone https://github.com/RIOT-OS/RIOT.git -b 2020.07
+$ git clone https://github.com/RIOT-OS/RIOT.git -b 2021.07
 $ git clone https://github.com/cogip/mcu-firmware.git
 ```
 
