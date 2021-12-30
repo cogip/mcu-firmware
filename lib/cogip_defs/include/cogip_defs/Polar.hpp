@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "PB_Polar.hpp"
+
 namespace cogip {
 
 namespace cogip_defs {
@@ -23,6 +25,11 @@ public:
         double distance = 0.0, ///< [in] distance
         double angle = 0.0     ///< [in] angle
         ) : distance_(distance), angle_(angle) {};
+
+    /// Constructor from Protobuf class
+    Polar(const PB_Polar &polar) :
+        distance_(polar.get_distance()),
+        angle_(polar.get_angle()) {};
 
     /// Return distance.
     double distance(void) const { return distance_; };
@@ -39,6 +46,14 @@ public:
     void set_angle(
         double angle           ///< [in] new angle
         ) { angle_ = angle; };
+
+    /// Copy data to Protobuf message.
+    void pb_copy(
+        PB_Polar &polar        ///< [out] Protobuf message to fill
+        ) const {
+        polar.set_distance(distance_);
+        polar.set_angle(angle_);
+    };
 
 private:
     double distance_;          ///< distance
