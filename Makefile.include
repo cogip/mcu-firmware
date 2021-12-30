@@ -62,8 +62,6 @@ endif
 # As RIOT Makefile.include is included, RAMSIZE can be computed
 ifneq ($(CPU),native)
 	.DEFAULT_GOAL := world
-	RAM_LEN_K := $(shell echo $(RAM_LEN) | sed 's/K//')
-	RAMSIZE := $(shell echo $$(( $(RAM_LEN_K) * $(KB) )) )
 endif
 
 # Use C++14 by default
@@ -73,4 +71,4 @@ CXXEXFLAGS += -std=c++14
 
 .PHONY: world
 world: all
-	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAMSIZE)
+	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAM_LEN)
