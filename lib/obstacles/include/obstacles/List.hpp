@@ -23,6 +23,12 @@
 #include "obstacles/Obstacle.hpp"
 #include "tracefd/File.hpp"
 
+#include "PB_Obstacle.hpp"
+
+#ifndef OBSTACLES_MAX_NUMBER
+#  define OBSTACLES_MAX_NUMBER 32  ///< Maximum number of obstacles
+#endif
+
 namespace cogip {
 
 namespace obstacles {
@@ -30,6 +36,9 @@ namespace obstacles {
 /// List of obstacles.
 class List: public std::vector<Obstacle *> {
 public:
+    /// Protobuf message type. Shortcut for original template type.
+    using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<cogip::obstacles::PB_Obstacle, OBSTACLES_MAX_NUMBER>;
+
     /// Constructor.
     List(
         uint32_t default_circle_radius = 0,   ///< [in] default radius for circle obstacles
@@ -62,6 +71,11 @@ public:
     /// Print all obstacles from the list in JSON format.
     void print_json(
         cogip::tracefd::File &out             ///< [out] trace file descriptor
+        ) const;
+
+    /// Copy data to Protobuf message.
+    void pb_copy(
+        PB_Message &message                 ///< [out] Protobuf message to fill
         ) const;
 
     /// Delete all obstacles from the list.

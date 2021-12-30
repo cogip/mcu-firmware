@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package cogip.obstacles;
+
+message PB_Rectangle {
+    float x = 1;
+    float y = 2;
+    float angle = 3;
+    float length_x = 4;
+    float length_y = 5;
+}

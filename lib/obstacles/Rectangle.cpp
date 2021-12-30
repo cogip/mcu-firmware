@@ -55,6 +55,16 @@ void Rectangle::print_json(cogip::tracefd::File &out) const
         );
 }
 
+void Rectangle::pb_copy(PB_Obstacle &message) const
+{
+    PB_Rectangle &rectangle = message.mutable_rectangle();
+    rectangle.set_x(center_.x());
+    rectangle.set_y(center_.y());
+    rectangle.set_angle(angle_);
+    rectangle.set_length_x(length_x_);
+    rectangle.set_length_y(length_y_);
+}
+
 } // namespace obstacles
 
 } // namespace cogip

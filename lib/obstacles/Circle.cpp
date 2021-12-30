@@ -76,6 +76,14 @@ void Circle::print_json(cogip::tracefd::File &out) const
         );
 }
 
+void Circle::pb_copy(PB_Obstacle &message) const
+{
+    PB_Circle &circle = message.mutable_circle();
+    circle.set_x(center_.x());
+    circle.set_y(center_.y());
+    circle.set_radius(radius_);
+}
+
 bool Circle::is_line_crossing_circle(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const
 {
     const cogip_defs::Coords &c = center_;
