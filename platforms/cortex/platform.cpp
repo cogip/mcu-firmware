@@ -11,11 +11,17 @@
 #include "avoidance.hpp"
 #include "tracefd/tracefd.hpp"
 #include "path/Path.hpp"
+#include "shell_menu/shell_menu.hpp"
+#include "uartpb/UartProtobuf.hpp"
+#include "uartpb/ReadBuffer.hpp"
 
 /* Platform includes */
 #include "lidar_utils.hpp"
 #include "lidar_obstacles.hpp"
 #include "trace_utils.hpp"
+
+#include "PB_Command.hpp"
+#include "PB_State.hpp"
 
 #ifdef MODULE_SHELL_PLATFORMS
 #include "shell_platforms.hpp"
@@ -27,6 +33,9 @@
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
+
+/// Maximum number of arguments to shell command callbacks
+#define MAX_COMMAND_ARGS 8
 
 /* Controller */
 static ctrl_quadpid_t ctrl_quadpid =
@@ -60,22 +69,36 @@ static ctrl_quadpid_t ctrl_quadpid =
 
 /* Planner */
 cogip::planners::Planner *planner = nullptr;
+bool start_planner = true;
 
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
-static bool trace_on = false;
+static size_t connected_monitors = 0;
+PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER> pb_state;
+
+enum InputMessageType {
+    MSG_COMMAND = 0,
+    MSG_BREAK = 1,
+    MSG_COPILOT_CONNECTED = 2,
+    MSG_COPILOT_DISCONNECTED = 3,
+    MSG_MONITOR_CONNECTED = 4,
+    MSG_MONITOR_DISCONNECTED = 5
+};
+
+enum OutputMessageType {
+    MSG_MENU = 0,
+    MSG_RESET = 1,
+    MSG_STATE = 2
+};
+
+cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
 bool pf_trace_on(void)
 {
-    return trace_on;
-}
-
-void pf_set_trace_mode(bool state)
-{
-    trace_on = state;
+    return (connected_monitors > 0);
 }
 
 void pf_print_state(cogip::tracefd::File &out)
@@ -109,6 +132,26 @@ void pf_print_state(cogip::tracefd::File &out)
     out.printf("}\n");
 
     out.unlock();
+}
+
+void pf_send_pb_state(void)
+{
+    if (uartpb == nullptr) {
+        return;
+    }
+
+    ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
+    pb_state.clear();
+    pb_state.set_mode((PB_Mode)ctrl->control.current_mode);
+    ctrl->control.pose_current.pb_copy(pb_state.mutable_pose_current());
+    ctrl->control.pose_order.pb_copy(pb_state.mutable_pose_order());
+    pb_state.mutable_cycle() = ctrl->control.current_cycle;
+    ctrl->control.speed_current.pb_copy(pb_state.mutable_speed_current());
+    ctrl->control.speed_order.pb_copy(pb_state.mutable_speed_order());
+    avoidance_pb_copy_path(pb_state.mutable_path());
+    cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
+
+    uartpb->send_message((uint8_t)MSG_STATE, pb_state);
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -250,6 +293,110 @@ static void *_task_planner_start_cancel(void *arg)
     return NULL;
 }
 
+/// Execute a shell command callback using arguments from Protobuf message.
+/// Command name is in the 'cmd' attribute of the Protobuf message.
+/// Arguments are in a space-separated string in 'desc' attribute of the Protobuf message.
+static void run_command(cogip::shell::Command *command, const cogip::shell::Command::PB_Message *pb_command)
+{
+    // Computed number of arguments
+    int argc = 0;
+    // List of arguments null-separated
+    char args[COMMAND_DESC_MAX_LENGTH];
+    // Array of pointers to each argument
+    char *argv[MAX_COMMAND_ARGS];
+    // First argument is the command
+    argv[argc++] = (char *)pb_command->cmd();
+    if (pb_command->get_desc().get_length() != 0) {
+        // If there are arguments to pass to the command in the 'desc' attribute
+        size_t i;
+        // Copy first argument pointer to 'argv'
+        argv[argc++] = args;
+        for (i = 0; i < pb_command->get_desc().get_length(); i++) {
+            if (i >= COMMAND_DESC_MAX_LENGTH || argc >= MAX_COMMAND_ARGS) {
+                printf("Skip command '%s %s': arguments too long\n", pb_command->cmd(), pb_command->desc());
+                return;
+            }
+            char c = pb_command->desc()[i];
+            // Copy each argument in 'args'
+            args[i] = c;
+            if (c == ' ') {
+                // Insert a null character between each argument
+                args[i] = '\0';
+                // Copy next argument pointer to 'argv'
+                argv[argc++] = args + i + 1;
+            }
+        }
+        // Add null-character afeter last argument
+        args[i] = '\0';
+    }
+    // Execute shell command callback
+    command->handler()(argc, argv);
+}
+
+// Handle a Protobuf command message
+static void handle_command(const cogip::shell::Command::PB_Message *pb_command)
+{
+    // Search the command in current menu command
+    for (auto command: *cogip::shell::current_menu) {
+        if (command->name() == pb_command->cmd()) {
+            run_command(command, pb_command);
+            return;
+        }
+    }
+
+    // If command was not found in current menu,
+    // search the command in global commands
+    for (auto command: cogip::shell::global_commands) {
+        if (command->name() == pb_command->cmd()) {
+            run_command(command, pb_command);
+            return;
+        }
+    }
+}
+
+// Read incoming Protobuf message and call the corresponding message handler
+void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
+{
+    typedef void (*response_handler_t)(const EmbeddedProto::MessageInterface *);
+    EmbeddedProto::MessageInterface *message = nullptr;
+    response_handler_t response_handler = nullptr;
+    switch (message_type) {
+        case MSG_COMMAND:
+            message = new cogip::shell::Command::PB_Message();
+            response_handler = (response_handler_t)handle_command;
+            break;
+        case MSG_BREAK:
+            start_planner = false;
+            break;
+        case MSG_COPILOT_CONNECTED:
+            puts("Copilot connected");
+            if (cogip::shell::current_menu) {
+                cogip::shell::current_menu->send_pb_message();
+            }
+            break;
+        case MSG_COPILOT_DISCONNECTED:
+            puts("Copilot disconnected");
+            connected_monitors = 0;
+            break;
+        case MSG_MONITOR_CONNECTED:
+            connected_monitors++;
+            printf("Monitor connected (%u)\n", connected_monitors);
+            break;
+        case MSG_MONITOR_DISCONNECTED:
+            connected_monitors--;
+            printf("Monitor disconnected (%u)\n", connected_monitors);
+            break;
+        default:
+            printf("Unknown response type: %u\n", message_type);
+            break;
+    }
+
+    if (message && response_handler) {
+        message->deserialize(buffer);
+        response_handler(message);
+    }
+}
+
 void pf_init(void)
 {
 #ifdef MODULE_SHELL_PLATFORMS
@@ -305,8 +452,24 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-    bool start_planner = true;
     int countdown = PF_START_COUNTDOWN;
+
+    /* Initialize UARTPB */
+    uartpb = new cogip::uartpb::UartProtobuf(
+        message_handler,
+        UART_DEV(1)
+        );
+
+    bool uartpb_res = uartpb->connect();
+    if (! uartpb_res) {
+        uartpb = nullptr;
+        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
+    }
+    else {
+        cogip::shell::register_uartpb(uartpb);
+        uartpb->start_reader();
+        uartpb->send_message((uint8_t)MSG_RESET);
+    }
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 
