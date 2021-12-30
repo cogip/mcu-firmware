@@ -31,6 +31,7 @@ public:
         );
 
     void print_json(cogip::tracefd::File &out) const override;
+    void pb_copy(PB_Obstacle &message) const override;
 
 private:
     double angle_;                        ///< angle of the rectangle

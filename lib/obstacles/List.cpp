@@ -1,6 +1,8 @@
 #include "obstacles/List.hpp"
 #include "obstacles_private.hpp"
 
+#include "PB_Obstacle.hpp"
+
 namespace cogip {
 
 namespace obstacles {
@@ -39,6 +41,14 @@ void List::print_json(cogip::tracefd::File &out) const
 
         obs->print_json(out);
     }
+}
+
+void List::pb_copy(PB_Message &message) const {
+    PB_Obstacle obstacle;
+    for (auto obs: *this) {
+        obs->pb_copy(obstacle);
+    }
+    message.add(obstacle);
 }
 
 } // namespace obstacles

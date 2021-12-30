@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "PB_Rectangle.proto";
+import "PB_Circle.proto";
+
+package cogip.obstacles;
+
+message PB_Obstacle {
+    oneof obstacle {
+        PB_Rectangle rectangle = 1;
+        PB_Circle circle = 2;
+    }
+}

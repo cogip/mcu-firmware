@@ -138,6 +138,11 @@ void Polygon::print_json(cogip::tracefd::File &out) const
     out.printf("]}");
 }
 
+void Polygon::pb_copy(PB_Obstacle &) const
+{
+    // Polygon is not supported by the simulator, so do nothing.
+}
+
 } // namespace obstacles
 
 } // namespace cogip

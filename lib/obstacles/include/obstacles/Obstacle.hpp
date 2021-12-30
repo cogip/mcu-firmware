@@ -19,6 +19,8 @@
 #include "cogip_defs/Polygon.hpp"
 #include "tracefd/File.hpp"
 
+#include "PB_Obstacle.hpp"
+
 namespace cogip {
 
 namespace obstacles {
@@ -65,6 +67,11 @@ public:
     /// Print obstacles in JSON format.
     virtual void print_json(
         cogip::tracefd::File &out         ///< [out] trace file descriptor
+        ) const = 0;
+
+    /// Copy data to Protobuf message.
+    virtual void pb_copy(
+        PB_Obstacle &message              ///< [out] Protobuf message to fill
         ) const = 0;
 
     /// Return obstacle center.

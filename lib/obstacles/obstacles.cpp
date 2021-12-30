@@ -38,6 +38,14 @@ void print_all_json(cogip::tracefd::File &out)
     out.printf("]");
 }
 
+void pb_copy(cogip::obstacles::List::PB_Message &message)
+{
+    for (auto l: all_obstacles) {
+        l->pb_copy(message);
+    }
+}
+
+
 bool is_point_in_obstacles(const cogip_defs::Coords &p, const Obstacle *filter)
 {
     for (auto obstacles: all_obstacles) {
