@@ -30,7 +30,7 @@ public:
         ) : Coords(x, y), O_(O) {};
 
     /// Constructor from Protobuf class
-    Pose(const PB_Pose &pose) : Coords(pose.get_x(), pose.get_y()), O_(pose.get_angle()) {};
+    Pose(const PB_Pose &pose) : Coords(pose.get_x(), pose.get_y()), O_(pose.get_O()) {};
 
     /// Return coordinates.
     Coords coords(void) const { return Coords(x_, y_); };
@@ -38,7 +38,7 @@ public:
     /// Set coordinates.
     void set_coords(
         const Coords &coords  ///< [in] new coordinates
-        ) { x_ = coords.x(); y_ = coords.y(); };
+        ) { x_ = coords.x(); y_ = coords.y();};
 
     /// Return 0-orientation.
     double O(void) const { return O_; };
@@ -60,7 +60,7 @@ public:
         ) const {
         pose.set_x(x_);
         pose.set_y(y_);
-        pose.set_angle(O_);
+        pose.set_O(O_);
     };
 
 private:

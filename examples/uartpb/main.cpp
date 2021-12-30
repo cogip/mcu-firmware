@@ -115,7 +115,7 @@ static bool send_pong()
 
     printf(
         "==>> Pong request  with pose={x=%.2lf, y=%.2lf, angle=%.2lf}\n",
-        (double)pong.get_pose().get_x(), (double)pong.get_pose().get_y(), (double)pong.get_pose().get_angle()
+        (double)pong.get_pose().get_x(), (double)pong.get_pose().get_y(), (double)pong.get_pose().get_O()
         );
 
     return uartpb->send_message((uint8_t)MSG_PONG, pong);
