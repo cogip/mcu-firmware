@@ -74,10 +74,7 @@ void Menu::enter(void)
 
     cogip::tracefd::out.logf("Enter shell menu: %s", current_menu->name().c_str());
 
-    if (uart_protobuf) {
-        update_pb_message();
-        uart_protobuf->send_message(0, pb_message_);
-    }
+    send_pb_message();
 
     if (current_menu != previous_menu && enter_cb_) {
         enter_cb_();
@@ -97,6 +94,14 @@ void Menu::update_pb_message(void)
     for (auto cmd: *current_menu) {
         cmd->update_pb_message();
         pb_message_.add_entries(cmd->pb_message());
+    }
+}
+
+void Menu::send_pb_message(void)
+{
+    if (uart_protobuf) {
+        update_pb_message();
+        uart_protobuf->send_message(0, pb_message_);
     }
 }
 

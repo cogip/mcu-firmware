@@ -64,6 +64,9 @@ public:
     /// Update the Protobuf message describing this menu.
     void update_pb_message(void);
 
+    /// Send the Protobuf message describing this menu if uartpb is registered.
+    void send_pb_message(void);
+
 private:
     std::string name_;                ///< menu name
     std::string cmd_;                 ///< command to enter this menu
