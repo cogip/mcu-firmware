@@ -16,7 +16,7 @@
 #define FINISH_INDEX    1
 
 /* Array of valid points */
-static cogip::cogip_defs::Coords _valid_points[GRAPH_MAX_VERTICES];
+static cogip::cogip_defs::Coords _valid_points[AVOIDANCE_GRAPH_MAX_VERTICES];
 /* Number of valid points */
 static uint8_t _valid_points_count = 0;
 
@@ -29,7 +29,7 @@ static uint8_t _valid_points_count = 0;
  *   _graph[3] = 0x22 = 0b00100010
  *   Valid point 3 can reach valid point 1 and valid point 5
  */
-static uint64_t _graph[GRAPH_MAX_VERTICES];
+static uint64_t _graph[AVOIDANCE_GRAPH_MAX_VERTICES];
 
 /* Start and finish poses */
 static cogip::cogip_defs::Coords start_pose;
@@ -108,7 +108,7 @@ static void _build_avoidance_graph(void)
             }
             /* If no collision, both points of the segment are added to
              * the graph with distance between them */
-            if ((p < GRAPH_MAX_VERTICES) && (p2 < GRAPH_MAX_VERTICES)) {
+            if ((p < AVOIDANCE_GRAPH_MAX_VERTICES) && (p2 < AVOIDANCE_GRAPH_MAX_VERTICES)) {
                 if (!collide) {
                     _graph[p] |= (1 << p2);
                     _graph[p2] |= (1 << p);
@@ -130,16 +130,16 @@ static void _build_avoidance_graph(void)
 static bool _dijkstra(void)
 {
     /* List of graph vertices already checked */
-    bool checked[GRAPH_MAX_VERTICES];
+    bool checked[AVOIDANCE_GRAPH_MAX_VERTICES];
     /* Weight(distance) of each vertex */
-    double distance[GRAPH_MAX_VERTICES];
+    double distance[AVOIDANCE_GRAPH_MAX_VERTICES];
     /* Graph vertices index */
     uint16_t v;
     /* Valid points index */
     uint16_t i;
 
     /* Dijkstra result path with parent direction hierarchy */
-    int parent[GRAPH_MAX_VERTICES];
+    int parent[AVOIDANCE_GRAPH_MAX_VERTICES];
 
     /* Start pose */
     uint8_t start = START_INDEX;
@@ -149,7 +149,7 @@ static bool _dijkstra(void)
         /* No point checked */
         checked[i] = false;
         /* All distances set to infinite */
-        distance[i] = DIJKSTRA_MAX_DISTANCE;
+        distance[i] = AVOIDANCE_DIJKSTRA_MAX_DISTANCE;
         /* No parent */
         parent[i] = -1;
     }
@@ -168,7 +168,7 @@ static bool _dijkstra(void)
     /* Loop until finish point is found or all points are checked */
     while ((v != FINISH_INDEX) && (checked[v] == false)) {
         /* Minimal distance found (initialized as infinite) */
-        double min_distance = DIJKSTRA_MAX_DISTANCE;
+        double min_distance = AVOIDANCE_DIJKSTRA_MAX_DISTANCE;
 
         /* Current graph vertex is checked */
         checked[v] = true;

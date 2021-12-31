@@ -39,8 +39,8 @@
  * @name Dijkstra avoidance parameters
  * @{
  */
-#define GRAPH_MAX_VERTICES      64          /**< Maximum graph vertice number */
-#define DIJKSTRA_MAX_DISTANCE   UINT32_MAX  /**< Maximum Dijkstra distance */
+#define AVOIDANCE_GRAPH_MAX_VERTICES         64          /**< Maximum graph vertice number */
+#define AVOIDANCE_DIJKSTRA_MAX_DISTANCE      UINT32_MAX  /**< Maximum Dijkstra distance */
 /** @} */
 
 /**
