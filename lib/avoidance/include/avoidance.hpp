@@ -35,6 +35,8 @@
 #include "cogip_defs/Coords.hpp"
 #include "tracefd/File.hpp"
 
+#include "PB_Coords.hpp"
+
 /**
  * @name Dijkstra avoidance parameters
  * @{
@@ -50,7 +52,7 @@
  *
  * @return              wanted pose if found, start position otherwise
  */
-cogip::cogip_defs::Pose avoidance_get_pose(uint8_t index);
+cogip::cogip_defs::Coords avoidance_get_pose(uint8_t index);
 
 /**
  * @brief Build avoidance graph, listing all path possibilities between start
@@ -83,5 +85,16 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
  * @return
  */
 void avoidance_print_path(cogip::tracefd::File &out);
+
+/**
+ * @brief Copy list of intermediate positions to reach wanted path position
+ *        to protobuf message
+ *
+ * @param[in]   out     Protobuf message to fill
+ *
+ * @return
+ */
+void avoidance_pb_copy_path(
+    EmbeddedProto::RepeatedFieldFixedSize<cogip::cogip_defs::PB_Coords, AVOIDANCE_GRAPH_MAX_VERTICES> &path);
 
 /** @} */

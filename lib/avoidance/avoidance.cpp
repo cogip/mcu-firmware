@@ -11,6 +11,7 @@
 #include "platform.hpp"
 #include "utils.h"
 #include "cogip_defs/Coords.hpp"
+#include "PB_Coords.hpp"
 
 #define START_INDEX     0
 #define FINISH_INDEX    1
@@ -321,4 +322,20 @@ void avoidance_print_path(cogip::tracefd::File &out)
             );
     }
     out.printf("]");
+}
+
+void avoidance_pb_copy_path(
+        EmbeddedProto::RepeatedFieldFixedSize<cogip::cogip_defs::PB_Coords, AVOIDANCE_GRAPH_MAX_VERTICES> &path) {
+    if (!_is_avoidance_computed) {
+        return;
+    }
+
+    cogip::cogip_defs::PB_Coords coords;
+    for (auto i: _children) {
+        _valid_points[i].pb_copy(coords);
+        path.add(coords);
+    }
+    /* Print also finish pose */
+    finish_pose.pb_copy(coords);
+    path.add(coords);
 }
