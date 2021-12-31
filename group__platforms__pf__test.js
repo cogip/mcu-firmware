@@ -54,6 +54,6 @@ var group__platforms__pf__test =
     [ "pf_is_camp_left", "group__platforms__pf__test.html#gadcb8588f477c2eda4b2f774b99b910d6", null ],
     [ "pf_is_game_launched", "group__platforms__pf__test.html#gae1a6aab08a0179e854ade7561e3dc079", null ],
     [ "pf_print_state", "group__platforms__pf__test.html#gac80e892a7623dddeb945d663b43fc38d", null ],
-    [ "pf_set_trace_mode", "group__platforms__pf__test.html#ga74ff9bcac245d58cc0058fcf625c9165", null ],
+    [ "pf_send_pb_state", "group__platforms__pf__test.html#ga0fc74267bdda152e7626e2c284689d07", null ],
     [ "pf_trace_on", "group__platforms__pf__test.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ]
 ];

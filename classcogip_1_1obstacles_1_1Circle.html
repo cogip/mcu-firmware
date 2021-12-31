@@ -175,6 +175,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aad28ba027fb65843a49c232f4d52399d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Circle.html#aad28ba027fb65843a49c232f4d52399d">print_json</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out) const override</td></tr>
 <tr class="memdesc:aad28ba027fb65843a49c232f4d52399d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print obstacles in JSON format.  <a href="classcogip_1_1obstacles_1_1Circle.html#aad28ba027fb65843a49c232f4d52399d">More...</a><br /></td></tr>
 <tr class="separator:aad28ba027fb65843a49c232f4d52399d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aca0408cb501ae42ebcd9b397d3039e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Circle.html#a8aca0408cb501ae42ebcd9b397d3039e">pb_copy</a> (PB_Obstacle &amp;message) const override</td></tr>
+<tr class="memdesc:a8aca0408cb501ae42ebcd9b397d3039e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="classcogip_1_1obstacles_1_1Circle.html#a8aca0408cb501ae42ebcd9b397d3039e">More...</a><br /></td></tr>
+<tr class="separator:a8aca0408cb501ae42ebcd9b397d3039e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcogip_1_1obstacles_1_1Obstacle"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcogip_1_1obstacles_1_1Obstacle')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html">cogip::obstacles::Obstacle</a></td></tr>
 <tr class="memitem:aaf2373e1f640bf9fe66e9236f13206ea inherit pub_methods_classcogip_1_1obstacles_1_1Obstacle"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#aaf2373e1f640bf9fe66e9236f13206ea">Obstacle</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;<a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7a56e847bb3343367b87e59865bdd2a2">center</a>, double <a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#ac79c25babac4c022f73cdc4df7ec74c9">radius</a>)</td></tr>
 <tr class="memdesc:aaf2373e1f640bf9fe66e9236f13206ea inherit pub_methods_classcogip_1_1obstacles_1_1Obstacle"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#aaf2373e1f640bf9fe66e9236f13206ea">More...</a><br /></td></tr>
@@ -368,6 +371,42 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 
 </div>
 </div>
+<a id="a8aca0408cb501ae42ebcd9b397d3039e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aca0408cb501ae42ebcd9b397d3039e">&#9670;&nbsp;</a></span>pb_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cogip::obstacles::Circle::pb_copy </td>
+          <td>(</td>
+          <td class="paramtype">PB_Obstacle &amp;&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copy data to Protobuf message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">message</td><td>[out] Protobuf message to fill </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a2a951d452e316cb68bbc3dd447f926e0">cogip::obstacles::Obstacle</a>.</p>
+
+</div>
+</div>
 <a id="aad28ba027fb65843a49c232f4d52399d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad28ba027fb65843a49c232f4d52399d">&#9670;&nbsp;</a></span>print_json()</h2>
 
@@ -411,7 +450,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

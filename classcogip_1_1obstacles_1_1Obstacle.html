@@ -132,7 +132,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1obstacles_1_1Obstacle.ht
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An obstacle used to detect and avoid collisions. </p>
 
-<p class="definition">Definition at line <a class="el" href="Obstacle_8hpp_source.html#l00027">27</a> of file <a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Obstacle_8hpp_source.html#l00029">29</a> of file <a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -184,6 +184,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:a066d4305e8b833f1bba25c33f1453520"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a066d4305e8b833f1bba25c33f1453520">print_json</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out) const =0</td></tr>
 <tr class="memdesc:a066d4305e8b833f1bba25c33f1453520"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print obstacles in JSON format.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#a066d4305e8b833f1bba25c33f1453520">More...</a><br /></td></tr>
 <tr class="separator:a066d4305e8b833f1bba25c33f1453520"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a951d452e316cb68bbc3dd447f926e0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a2a951d452e316cb68bbc3dd447f926e0">pb_copy</a> (PB_Obstacle &amp;message) const =0</td></tr>
+<tr class="memdesc:a2a951d452e316cb68bbc3dd447f926e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#a2a951d452e316cb68bbc3dd447f926e0">More...</a><br /></td></tr>
+<tr class="separator:a2a951d452e316cb68bbc3dd447f926e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a56e847bb3343367b87e59865bdd2a2"><td class="memItemLeft" align="right" valign="top"><a id="a7a56e847bb3343367b87e59865bdd2a2"></a>
 const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7a56e847bb3343367b87e59865bdd2a2">center</a> () const</td></tr>
 <tr class="memdesc:a7a56e847bb3343367b87e59865bdd2a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return obstacle center. <br /></td></tr>
@@ -403,6 +406,42 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 
 </div>
 </div>
+<a id="a2a951d452e316cb68bbc3dd447f926e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a951d452e316cb68bbc3dd447f926e0">&#9670;&nbsp;</a></span>pb_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void cogip::obstacles::Obstacle::pb_copy </td>
+          <td>(</td>
+          <td class="paramtype">PB_Obstacle &amp;&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copy data to Protobuf message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">message</td><td>[out] Protobuf message to fill </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classcogip_1_1obstacles_1_1Polygon.html#a8bcb4041008eff940233b478d07fa97e">cogip::obstacles::Polygon</a>, <a class="el" href="classcogip_1_1obstacles_1_1Rectangle.html#a8e8acbf7dcd4556449fd120df9fd9686">cogip::obstacles::Rectangle</a>, and <a class="el" href="classcogip_1_1obstacles_1_1Circle.html#a8aca0408cb501ae42ebcd9b397d3039e">cogip::obstacles::Circle</a>.</p>
+
+</div>
+</div>
 <a id="a066d4305e8b833f1bba25c33f1453520"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a066d4305e8b833f1bba25c33f1453520">&#9670;&nbsp;</a></span>print_json()</h2>
 
@@ -446,7 +485,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

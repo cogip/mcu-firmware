@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1cogip__defs_1_1Polar.htm
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate.">Polar</a> coordinate. </p>
 
-<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00019">19</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00021">21</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>&gt;</code></p>
 <table class="memberdecls">
@@ -140,6 +140,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a437c0afff180bc591d2a8f9ac5f75e4b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#a437c0afff180bc591d2a8f9ac5f75e4b">Polar</a> (double <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#a5dda2e70e8fab3e159a34079f300d3a3">distance</a>=0.0, double <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#ad3d524554bbb6d292dbddaadda32e982">angle</a>=0.0)</td></tr>
 <tr class="memdesc:a437c0afff180bc591d2a8f9ac5f75e4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classcogip_1_1cogip__defs_1_1Polar.html#a437c0afff180bc591d2a8f9ac5f75e4b">More...</a><br /></td></tr>
 <tr class="separator:a437c0afff180bc591d2a8f9ac5f75e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa100222b95afb121b97e7e60b1f36d3b"><td class="memItemLeft" align="right" valign="top"><a id="aa100222b95afb121b97e7e60b1f36d3b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#aa100222b95afb121b97e7e60b1f36d3b">Polar</a> (const PB_Polar &amp;polar)</td></tr>
+<tr class="memdesc:aa100222b95afb121b97e7e60b1f36d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from Protobuf class. <br /></td></tr>
+<tr class="separator:aa100222b95afb121b97e7e60b1f36d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5dda2e70e8fab3e159a34079f300d3a3"><td class="memItemLeft" align="right" valign="top"><a id="a5dda2e70e8fab3e159a34079f300d3a3"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#a5dda2e70e8fab3e159a34079f300d3a3">distance</a> (void) const</td></tr>
 <tr class="memdesc:a5dda2e70e8fab3e159a34079f300d3a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return distance. <br /></td></tr>
@@ -154,6 +158,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <tr class="memitem:ae0f1bcf7731cfc6011ccc3e151e9d157"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#ae0f1bcf7731cfc6011ccc3e151e9d157">set_angle</a> (double <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#ad3d524554bbb6d292dbddaadda32e982">angle</a>)</td></tr>
 <tr class="memdesc:ae0f1bcf7731cfc6011ccc3e151e9d157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set angle.  <a href="classcogip_1_1cogip__defs_1_1Polar.html#ae0f1bcf7731cfc6011ccc3e151e9d157">More...</a><br /></td></tr>
 <tr class="separator:ae0f1bcf7731cfc6011ccc3e151e9d157"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ea72ce091dca581c827ffe1a8d73fe4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#a1ea72ce091dca581c827ffe1a8d73fe4">pb_copy</a> (PB_Polar &amp;polar) const</td></tr>
+<tr class="memdesc:a1ea72ce091dca581c827ffe1a8d73fe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="classcogip_1_1cogip__defs_1_1Polar.html#a1ea72ce091dca581c827ffe1a8d73fe4">More...</a><br /></td></tr>
+<tr class="separator:a1ea72ce091dca581c827ffe1a8d73fe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a437c0afff180bc591d2a8f9ac5f75e4b"></a>
@@ -199,11 +206,47 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00022">22</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00024">24</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1ea72ce091dca581c827ffe1a8d73fe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ea72ce091dca581c827ffe1a8d73fe4">&#9670;&nbsp;</a></span>pb_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cogip::cogip_defs::Polar::pb_copy </td>
+          <td>(</td>
+          <td class="paramtype">PB_Polar &amp;&#160;</td>
+          <td class="paramname"><em>polar</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copy data to Protobuf message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">polar</td><td>[out] Protobuf message to fill </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00051">51</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ae0f1bcf7731cfc6011ccc3e151e9d157"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae0f1bcf7731cfc6011ccc3e151e9d157">&#9670;&nbsp;</a></span>set_angle()</h2>
 
@@ -236,7 +279,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00039">39</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00046">46</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -283,7 +326,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00034">34</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Polar_8hpp_source.html#l00041">41</a> of file <a class="el" href="Polar_8hpp_source.html">Polar.hpp</a>.</p>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
@@ -305,7 +348,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -173,18 +173,20 @@ $(document).ready(function(){initNavTree('Menu_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72">update_pb_message</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    std::string name_;                </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    std::string cmd_;                 </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *parent_;                    </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    func_cb_t enter_cb_;              </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html#abef872faf68678da5e8f050231365b61">PB_Message</a> pb_message_;           </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;};</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <span class="comment">// namespace shell</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#aee0b21fe8b7697f50f39be1e59d05fec">send_pb_message</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::string name_;                </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::string cmd_;                 </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *parent_;                    </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    func_cb_t enter_cb_;              </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html#abef872faf68678da5e8f050231365b61">PB_Message</a> pb_message_;           </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;};</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;} <span class="comment">// namespace shell</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aMenu_8hpp_html_a4f5e15b80e008c7f2e0711fada528979"><div class="ttname"><a href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a></div><div class="ttdeci">#define NB_SHELL_COMMANDS</div><div class="ttdoc">max shell commands per menu</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00027">Menu.hpp:27</a></div></div>
@@ -196,10 +198,11 @@ $(document).ready(function(){initNavTree('Menu_8hpp_source.html',''); initResiza
 <div class="ttc" id="aUartProtobuf_8hpp_html"><div class="ttname"><a href="UartProtobuf_8hpp.html">UartProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over UART module.</div></div>
 <div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html">cogip::shell::Menu</a></div><div class="ttdoc">Menu class.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00039">Menu.hpp:39</a></div></div>
 <div class="ttc" id="aCommand_8hpp_html"><div class="ttname"><a href="Command_8hpp.html">Command.hpp</a></div><div class="ttdoc">Command class declaration.</div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_aee0b21fe8b7697f50f39be1e59d05fec"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#aee0b21fe8b7697f50f39be1e59d05fec">cogip::shell::Menu::send_pb_message</a></div><div class="ttdeci">void send_pb_message(void)</div><div class="ttdoc">Send the Protobuf message describing this menu if uartpb is registered.</div></div>
 <div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_a76cb41413135fa4e947ef3efd85847b9"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">cogip::shell::Menu::parent</a></div><div class="ttdeci">Menu * parent(void) const</div><div class="ttdoc">Return the parent of this menu.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00062">Menu.hpp:62</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

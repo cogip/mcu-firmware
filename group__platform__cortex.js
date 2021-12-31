@@ -51,7 +51,7 @@ var group__platform__cortex =
     [ "pf_is_camp_left", "group__platform__cortex.html#gadcb8588f477c2eda4b2f774b99b910d6", null ],
     [ "pf_is_game_launched", "group__platform__cortex.html#gae1a6aab08a0179e854ade7561e3dc079", null ],
     [ "pf_print_state", "group__platform__cortex.html#gac80e892a7623dddeb945d663b43fc38d", null ],
-    [ "pf_set_trace_mode", "group__platform__cortex.html#ga74ff9bcac245d58cc0058fcf625c9165", null ],
+    [ "pf_send_pb_state", "group__platform__cortex.html#ga0fc74267bdda152e7626e2c284689d07", null ],
     [ "pf_trace_on", "group__platform__cortex.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],
     [ "angle_offset", "group__platform__cortex.html#ga225b96e919422af01ca0a00843455dde", null ],
     [ "distance_offset", "group__platform__cortex.html#ga770993624df37f0b423fdf977bd2dd56", null ]

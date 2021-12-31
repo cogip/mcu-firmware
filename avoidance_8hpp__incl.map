@@ -1,10 +1,9 @@
 <map id="lib/avoidance/include/avoidance.hpp" name="lib/avoidance/include/avoidance.hpp">
-<area shape="rect" id="node1" title="Public API for avoidance module." alt="" coords="157,5,317,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="69,95,135,121"/>
-<area shape="rect" id="node3" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="159,95,314,121"/>
-<area shape="rect" id="node6" href="$File_8hpp.html" title="File class declaration." alt="" coords="338,95,461,121"/>
-<area shape="rect" id="node4" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="5,169,175,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="199,169,304,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="355,169,414,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="439,169,557,196"/>
+<area shape="rect" id="node1" title="Public API for avoidance module." alt="" coords="163,5,323,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,72,121"/>
+<area shape="rect" id="node3" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="97,95,266,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="177,169,295,196"/>
+<area shape="rect" id="node5" href="$File_8hpp.html" title="File class declaration." alt="" coords="341,95,464,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="345,169,404,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="429,169,547,196"/>
 </map>

@@ -139,39 +139,43 @@ $(document).ready(function(){initNavTree('shell__menu_8hpp_source.html',''); ini
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span>shell {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">extern</span> Menu <a class="code" href="shell__menu_8hpp.html#a9d6dbaa5d4925d5fad9f8a7367e800df">root_menu</a>;            </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#a0a3623b983bdfa6cf8f26ccd45e85a78">start</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#a6e7524042ee38bd78451b5451a0b58eb">add_global_command</a>(</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    Command * global_command      </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    );</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#acfd47034155a0be7e3638303664fa8a7">rename_command</a>(</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">const</span> std::string &amp;old_name,  </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">const</span> std::string &amp;new_name   </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    );</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#ad0143ecc137f4abe6b6dd92edaabf425">register_uartpb</a>(</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a> *uartpb_ptr</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    );</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace shell</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">extern</span> Menu *<a class="code" href="shell__menu_8hpp.html#a4f4d0b0e4ef2462dcb7fe3bffb66c05b">current_menu</a>;        </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">extern</span> std::list&lt;Command *&gt; <a class="code" href="shell__menu_8hpp.html#a95f05d34f4667f1cd774c47f135f31ac">global_commands</a>;  </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#a0a3623b983bdfa6cf8f26ccd45e85a78">start</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#a6e7524042ee38bd78451b5451a0b58eb">add_global_command</a>(</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Command * global_command      </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    );</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#acfd47034155a0be7e3638303664fa8a7">rename_command</a>(</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">const</span> std::string &amp;old_name,  </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">const</span> std::string &amp;new_name   </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    );</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keywordtype">void</span> <a class="code" href="shell__menu_8hpp.html#ad0143ecc137f4abe6b6dd92edaabf425">register_uartpb</a>(</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a> *uartpb_ptr</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    );</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// namespace shell</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a></div><div class="ttdoc">Generic UART Protobuf communication class.</div><div class="ttdef"><b>Definition:</b> <a href="UartProtobuf_8hpp_source.html#l00053">UartProtobuf.hpp:53</a></div></div>
 <div class="ttc" id="aMenu_8hpp_html"><div class="ttname"><a href="Menu_8hpp.html">Menu.hpp</a></div><div class="ttdoc">Menu class declaration.</div></div>
 <div class="ttc" id="ashell__menu_8hpp_html_a9d6dbaa5d4925d5fad9f8a7367e800df"><div class="ttname"><a href="shell__menu_8hpp.html#a9d6dbaa5d4925d5fad9f8a7367e800df">cogip::shell::root_menu</a></div><div class="ttdeci">Menu root_menu</div><div class="ttdoc">root menu</div></div>
+<div class="ttc" id="ashell__menu_8hpp_html_a4f4d0b0e4ef2462dcb7fe3bffb66c05b"><div class="ttname"><a href="shell__menu_8hpp.html#a4f4d0b0e4ef2462dcb7fe3bffb66c05b">cogip::shell::current_menu</a></div><div class="ttdeci">Menu * current_menu</div><div class="ttdoc">pointer to the current menu</div></div>
 <div class="ttc" id="ashell__menu_8hpp_html_a6e7524042ee38bd78451b5451a0b58eb"><div class="ttname"><a href="shell__menu_8hpp.html#a6e7524042ee38bd78451b5451a0b58eb">cogip::shell::add_global_command</a></div><div class="ttdeci">void add_global_command(Command *global_command)</div><div class="ttdoc">Add a global command that will be available in all menus.</div></div>
 <div class="ttc" id="ashell__menu_8hpp_html_ad0143ecc137f4abe6b6dd92edaabf425"><div class="ttname"><a href="shell__menu_8hpp.html#ad0143ecc137f4abe6b6dd92edaabf425">cogip::shell::register_uartpb</a></div><div class="ttdeci">void register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)</div><div class="ttdoc">Register an UartProtobuf instance that will be used to send entered menus in Protobuf format over UAR...</div></div>
 <div class="ttc" id="ashell__menu_8hpp_html_a0a3623b983bdfa6cf8f26ccd45e85a78"><div class="ttname"><a href="shell__menu_8hpp.html#a0a3623b983bdfa6cf8f26ccd45e85a78">cogip::shell::start</a></div><div class="ttdeci">void start(void)</div><div class="ttdoc">Start the main menu.</div></div>
 <div class="ttc" id="aCommand_8hpp_html"><div class="ttname"><a href="Command_8hpp.html">Command.hpp</a></div><div class="ttdoc">Command class declaration.</div></div>
 <div class="ttc" id="ashell__menu_8hpp_html_acfd47034155a0be7e3638303664fa8a7"><div class="ttname"><a href="shell__menu_8hpp.html#acfd47034155a0be7e3638303664fa8a7">cogip::shell::rename_command</a></div><div class="ttdeci">void rename_command(const std::string &amp;old_name, const std::string &amp;new_name)</div><div class="ttdoc">Rename a command.</div></div>
+<div class="ttc" id="ashell__menu_8hpp_html_a95f05d34f4667f1cd774c47f135f31ac"><div class="ttname"><a href="shell__menu_8hpp.html#a95f05d34f4667f1cd774c47f135f31ac">cogip::shell::global_commands</a></div><div class="ttdeci">std::list&lt; Command * &gt; global_commands</div><div class="ttdoc">global commands, available in all menus</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

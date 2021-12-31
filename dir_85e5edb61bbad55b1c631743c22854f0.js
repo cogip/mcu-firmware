@@ -3,9 +3,7 @@ var dir_85e5edb61bbad55b1c631743c22854f0 =
     [ "Circle.hpp", "Circle_8hpp.html", [
       [ "Circle", "classcogip_1_1obstacles_1_1Circle.html", "classcogip_1_1obstacles_1_1Circle" ]
     ] ],
-    [ "List.hpp", "List_8hpp.html", [
-      [ "List", "classcogip_1_1obstacles_1_1List.html", "classcogip_1_1obstacles_1_1List" ]
-    ] ],
+    [ "List.hpp", "List_8hpp.html", "List_8hpp" ],
     [ "Obstacle.hpp", "Obstacle_8hpp.html", [
       [ "Obstacle", "classcogip_1_1obstacles_1_1Obstacle.html", "classcogip_1_1obstacles_1_1Obstacle" ]
     ] ],

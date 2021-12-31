@@ -134,36 +134,44 @@ $(document).ready(function(){initNavTree('obstacles_8hpp_source.html',''); initR
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// Project includes</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Coords_8hpp.html">cogip_defs/Coords.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Obstacle_8hpp.html">obstacles/Obstacle.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="File_8hpp.html">tracefd/File.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>cogip {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>obstacles {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="obstacles_8hpp.html#abe3c5f8b1593cc304f5a88bdf084cf43">is_point_in_obstacles</a>(</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">const</span> cogip_defs::Coords &amp;p, </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">const</span> Obstacle *filter       </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    );</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> <a class="code" href="obstacles_8hpp.html#a7adb2fcb2ee59abf32145acdc7e097fe">print_all_json</a>(</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out    </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    );</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} <span class="comment">// namespace obstacles</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="List_8hpp.html">obstacles/List.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="File_8hpp.html">tracefd/File.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span>obstacles {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="obstacles_8hpp.html#abe3c5f8b1593cc304f5a88bdf084cf43">is_point_in_obstacles</a>(</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">const</span> cogip_defs::Coords &amp;p, </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">const</span> Obstacle *filter       </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    );</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">void</span> <a class="code" href="obstacles_8hpp.html#a7adb2fcb2ee59abf32145acdc7e097fe">print_all_json</a>(</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out    </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    );</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">void</span> <a class="code" href="obstacles_8hpp.html#a1b88c84b2bd278cd43b651cd62cd0a76">pb_copy</a>(</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classcogip_1_1obstacles_1_1List.html#a45b31451668086c901b7096782429058">cogip::obstacles::List::PB_Message</a> &amp;message</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    );</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace obstacles</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aObstacle_8hpp_html"><div class="ttname"><a href="Obstacle_8hpp.html">Obstacle.hpp</a></div><div class="ttdoc">Polygon obstacle class declaration.</div></div>
 <div class="ttc" id="aobstacles_8hpp_html_a7adb2fcb2ee59abf32145acdc7e097fe"><div class="ttname"><a href="obstacles_8hpp.html#a7adb2fcb2ee59abf32145acdc7e097fe">cogip::obstacles::print_all_json</a></div><div class="ttdeci">void print_all_json(cogip::tracefd::File &amp;out)</div><div class="ttdoc">Print all obstacles from all lists.</div></div>
+<div class="ttc" id="aobstacles_8hpp_html_a1b88c84b2bd278cd43b651cd62cd0a76"><div class="ttname"><a href="obstacles_8hpp.html#a1b88c84b2bd278cd43b651cd62cd0a76">cogip::obstacles::pb_copy</a></div><div class="ttdeci">void pb_copy(cogip::obstacles::List::PB_Message &amp;message)</div><div class="ttdoc">Copy data to Protobuf message.</div></div>
+<div class="ttc" id="aList_8hpp_html"><div class="ttname"><a href="List_8hpp.html">List.hpp</a></div><div class="ttdoc">List obstacles class declaration.</div></div>
 <div class="ttc" id="aobstacles_8hpp_html_abe3c5f8b1593cc304f5a88bdf084cf43"><div class="ttname"><a href="obstacles_8hpp.html#abe3c5f8b1593cc304f5a88bdf084cf43">cogip::obstacles::is_point_in_obstacles</a></div><div class="ttdeci">bool is_point_in_obstacles(const cogip_defs::Coords &amp;p, const Obstacle *filter)</div><div class="ttdoc">Check if the given point is inside an obstacle.</div></div>
 <div class="ttc" id="aCoords_8hpp_html"><div class="ttname"><a href="Coords_8hpp.html">Coords.hpp</a></div><div class="ttdoc">Coords declaration.</div></div>
 <div class="ttc" id="aFile_8hpp_html"><div class="ttname"><a href="File_8hpp.html">File.hpp</a></div><div class="ttdoc">File class declaration.</div></div>
 <div class="ttc" id="aclasscogip_1_1tracefd_1_1File_html"><div class="ttname"><a href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a></div><div class="ttdoc">Trace file class.</div><div class="ttdef"><b>Definition:</b> <a href="File_8hpp_source.html#l00025">File.hpp:25</a></div></div>
+<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a45b31451668086c901b7096782429058"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a45b31451668086c901b7096782429058">cogip::obstacles::List::PB_Message</a></div><div class="ttdeci">EmbeddedProto::RepeatedFieldFixedSize&lt; cogip::obstacles::PB_Obstacle, OBSTACLES_MAX_NUMBER &gt; PB_Message</div><div class="ttdoc">Protobuf message type. Shortcut for original template type.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00040">List.hpp:40</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

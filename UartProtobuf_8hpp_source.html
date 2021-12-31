@@ -162,59 +162,61 @@ $(document).ready(function(){initNavTree('UartProtobuf_8hpp_source.html',''); in
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classcogip_1_1uartpb_1_1UartProtobuf.html">   53</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html">UartProtobuf</a> {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#ac98eb57dad66e9b43e4ba3ddee1fcb5f">UartProtobuf</a>(</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> (*message_handler)(uint8_t message_type, <a class="code" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;),</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        uart_t uart_dev,                          </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        uint32_t uart_speed=230400U               </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        );</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a87b9fb4539bf844e355a70cdc206e7c0">connect</a>();</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a8e05d0aa621931c8ac404acc2083f148">start_reader</a>();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a85a0d58536beac8de1d516371599d4a6">uart_rx_cb</a>(</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        uint8_t data                              </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        );</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7">message_reader</a>();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a97b47f0c139f6dcacbe3d52b0529a632">send_message</a>(</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        uint8_t message_type                      </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        );</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a97b47f0c139f6dcacbe3d52b0529a632">send_message</a>(</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        uint8_t message_type,                     </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">const</span> EmbeddedProto::MessageInterface &amp;message</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        );</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    uart_t uart_dev_;                             </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    uint32_t uart_speed_;                         </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    kernel_pid_t reader_pid_;                     </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">char</span> reader_stack_[<a class="code" href="group__sys__uartpb.html#gaee193c15950ce3df6cf32e356ba44d19">UARTPB_READER_STACKSIZE</a>];  </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">char</span> rx_mem_[UART_BUFFER_SIZE];               </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    ringbuffer_t rx_buf_;                         </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    uint8_t msg_type_ = UINT8_MAX;                </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    uint8_t msg_length_bytes_number_ = 4;         </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    uint8_t msg_length_bytes_received_ = 0;       </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    uint32_t msg_length_ = 0;                     </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    uint32_t msg_bytes_received_ = 0;             </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1ReadBuffer.html">ReadBuffer</a> read_buffer_;                      </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html">WriteBuffer</a> write_buffer_;                    </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    void (*message_handler_)(uint8_t message_type, <a class="code" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;);</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;};</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;} <span class="comment">// namespace uartpb</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">using</span> message_handler_t = void (*)(uint8_t message_type, <a class="code" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4">UartProtobuf</a>(</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        message_handler_t message_handler,        </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        uart_t uart_dev,                          </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        uint32_t uart_speed=230400U               </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        );</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a87b9fb4539bf844e355a70cdc206e7c0">connect</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a8e05d0aa621931c8ac404acc2083f148">start_reader</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a85a0d58536beac8de1d516371599d4a6">uart_rx_cb</a>(</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        uint8_t data                              </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        );</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7">message_reader</a>();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a97b47f0c139f6dcacbe3d52b0529a632">send_message</a>(</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        uint8_t message_type                      </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        );</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a97b47f0c139f6dcacbe3d52b0529a632">send_message</a>(</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        uint8_t message_type,                     </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">const</span> EmbeddedProto::MessageInterface &amp;message</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        );</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    uart_t uart_dev_;                             </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    uint32_t uart_speed_;                         </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    kernel_pid_t reader_pid_;                     </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">char</span> reader_stack_[<a class="code" href="group__sys__uartpb.html#gaee193c15950ce3df6cf32e356ba44d19">UARTPB_READER_STACKSIZE</a>];  </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">char</span> rx_mem_[UART_BUFFER_SIZE];               </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    ringbuffer_t rx_buf_;                         </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    uint8_t msg_type_ = UINT8_MAX;                </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    uint8_t msg_length_bytes_number_ = 4;         </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    uint8_t msg_length_bytes_received_ = 0;       </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    uint32_t msg_length_ = 0;                     </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    uint32_t msg_bytes_received_ = 0;             </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1ReadBuffer.html">ReadBuffer</a> read_buffer_;                      </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html">WriteBuffer</a> write_buffer_;                    </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    void (*message_handler_)(uint8_t message_type, <a class="code" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;};</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;} <span class="comment">// namespace uartpb</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="auartpb_8hpp_html"><div class="ttname"><a href="uartpb_8hpp.html">uartpb.hpp</a></div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a></div><div class="ttdoc">Generic UART Protobuf communication class.</div><div class="ttdef"><b>Definition:</b> <a href="UartProtobuf_8hpp_source.html#l00053">UartProtobuf.hpp:53</a></div></div>
-<div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html_ac98eb57dad66e9b43e4ba3ddee1fcb5f"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html#ac98eb57dad66e9b43e4ba3ddee1fcb5f">cogip::uartpb::UartProtobuf::UartProtobuf</a></div><div class="ttdeci">UartProtobuf(void(*message_handler)(uint8_t message_type, cogip::uartpb::ReadBuffer &amp;), uart_t uart_dev, uint32_t uart_speed=230400U)</div><div class="ttdoc">Class constructor.</div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1ReadBuffer_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a></div><div class="ttdoc">ReadBuffer class used to decode Protobuf messages.</div><div class="ttdef"><b>Definition:</b> <a href="ReadBuffer_8hpp_source.html#l00023">ReadBuffer.hpp:23</a></div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html">cogip::uartpb::WriteBuffer</a></div><div class="ttdoc">WriteBuffer class used to encode Protobuf messages.</div><div class="ttdef"><b>Definition:</b> <a href="WriteBuffer_8hpp_source.html#l00023">WriteBuffer.hpp:23</a></div></div>
+<div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html_a98373f7fe0b46d2364ab223a039272e4"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4">cogip::uartpb::UartProtobuf::UartProtobuf</a></div><div class="ttdeci">UartProtobuf(message_handler_t message_handler, uart_t uart_dev, uint32_t uart_speed=230400U)</div><div class="ttdoc">Class constructor.</div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html_a3ef9cf01ce4bf920dca63c07f6b973e7"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7">cogip::uartpb::UartProtobuf::message_reader</a></div><div class="ttdeci">void message_reader()</div><div class="ttdoc">Wait and decode incoming Protobuf messages.</div></div>
 <div class="ttc" id="agroup__sys__uartpb_html_gaee193c15950ce3df6cf32e356ba44d19"><div class="ttname"><a href="group__sys__uartpb.html#gaee193c15950ce3df6cf32e356ba44d19">UARTPB_READER_STACKSIZE</a></div><div class="ttdeci">#define UARTPB_READER_STACKSIZE</div><div class="ttdoc">message reader thread stask size</div><div class="ttdef"><b>Definition:</b> <a href="uartpb_8hpp_source.html#l00020">uartpb.hpp:20</a></div></div>
 <div class="ttc" id="aWriteBuffer_8hpp_html"><div class="ttname"><a href="WriteBuffer_8hpp.html">WriteBuffer.hpp</a></div><div class="ttdoc">Write buffer for EmbeddedProto.</div></div>
@@ -227,7 +229,7 @@ $(document).ready(function(){initNavTree('UartProtobuf_8hpp_source.html',''); in
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html_a85a0d58536beac8de1d516371599d4a6"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a85a0d58536beac8de1d516371599d4a6">cogip::uartpb::UartProtobuf::uart_rx_cb</a></div><div class="ttdeci">void uart_rx_cb(uint8_t data)</div><div class="ttdoc">Function call for each incomming bytes on serial port.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

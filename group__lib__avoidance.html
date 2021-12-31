@@ -132,10 +132,10 @@ $(document).ready(function(){initNavTree('group__lib__avoidance.html',''); initR
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Avoidance module. </p>
 <p>Avoidance is split in 2 steps:</p><ol type="1">
-<li><a class="el" href="group__lib__avoidance.html#ga1d92a5d3d545ca99815cc0ed52786c60" title="Build avoidance graph, listing all path possibilities between start and finish poses.">avoidance_build_graph()</a>: build graph of avoidance path to reach finish pose, including obstacles avoidance.</li>
-<li><a class="el" href="group__lib__avoidance.html#ga881d28454e3e5f25b53221d68a0eb83a" title="Return given index pose in the avoidance path.">avoidance_get_pose()</a>: get intermediate pose in avoidance computed path.</li>
+<li><a class="el" href="group__lib__avoidance.html#gaf820995cd0d04c0e6b22dfa0f48345ed" title="Build avoidance graph, listing all path possibilities between start and finish poses.">avoidance_build_graph()</a>: build graph of avoidance path to reach finish pose, including obstacles avoidance.</li>
+<li><a class="el" href="group__lib__avoidance.html#gadf4fb730f1e83cf8bee4b2a21eeba008" title="Return given index pose in the avoidance path.">avoidance_get_pose()</a>: get intermediate pose in avoidance computed path.</li>
 </ol>
-<p>Direct segment to reach final position can be checked to see if it becomes free of obstacles with <a class="el" href="group__lib__avoidance.html#ga47a5e9a532904832b412653ee3533dd5" title="Check if avoidance should be recomputed by checking if an obstacle is crossing the segment between st...">avoidance_check_recompute()</a> </p>
+<p>Direct segment to reach final position can be checked to see if it becomes free of obstacles with <a class="el" href="group__lib__avoidance.html#gab5b66d96b948baa8d2f7b27546b7f3cc" title="Check if avoidance should be recomputed by checking if an obstacle is crossing the segment between st...">avoidance_check_recompute()</a> </p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for Avoidance module:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -156,33 +156,36 @@ Files</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga881d28454e3e5f25b53221d68a0eb83a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#ga881d28454e3e5f25b53221d68a0eb83a">avoidance_get_pose</a> (uint8_t index)</td></tr>
-<tr class="memdesc:ga881d28454e3e5f25b53221d68a0eb83a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return given index pose in the avoidance path.  <a href="group__lib__avoidance.html#ga881d28454e3e5f25b53221d68a0eb83a">More...</a><br /></td></tr>
-<tr class="separator:ga881d28454e3e5f25b53221d68a0eb83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1d92a5d3d545ca99815cc0ed52786c60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#ga1d92a5d3d545ca99815cc0ed52786c60">avoidance_build_graph</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;s, const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;f)</td></tr>
-<tr class="memdesc:ga1d92a5d3d545ca99815cc0ed52786c60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build avoidance graph, listing all path possibilities between start and finish poses.  <a href="group__lib__avoidance.html#ga1d92a5d3d545ca99815cc0ed52786c60">More...</a><br /></td></tr>
-<tr class="separator:ga1d92a5d3d545ca99815cc0ed52786c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga47a5e9a532904832b412653ee3533dd5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#ga47a5e9a532904832b412653ee3533dd5">avoidance_check_recompute</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;start, const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;stop)</td></tr>
-<tr class="memdesc:ga47a5e9a532904832b412653ee3533dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if avoidance should be recomputed by checking if an obstacle is crossing the segment between start and finish position.  <a href="group__lib__avoidance.html#ga47a5e9a532904832b412653ee3533dd5">More...</a><br /></td></tr>
-<tr class="separator:ga47a5e9a532904832b412653ee3533dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadf4fb730f1e83cf8bee4b2a21eeba008"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#gadf4fb730f1e83cf8bee4b2a21eeba008">avoidance_get_pose</a> (uint8_t index)</td></tr>
+<tr class="memdesc:gadf4fb730f1e83cf8bee4b2a21eeba008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return given index pose in the avoidance path.  <a href="group__lib__avoidance.html#gadf4fb730f1e83cf8bee4b2a21eeba008">More...</a><br /></td></tr>
+<tr class="separator:gadf4fb730f1e83cf8bee4b2a21eeba008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf820995cd0d04c0e6b22dfa0f48345ed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#gaf820995cd0d04c0e6b22dfa0f48345ed">avoidance_build_graph</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;s, const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;f)</td></tr>
+<tr class="memdesc:gaf820995cd0d04c0e6b22dfa0f48345ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build avoidance graph, listing all path possibilities between start and finish poses.  <a href="group__lib__avoidance.html#gaf820995cd0d04c0e6b22dfa0f48345ed">More...</a><br /></td></tr>
+<tr class="separator:gaf820995cd0d04c0e6b22dfa0f48345ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab5b66d96b948baa8d2f7b27546b7f3cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#gab5b66d96b948baa8d2f7b27546b7f3cc">avoidance_check_recompute</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;start, const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;stop)</td></tr>
+<tr class="memdesc:gab5b66d96b948baa8d2f7b27546b7f3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if avoidance should be recomputed by checking if an obstacle is crossing the segment between start and finish position.  <a href="group__lib__avoidance.html#gab5b66d96b948baa8d2f7b27546b7f3cc">More...</a><br /></td></tr>
+<tr class="separator:gab5b66d96b948baa8d2f7b27546b7f3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga193806f42744210ad70b45e22c9efe6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#ga193806f42744210ad70b45e22c9efe6f">avoidance_print_path</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out)</td></tr>
 <tr class="memdesc:ga193806f42744210ad70b45e22c9efe6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print list of intermediate positions to reach wanted path position.  <a href="group__lib__avoidance.html#ga193806f42744210ad70b45e22c9efe6f">More...</a><br /></td></tr>
 <tr class="separator:ga193806f42744210ad70b45e22c9efe6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad8ee228563213a09ebf62982f71aface"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#gad8ee228563213a09ebf62982f71aface">avoidance_pb_copy_path</a> (EmbeddedProto::RepeatedFieldFixedSize&lt; cogip::cogip_defs::PB_Coords, <a class="el" href="group__lib__avoidance.html#ga1e57205bed23c26847f14e1cad4a8228">AVOIDANCE_GRAPH_MAX_VERTICES</a> &gt; &amp;path)</td></tr>
+<tr class="memdesc:gad8ee228563213a09ebf62982f71aface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy list of intermediate positions to reach wanted path position to protobuf message.  <a href="group__lib__avoidance.html#gad8ee228563213a09ebf62982f71aface">More...</a><br /></td></tr>
+<tr class="separator:gad8ee228563213a09ebf62982f71aface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
 Dijkstra avoidance parameters</h2></td></tr>
-<tr class="memitem:ga03c860ec81e011477f66d21c6c322aac"><td class="memItemLeft" align="right" valign="top"><a id="ga03c860ec81e011477f66d21c6c322aac"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#ga03c860ec81e011477f66d21c6c322aac">GRAPH_MAX_VERTICES</a>&#160;&#160;&#160;64</td></tr>
-<tr class="memdesc:ga03c860ec81e011477f66d21c6c322aac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum graph vertice number. <br /></td></tr>
-<tr class="separator:ga03c860ec81e011477f66d21c6c322aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae013dc86b0252337a7a3689096f1ab7d"><td class="memItemLeft" align="right" valign="top"><a id="gae013dc86b0252337a7a3689096f1ab7d"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#gae013dc86b0252337a7a3689096f1ab7d">DIJKSTRA_MAX_DISTANCE</a>&#160;&#160;&#160;UINT32_MAX</td></tr>
-<tr class="memdesc:gae013dc86b0252337a7a3689096f1ab7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum Dijkstra distance. <br /></td></tr>
-<tr class="separator:gae013dc86b0252337a7a3689096f1ab7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1e57205bed23c26847f14e1cad4a8228"><td class="memItemLeft" align="right" valign="top"><a id="ga1e57205bed23c26847f14e1cad4a8228"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#ga1e57205bed23c26847f14e1cad4a8228">AVOIDANCE_GRAPH_MAX_VERTICES</a>&#160;&#160;&#160;64</td></tr>
+<tr class="memdesc:ga1e57205bed23c26847f14e1cad4a8228"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum graph vertice number. <br /></td></tr>
+<tr class="separator:ga1e57205bed23c26847f14e1cad4a8228"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga756522bbc5126eeb7e69015d4f7c091d"><td class="memItemLeft" align="right" valign="top"><a id="ga756522bbc5126eeb7e69015d4f7c091d"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__lib__avoidance.html#ga756522bbc5126eeb7e69015d4f7c091d">AVOIDANCE_DIJKSTRA_MAX_DISTANCE</a>&#160;&#160;&#160;UINT32_MAX</td></tr>
+<tr class="memdesc:ga756522bbc5126eeb7e69015d4f7c091d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum Dijkstra distance. <br /></td></tr>
+<tr class="separator:ga756522bbc5126eeb7e69015d4f7c091d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga1d92a5d3d545ca99815cc0ed52786c60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1d92a5d3d545ca99815cc0ed52786c60">&#9670;&nbsp;</a></span>avoidance_build_graph()</h2>
+<a id="gaf820995cd0d04c0e6b22dfa0f48345ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf820995cd0d04c0e6b22dfa0f48345ed">&#9670;&nbsp;</a></span>avoidance_build_graph()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,13 +193,13 @@ Dijkstra avoidance parameters</h2></td></tr>
         <tr>
           <td class="memname">bool avoidance_build_graph </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;&#160;</td>
           <td class="paramname"><em>f</em>&#160;</td>
         </tr>
         <tr>
@@ -219,8 +222,8 @@ Dijkstra avoidance parameters</h2></td></tr>
 
 </div>
 </div>
-<a id="ga47a5e9a532904832b412653ee3533dd5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga47a5e9a532904832b412653ee3533dd5">&#9670;&nbsp;</a></span>avoidance_check_recompute()</h2>
+<a id="gab5b66d96b948baa8d2f7b27546b7f3cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab5b66d96b948baa8d2f7b27546b7f3cc">&#9670;&nbsp;</a></span>avoidance_check_recompute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -228,13 +231,13 @@ Dijkstra avoidance parameters</h2></td></tr>
         <tr>
           <td class="memname">bool avoidance_check_recompute </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> &amp;&#160;</td>
           <td class="paramname"><em>stop</em>&#160;</td>
         </tr>
         <tr>
@@ -257,14 +260,14 @@ Dijkstra avoidance parameters</h2></td></tr>
 
 </div>
 </div>
-<a id="ga881d28454e3e5f25b53221d68a0eb83a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga881d28454e3e5f25b53221d68a0eb83a">&#9670;&nbsp;</a></span>avoidance_get_pose()</h2>
+<a id="gadf4fb730f1e83cf8bee4b2a21eeba008"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadf4fb730f1e83cf8bee4b2a21eeba008">&#9670;&nbsp;</a></span>avoidance_get_pose()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> avoidance_get_pose </td>
+          <td class="memname"><a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip::cogip_defs::Coords</a> avoidance_get_pose </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
@@ -281,6 +284,33 @@ Dijkstra avoidance parameters</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>wanted pose if found, start position otherwise </dd></dl>
+
+</div>
+</div>
+<a id="gad8ee228563213a09ebf62982f71aface"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad8ee228563213a09ebf62982f71aface">&#9670;&nbsp;</a></span>avoidance_pb_copy_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void avoidance_pb_copy_path </td>
+          <td>(</td>
+          <td class="paramtype">EmbeddedProto::RepeatedFieldFixedSize&lt; cogip::cogip_defs::PB_Coords, <a class="el" href="group__lib__avoidance.html#ga1e57205bed23c26847f14e1cad4a8228">AVOIDANCE_GRAPH_MAX_VERTICES</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy list of intermediate positions to reach wanted path position to protobuf message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">out</td><td>Protobuf message to fill</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
@@ -315,7 +345,7 @@ Dijkstra avoidance parameters</h2></td></tr>
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

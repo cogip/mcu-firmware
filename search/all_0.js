@@ -19,9 +19,12 @@ var searchData=
   ['avoidance_5fborder_5fx_5fmin_16',['AVOIDANCE_BORDER_X_MIN',['../group__platform__cortex.html#ga74d22d5c450365dc5f4ae75b8b6ff432',1,'AVOIDANCE_BORDER_X_MIN():&#160;platform.hpp'],['../group__platforms__pf__test.html#ga74d22d5c450365dc5f4ae75b8b6ff432',1,'AVOIDANCE_BORDER_X_MIN():&#160;platform.hpp']]],
   ['avoidance_5fborder_5fy_5fmax_17',['AVOIDANCE_BORDER_Y_MAX',['../group__platform__cortex.html#ga128c544be070e5eb2e766506e28d9d91',1,'AVOIDANCE_BORDER_Y_MAX():&#160;platform.hpp'],['../group__platforms__pf__test.html#ga128c544be070e5eb2e766506e28d9d91',1,'AVOIDANCE_BORDER_Y_MAX():&#160;platform.hpp']]],
   ['avoidance_5fborder_5fy_5fmin_18',['AVOIDANCE_BORDER_Y_MIN',['../group__platform__cortex.html#ga9913d7c0d202417eecb4661db31e4522',1,'AVOIDANCE_BORDER_Y_MIN():&#160;platform.hpp'],['../group__platforms__pf__test.html#ga9913d7c0d202417eecb4661db31e4522',1,'AVOIDANCE_BORDER_Y_MIN():&#160;platform.hpp']]],
-  ['avoidance_5fbuild_5fgraph_19',['avoidance_build_graph',['../group__lib__avoidance.html#ga1d92a5d3d545ca99815cc0ed52786c60',1,'avoidance.hpp']]],
-  ['avoidance_5fcheck_5frecompute_20',['avoidance_check_recompute',['../group__lib__avoidance.html#ga47a5e9a532904832b412653ee3533dd5',1,'avoidance.hpp']]],
-  ['avoidance_5fget_5fpose_21',['avoidance_get_pose',['../group__lib__avoidance.html#ga881d28454e3e5f25b53221d68a0eb83a',1,'avoidance.hpp']]],
-  ['avoidance_5fprint_5fpath_22',['avoidance_print_path',['../group__lib__avoidance.html#ga193806f42744210ad70b45e22c9efe6f',1,'avoidance.hpp']]],
-  ['avoidance_20module_23',['Avoidance module',['../group__lib__avoidance.html',1,'']]]
+  ['avoidance_5fbuild_5fgraph_19',['avoidance_build_graph',['../group__lib__avoidance.html#gaf820995cd0d04c0e6b22dfa0f48345ed',1,'avoidance.hpp']]],
+  ['avoidance_5fcheck_5frecompute_20',['avoidance_check_recompute',['../group__lib__avoidance.html#gab5b66d96b948baa8d2f7b27546b7f3cc',1,'avoidance.hpp']]],
+  ['avoidance_5fdijkstra_5fmax_5fdistance_21',['AVOIDANCE_DIJKSTRA_MAX_DISTANCE',['../group__lib__avoidance.html#ga756522bbc5126eeb7e69015d4f7c091d',1,'avoidance.hpp']]],
+  ['avoidance_5fget_5fpose_22',['avoidance_get_pose',['../group__lib__avoidance.html#gadf4fb730f1e83cf8bee4b2a21eeba008',1,'avoidance.hpp']]],
+  ['avoidance_5fgraph_5fmax_5fvertices_23',['AVOIDANCE_GRAPH_MAX_VERTICES',['../group__lib__avoidance.html#ga1e57205bed23c26847f14e1cad4a8228',1,'avoidance.hpp']]],
+  ['avoidance_5fpb_5fcopy_5fpath_24',['avoidance_pb_copy_path',['../group__lib__avoidance.html#gad8ee228563213a09ebf62982f71aface',1,'avoidance.hpp']]],
+  ['avoidance_5fprint_5fpath_25',['avoidance_print_path',['../group__lib__avoidance.html#ga193806f42744210ad70b45e22c9efe6f',1,'avoidance.hpp']]],
+  ['avoidance_20module_26',['Avoidance module',['../group__lib__avoidance.html',1,'']]]
 ];

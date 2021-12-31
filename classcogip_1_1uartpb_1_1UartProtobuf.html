@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1uartpb_1_1UartProtobuf.h
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">cogip::uartpb::UartProtobuf Class Reference</div>  </div>
@@ -135,11 +136,17 @@ $(document).ready(function(){initNavTree('classcogip_1_1uartpb_1_1UartProtobuf.h
 </div>
 <p><code>#include &lt;<a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ad7d04f88a4dc6201eddcd2d58de6a940"><td class="memItemLeft" align="right" valign="top"><a id="ad7d04f88a4dc6201eddcd2d58de6a940"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>message_handler_t</b> = void(*)(uint8_t message_type, <a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;)</td></tr>
+<tr class="separator:ad7d04f88a4dc6201eddcd2d58de6a940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac98eb57dad66e9b43e4ba3ddee1fcb5f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#ac98eb57dad66e9b43e4ba3ddee1fcb5f">UartProtobuf</a> (void(*message_handler)(uint8_t message_type, <a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;), uart_t uart_dev, uint32_t uart_speed=230400U)</td></tr>
-<tr class="memdesc:ac98eb57dad66e9b43e4ba3ddee1fcb5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#ac98eb57dad66e9b43e4ba3ddee1fcb5f">More...</a><br /></td></tr>
-<tr class="separator:ac98eb57dad66e9b43e4ba3ddee1fcb5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98373f7fe0b46d2364ab223a039272e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4">UartProtobuf</a> (message_handler_t message_handler, uart_t uart_dev, uint32_t uart_speed=230400U)</td></tr>
+<tr class="memdesc:a98373f7fe0b46d2364ab223a039272e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4">More...</a><br /></td></tr>
+<tr class="separator:a98373f7fe0b46d2364ab223a039272e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87b9fb4539bf844e355a70cdc206e7c0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a87b9fb4539bf844e355a70cdc206e7c0">connect</a> ()</td></tr>
 <tr class="memdesc:a87b9fb4539bf844e355a70cdc206e7c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open serial port.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a87b9fb4539bf844e355a70cdc206e7c0">More...</a><br /></td></tr>
 <tr class="separator:a87b9fb4539bf844e355a70cdc206e7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,8 +169,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:abe0ea38dc7fe332c44405e7fdbea8389"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac98eb57dad66e9b43e4ba3ddee1fcb5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac98eb57dad66e9b43e4ba3ddee1fcb5f">&#9670;&nbsp;</a></span>UartProtobuf()</h2>
+<a id="a98373f7fe0b46d2364ab223a039272e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98373f7fe0b46d2364ab223a039272e4">&#9670;&nbsp;</a></span>UartProtobuf()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -171,7 +178,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="memname">cogip::uartpb::UartProtobuf::UartProtobuf </td>
           <td>(</td>
-          <td class="paramtype">void(*)(uint8_t message_type, <a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;)&#160;</td>
+          <td class="paramtype">message_handler_t&#160;</td>
           <td class="paramname"><em>message_handler</em>, </td>
         </tr>
         <tr>
@@ -324,7 +331,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Dec 2 2021 06:25:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Dec 31 2021 17:06:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>
