@@ -20,7 +20,7 @@
 #include "PB_Command.hpp"
 
 #ifndef COMMAND_NAME_MAX_LENGTH
-#  define COMMAND_NAME_MAX_LENGTH 16
+#  define COMMAND_NAME_MAX_LENGTH 64
 #endif
 
 #ifndef COMMAND_DESC_MAX_LENGTH
