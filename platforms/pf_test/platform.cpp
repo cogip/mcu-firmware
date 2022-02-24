@@ -325,6 +325,13 @@ static void run_command(cogip::shell::Command *command, const cogip::shell::Comm
 // Handle a Protobuf command message
 static void handle_command(const cogip::shell::Command::PB_Message *pb_command)
 {
+    if (cogip::shell::current_menu == nullptr) {
+        cogip::tracefd::out.logf(
+            "Warning: received PB command before current_menu is initialized: %s %s\n",
+            pb_command->cmd(), pb_command->desc());
+        return;
+    }
+
     // Search the command in current menu command
     for (auto command: *cogip::shell::current_menu) {
         if (command->name() == pb_command->cmd()) {
