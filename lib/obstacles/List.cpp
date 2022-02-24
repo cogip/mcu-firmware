@@ -1,5 +1,5 @@
 #include "obstacles/List.hpp"
-#include "obstacles_private.hpp"
+#include "obstacles/obstacles.hpp"
 
 #include "PB_Obstacle.hpp"
 
