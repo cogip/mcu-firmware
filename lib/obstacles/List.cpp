@@ -44,11 +44,9 @@ void List::print_json(cogip::tracefd::File &out) const
 }
 
 void List::pb_copy(PB_Message &message) const {
-    PB_Obstacle obstacle;
     for (auto obs: *this) {
-        obs->pb_copy(obstacle);
+        obs->pb_copy(message.get(message.get_length()));
     }
-    message.add(obstacle);
 }
 
 } // namespace obstacles
