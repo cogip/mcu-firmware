@@ -41,20 +41,12 @@ public:
 
     /// Constructor.
     List(
-        uint32_t default_circle_radius = 0,   ///< [in] default radius for circle obstacles
-        uint32_t default_rectangle_width = 0, ///< [in] default width for rectangle obstacles
         uint32_t min_distance = 0,            ///< [in] minium distance to a valid obstacle
         uint32_t max_distance = 0             ///< [in] maximum distance to a valid obstacle
         );
 
     /// Destructor.
     ~List();
-
-    /// Return the default radius for circle obstacles.
-    uint32_t default_circle_radius() { return default_circle_radius_; };
-
-    /// Return the default width for rectangle obstacles.
-    uint32_t default_rectangle_width() { return default_rectangle_width_; };
 
     /// Return the minimum distance to a valid obstacle.
     uint32_t min_distance() { return min_distance_; };
@@ -82,8 +74,6 @@ public:
     void clear();
 
 private:
-    uint32_t default_circle_radius_;          ///< obstacle default radius
-    uint32_t default_rectangle_width_;        ///< obstacle of rectangle type default width
     uint32_t min_distance_;                   ///< minimun distance from origin to create an obstacle
     uint32_t max_distance_;                   ///< maximum distance from origin to create an obstacle
     riot::mutex mutex_;                       ///< mutex protecting list access

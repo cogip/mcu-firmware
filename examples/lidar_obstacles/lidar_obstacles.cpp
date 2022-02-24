@@ -121,9 +121,7 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstac
             origin.y() + distance * sin(obstacle_angle)
         };
 
-        double radius = obstacles->default_circle_radius();
-
-        obstacles->push_back(new cogip::obstacles::Circle(center, radius));
+        obstacles->push_back(new cogip::obstacles::Circle(center, OBSTACLE_DEFAULT_CIRCLE_RADIUS));
     }
 }
 
@@ -152,8 +150,6 @@ static void _thread_obstacle_updater(const cogip::cogip_defs::Pose &robot_state)
 void obstacle_updater_start(const cogip::cogip_defs::Pose &robot_state)
 {
     lidar_obstacles = new cogip::obstacles::List(
-        OBSTACLE_DEFAULT_CIRCLE_RADIUS, // default_circle_radius
-        0,                              // default_rectangle_width
         ROBOT_WIDTH / 2,                // min_distance
         LIDAR_MAX_DISTANCE              // max_distance
         );
