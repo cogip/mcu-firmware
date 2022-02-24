@@ -14,6 +14,9 @@
 
 #pragma once
 
+// System includes
+#include <set>
+
 // Project includes
 #include "cogip_defs/Coords.hpp"
 #include "obstacles/Obstacle.hpp"
@@ -23,6 +26,8 @@
 namespace cogip {
 
 namespace obstacles {
+
+extern std::set<List const *> all_obstacles;  ///< List of all obstacle list
 
 /// Check if the given point is inside an obstacle.
 /// @return                  true if point is inside, false otherwise

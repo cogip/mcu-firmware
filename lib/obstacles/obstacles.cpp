@@ -1,6 +1,5 @@
 #include "obstacles/obstacles.hpp"
 #include "obstacles/List.hpp"
-#include "obstacles_private.hpp"
 
 /* System includes */
 #include <cmath>
