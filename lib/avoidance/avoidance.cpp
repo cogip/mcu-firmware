@@ -50,36 +50,36 @@ static bool _is_avoidance_computed = false;
  */
 static void _validate_obstacles_points(void)
 {
-    cogip::obstacles::List *obstacles_dyn = pf_get_dyn_obstacles();
     const cogip::obstacles::Polygon &borders = app_get_borders();
 
-    /* For each obstacle */
-    for (auto obstacle: *obstacles_dyn) {
+    for (auto l: cogip::obstacles::all_obstacles) {
+        for (auto obstacle: *l) {
 
-        /* Check if obstacle center is inside borders */
-        if (!borders.is_point_inside(obstacle->center())) {
-            continue;
-        }
-
-        /* Check if the center of this obstacle is not in an other obstacle */
-        if (cogip::obstacles::is_point_in_obstacles(obstacle->center(), obstacle)) {
-            continue;
-        }
-
-        /* Build a bounding box around the obstacle center */
-        cogip::cogip_defs::Polygon bb = obstacle->bounding_box(OBSTACLES_BB_NB_VERTICES,
-                                                               OBSTACLES_BB_RADIUS_MARGIN);
-
-        /* Validate bounding box points */
-        for (auto &point: bb) {
-            if (!borders.is_point_inside(point)) {
+            /* Check if obstacle center is inside borders */
+            if (!borders.is_point_inside(obstacle->center())) {
                 continue;
             }
-            if (cogip::obstacles::is_point_in_obstacles(point, nullptr)) {
+
+            /* Check if the center of this obstacle is not in an other obstacle */
+            if (cogip::obstacles::is_point_in_obstacles(obstacle->center(), obstacle)) {
                 continue;
             }
-            /* Found a valid point */
-            _valid_points[_valid_points_count++] = { point.x(), point.y() };
+
+            /* Build a bounding box around the obstacle center */
+            cogip::cogip_defs::Polygon bb = obstacle->bounding_box(OBSTACLES_BB_NB_VERTICES,
+                                                                   OBSTACLES_BB_RADIUS_MARGIN);
+
+            /* Validate bounding box points */
+            for (auto &point: bb) {
+                if (!borders.is_point_inside(point)) {
+                    continue;
+                }
+                if (cogip::obstacles::is_point_in_obstacles(point, nullptr)) {
+                    continue;
+                }
+                /* Found a valid point */
+                _valid_points[_valid_points_count++] = { point.x(), point.y() };
+            }
         }
     }
 }
@@ -92,19 +92,18 @@ static void _build_avoidance_graph(void)
     /* Validate all possible points */
     _validate_obstacles_points();
 
-    /* Get all dynamic obstacles */
-    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
-
     /* For each segment of the valid points list */
     for (int p = 0; p < _valid_points_count; p++) {
         for (int p2 = p + 1; p2 < _valid_points_count; p2++) {
             bool collide = false;
             /* Check if that segment crosses a polygon */
-            for (auto obstacle: *obstacles) {
-                if (obstacle->is_segment_crossing(_valid_points[p],
-                                                  _valid_points[p2])) {
-                    collide = true;
-                    break;
+            for (auto l: cogip::obstacles::all_obstacles) {
+                for (auto obstacle: *l) {
+                    if (obstacle->is_segment_crossing(_valid_points[p],
+                                                      _valid_points[p2])) {
+                        collide = true;
+                        break;
+                    }
                 }
             }
             /* If no collision, both points of the segment are added to
