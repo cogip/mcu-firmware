@@ -77,6 +77,7 @@ char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
+static size_t connected_copilots = 0;
 static size_t connected_monitors = 0;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER> pb_state;
 
@@ -99,7 +100,7 @@ cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
 bool pf_trace_on(void)
 {
-    return (connected_monitors > 0);
+    return (connected_copilots > 0);
 }
 
 void pf_print_state(cogip::tracefd::File &out)
@@ -365,14 +366,16 @@ void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
             start_planner = false;
             break;
         case MSG_COPILOT_CONNECTED:
-            puts("Copilot connected");
+            connected_copilots++;
+            printf("Copilot connected (%u)\n", connected_copilots);
             if (cogip::shell::current_menu) {
                 cogip::shell::current_menu->send_pb_message();
             }
             break;
         case MSG_COPILOT_DISCONNECTED:
-            puts("Copilot disconnected");
+            connected_copilots = connected_copilots ? connected_copilots - 1 : 0;
             connected_monitors = 0;
+            printf("Copilot disconnected (%u)\n", connected_copilots);
             break;
         case MSG_MONITOR_CONNECTED:
             connected_monitors++;
