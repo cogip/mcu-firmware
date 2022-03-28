@@ -3,9 +3,9 @@ syntax = "proto3";
 package cogip.obstacles;
 
 message PB_Rectangle {
-    float x = 1;
-    float y = 2;
-    float angle = 3;
-    float length_x = 4;
-    float length_y = 5;
+    sint32 x = 1;
+    sint32 y = 2;
+    sint32 angle = 3;
+    sint32 length_x = 4;
+    sint32 length_y = 5;
 }

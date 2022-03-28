@@ -3,6 +3,6 @@ syntax = "proto3";
 package cogip.cogip_defs;
 
 message PB_Polar {
-    double distance = 1;
-    double angle = 2;
+    sint32 distance = 1;
+    sint32 angle = 2;
 }

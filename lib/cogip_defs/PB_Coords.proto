@@ -3,6 +3,6 @@ syntax = "proto3";
 package cogip.cogip_defs;
 
 message PB_Coords {
-    double x = 1;
-    double y = 2;
+    sint32 x = 1;
+    sint32 y = 2;
 }
