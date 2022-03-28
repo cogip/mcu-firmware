@@ -3,7 +3,7 @@ syntax = "proto3";
 package cogip.obstacles;
 
 message PB_Circle {
-    float x = 1;
-    float y = 2;
-    float radius = 3;
+    sint32 x = 1;
+    sint32 y = 2;
+    sint32 radius = 3;
 }
