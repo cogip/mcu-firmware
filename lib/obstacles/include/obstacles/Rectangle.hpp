@@ -17,8 +17,8 @@ namespace cogip {
 
 namespace obstacles {
 
-/// A rectangle obstacle which inherits from Obstacle.
-/// Rectangle is very similar to Obstacle, but it is defined by its center,
+/// A rectangle obstacle which inherits from Polygon.
+/// Rectangle is very similar to Polygon, but it is defined by its center,
 /// angle and lengths to be easier to display in the simulator.
 class Rectangle : public Polygon {
 public:
@@ -31,7 +31,7 @@ public:
         );
 
     void print_json(cogip::tracefd::File &out) const override;
-    void pb_copy(PB_Obstacle &message) const override;
+    void pb_copy(PB_Message &message) const override;
 
 private:
     double angle_;                        ///< angle of the rectangle

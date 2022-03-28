@@ -10,6 +10,7 @@ namespace obstacles {
 Circle::Circle(const cogip_defs::Coords &center, double radius)
     : Obstacle(center, radius)
 {
+    update_bounding_box();
 }
 
 bool Circle::is_point_inside(const cogip_defs::Coords &p) const {
@@ -76,8 +77,10 @@ void Circle::print_json(cogip::tracefd::File &out) const
         );
 }
 
-void Circle::pb_copy(PB_Obstacle &message) const
+void Circle::pb_copy(PB_Message &message) const
 {
+    Obstacle::pb_copy(message);
+
     PB_Circle &circle = message.mutable_circle();
     circle.set_x(center_.x());
     circle.set_y(center_.y());

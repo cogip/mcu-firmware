@@ -16,21 +16,28 @@ Obstacle::Obstacle(
 {
 }
 
-cogip_defs::Polygon Obstacle::bounding_box(uint8_t nb_vertices, double radius_margin) const
+void Obstacle::update_bounding_box()
 {
-    double radius = radius_ * (1 + radius_margin);
+    if (radius_) {
+        double radius = radius_ * (1 + OBSTACLE_BOUNDING_BOX_MARGIN);
 
-    cogip_defs::Polygon bb;
+        bounding_box_.clear();
 
-    uint8_t nb_points = (nb_vertices < 4) ? 4 : nb_vertices;
-
-    for (uint8_t i = 0; i < nb_points; i++) {
-        bb.push_back(cogip_defs::Coords(
-            center_.x() + radius * cos(((double)i * 2 * M_PI) / (double)nb_points),
-            center_.y() + radius * sin(((double)i * 2 * M_PI) / (double)nb_points)));
+        for (uint8_t i = 0; i < OBSTACLE_BOUNDING_BOX_VERTICES; i++) {
+            bounding_box_.push_back(cogip_defs::Coords(
+                center_.x() + radius * cos(((double)i * 2 * M_PI) / (double)OBSTACLE_BOUNDING_BOX_VERTICES),
+                center_.y() + radius * sin(((double)i * 2 * M_PI) / (double)OBSTACLE_BOUNDING_BOX_VERTICES)));
+        }
     }
+}
 
-    return bb;
+void Obstacle::pb_copy(PB_Message &message) const
+{
+    auto &bb = message.mutable_bounding_box();
+    for (const auto &point: bounding_box_) {
+        auto &bb_point = bb.get(bb.get_length());
+        point.pb_copy(bb_point);
+    }
 }
 
 } // namespace obstacles

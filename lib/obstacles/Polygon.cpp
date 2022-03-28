@@ -138,7 +138,7 @@ void Polygon::print_json(cogip::tracefd::File &out) const
     out.printf("]}");
 }
 
-void Polygon::pb_copy(PB_Obstacle &) const
+void Polygon::pb_copy(PB_Message &) const
 {
     // Polygon is not supported by the simulator, so do nothing.
 }

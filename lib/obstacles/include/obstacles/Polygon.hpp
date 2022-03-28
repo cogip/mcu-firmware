@@ -28,11 +28,13 @@ public:
         const std::list<cogip_defs::Coords> *points = nullptr ///< [in] list of points defining th polygon (optional)
         );
 
+    const cogip_defs::Polygon & bounding_box() const override { return *this; };
+
     bool is_point_inside(const cogip_defs::Coords &p) const override;
     bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const override;
     cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const override;
     void print_json(cogip::tracefd::File &out) const override;
-    void pb_copy(PB_Obstacle &message) const override;
+    void pb_copy(PB_Message &message) const override;
 };
 
 } // namespace obstacles

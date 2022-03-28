@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "PB_Coords.proto";
 import "PB_Rectangle.proto";
 import "PB_Circle.proto";
 
@@ -10,4 +11,5 @@ message PB_Obstacle {
         PB_Rectangle rectangle = 1;
         PB_Circle circle = 2;
     }
+    repeated cogip.cogip_defs.PB_Coords bounding_box = 3;
 }
