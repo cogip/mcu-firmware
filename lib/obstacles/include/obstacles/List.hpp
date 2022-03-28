@@ -37,22 +37,13 @@ namespace obstacles {
 class List: public std::vector<Obstacle *> {
 public:
     /// Protobuf message type. Shortcut for original template type.
-    using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<cogip::obstacles::PB_Obstacle, OBSTACLES_MAX_NUMBER>;
+    using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<Obstacle::PB_Message, OBSTACLES_MAX_NUMBER>;
 
     /// Constructor.
-    List(
-        uint32_t min_distance = 0,            ///< [in] minium distance to a valid obstacle
-        uint32_t max_distance = 0             ///< [in] maximum distance to a valid obstacle
-        );
+    List();
 
     /// Destructor.
     ~List();
-
-    /// Return the minimum distance to a valid obstacle.
-    uint32_t min_distance() { return min_distance_; };
-
-    /// Return the maximum distance to a valid obstacle.
-    uint32_t max_distance() { return max_distance_; };
 
     /// Lock the list to avoid using/modifying it from several thread at the same time.
     void lock() { mutex_.lock(); };
@@ -74,8 +65,6 @@ public:
     void clear();
 
 private:
-    uint32_t min_distance_;                   ///< minimun distance from origin to create an obstacle
-    uint32_t max_distance_;                   ///< maximum distance from origin to create an obstacle
     riot::mutex mutex_;                       ///< mutex protecting list access
 };
 

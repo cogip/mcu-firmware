@@ -32,17 +32,16 @@ cogip::obstacles::List * lidar_obstacles = nullptr;
 riot::thread *obstacle_updater_thread = nullptr;
 
 // Find consecutive obstacles and keep the nearest at the middle
-static bool _filter_distances(cogip::obstacles::List * lidar_obstacles,
-                              const uint16_t *raw_distances, uint16_t *filtered_distances)
+static bool _filter_distances(const uint16_t *raw_distances, uint16_t *filtered_distances)
 {
     for (uint32_t i = 0; i < LDS01_NB_ANGLES; i++) {
-        filtered_distances[i] = lidar_obstacles->max_distance();
+        filtered_distances[i] = LIDAR_MAX_DISTANCE;
     }
 
     // Find an angle without obstacle
     int start = -1;
     for (uint32_t i = 0; i < LDS01_NB_ANGLES; i++) {
-        if (raw_distances[i] >= lidar_obstacles->max_distance()) {
+        if (raw_distances[i] >= LIDAR_MAX_DISTANCE) {
             start = i;
             break;
         }
@@ -58,7 +57,7 @@ static bool _filter_distances(cogip::obstacles::List * lidar_obstacles,
         uint32_t dist_min = raw_distances[first % LDS01_NB_ANGLES];
 
         // Find the next angle with obstacle
-        if (dist_min >= lidar_obstacles->max_distance()) {
+        if (dist_min >= LIDAR_MAX_DISTANCE) {
             continue;
         }
 
@@ -67,8 +66,8 @@ static bool _filter_distances(cogip::obstacles::List * lidar_obstacles,
             uint16_t dist_current = raw_distances[last % LDS01_NB_ANGLES];
 
             // Keep the nearest distance of consecutive obstacles
-            if (dist_current < lidar_obstacles->max_distance()
-                || raw_distances[(last + 1) % LDS01_NB_ANGLES] < lidar_obstacles->max_distance()) {
+            if (dist_current < LIDAR_MAX_DISTANCE
+                || raw_distances[(last + 1) % LDS01_NB_ANGLES] < LIDAR_MAX_DISTANCE) {
                 dist_min = dist_current < dist_min ? dist_current : dist_min;
                 continue;
             }
@@ -77,7 +76,7 @@ static bool _filter_distances(cogip::obstacles::List * lidar_obstacles,
             // no obstacle
             bool continue_loop = false;
             for (uint32_t next = last + 1; next < last + NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE; next++) {
-                if (raw_distances[next % LDS01_NB_ANGLES] < lidar_obstacles->max_distance()) {
+                if (raw_distances[next % LDS01_NB_ANGLES] < LIDAR_MAX_DISTANCE) {
                     continue_loop = true;
                     break;
                 }
@@ -107,7 +106,7 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstac
 
     for (uint16_t angle = 0; angle < 360; angle++) {
         uint16_t distance = distances[angle];
-        if (distance < obstacles->min_distance() || distance >= obstacles->max_distance()) {
+        if (distance < LIDAR_MIN_DISTANCE || distance >= LIDAR_MAX_DISTANCE) {
             continue;
         }
 
@@ -139,7 +138,7 @@ static void _thread_obstacle_updater(const cogip::cogip_defs::Pose &robot_state)
             raw_distances[i] += BEACON_SUPPORT_DIAMETER / 2;
         }
 
-        if (_filter_distances(lidar_obstacles, raw_distances, filtered_distances) == true) {
+        if (_filter_distances(raw_distances, filtered_distances) == true) {
             _update_dynamic_obstacles_from_lidar(lidar_obstacles, robot_state, filtered_distances);
         }
 
@@ -149,10 +148,7 @@ static void _thread_obstacle_updater(const cogip::cogip_defs::Pose &robot_state)
 
 void obstacle_updater_start(const cogip::cogip_defs::Pose &robot_state)
 {
-    lidar_obstacles = new cogip::obstacles::List(
-        ROBOT_WIDTH / 2,                // min_distance
-        LIDAR_MAX_DISTANCE              // max_distance
-        );
+    lidar_obstacles = new cogip::obstacles::List();
 
     obstacle_updater_thread = new riot::thread(_thread_obstacle_updater, robot_state);
 }

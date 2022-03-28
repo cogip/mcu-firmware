@@ -7,10 +7,7 @@ namespace cogip {
 
 namespace obstacles {
 
-List::List(
-    uint32_t min_distance,
-    uint32_t max_distance)
-    : min_distance_(min_distance), max_distance_(max_distance)
+List::List()
 {
     all_obstacles.insert(this);
 }
