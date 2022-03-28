@@ -21,6 +21,14 @@
 
 #include "PB_Obstacle.hpp"
 
+#ifndef OBSTACLE_BOUNDING_BOX_VERTICES
+#  define OBSTACLE_BOUNDING_BOX_VERTICES    6  /**< number of bounding box vertices */
+#endif
+
+#ifndef OBSTACLE_BOUNDING_BOX_MARGIN
+#  define OBSTACLE_BOUNDING_BOX_MARGIN    0.2  /**< bounding box margin in percent of the radius */
+#endif
+
 namespace cogip {
 
 namespace obstacles {
@@ -28,6 +36,10 @@ namespace obstacles {
 /// An obstacle used to detect and avoid collisions.
 class Obstacle {
 public:
+
+    /// Protobuf message type. Shortcut for original template type.
+    using PB_Message = PB_Obstacle<OBSTACLE_BOUNDING_BOX_VERTICES>;
+
     /// Constructor
     Obstacle(
         const cogip_defs::Coords &center, ///< [in] obstacle center
@@ -37,13 +49,11 @@ public:
     /// Destructor
     virtual ~Obstacle() {};
 
-    /// Return bounding box of an obstacle. This bounding box has nb_vertices
-    /// and has a radius of ((1 + radius_margin) * radius).
-    /// @return bounding box polygon
-    cogip_defs::Polygon bounding_box(
-        const uint8_t nb_vertices,        ///< [in] number of bounding box vertices
-        double radius_margin              ///< [in] radius margin
-        ) const;
+    /// Update bounding box.
+    void update_bounding_box();
+
+    /// Return bounding box polygon.
+    virtual const cogip_defs::Polygon & bounding_box() const { return bounding_box_; };
 
     /// Check if the given point is inside the obstacle.
     /// @return true if point is inside, false otherwise
@@ -71,8 +81,8 @@ public:
 
     /// Copy data to Protobuf message.
     virtual void pb_copy(
-        PB_Obstacle &message              ///< [out] Protobuf message to fill
-        ) const = 0;
+        PB_Message &message              ///< [out] Protobuf message to fill
+        ) const;
 
     /// Return obstacle center.
     const cogip_defs::Coords &center() const { return center_; };
@@ -83,6 +93,7 @@ public:
 protected:
     cogip_defs::Coords center_;           ///< obstacle center
     double radius_;                       ///< obstacle circumscribed circle radius
+    cogip_defs::Polygon bounding_box_;    ///< Precomputed bounding box for avoidance
 };
 
 } // namespace obstacles

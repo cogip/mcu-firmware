@@ -6,6 +6,7 @@
 /* Project includes */
 #include "app.hpp"
 #include "obstacles/obstacles.hpp"
+#include "obstacles/Obstacle.hpp"
 #include "planners/astar/AstarPlanner.hpp"
 #include "platform.hpp"
 #include "avoidance.hpp"
@@ -78,7 +79,7 @@ char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static size_t connected_copilots = 0;
 static size_t connected_monitors = 0;
-PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER> pb_state;
+PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
 enum InputMessageType {
     MSG_COMMAND = 0,

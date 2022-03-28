@@ -33,6 +33,10 @@ Rectangle::Rectangle(
         center.x() + (length_x_ / 2) * cos(DEG2RAD(angle)) + (length_y_ / 2) * sin(DEG2RAD(angle)),
         center.y() + (length_x_ / 2) * sin(DEG2RAD(angle)) - (length_y_ / 2) * cos(DEG2RAD(angle))
     ));
+
+    for (const auto & point: *this) {
+        bounding_box_.push_back(point);
+    }
 }
 
 void Rectangle::print_json(cogip::tracefd::File &out) const
@@ -47,8 +51,10 @@ void Rectangle::print_json(cogip::tracefd::File &out) const
         );
 }
 
-void Rectangle::pb_copy(PB_Obstacle &message) const
+void Rectangle::pb_copy(PB_Message &message) const
 {
+    Obstacle::pb_copy(message);
+
     PB_Rectangle &rectangle = message.mutable_rectangle();
     rectangle.set_x(center_.x());
     rectangle.set_y(center_.y());

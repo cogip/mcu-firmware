@@ -151,14 +151,6 @@
 /** @} */
 
 /**
- * @name Avoidance characteristics
- * @{
- */
-#define OBSTACLES_BB_NB_VERTICES            6                       /**< Obstacle bounding box vertices number */
-#define OBSTACLES_BB_RADIUS_MARGIN          0.4                     /**< Obstacle circle bounding box mark-up */
-/** @} */
-
-/**
  * @brief    General sensor structure
  */
 typedef struct {
