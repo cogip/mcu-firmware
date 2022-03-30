@@ -15,6 +15,7 @@
 #pragma once
 
 // RIOT includes
+#include "riot/mutex.hpp"
 #include "periph/uart.h"
 #include "ringbuffer.h"
 #include "thread.h"
@@ -105,6 +106,7 @@ private:
     WriteBuffer write_buffer_;                    ///< buffer used to encode a message
     void (*message_handler_)(uint8_t message_type, cogip::uartpb::ReadBuffer &);
                                                   ///< callback to process the message after decoding
+    riot::mutex mutex_;                           ///< mutex protecting serial port access
 };
 
 } // namespace uartpb

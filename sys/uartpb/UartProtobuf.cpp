@@ -98,16 +98,20 @@ void UartProtobuf::message_reader()
 
 void UartProtobuf::send_message(uint8_t message_type)
 {
+    mutex_.lock();
     // First, transmit the message_type.
     uart_write(uart_dev_, (uint8_t *)&message_type, 1);
 
     // Then, transmit the number of bytes in the message.
     size_t message_length = 0;
     uart_write(uart_dev_, (uint8_t *)&message_length, 4);
+
+    mutex_.unlock();
 }
 
 bool UartProtobuf::send_message(uint8_t message_type, const EmbeddedProto::MessageInterface &message)
 {
+    mutex_.lock();
     write_buffer_.clear();
     auto serialization_status = message.serialize(write_buffer_);
     assert(EmbeddedProto::Error::NO_ERRORS == serialization_status);
@@ -123,6 +127,8 @@ bool UartProtobuf::send_message(uint8_t message_type, const EmbeddedProto::Messa
         // Finally, transmit the actual data.
         uart_write(uart_dev_, write_buffer_.get_data(), write_buffer_.get_size());
     }
+
+    mutex_.unlock();
 
     return true;
 }
