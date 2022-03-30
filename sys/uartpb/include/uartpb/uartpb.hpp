@@ -25,7 +25,7 @@
 #endif
 
 #ifndef UARTPB_OUTPUT_MESSAGE_LENGTH_MAX
-#define UARTPB_OUTPUT_MESSAGE_LENGTH_MAX  1024               ///< max outgoing message length
+#define UARTPB_OUTPUT_MESSAGE_LENGTH_MAX  (4*1024)           ///< max outgoing message length
 #endif
 
 /// @}
