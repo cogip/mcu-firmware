@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import base64
+import binascii
 from enum import IntEnum
 from pathlib import Path
 from typing import Union
@@ -122,12 +124,20 @@ def main(
     serial_port.open()
 
     while(True):
-        message_type = int.from_bytes(serial_port.readline(1), byteorder='little')
-        message_length = int.from_bytes(serial_port.readline(4), byteorder='little')
-        encoded_message = b""
-        if message_length:
-            encoded_message = serial_port.read(message_length)
-        decode_message(message_type, encoded_message)
+        # Read next base64 message
+        base64_message = serial_port.readline()
+
+        # Base64 decoding
+        try:
+            pb_message = base64.decodebytes(base64_message)
+        except binascii.Error:
+            print("Failed to decode base64 message.")
+            continue
+
+        # Get message type on first byte
+        message_type = int(pb_message[0])
+
+        decode_message(message_type, pb_message[1:])
 
 
 if __name__ == "__main__":

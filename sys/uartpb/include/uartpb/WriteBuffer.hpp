@@ -15,6 +15,16 @@
 #include "uartpb.hpp"
 #include "WriteBufferInterface.h"
 
+/// Reserved space at the begining of the serialization buffer to store meta data.
+///   - 1 byte for message type
+#define UARTPB_METADATA_SIZE 1
+
+/// Size of the Protobuf serialization buffer
+#define UARTPB_SERIALIZATION_BUFFER_SIZE (UARTPB_OUTPUT_MESSAGE_LENGTH_MAX + UARTPB_METADATA_SIZE)
+
+/// Size of the base64 encoding buffer
+#define UARTPB_BASE64_BUFFER_SIZE (UARTPB_SERIALIZATION_BUFFER_SIZE * 2)
+
 namespace cogip {
 
 namespace uartpb {
@@ -43,9 +53,23 @@ public:
     /// Return a pointer to the data array.
     uint8_t * get_data();
 
+    /// Set type of the protobuf message
+    void set_message_type(uint8_t type);
+
+    /// Encode the data buffer in base64 before transmission over UART.
+    /// @return size of encoded message, 0 in case of failure.
+    size_t base64_encode();
+
+    /// Return a pointer to the data array.
+    uint8_t * get_base64_data();
+
 private:
-    uint8_t data_[UARTPB_OUTPUT_MESSAGE_LENGTH_MAX];  ///< array in which the serialized data is stored
-    uint32_t write_index_;                            ///< number of bytes currently serialized in the array
+    ///< array in which the serialized data is stored
+    uint8_t data_[UARTPB_SERIALIZATION_BUFFER_SIZE];
+    ///< array in which the base64 encoded serialized data is stored
+    uint8_t base64_data_[UARTPB_BASE64_BUFFER_SIZE];
+    ///< number of bytes currently serialized in the array
+    uint32_t write_index_;
 };
 
 } // namespace uartpb

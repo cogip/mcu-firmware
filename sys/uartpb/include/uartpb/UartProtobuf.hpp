@@ -78,7 +78,8 @@ public:
     void message_reader();
 
     /// Send an empty message (just a message type without data) on serial port.
-    void send_message(
+    /// @return true if message was encoded and sent, false otherwise
+    bool send_message(
         uint8_t message_type                      ///< [in] message type
         );
 
