@@ -11,15 +11,15 @@
 // - Absolute coordinate recalibration on games frames (?)
 static std::vector<cogip::path::Pose> poses = {
     {
-        -1200, 1000, 0,
+        -1200, 700, 0,
         MAX_SPEED
     },
     {
-        1200, 1000, 180,
+        1200, 700, 180,
         MAX_SPEED
     },
     {
-        -1200, 1000, 0,
+        -1200, 700, 0,
         MAX_SPEED
     },
 };
