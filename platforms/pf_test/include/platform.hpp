@@ -70,14 +70,6 @@
 /** @} */
 
 /**
- * @name Calibration
- *
- * @{
- */
-#define PF_START_COUNTDOWN  3   /**< Delay to press a key before the robot starts */
-/** @} */
-
-/**
  * @name Eurobot general properties
  *
  * @{

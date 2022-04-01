@@ -71,24 +71,21 @@ static ctrl_quadpid_t ctrl_quadpid =
 
 /* Planner */
 cogip::planners::Planner *planner = nullptr;
-bool start_planner = true;
 
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
-char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
-static size_t connected_copilots = 0;
+static bool copilot_connected = false;
 static size_t connected_monitors = 0;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
 enum InputMessageType {
     MSG_COMMAND = 0,
-    MSG_BREAK = 1,
-    MSG_COPILOT_CONNECTED = 2,
-    MSG_COPILOT_DISCONNECTED = 3,
-    MSG_MONITOR_CONNECTED = 4,
-    MSG_MONITOR_DISCONNECTED = 5
+    MSG_COPILOT_CONNECTED = 1,
+    MSG_COPILOT_DISCONNECTED = 2,
+    MSG_MONITOR_CONNECTED = 3,
+    MSG_MONITOR_DISCONNECTED = 4
 };
 
 enum OutputMessageType {
@@ -101,7 +98,7 @@ cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
 bool pf_trace_on(void)
 {
-    return (connected_copilots > 0);
+    return copilot_connected;
 }
 
 void pf_print_state(cogip::tracefd::File &out)
@@ -249,41 +246,6 @@ cogip::obstacles::List *pf_get_dyn_obstacles(void)
     return lidar_obstacles;
 }
 
-static void *_task_countdown(void *arg)
-{
-    (void)arg;
-    static int countdown = GAME_DURATION_SEC;
-
-    for (;;) {
-        xtimer_ticks32_t loop_start_time = xtimer_now();
-        if (countdown < 0) {
-            planner->stop();
-        }
-        else {
-            DEBUG("GAME TIME: %d\n", countdown);
-            countdown--;
-        }
-        xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
-    }
-
-    return NULL;
-}
-
-static void *_task_planner_start_cancel(void *arg)
-{
-    bool *start_shell = (bool *)arg;
-
-    /* Wait for Enter to be pressed */
-    getchar();
-
-    /* Set a flag and return once done */
-    *start_shell = false;
-
-    cogip::tracefd::out.logf("Key pressed, do not start planner.");
-
-    return NULL;
-}
-
 /// Execute a shell command callback using arguments from Protobuf message.
 /// Command name is in the 'cmd' attribute of the Protobuf message.
 /// Arguments are in a space-separated string in 'desc' attribute of the Protobuf message.
@@ -363,20 +325,17 @@ void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
             message = new cogip::shell::Command::PB_Message();
             response_handler = (response_handler_t)handle_command;
             break;
-        case MSG_BREAK:
-            start_planner = false;
-            break;
         case MSG_COPILOT_CONNECTED:
-            connected_copilots++;
-            printf("Copilot connected (%u)\n", connected_copilots);
+            copilot_connected = true;
+            puts("Copilot connected");
             if (cogip::shell::current_menu) {
                 cogip::shell::current_menu->send_pb_message();
             }
             break;
         case MSG_COPILOT_DISCONNECTED:
-            connected_copilots = connected_copilots ? connected_copilots - 1 : 0;
+            copilot_connected = false;
             connected_monitors = 0;
-            printf("Copilot disconnected (%u)\n", connected_copilots);
+            puts("Copilot disconnected");
             break;
         case MSG_MONITOR_CONNECTED:
             connected_monitors++;
@@ -439,7 +398,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-    int countdown = PF_START_COUNTDOWN;
 
     /* Initialize UARTPB */
     uartpb = new cogip::uartpb::UartProtobuf(
@@ -462,32 +420,6 @@ void pf_init_tasks(void)
 
     obstacle_updater_start(ctrl_get_pose_current(controller));
 
-    /* Create thread that up a flag on key pressed to not start the planner automatically */
-    kernel_pid_t planner_start_cancel_pid = thread_create(
-        planner_start_cancel_thread_stack,
-        sizeof(planner_start_cancel_thread_stack),
-        THREAD_PRIORITY_MAIN + 1, 0,
-        _task_planner_start_cancel,
-        &start_planner,
-        "wait planner start cancel"
-        );
-
-    cogip::tracefd::out.logf("Press Enter to cancel planner start...");
-
-    /* Wait for Enter key pressed or countdown */
-    while ((start_planner) && (countdown > 0)) {
-        xtimer_ticks32_t loop_start_time = xtimer_now();
-        cogip::tracefd::out.logf("%d seconds left...", countdown);
-        countdown--;
-        xtimer_periodic_wakeup(&loop_start_time, US_PER_SEC);
-    }
-
-    /* Stop task_planner_start_cancel thread if still running */
-    thread_t *planner_start_cancel_thread = (thread_t *)thread_get(planner_start_cancel_pid);
-    if (planner_start_cancel_thread) {
-        sched_set_status(planner_start_cancel_thread, STATUS_STOPPED);
-    }
-
     /* Create controller thread */
     thread_create(
         controller_thread_stack,
@@ -501,24 +433,4 @@ void pf_init_tasks(void)
     planner->start_thread();
 
     trace_start();
-
-    if (start_planner) {
-        /* Debug indicator to track the planner started state */
-        gpio_set(GPIO_DEBUG_LED);
-
-        /* Create countdown thread */
-        thread_create(
-            countdown_thread_stack,
-            sizeof(countdown_thread_stack),
-            THREAD_PRIORITY_MAIN - 3,
-            0,
-            _task_countdown,
-            NULL,
-            "countdown"
-            );
-
-        /* Start game */
-        DEBUG("platform: Start game\n");
-        planner->start();
-    }
 }
