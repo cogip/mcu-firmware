@@ -77,15 +77,12 @@ char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool copilot_connected = false;
-static size_t connected_monitors = 0;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
 enum InputMessageType {
     MSG_COMMAND = 0,
     MSG_COPILOT_CONNECTED = 1,
     MSG_COPILOT_DISCONNECTED = 2,
-    MSG_MONITOR_CONNECTED = 3,
-    MSG_MONITOR_DISCONNECTED = 4
 };
 
 enum OutputMessageType {
@@ -334,16 +331,8 @@ void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
             break;
         case MSG_COPILOT_DISCONNECTED:
             copilot_connected = false;
-            connected_monitors = 0;
             puts("Copilot disconnected");
             break;
-        case MSG_MONITOR_CONNECTED:
-            connected_monitors++;
-            printf("Monitor connected (%u)\n", connected_monitors);
-            break;
-        case MSG_MONITOR_DISCONNECTED:
-            connected_monitors--;
-            printf("Monitor disconnected (%u)\n", connected_monitors);
             break;
         default:
             printf("Unknown response type: %u\n", message_type);
