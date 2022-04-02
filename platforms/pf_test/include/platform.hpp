@@ -84,7 +84,7 @@
  * @{
  */
 #define MAX_ACC         1.5             /**< Maximum acceleration (mm/s²) */
-#define MAX_SPEED       3               /**< Maximum speed (mm/s) */
+#define MAX_SPEED       10              /**< Maximum speed (mm/s) */
 #define LOW_SPEED       (MAX_SPEED / 4) /**< Low speed (mm/s) */
 #define NORMAL_SPEED    (MAX_SPEED / 2) /**< Normal speed (mm/s) */
 /** @} */
