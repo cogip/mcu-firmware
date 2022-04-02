@@ -6,14 +6,14 @@
 static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
     .linear_speed_pid = {
         .kp = 10,
-        .ki = 0.025,
+        .ki = 0.05,
         .kd = 0.,
         .ti = 0.,
         .previous_error = 0.
     },
     .angular_speed_pid = {
         .kp = 10,
-        .ki = 0.025,
+        .ki = 0.05,
         .kd = 0.,
         .ti = 0.,
         .previous_error = 0.
