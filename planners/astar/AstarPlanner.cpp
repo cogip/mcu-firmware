@@ -15,7 +15,7 @@
 #include "debug.h"
 
 // Periodic task
-#define TASK_PERIOD_MS      (50)
+#define TASK_PERIOD_MS      (100)
 
 namespace cogip {
 
