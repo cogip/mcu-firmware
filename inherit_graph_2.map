@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="116,5,308,32"/>
 <area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Circle.html" title="Circle obstacle defined by its center and radius." alt="" coords="363,5,535,32"/>
 <area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="356,60,543,87"/>
-<area shape="rect" id="node4" href="$classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Obstacle." alt="" coords="591,60,791,87"/>
+<area shape="rect" id="node4" href="$classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Polygon." alt="" coords="591,60,791,87"/>
 <area shape="rect" id="node5" title=" " alt="" coords="5,123,68,149"/>
 <area shape="rect" id="node6" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title="A polygon defined by a list of coordinates." alt="" coords="141,57,283,98"/>
 <area shape="rect" id="node7" href="$classcogip_1_1obstacles_1_1List.html" title="List of obstacles." alt="" coords="133,123,291,149"/>

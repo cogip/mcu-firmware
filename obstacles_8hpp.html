@@ -120,7 +120,8 @@ $(document).ready(function(){initNavTree('obstacles_8hpp.html',''); initResizabl
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">obstacles.hpp File Reference<div class="ingroups"><a class="el" href="group__lib.html">Lib</a> &raquo; <a class="el" href="group__lib__obstacles.html">Obstacles module</a></div></div>  </div>
 </div><!--header-->
@@ -135,7 +136,8 @@ $(document).ready(function(){initNavTree('obstacles_8hpp.html',''); initResizabl
 Gilles DOFFE <a href="#" onclick="location.href='mai'+'lto:'+'g.d'+'of'+'fe@'+'gm'+'ail'+'.c'+'om'; return false;">g.dof<span style="display: none;">.nosp@m.</span>fe@g<span style="display: none;">.nosp@m.</span>mail.<span style="display: none;">.nosp@m.</span>com</a> </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="obstacles_8hpp_source.html">obstacles.hpp</a>.</p>
-</div><div class="textblock"><code>#include &quot;<a class="el" href="Coords_8hpp_source.html">cogip_defs/Coords.hpp</a>&quot;</code><br />
+</div><div class="textblock"><code>#include &lt;set&gt;</code><br />
+<code>#include &quot;<a class="el" href="Coords_8hpp_source.html">cogip_defs/Coords.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Obstacle_8hpp_source.html">obstacles/Obstacle.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="List_8hpp_source.html">obstacles/List.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="File_8hpp_source.html">tracefd/File.hpp</a>&quot;</code><br />
@@ -146,19 +148,20 @@ Gilles DOFFE <a href="#" onclick="location.href='mai'+'lto:'+'g.d'+'of'+'fe@'+'g
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="obstacles_8hpp__incl.png" border="0" usemap="#lib_2obstacles_2include_2obstacles_2obstacles_8hpp" alt=""/></div>
 <map name="lib_2obstacles_2include_2obstacles_2obstacles_8hpp" id="lib_2obstacles_2include_2obstacles_2obstacles_8hpp">
-<area shape="rect" title="Public API for obstacles module." alt="" coords="295,5,477,47"/>
-<area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="5,319,175,345"/>
-<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="179,169,353,196"/>
-<area shape="rect" href="File_8hpp.html" title="File class declaration." alt="" coords="625,244,747,271"/>
-<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="419,95,558,121"/>
-<area shape="rect" title=" " alt="" coords="31,393,149,420"/>
-<area shape="rect" title=" " alt="" coords="482,244,549,271"/>
-<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="127,244,303,271"/>
-<area shape="rect" title=" " alt="" coords="327,244,458,271"/>
-<area shape="rect" title=" " alt="" coords="377,319,440,345"/>
-<area shape="rect" title=" " alt="" coords="642,319,701,345"/>
-<area shape="rect" title=" " alt="" coords="725,319,844,345"/>
-<area shape="rect" title=" " alt="" coords="478,169,598,196"/>
+<area shape="rect" title="Public API for obstacles module." alt="" coords="183,5,366,47"/>
+<area shape="rect" title=" " alt="" coords="5,95,48,121"/>
+<area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="51,319,221,345"/>
+<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="188,169,361,196"/>
+<area shape="rect" href="File_8hpp.html" title="File class declaration." alt="" coords="669,244,792,271"/>
+<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="428,95,567,121"/>
+<area shape="rect" title=" " alt="" coords="77,393,195,420"/>
+<area shape="rect" title=" " alt="" coords="528,244,595,271"/>
+<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="173,244,349,271"/>
+<area shape="rect" title=" " alt="" coords="373,244,504,271"/>
+<area shape="rect" title=" " alt="" coords="422,319,485,345"/>
+<area shape="rect" title=" " alt="" coords="687,319,745,345"/>
+<area shape="rect" title=" " alt="" coords="770,319,889,345"/>
+<area shape="rect" title=" " alt="" coords="487,169,607,196"/>
 </map>
 </div>
 </div>
@@ -172,9 +175,16 @@ Functions</h2></td></tr>
 <tr class="memitem:a7adb2fcb2ee59abf32145acdc7e097fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#a7adb2fcb2ee59abf32145acdc7e097fe">cogip::obstacles::print_all_json</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out)</td></tr>
 <tr class="memdesc:a7adb2fcb2ee59abf32145acdc7e097fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all obstacles from all lists.  <a href="obstacles_8hpp.html#a7adb2fcb2ee59abf32145acdc7e097fe">More...</a><br /></td></tr>
 <tr class="separator:a7adb2fcb2ee59abf32145acdc7e097fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b88c84b2bd278cd43b651cd62cd0a76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#a1b88c84b2bd278cd43b651cd62cd0a76">cogip::obstacles::pb_copy</a> (<a class="el" href="classcogip_1_1obstacles_1_1List.html#a45b31451668086c901b7096782429058">cogip::obstacles::List::PB_Message</a> &amp;message)</td></tr>
+<tr class="memitem:a1b88c84b2bd278cd43b651cd62cd0a76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#a1b88c84b2bd278cd43b651cd62cd0a76">cogip::obstacles::pb_copy</a> (<a class="el" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">cogip::obstacles::List::PB_Message</a> &amp;message)</td></tr>
 <tr class="memdesc:a1b88c84b2bd278cd43b651cd62cd0a76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="obstacles_8hpp.html#a1b88c84b2bd278cd43b651cd62cd0a76">More...</a><br /></td></tr>
 <tr class="separator:a1b88c84b2bd278cd43b651cd62cd0a76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a70a67cbe7ab674c26b73a4d7823cb08d"><td class="memItemLeft" align="right" valign="top"><a id="a70a67cbe7ab674c26b73a4d7823cb08d"></a>
+std::set&lt; List const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#a70a67cbe7ab674c26b73a4d7823cb08d">cogip::obstacles::all_obstacles</a></td></tr>
+<tr class="memdesc:a70a67cbe7ab674c26b73a4d7823cb08d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1obstacles_1_1List.html" title="List of obstacles.">List</a> of all obstacle list. <br /></td></tr>
+<tr class="separator:a70a67cbe7ab674c26b73a4d7823cb08d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="abe3c5f8b1593cc304f5a88bdf084cf43"></a>
@@ -224,7 +234,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void cogip::obstacles::pb_copy </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1obstacles_1_1List.html#a45b31451668086c901b7096782429058">cogip::obstacles::List::PB_Message</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">cogip::obstacles::List::PB_Message</a> &amp;&#160;</td>
           <td class="paramname"><em>message</em></td><td>)</td>
           <td></td>
         </tr>
@@ -271,7 +281,7 @@ Functions</h2></td></tr>
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Jan 23 2022 13:55:49 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Apr 5 2022 16:34:32 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

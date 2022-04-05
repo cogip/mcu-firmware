@@ -1,8 +1,8 @@
 <map id="cogip::obstacles::Rectangle" name="cogip::obstacles::Rectangle">
-<area shape="rect" id="node1" title="A rectangle obstacle which inherits from Obstacle." alt="" coords="96,276,296,303"/>
-<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="103,200,289,227"/>
-<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="5,117,197,143"/>
-<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="30,5,173,47"/>
-<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title="A polygon defined by a list of coordinates." alt="" coords="222,109,365,151"/>
-<area shape="rect" id="node6" title=" " alt="" coords="210,13,377,39"/>
+<area shape="rect" id="node1" title="A rectangle obstacle which inherits from Polygon." alt="" coords="5,337,205,364"/>
+<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="12,261,199,288"/>
+<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="127,185,319,212"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title="A polygon defined by a list of coordinates." alt="" coords="23,81,166,123"/>
+<area shape="rect" id="node5" title=" " alt="" coords="11,5,178,32"/>
+<area shape="rect" id="node6" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="195,81,338,123"/>
 </map>

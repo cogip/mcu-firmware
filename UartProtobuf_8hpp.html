@@ -135,7 +135,8 @@ $(document).ready(function(){initNavTree('UartProtobuf_8hpp.html',''); initResiz
 <dl class="section author"><dt>Author</dt><dd>Eric Courtois <a href="#" onclick="location.href='mai'+'lto:'+'eri'+'c.'+'cou'+'rt'+'ois'+'@g'+'mai'+'l.'+'com'; return false;">eric.<span style="display: none;">.nosp@m.</span>cour<span style="display: none;">.nosp@m.</span>tois@<span style="display: none;">.nosp@m.</span>gmai<span style="display: none;">.nosp@m.</span>l.com</a> </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>.</p>
-</div><div class="textblock"><code>#include &quot;periph/uart.h&quot;</code><br />
+</div><div class="textblock"><code>#include &quot;riot/mutex.hpp&quot;</code><br />
+<code>#include &quot;periph/uart.h&quot;</code><br />
 <code>#include &quot;ringbuffer.h&quot;</code><br />
 <code>#include &quot;thread.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="uartpb_8hpp_source.html">uartpb/uartpb.hpp</a>&quot;</code><br />
@@ -149,17 +150,18 @@ $(document).ready(function(){initNavTree('UartProtobuf_8hpp.html',''); initResiz
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="UartProtobuf_8hpp__incl.png" border="0" usemap="#sys_2uartpb_2include_2uartpb_2UartProtobuf_8hpp" alt=""/></div>
 <map name="sys_2uartpb_2include_2uartpb_2UartProtobuf_8hpp" id="sys_2uartpb_2include_2uartpb_2UartProtobuf_8hpp">
-<area shape="rect" title="Exchange Protobuf messages over UART module." alt="" coords="349,5,532,47"/>
-<area shape="rect" title=" " alt="" coords="5,95,111,121"/>
-<area shape="rect" title=" " alt="" coords="135,95,231,121"/>
-<area shape="rect" title=" " alt="" coords="256,95,332,121"/>
-<area shape="rect" href="uartpb_8hpp.html" title=" " alt="" coords="498,169,637,196"/>
-<area shape="rect" href="ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="601,95,768,121"/>
-<area shape="rect" href="WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="356,95,525,121"/>
-<area shape="rect" title=" " alt="" coords="792,95,943,121"/>
-<area shape="rect" title=" " alt="" coords="407,169,474,196"/>
-<area shape="rect" title=" " alt="" coords="661,169,825,196"/>
-<area shape="rect" title=" " alt="" coords="216,169,383,196"/>
+<area shape="rect" title="Exchange Protobuf messages over UART module." alt="" coords="383,5,565,47"/>
+<area shape="rect" title=" " alt="" coords="5,95,124,121"/>
+<area shape="rect" title=" " alt="" coords="148,95,253,121"/>
+<area shape="rect" title=" " alt="" coords="278,95,374,121"/>
+<area shape="rect" title=" " alt="" coords="399,95,475,121"/>
+<area shape="rect" href="uartpb_8hpp.html" title=" " alt="" coords="439,169,578,196"/>
+<area shape="rect" href="ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="744,95,911,121"/>
+<area shape="rect" href="WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="551,95,720,121"/>
+<area shape="rect" title=" " alt="" coords="935,95,1085,121"/>
+<area shape="rect" title=" " alt="" coords="794,169,861,196"/>
+<area shape="rect" title=" " alt="" coords="885,169,1049,196"/>
+<area shape="rect" title=" " alt="" coords="603,169,769,196"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -266,7 +268,7 @@ Functions</h2></td></tr>
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Jan 23 2022 13:55:49 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Apr 5 2022 16:34:32 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

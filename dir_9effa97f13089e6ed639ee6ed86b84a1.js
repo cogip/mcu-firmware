@@ -5,7 +5,5 @@ var dir_9effa97f13089e6ed639ee6ed86b84a1 =
     ] ],
     [ "uartpb.hpp", "uartpb_8hpp.html", "uartpb_8hpp" ],
     [ "UartProtobuf.hpp", "UartProtobuf_8hpp.html", "UartProtobuf_8hpp" ],
-    [ "WriteBuffer.hpp", "WriteBuffer_8hpp.html", [
-      [ "WriteBuffer", "classcogip_1_1uartpb_1_1WriteBuffer.html", "classcogip_1_1uartpb_1_1WriteBuffer" ]
-    ] ]
+    [ "WriteBuffer.hpp", "WriteBuffer_8hpp.html", "WriteBuffer_8hpp" ]
 ];

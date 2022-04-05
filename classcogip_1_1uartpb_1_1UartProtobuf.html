@@ -132,7 +132,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1uartpb_1_1UartProtobuf.h
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Generic UART Protobuf communication class. </p>
 
-<p class="definition">Definition at line <a class="el" href="UartProtobuf_8hpp_source.html#l00053">53</a> of file <a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="UartProtobuf_8hpp_source.html#l00054">54</a> of file <a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>&gt;</code></p>
 <table class="memberdecls">
@@ -161,9 +161,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7">message_reader</a> ()</td></tr>
 <tr class="memdesc:a3ef9cf01ce4bf920dca63c07f6b973e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait and decode incoming Protobuf messages. <br /></td></tr>
 <tr class="separator:a3ef9cf01ce4bf920dca63c07f6b973e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97b47f0c139f6dcacbe3d52b0529a632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a97b47f0c139f6dcacbe3d52b0529a632">send_message</a> (uint8_t message_type)</td></tr>
-<tr class="memdesc:a97b47f0c139f6dcacbe3d52b0529a632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an empty message (just a message type without data) on serial port.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a97b47f0c139f6dcacbe3d52b0529a632">More...</a><br /></td></tr>
-<tr class="separator:a97b47f0c139f6dcacbe3d52b0529a632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a346a33597bc2bb62e9e2369160768af7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a346a33597bc2bb62e9e2369160768af7">send_message</a> (uint8_t message_type)</td></tr>
+<tr class="memdesc:a346a33597bc2bb62e9e2369160768af7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an empty message (just a message type without data) on serial port.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a346a33597bc2bb62e9e2369160768af7">More...</a><br /></td></tr>
+<tr class="separator:a346a33597bc2bb62e9e2369160768af7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe0ea38dc7fe332c44405e7fdbea8389"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#abe0ea38dc7fe332c44405e7fdbea8389">send_message</a> (uint8_t message_type, const EmbeddedProto::MessageInterface &amp;message)</td></tr>
 <tr class="memdesc:abe0ea38dc7fe332c44405e7fdbea8389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send Protobuf message on serial port.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#abe0ea38dc7fe332c44405e7fdbea8389">More...</a><br /></td></tr>
 <tr class="separator:abe0ea38dc7fe332c44405e7fdbea8389"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -234,14 +234,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a97b47f0c139f6dcacbe3d52b0529a632"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97b47f0c139f6dcacbe3d52b0529a632">&#9670;&nbsp;</a></span>send_message() <span class="overload">[1/2]</span></h2>
+<a id="a346a33597bc2bb62e9e2369160768af7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a346a33597bc2bb62e9e2369160768af7">&#9670;&nbsp;</a></span>send_message() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cogip::uartpb::UartProtobuf::send_message </td>
+          <td class="memname">bool cogip::uartpb::UartProtobuf::send_message </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>message_type</em></td><td>)</td>
@@ -251,6 +251,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><div class="memdoc">
 
 <p>Send an empty message (just a message type without data) on serial port. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if message was encoded and sent, false otherwise </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">message_type</td><td>[in] message type </td></tr>
@@ -331,7 +332,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Jan 23 2022 13:55:49 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Apr 5 2022 16:34:32 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

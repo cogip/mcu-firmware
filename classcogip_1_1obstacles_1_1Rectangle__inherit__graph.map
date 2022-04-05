@@ -1,5 +1,5 @@
 <map id="cogip::obstacles::Rectangle" name="cogip::obstacles::Rectangle">
-<area shape="rect" id="node1" title="A rectangle obstacle which inherits from Obstacle." alt="" coords="97,244,297,271"/>
+<area shape="rect" id="node1" title="A rectangle obstacle which inherits from Polygon." alt="" coords="97,244,297,271"/>
 <area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="104,169,291,196"/>
 <area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="5,87,197,114"/>
 <area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title="A polygon defined by a list of coordinates." alt="" coords="222,80,365,121"/>
