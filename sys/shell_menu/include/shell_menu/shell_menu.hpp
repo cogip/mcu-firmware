@@ -16,7 +16,9 @@
 #include "shell_menu/Command.hpp"
 #include "shell_menu/Menu.hpp"
 
+#ifdef MODULE_UARTPB
 #include "uartpb/UartProtobuf.hpp"
+#endif
 
 namespace cogip {
 
@@ -40,11 +42,13 @@ void rename_command(
     const std::string &new_name   ///< [in] new command name
     );
 
+#ifdef MODULE_UARTPB
 /// Register an UartProtobuf instance that will be used to send entered menus
 /// in Protobuf format over UART.
 void register_uartpb(
     cogip::uartpb::UartProtobuf *uartpb_ptr
     );
+#endif
 
 } // namespace shell
 

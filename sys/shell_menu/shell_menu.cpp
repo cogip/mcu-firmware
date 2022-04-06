@@ -14,7 +14,10 @@ std::set<Command *> all_commands;
 std::list<Command *> global_commands;
 Menu *current_menu = nullptr;
 shell_command_t current_commands[NB_SHELL_COMMANDS];
+
+#ifdef MODULE_UARTPB
 cogip::uartpb::UartProtobuf *uart_protobuf = nullptr;
+#endif
 
 // Callbacks for default global commands
 static int _display_json_help(int argc, char **argv)
@@ -91,10 +94,12 @@ void rename_command(const std::string &old_name, const std::string &new_name)
     current_menu->enter();
 }
 
+#ifdef MODULE_UARTPB
 void register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)
 {
     uart_protobuf = uartpb_ptr;
 }
+#endif
 
 } // namespace shell
 
