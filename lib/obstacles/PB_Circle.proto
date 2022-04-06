@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package cogip.obstacles;
-
 message PB_Circle {
     sint32 x = 1;
     sint32 y = 2;

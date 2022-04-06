@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package cogip.embedded_proto_uart;
-
 // All message type names are prefixed with "PB_" to avoid collisions
 // C++ classes already defined in code and Protobuf generated types.
 

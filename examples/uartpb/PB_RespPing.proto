@@ -2,8 +2,6 @@ syntax = "proto3";
 
 import "PB_Color.proto";
 
-package cogip.embedded_proto_uart;
-
 message PB_RespPing {
-    cogip_defs.PB_Color color = 1;
+    PB_Color color = 1;
 }
