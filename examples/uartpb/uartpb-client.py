@@ -19,6 +19,7 @@ from PB_RespHello_pb2 import PB_RespHello
 from PB_RespPing_pb2 import PB_RespPing
 from PB_RespPong_pb2 import PB_RespPong
 from PB_Menu_pb2 import PB_Menu
+from PB_AppOutputMessage_pb2 import PB_AppOutputMessage
 
 
 class MessageType(IntEnum):
@@ -41,8 +42,8 @@ def send_response(message_type: MessageType, response: Union[PB_RespHello, PB_Re
     serial_port.write(response_encoded)
 
 
-def handle_reset() -> None:
-    print("Reset received.")
+def handle_message_reset(reset: bool) -> None:
+    print("Reset received:", reset)
 
 
 def handle_message_menu(menu: PB_Menu) -> None:
@@ -65,49 +66,39 @@ def handle_message_ping(ping: PB_ReqPing) -> None:
 
 
 def handle_message_pong(pong: PB_ReqPong) -> None:
-    print(f"Received Pong request with pose={{x={pong.pose.x}, y={pong.pose.y}, angle={pong.pose.angle}}}")
+    print(f"Received Pong request with pose={{x={pong.pose.x}, y={pong.pose.y}, angle={pong.pose.O}}}")
     response = PB_RespPong(
         new_pose=PB_Pose(
             x=-pong.pose.x,
             y=-pong.pose.y,
-            angle=-pong.pose.angle
+            O=-pong.pose.O
         )
     )
     send_response(MessageType.PONG, response)
 
 
 request_handlers = {
-    MessageType.MENU: handle_message_menu,
-    MessageType.HELLO: handle_message_hello,
-    MessageType.PING: handle_message_ping,
-    MessageType.PONG: handle_message_pong
+    "reset": handle_message_reset,
+    "menu": handle_message_menu,
+    "req_hello": handle_message_hello,
+    "req_ping": handle_message_ping,
+    "req_pong": handle_message_pong
 }
 
 
-def decode_message(message_type: MessageType, encoded_message: bytes = b"") -> None:
-    if message_type == MessageType.RESET:
-        handle_reset()
-        return
-    elif message_type == MessageType.MENU:
-        message = PB_Menu()
-    elif message_type == MessageType.HELLO:
-        message = PB_ReqHello()
-    elif message_type == MessageType.PING:
-        message = PB_ReqPing()
-    elif message_type == MessageType.PONG:
-        message = PB_ReqPong()
-    else:
-        print(f"Unknown message type: {message_type}")
-
+def decode_message(encoded_message: bytes) -> None:
     try:
+        message = PB_AppOutputMessage()
         message.ParseFromString(encoded_message)
     except protobuf.message.DecodeError as exc:
         print(exc)
         return -1
 
+    message_type = message.WhichOneof("type")
+
     request_handler = request_handlers.get(message_type)
     if request_handler:
-        request_handler(message)
+        request_handler(getattr(message, message_type))
     else:
         print(f"No handler found for message type '{message_type}'")
 
@@ -134,10 +125,7 @@ def main(
             print("Failed to decode base64 message.")
             continue
 
-        # Get message type on first byte
-        message_type = int(pb_message[0])
-
-        decode_message(message_type, pb_message[1:])
+        decode_message(pb_message)
 
 
 if __name__ == "__main__":

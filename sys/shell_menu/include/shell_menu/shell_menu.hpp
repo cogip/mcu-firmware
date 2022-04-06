@@ -16,6 +16,8 @@
 #include "shell_menu/Command.hpp"
 #include "shell_menu/Menu.hpp"
 
+#include "uartpb/UartProtobuf.hpp"
+
 namespace cogip {
 
 namespace shell {

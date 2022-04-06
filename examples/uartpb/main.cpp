@@ -6,6 +6,8 @@
 #include "thread.h"
 #include "xtimer.h"
 
+#include "uartpb_config.hpp"
+
 // Projet includes
 #include "shell_menu/shell_menu.hpp"
 
@@ -94,7 +96,9 @@ static bool send_hello()
         (int32_t)hello.get_number(), (const char *)hello.get_message().get_const()
         );
 
-    return uartpb->send_message((uint8_t)MSG_HELLO, hello);
+    PB_OutputMessage &msg = uartpb->output_message();
+    msg.set_req_hello(hello);
+    return uartpb->send_message();
 }
 
 static bool send_ping()
@@ -104,7 +108,10 @@ static bool send_ping()
 
     printf("==>> Ping request  with color=%s\n", get_color_name((cogip::cogip_defs::Color)ping.get_color()));
 
-    return uartpb->send_message((uint8_t)MSG_PING, ping);
+    PB_OutputMessage &msg = uartpb->output_message();
+    msg.set_req_ping(ping);
+    return uartpb->send_message();
+
 }
 
 static bool send_pong()
@@ -118,7 +125,9 @@ static bool send_pong()
         (double)pong.get_pose().get_x(), (double)pong.get_pose().get_y(), (double)pong.get_pose().get_O()
         );
 
-    return uartpb->send_message((uint8_t)MSG_PONG, pong);
+    PB_OutputMessage &msg = uartpb->output_message();
+    msg.set_req_pong(pong);
+    return uartpb->send_message();
 }
 
 static void *message_sender(void *arg)
@@ -220,7 +229,9 @@ int main(void)
         sender_stack, sizeof(sender_stack), SENDER_PRIO,
         THREAD_CREATE_SLEEPING, message_sender, NULL, "sender");
 
-    uartpb->send_message((uint8_t)MSG_RESET);
+    PB_OutputMessage &msg = uartpb->output_message();
+    msg.set_reset(true);
+    uartpb->send_message();
 
     // Start shell
     cogip::shell::register_uartpb(uartpb);
