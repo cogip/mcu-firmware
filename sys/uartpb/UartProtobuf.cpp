@@ -96,39 +96,22 @@ void UartProtobuf::message_reader()
     }
 }
 
-bool UartProtobuf::send_message(uint8_t message_type)
+PB_OutputMessage & UartProtobuf::output_message()
+{
+    mutex_.lock();
+    return output_message_;
+};
+
+bool UartProtobuf::send_message()
 {
     bool success = true;
-    mutex_.lock();
-
     write_buffer_.clear();
-    write_buffer_.set_message_type(message_type);
-    size_t base64_size = write_buffer_.base64_encode();
-    if (base64_size == 0) {
-        puts("Failed to base64 encode Protobuf serialized message.");
-        success = false;
-    }
-    else {
-        uart_write(uart_dev_, write_buffer_.get_base64_data(), base64_size+1);
-    }
-
-    mutex_.unlock();
-
-    return success;
-}
-
-bool UartProtobuf::send_message(uint8_t message_type, const EmbeddedProto::MessageInterface &message)
-{
-    bool success = true;
-    mutex_.lock();
-    write_buffer_.clear();
-    auto serialization_status = message.serialize(write_buffer_);
+    auto serialization_status = output_message_.serialize(write_buffer_);
     if(EmbeddedProto::Error::NO_ERRORS != serialization_status) {
         puts("Failed to serialize Protobuf message.");
         success = false;
     }
     else {
-        write_buffer_.set_message_type(message_type);
         size_t base64_size = write_buffer_.base64_encode();
         if (base64_size == 0) {
             puts("Failed to base64 encode Protobuf serialized message.");

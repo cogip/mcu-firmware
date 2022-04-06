@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "PB_Menu.proto";
+import "PB_State.proto";
+
+message PB_GameOutputMessage {
+    oneof type {
+        bool reset = 1;
+        PB_Menu menu = 2;
+        PB_State state = 3;
+    }
+}

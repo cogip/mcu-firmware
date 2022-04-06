@@ -148,7 +148,9 @@ void pf_send_pb_state(void)
     avoidance_pb_copy_path(pb_state.mutable_path());
     cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
 
-    uartpb->send_message((uint8_t)MSG_STATE, pb_state);
+    PB_OutputMessage &msg = uartpb->output_message();
+    msg.set_state(pb_state);
+    uartpb->send_message();
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -402,7 +404,9 @@ void pf_init_tasks(void)
     else {
         cogip::shell::register_uartpb(uartpb);
         uartpb->start_reader();
-        uartpb->send_message((uint8_t)MSG_RESET);
+        PB_OutputMessage &msg = uartpb->output_message();
+        msg.set_reset(true);
+        uartpb->send_message();
     }
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);

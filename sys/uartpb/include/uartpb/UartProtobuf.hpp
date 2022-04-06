@@ -8,6 +8,11 @@
 /// @details     This module provides a class that controls an UART to send and
 ///              receive Protobuf messages using EmbbededProto.
 ///              A callback function must also be provided to handle decoded messages.
+///              A file `uartpb_config.hpp` must be provided by the application, either at lib,
+///              platform or application level. This file must define the `PB_OutputMessage` type.
+///              This type refers to a Protobuf message that contains a `oneof` attribute grouping
+///              all message types that the application and its libraries can send on serial port.
+///              See `examples/uartb`.
 /// @{
 /// @file
 /// @author      Eric Courtois <eric.courtois@gmail.com>
@@ -25,6 +30,8 @@
 #include "uartpb/WriteBuffer.hpp"
 
 #include "MessageInterface.h"
+
+#include "uartpb_config.hpp"
 
 // Double the size of the ringbuffer receiving input bytes,
 // so we can continue receiving data even if the thread decoding
@@ -77,21 +84,17 @@ public:
     /// Wait and decode incoming Protobuf messages.
     void message_reader();
 
-    /// Send an empty message (just a message type without data) on serial port.
-    /// @return true if message was encoded and sent, false otherwise
-    bool send_message(
-        uint8_t message_type                      ///< [in] message type
-        );
+    /// Get and lock output message and serial port.
+    /// Output message, serialization buffer and serial port are locked by this function,
+    /// send_message() must be called to release the lock.
+    PB_OutputMessage &output_message();
 
-    /// Send Protobuf message on serial port.
+    /// Unlock and send message on serial port.
     /// @return true if message was encoded and sent, false otherwise
-    bool send_message(
-        uint8_t message_type,                     ///< [in] message type
-        const EmbeddedProto::MessageInterface &message
-                                                  ///< [in] message to send
-        );
+    bool send_message();
 
 private:
+    PB_OutputMessage output_message_;             ///< Protobuf output message
     uart_t uart_dev_;                             ///< UART device
     uint32_t uart_speed_;                         ///< UART baud rate
     kernel_pid_t reader_pid_;                     ///< reader thread PID

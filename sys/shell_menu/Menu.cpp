@@ -5,11 +5,22 @@
 #include <cassert>
 
 // Project includes
+#include "uartpb/UartProtobuf.hpp"
 #include "tracefd/tracefd.hpp"
+
+#include "PB_Menu.hpp"
 
 namespace cogip {
 
 namespace shell {
+
+/// Protobuf message type. Shortcut for original template type.
+using PB_Message = PB_Menu<
+    COMMAND_NAME_MAX_LENGTH, NB_SHELL_COMMANDS,
+    COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH
+    >;
+
+PB_Message pb_message_;           ///< Protobuf message describing this menu.
 
 // Callback executed to enter a sub-menu
 static int _cmd_enter_sub_menu(int argc, char **argv)
@@ -101,7 +112,9 @@ void Menu::send_pb_message(void)
 {
     if (uart_protobuf) {
         update_pb_message();
-        uart_protobuf->send_message(0, pb_message_);
+        auto & output_message = uart_protobuf->output_message();
+        output_message.set_menu(pb_message_);
+        uart_protobuf->send_message();
     }
 }
 
