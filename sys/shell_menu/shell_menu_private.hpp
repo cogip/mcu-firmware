@@ -12,7 +12,10 @@
 #pragma once
 
 #include "shell_menu/shell_menu.hpp"
+
+#ifdef MODULE_UARTPB
 #include "uartpb/UartProtobuf.hpp"
+#endif
 
 #include <map>
 #include <set>
@@ -23,7 +26,10 @@ namespace shell {
 
 extern std::map<std::string, Menu *> all_menus;     ///< map containing all menus indexed by cmd
 extern std::set<Command *> all_commands;            ///< all commands
+
+#ifdef MODULE_UARTPB
 extern cogip::uartpb::UartProtobuf *uart_protobuf;  ///< UartProtocol instance used to send new menu over UART
+#endif
 
 /// Shell commands used by RIOT shell module.
 /// It is updated each time a menu is entered or exited.

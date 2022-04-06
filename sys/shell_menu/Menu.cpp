@@ -5,7 +5,6 @@
 #include <cassert>
 
 // Project includes
-#include "uartpb/UartProtobuf.hpp"
 #include "tracefd/tracefd.hpp"
 
 #include "PB_Menu.hpp"
@@ -85,7 +84,9 @@ void Menu::enter(void)
 
     cogip::tracefd::out.logf("Enter shell menu: %s", current_menu->name().c_str());
 
+#ifdef MODULE_UARTPB
     send_pb_message();
+#endif
 
     if (current_menu != previous_menu && enter_cb_) {
         enter_cb_();
@@ -108,6 +109,7 @@ void Menu::update_pb_message(void)
     }
 }
 
+#ifdef MODULE_UARTPB
 void Menu::send_pb_message(void)
 {
     if (uart_protobuf) {
@@ -117,6 +119,7 @@ void Menu::send_pb_message(void)
         uart_protobuf->send_message();
     }
 }
+#endif
 
 } // namespace shell
 
