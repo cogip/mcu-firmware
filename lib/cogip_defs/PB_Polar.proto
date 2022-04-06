@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package cogip.cogip_defs;
-
 message PB_Polar {
     sint32 distance = 1;
     sint32 angle = 2;

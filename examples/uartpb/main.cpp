@@ -38,17 +38,17 @@ enum MessageType {
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
-static void handle_response_hello(const cogip::embedded_proto_uart::PB_RespHello *hello)
+static void handle_response_hello(const PB_RespHello *hello)
 {
     printf("<<== Hello response with number=%" PRId32 "\n\n", (int32_t)hello->get_number());
 }
 
-static void handle_response_ping(const cogip::embedded_proto_uart::PB_RespPing *ping)
+static void handle_response_ping(const PB_RespPing *ping)
 {
     printf("<<== Ping response with color=%s\n\n", get_color_name((cogip::cogip_defs::Color)ping->get_color()));
 }
 
-static void handle_response_pong(const cogip::embedded_proto_uart::PB_RespPong *pong)
+static void handle_response_pong(const PB_RespPong *pong)
 {
     cogip::cogip_defs::Pose pose(pong->get_new_pose());
     printf(
@@ -64,15 +64,15 @@ void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
     response_handler_t response_handler = nullptr;
     switch (message_type) {
         case MSG_HELLO:
-            message = new cogip::embedded_proto_uart::PB_RespHello();
+            message = new PB_RespHello();
             response_handler = (response_handler_t)handle_response_hello;
             break;
         case MSG_PING:
-            message = new cogip::embedded_proto_uart::PB_RespPing();
+            message = new PB_RespPing();
             response_handler = (response_handler_t)handle_response_ping;
             break;
         case MSG_PONG:
-            message = new cogip::embedded_proto_uart::PB_RespPong();
+            message = new PB_RespPong();
             response_handler = (response_handler_t)handle_response_pong;
             break;
         default:
@@ -86,7 +86,7 @@ void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
 
 static bool send_hello()
 {
-    cogip::embedded_proto_uart::PB_ReqHello<64> hello;
+    PB_ReqHello<64> hello;
     hello.set_number(std::rand());
     hello.mutable_message() = "hellohello";
     printf(
@@ -99,8 +99,8 @@ static bool send_hello()
 
 static bool send_ping()
 {
-    cogip::embedded_proto_uart::PB_ReqPing ping;
-    ping.set_color((cogip::cogip_defs::PB_Color)cogip::cogip_defs::Color::RED);
+    PB_ReqPing ping;
+    ping.set_color((PB_Color)cogip::cogip_defs::Color::RED);
 
     printf("==>> Ping request  with color=%s\n", get_color_name((cogip::cogip_defs::Color)ping.get_color()));
 
@@ -109,7 +109,7 @@ static bool send_ping()
 
 static bool send_pong()
 {
-    cogip::embedded_proto_uart::PB_ReqPong pong;
+    PB_ReqPong pong;
     cogip::cogip_defs::Pose pose = {15, 30, 90};
     pose.pb_copy(pong.mutable_pose());
 

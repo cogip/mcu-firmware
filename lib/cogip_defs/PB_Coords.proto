@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package cogip.cogip_defs;
-
 message PB_Coords {
     sint32 x = 1;
     sint32 y = 2;

@@ -95,6 +95,6 @@ void avoidance_print_path(cogip::tracefd::File &out);
  * @return
  */
 void avoidance_pb_copy_path(
-    EmbeddedProto::RepeatedFieldFixedSize<cogip::cogip_defs::PB_Coords, AVOIDANCE_GRAPH_MAX_VERTICES> &path);
+    EmbeddedProto::RepeatedFieldFixedSize<PB_Coords, AVOIDANCE_GRAPH_MAX_VERTICES> &path);
 
 /** @} */

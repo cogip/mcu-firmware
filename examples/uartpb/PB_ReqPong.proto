@@ -2,11 +2,9 @@ syntax = "proto3";
 
 import "PB_Pose.proto";
 
-package cogip.embedded_proto_uart;
-
 // All message type names are prefixed with "PB_" to avoid collisions
 // C++ classes already defined in code and Protobuf generated types.
 
 message PB_ReqPong {
-    cogip_defs.PB_Pose pose = 1;
+    PB_Pose pose = 1;
 }

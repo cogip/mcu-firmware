@@ -2,8 +2,6 @@ syntax = "proto3";
 
 import "PB_Pose.proto";
 
-package cogip.embedded_proto_uart;
-
 message PB_RespPong {
-    cogip_defs.PB_Pose new_pose = 1;
+    PB_Pose new_pose = 1;
 }

@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package cogip.obstacles;
-
 message PB_Rectangle {
     sint32 x = 1;
     sint32 y = 2;

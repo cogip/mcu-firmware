@@ -8,11 +8,11 @@ import "PB_Obstacle.proto";
 
 message PB_State {
     PB_Mode mode = 1;
-    cogip.cogip_defs.PB_Pose pose_current = 2;
-    cogip.cogip_defs.PB_Pose pose_order = 3;
+    PB_Pose pose_current = 2;
+    PB_Pose pose_order = 3;
     uint32 cycle = 4;
-    cogip.cogip_defs.PB_Polar speed_current = 5;
-    cogip.cogip_defs.PB_Polar speed_order = 6;
-    repeated cogip.cogip_defs.PB_Coords path = 7;
-    repeated cogip.obstacles.PB_Obstacle obstacles = 8;
+    PB_Polar speed_current = 5;
+    PB_Polar speed_order = 6;
+    repeated PB_Coords path = 7;
+    repeated PB_Obstacle obstacles = 8;
 }
