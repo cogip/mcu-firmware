@@ -10,6 +10,5 @@ var classcogip_1_1uartpb_1_1WriteBuffer =
     [ "get_max_size", "classcogip_1_1uartpb_1_1WriteBuffer.html#aa99f21ae53420cb80fd5d6d8e66b92bf", null ],
     [ "get_size", "classcogip_1_1uartpb_1_1WriteBuffer.html#a729279bf068b049c3ed56fb15a80a95a", null ],
     [ "push", "classcogip_1_1uartpb_1_1WriteBuffer.html#aecb9b0f9cd093d8df7e4cfcc59e21046", null ],
-    [ "push", "classcogip_1_1uartpb_1_1WriteBuffer.html#aeb1bde1c701c96d2e0df3ab1ed70d93b", null ],
-    [ "set_message_type", "classcogip_1_1uartpb_1_1WriteBuffer.html#af101f6829f6c4f1b0a5064cc9ea85cef", null ]
+    [ "push", "classcogip_1_1uartpb_1_1WriteBuffer.html#aeb1bde1c701c96d2e0df3ab1ed70d93b", null ]
 ];

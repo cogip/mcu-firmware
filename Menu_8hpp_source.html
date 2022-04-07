@@ -139,70 +139,59 @@ $(document).ready(function(){initNavTree('Menu_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// Project includes</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;utils.h&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="UartProtobuf_8hpp.html">uartpb/UartProtobuf.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;PB_Menu.hpp&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#ifndef NB_SHELL_COMMANDS</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">   27</a></span>&#160;<span class="preprocessor">#  define NB_SHELL_COMMANDS 20    </span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>cogip {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>shell {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Menu.html">   39</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> : <span class="keyword">public</span> std::list&lt;Command *&gt; {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">using</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#abef872faf68678da5e8f050231365b61">PB_Message</a> = PB_Menu&lt;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        COMMAND_NAME_MAX_LENGTH, <a class="code" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a>,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Menu.html#abef872faf68678da5e8f050231365b61">   45</a></span>&#160;        &gt;;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b">Menu</a>(</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keyword">const</span> std::string &amp;<a class="code" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">name</a>,      </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">const</span> std::string &amp;cmd,       </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *<a class="code" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">parent</a> = <span class="keyword">nullptr</span>,       </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        func_cb_t enter_cb = <span class="keyword">nullptr</span>  </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        );</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#ifndef NB_SHELL_COMMANDS</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">   24</a></span>&#160;<span class="preprocessor">#  define NB_SHELL_COMMANDS 20    </span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>shell {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Menu.html">   36</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> : <span class="keyword">public</span> std::list&lt;Command *&gt; {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b">Menu</a>(</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">const</span> std::string &amp;<a class="code" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">name</a>,      </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">const</span> std::string &amp;cmd,       </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *<a class="code" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">parent</a> = <span class="keyword">nullptr</span>,       </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        func_cb_t enter_cb = <span class="keyword">nullptr</span>  </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        );</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#a9e63226f196a0da8d35dcda2dbf72908">enter</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">   50</a></span>&#160;    <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">name</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> name_; };</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">   53</a></span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> * <a class="code" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">parent</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> parent_; };</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#a9e63226f196a0da8d35dcda2dbf72908">enter</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72">update_pb_message</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">   59</a></span>&#160;    <span class="keyword">const</span> std::string &amp; <a class="code" href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">name</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> name_; };</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">   62</a></span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> * <a class="code" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">parent</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> parent_; };</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72">update_pb_message</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1shell_1_1Menu.html#aee0b21fe8b7697f50f39be1e59d05fec">send_pb_message</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#ifdef MODULE_UARTPB</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> send_pb_message(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    std::string name_;                </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    std::string cmd_;                 </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *parent_;                    </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    func_cb_t enter_cb_;              </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::string name_;                </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::string cmd_;                 </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html">Menu</a> *parent_;                    </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    func_cb_t enter_cb_;              </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classcogip_1_1shell_1_1Menu.html#abef872faf68678da5e8f050231365b61">PB_Message</a> pb_message_;           </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;};</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;} <span class="comment">// namespace shell</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;} <span class="comment">// namespace shell</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aMenu_8hpp_html_a4f5e15b80e008c7f2e0711fada528979"><div class="ttname"><a href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a></div><div class="ttdeci">#define NB_SHELL_COMMANDS</div><div class="ttdoc">max shell commands per menu</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00027">Menu.hpp:27</a></div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_abef872faf68678da5e8f050231365b61"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#abef872faf68678da5e8f050231365b61">cogip::shell::Menu::PB_Message</a></div><div class="ttdeci">PB_Menu&lt; COMMAND_NAME_MAX_LENGTH, NB_SHELL_COMMANDS, COMMAND_NAME_MAX_LENGTH, COMMAND_DESC_MAX_LENGTH &gt; PB_Message</div><div class="ttdoc">Protobuf message type. Shortcut for original template type.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00045">Menu.hpp:45</a></div></div>
 <div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_ac0e489282e9331bd3f177e122c10c69b"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b">cogip::shell::Menu::Menu</a></div><div class="ttdeci">Menu(const std::string &amp;name, const std::string &amp;cmd, Menu *parent=nullptr, func_cb_t enter_cb=nullptr)</div><div class="ttdoc">Constructor.</div></div>
 <div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_a7d76f5f2ff4a23301412ef888194dc72"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72">cogip::shell::Menu::update_pb_message</a></div><div class="ttdeci">void update_pb_message(void)</div><div class="ttdoc">Update the Protobuf message describing this menu.</div></div>
 <div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_a9e63226f196a0da8d35dcda2dbf72908"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#a9e63226f196a0da8d35dcda2dbf72908">cogip::shell::Menu::enter</a></div><div class="ttdeci">void enter(void)</div><div class="ttdoc">Enter this menu.</div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_a4f551988c9e6df31da585edfba8d2d39"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">cogip::shell::Menu::name</a></div><div class="ttdeci">const std::string &amp; name(void) const</div><div class="ttdoc">Return the name of this menu.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00059">Menu.hpp:59</a></div></div>
-<div class="ttc" id="aUartProtobuf_8hpp_html"><div class="ttname"><a href="UartProtobuf_8hpp.html">UartProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over UART module.</div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html">cogip::shell::Menu</a></div><div class="ttdoc">Menu class.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00039">Menu.hpp:39</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_a4f551988c9e6df31da585edfba8d2d39"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39">cogip::shell::Menu::name</a></div><div class="ttdeci">const std::string &amp; name(void) const</div><div class="ttdoc">Return the name of this menu.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00050">Menu.hpp:50</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html">cogip::shell::Menu</a></div><div class="ttdoc">Menu class.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00036">Menu.hpp:36</a></div></div>
 <div class="ttc" id="aCommand_8hpp_html"><div class="ttname"><a href="Command_8hpp.html">Command.hpp</a></div><div class="ttdoc">Command class declaration.</div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_aee0b21fe8b7697f50f39be1e59d05fec"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#aee0b21fe8b7697f50f39be1e59d05fec">cogip::shell::Menu::send_pb_message</a></div><div class="ttdeci">void send_pb_message(void)</div><div class="ttdoc">Send the Protobuf message describing this menu if uartpb is registered.</div></div>
-<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_a76cb41413135fa4e947ef3efd85847b9"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">cogip::shell::Menu::parent</a></div><div class="ttdeci">Menu * parent(void) const</div><div class="ttdoc">Return the parent of this menu.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00062">Menu.hpp:62</a></div></div>
+<div class="ttc" id="aclasscogip_1_1shell_1_1Menu_html_a76cb41413135fa4e947ef3efd85847b9"><div class="ttname"><a href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">cogip::shell::Menu::parent</a></div><div class="ttdeci">Menu * parent(void) const</div><div class="ttdoc">Return the parent of this menu.</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00053">Menu.hpp:53</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Apr 5 2022 16:34:32 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Apr 7 2022 15:53:57 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -2,8 +2,5 @@
 <area shape="rect" id="node1" title=" " alt="" coords="142,5,285,47"/>
 <area shape="rect" id="node2" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="5,95,176,136"/>
 <area shape="rect" id="node3" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="122,184,305,225"/>
-<area shape="rect" id="node7" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="251,95,424,136"/>
-<area shape="rect" id="node4" href="$Menu_8hpp.html" title="Menu class declaration." alt="" coords="63,273,238,315"/>
-<area shape="rect" id="node6" href="$shell__menu__private_8hpp.html" title="Shell menu private variables." alt="" coords="134,452,293,493"/>
-<area shape="rect" id="node5" href="$shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="39,363,247,404"/>
+<area shape="rect" id="node4" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="251,95,424,136"/>
 </map>

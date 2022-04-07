@@ -17,5 +17,6 @@ var searchData=
   ['operator_2b_2b_208',['operator++',['../classcogip_1_1path_1_1Path.html#aaae75d0cc68ed0f9073ea3bc489b1b76',1,'cogip::path::Path']]],
   ['operator_2d_2d_209',['operator--',['../classcogip_1_1path_1_1Path.html#a38bd60d9e84bddbe62d40853ad2e5306',1,'cogip::path::Path']]],
   ['operator_3d_3d_210',['operator==',['../classcogip_1_1cogip__defs_1_1Coords.html#aeed87d930417ce463a07a73957415887',1,'cogip::cogip_defs::Coords::operator==()'],['../classcogip_1_1cogip__defs_1_1Pose.html#a9926a28b46f31da29c93c52aba8c5797',1,'cogip::cogip_defs::Pose::operator==()']]],
-  ['out_211',['out',['../tracefd_8hpp.html#a47f440a7a4f22659c9c4c3bffedadb74',1,'cogip::tracefd']]]
+  ['out_211',['out',['../tracefd_8hpp.html#a47f440a7a4f22659c9c4c3bffedadb74',1,'cogip::tracefd']]],
+  ['output_5fmessage_212',['output_message',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a72aad53d0e731ee6704fe2457f360613',1,'cogip::uartpb::UartProtobuf']]]
 ];

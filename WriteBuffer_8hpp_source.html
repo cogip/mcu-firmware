@@ -135,66 +135,59 @@ $(document).ready(function(){initNavTree('WriteBuffer_8hpp_source.html',''); ini
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="uartpb_8hpp.html">uartpb.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;WriteBufferInterface.h&quot;</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="WriteBuffer_8hpp.html#a54c144875b1b3c74da4016462db4698d">   20</a></span>&#160;<span class="preprocessor">#define UARTPB_METADATA_SIZE 1</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="WriteBuffer_8hpp.html#a68f50bc2afcbabc314746166bf6bfcbf">   23</a></span>&#160;<span class="preprocessor">#define UARTPB_SERIALIZATION_BUFFER_SIZE (UARTPB_OUTPUT_MESSAGE_LENGTH_MAX + UARTPB_METADATA_SIZE)</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">   19</a></span>&#160;<span class="preprocessor">#define UARTPB_BASE64_BUFFER_SIZE (UARTPB_OUTPUT_MESSAGE_LENGTH_MAX * 2)</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>uartpb {</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">   26</a></span>&#160;<span class="preprocessor">#define UARTPB_BASE64_BUFFER_SIZE (UARTPB_SERIALIZATION_BUFFER_SIZE * 2)</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>cogip {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>uartpb {</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classcogip_1_1uartpb_1_1WriteBuffer.html">   26</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html">WriteBuffer</a> : <span class="keyword">public</span> EmbeddedProto::WriteBufferInterface</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#af6bf93218ba473d486bdde2c051fc60e">WriteBuffer</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classcogip_1_1uartpb_1_1WriteBuffer.html">   33</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html">WriteBuffer</a> : <span class="keyword">public</span> EmbeddedProto::WriteBufferInterface</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#af6bf93218ba473d486bdde2c051fc60e">WriteBuffer</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    ~<a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html">WriteBuffer</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">virtual</span> uint32_t get_size() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">virtual</span> uint32_t get_max_size() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">virtual</span> uint32_t get_available_size() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    ~<a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html">WriteBuffer</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">virtual</span> uint32_t get_size() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">virtual</span> uint32_t get_max_size() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">virtual</span> uint32_t get_available_size() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> push(<span class="keyword">const</span> uint8_t <span class="keywordtype">byte</span>) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> push(<span class="keyword">const</span> uint8_t *bytes, <span class="keyword">const</span> uint32_t length) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    uint8_t * <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#a8804e599f0461426050a4884fa972ef3">get_data</a>();</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> push(<span class="keyword">const</span> uint8_t <span class="keywordtype">byte</span>) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> push(<span class="keyword">const</span> uint8_t *bytes, <span class="keyword">const</span> uint32_t length) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#a11396f10e3687424b70a3436884080fe">base64_encode</a>();</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    uint8_t * <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#a8804e599f0461426050a4884fa972ef3">get_data</a>();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    uint8_t * <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#a5a003d12811b56eb0fa4cc7429d40dfa">get_base64_data</a>();</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#af101f6829f6c4f1b0a5064cc9ea85cef">set_message_type</a>(uint8_t type);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#a11396f10e3687424b70a3436884080fe">base64_encode</a>();</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    uint8_t * <a class="code" href="classcogip_1_1uartpb_1_1WriteBuffer.html#a5a003d12811b56eb0fa4cc7429d40dfa">get_base64_data</a>();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    uint8_t data_[<a class="code" href="WriteBuffer_8hpp.html#a68f50bc2afcbabc314746166bf6bfcbf">UARTPB_SERIALIZATION_BUFFER_SIZE</a>];</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    uint8_t base64_data_[<a class="code" href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">UARTPB_BASE64_BUFFER_SIZE</a>];</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    uint32_t write_index_;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;};</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <span class="comment">// namespace uartpb</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    uint8_t data_[<a class="code" href="group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b">UARTPB_OUTPUT_MESSAGE_LENGTH_MAX</a>];</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    uint8_t base64_data_[<a class="code" href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">UARTPB_BASE64_BUFFER_SIZE</a>];</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    uint32_t write_index_;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;} <span class="comment">// namespace uartpb</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;} <span class="comment">// namespace cogip</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="auartpb_8hpp_html"><div class="ttname"><a href="uartpb_8hpp.html">uartpb.hpp</a></div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html_a8804e599f0461426050a4884fa972ef3"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html#a8804e599f0461426050a4884fa972ef3">cogip::uartpb::WriteBuffer::get_data</a></div><div class="ttdeci">uint8_t * get_data()</div><div class="ttdoc">Return a pointer to the data array.</div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html_af6bf93218ba473d486bdde2c051fc60e"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html#af6bf93218ba473d486bdde2c051fc60e">cogip::uartpb::WriteBuffer::WriteBuffer</a></div><div class="ttdeci">WriteBuffer()=default</div><div class="ttdoc">Class constructor.</div></div>
-<div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html">cogip::uartpb::WriteBuffer</a></div><div class="ttdoc">WriteBuffer class used to encode Protobuf messages.</div><div class="ttdef"><b>Definition:</b> <a href="WriteBuffer_8hpp_source.html#l00033">WriteBuffer.hpp:33</a></div></div>
+<div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html">cogip::uartpb::WriteBuffer</a></div><div class="ttdoc">WriteBuffer class used to encode Protobuf messages.</div><div class="ttdef"><b>Definition:</b> <a href="WriteBuffer_8hpp_source.html#l00026">WriteBuffer.hpp:26</a></div></div>
+<div class="ttc" id="agroup__sys__uartpb_html_gafb04dcb448f82d1d09b69b316f9cc62b"><div class="ttname"><a href="group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b">UARTPB_OUTPUT_MESSAGE_LENGTH_MAX</a></div><div class="ttdeci">#define UARTPB_OUTPUT_MESSAGE_LENGTH_MAX</div><div class="ttdoc">max outgoing message length</div><div class="ttdef"><b>Definition:</b> <a href="uartpb_8hpp_source.html#l00028">uartpb.hpp:28</a></div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html_a5a003d12811b56eb0fa4cc7429d40dfa"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html#a5a003d12811b56eb0fa4cc7429d40dfa">cogip::uartpb::WriteBuffer::get_base64_data</a></div><div class="ttdeci">uint8_t * get_base64_data()</div><div class="ttdoc">Return a pointer to the data array.</div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html_a11396f10e3687424b70a3436884080fe"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html#a11396f10e3687424b70a3436884080fe">cogip::uartpb::WriteBuffer::base64_encode</a></div><div class="ttdeci">size_t base64_encode()</div><div class="ttdoc">Encode the data buffer in base64 before transmission over UART.</div></div>
-<div class="ttc" id="aclasscogip_1_1uartpb_1_1WriteBuffer_html_af101f6829f6c4f1b0a5064cc9ea85cef"><div class="ttname"><a href="classcogip_1_1uartpb_1_1WriteBuffer.html#af101f6829f6c4f1b0a5064cc9ea85cef">cogip::uartpb::WriteBuffer::set_message_type</a></div><div class="ttdeci">void set_message_type(uint8_t type)</div><div class="ttdoc">Set type of the protobuf message.</div></div>
-<div class="ttc" id="aWriteBuffer_8hpp_html_a571212f813bff683a47097be73abdbd4"><div class="ttname"><a href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">UARTPB_BASE64_BUFFER_SIZE</a></div><div class="ttdeci">#define UARTPB_BASE64_BUFFER_SIZE</div><div class="ttdoc">Size of the base64 encoding buffer.</div><div class="ttdef"><b>Definition:</b> <a href="WriteBuffer_8hpp_source.html#l00026">WriteBuffer.hpp:26</a></div></div>
-<div class="ttc" id="aWriteBuffer_8hpp_html_a68f50bc2afcbabc314746166bf6bfcbf"><div class="ttname"><a href="WriteBuffer_8hpp.html#a68f50bc2afcbabc314746166bf6bfcbf">UARTPB_SERIALIZATION_BUFFER_SIZE</a></div><div class="ttdeci">#define UARTPB_SERIALIZATION_BUFFER_SIZE</div><div class="ttdoc">Size of the Protobuf serialization buffer.</div><div class="ttdef"><b>Definition:</b> <a href="WriteBuffer_8hpp_source.html#l00023">WriteBuffer.hpp:23</a></div></div>
+<div class="ttc" id="aWriteBuffer_8hpp_html_a571212f813bff683a47097be73abdbd4"><div class="ttname"><a href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">UARTPB_BASE64_BUFFER_SIZE</a></div><div class="ttdeci">#define UARTPB_BASE64_BUFFER_SIZE</div><div class="ttdoc">Size of the base64 encoding buffer.</div><div class="ttdef"><b>Definition:</b> <a href="WriteBuffer_8hpp_source.html#l00019">WriteBuffer.hpp:19</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Apr 5 2022 16:34:32 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Apr 7 2022 15:53:57 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

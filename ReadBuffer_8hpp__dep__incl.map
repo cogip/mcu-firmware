@@ -1,7 +1,4 @@
 <map id="sys/uartpb/include/uartpb/ReadBuffer.hpp" name="sys/uartpb/include/uartpb/ReadBuffer.hpp">
-<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="95,5,265,47"/>
-<area shape="rect" id="node2" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="89,95,271,136"/>
-<area shape="rect" id="node3" href="$Menu_8hpp.html" title="Menu class declaration." alt="" coords="30,184,205,225"/>
-<area shape="rect" id="node5" href="$shell__menu__private_8hpp.html" title="Shell menu private variables." alt="" coords="101,363,259,404"/>
-<area shape="rect" id="node4" href="$shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="5,273,213,315"/>
+<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="11,5,182,47"/>
+<area shape="rect" id="node2" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="5,95,188,136"/>
 </map>

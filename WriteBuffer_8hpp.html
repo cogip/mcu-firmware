@@ -156,11 +156,8 @@ $(document).ready(function(){initNavTree('WriteBuffer_8hpp.html',''); initResiza
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="WriteBuffer_8hpp__dep__incl.png" border="0" usemap="#sys_2uartpb_2include_2uartpb_2WriteBuffer_8hppdep" alt=""/></div>
 <map name="sys_2uartpb_2include_2uartpb_2WriteBuffer_8hppdep" id="sys_2uartpb_2include_2uartpb_2WriteBuffer_8hppdep">
-<area shape="rect" title="Write buffer for EmbeddedProto." alt="" coords="93,5,267,47"/>
-<area shape="rect" href="UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="89,95,271,136"/>
-<area shape="rect" href="Menu_8hpp.html" title="Menu class declaration." alt="" coords="30,184,205,225"/>
-<area shape="rect" href="shell__menu__private_8hpp.html" title="Shell menu private variables." alt="" coords="101,363,259,404"/>
-<area shape="rect" href="shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="5,273,213,315"/>
+<area shape="rect" title="Write buffer for EmbeddedProto." alt="" coords="10,5,183,47"/>
+<area shape="rect" href="UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="5,95,188,136"/>
 </map>
 </div>
 </div>
@@ -171,45 +168,16 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1WriteBuffer.html">cogip::uartpb::WriteBuffer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1uartpb_1_1WriteBuffer.html" title="WriteBuffer class used to encode Protobuf messages.">WriteBuffer</a> class used to encode Protobuf messages.  <a href="classcogip_1_1uartpb_1_1WriteBuffer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54c144875b1b3c74da4016462db4698d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="WriteBuffer_8hpp.html#a54c144875b1b3c74da4016462db4698d">UARTPB_METADATA_SIZE</a>&#160;&#160;&#160;1</td></tr>
-<tr class="memdesc:a54c144875b1b3c74da4016462db4698d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserved space at the begining of the serialization buffer to store meta data.  <a href="WriteBuffer_8hpp.html#a54c144875b1b3c74da4016462db4698d">More...</a><br /></td></tr>
-<tr class="separator:a54c144875b1b3c74da4016462db4698d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68f50bc2afcbabc314746166bf6bfcbf"><td class="memItemLeft" align="right" valign="top"><a id="a68f50bc2afcbabc314746166bf6bfcbf"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="WriteBuffer_8hpp.html#a68f50bc2afcbabc314746166bf6bfcbf">UARTPB_SERIALIZATION_BUFFER_SIZE</a>&#160;&#160;&#160;(<a class="el" href="group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b">UARTPB_OUTPUT_MESSAGE_LENGTH_MAX</a> + <a class="el" href="WriteBuffer_8hpp.html#a54c144875b1b3c74da4016462db4698d">UARTPB_METADATA_SIZE</a>)</td></tr>
-<tr class="memdesc:a68f50bc2afcbabc314746166bf6bfcbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the Protobuf serialization buffer. <br /></td></tr>
-<tr class="separator:a68f50bc2afcbabc314746166bf6bfcbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a571212f813bff683a47097be73abdbd4"><td class="memItemLeft" align="right" valign="top"><a id="a571212f813bff683a47097be73abdbd4"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">UARTPB_BASE64_BUFFER_SIZE</a>&#160;&#160;&#160;(<a class="el" href="WriteBuffer_8hpp.html#a68f50bc2afcbabc314746166bf6bfcbf">UARTPB_SERIALIZATION_BUFFER_SIZE</a> * 2)</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="WriteBuffer_8hpp.html#a571212f813bff683a47097be73abdbd4">UARTPB_BASE64_BUFFER_SIZE</a>&#160;&#160;&#160;(<a class="el" href="group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b">UARTPB_OUTPUT_MESSAGE_LENGTH_MAX</a> * 2)</td></tr>
 <tr class="memdesc:a571212f813bff683a47097be73abdbd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the base64 encoding buffer. <br /></td></tr>
 <tr class="separator:a571212f813bff683a47097be73abdbd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a54c144875b1b3c74da4016462db4698d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54c144875b1b3c74da4016462db4698d">&#9670;&nbsp;</a></span>UARTPB_METADATA_SIZE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define UARTPB_METADATA_SIZE&#160;&#160;&#160;1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Reserved space at the begining of the serialization buffer to store meta data. </p>
-<ul>
-<li>1 byte for message type </li>
-</ul>
-
-<p class="definition">Definition at line <a class="el" href="WriteBuffer_8hpp_source.html#l00020">20</a> of file <a class="el" href="WriteBuffer_8hpp_source.html">WriteBuffer.hpp</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Apr 5 2022 16:34:32 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Apr 7 2022 15:53:57 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

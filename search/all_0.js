@@ -25,7 +25,7 @@ var searchData=
   ['avoidance_5fdijkstra_5fmax_5fdistance_22',['AVOIDANCE_DIJKSTRA_MAX_DISTANCE',['../group__lib__avoidance.html#ga756522bbc5126eeb7e69015d4f7c091d',1,'avoidance.hpp']]],
   ['avoidance_5fget_5fpose_23',['avoidance_get_pose',['../group__lib__avoidance.html#gadf4fb730f1e83cf8bee4b2a21eeba008',1,'avoidance.hpp']]],
   ['avoidance_5fgraph_5fmax_5fvertices_24',['AVOIDANCE_GRAPH_MAX_VERTICES',['../group__lib__avoidance.html#ga1e57205bed23c26847f14e1cad4a8228',1,'avoidance.hpp']]],
-  ['avoidance_5fpb_5fcopy_5fpath_25',['avoidance_pb_copy_path',['../group__lib__avoidance.html#gad8ee228563213a09ebf62982f71aface',1,'avoidance.hpp']]],
+  ['avoidance_5fpb_5fcopy_5fpath_25',['avoidance_pb_copy_path',['../group__lib__avoidance.html#ga08fb700c7273e58a380e21ffe540cda8',1,'avoidance.hpp']]],
   ['avoidance_5fprint_5fpath_26',['avoidance_print_path',['../group__lib__avoidance.html#ga193806f42744210ad70b45e22c9efe6f',1,'avoidance.hpp']]],
   ['avoidance_20module_27',['Avoidance module',['../group__lib__avoidance.html',1,'']]]
 ];

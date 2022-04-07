@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['writebuffer_617',['WriteBuffer',['../classcogip_1_1uartpb_1_1WriteBuffer.html#af6bf93218ba473d486bdde2c051fc60e',1,'cogip::uartpb::WriteBuffer']]]
+  ['writebuffer_610',['WriteBuffer',['../classcogip_1_1uartpb_1_1WriteBuffer.html#af6bf93218ba473d486bdde2c051fc60e',1,'cogip::uartpb::WriteBuffer']]]
 ];
