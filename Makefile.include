@@ -1,8 +1,8 @@
-MCUFIRMWAREBASE := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+MCUFIRMWAREBASE := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
-APPDIR:=$(CURDIR)
+APPDIR := $(CURDIR)
 EXTERNAL_BOARD_DIRS ?= $(MCUFIRMWAREBASE)/boards/
-LAST_MAKEFILEDIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+LAST_MAKEFILEDIR = $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
 RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
 
