@@ -53,6 +53,9 @@ Makefile.local
 # Python compiled files
 *.pyc
 
+# Python virtualenv
+venv/
+
 # Ignore download cache
 .dlcache
 
