@@ -17,6 +17,9 @@ var hierarchy =
     [ "list", null, [
       [ "cogip::shell::Menu", "classcogip_1_1shell_1_1Menu.html", null ]
     ] ],
+    [ "lx_reader_t", "structlx__reader__t.html", null ],
+    [ "lx_t", "structlx__t.html", null ],
+    [ "lx_writer_t", "structlx__writer__t.html", null ],
     [ "cogip::obstacles::Obstacle", "classcogip_1_1obstacles_1_1Obstacle.html", [
       [ "cogip::obstacles::Circle", "classcogip_1_1obstacles_1_1Circle.html", null ],
       [ "cogip::obstacles::Polygon", "classcogip_1_1obstacles_1_1Polygon.html", [
