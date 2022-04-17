@@ -21,6 +21,7 @@
 #include "lidar_obstacles.hpp"
 #include "trace_utils.hpp"
 
+#include "uartpb_config.hpp"
 #include "PB_Command.hpp"
 #include "PB_State.hpp"
 
@@ -81,6 +82,7 @@ static bool copilot_connected = false;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
+static PB_OutputMessage output_message;
 
 bool pf_trace_on(void)
 {
@@ -137,9 +139,8 @@ void pf_send_pb_state(void)
     avoidance_pb_copy_path(pb_state.mutable_path());
     cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
 
-    PB_OutputMessage &msg = uartpb->output_message();
-    msg.set_state(pb_state);
-    uartpb->send_message();
+    output_message.set_state(pb_state);
+    uartpb->send_message(output_message);
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -449,9 +450,8 @@ void pf_init_tasks(void)
     else {
         cogip::shell::register_uartpb(uartpb);
         uartpb->start_reader();
-        PB_OutputMessage &msg = uartpb->output_message();
-        msg.set_reset(true);
-        uartpb->send_message();
+        output_message.set_reset(true);
+        uartpb->send_message(output_message);
     }
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);

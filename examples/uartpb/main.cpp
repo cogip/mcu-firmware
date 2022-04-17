@@ -21,6 +21,7 @@
 #include "PB_RespPing.hpp"
 #include "PB_RespPong.hpp"
 #include "PB_ExampleInputMessage.hpp"
+#include "PB_ExampleOutputMessage.hpp"
 
 #include "uartpb/UartProtobuf.hpp"
 #include "uartpb/ReadBuffer.hpp"
@@ -32,6 +33,7 @@ static char sender_stack[THREAD_STACKSIZE_MAIN];
 bool suspend_sender = false;
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
+static PB_OutputMessage output_message;
 
 static void handle_response_hello(const PB_RespHello &hello)
 {
@@ -73,7 +75,7 @@ void message_handler(cogip::uartpb::ReadBuffer &buffer)
     delete message;
 }
 
-static bool send_hello()
+static void send_hello()
 {
     PB_ReqHello<64> hello;
     hello.set_number(std::rand());
@@ -83,25 +85,22 @@ static bool send_hello()
         (int32_t)hello.get_number(), (const char *)hello.get_message().get_const()
         );
 
-    PB_OutputMessage &msg = uartpb->output_message();
-    msg.set_req_hello(hello);
-    return uartpb->send_message();
+    output_message.set_req_hello(hello);
+    uartpb->send_message(output_message);
 }
 
-static bool send_ping()
+static void send_ping()
 {
     PB_ReqPing ping;
     ping.set_color((PB_Color)cogip::cogip_defs::Color::RED);
 
     printf("==>> Ping request  with color=%s\n", get_color_name((cogip::cogip_defs::Color)ping.get_color()));
 
-    PB_OutputMessage &msg = uartpb->output_message();
-    msg.set_req_ping(ping);
-    return uartpb->send_message();
-
+    output_message.set_req_ping(ping);
+    uartpb->send_message(output_message);
 }
 
-static bool send_pong()
+static void send_pong()
 {
     PB_ReqPong pong;
     cogip::cogip_defs::Pose pose = {15, 30, 90};
@@ -112,9 +111,8 @@ static bool send_pong()
         (double)pong.get_pose().get_x(), (double)pong.get_pose().get_y(), (double)pong.get_pose().get_O()
         );
 
-    PB_OutputMessage &msg = uartpb->output_message();
-    msg.set_req_pong(pong);
-    return uartpb->send_message();
+    output_message.set_req_pong(pong);
+    uartpb->send_message(output_message);
 }
 
 static void *message_sender(void *arg)
@@ -216,9 +214,8 @@ int main(void)
         sender_stack, sizeof(sender_stack), SENDER_PRIO,
         THREAD_CREATE_SLEEPING, message_sender, NULL, "sender");
 
-    PB_OutputMessage &msg = uartpb->output_message();
-    msg.set_reset(true);
-    uartpb->send_message();
+    output_message.set_reset(true);
+    uartpb->send_message(output_message);
 
     // Start shell
     cogip::shell::register_uartpb(uartpb);
