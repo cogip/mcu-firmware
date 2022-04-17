@@ -77,30 +77,14 @@ char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 char planner_start_cancel_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
-static size_t connected_copilots = 0;
-static size_t connected_monitors = 0;
+static bool copilot_connected = false;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
-
-enum InputMessageType {
-    MSG_COMMAND = 0,
-    MSG_BREAK = 1,
-    MSG_COPILOT_CONNECTED = 2,
-    MSG_COPILOT_DISCONNECTED = 3,
-    MSG_MONITOR_CONNECTED = 4,
-    MSG_MONITOR_DISCONNECTED = 5
-};
-
-enum OutputMessageType {
-    MSG_MENU = 0,
-    MSG_RESET = 1,
-    MSG_STATE = 2
-};
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
 bool pf_trace_on(void)
 {
-    return (connected_copilots > 0);
+    return copilot_connected;
 }
 
 void pf_print_state(cogip::tracefd::File &out)
@@ -300,7 +284,7 @@ static void *_task_planner_start_cancel(void *arg)
 /// Execute a shell command callback using arguments from Protobuf message.
 /// Command name is in the 'cmd' attribute of the Protobuf message.
 /// Arguments are in a space-separated string in 'desc' attribute of the Protobuf message.
-static void run_command(cogip::shell::Command *command, const cogip::shell::Command::PB_Message *pb_command)
+static void run_command(cogip::shell::Command *command, const cogip::shell::Command::PB_Message &pb_command)
 {
     // Computed number of arguments
     int argc = 0;
@@ -309,18 +293,18 @@ static void run_command(cogip::shell::Command *command, const cogip::shell::Comm
     // Array of pointers to each argument
     char *argv[MAX_COMMAND_ARGS];
     // First argument is the command
-    argv[argc++] = (char *)pb_command->cmd();
-    if (pb_command->get_desc().get_length() != 0) {
+    argv[argc++] = (char *)pb_command.cmd();
+    if (pb_command.get_desc().get_length() != 0) {
         // If there are arguments to pass to the command in the 'desc' attribute
         size_t i;
         // Copy first argument pointer to 'argv'
         argv[argc++] = args;
-        for (i = 0; i < pb_command->get_desc().get_length(); i++) {
+        for (i = 0; i < pb_command.get_desc().get_length(); i++) {
             if (i >= COMMAND_DESC_MAX_LENGTH || argc >= MAX_COMMAND_ARGS) {
-                printf("Skip command '%s %s': arguments too long\n", pb_command->cmd(), pb_command->desc());
+                printf("Skip command '%s %s': arguments too long\n", pb_command.cmd(), pb_command.desc());
                 return;
             }
-            char c = pb_command->desc()[i];
+            char c = pb_command.desc()[i];
             // Copy each argument in 'args'
             args[i] = c;
             if (c == ' ') {
@@ -338,18 +322,18 @@ static void run_command(cogip::shell::Command *command, const cogip::shell::Comm
 }
 
 // Handle a Protobuf command message
-static void handle_command(const cogip::shell::Command::PB_Message *pb_command)
+static void handle_command(const cogip::shell::Command::PB_Message &pb_command)
 {
     if (cogip::shell::current_menu == nullptr) {
         cogip::tracefd::out.logf(
             "Warning: received PB command before current_menu is initialized: %s %s\n",
-            pb_command->cmd(), pb_command->desc());
+            pb_command.cmd(), pb_command.desc());
         return;
     }
 
     // Search the command in current menu command
     for (auto command: *cogip::shell::current_menu) {
-        if (command->name() == pb_command->cmd()) {
+        if (command->name() == pb_command.cmd()) {
             run_command(command, pb_command);
             return;
         }
@@ -358,7 +342,7 @@ static void handle_command(const cogip::shell::Command::PB_Message *pb_command)
     // If command was not found in current menu,
     // search the command in global commands
     for (auto command: cogip::shell::global_commands) {
-        if (command->name() == pb_command->cmd()) {
+        if (command->name() == pb_command.cmd()) {
             run_command(command, pb_command);
             return;
         }
@@ -366,48 +350,32 @@ static void handle_command(const cogip::shell::Command::PB_Message *pb_command)
 }
 
 // Read incoming Protobuf message and call the corresponding message handler
-void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
+void message_handler(cogip::uartpb::ReadBuffer &buffer)
 {
-    typedef void (*response_handler_t)(const EmbeddedProto::MessageInterface *);
-    EmbeddedProto::MessageInterface *message = nullptr;
-    response_handler_t response_handler = nullptr;
-    switch (message_type) {
-        case MSG_COMMAND:
-            message = new cogip::shell::Command::PB_Message();
-            response_handler = (response_handler_t)handle_command;
-            break;
-        case MSG_BREAK:
-            start_planner = false;
-            break;
-        case MSG_COPILOT_CONNECTED:
-            connected_copilots++;
-            printf("Copilot connected (%u)\n", connected_copilots);
-            if (cogip::shell::current_menu) {
-                cogip::shell::current_menu->send_pb_message();
-            }
-            break;
-        case MSG_COPILOT_DISCONNECTED:
-            connected_copilots = connected_copilots ? connected_copilots - 1 : 0;
-            connected_monitors = 0;
-            printf("Copilot disconnected (%u)\n", connected_copilots);
-            break;
-        case MSG_MONITOR_CONNECTED:
-            connected_monitors++;
-            printf("Monitor connected (%u)\n", connected_monitors);
-            break;
-        case MSG_MONITOR_DISCONNECTED:
-            connected_monitors--;
-            printf("Monitor disconnected (%u)\n", connected_monitors);
-            break;
-        default:
-            printf("Unknown response type: %u\n", message_type);
-            break;
-    }
+    PB_InputMessage *message = new PB_InputMessage();
+    message->deserialize(buffer);
 
-    if (message && response_handler) {
-        message->deserialize(buffer);
-        response_handler(message);
+    if (message->has_command()) {
+        handle_command(message->command());
     }
+    else if (message->has_copilot_connected()) {
+        copilot_connected = true;
+        puts("Copilot connected");
+        if (cogip::shell::current_menu) {
+            cogip::shell::current_menu->send_pb_message();
+        }
+    }
+    else if (message->has_copilot_disconnected()) {
+        copilot_connected = false;
+        puts("Copilot disconnected");
+    }
+    else if (message->has_wizard()) {
+        wizard->handle_response(message->wizard());
+    }
+    else {
+        printf("Unknown response type: %" PRIu32 "\n", static_cast<uint32_t>(message->get_which_type()));
+    }
+    delete message;
 }
 
 void pf_init(void)

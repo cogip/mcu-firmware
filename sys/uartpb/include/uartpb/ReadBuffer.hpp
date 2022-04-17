@@ -12,8 +12,12 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 #include "uartpb.hpp"
 #include "ReadBufferInterface.h"
+
+/// Size of the base64 decoding buffer
+#define UARTPB_BASE64_DECODE_BUFFER_SIZE (UARTPB_INPUT_MESSAGE_LENGTH_MAX * 2)
 
 namespace cogip {
 
@@ -52,10 +56,22 @@ public:
     /// Push new data into the buffer.
     bool push(uint8_t &byte);
 
+    /// Decode the data buffer from base64 before deserialization.
+    /// @return size of decoded message, 0 in case of failure.
+    size_t base64_decode();
+
+    /// Return a pointer to the data array.
+    uint8_t * get_base64_data();
+
 private:
-    uint8_t data_[UARTPB_INPUT_MESSAGE_LENGTH_MAX];  ///< array in which the data received over uart is stored
-    uint32_t write_index_;                           ///< number of bytes currently received and stored in the data array
-    uint32_t read_index_;                            ///< number of bytes read from the data array
+    ///< array in which the data received over uart is stored
+    uint8_t data_[UARTPB_INPUT_MESSAGE_LENGTH_MAX];
+    ///< array in which the base64 encoded serialized data is stored
+    uint8_t base64_data_[UARTPB_BASE64_DECODE_BUFFER_SIZE];
+    ///< number of bytes currently received and stored in the data array
+    uint32_t write_index_;
+    ///< number of bytes read from the data array
+    uint32_t read_index_;
 };
 
 } // namespace uartpb

@@ -20,6 +20,7 @@
 #include "PB_RespHello.hpp"
 #include "PB_RespPing.hpp"
 #include "PB_RespPong.hpp"
+#include "PB_ExampleInputMessage.hpp"
 
 #include "uartpb/UartProtobuf.hpp"
 #include "uartpb/ReadBuffer.hpp"
@@ -30,60 +31,46 @@ static kernel_pid_t sender_pid;
 static char sender_stack[THREAD_STACKSIZE_MAIN];
 bool suspend_sender = false;
 
-enum MessageType {
-    MSG_MENU = 0,
-    MSG_RESET = 1,
-    MSG_HELLO = 2,
-    MSG_PING = 3,
-    MSG_PONG = 4
-};
-
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
 
-static void handle_response_hello(const PB_RespHello *hello)
+static void handle_response_hello(const PB_RespHello &hello)
 {
-    printf("<<== Hello response with number=%" PRId32 "\n\n", (int32_t)hello->get_number());
+    printf("<<== Hello response with number=%" PRId32 "\n\n", (int32_t)hello.get_number());
 }
 
-static void handle_response_ping(const PB_RespPing *ping)
+static void handle_response_ping(const PB_RespPing &ping)
 {
-    printf("<<== Ping response with color=%s\n\n", get_color_name((cogip::cogip_defs::Color)ping->get_color()));
+    printf("<<== Ping response with color=%s\n\n", get_color_name((cogip::cogip_defs::Color)ping.get_color()));
 }
 
-static void handle_response_pong(const PB_RespPong *pong)
+static void handle_response_pong(const PB_RespPong &pong)
 {
-    cogip::cogip_defs::Pose pose(pong->get_new_pose());
+    const cogip::cogip_defs::Pose &pose = pong.get_new_pose();
     printf(
         "<<== Pong response with pose={x=%.2lf, y=%.2lf, angle=%.2lf}\n\n",
         pose.x(), pose.y(), pose.O()
         );
 }
 
-void message_handler(uint8_t message_type, cogip::uartpb::ReadBuffer &buffer)
+void message_handler(cogip::uartpb::ReadBuffer &buffer)
 {
-    typedef void (*response_handler_t)(const EmbeddedProto::MessageInterface *);
-    EmbeddedProto::MessageInterface *message = nullptr;
-    response_handler_t response_handler = nullptr;
-    switch (message_type) {
-        case MSG_HELLO:
-            message = new PB_RespHello();
-            response_handler = (response_handler_t)handle_response_hello;
-            break;
-        case MSG_PING:
-            message = new PB_RespPing();
-            response_handler = (response_handler_t)handle_response_ping;
-            break;
-        case MSG_PONG:
-            message = new PB_RespPong();
-            response_handler = (response_handler_t)handle_response_pong;
-            break;
-        default:
-            printf("Unknown response type: %u\n", message_type);
-            return;
+    PB_ExampleInputMessage *message = new PB_ExampleInputMessage();
+    message->deserialize(buffer);
+
+    if (message->has_resp_hello()) {
+        handle_response_hello(message->resp_hello());
+    }
+    else if (message->has_resp_ping()) {
+        handle_response_ping(message->resp_ping());
+    }
+    else if (message->has_resp_pong()) {
+        handle_response_pong(message->resp_pong());
+    }
+    else {
+        printf("Unknown response type: %" PRIu32 "\n", static_cast<uint32_t>(message->get_which_type()));
     }
 
-    message->deserialize(buffer);
-    response_handler(message);
+    delete message;
 }
 
 static bool send_hello()

@@ -35,43 +35,15 @@ void UartProtobuf::start_reader()
 
 void UartProtobuf::uart_rx_cb(uint8_t data)
 {
-    // Read message type.
-    if (msg_type_ == UINT8_MAX) {
-        msg_type_ = data;
-        msg_length_bytes_received_ = 0;
-        return;
-    }
-
-    // Read the size of the message.
-    if (msg_length_bytes_received_ < msg_length_bytes_number_) {
-        ((uint8_t *)&msg_length_)[msg_length_bytes_received_++] = data;
-        msg_bytes_received_ = 0;
-        if (msg_length_bytes_received_ == msg_length_bytes_number_ && msg_length_ == 0) {
-            // Special case where the message content is empty.
-            // Directly send the message with its type and no content.
-            msg_t msg;
-            msg.type = msg_type_;
-            msg.content.value = msg_length_;
-            msg_send(&msg, reader_pid_);
-            msg_type_ = UINT8_MAX;
-        }
-        return;
-    }
-
-    // If the size is received, read the message.
-    if (msg_bytes_received_ < msg_length_) {
-        ringbuffer_add_one(&rx_buf_, data);
-        msg_bytes_received_++;
-    }
-
-    // If the message is received, send it to the decoding thread.
-    if (msg_bytes_received_ == msg_length_) {
+    if (data == '\n') {
         msg_t msg;
-        msg.type = msg_type_;
         msg.content.value = msg_length_;
         msg_send(&msg, reader_pid_);
-        msg_type_ = UINT8_MAX;
+        msg_length_ = 0;
+        return;
     }
+    ringbuffer_add_one(&rx_buf_, data);
+    msg_length_++;
 }
 
 void UartProtobuf::message_reader()
@@ -82,16 +54,13 @@ void UartProtobuf::message_reader()
 
     while (1) {
         msg_receive(&msg);
-        uint8_t message_type = (uint8_t)msg.type;
         uint32_t message_length = (uint32_t)msg.content.value;
         assert(message_length <= UARTPB_INPUT_MESSAGE_LENGTH_MAX);
         read_buffer_.clear();
-        for (size_t i = 0; i < message_length; i++) {
-            uint8_t c = ringbuffer_get_one(&rx_buf_);
-            read_buffer_.push(c);
-        }
-        if (message_handler_) {
-            message_handler_(message_type, read_buffer_);
+        ringbuffer_get(&rx_buf_, (char *)read_buffer_.get_base64_data(), message_length);
+        size_t res = read_buffer_.base64_decode();
+        if (res > 0 && message_handler_) {
+            message_handler_(read_buffer_);
         }
     }
 }
