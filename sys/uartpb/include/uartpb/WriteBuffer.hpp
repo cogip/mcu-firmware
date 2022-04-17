@@ -16,7 +16,7 @@
 #include "WriteBufferInterface.h"
 
 /// Size of the base64 encoding buffer
-#define UARTPB_BASE64_BUFFER_SIZE (UARTPB_OUTPUT_MESSAGE_LENGTH_MAX * 2)
+#define UARTPB_BASE64_ENCODE_BUFFER_SIZE (UARTPB_OUTPUT_MESSAGE_LENGTH_MAX * 2)
 
 namespace cogip {
 
@@ -57,7 +57,7 @@ private:
     ///< array in which the serialized data is stored
     uint8_t data_[UARTPB_OUTPUT_MESSAGE_LENGTH_MAX];
     ///< array in which the base64 encoded serialized data is stored
-    uint8_t base64_data_[UARTPB_BASE64_BUFFER_SIZE];
+    uint8_t base64_data_[UARTPB_BASE64_ENCODE_BUFFER_SIZE];
     ///< number of bytes currently serialized in the array
     uint32_t write_index_;
 };

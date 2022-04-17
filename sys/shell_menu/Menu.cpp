@@ -7,6 +7,10 @@
 // Project includes
 #include "tracefd/tracefd.hpp"
 
+#ifdef MODULE_UARTPB
+#  include "uartpb_config.hpp"
+#endif
+
 #include "PB_Menu.hpp"
 
 namespace cogip {
@@ -110,13 +114,14 @@ void Menu::update_pb_message(void)
 }
 
 #ifdef MODULE_UARTPB
+static PB_OutputMessage output_message;
+
 void Menu::send_pb_message(void)
 {
     if (uart_protobuf) {
         update_pb_message();
-        auto & output_message = uart_protobuf->output_message();
         output_message.set_menu(pb_message_);
-        uart_protobuf->send_message();
+        uart_protobuf->send_message(output_message);
     }
 }
 #endif

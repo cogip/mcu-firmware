@@ -61,14 +61,14 @@ uint8_t * WriteBuffer::get_data()
 size_t WriteBuffer::base64_encode()
 {
     size_t base64_buffer_size = 0;
-    memset(base64_data_, '\n', UARTPB_BASE64_BUFFER_SIZE);
+    memset(base64_data_, '\n', UARTPB_BASE64_ENCODE_BUFFER_SIZE);
     int ret = ::base64_encode(data_, write_index_, NULL, &base64_buffer_size);
     if (ret != BASE64_ERROR_BUFFER_OUT_SIZE) {
         printf("1 ret = %d (success = %d)\n", ret, BASE64_SUCCESS);
         return 0;
     }
-    if (base64_buffer_size > UARTPB_BASE64_BUFFER_SIZE) {
-        printf("Failed to base64 encode, buffer too small (%u > %u).\n", base64_buffer_size, UARTPB_BASE64_BUFFER_SIZE);
+    if (base64_buffer_size > UARTPB_BASE64_ENCODE_BUFFER_SIZE) {
+        printf("Failed to base64 encode, buffer too small (%u > %u).\n", base64_buffer_size, UARTPB_BASE64_ENCODE_BUFFER_SIZE);
         return 0;
     }
 
