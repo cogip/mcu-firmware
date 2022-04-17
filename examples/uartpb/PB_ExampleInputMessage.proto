@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "PB_RespHello.proto";
+import "PB_RespPing.proto";
+import "PB_RespPong.proto";
+
+message PB_ExampleInputMessage {
+    oneof type {
+        PB_RespHello resp_hello = 1;
+        PB_RespPing resp_ping = 2;
+        PB_RespPong resp_pong = 3;
+    }
+}

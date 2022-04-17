@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "PB_Command.proto";
+
+message PB_GameInputMessage {
+    oneof type {
+        PB_Command command = 1;
+        bool copilot_connected = 2;
+        bool copilot_disconnected = 3;
+    }
+}

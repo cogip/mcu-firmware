@@ -22,7 +22,7 @@ are sent as Protobuf messages.
 
 At startup, a `Reset` message type is sent without data to warn that the STM32 has booted.
 
-On the RPi side, the Python software will respond to `Req*` messages by `Ack*` messages,
+On the RPi side, the Python software will respond to `Req*` messages by `Resp*` messages,
 and display received menus and reset info.
 
 # Setup
@@ -43,12 +43,6 @@ Create a venv and install required packages inside:
 $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip install -r requirements.txt
-```
-
-## Generate Protobuf Messages Python Definitions
-
-```sh
-$ make protoc_py
 ```
 
 # Compiling and Running Example on Real Hardware
@@ -91,7 +85,7 @@ Options:
 
 Use the `cogip-native` board which allows using a second UART.
 
-## Create Virtual Serial Ports
+## Create Virtual Serial Ports
 
 Make sure `socat`is installed:
 
@@ -104,7 +98,6 @@ Create the virtual ports in a different terminal:
 ```sh
 $ socat -d -d pty,raw,echo=0,link=/tmp/ttySTM32 pty,raw,echo=0,link=/tmp/ttyRPI
 ```
-
 
 ## Compilation and Run the Native Firmware
 

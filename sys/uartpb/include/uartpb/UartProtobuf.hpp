@@ -60,7 +60,7 @@ void *message_reader_wrapper(
 /// Generic UART Protobuf communication class.
 class UartProtobuf {
 public:
-    using message_handler_t = void (*)(uint8_t message_type, cogip::uartpb::ReadBuffer &);
+    using message_handler_t = void (*)(cogip::uartpb::ReadBuffer &);
 
     /// Class constructor.
     UartProtobuf(
@@ -101,14 +101,10 @@ private:
     char reader_stack_[UARTPB_READER_STACKSIZE];  ///< reader thread stack
     char rx_mem_[UART_BUFFER_SIZE];               ///< memory for UART incoming bytes
     ringbuffer_t rx_buf_;                         ///< ring buffer for UART incoming bytes
-    uint8_t msg_type_ = UINT8_MAX;                ///< type of message to receive
-    uint8_t msg_length_bytes_number_ = 4;         ///< number of bytes needed to encode message length
-    uint8_t msg_length_bytes_received_ = 0;       ///< number of bytes received for current message length
     uint32_t msg_length_ = 0;                     ///< message length
-    uint32_t msg_bytes_received_ = 0;             ///< number of bytes received for current message
     ReadBuffer read_buffer_;                      ///< buffer used to decode a message
     WriteBuffer write_buffer_;                    ///< buffer used to encode a message
-    void (*message_handler_)(uint8_t message_type, cogip::uartpb::ReadBuffer &);
+    void (*message_handler_)(cogip::uartpb::ReadBuffer &);
                                                   ///< callback to process the message after decoding
     riot::mutex mutex_;                           ///< mutex protecting serial port access
 };
