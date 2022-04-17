@@ -80,6 +80,8 @@ int main(void)
     _init_excavation_sites_obstacles();
     _init_samples_obstacles();
 
+    app_wizard();
+
     // Start shell
     cogip::shell::start();
 

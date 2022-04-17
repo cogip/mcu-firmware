@@ -18,3 +18,6 @@ cogip::path::Path &app_get_path(void);
 
 void app_init(void);
 void app_init_tasks(void);
+
+/// Run Application wizard
+void app_wizard(void);
