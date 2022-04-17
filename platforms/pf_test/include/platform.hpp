@@ -34,6 +34,7 @@
 #include "odometry.hpp"
 #include "path/Path.hpp"
 #include "utils.h"
+#include "wizard/Wizard.hpp"
 
 #define ROBOT_ID            0       /**< Robot ID for logs */
 
@@ -240,6 +241,13 @@ ctrl_quadpid_t *pf_get_quadpid_ctrl(void);
  * return   Controller
  **/
 ctrl_t *pf_get_ctrl(void);
+
+/**
+ * @brief Returns wizard.
+ *
+ * return   Wizard
+ **/
+cogip::wizard::Wizard *pf_get_wizard();
 
 /**
  * @brief Initialize all platforms threads

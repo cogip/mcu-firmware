@@ -2,11 +2,13 @@ syntax = "proto3";
 
 import "PB_Menu.proto";
 import "PB_State.proto";
+import "PB_Wizard.proto";
 
 message PB_GameOutputMessage {
     oneof type {
         bool reset = 1;
         PB_Menu menu = 2;
         PB_State state = 3;
+        PB_Wizard wizard = 4;
     }
 }
