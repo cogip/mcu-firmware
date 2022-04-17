@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+message PB_WizardBool {
+    bool value = 1;
+}
+
+message PB_WizardInt {
+    sint32 value = 1;
+}
+
+message PB_WizardFloat {
+    float value = 1;
+}
+
+message PB_WizardString {
+    string value = 1;
+}
+
+message PB_WizardMessage {
+    string value = 1;
+}
+
+message PB_WizardChoiceInt {
+    repeated int32 choices = 1;
+    int32 value = 2;
+}
+
+message PB_WizardChoiceFloating {
+    repeated float choices = 1;
+    float value = 2;
+}
+
+message PB_WizardChoiceString {
+    repeated string choices = 1;
+    string value = 2;
+}
+
+message PB_WizardSelectInt {
+    repeated int32 choices = 1;
+    repeated int32 value = 2;
+}
+
+message PB_WizardSelectFloating {
+    repeated float choices = 1;
+    repeated float value = 2;
+}
+
+message PB_WizardSelectString {
+    repeated string choices = 1;
+    repeated string value = 2;
+}
+
+message PB_WizardCamp {
+    string value = 1;
+}
+
+message PB_WizardCamera {
+    bool value = 1;
+}
+
+message PB_Wizard {
+    string name = 1;
+    uint32 request_id = 2;
+    oneof type {
+        PB_WizardBool boolean = 3;
+        PB_WizardInt integer = 4;
+        PB_WizardFloat floating = 5;
+        PB_WizardString str = 6;
+        PB_WizardMessage message = 7;
+        PB_WizardChoiceInt choice_integer = 8;
+        PB_WizardChoiceFloating choice_floating = 9;
+        PB_WizardChoiceString choice_str = 10;
+        PB_WizardSelectInt select_integer = 11;
+        PB_WizardSelectFloating select_floating = 12;
+        PB_WizardSelectString select_str = 13;
+        PB_WizardCamp camp = 14;
+        PB_WizardCamera camera = 15;
+    }
+}
