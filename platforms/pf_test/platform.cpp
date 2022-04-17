@@ -81,6 +81,7 @@ static bool copilot_connected = false;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
+cogip::wizard::Wizard *wizard = nullptr;
 static PB_OutputMessage output_message;
 
 bool pf_trace_on(void)
@@ -232,6 +233,11 @@ int pf_is_camp_left(void)
 cogip::obstacles::List *pf_get_dyn_obstacles(void)
 {
     return lidar_obstacles;
+}
+
+cogip::wizard::Wizard *pf_get_wizard()
+{
+    return wizard;
 }
 
 /// Execute a shell command callback using arguments from Protobuf message.
@@ -391,6 +397,8 @@ void pf_init_tasks(void)
         output_message.set_reset(true);
         uartpb->send_message(output_message);
     }
+
+    wizard = new cogip::wizard::Wizard(uartpb);
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 
