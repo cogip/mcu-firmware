@@ -181,39 +181,6 @@ static const qdec_conf_t qdec_config[] = {
 /** @} */
 
 /**
- * @name   SPI configuration
- * @{
- */
-static const spi_conf_t spi_config[] = {
-    {
-        .dev = SPI1,
-        // .mosi_pin       = GPIO_PIN(PORT_A, 7),
-        .mosi_pin = GPIO_PIN(PORT_B, 5),
-        // .miso_pin       = GPIO_PIN(PORT_A, 6),
-        .miso_pin = GPIO_PIN(PORT_B, 4),
-        // .sclk_pin       = GPIO_PIN(PORT_A, 5),
-        .sclk_pin = GPIO_PIN(PORT_B, 3),
-        // .cs_pin         = GPIO_PIN(PORT_A, 4),
-        .cs_pin = GPIO_PIN(PORT_A, 8),
-        .mosi_af = GPIO_AF5,
-        .miso_af = GPIO_AF5,
-        .sclk_af = GPIO_AF5,
-        .cs_af = GPIO_AF5,
-        .rccmask = RCC_APB2ENR_SPI1EN,
-        .apbbus = APB2,
-#ifdef MODULE_PERIPH_DMA
-        .tx_dma = 0,
-        .tx_dma_chan = 3,
-        .rx_dma = 1,
-        .rx_dma_chan = 3,
-#endif
-    }
-};
-
-#define SPI_NUMOF           ARRAY_SIZE(spi_config)
-/** @} */
-
-/**
  * @name   ADC configuration
  *
  * Note that we do not configure all ADC channels,

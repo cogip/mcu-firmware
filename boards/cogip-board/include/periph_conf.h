@@ -195,34 +195,6 @@ static const i2c_conf_t i2c_config[] = {
 /** @} */
 
 /**
- * @name SPI configuration
- * @{
- */
-
-static const spi_conf_t spi_config[] = {
-    {
-        .dev = SPI2,
-        .mosi_pin = GPIO_PIN(PORT_C, 1),    /* Warning: this is AF7 */
-        .miso_pin = GPIO_PIN(PORT_C, 2),    /* AF5 */
-        .sclk_pin = GPIO_PIN(PORT_B, 13),   /* AF5 */
-        .cs_pin = GPIO_PIN(PORT_A, 1),
-        .mosi_af = GPIO_AF7,
-        .miso_af = GPIO_AF5,
-        .sclk_af = GPIO_AF5,
-        .cs_af = GPIO_AF5,
-        .rccmask = RCC_APB1ENR_SPI2EN,
-        .apbbus = APB1,
-        .tx_dma = 0,
-        .tx_dma_chan = 0,
-        .rx_dma = 0,
-        .rx_dma_chan = 0
-    },
-};
-
-#define SPI_NUMOF   ARRAY_SIZE(spi_config)
-/** @} */
-
-/**
  * @name   ADC configuration
  *
  * Note that we do not configure all ADC channels,
