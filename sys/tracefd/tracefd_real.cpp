@@ -5,6 +5,8 @@
 // System includes
 #include <cstdio>
 
+#ifdef TRACEFD_SDCARD_SPI_DEV
+
 // RIOT includes
 #include "mtd_sdcard.h"
 #include "sdcard_spi.h"
@@ -23,8 +25,8 @@ static mtd_sdcard_t mtd_sdcard_dev = {
         .pages_per_sector = 0,
         .page_size = 0
     },
-    .sd_card = &sdcard_spi_devs[0],
-    .params = &sdcard_spi_params[0]
+    .sd_card = &sdcard_spi_devs[TRACEFD_SDCARD_SPI_DEV],
+    .params = &sdcard_spi_params[TRACEFD_SDCARD_SPI_DEV]
 };
 
 // File system specific descriptor
@@ -66,6 +68,7 @@ static vfs_mount_t flash_mount = {
     .open_files = {},
     .private_data = &fs_desc
 };
+#endif // TRACEFD_SDCARD_SPI_DEV
 
 namespace cogip {
 
@@ -73,9 +76,12 @@ namespace tracefd {
 
 bool init_root_dir(void)
 {
+    int res = 1;
+#ifdef TRACEFD_SDCARD_SPI_DEV
     fatfs_mtd_devs[fs_desc.vol_idx] = (mtd_dev_t *)&mtd_sdcard_dev;
-    int res = vfs_mount(&flash_mount);
+    res = vfs_mount(&flash_mount);
     ::printf("res = %d\n", res);
+#endif // TRACEFD_SDCARD_SPI_DEV
     return (res == 0);
 }
 
