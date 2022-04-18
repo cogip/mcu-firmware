@@ -1,6 +1,6 @@
 APPLICATION = sdcard
 
-BOARD ?= cogip-nucleo-f446re
+BOARD ?= nucleo-f446re
 
 USEMODULE += shell
 USEMODULE += shell_commands
