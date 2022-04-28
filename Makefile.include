@@ -4,6 +4,8 @@ APPDIR := $(CURDIR)
 EXTERNAL_BOARD_DIRS ?= $(MCUFIRMWAREBASE)/boards/
 LAST_MAKEFILEDIR = $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
+BUILD_DIR = $(MCUFIRMWAREBASE)/build
+PKGDIRBASE = $(BUILD_DIR)/pkg
 RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
 
 # Create a symbolic for each package in RIOT
