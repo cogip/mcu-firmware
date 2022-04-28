@@ -11,6 +11,7 @@ static PB_OutputMessage output_message;
 Wizard::Wizard(cogip::uartpb::UartProtobuf *uartpb) : uartpb_(uartpb)
 {
     event_queue_init(&queue_);
+    event_.super.list_node.next = nullptr;
 }
 
 void Wizard::handle_response(const PB_Message &pb_message)
