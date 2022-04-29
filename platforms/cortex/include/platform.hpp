@@ -167,6 +167,13 @@ typedef struct {
 bool pf_trace_on(void);
 
 /**
+ * @brief Set/unset copilot connected
+ *
+ * param[in]    connected             copilot connected or not
+ */
+void pf_set_copilot_connected(bool connected);
+
+/**
  * @brief Print current robot state in JSON format
  *
  * param[in]    out             tracefd descriptor used to print state

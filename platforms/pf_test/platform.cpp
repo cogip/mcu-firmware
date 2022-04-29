@@ -86,6 +86,11 @@ bool pf_trace_on(void)
     return copilot_connected;
 }
 
+void pf_set_copilot_connected(bool connected)
+{
+    copilot_connected = connected;
+}
+
 void pf_print_state(cogip::tracefd::File &out)
 {
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
@@ -237,38 +242,6 @@ cogip::wizard::Wizard *pf_get_wizard()
     return wizard;
 }
 
-// Read incoming Protobuf message and call the corresponding message handler
-void message_handler(cogip::uartpb::ReadBuffer &buffer)
-{
-    PB_InputMessage *message = new PB_InputMessage();
-    EmbeddedProto::Error status = message->deserialize(buffer);
-
-    if (status != EmbeddedProto::Error::NO_ERRORS) {
-        printf("Protobof message deserialization failed (%u)\n", (uint32_t)status);
-    }
-    else if (message->has_command()) {
-        cogip::shell::handle_pb_command(message->command());
-    }
-    else if (message->has_copilot_connected()) {
-        copilot_connected = true;
-        puts("Copilot connected");
-        if (cogip::shell::current_menu) {
-            cogip::shell::current_menu->send_pb_message();
-        }
-    }
-    else if (message->has_copilot_disconnected()) {
-        copilot_connected = false;
-        puts("Copilot disconnected");
-    }
-    else if (message->has_wizard()) {
-        wizard->handle_response(message->wizard());
-    }
-    else {
-        printf("Unknown response type: %" PRIu32 "\n", static_cast<uint32_t>(message->get_which_type()));
-    }
-    delete message;
-}
-
 void pf_init(void)
 {
 #ifdef MODULE_SHELL_PLATFORMS
@@ -314,7 +287,7 @@ void pf_init_tasks(void)
 
     /* Initialize UARTPB */
     uartpb = new cogip::uartpb::UartProtobuf(
-        message_handler,
+        app_message_handler,
         UART_DEV(1)
         );
 
