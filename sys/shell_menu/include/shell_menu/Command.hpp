@@ -27,6 +27,10 @@
 #  define COMMAND_DESC_MAX_LENGTH 128
 #endif
 
+#ifndef COMMAND_MAX_PB_ARGS
+#  define COMMAND_MAX_PB_ARGS 8  ///< Maximum number of arguments to shell command from Protobuf message
+#endif
+
 namespace cogip {
 
 namespace shell {
