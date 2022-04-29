@@ -360,9 +360,12 @@ static void handle_command(const cogip::shell::Command::PB_Message &pb_command)
 void message_handler(cogip::uartpb::ReadBuffer &buffer)
 {
     PB_InputMessage *message = new PB_InputMessage();
-    message->deserialize(buffer);
+    EmbeddedProto::Error status = message->deserialize(buffer);
 
-    if (message->has_command()) {
+    if (status != EmbeddedProto::Error::NO_ERRORS) {
+        printf("Protobof message deserialization failed (%u)\n", (uint32_t)status);
+    }
+    else if (message->has_command()) {
         handle_command(message->command());
     }
     else if (message->has_copilot_connected()) {
