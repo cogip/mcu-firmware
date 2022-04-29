@@ -48,6 +48,9 @@ void rename_command(
 void register_uartpb(
     cogip::uartpb::UartProtobuf *uartpb_ptr
     );
+
+/// Handle and execute a command coming from a Protobuf message
+void handle_pb_command(const Command::PB_Message &pb_command);
 #endif
 
 } // namespace shell

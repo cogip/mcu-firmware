@@ -37,9 +37,6 @@
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
 
-/// Maximum number of arguments to shell command callbacks
-#define MAX_COMMAND_ARGS 8
-
 /* Controller */
 static ctrl_quadpid_t ctrl_quadpid =
 {
@@ -240,74 +237,6 @@ cogip::wizard::Wizard *pf_get_wizard()
     return wizard;
 }
 
-/// Execute a shell command callback using arguments from Protobuf message.
-/// Command name is in the 'cmd' attribute of the Protobuf message.
-/// Arguments are in a space-separated string in 'desc' attribute of the Protobuf message.
-static void run_command(cogip::shell::Command *command, const cogip::shell::Command::PB_Message &pb_command)
-{
-    // Computed number of arguments
-    int argc = 0;
-    // List of arguments null-separated
-    char args[COMMAND_DESC_MAX_LENGTH];
-    // Array of pointers to each argument
-    char *argv[MAX_COMMAND_ARGS];
-    // First argument is the command
-    argv[argc++] = (char *)pb_command.cmd();
-    if (pb_command.get_desc().get_length() != 0) {
-        // If there are arguments to pass to the command in the 'desc' attribute
-        size_t i;
-        // Copy first argument pointer to 'argv'
-        argv[argc++] = args;
-        for (i = 0; i < pb_command.get_desc().get_length(); i++) {
-            if (i >= COMMAND_DESC_MAX_LENGTH || argc >= MAX_COMMAND_ARGS) {
-                printf("Skip command '%s %s': arguments too long\n", pb_command.cmd(), pb_command.desc());
-                return;
-            }
-            char c = pb_command.desc()[i];
-            // Copy each argument in 'args'
-            args[i] = c;
-            if (c == ' ') {
-                // Insert a null character between each argument
-                args[i] = '\0';
-                // Copy next argument pointer to 'argv'
-                argv[argc++] = args + i + 1;
-            }
-        }
-        // Add null-character after last argument
-        args[i] = '\0';
-    }
-    // Execute shell command callback
-    command->handler()(argc, argv);
-}
-
-// Handle a Protobuf command message
-static void handle_command(const cogip::shell::Command::PB_Message &pb_command)
-{
-    if (cogip::shell::current_menu == nullptr) {
-        cogip::tracefd::out.logf(
-            "Warning: received PB command before current_menu is initialized: %s %s\n",
-            pb_command.cmd(), pb_command.desc());
-        return;
-    }
-
-    // Search the command in current menu command
-    for (auto command: *cogip::shell::current_menu) {
-        if (command->name() == pb_command.cmd()) {
-            run_command(command, pb_command);
-            return;
-        }
-    }
-
-    // If command was not found in current menu,
-    // search the command in global commands
-    for (auto command: cogip::shell::global_commands) {
-        if (command->name() == pb_command.cmd()) {
-            run_command(command, pb_command);
-            return;
-        }
-    }
-}
-
 // Read incoming Protobuf message and call the corresponding message handler
 void message_handler(cogip::uartpb::ReadBuffer &buffer)
 {
@@ -318,7 +247,7 @@ void message_handler(cogip::uartpb::ReadBuffer &buffer)
         printf("Protobof message deserialization failed (%u)\n", (uint32_t)status);
     }
     else if (message->has_command()) {
-        handle_command(message->command());
+        cogip::shell::handle_pb_command(message->command());
     }
     else if (message->has_copilot_connected()) {
         copilot_connected = true;
