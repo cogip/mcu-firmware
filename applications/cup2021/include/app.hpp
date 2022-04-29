@@ -3,6 +3,7 @@
 // Project includes
 #include "obstacles/Polygon.hpp"
 #include "path/Path.hpp"
+#include "uartpb/ReadBuffer.hpp"
 
 #include "sd21.h"
 
@@ -120,6 +121,9 @@ const cogip::obstacles::Polygon &app_get_borders(void);
 
 /// Return the path of current application.
 cogip::path::Path &app_get_path(void);
+
+/// Message handler for incoming Protobuf messages.
+void app_message_handler(cogip::uartpb::ReadBuffer &buffer);
 
 void app_init(void);
 void app_init_tasks(void);
