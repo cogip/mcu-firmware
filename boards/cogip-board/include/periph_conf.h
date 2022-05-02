@@ -157,16 +157,7 @@ static const pwm_conf_t pwm_config[] = {
  * @{
  */
 static const qdec_conf_t qdec_config[] = {
-    {
-        .dev = TIM3,
-        .max = 0xffffffff,
-        .rcc_mask = RCC_APB1ENR_TIM3EN,
-        .chan = { { .pin = GPIO_PIN(PORT_C, 6), .cc_chan = 0 },
-                  { .pin = GPIO_PIN(PORT_C, 7), .cc_chan = 1 } },
-        .af = GPIO_AF2,
-        .bus = APB1,
-        .irqn = TIM3_IRQn
-    },
+    /* Left encoder */
     {
         .dev = TIM4,
         .max = 0xffffffff,
@@ -176,6 +167,17 @@ static const qdec_conf_t qdec_config[] = {
         .af = GPIO_AF2,
         .bus = APB1,
         .irqn = TIM4_IRQn
+    },
+    /* Right encoder */
+    {
+        .dev = TIM3,
+        .max = 0xffffffff,
+        .rcc_mask = RCC_APB1ENR_TIM3EN,
+        .chan = { { .pin = GPIO_PIN(PORT_C, 6), .cc_chan = 0 },
+                  { .pin = GPIO_PIN(PORT_C, 7), .cc_chan = 1 } },
+        .af = GPIO_AF2,
+        .bus = APB1,
+        .irqn = TIM3_IRQn
     },
 };
 
