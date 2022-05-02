@@ -17,7 +17,7 @@ QUIET ?= 1
 DEVELHELP ?= 1
 
 define remote-flash-recipe
-	scp $(BINFILE) $(REMOTE_TARGET):/tmp/fw.bin
+	scp $(BINFILE) $(REMOTE_USER)@$(REMOTE_TARGET):/tmp/fw.bin
 	$(GDB) -nx -batch -ex "target extended-remote $(REMOTE_TARGET):3333" -ex "monitor reset halt" -ex "monitor flash write_image erase /tmp/fw.bin 0x08000000" -ex "monitor reset run"
 endef
 
