@@ -16,6 +16,28 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef LX_DIR_PIN
+#define LX_DIR_PIN  GPIO_UNDEF
+#endif
+
+static void dir_init(uart_t uart)
+{
+    (void)uart;
+    gpio_init(LX_DIR_PIN, GPIO_OUT);
+}
+
+static void dir_enable_tx(uart_t uart)
+{
+    (void)uart;
+    gpio_set(LX_DIR_PIN);
+}
+
+static void dir_disable_tx(uart_t uart)
+{
+    (void)uart;
+    gpio_clear(LX_DIR_PIN);
+}
+
 static const int32_t baudrates[] = {
     115200L,
 };
@@ -133,7 +155,7 @@ static int cmd_init(int argc, char **argv)
     uart_half_duplex_params_t params = {
         .uart = uart,
         .baudrate = baud,
-        .dir = UART_HALF_DUPLEX_DIR_NONE,
+        .dir = { dir_init, dir_enable_tx, dir_disable_tx },
     };
 
     int ret = uart_half_duplex_init(&stream, lx_servos_buffer, ARRAY_SIZE(lx_servos_buffer), &params);
