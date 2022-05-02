@@ -51,30 +51,44 @@ extern "C" {
 static const motor_driver_config_t motor_driver_config[] = {
     {
         .pwm_dev = 0,
-        .mode = MOTOR_DRIVER_1_DIR,
-        .mode_brake = MOTOR_BRAKE_LOW,
+        .mode = MOTOR_DRIVER_1_DIR_BRAKE,
+        .mode_brake = MOTOR_BRAKE_HIGH,
         .pwm_mode = PWM_LEFT,
         .pwm_frequency = 20000U,
         .pwm_resolution = 1500U,
-        .nb_motors = 2,
+        .nb_motors = 1,
         .motors = {
+            /* Left motor */
             {
                 .pwm_channel = 0,
-                .gpio_enable = GPIO_UNDEF,
-                .gpio_dir0 = GPIO_PIN(PORT_A, 4),
-                .gpio_dir1_or_brake = GPIO_UNDEF,
-                .gpio_dir_reverse = 0,
-                .gpio_enable_invert = 0,
-                .gpio_brake_invert = 0,
-            },
-            {
-                .pwm_channel = 1,
-                .gpio_enable = GPIO_UNDEF,
-                .gpio_dir0 = GPIO_PIN(PORT_B, 8),
-                .gpio_dir1_or_brake = GPIO_UNDEF,
+                .gpio_enable = GPIO_PIN(PORT_A, 1),
+                .gpio_dir0 = GPIO_PIN(PORT_B, 0),
+                .gpio_dir1_or_brake = GPIO_PIN(PORT_B, 1),
                 .gpio_dir_reverse = 1,
                 .gpio_enable_invert = 0,
-                .gpio_brake_invert = 0,
+                .gpio_brake_invert = 1,
+            },
+        },
+        .cb = NULL
+    },
+    {
+        .pwm_dev = 1,
+        .mode = MOTOR_DRIVER_1_DIR_BRAKE,
+        .mode_brake = MOTOR_BRAKE_HIGH,
+        .pwm_mode = PWM_LEFT,
+        .pwm_frequency = 20000U,
+        .pwm_resolution = 1500U,
+        .nb_motors = 1,
+        .motors = {
+            /* Right motor */
+            {
+                .pwm_channel = 0,
+                .gpio_enable = GPIO_PIN(PORT_A, 1),
+                .gpio_dir0 = GPIO_PIN(PORT_B, 13),
+                .gpio_dir1_or_brake = GPIO_PIN(PORT_B, 12),
+                .gpio_dir_reverse = 0,
+                .gpio_enable_invert = 0,
+                .gpio_brake_invert = 1,
             },
         },
         .cb = NULL
