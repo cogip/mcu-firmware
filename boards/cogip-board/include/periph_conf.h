@@ -211,27 +211,6 @@ static const i2c_conf_t i2c_config[] = {
 #define I2C_NUMOF   ARRAY_SIZE(i2c_config)
 /** @} */
 
-/**
- * @name   ADC configuration
- *
- * Note that we do not configure all ADC channels,
- * and not in the STM32F446 order.
- *
- * @{
- */
-#define ADC_NUMOF       (8U)
-#define ADC_CONFIG {    \
-        { GPIO_PIN(PORT_B, 0), 0, 8 },  \
-        { GPIO_PIN(PORT_B, 1), 0, 9 },  \
-        { GPIO_PIN(PORT_C, 0), 0, 10 }, \
-        { GPIO_PIN(PORT_C, 1), 0, 11 }, \
-        { GPIO_PIN(PORT_C, 2), 0, 12 }, \
-        { GPIO_PIN(PORT_C, 3), 0, 13 }, \
-        { GPIO_PIN(PORT_C, 4), 0, 14 }, \
-        { GPIO_PIN(PORT_C, 5), 0, 15 }, \
-}
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
