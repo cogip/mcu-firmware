@@ -36,6 +36,9 @@ extern "C" {
 /* Debug LED */
 #define GPIO_DEBUG_LED  GPIO_UNDEF
 
+/* Servomotors half duplex direction pin */
+#define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
+
 /* Motors */
 #define MOTOR_LEFT  0
 #define MOTOR_RIGHT 1
