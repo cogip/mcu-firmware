@@ -29,19 +29,12 @@ extern "C" {
 #define PCA9548_SENSORS 0
 
 /* Camp selection */
-#define GPIO_CAMP       GPIO_PIN(PORT_B, 1)
+#define GPIO_CAMP       GPIO_UNDEF
 /* Starting switch */
-#define GPIO_STARTER    GPIO_PIN(PORT_B, 2)
+#define GPIO_STARTER    GPIO_UNDEF
 
-/* Pumps */
-#define GPIO_BL_PUMP_1  GPIO_PIN(PORT_C, 11)
-#define GPIO_BC_PUMP_2  GPIO_PIN(PORT_A, 12)
-#define GPIO_BR_PUMP_3  GPIO_PIN(PORT_A, 11)
-#define GPIO_FL_PUMP_4  GPIO_PIN(PORT_A, 10)
-#define GPIO_FC_PUMP_5  GPIO_PIN(PORT_A, 9)
-#define GPIO_FR_PUMP_6  GPIO_PIN(PORT_B, 15)
-
-#define GPIO_DEBUG_LED  GPIO_PIN(PORT_C, 8)
+/* Debug LED */
+#define GPIO_DEBUG_LED  GPIO_UNDEF
 
 /* Motors */
 #define HBRIDGE_MOTOR_LEFT  0
