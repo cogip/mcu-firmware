@@ -27,6 +27,9 @@ void app_message_handler(cogip::uartpb::ReadBuffer &buffer)
     else if (message->has_wizard()) {
         pf_get_wizard()->handle_response(message->wizard());
     }
+    else if (message->has_samples()) {
+        app_samples_process(message->samples());
+    }
     else {
         printf("Unknown response type: %" PRIu32 "\n", static_cast<uint32_t>(message->get_which_type()));
     }

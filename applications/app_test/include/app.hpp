@@ -4,6 +4,7 @@
 #include "obstacles/Polygon.hpp"
 #include "path/Path.hpp"
 #include "uartpb/ReadBuffer.hpp"
+#include "app_samples.hpp"
 
 /*
  * Machine parameters
