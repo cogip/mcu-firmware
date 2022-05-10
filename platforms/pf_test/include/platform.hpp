@@ -250,6 +250,13 @@ ctrl_quadpid_t *pf_get_quadpid_ctrl(void);
 ctrl_t *pf_get_ctrl(void);
 
 /**
+ * @brief Returns uarpb.
+ *
+ * return   uarpb pointer
+ **/
+cogip::uartpb::UartProtobuf *pf_get_uartpb();
+
+/**
  * @brief Returns wizard.
  *
  * return   Wizard

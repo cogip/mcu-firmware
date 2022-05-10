@@ -5,6 +5,7 @@
 #include "obstacles/Obstacle.hpp"
 #include "avoidance.hpp"
 #include "wizard/Wizard.hpp"
+#include "app_samples.hpp"
 
 #include "PB_GameInputMessage.hpp"
 #include "PB_GameOutputMessage.hpp"
@@ -28,7 +29,8 @@ using PB_InputMessage = PB_GameInputMessage<
     WIZARD_NAME_MAX_LENGTH,
     WIZARD_REP_MAX,
     WIZARD_NAME_MAX_LENGTH,
-    WIZARD_NAME_MAX_LENGTH>;
+    WIZARD_NAME_MAX_LENGTH,
+    APP_SAMPLES_MAX_DETECTED>;
 
 using PB_OutputMessage = PB_GameOutputMessage<
     COMMAND_NAME_MAX_LENGTH,

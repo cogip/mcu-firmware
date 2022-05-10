@@ -237,6 +237,11 @@ cogip::obstacles::List *pf_get_dyn_obstacles(void)
     return lidar_obstacles;
 }
 
+cogip::uartpb::UartProtobuf *pf_get_uartpb()
+{
+    return uartpb;
+}
+
 cogip::wizard::Wizard *pf_get_wizard()
 {
     return wizard;
