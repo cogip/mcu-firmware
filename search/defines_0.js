@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nb_5fshell_5fcommands_923',['NB_SHELL_COMMANDS',['../Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979',1,'Menu.hpp']]]
+  ['command_5fmax_5fpb_5fargs_956',['COMMAND_MAX_PB_ARGS',['../Command_8hpp.html#abd67fd31810d415a85555f83e54d266f',1,'Command.hpp']]]
 ];

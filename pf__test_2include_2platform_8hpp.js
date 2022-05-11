@@ -38,6 +38,8 @@ var pf__test_2include_2platform_8hpp =
     [ "pf_get_ctrl", "group__platforms__pf__test.html#gada66418f7a25f83900babc9406aeb623", null ],
     [ "pf_get_dyn_obstacles", "group__platforms__pf__test.html#ga4710e211e29d3b2da545113781f99a64", null ],
     [ "pf_get_quadpid_ctrl", "group__platforms__pf__test.html#ga76464c76865b8a010f137488bf519fe3", null ],
+    [ "pf_get_uartpb", "group__platforms__pf__test.html#ga98dfe5222245c9d0a4f12c04c3c3f4f5", null ],
+    [ "pf_get_wizard", "group__platforms__pf__test.html#ga026956502bf7107f10d9313d0c6a74e4", null ],
     [ "pf_init", "group__platforms__pf__test.html#gad2d77ae9a60de6fba2ff595654fb94e0", null ],
     [ "pf_init_quadpid_params", "group__platforms__pf__test.html#ga096df40041a3b5fba1c96cd90524be73", null ],
     [ "pf_init_tasks", "group__platforms__pf__test.html#gac3bbbd7ff3d70fb15bbd73b9203044f3", null ],
@@ -45,6 +47,7 @@ var pf__test_2include_2platform_8hpp =
     [ "pf_is_game_launched", "group__platforms__pf__test.html#gae1a6aab08a0179e854ade7561e3dc079", null ],
     [ "pf_print_state", "group__platforms__pf__test.html#gac80e892a7623dddeb945d663b43fc38d", null ],
     [ "pf_send_pb_state", "group__platforms__pf__test.html#ga0fc74267bdda152e7626e2c284689d07", null ],
+    [ "pf_set_copilot_connected", "group__platforms__pf__test.html#gaf83cc53998c27d898d71f8a7e981fdc0", null ],
     [ "pf_trace_on", "group__platforms__pf__test.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],
     [ "ctrl_pf_quadpid_conf", "group__platforms__pf__test.html#ga608925865d22e4a6089fb2b2bdabe56a", null ]
 ];

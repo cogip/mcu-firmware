@@ -1,0 +1,6 @@
+<map id="sys/uartpb/include/uartpb/UartProtobuf.hpp" name="sys/uartpb/include/uartpb/UartProtobuf.hpp">
+<area shape="rect" id="node1" title="Exchange Protobuf messages over UART module." alt="" coords="109,5,291,47"/>
+<area shape="rect" id="node2" href="$Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="127,95,273,136"/>
+<area shape="rect" id="node3" href="$cortex_2include_2platform_8hpp.html" title="Define hardware properties of Cortex platform. Units:" alt="" coords="5,184,187,225"/>
+<area shape="rect" id="node4" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="211,184,397,225"/>
+</map>

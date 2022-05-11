@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['obstacle_5fbounding_5fbox_5fmargin_924',['OBSTACLE_BOUNDING_BOX_MARGIN',['../Obstacle_8hpp.html#afefd463fcccc8cb27d326e4059027dfb',1,'Obstacle.hpp']]],
-  ['obstacle_5fbounding_5fbox_5fvertices_925',['OBSTACLE_BOUNDING_BOX_VERTICES',['../Obstacle_8hpp.html#a47513fde91e697692dff9c390619f39a',1,'Obstacle.hpp']]],
-  ['obstacles_5fmax_5fnumber_926',['OBSTACLES_MAX_NUMBER',['../List_8hpp.html#a8eb65ca038368f488adf6e95a2981f3b',1,'List.hpp']]]
+  ['nb_5fshell_5fcommands_957',['NB_SHELL_COMMANDS',['../Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979',1,'Menu.hpp']]]
 ];

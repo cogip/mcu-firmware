@@ -33,6 +33,9 @@ var annotated_dup =
         [ "ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html", "classcogip_1_1uartpb_1_1ReadBuffer" ],
         [ "UartProtobuf", "classcogip_1_1uartpb_1_1UartProtobuf.html", "classcogip_1_1uartpb_1_1UartProtobuf" ],
         [ "WriteBuffer", "classcogip_1_1uartpb_1_1WriteBuffer.html", "classcogip_1_1uartpb_1_1WriteBuffer" ]
+      ] ],
+      [ "wizard", null, [
+        [ "Wizard", "classcogip_1_1wizard_1_1Wizard.html", "classcogip_1_1wizard_1_1Wizard" ]
       ] ]
     ] ],
     [ "ctrl_configuration_t", "structctrl__configuration__t.html", "structctrl__configuration__t" ],
@@ -49,6 +52,7 @@ var annotated_dup =
     [ "pf_sensor_t", "structpf__sensor__t.html", "structpf__sensor__t" ],
     [ "PID", "structPID.html", null ],
     [ "PID_t", "structPID__t.html", "structPID__t" ],
+    [ "Platform", "classPlatform.html", "classPlatform" ],
     [ "sd21_conf_t", "structsd21__conf__t.html", "structsd21__conf__t" ],
     [ "sd21_servo_t", "structsd21__servo__t.html", "structsd21__servo__t" ],
     [ "shmem_data_t", "structshmem__data__t.html", "structshmem__data__t" ]

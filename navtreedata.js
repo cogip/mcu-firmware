@@ -28,7 +28,7 @@ var NAVTREE =
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Data Fields", "functions.html", [
-        [ "All", "functions.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ]
@@ -52,10 +52,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"dir_50cb6e1ec438713ff8b9040b0f86bf69.html",
-"group__driver__lx-servo.html#ga7a293d0932ad936c5af525873deaf897",
-"group__platform__cortex.html#gac80e892a7623dddeb945d663b43fc38d",
-"path_2include_2path_2Pose_8hpp_source.html"
+"cortex_2lidar__obstacles_8hpp_source.html",
+"group__driver__lds01__dma.html#ga31642b7f0017816d639ad0912a7c85c0",
+"group__platform__cortex.html#ga1dc63a69bc06342aca5ca9cb42e784fa",
+"group__sys__shmem.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

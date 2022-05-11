@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1uartpb_1_1ReadBuffer.htm
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html" title="ReadBuffer class used to decode Protobuf messages.">ReadBuffer</a> class used to decode Protobuf messages. </p>
 
-<p class="definition">Definition at line <a class="el" href="ReadBuffer_8hpp_source.html#l00023">23</a> of file <a class="el" href="ReadBuffer_8hpp_source.html">ReadBuffer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReadBuffer_8hpp_source.html#l00027">27</a> of file <a class="el" href="ReadBuffer_8hpp_source.html">ReadBuffer.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="ReadBuffer_8hpp_source.html">ReadBuffer.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -197,7 +197,35 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html#abe513039fa34140f98cd99c947cb411c">push</a> (uint8_t &amp;byte)</td></tr>
 <tr class="memdesc:abe513039fa34140f98cd99c947cb411c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push new data into the buffer. <br /></td></tr>
 <tr class="separator:abe513039fa34140f98cd99c947cb411c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92d1d35f17b7c2f4e98ee76e13d86e02"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html#a92d1d35f17b7c2f4e98ee76e13d86e02">base64_decode</a> ()</td></tr>
+<tr class="memdesc:a92d1d35f17b7c2f4e98ee76e13d86e02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode the data buffer from base64 before deserialization.  <a href="classcogip_1_1uartpb_1_1ReadBuffer.html#a92d1d35f17b7c2f4e98ee76e13d86e02">More...</a><br /></td></tr>
+<tr class="separator:a92d1d35f17b7c2f4e98ee76e13d86e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ab198bc2a05f8962d508ba6fe12dd64"><td class="memItemLeft" align="right" valign="top"><a id="a1ab198bc2a05f8962d508ba6fe12dd64"></a>
+uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html#a1ab198bc2a05f8962d508ba6fe12dd64">get_base64_data</a> ()</td></tr>
+<tr class="memdesc:a1ab198bc2a05f8962d508ba6fe12dd64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the data array. <br /></td></tr>
+<tr class="separator:a1ab198bc2a05f8962d508ba6fe12dd64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a92d1d35f17b7c2f4e98ee76e13d86e02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92d1d35f17b7c2f4e98ee76e13d86e02">&#9670;&nbsp;</a></span>base64_decode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t cogip::uartpb::ReadBuffer::base64_decode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Decode the data buffer from base64 before deserialization. </p>
+<dl class="section return"><dt>Returns</dt><dd>size of decoded message, 0 in case of failure. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>sys/uartpb/include/uartpb/<a class="el" href="ReadBuffer_8hpp_source.html">ReadBuffer.hpp</a></li>
 </ul>
@@ -205,7 +233,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Mon Apr 18 2022 20:35:54 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Wed May 11 2022 16:54:03 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

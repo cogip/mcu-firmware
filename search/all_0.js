@@ -27,5 +27,6 @@ var searchData=
   ['avoidance_5fgraph_5fmax_5fvertices_24',['AVOIDANCE_GRAPH_MAX_VERTICES',['../group__lib__avoidance.html#ga1e57205bed23c26847f14e1cad4a8228',1,'avoidance.hpp']]],
   ['avoidance_5fpb_5fcopy_5fpath_25',['avoidance_pb_copy_path',['../group__lib__avoidance.html#ga08fb700c7273e58a380e21ffe540cda8',1,'avoidance.hpp']]],
   ['avoidance_5fprint_5fpath_26',['avoidance_print_path',['../group__lib__avoidance.html#ga193806f42744210ad70b45e22c9efe6f',1,'avoidance.hpp']]],
-  ['avoidance_20module_27',['Avoidance module',['../group__lib__avoidance.html',1,'']]]
+  ['avoidance_20module_27',['Avoidance module',['../group__lib__avoidance.html',1,'']]],
+  ['abstract_20platform_28',['Abstract platform',['../group__platforms__abstract.html',1,'']]]
 ];

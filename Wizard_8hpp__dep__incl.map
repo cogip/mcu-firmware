@@ -1,0 +1,5 @@
+<map id="lib/wizard/include/wizard/Wizard.hpp" name="lib/wizard/include/wizard/Wizard.hpp">
+<area shape="rect" id="node1" title="Public API for wizard module." alt="" coords="127,5,273,47"/>
+<area shape="rect" id="node2" href="$cortex_2include_2platform_8hpp.html" title="Define hardware properties of Cortex platform. Units:" alt="" coords="5,95,187,136"/>
+<area shape="rect" id="node3" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="211,95,397,136"/>
+</map>

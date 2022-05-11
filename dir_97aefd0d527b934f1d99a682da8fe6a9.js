@@ -7,5 +7,6 @@ var dir_97aefd0d527b934f1d99a682da8fe6a9 =
     [ "path", "dir_62e21b677e903da2ff4213ed72525065.html", "dir_62e21b677e903da2ff4213ed72525065" ],
     [ "pid", "dir_8a2dd44fd4fe510e36367f0b48502073.html", "dir_8a2dd44fd4fe510e36367f0b48502073" ],
     [ "trigonometry", "dir_a27885517f8467a6210e2956ed69323d.html", "dir_a27885517f8467a6210e2956ed69323d" ],
-    [ "utils", "dir_4ce02b87227cef1244bdd1fa3b12a08b.html", "dir_4ce02b87227cef1244bdd1fa3b12a08b" ]
+    [ "utils", "dir_4ce02b87227cef1244bdd1fa3b12a08b.html", "dir_4ce02b87227cef1244bdd1fa3b12a08b" ],
+    [ "wizard", "dir_e910189c3f79d19c85f53a628681152b.html", "dir_e910189c3f79d19c85f53a628681152b" ]
 ];
