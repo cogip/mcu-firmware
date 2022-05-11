@@ -24,7 +24,7 @@ namespace planners {
 int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &robot_pose)
 {
     // Current final path pose to reach
-    cogip::path::Pose current_path_pos = path_.current_pose();
+    cogip::path::Pose & current_path_pos = path_.current_pose();
     // Pose to reach by the controller
     cogip::cogip_defs::Pose pose_to_reach = ctrl_get_pose_to_reach(ctrl_);
     // Avoidance graph position index. This index increments on each
