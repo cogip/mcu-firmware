@@ -34,25 +34,27 @@ public:
         func_cb_t act_=nullptr          ///< [in] action callback
         ) : cogip_defs::Pose(x, y, O), max_speed_linear_(max_speed_linear), max_speed_angular_(max_speed_angular), allow_reverse_(allow_reverse), act_(act_) {};
 
+    /// Destructor
+    virtual ~Pose() {};
+
     /// Retourn max speed linear.
-    double max_speed_linear() const { return max_speed_linear_; };
+    virtual double max_speed_linear() const { return max_speed_linear_; };
 
     /// Retourn max speed angular.
-    double max_speed_angular() const { return max_speed_angular_; };
+    virtual double max_speed_angular() const { return max_speed_angular_; };
 
     /// Is reverse mode allowed or not.
-    bool allow_reverse() const { return allow_reverse_; };
+    virtual bool allow_reverse() const { return allow_reverse_; };
 
     /// Enable or disable reverse mode.
-    void set_allow_reverse(
+    virtual void set_allow_reverse(
         bool enable               ///< new value for reverse mode
         ) { allow_reverse_ = enable; };
 
-
     /// Execute action callback if set.
-    void act() const { if (act_) act_(); }
+    virtual void act() const { if (act_) act_(); }
 
-private:
+protected:
     double max_speed_linear_;     ///< max speed
     double max_speed_angular_;    ///< max speed
     bool allow_reverse_;          ///< reverse mode
