@@ -57,8 +57,8 @@ static const motor_driver_config_t motor_driver_config[] = {
         .mode = MOTOR_DRIVER_1_DIR_BRAKE,
         .mode_brake = MOTOR_BRAKE_HIGH,
         .pwm_mode = PWM_LEFT,
-        .pwm_frequency = 20000U,
-        .pwm_resolution = 1500U,
+        .pwm_frequency = 100000U,
+        .pwm_resolution = 450U,
         .nb_motors = 1,
         .motors = {
             /* Left motor */
@@ -79,8 +79,8 @@ static const motor_driver_config_t motor_driver_config[] = {
         .mode = MOTOR_DRIVER_1_DIR_BRAKE,
         .mode_brake = MOTOR_BRAKE_HIGH,
         .pwm_mode = PWM_LEFT,
-        .pwm_frequency = 20000U,
-        .pwm_resolution = 1500U,
+        .pwm_frequency = 100000U,
+        .pwm_resolution = 450U,
         .nb_motors = 1,
         .motors = {
             /* Right motor */
