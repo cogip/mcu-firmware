@@ -171,6 +171,9 @@ void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
 
     /* convert to position */
     odometry_update(robot_pose, robot_speed, SEGMENT);
+
+    robot_speed.set_distance(robot_speed.distance() * PULSE_PER_MM);
+    robot_speed.set_angle(robot_speed.angle() * PULSE_PER_DEGREE);
 }
 
 void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose,
