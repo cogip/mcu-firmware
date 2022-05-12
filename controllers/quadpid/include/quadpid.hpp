@@ -72,6 +72,10 @@ typedef struct {
                                                      switch to position reached
                                                      state */
 
+    uint16_t min_angle_for_target_orientation;  /**< Angle approximation to
+                                                     switch to linear
+                                                     correction */
+
     ctrl_regul_t regul;                         /**< Current regulation type */
 } ctrl_quadpid_parameters_t;
 
