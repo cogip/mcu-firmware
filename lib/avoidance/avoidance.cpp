@@ -276,6 +276,7 @@ update_graph_error_finish_pose:
 bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
                                const cogip::cogip_defs::Coords &stop)
 {
+    return false;
     /* Get dynamic obstacle list */
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
     const cogip::obstacles::Polygon &borders = app_get_borders();

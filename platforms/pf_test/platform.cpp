@@ -204,8 +204,8 @@ void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose,
 
 int encoder_read(cogip::cogip_defs::Polar &robot_speed)
 {
-    int32_t left_speed = qdec_read_and_reset(HBRIDGE_MOTOR_LEFT) * QDEC_LEFT_POLARITY;
-    int32_t right_speed = qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
+    int32_t left_speed = qdec_read_and_reset(MOTOR_LEFT) * QDEC_LEFT_POLARITY;
+    int32_t right_speed = qdec_read_and_reset(MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
 
     /* update speed */
     robot_speed.set_distance(((right_speed + left_speed) / 2.0) / PULSE_PER_MM);
@@ -216,8 +216,8 @@ int encoder_read(cogip::cogip_defs::Polar &robot_speed)
 
 void encoder_reset(void)
 {
-    qdec_read_and_reset(HBRIDGE_MOTOR_LEFT);
-    qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
+    qdec_read_and_reset(MOTOR_LEFT);
+    qdec_read_and_reset(MOTOR_RIGHT);
 }
 
 void motor_drive(const cogip::cogip_defs::Polar &command)
@@ -225,8 +225,8 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t right_command = (int16_t) (command.distance() + command.angle());
     int16_t left_command = (int16_t) (command.distance() - command.angle());
 
-    motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_LEFT, left_command);
-    motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_RIGHT, right_command);
+    motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0, left_command);
+    motor_set(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0, right_command);
 }
 
 int pf_is_camp_left(void)
@@ -257,27 +257,28 @@ void pf_init(void)
 #endif /* MODULE_SHELL_PLATFORMS */
 
     /* Debug LED */
-    if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT)) {
-        puts("WARNING: GPIO_DEBUG_LED not initialized!");
-    }
-    gpio_clear(GPIO_DEBUG_LED);
+    //if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT)) {
+    //    puts("WARNING: GPIO_DEBUG_LED not initialized!");
+    //}
+    //gpio_clear(GPIO_DEBUG_LED);
 
-    motor_driver_init(MOTOR_DRIVER_DEV(0));
+    motor_driver_init(MOTOR_DRIVER_DEV(MOTOR_LEFT));
+    motor_driver_init(MOTOR_DRIVER_DEV(MOTOR_RIGHT));
 
     /* Setup qdec periphereal */
-    int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_MODE, NULL, NULL);
+    int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
     if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_LEFT, error);
+        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LEFT, error);
     }
-    error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
+    error = qdec_init(QDEC_DEV(MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
     if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
+        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
 
     /* Init odometry */
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
-    gpio_clear(GPIO_DEBUG_LED);
+    //gpio_clear(GPIO_DEBUG_LED);
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
 
@@ -309,6 +310,7 @@ void pf_init_tasks(void)
         uartpb->start_reader();
         output_message.set_reset(true);
         uartpb->send_message(output_message);
+        cogip::tracefd::out.logf("UART initialization success: %d\n", uartpb_res);
     }
 
     wizard = new cogip::wizard::Wizard(uartpb);

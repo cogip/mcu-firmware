@@ -81,17 +81,17 @@ static impulse_cfg_t impulse_cfg__tf_ident_angular = {
 
 static impulse_cfg_t impulse_cfg__speed_pid_linear = {
     .cycle_start_mot = 1 /* sec */,
-    .cycle_end_mot = 3 /* sec */,
-    .cycle_end_func = 5 /* sec */,
-    .impulse_max_value = MAX_SPEED,
+    .cycle_end_mot = 4 /* sec */,
+    .cycle_end_func = 6 /* sec */,
+    .impulse_max_value = NORMAL_SPEED,
     .is_linear = TRUE,
 };
 
 static impulse_cfg_t impulse_cfg__speed_pid_angular = {
     .cycle_start_mot = 1 /* sec */,
-    .cycle_end_mot = 3 /* sec */,
-    .cycle_end_func = 5 /* sec */,
-    .impulse_max_value = MAX_SPEED / 2,
+    .cycle_end_mot = 11 /* sec */,
+    .cycle_end_func = 14 /* sec */,
+    .impulse_max_value = MAX_SPEED,
     .is_linear = FALSE,
 };
 

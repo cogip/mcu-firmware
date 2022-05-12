@@ -87,8 +87,8 @@
  * @name Acceleration and speed profiles
  * @{
  */
-#define MAX_ACC_M_PER_S2    0.25                                                 /**< Maximum acceleration (m/s²) */
-#define MAX_SPEED_M_PER_S   0.75                                                 /**< Maximum speed (m/s) */
+#define MAX_ACC_M_PER_S2    0.15                                                /**< Maximum acceleration (m/s²) */
+#define MAX_SPEED_M_PER_S   2                                                   /**< Maximum speed (m/s) */
 
 #define MAX_ACC             ((MAX_ACC_M_PER_S2 * 1000 * PULSE_PER_MM) \
                             * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) */

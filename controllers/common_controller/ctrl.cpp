@@ -213,6 +213,9 @@ void *task_ctrl_update(void *arg)
         ctrl_post_mode_cb_t post_mode_cb = ctrl->pf_conf->ctrl_post_mode_cb[current_mode];
 
         if (post_mode_cb) {
+            if (ctrl_is_pose_reached(ctrl)) {
+                motor_command = {0, 0};
+            }
             post_mode_cb(ctrl->control.pose_current, ctrl->control.speed_current, motor_command);
         }
 

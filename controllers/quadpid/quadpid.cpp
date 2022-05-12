@@ -208,6 +208,7 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
         && fabs(pos_err.distance()) > ctrl_quadpid->quadpid_params.min_distance_for_angular_switch) {
 
         /* should we go reverse? */
+        DEBUG("POS_ERR ANGLE = %lf\n", fabs(pos_err.angle()));
         if (ctrl_quadpid->control.allow_reverse && fabs(pos_err.angle()) > 90) {
             pos_err.set_distance(- pos_err.distance());
 
@@ -220,7 +221,7 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
         }
 
         /* if target point direction angle is too important, bot rotates on its starting point */
-        if (fabs(pos_err.angle()) > ctrl_quadpid->quadpid_params.min_angle_for_pose_reached) {
+        if (fabs(pos_err.angle()) > ctrl_quadpid->quadpid_params.min_angle_for_target_orientation) {
             ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_PRE_ANGL;
             pos_err.set_distance(0);
             pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
@@ -276,8 +277,8 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
                                              speed_order.distance(),
                                              speed_current.distance()));
     command.set_angle(limit_speed_command(command.angle(),
-                                          speed_order.angle(),
-                                          speed_current.angle()));
+                                              speed_order.angle(),
+                                              speed_current.angle()));
 
     /* ********************** speed pid controller ********************* */
     return ctrl_quadpid_speed(ctrl_quadpid, command, speed_current);
