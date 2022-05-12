@@ -212,7 +212,7 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
 
         /* should we go reverse? */
         if (ctrl_quadpid->control.allow_reverse && fabs(pos_err.angle()) > 90) {
-            pos_err.set_distance(pos_err.distance() - pos_err.distance());
+            pos_err.set_distance(- pos_err.distance());
 
             if (pos_err.angle() < 0) {
                 pos_err.set_angle(pos_err.angle() + 180);
