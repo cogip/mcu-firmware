@@ -220,7 +220,7 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
         }
 
         /* if target point direction angle is too important, bot rotates on its starting point */
-        if (fabs(pos_err.angle()) > ctrl_quadpid->quadpid_params.min_angle_for_pose_reached) {
+        if (fabs(pos_err.angle()) > ctrl_quadpid->quadpid_params.min_angle_for_target_orientation) {
             ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_PRE_ANGL;
             pos_err.set_distance(0);
             pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);

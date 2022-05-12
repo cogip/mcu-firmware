@@ -35,5 +35,6 @@ static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
 
     .min_distance_for_angular_switch = 3,       // mm,
     .min_angle_for_pose_reached = 2,            // deg,
+    .min_angle_for_target_orientation = 2,      // deg,
     .regul = CTRL_REGUL_POSE_DIST,
 };

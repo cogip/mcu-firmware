@@ -63,6 +63,7 @@ static ctrl_quadpid_t ctrl_quadpid =
         .angular_pose_pid = { 0, 0, 0, 0, 0 },
         .min_distance_for_angular_switch = 0,
         .min_angle_for_pose_reached = 0,
+        .min_angle_for_target_orientation = 0,
         .regul = CTRL_REGUL_IDLE
     }
 };
