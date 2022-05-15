@@ -40,6 +40,12 @@ void Obstacle::pb_copy(PB_Message &message) const
     }
 }
 
+void Obstacle::set_center(cogip_defs::Coords &center)
+{
+    center_ = center;
+    update_bounding_box();
+}
+
 } // namespace obstacles
 
 } // namespace cogip
