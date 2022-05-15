@@ -23,7 +23,7 @@ static int pln_cmd_go_next_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    app_get_path()++;
+    app_get_path().next();
 
     return EXIT_SUCCESS;
 }

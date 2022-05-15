@@ -56,7 +56,7 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
                 current_path_pos.act();
                 DEBUG("planner: action finished!\n");
                 DEBUG("planner: Increment position.\n");
-                path_++;
+                path_.next();
             }
             // Update current path targeted position in case it has changed
             current_path_pos = path_.current_pose();
@@ -90,7 +90,7 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
             goto trajectory_get_route_update_error;
         }
         // Increment the position to reach in the path
-        path_++;
+        path_.unreachable();
         current_path_pos = path_.current_pose();
         // As current path pose has changed, avoidance graph needs to be recomputed
         avoidance_update = true;
@@ -115,7 +115,7 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
                 if (!allow_change_path_pose_) {
                     goto trajectory_get_route_update_error;
                 }
-                path_++;
+                path_.unreachable();
                 if (current_path_pos == path_.current_pose()) {
                     goto trajectory_get_route_update_error;
                 }

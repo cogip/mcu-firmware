@@ -54,6 +54,12 @@ public:
     /// Mirror all points in path to match the two possible sides of the game.
     virtual void horizontal_mirror_all_poses();
 
+    /// Indicate that the current position is unreachable.
+    virtual void unreachable() { next(); };
+
+    /// Go to next position.
+    virtual void next() { (*this)++; };
+
 protected:
     bool play_in_loop_;                  ///< play path in loop
     size_t current_pose_index_;          ///< index of the current position in the path
