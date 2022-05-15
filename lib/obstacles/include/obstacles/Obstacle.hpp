@@ -90,10 +90,17 @@ public:
     /// Return obstacle circumscribed circle radius.
     double radius() const { return radius_; };
 
+    /// Return true if obstacle is enabled, false otherwise.
+    bool enabled() const { return enabled_; };
+
+    /// Enable or disable obstacle.
+    void enable(bool enabled) { enabled_ = enabled; };
+
 protected:
     cogip_defs::Coords center_;           ///< obstacle center
     double radius_;                       ///< obstacle circumscribed circle radius
     cogip_defs::Polygon bounding_box_;    ///< Precomputed bounding box for avoidance
+    bool enabled_;                        ///< Obstacle enabled or not
 };
 
 } // namespace obstacles

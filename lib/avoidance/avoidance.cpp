@@ -54,6 +54,9 @@ static void _validate_obstacles_points(void)
 
     for (auto l: cogip::obstacles::all_obstacles) {
         for (auto obstacle: *l) {
+            if (! obstacle->enabled()) {
+                continue;
+            }
 
             /* Check if obstacle center is inside borders */
             if (!borders.is_point_inside(obstacle->center())) {
@@ -98,6 +101,9 @@ static void _build_avoidance_graph(void)
             /* Check if that segment crosses a polygon */
             for (auto l: cogip::obstacles::all_obstacles) {
                 for (auto obstacle: *l) {
+                    if (! obstacle->enabled()) {
+                        continue;
+                    }
                     if (obstacle->is_segment_crossing(_valid_points[p],
                                                       _valid_points[p2])) {
                         collide = true;

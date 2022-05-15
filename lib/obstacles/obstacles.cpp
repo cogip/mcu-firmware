@@ -27,12 +27,12 @@ void print_all_json(cogip::tracefd::File &out)
     out.printf("[");
 
     for (auto l: all_obstacles) {
-        if (nb_obstacles > 0 && l->size() > 0) {
+        if (nb_obstacles > 0 && l->enabled_obstacles() > 0) {
             out.printf(",");
         }
 
         l->print_json(out);
-        nb_obstacles += l->size();
+        nb_obstacles += l->enabled_obstacles();
     }
     out.printf("]");
 }
@@ -49,6 +49,9 @@ bool is_point_in_obstacles(const cogip_defs::Coords &p, const Obstacle *filter)
 {
     for (auto obstacles: all_obstacles) {
         for (auto obstacle: *obstacles) {
+            if (! obstacle->enabled()) {
+                continue;
+            }
             if (filter == obstacle) {
                 continue;
             }
