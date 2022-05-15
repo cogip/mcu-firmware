@@ -87,6 +87,9 @@ public:
     /// Return obstacle center.
     const cogip_defs::Coords &center() const { return center_; };
 
+    /// Set obstacle center.
+    void set_center(cogip_defs::Coords &center);
+
     /// Return obstacle circumscribed circle radius.
     double radius() const { return radius_; };
 
