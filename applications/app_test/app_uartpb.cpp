@@ -4,8 +4,12 @@
 
 #include "uartpb_config.hpp"
 
+namespace cogip {
+
+namespace app {
+
 // Read incoming Protobuf message and call the corresponding message handler
-void app_message_handler(cogip::uartpb::ReadBuffer &buffer)
+void app_uartpb_message_handler(cogip::uartpb::ReadBuffer &buffer)
 {
     PB_InputMessage *message = new PB_InputMessage();
     message->deserialize(buffer);
@@ -35,3 +39,7 @@ void app_message_handler(cogip::uartpb::ReadBuffer &buffer)
     }
     delete message;
 }
+
+} // namespace app
+
+} // namespace cogip
