@@ -68,22 +68,6 @@ static void _init_samples_obstacles(void)
     obstacles->push_back(new SampleObstacle({ -600, 795 }, 75));
 }
 
-static int cmd_wizard(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-    app_wizard();
-    return 0;
-}
-
-static int cmd_samples(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-    app_samples_request();
-    return 0;
-}
-
 int main(void)
 {
     pf_init();
@@ -94,12 +78,6 @@ int main(void)
 
     _init_excavation_sites_obstacles();
     _init_samples_obstacles();
-
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("_wizard", "Run Wizard", cmd_wizard));
-
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("_samples", "Get detected samples", cmd_samples));
 
     // Start shell
     cogip::shell::start();

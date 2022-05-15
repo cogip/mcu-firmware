@@ -1,6 +1,10 @@
 #include "platform.hpp"
 
-cogip::wizard::Wizard::PB_Message wizard_message;
+namespace cogip {
+
+namespace app {
+
+static cogip::wizard::Wizard::PB_Message wizard_message;
 
 void app_wizard(void)
 {
@@ -194,3 +198,7 @@ void app_wizard(void)
 
     puts("Wizard done");
 }
+
+} // namespace app
+
+} // namespace cogip
