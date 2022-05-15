@@ -257,7 +257,7 @@ void pf_init(void)
 {
     /* Initialize UARTPB */
     uartpb = new cogip::uartpb::UartProtobuf(
-        app_message_handler,
+        cogip::app::app_uartpb_message_handler,
         UART_DEV(1)
         );
 

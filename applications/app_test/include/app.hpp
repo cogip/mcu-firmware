@@ -3,8 +3,8 @@
 // Project includes
 #include "app_borders.hpp"
 #include "path/Path.hpp"
-#include "uartpb/ReadBuffer.hpp"
 #include "app_samples.hpp"
+#include "app_uartpb.hpp"
 
 /*
  * Machine parameters
@@ -14,9 +14,6 @@
 
 /// Return the path of current application.
 cogip::path::Path &app_get_path(void);
-
-/// Message handler for incoming Protobuf messages.
-void app_message_handler(cogip::uartpb::ReadBuffer &buffer);
 
 void app_init(void);
 void app_init_tasks(void);
