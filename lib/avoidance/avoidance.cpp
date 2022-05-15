@@ -50,7 +50,7 @@ static bool _is_avoidance_computed = false;
  */
 static void _validate_obstacles_points(void)
 {
-    const cogip::obstacles::Polygon &borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     for (auto l: cogip::obstacles::all_obstacles) {
         for (auto obstacle: *l) {
@@ -247,7 +247,7 @@ bool avoidance_build_graph(const cogip::cogip_defs::Coords &s, const cogip::cogi
     start_pose = s;
     finish_pose = f;
     _is_avoidance_computed = false;
-    const cogip::obstacles::Polygon &borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     if (!borders.is_point_inside(finish_pose)) {
         goto update_graph_error_finish_pose;
@@ -285,7 +285,7 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
 {
     /* Get dynamic obstacle list */
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
-    const cogip::obstacles::Polygon &borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     /* Check if that segment crosses a polygon */
     for (auto obstacle: *obstacles) {

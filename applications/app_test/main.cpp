@@ -92,7 +92,6 @@ int main(void)
     pf_init_tasks();
     app_init_tasks();
 
-    _init_border_obstacles();
     _init_excavation_sites_obstacles();
     _init_samples_obstacles();
 
