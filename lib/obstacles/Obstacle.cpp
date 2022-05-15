@@ -12,7 +12,7 @@ namespace obstacles {
 
 Obstacle::Obstacle(
     const cogip_defs::Coords &center, double radius)
-    : center_(center), radius_(radius)
+    : center_(center), radius_(radius), enabled_(true)
 {
 }
 
