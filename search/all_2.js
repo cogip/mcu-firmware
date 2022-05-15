@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['camp_5fleft_40',['CAMP_LEFT',['../group__platform__cortex.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'CAMP_LEFT():&#160;platform.hpp'],['../group__platforms__pf__test.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'CAMP_LEFT():&#160;platform.hpp']]],
-  ['camp_5fright_41',['CAMP_RIGHT',['../group__platform__cortex.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'CAMP_RIGHT():&#160;platform.hpp'],['../group__platforms__pf__test.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'CAMP_RIGHT():&#160;platform.hpp']]],
+  ['camp_5fleft_40',['CAMP_LEFT',['../group__platform__cortex.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'CAMP_LEFT():&#160;platform.hpp'],['../group__platforms__pegasus.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'CAMP_LEFT():&#160;platform.hpp'],['../group__platforms__pf__test.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'CAMP_LEFT():&#160;platform.hpp']]],
+  ['camp_5fright_41',['CAMP_RIGHT',['../group__platform__cortex.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'CAMP_RIGHT():&#160;platform.hpp'],['../group__platforms__pegasus.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'CAMP_RIGHT():&#160;platform.hpp'],['../group__platforms__pf__test.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'CAMP_RIGHT():&#160;platform.hpp']]],
   ['center_42',['center',['../classcogip_1_1obstacles_1_1Obstacle.html#a7a56e847bb3343367b87e59865bdd2a2',1,'cogip::obstacles::Obstacle']]],
   ['center_5f_43',['center_',['../classcogip_1_1obstacles_1_1Obstacle.html#a3307d0d2f744ecfa67a6be367e33d635',1,'cogip::obstacles::Obstacle']]],
   ['channel_5fnumof_44',['channel_numof',['../structpca9548__conf__t.html#ade4b83f3f9b3caa9fe2cb9a4bc7e0f03',1,'pca9548_conf_t']]],

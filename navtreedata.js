@@ -53,9 +53,10 @@ var NAVTREEINDEX =
 [
 ".html",
 "cortex_2lidar__obstacles_8hpp_source.html",
-"group__driver__lds01__dma.html#ga31642b7f0017816d639ad0912a7c85c0",
-"group__platform__cortex.html#ga1dc63a69bc06342aca5ca9cb42e784fa",
-"group__sys__shmem.html"
+"group__driver__lds01__dma.html#ga2c25f198ab9420b51d63dc850a2c4aeb",
+"group__platform__cortex.html#ga128c544be070e5eb2e766506e28d9d91",
+"group__platforms__pf__test.html#ga98dfe5222245c9d0a4f12c04c3c3f4f5",
+"structctrl__platform__configuration__t.html#ae31b73291c6d84a716dbea00bb156b8e"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hardware_20platform_970',['Hardware platform',['../group__platforms.html',1,'']]]
+  ['hardware_20platform_975',['Hardware platform',['../group__platforms.html',1,'']]]
 ];

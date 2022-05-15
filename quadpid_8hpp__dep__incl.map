@@ -1,6 +1,7 @@
 <map id="controllers/quadpid/include/quadpid.hpp" name="controllers/quadpid/include/quadpid.hpp">
-<area shape="rect" id="node1" title="QuadPID controllers API and datas." alt="" coords="209,5,366,47"/>
+<area shape="rect" id="node1" title="QuadPID controllers API and datas." alt="" coords="314,5,471,47"/>
 <area shape="rect" id="node2" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="5,95,172,151"/>
 <area shape="rect" id="node3" href="$cortex_2include_2platform_8hpp.html" title="Define hardware properties of Cortex platform. Units:" alt="" coords="197,102,378,143"/>
-<area shape="rect" id="node4" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="403,102,588,143"/>
+<area shape="rect" id="node4" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="402,102,597,143"/>
+<area shape="rect" id="node5" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="621,102,807,143"/>
 </map>

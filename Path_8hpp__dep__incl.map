@@ -1,8 +1,9 @@
 <map id="lib/path/include/path/Path.hpp" name="lib/path/include/path/Path.hpp">
-<area shape="rect" id="node1" title="Path declaration." alt="" coords="371,5,526,47"/>
+<area shape="rect" id="node1" title="Path declaration." alt="" coords="477,5,631,47"/>
 <area shape="rect" id="node2" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="151,95,333,136"/>
 <area shape="rect" id="node5" href="$cortex_2include_2platform_8hpp.html" title="Define hardware properties of Cortex platform. Units:" alt="" coords="358,95,539,136"/>
-<area shape="rect" id="node6" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="564,95,749,136"/>
+<area shape="rect" id="node6" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="563,95,758,136"/>
+<area shape="rect" id="node7" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="783,95,968,136"/>
 <area shape="rect" id="node3" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="5,184,239,225"/>
 <area shape="rect" id="node4" href="$shell__planners_8hpp_source.html" title=" " alt="" coords="263,184,461,225"/>
 </map>
