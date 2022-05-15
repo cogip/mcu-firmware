@@ -1,7 +1,7 @@
 #pragma once
 
 // Project includes
-#include "obstacles/Polygon.hpp"
+#include "app_borders.hpp"
 #include "path/Path.hpp"
 #include "uartpb/ReadBuffer.hpp"
 #include "app_samples.hpp"
@@ -11,9 +11,6 @@
  */
 
 #define USART_CONSOLE   USARTC0
-
-/// Return a polygon obstacle delimitng the table borders.
-const cogip::obstacles::Polygon &app_get_borders(void);
 
 /// Return the path of current application.
 cogip::path::Path &app_get_path(void);
