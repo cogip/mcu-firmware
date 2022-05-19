@@ -4,6 +4,7 @@
 #include "app_borders.hpp"
 #include "app_camp.hpp"
 #include "path/Path.hpp"
+#include "app_obstacles.hpp"
 #include "app_samples.hpp"
 #include "app_shell.hpp"
 #include "app_uartpb.hpp"
