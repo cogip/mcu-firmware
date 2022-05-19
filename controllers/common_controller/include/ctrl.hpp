@@ -170,11 +170,22 @@ typedef struct {
  */
 typedef int (*ctrl_mode_cb_t)(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
 
+
+/**
+ * @brief   Controller callback when a new pose to reach is set.
+ *
+ * @param[in]   ctrl            Controller object
+ *
+ * @return
+ */
+typedef void (*ctrl_set_pose_to_reach_cb_t)(ctrl_t *ctrl);
+
 /**
  * @brief   Controller modes callbacks definitions
  */
 typedef struct {
-    ctrl_mode_cb_t ctrl_mode_cb[CTRL_MODE_NUMOF];   /**< Modes callbacks */
+    ctrl_mode_cb_t ctrl_mode_cb[CTRL_MODE_NUMOF];       /**< Modes callbacks */
+    ctrl_set_pose_to_reach_cb_t  set_pose_to_reach_cb;  /**< Set new pose to reach callback */
 } ctrl_configuration_t;
 
 /**
