@@ -194,11 +194,11 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
     const cogip::cogip_defs::Polar &speed_order = ctrl_get_speed_order((ctrl_t *)ctrl_quadpid);
 
     /* ******************** position pid ctrl ******************** */
-    /* compute position error */
 
     /* get next pose to reach */
     cogip::cogip_defs::Pose pose_order = ctrl_get_pose_to_reach((ctrl_t *)ctrl_quadpid);
 
+    /* compute position error */
     cogip::cogip_defs::Polar pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
     DEBUG("@robot@,%u,%" PRIu32 ",@pose_order@,%.2f,%.2f,%.2f\n",
