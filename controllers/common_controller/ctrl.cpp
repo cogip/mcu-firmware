@@ -75,7 +75,7 @@ const cogip::cogip_defs::Pose &ctrl_get_pose_current(ctrl_t *ctrl)
     return ctrl->control.pose_current;
 }
 
-void ctrl_set_pose_to_reach(ctrl_t *ctrl, const cogip::cogip_defs::Pose &pose_order)
+void ctrl_set_pose_to_reach(ctrl_t *ctrl, cogip::cogip_defs::Pose pose_order)
 {
     DEBUG("ctrl: New pose to reach: x=%lf, y=%lf, O=%lf\n",
           pose_order.x(), pose_order.y(), pose_order.O());
