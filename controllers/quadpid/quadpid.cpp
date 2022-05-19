@@ -232,6 +232,12 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
             pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
         }
         else {
+            if (ctrl_quadpid->quadpid_params.regul == CTRL_REGUL_POSE_PRE_ANGL) {
+                pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
+                pid_reset(&ctrl_quadpid->quadpid_params.angular_pose_pid);
+                pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
+                pid_reset(&ctrl_quadpid->quadpid_params.angular_speed_pid);
+            }
             ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST;
         }
     }
