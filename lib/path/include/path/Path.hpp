@@ -42,8 +42,11 @@ public:
     /// @return new position
     size_t operator--(int);
 
-    /// Return maximum speed to use in order to go to the current position.
-    double current_max_speed();
+    /// Return maximum linear speed to use in order to go to the current position.
+    double current_max_speed_linear();
+
+    /// Return maximum angular speed to use in order to go to the current position.
+    double current_max_speed_angular();
 
     /// Mirror all points in path to match the two possible sides of the game.
     void horizontal_mirror_all_poses();

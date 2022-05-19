@@ -12,15 +12,18 @@
 static std::vector<cogip::path::Pose> poses = {
     {
         -1200, 700, 0,
-        MAX_SPEED
+        MAX_SPEED_LINEAR,
+        MAX_SPEED_ANGULAR,
     },
     {
         1200, 700, 180,
-        MAX_SPEED
+        MAX_SPEED_LINEAR,
+        MAX_SPEED_ANGULAR,
     },
     {
         -1200, 700, 0,
-        MAX_SPEED
+        MAX_SPEED_LINEAR,
+        MAX_SPEED_ANGULAR,
     },
 };
 

@@ -87,16 +87,24 @@
  * @name Acceleration and speed profiles
  * @{
  */
-#define MAX_ACC_M_PER_S2    0.15                                                /**< Maximum acceleration (m/s²) */
-#define MAX_SPEED_M_PER_S   2                                                   /**< Maximum speed (m/s) */
+#define MAX_ACC_M_PER_S2    0.2                                                 /**< Maximum acceleration (m/s²) */
+#define MAX_SPEED_M_PER_S   1.2                                                 /**< Maximum speed (m/s) */
+#define MAX_ACC_DEG_PER_S2  60                                                  /**< Maximum acceleration (deg/s²) */
+#define MAX_SPEED_DEG_PER_S 270                                                 /**< Maximum speed (deg/s) */
 
-#define MAX_ACC             ((MAX_ACC_M_PER_S2 * 1000 * PULSE_PER_MM) \
+#define MAX_ACC_LINEAR      ((MAX_ACC_M_PER_S2 * 1000) \
                             * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) */
-#define MAX_SPEED           ((MAX_SPEED_M_PER_S * 1000 * PULSE_PER_MM) \
+#define MAX_SPEED_LINEAR    ((MAX_SPEED_M_PER_S * 1000) \
+                            * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum speed (pulses/THREAD_PERIOD_INTERVAL) */
+#define MAX_ACC_ANGULAR     (MAX_ACC_DEG_PER_S2 \
+                            * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) */
+#define MAX_SPEED_ANGULAR   (MAX_SPEED_DEG_PER_S \
                             * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum speed (pulses/THREAD_PERIOD_INTERVAL) */
 
-#define LOW_SPEED           (MAX_SPEED / 4)                                     /**< Low speed (mm/THREAD_PERIOD_INTERVAL) */
-#define NORMAL_SPEED        (MAX_SPEED / 2)                                     /**< Normal speed (mm/THREAD_PERIOD_INTERVAL) */
+#define LOW_SPEED_LINEAR        (MAX_SPEED_LINEAR / 4)                          /**< Low speed (mm/THREAD_PERIOD_INTERVAL) */
+#define NORMAL_SPEED_LINEAR     (MAX_SPEED_LINEAR / 2)                          /**< Normal speed (mm/THREAD_PERIOD_INTERVAL) */
+#define LOW_SPEED_ANGULAR       (MAX_SPEED_ANGULAR / 4)                         /**< Low speed (mm/THREAD_PERIOD_INTERVAL) */
+#define NORMAL_SPEED_ANGULAR    (MAX_SPEED_ANGULAR / 2)                         /**< Normal speed (mm/THREAD_PERIOD_INTERVAL) */
 /** @} */
 
 /**

@@ -47,24 +47,26 @@ static cogip::cogip_defs::Polar compute_position_error(const ctrl_quadpid_t *ctr
 /**
  * \fn limit_speed_command
  * \brief limit speed command to maximum acceleration and speed setpoint
- * \param command : computed speed by position PID controller
- * \param final_speed : maximum speed
- * \param real_speed
+ * \param command       computed speed by position PID controller
+ * \param final_speed   maximum speed
+ * \param real_speed    real speed
+ * \param max_acc       maximum acceleration
  * \return speed_order
  */
 static double limit_speed_command(double command,
                                   double final_speed,
-                                  double real_speed)
+                                  double real_speed,
+                                  double max_acc)
 {
     /* limit speed command (maximum acceleration) */
     double a = command - real_speed;
 
-    if (a > MAX_ACC) {
-        command = real_speed + MAX_ACC;
+    if (a > max_acc) {
+        command = real_speed + max_acc;
     }
 
-    if (a < -MAX_ACC) {
-        command = real_speed - MAX_ACC;
+    if (a < -max_acc) {
+        command = real_speed - max_acc;
     }
 
     /* limit speed command (speed setpoint) */
@@ -173,10 +175,10 @@ int ctrl_quadpid_running_speed(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
     /* limit speed command->*/
     command.set_distance(limit_speed_command(command.distance(),
                                              fabs(speed_order.distance()),
-                                             speed_current.distance()));
+                                             speed_current.distance(), MAX_ACC_LINEAR));
     command.set_angle(limit_speed_command(command.angle(),
                                           fabs(speed_order.angle()),
-                                          speed_current.angle()));
+                                          speed_current.angle(), MAX_ACC_ANGULAR));
 
     /* ********************** speed pid controller ********************* */
     return ctrl_quadpid_speed((ctrl_quadpid_t *)ctrl, command, speed_current);
@@ -277,10 +279,10 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
     /* limit speed command->*/
     command.set_distance(limit_speed_command(command.distance(),
                                              speed_order.distance(),
-                                             speed_current.distance()));
+                                             speed_current.distance(), MAX_ACC_LINEAR));
     command.set_angle(limit_speed_command(command.angle(),
                                           speed_order.angle(),
-                                          speed_current.angle()));
+                                          speed_current.angle(), MAX_ACC_ANGULAR));
 
     /* ********************** speed pid controller ********************* */
     return ctrl_quadpid_speed(ctrl_quadpid, command, speed_current);

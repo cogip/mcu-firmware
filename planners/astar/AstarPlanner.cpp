@@ -183,8 +183,8 @@ void *AstarPlanner::task_planner()
         current_path_pos = path_.current_pose();
 
         // Update speed order to max speed defined value in the new point to reach
-        speed_order.set_distance(path_.current_max_speed());
-        speed_order.set_angle(speed_order.distance());
+        speed_order.set_distance(path_.current_max_speed_linear());
+        speed_order.set_angle(path_.current_max_speed_angular());
 
         // reverse gear selection is granted per point to reach, in path
         ctrl_set_allow_reverse(ctrl_, current_path_pos.allow_reverse());
