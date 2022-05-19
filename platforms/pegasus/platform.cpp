@@ -223,12 +223,12 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t right_command = (int16_t) (command.distance() + command.angle());
     int16_t left_command = (int16_t) (command.distance() - command.angle());
 
-    if ((! right_command) && (! left_command)) {
+    if ((right_command == 0) && (left_command == 0)) {
         motor_brake(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0);
         motor_brake(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0);
     }
     else {
-        motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT)/2, 0, left_command);
+        motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0, left_command);
         motor_set(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0, right_command);
     }
 
