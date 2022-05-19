@@ -3,6 +3,7 @@
 // Project includes
 #include "app_borders.hpp"
 #include "app_camp.hpp"
+#include "app_context.hpp"
 #include "path/Path.hpp"
 #include "app_obstacles.hpp"
 #include "app_samples.hpp"
