@@ -265,8 +265,10 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
             pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
             pid_reset(&ctrl_quadpid->quadpid_params.angular_speed_pid);
 
-            ctrl_set_pose_reached((ctrl_t *) ctrl_quadpid);
-            ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
+            ctrl_set_pose_reached(ctrl);
+
+            command = {0, 0};
+            return 0;
         }
     }
 
