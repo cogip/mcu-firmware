@@ -79,9 +79,12 @@ static double limit_speed_command(double command,
     return command;
 }
 
-/**
- *
- */
+void ctrl_quadpid_set_pose_to_reach_cb(ctrl_t *ctrl) {
+    ctrl_quadpid_t *ctrl_quadpid = (ctrl_quadpid_t *)ctrl;
+
+    ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST;
+}
+
 int ctrl_quadpid_speed(ctrl_quadpid_t *ctrl,
                        cogip::cogip_defs::Polar &command,
                        const cogip::cogip_defs::Polar &speed_current)

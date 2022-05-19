@@ -91,6 +91,15 @@ typedef struct {
 } ctrl_quadpid_t;
 
 /**
+ * @brief   QuadPID controller callback when a new pose to reach is set.
+ *
+ * @param[in]   ctrl            Controller object
+ *
+ * @return
+ */
+void ctrl_quadpid_set_pose_to_reach_cb(ctrl_t *ctrl);
+
+/**
  * @brief   Speed regulation function.
  *
  * Perform the linear and angular speeds regulation according to the given
@@ -173,7 +182,8 @@ static const ctrl_configuration_t ctrl_quadpid_conf = {
         ctrl_quadpid_ingame,        // CTRL_MODE_RUNNING
         ctrl_quadpid_running_speed, // CTRL_MODE_RUNNING_SPEED
         ctrl_quadpid_nopid          // CTRL_MODE_PASSTHROUGH
-    }
+    },
+    .set_pose_to_reach_cb = ctrl_quadpid_set_pose_to_reach_cb,
 };
 
 /** @} */
