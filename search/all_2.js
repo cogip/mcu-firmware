@@ -76,7 +76,8 @@ var searchData=
   ['current_5fmenu_113',['current_menu',['../shell__menu_8hpp.html#a4f4d0b0e4ef2462dcb7fe3bffb66c05b',1,'cogip::shell']]],
   ['current_5fmode_114',['current_mode',['../structctrl__control__t.html#ab90d024b5add80decab75bd9a27ceb10',1,'ctrl_control_t']]],
   ['current_5fpose_115',['current_pose',['../classcogip_1_1path_1_1Path.html#a8903791857430693d86f88009044baa5',1,'cogip::path::Path']]],
-  ['cogip_20common_20definitions_116',['Cogip common definitions',['../group__lib__cogip__defs.html',1,'']]],
-  ['cortex_20platform_117',['Cortex platform',['../group__platform__cortex.html',1,'']]],
-  ['common_20platform_20shell_118',['Common platform shell',['../group__platforms__shell.html',1,'']]]
+  ['cogip_20vacuum_20pump_20driver_116',['COGIP vacuum pump driver',['../group__driver__vacuum__pump.html',1,'']]],
+  ['cogip_20common_20definitions_117',['Cogip common definitions',['../group__lib__cogip__defs.html',1,'']]],
+  ['cortex_20platform_118',['Cortex platform',['../group__platform__cortex.html',1,'']]],
+  ['common_20platform_20shell_119',['Common platform shell',['../group__platforms__shell.html',1,'']]]
 ];

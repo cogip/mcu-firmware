@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['wizard_540',['Wizard',['../classcogip_1_1wizard_1_1Wizard.html',1,'cogip::wizard']]],
-  ['writebuffer_541',['WriteBuffer',['../classcogip_1_1uartpb_1_1WriteBuffer.html',1,'cogip::uartpb']]]
+  ['vacuum_5fpump_5fparams_5ft_550',['vacuum_pump_params_t',['../structvacuum__pump__params__t.html',1,'']]]
 ];

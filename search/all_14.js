@@ -1,11 +1,10 @@
 var searchData=
 [
-  ['wizard_20module_491',['Wizard module',['../group__lib__wizard.html',1,'']]],
-  ['wheels_5fdistance_492',['wheels_distance',['../classPlatform.html#a17eab1417c9db966f0e7ab53dac3ff9d',1,'Platform::wheels_distance()'],['../group__platform__cortex.html#gaf84ab689cafbbd54fd9d5f3b7e376d6f',1,'WHEELS_DISTANCE():&#160;platform.hpp'],['../group__platforms__pegasus.html#gaf84ab689cafbbd54fd9d5f3b7e376d6f',1,'WHEELS_DISTANCE():&#160;platform.hpp'],['../group__platforms__pf__test.html#gaf84ab689cafbbd54fd9d5f3b7e376d6f',1,'WHEELS_DISTANCE():&#160;platform.hpp']]],
-  ['wizard_493',['Wizard',['../classcogip_1_1wizard_1_1Wizard.html',1,'cogip::wizard::Wizard'],['../classcogip_1_1wizard_1_1Wizard.html#a9f8f1c72d4feb779e0415ad4706d76a1',1,'cogip::wizard::Wizard::Wizard()']]],
-  ['wizard_2ehpp_494',['Wizard.hpp',['../Wizard_8hpp.html',1,'']]],
-  ['wizard_5fname_5fmax_5flength_495',['WIZARD_NAME_MAX_LENGTH',['../group__lib__wizard.html#ga4b40753fd51245b8b150805686135e12',1,'Wizard.hpp']]],
-  ['wizard_5frep_5fmax_496',['WIZARD_REP_MAX',['../group__lib__wizard.html#ga3f0252a2b7d4f6acfe2eccdf79352e9a',1,'Wizard.hpp']]],
-  ['writebuffer_497',['WriteBuffer',['../classcogip_1_1uartpb_1_1WriteBuffer.html',1,'cogip::uartpb::WriteBuffer'],['../classcogip_1_1uartpb_1_1WriteBuffer.html#af6bf93218ba473d486bdde2c051fc60e',1,'cogip::uartpb::WriteBuffer::WriteBuffer()']]],
-  ['writebuffer_2ehpp_498',['WriteBuffer.hpp',['../WriteBuffer_8hpp.html',1,'']]]
+  ['vacuum_5fpump_2eh_494',['vacuum_pump.h',['../vacuum__pump_8h.html',1,'']]],
+  ['vacuum_5fpump_5finit_495',['vacuum_pump_init',['../group__driver__vacuum__pump.html#gac125820d976df6d6f630732411b32145',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5fis_5funder_5fpressure_496',['vacuum_pump_is_under_pressure',['../group__driver__vacuum__pump.html#gad7fc52108572dd504e22ecdbaadafa3c',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5fparams_5ft_497',['vacuum_pump_params_t',['../structvacuum__pump__params__t.html',1,'']]],
+  ['vacuum_5fpump_5fstart_498',['vacuum_pump_start',['../group__driver__vacuum__pump.html#gac06fe9bdd82b72bf75ad78f62af8d975',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5fstop_499',['vacuum_pump_stop',['../group__driver__vacuum__pump.html#gadd86e5b7ab43dcd6484c62f7be6cd81e',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5ft_500',['vacuum_pump_t',['../group__driver__vacuum__pump.html#gad99ecfeec89c500f08fb83686865bb7a',1,'vacuum_pump.h']]]
 ];

@@ -1,8 +1,9 @@
 <map id="Drivers" name="Drivers">
-<area shape="rect" id="node1" href="$group__driver__lds01__dma.html" title="LDS01 (aka HLS&#45;LFCD2) LiDAR driver." alt="" coords="141,5,289,31"/>
-<area shape="rect" id="node2" href="$group__sd21.html" title="Servomotors SD21 board driver." alt="" coords="123,55,307,95"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,120,75,145"/>
-<area shape="rect" id="node4" href="$group__driver__lds01.html" title="LDS01 (aka HLS&#45;LFCD2) LiDAR driver." alt="" coords="141,120,289,145"/>
-<area shape="rect" id="node5" href="$group__I2C.html" title="I2C switch PCA9548 driver." alt="" coords="131,169,299,195"/>
-<area shape="rect" id="node6" href="$group__driver__lx__servo.html" title="LX servomotors serial communication protocol." alt="" coords="123,219,307,259"/>
+<area shape="rect" id="node1" href="$group__driver__lds01__dma.html" title="LDS01 (aka HLS&#45;LFCD2) LiDAR driver." alt="" coords="150,5,298,31"/>
+<area shape="rect" id="node2" href="$group__sd21.html" title="Servomotors SD21 board driver." alt="" coords="132,55,316,95"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,145,75,171"/>
+<area shape="rect" id="node4" href="$group__driver__lds01.html" title="LDS01 (aka HLS&#45;LFCD2) LiDAR driver." alt="" coords="150,120,298,145"/>
+<area shape="rect" id="node5" href="$group__I2C.html" title="I2C switch PCA9548 driver." alt="" coords="140,169,308,195"/>
+<area shape="rect" id="node6" href="$group__driver__lx__servo.html" title="LX servomotors serial communication protocol." alt="" coords="132,219,316,259"/>
+<area shape="rect" id="node7" href="$group__driver__vacuum__pump.html" title="COGIP vacuum pump driver." alt="" coords="123,284,325,309"/>
 </map>
