@@ -35,7 +35,7 @@ void UartProtobuf::start_reader()
 
 void UartProtobuf::uart_rx_cb(uint8_t data)
 {
-    if (data == '\n') {
+    if (data == 0) {
         msg_t msg;
         msg.content.value = msg_length_;
         msg_send(&msg, reader_pid_);
