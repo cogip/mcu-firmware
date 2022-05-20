@@ -1,5 +1,7 @@
 #include "platform.hpp"
 
+#include <iostream>
+
 namespace cogip {
 
 namespace app {
