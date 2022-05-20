@@ -1,5 +1,8 @@
 #pragma once
 
+/* RIOT includes */
+#include <timex.h>
+
 typedef void (*func_cb_t)(void);
 
 #define FALSE   (0)
