@@ -5,28 +5,28 @@
 
 static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
     .linear_speed_pid = {
-        .kp = 110.,
-        .ki = 50,
+        .kp = 0.,
+        .ki = 0.,
         .kd = 0.,
         .ti = 0.,
         .previous_error = 0.
     },
     .angular_speed_pid = {
-        .kp = 110.,
-        .ki = 50,
+        .kp = 0.,
+        .ki = 0,
         .kd = 0.,
         .ti = 0.,
         .previous_error = 0.
     },
     .linear_pose_pid = {
-        .kp = 0.5,
+        .kp = 0.,
         .ki = 0.,
         .kd = 0,
         .ti = 0.,
         .previous_error = 0.
     },
     .angular_pose_pid = {
-        .kp = 0.5,
+        .kp = 0.,
         .ki = 0.,
         .kd = 0,
         .ti = 0.,
