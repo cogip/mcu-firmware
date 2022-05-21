@@ -255,6 +255,24 @@ cogip::wizard::Wizard *pf_get_wizard()
 
 void pf_init(void)
 {
+    /* Initialize UARTPB */
+    uartpb = new cogip::uartpb::UartProtobuf(
+        app_message_handler,
+        UART_DEV(1)
+        );
+
+    bool uartpb_res = uartpb->connect();
+    if (! uartpb_res) {
+        uartpb = nullptr;
+        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
+    }
+    else {
+        cogip::shell::register_uartpb(uartpb);
+        uartpb->start_reader();
+        output_message.set_reset(true);
+        uartpb->send_message(output_message);
+    }
+
 #ifdef MODULE_SHELL_PLATFORMS
     pf_shell_init();
 #endif /* MODULE_SHELL_PLATFORMS */
@@ -295,24 +313,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-
-    /* Initialize UARTPB */
-    uartpb = new cogip::uartpb::UartProtobuf(
-        app_message_handler,
-        UART_DEV(1)
-        );
-
-    bool uartpb_res = uartpb->connect();
-    if (! uartpb_res) {
-        uartpb = nullptr;
-        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
-    }
-    else {
-        cogip::shell::register_uartpb(uartpb);
-        uartpb->start_reader();
-        output_message.set_reset(true);
-        uartpb->send_message(output_message);
-    }
 
     wizard = new cogip::wizard::Wizard(uartpb);
 
