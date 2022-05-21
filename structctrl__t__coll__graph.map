@@ -1,6 +1,6 @@
 <map id="ctrl_t" name="ctrl_t">
 <area shape="rect" id="node1" title="Controller default definition." alt="" coords="252,319,307,345"/>
-<area shape="rect" id="node7" href="$structctrl__configuration__t.html" title="Controller modes callbacks definitions." alt="" coords="206,408,353,435"/>
+<area shape="rect" id="node7" href="$structctrl__configuration__t.html" title="Controller modes callbacks definitions." alt="" coords="206,423,353,449"/>
 <area shape="rect" id="node2" href="$structctrl__control__t.html" title="Controller general structure." alt="" coords="90,229,197,256"/>
 <area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="5,96,148,137"/>
 <area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="172,103,347,130"/>

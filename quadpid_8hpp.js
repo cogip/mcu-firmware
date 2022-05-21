@@ -9,6 +9,7 @@ var quadpid_8hpp =
     [ "ctrl_quadpid_ingame", "group__quadpid.html#ga2639431d56ddd5b2ca5578d24200cc7b", null ],
     [ "ctrl_quadpid_nopid", "group__quadpid.html#gacbda3571b7e093ffdb39af991d43d587", null ],
     [ "ctrl_quadpid_running_speed", "group__quadpid.html#ga5a2742885f1f7d2e3df5e80b1ac7f938", null ],
+    [ "ctrl_quadpid_set_pose_to_reach_cb", "group__quadpid.html#gac388c076f3732139d4be80868bd0bea5", null ],
     [ "ctrl_quadpid_speed", "group__quadpid.html#ga99ba79d1b7d1735cdf16aede0a14ec04", null ],
     [ "ctrl_quadpid_stop", "group__quadpid.html#ga1a9ce19471b7208c47908f534cc28af0", null ],
     [ "ctrl_quadpid_conf", "group__quadpid.html#gadad5095d3afcebe949747c8797aba447", null ]

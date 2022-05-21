@@ -1,13 +1,14 @@
 <map id="sys/shell_menu/shell_menu_private.hpp" name="sys/shell_menu/shell_menu_private.hpp">
-<area shape="rect" id="node1" title="Shell menu private variables." alt="" coords="248,5,407,47"/>
-<area shape="rect" id="node2" href="$shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="73,95,277,121"/>
-<area shape="rect" id="node10" title=" " alt="" coords="302,95,353,121"/>
-<area shape="rect" id="node11" title=" " alt="" coords="377,95,419,121"/>
-<area shape="rect" id="node3" href="$Command_8hpp.html" title="Command class declaration." alt="" coords="5,244,201,271"/>
-<area shape="rect" id="node7" href="$Menu_8hpp.html" title="Menu class declaration." alt="" coords="165,169,330,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="313,319,371,345"/>
-<area shape="rect" id="node5" title=" " alt="" coords="7,319,72,345"/>
-<area shape="rect" id="node6" title=" " alt="" coords="97,319,238,345"/>
-<area shape="rect" id="node8" title=" " alt="" coords="226,244,269,271"/>
-<area shape="rect" id="node9" href="$utils_8h_source.html" title=" " alt="" coords="293,244,356,271"/>
+<area shape="rect" id="node1" title="Shell menu private variables." alt="" coords="325,5,483,47"/>
+<area shape="rect" id="node2" href="$shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="150,95,354,121"/>
+<area shape="rect" id="node11" title=" " alt="" coords="379,95,429,121"/>
+<area shape="rect" id="node12" title=" " alt="" coords="453,95,496,121"/>
+<area shape="rect" id="node3" href="$Command_8hpp.html" title="Command class declaration." alt="" coords="82,244,278,271"/>
+<area shape="rect" id="node7" href="$Menu_8hpp.html" title="Menu class declaration." alt="" coords="241,169,407,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="309,319,368,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="171,319,237,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,319,147,345"/>
+<area shape="rect" id="node8" title=" " alt="" coords="303,244,345,271"/>
+<area shape="rect" id="node9" href="$utils_8h_source.html" title=" " alt="" coords="421,244,483,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="416,319,488,345"/>
 </map>

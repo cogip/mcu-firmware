@@ -1,7 +1,8 @@
 var classcogip_1_1path_1_1Path =
 [
     [ "Path", "classcogip_1_1path_1_1Path.html#a4d93ca0f5b8e8b39032f77e360dd90b9", null ],
-    [ "current_max_speed", "classcogip_1_1path_1_1Path.html#a6b6cdacabca06a1b1a6da7f1634d8a5f", null ],
+    [ "current_max_speed_angular", "classcogip_1_1path_1_1Path.html#abb764d6c72c64c7f1c278b333e1dde20", null ],
+    [ "current_max_speed_linear", "classcogip_1_1path_1_1Path.html#a9ec90fb9aa21e6fc393bf1e47dcd43ff", null ],
     [ "current_pose", "classcogip_1_1path_1_1Path.html#a8903791857430693d86f88009044baa5", null ],
     [ "horizontal_mirror_all_poses", "classcogip_1_1path_1_1Path.html#a4a0eb4784842f5e284df713ba24dac00", null ],
     [ "operator++", "classcogip_1_1path_1_1Path.html#aaae75d0cc68ed0f9073ea3bc489b1b76", null ],

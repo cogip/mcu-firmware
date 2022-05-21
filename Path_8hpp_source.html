@@ -154,19 +154,21 @@ $(document).ready(function(){initNavTree('Path_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classcogip_1_1path_1_1Path.html#a38bd60d9e84bddbe62d40853ad2e5306">operator--</a>(<span class="keywordtype">int</span>);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classcogip_1_1path_1_1Path.html#a6b6cdacabca06a1b1a6da7f1634d8a5f">current_max_speed</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classcogip_1_1path_1_1Path.html#a9ec90fb9aa21e6fc393bf1e47dcd43ff">current_max_speed_linear</a>();</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1path_1_1Path.html#a4a0eb4784842f5e284df713ba24dac00">horizontal_mirror_all_poses</a>();</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classcogip_1_1path_1_1Path.html#abb764d6c72c64c7f1c278b333e1dde20">current_max_speed_angular</a>();</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">bool</span> play_in_loop_;                  </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">size_t</span> current_pose_index_;          </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;};</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;} <span class="comment">// namespace path</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1path_1_1Path.html#a4a0eb4784842f5e284df713ba24dac00">horizontal_mirror_all_poses</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">bool</span> play_in_loop_;                  </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">size_t</span> current_pose_index_;          </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;};</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;} <span class="comment">// namespace path</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasscogip_1_1path_1_1Path_html_a0877da53564e45003992984da33e5665"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#a0877da53564e45003992984da33e5665">cogip::path::Path::reset_current_pose_index</a></div><div class="ttdeci">void reset_current_pose_index()</div><div class="ttdoc">Reset current position to index 0.</div><div class="ttdef"><b>Definition:</b> <a href="Path_8hpp_source.html#l00035">Path.hpp:35</a></div></div>
@@ -175,13 +177,14 @@ $(document).ready(function(){initNavTree('Path_8hpp_source.html',''); initResiza
 <div class="ttc" id="aclasscogip_1_1path_1_1Pose_html"><div class="ttname"><a href="classcogip_1_1path_1_1Pose.html">cogip::path::Pose</a></div><div class="ttdoc">Position class as used in Path.</div><div class="ttdef"><b>Definition:</b> <a href="path_2include_2path_2Pose_8hpp_source.html#l00022">Pose.hpp:22</a></div></div>
 <div class="ttc" id="aclasscogip_1_1path_1_1Path_html_a4d93ca0f5b8e8b39032f77e360dd90b9"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#a4d93ca0f5b8e8b39032f77e360dd90b9">cogip::path::Path::Path</a></div><div class="ttdeci">Path(const std::vector&lt; Pose &gt; &amp;poses, bool play_in_loop=false)</div><div class="ttdoc">Constuctor.</div><div class="ttdef"><b>Definition:</b> <a href="Path_8hpp_source.html#l00026">Path.hpp:26</a></div></div>
 <div class="ttc" id="aclasscogip_1_1path_1_1Path_html"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html">cogip::path::Path</a></div><div class="ttdoc">Path class.</div><div class="ttdef"><b>Definition:</b> <a href="Path_8hpp_source.html#l00023">Path.hpp:23</a></div></div>
+<div class="ttc" id="aclasscogip_1_1path_1_1Path_html_abb764d6c72c64c7f1c278b333e1dde20"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#abb764d6c72c64c7f1c278b333e1dde20">cogip::path::Path::current_max_speed_angular</a></div><div class="ttdeci">double current_max_speed_angular()</div><div class="ttdoc">Return maximum angular speed to use in order to go to the current position.</div></div>
+<div class="ttc" id="aclasscogip_1_1path_1_1Path_html_a9ec90fb9aa21e6fc393bf1e47dcd43ff"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#a9ec90fb9aa21e6fc393bf1e47dcd43ff">cogip::path::Path::current_max_speed_linear</a></div><div class="ttdeci">double current_max_speed_linear()</div><div class="ttdoc">Return maximum linear speed to use in order to go to the current position.</div></div>
 <div class="ttc" id="aclasscogip_1_1path_1_1Path_html_a4a0eb4784842f5e284df713ba24dac00"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#a4a0eb4784842f5e284df713ba24dac00">cogip::path::Path::horizontal_mirror_all_poses</a></div><div class="ttdeci">void horizontal_mirror_all_poses()</div><div class="ttdoc">Mirror all points in path to match the two possible sides of the game.</div></div>
 <div class="ttc" id="aclasscogip_1_1path_1_1Path_html_a8903791857430693d86f88009044baa5"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#a8903791857430693d86f88009044baa5">cogip::path::Path::current_pose</a></div><div class="ttdeci">const cogip::path::Pose &amp; current_pose() const</div><div class="ttdoc">Return current position.</div><div class="ttdef"><b>Definition:</b> <a href="Path_8hpp_source.html#l00032">Path.hpp:32</a></div></div>
-<div class="ttc" id="aclasscogip_1_1path_1_1Path_html_a6b6cdacabca06a1b1a6da7f1634d8a5f"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#a6b6cdacabca06a1b1a6da7f1634d8a5f">cogip::path::Path::current_max_speed</a></div><div class="ttdeci">double current_max_speed()</div><div class="ttdoc">Return maximum speed to use in order to go to the current position.</div></div>
 <div class="ttc" id="aclasscogip_1_1path_1_1Path_html_aaae75d0cc68ed0f9073ea3bc489b1b76"><div class="ttname"><a href="classcogip_1_1path_1_1Path.html#aaae75d0cc68ed0f9073ea3bc489b1b76">cogip::path::Path::operator++</a></div><div class="ttdeci">size_t operator++(int)</div><div class="ttdoc">Increment the current position in the robot path (going forward to the next position).</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri May 20 2022 22:03:49 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat May 21 2022 08:09:15 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

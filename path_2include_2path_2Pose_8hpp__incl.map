@@ -1,8 +1,9 @@
 <map id="lib/path/include/path/Pose.hpp" name="lib/path/include/path/Pose.hpp">
-<area shape="rect" id="node1" title="Path Pose declaration." alt="" coords="159,5,314,47"/>
-<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="93,95,247,121"/>
-<area shape="rect" id="node6" href="$utils_8h_source.html" title=" " alt="" coords="272,95,335,121"/>
+<area shape="rect" id="node1" title="Path Pose declaration." alt="" coords="230,5,385,47"/>
+<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="163,95,318,121"/>
+<area shape="rect" id="node6" href="$utils_8h_source.html" title=" " alt="" coords="343,95,405,121"/>
 <area shape="rect" id="node3" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="5,169,175,196"/>
 <area shape="rect" id="node5" title=" " alt="" coords="199,169,304,196"/>
 <area shape="rect" id="node4" title=" " alt="" coords="31,244,149,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="338,169,410,196"/>
 </map>

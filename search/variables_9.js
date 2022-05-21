@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['min_5fangle_5ffor_5fpose_5freached_874',['min_angle_for_pose_reached',['../structctrl__quadpid__parameters__t.html#aac77170c740af320da7d741599bf9dde',1,'ctrl_quadpid_parameters_t']]],
-  ['min_5fangle_5ffor_5ftarget_5forientation_875',['min_angle_for_target_orientation',['../structctrl__quadpid__parameters__t.html#a4f9519a885dc75448adfa664e7a7a71a',1,'ctrl_quadpid_parameters_t']]],
-  ['min_5fdistance_5ffor_5fangular_5fswitch_876',['min_distance_for_angular_switch',['../structctrl__quadpid__parameters__t.html#ad818c574ffcfaf2e6cd359f1cb81bcd8',1,'ctrl_quadpid_parameters_t']]]
+  ['min_5fangle_5ffor_5fpose_5freached_887',['min_angle_for_pose_reached',['../structctrl__quadpid__parameters__t.html#a9b9d4a94b7089b5a7ae3621b438f0251',1,'ctrl_quadpid_parameters_t']]],
+  ['min_5fangle_5ffor_5ftarget_5forientation_888',['min_angle_for_target_orientation',['../structctrl__quadpid__parameters__t.html#a64a381bdc20a855bc3372dc4f6754b0a',1,'ctrl_quadpid_parameters_t']]],
+  ['min_5fdistance_5ffor_5fangular_5fswitch_889',['min_distance_for_angular_switch',['../structctrl__quadpid__parameters__t.html#a4ca9cf9a4278de51247b8681f45086c7',1,'ctrl_quadpid_parameters_t']]]
 ];

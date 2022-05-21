@@ -52,11 +52,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"cortex_2lidar__obstacles_8hpp_source.html",
-"group__driver__lds01__dma.html#ga128d1730d1c4afafa65738f1da25e2f2",
-"group__platform__cortex.html#ga026956502bf7107f10d9313d0c6a74e4",
-"group__platforms__pf__test.html#ga5cf00ead1b5f61c36d5b74020b7c0432",
-"structctrl__control__t.html#a53e6840e25fc7839589b1a9ca1bfa976"
+"cortex_2include_2shmem__params_8h.html",
+"group__driver__lds01__dma.html#ga094bb4ecce8414c9538a91a7cd6a4baa",
+"group__platform__cortex.html#ga01b991071eb3a90da5bda254ae466955",
+"group__platforms__pf__test.html#ga0bcf6895d58d71cb270a01a0427f5ae8",
+"pegasus_2trace__utils_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

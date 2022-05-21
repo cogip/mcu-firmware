@@ -3,6 +3,7 @@ var ctrl_8hpp =
     [ "ctrl_mode_cb_t", "group__controller.html#ga32add690e6ab2833b0ca3f83f9e043cb", null ],
     [ "ctrl_post_mode_cb_t", "group__controller.html#ga7b80d1d208e2a69888bc71a684d85c1a", null ],
     [ "ctrl_pre_mode_cb_t", "group__controller.html#ga6249a908e06e43b827b251906a84b664", null ],
+    [ "ctrl_set_pose_to_reach_cb_t", "group__controller.html#ga8f12ad3ddc94039e0cff37db14ceb783", null ],
     [ "ctrl_t", "group__controller.html#ga180894284b940092b53725eaf050822c", null ],
     [ "speed_order_cb_t", "group__controller.html#ga9c1b638e3f06d26040f8e3c7d6889fc9", null ],
     [ "ctrl_mode_t", "group__controller.html#ga83512a82ac70fd30e2ba0512c79d1001", [

@@ -6,9 +6,9 @@ var group__quadpid =
       [ "angular_speed_pid", "structctrl__quadpid__parameters__t.html#ade825581a885aecfd669dcecaf801afe", null ],
       [ "linear_pose_pid", "structctrl__quadpid__parameters__t.html#ac36f2653dcdfccbb730325690e45e0ac", null ],
       [ "linear_speed_pid", "structctrl__quadpid__parameters__t.html#a0d901244472c20e4e3667209980204c8", null ],
-      [ "min_angle_for_pose_reached", "structctrl__quadpid__parameters__t.html#aac77170c740af320da7d741599bf9dde", null ],
-      [ "min_angle_for_target_orientation", "structctrl__quadpid__parameters__t.html#a4f9519a885dc75448adfa664e7a7a71a", null ],
-      [ "min_distance_for_angular_switch", "structctrl__quadpid__parameters__t.html#ad818c574ffcfaf2e6cd359f1cb81bcd8", null ],
+      [ "min_angle_for_pose_reached", "structctrl__quadpid__parameters__t.html#a9b9d4a94b7089b5a7ae3621b438f0251", null ],
+      [ "min_angle_for_target_orientation", "structctrl__quadpid__parameters__t.html#a64a381bdc20a855bc3372dc4f6754b0a", null ],
+      [ "min_distance_for_angular_switch", "structctrl__quadpid__parameters__t.html#a4ca9cf9a4278de51247b8681f45086c7", null ],
       [ "regul", "structctrl__quadpid__parameters__t.html#ab0651a8c149a4b56a17b4332dfd2d8a0", null ]
     ] ],
     [ "ctrl_quadpid_t", "structctrl__quadpid__t.html", [
@@ -26,6 +26,7 @@ var group__quadpid =
     [ "ctrl_quadpid_ingame", "group__quadpid.html#ga2639431d56ddd5b2ca5578d24200cc7b", null ],
     [ "ctrl_quadpid_nopid", "group__quadpid.html#gacbda3571b7e093ffdb39af991d43d587", null ],
     [ "ctrl_quadpid_running_speed", "group__quadpid.html#ga5a2742885f1f7d2e3df5e80b1ac7f938", null ],
+    [ "ctrl_quadpid_set_pose_to_reach_cb", "group__quadpid.html#gac388c076f3732139d4be80868bd0bea5", null ],
     [ "ctrl_quadpid_speed", "group__quadpid.html#ga99ba79d1b7d1735cdf16aede0a14ec04", null ],
     [ "ctrl_quadpid_stop", "group__quadpid.html#ga1a9ce19471b7208c47908f534cc28af0", null ],
     [ "ctrl_quadpid_conf", "group__quadpid.html#gadad5095d3afcebe949747c8797aba447", null ]
