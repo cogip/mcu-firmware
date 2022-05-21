@@ -161,6 +161,11 @@ ctrl_t *pf_get_ctrl(void)
     return (ctrl_t *)&ctrl_quadpid;
 }
 
+cogip::planners::Planner *pf_get_planner(void)
+{
+    return (cogip::planners::Planner *)planner;
+}
+
 void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
                             cogip::cogip_defs::Polar &robot_speed,
                             cogip::cogip_defs::Polar &motor_command)
