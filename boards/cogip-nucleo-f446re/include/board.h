@@ -64,8 +64,8 @@ extern "C" {
 /** @} */
 
 /* Motors */
-#define HBRIDGE_MOTOR_LEFT  0
-#define HBRIDGE_MOTOR_RIGHT 1
+#define MOTOR_LEFT  0
+#define MOTOR_RIGHT 1
 
 /* Quadrature decoding */
 #define QDEC_MODE           QDEC_X4

@@ -55,8 +55,8 @@ extern "C" {
 #define GPIO_DEBUG_LED  GPIO_PIN(2, 8)
 
 /* Motors */
-#define HBRIDGE_MOTOR_LEFT  0
-#define HBRIDGE_MOTOR_RIGHT 1
+#define MOTOR_LEFT  0
+#define MOTOR_RIGHT 1
 
 /* Quadrature decoding */
 #define QDEC_MODE           QDEC_X1

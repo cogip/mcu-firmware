@@ -172,9 +172,6 @@ void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
 
     /* convert to position */
     odometry_update(robot_pose, robot_speed, SEGMENT);
-
-    robot_speed.set_distance(robot_speed.distance() * PULSE_PER_MM);
-    robot_speed.set_angle(robot_speed.angle() * PULSE_PER_DEGREE);
 }
 
 void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose,
@@ -205,8 +202,8 @@ void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose,
 
 int encoder_read(cogip::cogip_defs::Polar &robot_speed)
 {
-    int32_t left_speed = qdec_read_and_reset(HBRIDGE_MOTOR_LEFT) * QDEC_LEFT_POLARITY;
-    int32_t right_speed = qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
+    int32_t left_speed = qdec_read_and_reset(MOTOR_LEFT) * QDEC_LEFT_POLARITY;
+    int32_t right_speed = qdec_read_and_reset(MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
 
     /* update speed */
     robot_speed.set_distance(((right_speed + left_speed) / 2.0) / PULSE_PER_MM);
@@ -217,8 +214,8 @@ int encoder_read(cogip::cogip_defs::Polar &robot_speed)
 
 void encoder_reset(void)
 {
-    qdec_read_and_reset(HBRIDGE_MOTOR_LEFT);
-    qdec_read_and_reset(HBRIDGE_MOTOR_RIGHT);
+    qdec_read_and_reset(MOTOR_LEFT);
+    qdec_read_and_reset(MOTOR_RIGHT);
 }
 
 void motor_drive(const cogip::cogip_defs::Polar &command)
@@ -226,8 +223,8 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t right_command = (int16_t) (command.distance() + command.angle());
     int16_t left_command = (int16_t) (command.distance() - command.angle());
 
-    motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_LEFT, left_command);
-    motor_set(MOTOR_DRIVER_DEV(0), HBRIDGE_MOTOR_RIGHT, right_command);
+    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
+    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
 }
 
 int pf_is_camp_left(void)
@@ -266,13 +263,13 @@ void pf_init(void)
     motor_driver_init(MOTOR_DRIVER_DEV(0));
 
     /* Setup qdec periphereal */
-    int error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_LEFT), QDEC_MODE, NULL, NULL);
+    int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
     if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_LEFT, error);
+        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LEFT, error);
     }
-    error = qdec_init(QDEC_DEV(HBRIDGE_MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
+    error = qdec_init(QDEC_DEV(MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
     if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", HBRIDGE_MOTOR_RIGHT, error);
+        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
 
     /* Init odometry */

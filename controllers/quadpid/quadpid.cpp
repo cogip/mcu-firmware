@@ -47,24 +47,26 @@ static cogip::cogip_defs::Polar compute_position_error(const ctrl_quadpid_t *ctr
 /**
  * \fn limit_speed_command
  * \brief limit speed command to maximum acceleration and speed setpoint
- * \param command : computed speed by position PID controller
- * \param final_speed : maximum speed
- * \param real_speed
+ * \param command       computed speed by position PID controller
+ * \param final_speed   maximum speed
+ * \param real_speed    real speed
+ * \param max_acc       maximum acceleration
  * \return speed_order
  */
 static double limit_speed_command(double command,
                                   double final_speed,
-                                  double real_speed)
+                                  double real_speed,
+                                  double max_acc)
 {
     /* limit speed command (maximum acceleration) */
     double a = command - real_speed;
 
-    if (a > MAX_ACC) {
-        command = real_speed + MAX_ACC;
+    if (a > max_acc) {
+        command = real_speed + max_acc;
     }
 
-    if (a < -MAX_ACC) {
-        command = real_speed - MAX_ACC;
+    if (a < -max_acc) {
+        command = real_speed - max_acc;
     }
 
     /* limit speed command (speed setpoint) */
@@ -79,9 +81,12 @@ static double limit_speed_command(double command,
     return command;
 }
 
-/**
- *
- */
+void ctrl_quadpid_set_pose_to_reach_cb(ctrl_t *ctrl) {
+    ctrl_quadpid_t *ctrl_quadpid = (ctrl_quadpid_t *)ctrl;
+
+    ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST;
+}
+
 int ctrl_quadpid_speed(ctrl_quadpid_t *ctrl,
                        cogip::cogip_defs::Polar &command,
                        const cogip::cogip_defs::Polar &speed_current)
@@ -170,10 +175,10 @@ int ctrl_quadpid_running_speed(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
     /* limit speed command->*/
     command.set_distance(limit_speed_command(command.distance(),
                                              fabs(speed_order.distance()),
-                                             speed_current.distance()));
+                                             speed_current.distance(), MAX_ACC_LINEAR));
     command.set_angle(limit_speed_command(command.angle(),
                                           fabs(speed_order.angle()),
-                                          speed_current.angle()));
+                                          speed_current.angle(), MAX_ACC_ANGULAR));
 
     /* ********************** speed pid controller ********************* */
     return ctrl_quadpid_speed((ctrl_quadpid_t *)ctrl, command, speed_current);
@@ -189,11 +194,11 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
     const cogip::cogip_defs::Polar &speed_order = ctrl_get_speed_order((ctrl_t *)ctrl_quadpid);
 
     /* ******************** position pid ctrl ******************** */
-    /* compute position error */
 
     /* get next pose to reach */
     cogip::cogip_defs::Pose pose_order = ctrl_get_pose_to_reach((ctrl_t *)ctrl_quadpid);
 
+    /* compute position error */
     cogip::cogip_defs::Polar pos_err = compute_position_error(ctrl_quadpid, pose_order, pose_current);
 
     DEBUG("@robot@,%u,%" PRIu32 ",@pose_order@,%.2f,%.2f,%.2f\n",
@@ -227,6 +232,12 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
             pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
         }
         else {
+            if (ctrl_quadpid->quadpid_params.regul == CTRL_REGUL_POSE_PRE_ANGL) {
+                pid_reset(&ctrl_quadpid->quadpid_params.linear_pose_pid);
+                pid_reset(&ctrl_quadpid->quadpid_params.angular_pose_pid);
+                pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
+                pid_reset(&ctrl_quadpid->quadpid_params.angular_speed_pid);
+            }
             ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST;
         }
     }
@@ -254,8 +265,10 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
             pid_reset(&ctrl_quadpid->quadpid_params.linear_speed_pid);
             pid_reset(&ctrl_quadpid->quadpid_params.angular_speed_pid);
 
-            ctrl_set_pose_reached((ctrl_t *) ctrl_quadpid);
-            ctrl_quadpid->quadpid_params.regul = CTRL_REGUL_POSE_DIST; //CTRL_REGUL_IDLE;
+            ctrl_set_pose_reached(ctrl);
+
+            command = {0, 0};
+            return 0;
         }
     }
 
@@ -274,10 +287,10 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
     /* limit speed command->*/
     command.set_distance(limit_speed_command(command.distance(),
                                              speed_order.distance(),
-                                             speed_current.distance()));
+                                             speed_current.distance(), MAX_ACC_LINEAR));
     command.set_angle(limit_speed_command(command.angle(),
                                           speed_order.angle(),
-                                          speed_current.angle()));
+                                          speed_current.angle(), MAX_ACC_ANGULAR));
 
     /* ********************** speed pid controller ********************* */
     return ctrl_quadpid_speed(ctrl_quadpid, command, speed_current);

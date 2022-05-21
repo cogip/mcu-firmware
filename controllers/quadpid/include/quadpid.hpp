@@ -64,15 +64,15 @@ typedef struct {
     PID_t linear_pose_pid;                      /**< Linear pose Kp, Ki, Kd */
     PID_t angular_pose_pid;                     /**< Angular pose Kp, Ki, Kd */
 
-    uint16_t min_distance_for_angular_switch;   /**< Distance approximation to
+    double min_distance_for_angular_switch;   /**< Distance approximation to
                                                      switch to angular
                                                      correction */
 
-    uint16_t min_angle_for_pose_reached;        /**< Angle approximation to
+    double min_angle_for_pose_reached;        /**< Angle approximation to
                                                      switch to position reached
                                                      state */
 
-    uint16_t min_angle_for_target_orientation;  /**< Angle approximation to
+    double min_angle_for_target_orientation;  /**< Angle approximation to
                                                      switch to linear
                                                      correction */
 
@@ -89,6 +89,15 @@ typedef struct {
     ctrl_quadpid_parameters_t quadpid_params;           /**< QuadPID specific
                                                            configuration */
 } ctrl_quadpid_t;
+
+/**
+ * @brief   QuadPID controller callback when a new pose to reach is set.
+ *
+ * @param[in]   ctrl            Controller object
+ *
+ * @return
+ */
+void ctrl_quadpid_set_pose_to_reach_cb(ctrl_t *ctrl);
 
 /**
  * @brief   Speed regulation function.
@@ -173,7 +182,8 @@ static const ctrl_configuration_t ctrl_quadpid_conf = {
         ctrl_quadpid_ingame,        // CTRL_MODE_RUNNING
         ctrl_quadpid_running_speed, // CTRL_MODE_RUNNING_SPEED
         ctrl_quadpid_nopid          // CTRL_MODE_PASSTHROUGH
-    }
+    },
+    .set_pose_to_reach_cb = ctrl_quadpid_set_pose_to_reach_cb,
 };
 
 /** @} */

@@ -86,6 +86,10 @@ void ctrl_set_pose_to_reach(ctrl_t *ctrl, const cogip::cogip_defs::Pose &pose_or
         ctrl->control.blocking_cycles = 0;
         ctrl->control.pose_order = pose_order;
         ctrl->control.pose_reached = FALSE;
+        ctrl_set_pose_to_reach_cb_t set_pose_to_reach_cb = ctrl->conf->set_pose_to_reach_cb;
+        if (set_pose_to_reach_cb) {
+            set_pose_to_reach_cb(ctrl);
+        }
     }
 
     irq_enable();

@@ -30,9 +30,14 @@ size_t Path::operator--(int)
     return current_pose_index_;
 }
 
-double Path::current_max_speed()
+double Path::current_max_speed_linear()
 {
-    return std::min(at(current_pose_index_).max_speed(), (double)MAX_SPEED);
+    return std::min(at(current_pose_index_).max_speed_linear(), (double)MAX_SPEED_LINEAR);
+}
+
+double Path::current_max_speed_angular()
+{
+    return std::min(at(current_pose_index_).max_speed_angular(), (double)MAX_SPEED_ANGULAR);
 }
 
 void Path::horizontal_mirror_all_poses()

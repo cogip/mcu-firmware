@@ -172,9 +172,6 @@ void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
 
     /* convert to position */
     odometry_update(robot_pose, robot_speed, SEGMENT);
-
-    robot_speed.set_distance(robot_speed.distance() * PULSE_PER_MM);
-    robot_speed.set_angle(robot_speed.angle() * PULSE_PER_DEGREE);
 }
 
 void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose,
@@ -226,12 +223,12 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t right_command = (int16_t) (command.distance() + command.angle());
     int16_t left_command = (int16_t) (command.distance() - command.angle());
 
-    if ((! right_command) && (! left_command)) {
+    if ((right_command == 0) && (left_command == 0)) {
         motor_brake(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0);
         motor_brake(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0);
     }
     else {
-        motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT)/2, 0, left_command);
+        motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0, left_command);
         motor_set(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0, right_command);
     }
 

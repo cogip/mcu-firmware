@@ -83,7 +83,7 @@ static impulse_cfg_t impulse_cfg__speed_pid_linear = {
     .cycle_start_mot = 1 /* sec */,
     .cycle_end_mot = 3 /* sec */,
     .cycle_end_func = 5 /* sec */,
-    .impulse_max_value = MAX_SPEED,
+    .impulse_max_value = MAX_SPEED_LINEAR,
     .is_linear = TRUE,
 };
 
@@ -91,7 +91,7 @@ static impulse_cfg_t impulse_cfg__speed_pid_angular = {
     .cycle_start_mot = 1 /* sec */,
     .cycle_end_mot = 3 /* sec */,
     .cycle_end_func = 5 /* sec */,
-    .impulse_max_value = MAX_SPEED / 2,
+    .impulse_max_value = MAX_SPEED_ANGULAR,
     .is_linear = FALSE,
 };
 
@@ -236,7 +236,7 @@ static void shell_seq_speed_pid_only(ctrl_t *ctrl_quadpid)
 static void ctrl_quadpid_pose_shell_seq(ctrl_t *ctrl_quadpid, const cogip::cogip_defs::Pose &pos)
 {
     /* Speed order is fixed to maximum speed */
-    cogip::cogip_defs::Polar speed_order(MAX_SPEED, MAX_SPEED / 2);
+    cogip::cogip_defs::Polar speed_order(MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
 
     /* Send the speed order and the position to reach to the controller */
     ctrl_set_pose_to_reach(ctrl_quadpid, pos);
