@@ -14,6 +14,7 @@
 #include "platform.hpp"
 
 static cogip::planners::Planner *planner = nullptr;
+static cogip::shell::Menu *planner_menu = nullptr;
 
 /* Shell command array */
 static uint8_t shell_path_index;
@@ -96,19 +97,21 @@ void pln_shell_init(cogip::planners::Planner *pln)
     planner = pln;
 
     /* Planners menu and commands */
-    cogip::shell::Menu *menu = new cogip::shell::Menu(
-        "Planners menu", "pln_menu", &cogip::shell::root_menu, pln_menu_enter);
+    if (! planner_menu) {
+        planner_menu = new cogip::shell::Menu(
+            "Planners menu", "pln_menu", &cogip::shell::root_menu, pln_menu_enter);
 
-    menu->push_back(new cogip::shell::Command(
-        "n", "Go to next position", pln_cmd_go_next_cb));
-    menu->push_back(new cogip::shell::Command(
-        "p", "Go to previous position", pln_cmd_go_previous_cb));
-    menu->push_back(new cogip::shell::Command(
-        "s", "Go back to start position", pln_cmd_go_start_cb));
-    menu->push_back(new cogip::shell::Command(
-        "a", "Launch action", pln_cmd_launch_action_cb));
-    menu->push_back(new cogip::shell::Command(
-        "P", "Play", pln_cmd_play_cb));
-    menu->push_back(new cogip::shell::Command(
-        "S", "Stop", pln_cmd_stop_cb));
+        planner_menu->push_back(new cogip::shell::Command(
+            "n", "Go to next position", pln_cmd_go_next_cb));
+        planner_menu->push_back(new cogip::shell::Command(
+            "p", "Go to previous position", pln_cmd_go_previous_cb));
+        planner_menu->push_back(new cogip::shell::Command(
+            "s", "Go back to start position", pln_cmd_go_start_cb));
+        planner_menu->push_back(new cogip::shell::Command(
+            "a", "Launch action", pln_cmd_launch_action_cb));
+        planner_menu->push_back(new cogip::shell::Command(
+            "P", "Play", pln_cmd_play_cb));
+        planner_menu->push_back(new cogip::shell::Command(
+            "S", "Stop", pln_cmd_stop_cb));
+    }
 }
