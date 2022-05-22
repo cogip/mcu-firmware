@@ -174,7 +174,7 @@ void *AstarPlanner::task_planner()
 
     cogip::tracefd::out.logf("Game planner started");
 
-    for (;;) {
+    while (! thread_exit_) {
         riot::time_point loop_start_time = riot::now();
 
         if (!started_) {
