@@ -30,6 +30,7 @@ public:
         ctrl_t *ctrl,                               ///< [in] controller object
         path::Path &path                            ///< [in] application path
         );
+    virtual ~Planner();
 
     /// Start the trajectory planification and the associated controller.
     void start();
