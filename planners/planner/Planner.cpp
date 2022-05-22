@@ -18,11 +18,15 @@ namespace planners {
 char planner_thread_stack[THREAD_STACKSIZE_LARGE];
 
 Planner::Planner(ctrl_t *ctrl, path::Path &path)
-    : ctrl_(ctrl), path_(path), started_(false), allow_change_path_pose_(true)
+    : ctrl_(ctrl), path_(path), started_(false), allow_change_path_pose_(true), thread_exit_(false)
 {
 #ifdef MODULE_SHELL_PLANNERS
     pln_shell_init(this);
 #endif // MODULE_SHELL_PLANNERS
+};
+
+Planner::~Planner() {
+    thread_exit_ = true;
 };
 
 void Planner::start()
