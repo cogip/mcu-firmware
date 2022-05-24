@@ -126,6 +126,7 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
             }
         }
         if (nb_pose_reachable < 0) {
+            path_.unreachable();
             DEBUG("planner: No position reachable!\n");
             goto trajectory_get_route_update_error;
         }
