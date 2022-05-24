@@ -86,12 +86,8 @@ private:
     uart_t uart_dev_;                             ///< UART device
     uint32_t uart_speed_;                         ///< UART baud rate
     kernel_pid_t reader_pid_;                     ///< reader thread PID
-    char reader_stack_[UARTPB_READER_STACKSIZE];  ///< reader thread stack
-    char rx_mem_[UART_BUFFER_SIZE];               ///< memory for UART incoming bytes
     ringbuffer_t rx_buf_;                         ///< ring buffer for UART incoming bytes
     uint32_t msg_length_ = 0;                     ///< message length
-    ReadBuffer read_buffer_;                      ///< buffer used to decode a message
-    WriteBuffer write_buffer_;                    ///< buffer used to encode a message
     void (*message_handler_)(cogip::uartpb::ReadBuffer &);
                                                   ///< callback to process the message after decoding
     riot::mutex mutex_;                           ///< mutex protecting serial port access
