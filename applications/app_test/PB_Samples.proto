@@ -12,4 +12,5 @@ message PB_Sample {
 
 message PB_Samples {
     repeated PB_Sample samples = 1;
+    bool has_samples = 2;
 }
