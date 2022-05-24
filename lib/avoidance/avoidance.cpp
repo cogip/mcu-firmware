@@ -240,21 +240,22 @@ bool avoidance_build_graph(const cogip::cogip_defs::Coords &s, const cogip::cogi
 {
     start_pose = s;
     finish_pose = f;
-    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
+    _is_avoidance_computed = false;
     const cogip::obstacles::Polygon &borders = app_get_borders();
 
     if (!borders.is_point_inside(finish_pose)) {
-        _is_avoidance_computed = false;
         goto update_graph_error_finish_pose;
     }
 
     /* Check that start and destination point are not in an obstacle */
-    for (auto obstacle: *obstacles) {
-        if (obstacle->is_point_inside(finish_pose)) {
-            goto update_graph_error_finish_pose;
-        }
-        if (obstacle->is_point_inside(start_pose)) {
-            start_pose = obstacle->nearest_point(start_pose);
+    for (auto l: cogip::obstacles::all_obstacles) {
+        for (auto obstacle: *l) {
+            if (obstacle->is_point_inside(finish_pose)) {
+                goto update_graph_error_finish_pose;
+            }
+            if (obstacle->is_point_inside(start_pose)) {
+                start_pose = obstacle->nearest_point(start_pose);
+            }
         }
     }
 
