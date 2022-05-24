@@ -24,7 +24,7 @@ namespace planners {
 int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &robot_pose)
 {
     // Current final path pose to reach
-    cogip::path::Pose & current_path_pos = path_.current_pose();
+    const cogip::path::Pose *current_path_pos = path_.current_pose();
     // Pose to reach by the controller
     cogip::cogip_defs::Pose pose_to_reach = ctrl_get_pose_to_reach(ctrl_);
     // Avoidance graph position index. This index increments on each
@@ -41,8 +41,8 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
     // Ask to the controller if the targeted position has been reached
     if (ctrl_is_pose_reached(ctrl_)) {
         // If the targeted pose has been reached, check if it is the current path pose
-        if ((pose_to_reach.x() == current_path_pos.x())
-            && (pose_to_reach.y() == current_path_pos.y())) {
+        if ((pose_to_reach.x() == current_path_pos->x())
+            && (pose_to_reach.y() == current_path_pos->y())) {
             //  If the targeted pose is the current path pose to reach, launch
             //  the action and update the current path pose to reach to the next
             //  one in path, if allowed.
@@ -53,7 +53,7 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
                 // If it exists launch action associated to the point and
                 // increment the position to reach in the path
                 DEBUG("planner: action launched!\n");
-                current_path_pos.act();
+                current_path_pos->act();
                 DEBUG("planner: action finished!\n");
                 DEBUG("planner: Increment position.\n");
                 path_.next();
@@ -71,8 +71,9 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
             current_path_pos = path_.current_pose();
             avoidance_update = true;
         }
-        else if (!avoidance_check_recompute(robot_pose,
-                                            current_path_pos)) {
+        else if (avoidance_check_recompute(robot_pose,
+                                           *current_path_pos)) {
+            DEBUG("planner: Need to recompute avoidance graph.\n");
             avoidance_update = true;
         }
         // If it is an intermediate pose, just go to the next one in
@@ -105,7 +106,7 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
         // to reach the targeted path current position.
         // The current intermediate position is then pointed by avoidance_index
         avoidance_status = avoidance_build_graph(robot_pose,
-                                                 current_path_pos);
+                                                 *current_path_pos);
 
         // In case the targeted position is not reachable, select the
         // next position in the path. If no position is reachable, return an error
@@ -116,12 +117,12 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
                     goto trajectory_get_route_update_error;
                 }
                 path_.unreachable();
-                if (current_path_pos == path_.current_pose()) {
+                if (*current_path_pos == *path_.current_pose()) {
                     goto trajectory_get_route_update_error;
                 }
                 current_path_pos = path_.current_pose();
                 avoidance_status = avoidance_build_graph(robot_pose,
-                                                         current_path_pos);
+                                                         *current_path_pos);
             }
         }
         if (nb_pose_reachable < 0) {
@@ -137,10 +138,10 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
     pose_to_reach.set_coords(avoidance_get_pose(avoidance_index));
 
     // Check if the point to reach is the current path position to reach
-    if ((pose_to_reach.x() == current_path_pos.x())
-        && (pose_to_reach.y() == current_path_pos.y())) {
+    if ((pose_to_reach.x() == current_path_pos->x())
+        && (pose_to_reach.y() == current_path_pos->y())) {
         DEBUG("planner: Reaching final position\n");
-        pose_to_reach.set_O(current_path_pos.O());
+        pose_to_reach.set_O(current_path_pos->O());
         ctrl_set_pose_intermediate(ctrl_, false);
     }
     else {
@@ -165,9 +166,9 @@ void *AstarPlanner::task_planner()
     path_.reset_current_pose_index();
 
     // Object context initialisation
-    cogip::path::Pose current_path_pos = path_.current_pose();
-    cogip::cogip_defs::Pose initial_pose = current_path_pos;
-    ctrl_set_pose_current(ctrl_, initial_pose);
+    const cogip::path::Pose *current_path_pos = path_.current_pose();
+    const cogip::cogip_defs::Pose *initial_pose = current_path_pos;
+    ctrl_set_pose_current(ctrl_, *initial_pose);
     ctrl_set_speed_order(ctrl_, speed_order);
     ctrl_set_pose_reached(ctrl_);
 
@@ -187,7 +188,7 @@ void *AstarPlanner::task_planner()
         speed_order.set_angle(path_.current_max_speed_angular());
 
         // reverse gear selection is granted per point to reach, in path
-        ctrl_set_allow_reverse(ctrl_, current_path_pos.allow_reverse());
+        ctrl_set_allow_reverse(ctrl_, current_path_pos->allow_reverse());
 
         if (trajectory_get_route_update(ctrl_get_pose_current(ctrl_))) {
             ctrl_set_mode(ctrl_, CTRL_MODE_STOP);

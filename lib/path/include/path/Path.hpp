@@ -32,7 +32,7 @@ public:
     virtual ~Path() {};
 
     /// Return current position.
-    virtual cogip::path::Pose &current_pose() { return data()[current_pose_index_]; };
+    virtual const cogip::path::Pose *current_pose() { return &(data()[current_pose_index_]); };
 
     /// Reset current position to index 0.
     virtual void reset_current_pose_index() { current_pose_index_ = 0; };
