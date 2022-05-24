@@ -10,5 +10,7 @@ message PB_GameOutputMessage {
         PB_Menu menu = 2;
         PB_State state = 3;
         PB_Wizard wizard = 4;
+        bool req_samples = 5;
+        uint32 score = 6;
     }
 }

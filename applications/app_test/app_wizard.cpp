@@ -1,5 +1,9 @@
 #include "app_camp.hpp"
+#include "app_planner.hpp"
 #include "platform.hpp"
+
+#include "riot/chrono.hpp"
+#include "riot/thread.hpp"
 
 #include <iostream>
 
@@ -20,7 +24,10 @@ void app_wizard(void)
     if (wizard_message.has_camp()) {
         std::string select_camp = wizard_message.get_camp().value();
         std::cout << "Selected camp: " << select_camp << std::endl;
-        app_camp_set_color(select_camp == "yellow" ? CampColor::Yellow : CampColor::Purple);
+        CampColor color = select_camp == "yellow" ? CampColor::Yellow : CampColor::Purple;
+        if (color != app_camp_get_color()) {
+            app_camp_set_color(color);
+        }
     }
     else {
         puts("Wizard error: bad response type for camp color.");
@@ -48,8 +55,12 @@ void app_wizard(void)
         puts("Wizard error: bad response type for message start.");
     }
 
-    pf_get_planner()->set_allow_change_path_pose(true);
-    pf_get_planner()->start();
+    app_planner_reset();
+    // Wait for old planner thread to end if any
+    riot::this_thread::sleep_for(std::chrono::milliseconds(500));
+    app_planner_get()->start_thread();
+    app_planner_get()->set_allow_change_path_pose(true);
+    app_planner_get()->start();
 
 #if 0  // Keep unused code as examples for other types supported by wizard.
     wizard_message.clear();

@@ -68,9 +68,6 @@ static ctrl_quadpid_t ctrl_quadpid =
     }
 };
 
-/* Planner */
-cogip::planners::Planner *planner = nullptr;
-
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -245,6 +242,11 @@ cogip::obstacles::List *pf_get_dyn_obstacles(void)
     return lidar_obstacles;
 }
 
+cogip::uartpb::UartProtobuf *pf_get_uartpb()
+{
+    return uartpb;
+}
+
 cogip::wizard::Wizard *pf_get_wizard()
 {
     return wizard;
@@ -252,6 +254,24 @@ cogip::wizard::Wizard *pf_get_wizard()
 
 void pf_init(void)
 {
+    /* Initialize UARTPB */
+    uartpb = new cogip::uartpb::UartProtobuf(
+        cogip::app::app_uartpb_message_handler,
+        UART_DEV(1)
+        );
+
+    bool uartpb_res = uartpb->connect();
+    if (! uartpb_res) {
+        uartpb = nullptr;
+        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
+    }
+    else {
+        cogip::shell::register_uartpb(uartpb);
+        uartpb->start_reader();
+        output_message.set_reset(true);
+        uartpb->send_message(output_message);
+    }
+
 #ifdef MODULE_SHELL_PLATFORMS
     pf_shell_init();
 #endif /* MODULE_SHELL_PLATFORMS */
@@ -282,9 +302,6 @@ void pf_init(void)
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
 
-    /* Initialize planner */
-    planner = new cogip::planners::AstarPlanner(pf_get_ctrl(), app_get_path());
-
 #ifdef MODULE_SHELL_QUADPID
     ctrl_quadpid_shell_init(&ctrl_quadpid);
 #endif /* MODULE_SHELL_QUADPID */
@@ -293,25 +310,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-
-    /* Initialize UARTPB */
-    uartpb = new cogip::uartpb::UartProtobuf(
-        app_message_handler,
-        UART_DEV(1)
-        );
-
-    bool uartpb_res = uartpb->connect();
-    if (! uartpb_res) {
-        uartpb = nullptr;
-        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
-    }
-    else {
-        cogip::shell::register_uartpb(uartpb);
-        uartpb->start_reader();
-        output_message.set_reset(true);
-        uartpb->send_message(output_message);
-        cogip::tracefd::out.logf("UART initialization success: %d\n", uartpb_res);
-    }
 
     wizard = new cogip::wizard::Wizard(uartpb);
 
@@ -328,8 +326,6 @@ void pf_init_tasks(void)
         (void *)controller,
         "motion control"
         );
-
-    planner->start_thread();
 
     trace_start();
 }

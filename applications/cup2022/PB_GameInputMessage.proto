@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "PB_Command.proto";
 import "PB_Wizard.proto";
+import "PB_Samples.proto";
 
 message PB_GameInputMessage {
     oneof type {
@@ -9,5 +10,6 @@ message PB_GameInputMessage {
         bool copilot_connected = 2;
         bool copilot_disconnected = 3;
         PB_Wizard wizard = 4;
+        PB_Samples samples = 5;
     }
 }

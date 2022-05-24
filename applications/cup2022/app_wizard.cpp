@@ -1,11 +1,66 @@
+#include "app_camp.hpp"
+#include "app_planner.hpp"
 #include "platform.hpp"
 
-cogip::wizard::Wizard::PB_Message wizard_message;
+#include "riot/chrono.hpp"
+#include "riot/thread.hpp"
+
+namespace cogip {
+
+namespace app {
+
+static cogip::wizard::Wizard::PB_Message wizard_message;
 
 void app_wizard(void)
 {
     cogip::wizard::Wizard *wizard = pf_get_wizard();
 
+    wizard_message.clear();
+    wizard_message.mutable_name() = "Choose your camp";
+    wizard_message.mutable_camp().mutable_value() = "yellow";
+    wizard_message = wizard->request(wizard_message);
+    if (wizard_message.has_camp()) {
+        std::string select_camp = wizard_message.get_camp().value();
+        std::cout << "Selected camp: " << select_camp << std::endl;
+        CampColor color = select_camp == "yellow" ? CampColor::Yellow : CampColor::Purple;
+        if (color != app_camp_get_color()) {
+            app_camp_set_color(color);
+        }
+    }
+    else {
+        puts("Wizard error: bad response type for camp color.");
+    }
+
+    wizard_message.clear();
+    wizard_message.mutable_name() = "Check camera focus";
+    wizard_message.mutable_camera().set_value(true);
+    wizard_message = wizard->request(wizard_message);
+    if (wizard_message.has_camera()) {
+        puts("Camera checked");
+    }
+    else {
+        puts("Wizard error: bad response type fro camera focus.");
+    }
+
+    wizard_message.clear();
+    wizard_message.mutable_name() = "Message";
+    wizard_message.mutable_message().mutable_value() = "Ready to start?";
+    wizard_message = wizard->request(wizard_message);
+    if (wizard_message.has_message()) {
+        puts("Wizard start message acknowledged");
+    }
+    else {
+        puts("Wizard error: bad response type for message start.");
+    }
+
+    app_planner_reset();
+    // Wait for old planner thread to end if any
+    riot::this_thread::sleep_for(std::chrono::milliseconds(500));
+    app_planner_get()->start_thread();
+    app_planner_get()->set_allow_change_path_pose(true);
+    app_planner_get()->start();
+
+#if 0  // Keep unused code as examples for other types supported by wizard.
     wizard_message.clear();
     wizard_message.mutable_name() = "Skip Wizard example?";
     wizard_message.mutable_boolean().set_value(true);
@@ -49,17 +104,6 @@ void app_wizard(void)
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_str()) {
         printf("Wizard string response: %s\n", wizard_message.get_str().value());
-    }
-    else {
-        puts("Wizard error: bad response type.");
-    }
-
-    wizard_message.clear();
-    wizard_message.mutable_name() = "Warning";
-    wizard_message.mutable_message().mutable_value() = "Please insert starter";
-    wizard_message = wizard->request(wizard_message);
-    if (wizard_message.has_message()) {
-        puts("Wizard message acknowledged");
     }
     else {
         puts("Wizard error: bad response type.");
@@ -169,28 +213,11 @@ void app_wizard(void)
     else {
         puts("Wizard error: bad response type.");
     }
-
-    wizard_message.clear();
-    wizard_message.mutable_name() = "Choose/Verify your camp";
-    wizard_message.mutable_camp().mutable_value() = "yellow";
-    wizard_message = wizard->request(wizard_message);
-    if (wizard_message.has_camp()) {
-        printf("Wizard camp response: %s\n", wizard_message.get_camp().value());
-    }
-    else {
-        puts("Wizard error: bad response type.");
-    }
-
-    wizard_message.clear();
-    wizard_message.mutable_name() = "Check camera focus";
-    wizard_message.mutable_camera().set_value(true);
-    wizard_message = wizard->request(wizard_message);
-    if (wizard_message.has_camera()) {
-        puts("Camera checked");
-    }
-    else {
-        puts("Wizard error: bad response type.");
-    }
+#endif
 
     puts("Wizard done");
 }
+
+} // namespace app
+
+} // namespace cogip

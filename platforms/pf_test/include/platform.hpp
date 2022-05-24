@@ -62,7 +62,7 @@
  *
  * @{
  */
-#define ROBOT_WIDTH                         333.54                  /**< Robot width (mm) */
+#define ROBOT_WIDTH                         330                     /**< Robot width (mm) */
 #define ROBOT_MARGIN                        (ROBOT_WIDTH / 2)       /**< Point the most far from robot center (mm) */
 #define BEACON_SUPPORT_DIAMETER             70                      /**< Size of the beacon support (a cylinder of 70mm diameter to a cube of 100mm width) */
 

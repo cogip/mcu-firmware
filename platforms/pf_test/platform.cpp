@@ -68,9 +68,6 @@ static ctrl_quadpid_t ctrl_quadpid =
     }
 };
 
-/* Planner */
-cogip::planners::Planner *planner = nullptr;
-
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -161,11 +158,6 @@ ctrl_t *pf_get_ctrl(void)
     return (ctrl_t *)&ctrl_quadpid;
 }
 
-cogip::planners::Planner *pf_get_planner(void)
-{
-    return (cogip::planners::Planner *)planner;
-}
-
 void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
                             cogip::cogip_defs::Polar &robot_speed,
                             cogip::cogip_defs::Polar &motor_command)
@@ -228,8 +220,15 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t right_command = (int16_t) (command.distance() + command.angle());
     int16_t left_command = (int16_t) (command.distance() - command.angle());
 
-    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
-    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
+    if ((right_command == 0) && (left_command == 0)) {
+        motor_brake(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0);
+        motor_brake(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0);
+    }
+    else {
+        motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0, left_command);
+        motor_set(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0, right_command);
+    }
+
 }
 
 int pf_is_camp_left(void)
@@ -278,12 +277,13 @@ void pf_init(void)
 #endif /* MODULE_SHELL_PLATFORMS */
 
     /* Debug LED */
-    if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT)) {
-        puts("WARNING: GPIO_DEBUG_LED not initialized!");
-    }
-    gpio_clear(GPIO_DEBUG_LED);
+    //if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT)) {
+    //    puts("WARNING: GPIO_DEBUG_LED not initialized!");
+    //}
+    //gpio_clear(GPIO_DEBUG_LED);
 
-    motor_driver_init(MOTOR_DRIVER_DEV(0));
+    motor_driver_init(MOTOR_DRIVER_DEV(MOTOR_LEFT));
+    motor_driver_init(MOTOR_DRIVER_DEV(MOTOR_RIGHT));
 
     /* Setup qdec periphereal */
     int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
@@ -298,12 +298,9 @@ void pf_init(void)
     /* Init odometry */
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
-    gpio_clear(GPIO_DEBUG_LED);
+    //gpio_clear(GPIO_DEBUG_LED);
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
-
-    /* Initialize planner */
-    planner = new cogip::planners::AstarPlanner(pf_get_ctrl(), app_get_path());
 
 #ifdef MODULE_SHELL_QUADPID
     ctrl_quadpid_shell_init(&ctrl_quadpid);
@@ -329,8 +326,6 @@ void pf_init_tasks(void)
         (void *)controller,
         "motion control"
         );
-
-    planner->start_thread();
 
     trace_start();
 }
