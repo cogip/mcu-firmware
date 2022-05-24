@@ -53,10 +53,10 @@ static int pln_cmd_launch_action_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    const cogip::path::Pose &current_path_pos = app_get_path().current_pose();
+    const cogip::path::Pose *current_path_pos = app_get_path().current_pose();
 
     puts("Launch callback!");
-    current_path_pos.act();
+    current_path_pos->act();
 
     return EXIT_SUCCESS;
 }
