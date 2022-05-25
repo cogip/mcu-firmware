@@ -21,7 +21,7 @@ static event_t new_frame_event;
 static event_queue_t new_frame_queue;
 
 // Thread stack
-static char lidar_frame_updater_thread_stack[THREAD_STACKSIZE_LARGE];
+static char lidar_frame_updater_thread_stack[THREAD_STACKSIZE_MEDIUM];
 
 // Thread priority
 #define LIDAR_FRAME_UPDATER_PRIO (THREAD_PRIORITY_MAIN - 1)

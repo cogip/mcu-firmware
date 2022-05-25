@@ -29,7 +29,7 @@
 #define DEG2RAD(a)            (a * (2.0 * M_PI) / 360.0)
 
 // Thread stack
-static char obstacle_updater_thread_stack[THREAD_STACKSIZE_LARGE * 2];
+static char obstacle_updater_thread_stack[THREAD_STACKSIZE_LARGE];
 
 // Obstacles list of Lidar detected obstacles
 cogip::obstacles::List *lidar_obstacles = nullptr;

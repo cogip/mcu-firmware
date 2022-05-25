@@ -10,7 +10,7 @@
 #define TASK_PERIOD_MS 100
 
 /* Thread stack */
-static char trace_thread_stack[THREAD_STACKSIZE_MEDIUM];
+static char trace_thread_stack[THREAD_STACKSIZE_LARGE];
 
 /* Thread priority */
 #define TRACE_PRIO (THREAD_PRIORITY_MAIN - 1)

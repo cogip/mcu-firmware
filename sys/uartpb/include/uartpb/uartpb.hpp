@@ -17,15 +17,15 @@
 #endif
 
 #ifndef UARTPB_READER_STACKSIZE
-#define UARTPB_READER_STACKSIZE  THREAD_STACKSIZE_MAIN       ///< message reader thread stask size
+#define UARTPB_READER_STACKSIZE  THREAD_STACKSIZE_SMALL     ///< message reader thread stask size
 #endif
 
 #ifndef UARTPB_INPUT_MESSAGE_LENGTH_MAX
-#define UARTPB_INPUT_MESSAGE_LENGTH_MAX  1024                ///< max incoming message length
+#define UARTPB_INPUT_MESSAGE_LENGTH_MAX  128               ///< max incoming message length
 #endif
 
 #ifndef UARTPB_OUTPUT_MESSAGE_LENGTH_MAX
-#define UARTPB_OUTPUT_MESSAGE_LENGTH_MAX  (4*1024)           ///< max outgoing message length
+#define UARTPB_OUTPUT_MESSAGE_LENGTH_MAX  (1024)           ///< max outgoing message length
 #endif
 
 /// @}

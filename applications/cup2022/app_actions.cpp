@@ -40,7 +40,7 @@ static PB_OutputMessage _pb_score;
 
 static Actions *_actions = nullptr;
 
-static ActionStrategy _strategy = ActionStrategy::Game;
+static ActionStrategy _strategy = ActionStrategy::Approval;
 
 struct ActionComparator
 {

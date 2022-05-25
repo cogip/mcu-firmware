@@ -69,8 +69,8 @@ static ctrl_quadpid_t ctrl_quadpid =
 };
 
 /* Thread stacks */
-char controller_thread_stack[THREAD_STACKSIZE_LARGE];
-char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
+char controller_thread_stack[THREAD_STACKSIZE_SMALL];
+//char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool copilot_connected = false;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
