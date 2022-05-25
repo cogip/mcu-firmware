@@ -253,33 +253,32 @@ public:
 private:
 };
 
-class EndAction: public Action {
+class ExcavationEndAction: public Action {
 public:
-    EndAction(): Action("end") {
+    ExcavationEndAction(): Action("end") {
         Pose *pose = new Pose ({ app_camp_adapt_distance(525), 1375, -90, MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR });
         poses_->push_back(pose);
         pose_it_ = poses_->begin();
-        app_get_context().score = 7;
     };
-    ~EndAction() {};
+    ~ExcavationEndAction() {};
 
     float weight() const override {
         return 1;
     };
 
     void before_action() override {
+        std::cout << "ExcavationEndAction::before_action" << std::endl;
         // Disable excavation site obstacles
         std::map<CampColor, FixedObstacle *> & obstacles = app_get_excavation_sites_obstacles();
         obstacles[app_camp_get_color()]->enable(false);
     };
 
     void after_action() override {
+        std::cout << "ExcavationEndAction::after_action" << std::endl;
         app_get_context().score += 20;
         _pb_score.set_score(app_get_context().score);
         pf_get_uartpb()->send_message(_pb_score);
     };
-
-private:
 };
 
 class StaticAction: public Action {
@@ -1132,7 +1131,7 @@ static void _app_actions_init_game()
     _actions->push_back(new StartAction());
 
     // End
-    _actions->push_back(new EndAction());
+    _actions->push_back(new ExcavationEndAction());
 
     // Get fixed sample on table
     _actions->push_back(new GetFixedSampleAction(
