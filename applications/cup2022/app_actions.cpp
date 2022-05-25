@@ -203,30 +203,37 @@ public:
     };
 };
 
-// class ApprovalAction: public Action {
-// public:
-//     ApprovalAction(): Action("Approval action") {
-//         pose = new Pose(app_camp_adapt_distance(-1200), 1000, app_camp_adapt_angle(0), LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
-//         poses_->push_back(pose);
+class PlayInLoopAction: public Action {
+public:
+    PlayInLoopAction(): Action("Play in loop action") {
+        Pose *pose = new Pose(
+            app_camp_adapt_distance(-1200),
+            1000,
+            app_camp_adapt_angle(0),
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR
+        );
+        poses_->push_back(pose);
 
-//         pose = new Pose(app_camp_adapt_distance(1200), 1000, app_camp_adapt_angle(180), LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
-//         pose->set_after_pose(std::bind(&ApprovalAction::loop, this));
-//         poses_->push_back(pose);
-//         std::cout << "ApprovalAction::poses_ = " << *poses_ << std::endl;
-//         pose_it_ = poses_->begin();
-//     };
-//     ~ApprovalAction() {};
+        pose = new Pose(
+            app_camp_adapt_distance(1200),
+            1000,
+            app_camp_adapt_angle(180),
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR
+        );
+        pose->set_after_pose(std::bind(&PlayInLoopAction::loop, this));
+        poses_->push_back(pose);
+        pose_it_ = poses_->begin();
+    };
+    ~PlayInLoopAction() {};
 
-//     void loop() {
-//         std::cout << "ApprovalAction::loop1 = " << *poses_ << std::endl;
-//         pose_it_ = poses_->begin();
-//         std::cout << "ApprovalAction::loop2 = " << *poses_ << std::endl;
-//     };
+    void loop() {
+        pose_it_ = poses_->begin();
+    };
 
-//     float weight() const override {
-//         return 1000000;
-//     };
-// };
+    float weight() const override {
+        return 1000000;
+    };
+};
 
 class StartAction: public Action {
 public:
