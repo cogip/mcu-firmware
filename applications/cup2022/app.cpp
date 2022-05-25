@@ -14,7 +14,7 @@ void app_init(void)
     gpio_init(GPIO_STARTER, GPIO_IN);
 
     cogip::app::app_obstacles_init();
-    //cogip::app::app_samples_init();
+    cogip::app::app_samples_init();
     cogip::app::app_shell_init();
 }
 

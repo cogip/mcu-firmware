@@ -82,61 +82,60 @@ void app_samples_init()
     obstacles->push_back(sample->obstacle());
     (*_samples[CampColor::Yellow])[SampleId::TableFixedRed] = sample;
 
-    sample = new Sample(SampleId::TableRandomBlue, SampleColor::Blue, false, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::TableRandomBlue] = sample;
+    // sample = new Sample(SampleId::TableRandomBlue, SampleColor::Blue, false, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::TableRandomBlue] = sample;
 
-    sample = new Sample(SampleId::TableRandomGreen, SampleColor::Green, false, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::TableRandomGreen] = sample;
+    // sample = new Sample(SampleId::TableRandomGreen, SampleColor::Green, false, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::TableRandomGreen] = sample;
 
-    sample = new Sample(SampleId::TableRandomRed, SampleColor::Red, false, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::TableRandomRed] = sample;
+    // sample = new Sample(SampleId::TableRandomRed, SampleColor::Red, false, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::TableRandomRed] = sample;
 
-    sample = new Sample(SampleId::TableRandomRed, SampleColor::Red, false, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::TableRandomRed] = sample;
+    // sample = new Sample(SampleId::TableRandomRed, SampleColor::Red, false, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::TableRandomRed] = sample;
 
-    sample = new Sample(SampleId::RackTopBlue, SampleColor::Blue, true, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::RackTopBlue] = sample;
+    // sample = new Sample(SampleId::RackTopBlue, SampleColor::Blue, true, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::RackTopBlue] = sample;
 
-    sample = new Sample(SampleId::RackTopGreen, SampleColor::Green, true, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::RackTopGreen] = sample;
+    // sample = new Sample(SampleId::RackTopGreen, SampleColor::Green, true, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::RackTopGreen] = sample;
 
-    sample = new Sample(SampleId::RackTopRed, SampleColor::Red, true, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::RackTopRed] = sample;
+    // sample = new Sample(SampleId::RackTopRed, SampleColor::Red, true, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::RackTopRed] = sample;
 
-    sample = new Sample(SampleId::RackSideBlue, SampleColor::Blue, true, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::RackSideBlue] = sample;
+    // sample = new Sample(SampleId::RackSideBlue, SampleColor::Blue, true, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::RackSideBlue] = sample;
 
-    sample = new Sample(SampleId::RackSideGreen, SampleColor::Green, true, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::RackSideGreen] = sample;
+    // sample = new Sample(SampleId::RackSideGreen, SampleColor::Green, true, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::RackSideGreen] = sample;
 
-    sample = new Sample(SampleId::RackSideRed, SampleColor::Red, true, false, SampleLocation::OnTable);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::RackSideRed] = sample;
+    // sample = new Sample(SampleId::RackSideRed, SampleColor::Red, true, false, SampleLocation::OnTable);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::RackSideRed] = sample;
 
-    sample = new Sample(SampleId::OutSideGreen, SampleColor::Green, true, false, SampleLocation::OnTable);
-    sample->set_coords(1500+64.95, 300);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::OutSideGreen] = sample;
+    // sample = new Sample(SampleId::OutSideGreen, SampleColor::Green, true, false, SampleLocation::OnTable);
+    // sample->set_coords(1500+64.95, 300);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::OutSideGreen] = sample;
 
-    sample = new Sample(SampleId::ShedBlue, SampleColor::Blue, true, false, SampleLocation::OnTable);
-    sample->set_coords(1500-120.6, 1688.4);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::ShedBlue] = sample;
+    // sample = new Sample(SampleId::ShedBlue, SampleColor::Blue, true, false, SampleLocation::OnTable);
+    // sample->set_coords(1500-120.6, 1688.4);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::ShedBlue] = sample;
 
-    sample = new Sample(SampleId::ShedRed, SampleColor::Red, true, false, SampleLocation::OnTable);
-    sample->set_coords(1500-311.6, 1879.4);
-    obstacles->push_back(sample->obstacle());
-    (*_samples[CampColor::Yellow])[SampleId::ShedRed] = sample;
-
+    // sample = new Sample(SampleId::ShedRed, SampleColor::Red, true, false, SampleLocation::OnTable);
+    // sample->set_coords(1500-311.6, 1879.4);
+    // obstacles->push_back(sample->obstacle());
+    // (*_samples[CampColor::Yellow])[SampleId::ShedRed] = sample;
 
     // Copy samples for purple side
     for (const auto item : *(_samples[CampColor::Yellow])) {

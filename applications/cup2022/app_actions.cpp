@@ -40,7 +40,7 @@ static PB_OutputMessage _pb_score;
 
 static Actions *_actions = nullptr;
 
-static ActionStrategy _strategy = ActionStrategy::Approval;
+static ActionStrategy _strategy = ActionStrategy::Game;
 
 struct ActionComparator
 {
@@ -238,19 +238,21 @@ public:
 class StartAction: public Action {
 public:
     StartAction(): Action("start") {
-        Pose *pose = new Pose(app_camp_adapt_distance(1200), 700, app_camp_adapt_angle(180), MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
+        Pose *pose = new Pose(
+            app_camp_adapt_distance(1100 + ROBOT_CENTER_TO_FACE + 10),
+            1000 - ROBOT_CENTER_TO_SIDE,
+            app_camp_adapt_angle(180),
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+        );
         poses_->push_back(pose);
-        pose_it_ = poses_->begin();
         app_get_context().score = 7;
+        pose_it_ = poses_->begin();
     };
     ~StartAction() {};
 
     float weight() const override {
         return std::numeric_limits<float>::max();
-        // return 1000;
     };
-
-private:
 };
 
 class ExcavationEndAction: public Action {
@@ -873,6 +875,150 @@ private:
     Poses::iterator drop_replica_pose1_, drop_replica_pose2_;
 };
 
+class StatuetteOnlyAction: public Action {
+public:
+    StatuetteOnlyAction(
+        float weight,
+        bool opposite=false
+    ) : Action("Statuette only"),
+        default_weight_(weight),
+        opposite_(opposite)
+    {
+        Pose *pose;
+        cogip_defs::Coords statuette_center_on_pedestal(1245, 1749);
+
+        // Approch pedestal
+        pose = new Pose(
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
+            app_camp_adapt_angle(45),
+            MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
+        poses_->push_back(pose);
+
+        // Take statuette on pedestal
+        pose = new Pose(
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2,
+            app_camp_adapt_angle(45),
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR, false);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::take_statuette, this));
+        poses_->push_back(pose);
+
+        // Step back pedestal
+        pose = new Pose(
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
+            app_camp_adapt_angle(45),
+            MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
+        poses_->push_back(pose);
+
+        // Approach cabinet to drop statuette
+        pose = new Pose(
+            app_camp_adapt_distance(1275),
+            ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 91 + 50,
+            -90,
+            MAX_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+        drop_statuette_pose1_ = poses_->insert(poses_->end(), pose);
+
+        // Drop statuette
+        pose = new Pose(
+            app_camp_adapt_distance(1275),
+            ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 91,
+            -90,
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR, false);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::drop_statuette, this));
+        drop_statuette_pose2_ = poses_->insert(poses_->end(), pose);
+
+        // Approach cabinet to take replica
+        pose = new Pose(
+            app_camp_adapt_distance(1115.15),
+            ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
+            -90,
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+        poses_->push_back(pose);
+
+        // Take replica
+        pose = new Pose(
+            app_camp_adapt_distance(1115.15),
+            ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5,
+            -90,
+            MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR, false);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::take_replica, this));
+        poses_->push_back(pose);
+
+        // Approach cabinet to take replica
+        pose = new Pose(
+            app_camp_adapt_distance(1115.15),
+            ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
+            -90,
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+        poses_->push_back(pose);
+        // Approach pedestal to drop replica
+        pose = new Pose(
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
+            app_camp_adapt_angle(45),
+            MAX_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+        drop_replica_pose1_ = poses_->insert(poses_->end(), pose);
+
+        // Drop replica
+        pose = new Pose(
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2,
+            app_camp_adapt_angle(45),
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR, false);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::drop_replica, this));
+        drop_replica_pose2_ = poses_->insert(poses_->end(), pose);
+
+        pose_it_ = poses_->begin();
+    };
+
+    float weight() const override {
+        return default_weight_;
+    };
+
+    void take_statuette() {
+        std::cout << "StatuetteOnlyAction::take_statuette" << std::endl;
+        // TODO: get statuette
+        bool success = true;
+        if (success) {
+            app_get_context().score += 5;
+        }
+        else {
+            poses_->erase(drop_statuette_pose1_);
+            poses_->erase(drop_statuette_pose2_);
+        }
+    };
+
+    void drop_statuette() {
+        std::cout << "StatuetteOnlyAction::drop_statuette" << std::endl;
+        // TODO: drop statuette
+        app_get_context().score += 15;
+    };
+
+    void take_replica() {
+        std::cout << "StatuetteOnlyAction::take_replica" << std::endl;
+        // TODO: get statuette
+        bool success = true;
+        if (! success) {
+            poses_->erase(drop_replica_pose1_);
+            poses_->erase(drop_replica_pose2_);
+        }
+    };
+
+    void drop_replica() {
+        std::cout << "StatuetteOnlyAction::drop_replica" << std::endl;
+        // TODO: drop statuette
+        app_get_context().score += 10;
+    };
+
+private:
+    float default_weight_;
+    bool opposite_;
+    Poses::iterator drop_statuette_pose1_, drop_statuette_pose2_;
+    Poses::iterator drop_replica_pose1_, drop_replica_pose2_;
+};
+
 class DropInShedAction: public Action {
 public:
     DropInShedAction(
@@ -1123,6 +1269,50 @@ private:
     double angle_;
 };
 
+class PushAndEndAction: public Action {
+public:
+    PushAndEndAction(): Action("Push and end action") {
+        Pose *pose = new Pose(
+            app_camp_adapt_distance(50),
+            675,
+            app_camp_adapt_angle(0),
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+        );
+        pose->set_after_pose(std::bind(&PushAndEndAction::before_push, this));
+        poses_->push_back(pose);
+
+        pose = new Pose(
+            app_camp_adapt_distance(1500 - APP_SAMPLE_RADIUS*2 - ROBOT_CENTER_TO_FACE - 40),
+            675,
+            -90,
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+        );
+        poses_->push_back(pose);
+
+        pose_it_ = poses_->begin();
+    };
+    ~PushAndEndAction() {};
+
+    void before_push() {
+        std::cout << "PushAndEndAction::before_push" << std::endl;
+        app_samples_get_one(SampleId::TableFixedBlue)->obstacle()->enable(false);
+        app_samples_get_one(SampleId::TableFixedRed)->obstacle()->enable(false);
+        app_samples_get_one(SampleId::TableFixedGreen)->obstacle()->enable(false);
+    };
+
+    void after_action() override {
+        std::cout << "PushAndEndAction::after_action" << std::endl;
+        app_get_context().score += 1; // 1 sample
+        app_get_context().score += 20;
+        _pb_score.set_score(app_get_context().score);
+        pf_get_uartpb()->send_message(_pb_score);
+    };
+
+    float weight() const override {
+        return 1;
+    };
+};
+
 static void _app_actions_init_game()
 {
     _actions = new Actions();
@@ -1130,51 +1320,54 @@ static void _app_actions_init_game()
     // Start
     _actions->push_back(new StartAction());
 
-    // End
-    _actions->push_back(new ExcavationEndAction());
+    // // End
+    // _actions->push_back(new ExcavationEndAction());
 
-    // Get fixed sample on table
-    _actions->push_back(new GetFixedSampleAction(
-        SampleId::TableFixedRed,
-        { SampleId::TableFixedGreen, SampleId::TableFixedBlue },
-        1000
-    ));
-    _actions->push_back(new GetFixedSampleAction(
-        SampleId::TableFixedGreen,
-        { SampleId::TableFixedRed, SampleId::TableFixedBlue },
-        1000
-    ));
-    _actions->push_back(new GetFixedSampleAction(
-        SampleId::TableFixedBlue,
-        { SampleId::TableFixedRed, SampleId::TableFixedGreen },
-        1000
-    ));
+    // // Get fixed sample on table
+    // _actions->push_back(new GetFixedSampleAction(
+    //     SampleId::TableFixedRed,
+    //     { SampleId::TableFixedGreen, SampleId::TableFixedBlue },
+    //     1000
+    // ));
+    // _actions->push_back(new GetFixedSampleAction(
+    //     SampleId::TableFixedGreen,
+    //     { SampleId::TableFixedRed, SampleId::TableFixedBlue },
+    //     1000
+    // ));
+    // _actions->push_back(new GetFixedSampleAction(
+    //     SampleId::TableFixedBlue,
+    //     { SampleId::TableFixedRed, SampleId::TableFixedGreen },
+    //     1000
+    // ));
 
-    // Detect random samples
-    _actions->push_back(new DetectRandomSamplesAction(900));
-    // _actions->push_back(new DetectRandomSamplesAction(100, true));
+    // // Detect random samples
+    // _actions->push_back(new DetectRandomSamplesAction(900));
+    // // _actions->push_back(new DetectRandomSamplesAction(100, true));
 
-    // Drop samples on gallery
-    _actions->push_back(new DropInGalleryAction(SampleColor::Red, 800));
-    _actions->push_back(new DropInGalleryAction(SampleColor::Red, 800));
-    _actions->push_back(new DropInGalleryAction(SampleColor::Green, 800));
-    _actions->push_back(new DropInGalleryAction(SampleColor::Green, 800));
-    _actions->push_back(new DropInGalleryAction(SampleColor::Blue, 800));
-    _actions->push_back(new DropInGalleryAction(SampleColor::Blue, 800));
+    // // Drop samples on gallery
+    // _actions->push_back(new DropInGalleryAction(SampleColor::Red, 800));
+    // _actions->push_back(new DropInGalleryAction(SampleColor::Red, 800));
+    // _actions->push_back(new DropInGalleryAction(SampleColor::Green, 800));
+    // _actions->push_back(new DropInGalleryAction(SampleColor::Green, 800));
+    // _actions->push_back(new DropInGalleryAction(SampleColor::Blue, 800));
+    // _actions->push_back(new DropInGalleryAction(SampleColor::Blue, 800));
 
-    // Statuette actions
-    _actions->push_back(new StatuetteAction(700));
+    // Statuette only actions
+    _actions->push_back(new StatuetteOnlyAction(700));
 
-    // Drop in sched
-    _actions->push_back(new DropInShedAction(600));
+    // // Drop in sched
+    // _actions->push_back(new DropInShedAction(600));
 
-    _actions->push_back(new ExcavationSquaresAction(500));
+    // _actions->push_back(new ExcavationSquaresAction(500));
 
-    // Get sample on top dispenser
-    _actions->push_back(new SideDispenserAction(400));
-    // _actions->push_back(new TopDispenserAction(400));
+    // // Get sample on top dispenser
+    // _actions->push_back(new SideDispenserAction(400));
+    // // _actions->push_back(new TopDispenserAction(400));
 
     // Drop in camp (300)
+
+    // Push fixed samples in camp and stop
+    _actions->push_back(new PushAndEndAction());
 }
 
 static void _app_actions_init_approval()
