@@ -26,7 +26,7 @@
 #endif
 
 #ifndef OBSTACLE_BOUNDING_BOX_MARGIN
-#  define OBSTACLE_BOUNDING_BOX_MARGIN    0.2  /**< bounding box margin in percent of the radius */
+#  define OBSTACLE_BOUNDING_BOX_MARGIN    0.4  /**< bounding box margin in percent of the radius */
 #endif
 
 namespace cogip {

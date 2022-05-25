@@ -8,7 +8,7 @@
 
 #include "thread.h"
 
-static char wizard_thread_stack[THREAD_STACKSIZE_MEDIUM];
+static char wizard_thread_stack[THREAD_STACKSIZE_LARGE*2];
 #define WIZARD_THREAD_PRIO (THREAD_PRIORITY_MAIN - 1)
 
 namespace cogip {

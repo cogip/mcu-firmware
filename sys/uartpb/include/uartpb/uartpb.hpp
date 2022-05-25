@@ -17,7 +17,7 @@
 #endif
 
 #ifndef UARTPB_READER_STACKSIZE
-#define UARTPB_READER_STACKSIZE  THREAD_STACKSIZE_SMALL     ///< message reader thread stask size
+#define UARTPB_READER_STACKSIZE  THREAD_STACKSIZE_LARGE*2   ///< message reader thread stask size
 #endif
 
 #ifndef UARTPB_INPUT_MESSAGE_LENGTH_MAX

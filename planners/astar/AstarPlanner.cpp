@@ -37,6 +37,9 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
     // Recompute avoidance graph if not 0
     bool avoidance_update = avoidance_check_recompute(robot_pose,
                                                       pose_to_reach);
+    static int count = 1000;
+    if (count-- < 0)
+        goto trajectory_get_route_update_error;
 
     // Ask to the controller if the targeted position has been reached
     if (ctrl_is_pose_reached(ctrl_)) {
@@ -170,6 +173,7 @@ void *AstarPlanner::task_planner()
     const cogip::path::Pose *current_path_pos = path_.current_pose();
     const cogip::cogip_defs::Pose *initial_pose = current_path_pos;
     ctrl_set_pose_current(ctrl_, *initial_pose);
+    ctrl_set_pose_to_reach(ctrl_, *initial_pose);
     ctrl_set_speed_order(ctrl_, speed_order);
     ctrl_set_pose_reached(ctrl_);
 

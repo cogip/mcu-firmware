@@ -14,6 +14,7 @@ static cogip::planners::Planner *_planner = nullptr;
 cogip::planners::Planner *app_planner_get(void)
 {
     if (! _planner) {
+        while(gpio_read(GPIO_STARTER));
         _planner = new cogip::planners::AstarPlanner(pf_get_ctrl(), cogip::app::app_get_path());
     }
     return (cogip::planners::Planner *)_planner;

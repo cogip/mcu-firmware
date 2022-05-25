@@ -152,30 +152,81 @@ Action *Actions::new_action(Action *recycle_action)
 class ApprovalAction: public Action {
 public:
     ApprovalAction(): Action("Approval action") {
-        Pose *pose = new Pose(app_camp_adapt_distance(1200), 1000, app_camp_adapt_angle(180), NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR);
+        Pose *pose = new Pose(
+            app_camp_adapt_distance(1500 - ROBOT_CENTER_TO_FACE),
+            1000 - ROBOT_CENTER_TO_SIDE,
+            app_camp_adapt_angle(180),
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+        );
         poses_->push_back(pose);
 
-        pose = new Pose(app_camp_adapt_distance(-1200), 1000, app_camp_adapt_angle(0), NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR);
+        pose = new Pose(
+            app_camp_adapt_distance(50),
+            1200,
+            app_camp_adapt_angle(180),
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+        );
         poses_->push_back(pose);
 
-        pose = new Pose(app_camp_adapt_distance(1200), 1000, app_camp_adapt_angle(180), NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR);
-        pose->set_after_pose(std::bind(&ApprovalAction::loop, this));
+        pose = new Pose(
+            app_camp_adapt_distance(50),
+            675,
+            app_camp_adapt_angle(0),
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+        );
+        pose->set_before_pose(std::bind(&ApprovalAction::before_push, this));
         poses_->push_back(pose);
+
+        pose = new Pose(
+            app_camp_adapt_distance(1500 - APP_SAMPLE_RADIUS*2 - ROBOT_CENTER_TO_FACE - 30),
+            675,
+            app_camp_adapt_angle(0),
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+        );
+        poses_->push_back(pose);
+
         std::cout << "ApprovalAction::poses_ = " << *poses_ << std::endl;
         pose_it_ = poses_->begin();
     };
     ~ApprovalAction() {};
 
-    void loop() {
-        std::cout << "ApprovalAction::loop1 = " << *poses_ << std::endl;
-        pose_it_ = poses_->begin();
-        std::cout << "ApprovalAction::loop2 = " << *poses_ << std::endl;
+    void before_push() {
+        //std::cout << "ApprovalAction::before_push" << std::endl;
+        //app_samples_get_one(SampleId::TableFixedBlue)->obstacle()->enable(false);
+        //app_samples_get_one(SampleId::TableFixedRed)->obstacle()->enable(false);
+        //app_samples_get_one(SampleId::TableFixedGreen)->obstacle()->enable(false);
     };
+
 
     float weight() const override {
         return 1000000;
     };
 };
+
+// class ApprovalAction: public Action {
+// public:
+//     ApprovalAction(): Action("Approval action") {
+//         pose = new Pose(app_camp_adapt_distance(-1200), 1000, app_camp_adapt_angle(0), LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+//         poses_->push_back(pose);
+
+//         pose = new Pose(app_camp_adapt_distance(1200), 1000, app_camp_adapt_angle(180), LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+//         pose->set_after_pose(std::bind(&ApprovalAction::loop, this));
+//         poses_->push_back(pose);
+//         std::cout << "ApprovalAction::poses_ = " << *poses_ << std::endl;
+//         pose_it_ = poses_->begin();
+//     };
+//     ~ApprovalAction() {};
+
+//     void loop() {
+//         std::cout << "ApprovalAction::loop1 = " << *poses_ << std::endl;
+//         pose_it_ = poses_->begin();
+//         std::cout << "ApprovalAction::loop2 = " << *poses_ << std::endl;
+//     };
+
+//     float weight() const override {
+//         return 1000000;
+//     };
+// };
 
 class StartAction: public Action {
 public:

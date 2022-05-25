@@ -128,7 +128,7 @@ void pf_send_pb_state(void)
         return;
     }
 
-    ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
+    /*ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
     pb_state.clear();
     pb_state.set_mode((PB_Mode)ctrl->control.current_mode);
     ctrl->control.pose_current.pb_copy(pb_state.mutable_pose_current());
@@ -140,7 +140,7 @@ void pf_send_pb_state(void)
     cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
 
     output_message.set_state(pb_state);
-    uartpb->send_message(output_message);
+    uartpb->send_message(output_message);*/
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)

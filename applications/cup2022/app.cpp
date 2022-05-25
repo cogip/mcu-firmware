@@ -11,8 +11,10 @@ void app_init(void)
     /* Init quadpid controller */
     pf_init_quadpid_params(ctrl_quadpid_params);
 
+    gpio_init(GPIO_STARTER, GPIO_IN);
+
     cogip::app::app_obstacles_init();
-    cogip::app::app_samples_init();
+    //cogip::app::app_samples_init();
     cogip::app::app_shell_init();
 }
 
