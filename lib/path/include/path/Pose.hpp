@@ -31,8 +31,8 @@ public:
         double max_speed_linear=0.0,    ///< [in] max speed linear
         double max_speed_angular=0.0,   ///< [in] max speed angular
         bool allow_reverse=true,        ///< [in] reverse mode
-        func_cb_t act_=nullptr          ///< [in] action callback
-        ) : cogip_defs::Pose(x, y, O), max_speed_linear_(max_speed_linear), max_speed_angular_(max_speed_angular), allow_reverse_(allow_reverse), act_(act_) {};
+        func_cb_t act=nullptr          ///< [in] action callback
+        ) : cogip_defs::Pose(x, y, O), max_speed_linear_(max_speed_linear), max_speed_angular_(max_speed_angular), allow_reverse_(allow_reverse), act_(act) {};
 
     /// Destructor
     virtual ~Pose() {};

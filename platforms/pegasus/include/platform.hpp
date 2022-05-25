@@ -30,6 +30,7 @@
 /* Project includes */
 #include "board.h"
 #include "ctrl.hpp"
+#include "lx_servo.h"
 #include "quadpid.hpp"
 #include "obstacles/List.hpp"
 #include "odometry.hpp"
@@ -300,6 +301,13 @@ void pf_init_tasks(void);
  * @return
  **/
 void pf_init(void);
+
+/**
+ * @brief   Return Half-duplex LX servomotors UART stream
+ *
+ * @return  Half-duplex UART stream
+ */
+uart_half_duplex_t* pf_lx_get_stream(void);
 
 /**
  * @brief Read quadrature encoders to get linear and angular robot speed

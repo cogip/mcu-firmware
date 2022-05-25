@@ -4,6 +4,7 @@
 #include "trigonometry.h"
 
 #include "app_actions.hpp"
+#include "app_arm.hpp"
 #include "app_camp.hpp"
 #include "app_context.hpp"
 #include "app_obstacles.hpp"
@@ -893,6 +894,7 @@ public:
             statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
             app_camp_adapt_angle(45),
             MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::approach_statuette, this));
         poses_->push_back(pose);
 
         // Take statuette on pedestal
@@ -910,6 +912,7 @@ public:
             statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
             app_camp_adapt_angle(45),
             MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::stepback_statuette, this));
         poses_->push_back(pose);
 
         // Approach cabinet to drop statuette
@@ -935,6 +938,7 @@ public:
             ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
             -90,
             LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::approach_replica, this));
         poses_->push_back(pose);
 
         // Take replica
@@ -952,7 +956,9 @@ public:
             ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
             -90,
             LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::stepback_replica, this));
         poses_->push_back(pose);
+
         // Approach pedestal to drop replica
         pose = new Pose(
             app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
@@ -977,6 +983,11 @@ public:
         return default_weight_;
     };
 
+    void approach_statuette() {
+        std::cout << "StatuetteOnlyAction::approach_statuette" << std::endl;
+        app_central_arm_gripping_statuette();
+    };
+
     void take_statuette() {
         std::cout << "StatuetteOnlyAction::take_statuette" << std::endl;
         // TODO: get statuette
@@ -990,10 +1001,20 @@ public:
         }
     };
 
+    void stepback_statuette() {
+        std::cout << "StatuetteOnlyAction::stepback_statuette" << std::endl;
+        app_central_arm_gripping_statuette_up();
+    };
+
     void drop_statuette() {
         std::cout << "StatuetteOnlyAction::drop_statuette" << std::endl;
-        // TODO: drop statuette
+        app_central_arm_releasing_statuette();
         app_get_context().score += 15;
+    };
+
+    void approach_replica() {
+        std::cout << "StatuetteOnlyAction::approach_replica" << std::endl;
+        app_central_arm_gripping_replica();
     };
 
     void take_replica() {
@@ -1006,9 +1027,14 @@ public:
         }
     };
 
+    void stepback_replica() {
+        std::cout << "StatuetteOnlyAction::stepback_replica" << std::endl;
+        app_central_arm_gripping_replica_up();
+    };
+
     void drop_replica() {
         std::cout << "StatuetteOnlyAction::drop_replica" << std::endl;
-        // TODO: drop statuette
+        app_central_arm_releasing_replica();
         app_get_context().score += 10;
     };
 

@@ -10,6 +10,7 @@
 #include "obstacles/Obstacle.hpp"
 #include "planners/astar/AstarPlanner.hpp"
 #include "platform.hpp"
+#include "platform_arm.hpp"
 #include "avoidance.hpp"
 #include "tracefd/tracefd.hpp"
 #include "path/Path.hpp"
@@ -298,6 +299,9 @@ void pf_init(void)
     /* Init odometry */
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
 
+    /* Init arms */
+    pf_arms_init();
+
     //gpio_clear(GPIO_DEBUG_LED);
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
@@ -313,7 +317,7 @@ void pf_init_tasks(void)
 
     wizard = new cogip::wizard::Wizard(uartpb);
 
-    lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
+    //lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 
     obstacle_updater_start(ctrl_get_pose_current(controller));
 

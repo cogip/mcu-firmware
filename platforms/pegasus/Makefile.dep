@@ -16,8 +16,10 @@ USEMODULE += astar
 USEMODULE += quadpid
 USEMODULE += cogip_defs
 USEMODULE += lds01_dma
+USEMODULE += lx_servo
 USEMODULE += obstacles
 USEMODULE += tracefd
+USEMODULE += vacuum_pump
 USEMODULE += wizard
 
 # Board features required

@@ -36,8 +36,18 @@ extern "C" {
 /* Debug LED */
 #define GPIO_DEBUG_LED  GPIO_PIN(PORT_A, 0)
 
-/* Servomotors half duplex direction pin */
+#define GPIO_VACUUM1_ENABLE GPIO_PIN(PORT_C, 13)
+#define GPIO_VACUUM1_TEST GPIO_PIN(PORT_C, 0)
+#define GPIO_VACUUM2_ENABLE GPIO_PIN(PORT_C, 14)
+#define GPIO_VACUUM2_TEST GPIO_PIN(PORT_C, 1)
+#define GPIO_VACUUM3_ENABLE GPIO_PIN(PORT_C, 15)
+#define GPIO_VACUUM3_TEST GPIO_PIN(PORT_C, 2)
+
+/* Servomotors */
+/* Half duplex direction pin */
 #define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
+/* UART */
+#define LX_UART_DEV     3
 
 /* Motors */
 #define MOTOR_LEFT  0
