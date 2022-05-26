@@ -39,6 +39,7 @@ void app_central_arm_gripping_statuette_up(void);
 void app_central_arm_releasing_statuette(void);
 
 void app_central_arm_gripping_replica(void);
+void app_central_arm_gripping_replica_purple(void);
 void app_central_arm_gripping_replica_up(void);
 void app_central_arm_releasing_replica(void);
 

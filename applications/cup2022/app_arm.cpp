@@ -235,7 +235,7 @@ void app_central_arm_gripping_statuette_up(void)
 
 void app_central_arm_releasing_statuette(void)
 {
-    int ret = lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_BASE], 250, 500);
+    int ret = lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_BASE], 200, 500);
     ret += lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_MID], 500, 500);
     ret += lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_LIFT], 350, 500);
     ret += lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_HEAD], 500, 0);
@@ -243,24 +243,34 @@ void app_central_arm_releasing_statuette(void)
     ret += lx_servo_move_start(&lx[ARM_CENTRAL_LX_BASE]);
     ret += lx_servo_move_start(&lx[ARM_CENTRAL_LX_MID]);
     ret += lx_servo_move_start(&lx[ARM_CENTRAL_LX_HEAD]);
-    wait_timeout(500);
+    wait_timeout(2000);
     vacuum_pump_stop(ARM_CENTRAL_PUMP);
-    wait_timeout(200);
+    wait_timeout(500);
     app_central_arm_folded();
 }
 
-void app_central_arm_gripping_replica(void)
+void app_central_arm_gripping_replica_purple(void)
 {
     vacuum_pump_start(ARM_CENTRAL_PUMP);
-    int ret = lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_BASE], 250, 500);
+    int ret = lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_BASE], 200, 500);
     ret += lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_MID], 500, 500);
-    ret += lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_LIFT], 450, 500);
+    ret += lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_LIFT], 550, 500);
     ret += lx_servo_move_time_wait_write(&lx[ARM_CENTRAL_LX_HEAD], 500, 0);
     ret += lx_servo_move_start(&lx[ARM_CENTRAL_LX_LIFT]);
     ret += lx_servo_move_start(&lx[ARM_CENTRAL_LX_BASE]);
     ret += lx_servo_move_start(&lx[ARM_CENTRAL_LX_MID]);
     ret += lx_servo_move_start(&lx[ARM_CENTRAL_LX_HEAD]);
     wait_timeout(500);
+}
+
+void app_central_arm_gripping_replica(void)
+{
+    if (app_camp_get_color() == CampColor::Purple) {
+        app_central_arm_gripping_replica_purple();
+    }
+    else {
+        app_central_arm_gripping_statuette();
+    }
 }
 
 void app_central_arm_gripping_replica_up(void)

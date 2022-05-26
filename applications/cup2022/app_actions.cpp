@@ -879,11 +879,9 @@ private:
 class StatuetteOnlyAction: public Action {
 public:
     StatuetteOnlyAction(
-        float weight,
-        bool opposite=false
+        float weight
     ) : Action("Statuette only"),
-        default_weight_(weight),
-        opposite_(opposite)
+        default_weight_(weight)
     {
         Pose *pose;
         cogip_defs::Coords statuette_center_on_pedestal(1245, 1749);
@@ -893,13 +891,13 @@ public:
             app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
             statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
             app_camp_adapt_angle(45),
-            MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR);
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::approach_statuette, this));
         poses_->push_back(pose);
 
         // Take statuette on pedestal
         pose = new Pose(
-            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2),
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2 + 30),
             statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2,
             app_camp_adapt_angle(45),
             LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR, false);
@@ -911,7 +909,7 @@ public:
             app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
             statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
             app_camp_adapt_angle(45),
-            MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR);
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::stepback_statuette, this));
         poses_->push_back(pose);
 
@@ -920,7 +918,7 @@ public:
             app_camp_adapt_distance(1275),
             ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 91 + 50,
             -90,
-            MAX_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+            NORMAL_SPEED_LINEAR, LOW_SPEED_ANGULAR);
         drop_statuette_pose1_ = poses_->insert(poses_->end(), pose);
 
         // Drop statuette
@@ -937,7 +935,7 @@ public:
             app_camp_adapt_distance(1115.15),
             ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
             -90,
-            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR);
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::approach_replica, this));
         poses_->push_back(pose);
 
@@ -946,7 +944,7 @@ public:
             app_camp_adapt_distance(1115.15),
             ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5,
             -90,
-            MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR, false);
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR, false);
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::take_replica, this));
         poses_->push_back(pose);
 
@@ -955,16 +953,16 @@ public:
             app_camp_adapt_distance(1115.15),
             ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
             -90,
-            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+            NORMAL_SPEED_LINEAR, LOW_SPEED_ANGULAR);
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::stepback_replica, this));
         poses_->push_back(pose);
 
         // Approach pedestal to drop replica
         pose = new Pose(
-            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
-            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE - 30)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE - 30)/SQRT_2,
             app_camp_adapt_angle(45),
-            MAX_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+            NORMAL_SPEED_LINEAR, LOW_SPEED_ANGULAR);
         drop_replica_pose1_ = poses_->insert(poses_->end(), pose);
 
         // Drop replica
@@ -1040,7 +1038,6 @@ public:
 
 private:
     float default_weight_;
-    bool opposite_;
     Poses::iterator drop_statuette_pose1_, drop_statuette_pose2_;
     Poses::iterator drop_replica_pose1_, drop_replica_pose2_;
 };
@@ -1302,7 +1299,7 @@ public:
             app_camp_adapt_distance(50),
             675,
             app_camp_adapt_angle(0),
-            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR, false
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR
         );
         pose->set_after_pose(std::bind(&PushAndEndAction::before_push, this));
         poses_->push_back(pose);
