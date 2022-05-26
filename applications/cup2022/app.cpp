@@ -1,6 +1,7 @@
 /* Project includes */
 #include "app.hpp"
 #include "app_arm.hpp"
+#include "app_arm_shell.hpp"
 #include "app_conf.hpp"
 #include "platform.hpp"
 
@@ -17,6 +18,7 @@ void app_init(void)
 
     // Init all LX servomotors
     cogip::app::app_arms_init();
+    cogip::app::app_arm_shell_init();
 
     // Fixed obstacles
     cogip::app::app_obstacles_init();
