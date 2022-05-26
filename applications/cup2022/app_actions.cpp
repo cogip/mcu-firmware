@@ -897,8 +897,8 @@ public:
 
         // Take statuette on pedestal
         pose = new Pose(
-            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2 + 30),
-            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE)/SQRT_2,
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE - 40)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT + ROBOT_CENTER_TO_FACE - 40)/SQRT_2,
             app_camp_adapt_angle(45),
             LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR, false);
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::take_statuette, this));
@@ -909,7 +909,7 @@ public:
             app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2),
             statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE)/SQRT_2,
             app_camp_adapt_angle(45),
-            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR);
+            NORMAL_SPEED_LINEAR, NORMAL_SPEED_ANGULAR);
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::stepback_statuette, this));
         poses_->push_back(pose);
 
@@ -948,7 +948,16 @@ public:
         pose->set_after_pose(std::bind(&StatuetteOnlyAction::take_replica, this));
         poses_->push_back(pose);
 
-        // Approach cabinet to take replica
+        // Step back cabinet
+        pose = new Pose(
+            app_camp_adapt_distance(1115.15),
+            ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
+            -90,
+            LOW_SPEED_LINEAR, LOW_SPEED_ANGULAR, true);
+        pose->set_after_pose(std::bind(&StatuetteOnlyAction::approach_replica, this));
+        poses_->push_back(pose);
+
+        // Approach cabinet to drop replica
         pose = new Pose(
             app_camp_adapt_distance(1115.15),
             ROBOT_CENTER_TO_FACE + CENTRAL_ARM_LENGTH_FRONT - 44.5 + 50,
@@ -1012,7 +1021,12 @@ public:
 
     void approach_replica() {
         std::cout << "StatuetteOnlyAction::approach_replica" << std::endl;
-        app_central_arm_gripping_replica();
+        if (app_camp_get_color() == CampColor::Purple) {
+            app_central_arm_gripping_replica_purple();
+        }
+        else {
+            app_central_arm_gripping_replica_yellow();
+        }
     };
 
     void take_replica() {

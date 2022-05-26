@@ -30,11 +30,11 @@ static int _cmd_releasing_statuette(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static int _cmd_gripping_replica(int argc, char **argv)
+static int _cmd_gripping_replica_yellow(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
-    app_central_arm_gripping_replica();
+    app_central_arm_gripping_replica_yellow();
     return EXIT_SUCCESS;
 }
 
@@ -89,7 +89,7 @@ void app_arm_shell_init()
         new cogip::shell::Command("arm3", "Releasing statuette", _cmd_releasing_statuette));
 
     menu->push_back(
-        new cogip::shell::Command("arm4", "Gripping replica", _cmd_gripping_replica));
+        new cogip::shell::Command("arm4", "Gripping replica yellow", _cmd_gripping_replica_yellow));
 
     menu->push_back(
         new cogip::shell::Command("arm5", "Gripping replica purple", _cmd_gripping_replica_purple));
