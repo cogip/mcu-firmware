@@ -1016,12 +1016,6 @@ public:
     void approach_replica() {
         // std::cout << "StatuetteOnlyAction::approach_replica" << std::endl;
         app_central_arm_gripping_replica();
-        if (app_camp_get_color() == CampColor::Purple) {
-            app_central_arm_gripping_replica_purple();
-        }
-        else {
-            app_central_arm_gripping_replica_yellow();
-        }
     };
 
     void take_replica() {
