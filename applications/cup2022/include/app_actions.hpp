@@ -6,6 +6,13 @@
 
 #include "app_pose.hpp"
 
+#define CENTRAL_ARM_LENGTH_FRONT 181
+#define CENTRAL_ARM_LENGTH_DOWN 84.72
+#define SIDE_ARM_LENGTH_DOWN 67.98
+#define ROBOT_CENTER_TO_FACE 140
+#define ROBOT_CENTER_TO_SIDE 165
+#define SIDE_ARM_SHIFT 114.47
+
 namespace cogip {
 
 namespace app {

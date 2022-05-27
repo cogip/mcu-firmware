@@ -2,12 +2,18 @@
 #include "trigonometry.h"
 #include "uartpb_config.hpp"
 
+#include "app_actions.hpp"
 #include "app_camp.hpp"
 #include "app_samples.hpp"
 
 #include "event.h"
 
 #include <cmath>
+
+#define CAMERA_X_RATIO 102
+#define CAMERA_Y_RATIO 73.5
+#define CAMERA_X_DIST 2
+#define CAMERA_Y_DIST 270
 
 namespace cogip {
 
@@ -182,8 +188,10 @@ const DetectedSamples & app_samples_detect(void)
         SampleColor color = (SampleColor)sample.get_tag().get();
         double local_x = sample.get_x();
         double local_y = sample.get_y();
-        local_y = local_y/75*100;
-        local_y -= (220 + ROBOT_WIDTH/2);
+        local_x = local_x/CAMERA_X_RATIO*100;
+        local_y = local_y/CAMERA_Y_RATIO*100;
+        local_x += CAMERA_X_DIST;
+        local_y -= (CAMERA_Y_DIST + ROBOT_CENTER_TO_FACE);
         double robot_angle = robot_pose.O();
         double global_x =
             robot_pose.x()
