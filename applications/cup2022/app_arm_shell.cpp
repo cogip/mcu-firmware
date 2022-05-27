@@ -137,6 +137,7 @@ void arm_shell_enter_callback(void)
 
 void app_arm_shell_init()
 {
+#if 0
     cogip::shell::Menu *menu = new cogip::shell::Menu(
         "Arm actions", "arm", &cogip::shell::root_menu, arm_shell_enter_callback);
 
@@ -187,6 +188,7 @@ void app_arm_shell_init()
 
     menu->push_back(
         new cogip::shell::Command("arm8", "Folded", _cmd_folded));
+#endif
 }
 
 } // namespace app
