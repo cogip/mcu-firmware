@@ -31,6 +31,8 @@ enum class Arm {
 #define MAX_SAMPLES_IN_ROBOT 6
 #define SQRT_2 1.414213562
 
+static bool _score_sent = false;
+
 static PB_OutputMessage _pb_score;
 
 static Actions *_actions = nullptr;
@@ -1330,8 +1332,11 @@ public:
         // std::cout << "PushAndEndAction::after_action" << std::endl;
         app_get_context().score += 1; // 1 sample
         app_get_context().score += 20;
-        _pb_score.set_score(app_get_context().score);
-        pf_get_uartpb()->send_message(_pb_score);
+        if (! _score_sent) {
+            _pb_score.set_score(app_get_context().score);
+            pf_get_uartpb()->send_message(_pb_score);
+            _score_sent = true;
+        }
     };
 
     float weight() const override {
