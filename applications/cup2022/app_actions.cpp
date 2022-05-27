@@ -964,8 +964,8 @@ public:
 
         // Approach pedestal to drop replica
         pose = new Pose(
-            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE - 30)/SQRT_2),
-            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE - 30)/SQRT_2,
+            app_camp_adapt_distance(statuette_center_on_pedestal.x() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE - 40)/SQRT_2),
+            statuette_center_on_pedestal.y() - (CENTRAL_ARM_LENGTH_FRONT*2 + ROBOT_CENTER_TO_FACE - 40)/SQRT_2,
             app_camp_adapt_angle(45),
             NORMAL_SPEED_LINEAR, LOW_SPEED_ANGULAR);
         drop_replica_pose1_ = poses_->insert(poses_->end(), pose);
