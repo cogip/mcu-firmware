@@ -28,12 +28,6 @@ enum class Arm {
     Right
 };
 
-#define CENTRAL_ARM_LENGTH_FRONT 181
-#define CENTRAL_ARM_LENGTH_DOWN 84.72
-#define SIDE_ARM_LENGTH_DOWN 67.98
-#define ROBOT_CENTER_TO_FACE 140
-#define ROBOT_CENTER_TO_SIDE 165
-#define SIDE_ARM_SHIFT 114.47
 #define MAX_SAMPLES_IN_ROBOT 6
 #define SQRT_2 1.414213562
 
@@ -114,9 +108,9 @@ Actions::~Actions()
 
 Action *Actions::new_action(Action *recycle_action)
 {
-    std::cout << "[Actions::new_action] size = " << size() << std::endl;
+    // std::cout << "[Actions::new_action] size = " << size() << std::endl;
     if (current_) {
-        std::cout << "[Actions::new_action] current = " << current_->name() << std::endl;
+        // std::cout << "[Actions::new_action] current = " << current_->name() << std::endl;
         current_->after_action();
     }
 
@@ -125,25 +119,25 @@ Action *Actions::new_action(Action *recycle_action)
     if (size()) {
         sort(ActionComparator());
         for (auto *action: *this) {
-            std::cout << action->weight() << " " << action->name() << std::endl;
+            // std::cout << action->weight() << " " << action->name() << std::endl;
         }
         Action *canditate = back();
         if (canditate->weight() == 0) {
-            std::cout << "[Actions::new_action] no more eligible actions" << std::endl;
+            // std::cout << "[Actions::new_action] no more eligible actions" << std::endl;
         }
         else {
             current_ = canditate;
             pop_back();
             current_->before_action();
-            std::cout << "[Actions::new_action] selected = " << current_->name() << std::endl;
+            // std::cout << "[Actions::new_action] selected = " << current_->name() << std::endl;
         }
     }
     else {
-        std::cout << "[Actions::new_action] no more actions" << std::endl;
+        // std::cout << "[Actions::new_action] no more actions" << std::endl;
     }
 
     if (recycle_action) {
-        std::cout << "[Actions::new_action] recycle action " << recycle_action->name() << std::endl;
+        // std::cout << "[Actions::new_action] recycle action " << recycle_action->name() << std::endl;
         push_back(recycle_action);
     }
 
@@ -186,7 +180,7 @@ public:
         );
         poses_->push_back(pose);
 
-        std::cout << "ApprovalAction::poses_ = " << *poses_ << std::endl;
+        // std::cout << "ApprovalAction::poses_ = " << *poses_ << std::endl;
         pose_it_ = poses_->begin();
     };
     ~ApprovalAction() {};
@@ -270,14 +264,14 @@ public:
     };
 
     void before_action() override {
-        std::cout << "ExcavationEndAction::before_action" << std::endl;
+        // std::cout << "ExcavationEndAction::before_action" << std::endl;
         // Disable excavation site obstacles
         std::map<CampColor, FixedObstacle *> & obstacles = app_get_excavation_sites_obstacles();
         obstacles[app_camp_get_color()]->enable(false);
     };
 
     void after_action() override {
-        std::cout << "ExcavationEndAction::after_action" << std::endl;
+        // std::cout << "ExcavationEndAction::after_action" << std::endl;
         app_get_context().score += 20;
         _pb_score.set_score(app_get_context().score);
         pf_get_uartpb()->send_message(_pb_score);
@@ -330,7 +324,7 @@ public:
     };
 
     void before_action() override {
-        std::cout << "GetFixedSampleAction::before_action" << std::endl;
+        // std::cout << "GetFixedSampleAction::before_action" << std::endl;
         Pose *pose;
         Arm arm = choose_arm(sample_);
         const cogip::cogip_defs::Pose robot_pose = ctrl_get_pose_current(pf_get_ctrl());
@@ -358,11 +352,11 @@ public:
         poses_->push_back(pose);
 
         pose_it_ = poses_->begin();
-        std::cout << "GetFixedSampleAction::before_action::poses = " << poses_ << std::endl;
+        // std::cout << "GetFixedSampleAction::before_action::poses = " << poses_ << std::endl;
     };
 
     void before_take() {
-        std::cout << "GetFixedSampleAction::before_take" << std::endl;
+        // std::cout << "GetFixedSampleAction::before_take" << std::endl;
         sample_->obstacle()->enable(false);
         for (Sample *neighbor: neighbors_) {
             if (neighbor->loc() == SampleLocation::OnTable) {
@@ -372,7 +366,7 @@ public:
     };
 
     void after_take() {
-        std::cout << "GetFixedSampleAction::after_take" << std::endl;
+        // std::cout << "GetFixedSampleAction::after_take" << std::endl;
         sample_->obstacle()->enable(false);
         // TODO: Take sample with side arm => not hidden
         sample_->set_loc(SampleLocation::InRobot);
@@ -381,7 +375,7 @@ public:
     };
 
     void after_action() override {
-        std::cout << "GetFixedSampleAction::after_action" << std::endl;
+        // std::cout << "GetFixedSampleAction::after_action" << std::endl;
         for (Sample *neighbor: neighbors_) {
             if (neighbor->loc() == SampleLocation::OnTable) {
                 neighbor->obstacle()->enable(true);
@@ -451,7 +445,7 @@ public:
     };
 
     void drop_sample() {
-        std::cout << "DropInGalleryAction::drop_sample" << std::endl;
+        // std::cout << "DropInGalleryAction::drop_sample" << std::endl;
 
         // TODO: Drop sample with center arm
         // uint8_t pose_in_gallery = app_get_context().samples_in_gallery[color_].size();
@@ -504,8 +498,8 @@ public:
     };
 
     void detect_samples() {
-        std::cout << "DetectRandomSamplesAction::detect_samples" << std::endl;
-        std::cout << "DetectRandomSamplesAction::detect_samples: current thread: " << thread_get_active()->name << std::endl;
+        // std::cout << "DetectRandomSamplesAction::detect_samples" << std::endl;
+        // std::cout << "DetectRandomSamplesAction::detect_samples: current thread: " << thread_get_active()->name << std::endl;
 
         const DetectedSamples & detected_samples = app_samples_detect();
         for (DetectedSample *detected_sample: detected_samples) {
@@ -525,7 +519,7 @@ public:
                     neigbors = { SampleId::TableRandomGreen, SampleId::TableRandomRed };
                     break;
                 default:
-                    std::cout << "Unknown detected sample color: " << static_cast<int>(detected_sample->color) << std::endl;
+                    // std::cout << "Unknown detected sample color: " << static_cast<int>(detected_sample->color) << std::endl;
                     continue;
             }
             Sample *sample = app_samples_get_one(id, opposite_);
@@ -584,7 +578,7 @@ public:
     };
 
     virtual void take_sample(SampleId id) {
-        std::cout << "TopDispenserAction::take_sample(" << as_number(id) << ")" << std::endl;
+        // std::cout << "TopDispenserAction::take_sample(" << as_number(id) << ")" << std::endl;
 
         // TODO: get sample
         bool success = true;
@@ -635,7 +629,7 @@ public:
     };
 
     virtual void take_sample(SampleId id) {
-        std::cout << "SideDispenserAction::take_sample(" << as_number(id) << ")" << std::endl;
+        // std::cout << "SideDispenserAction::take_sample(" << as_number(id) << ")" << std::endl;
 
         // TODO: get sample
         bool success = true;
@@ -811,7 +805,7 @@ public:
     };
 
     void take_statuette() {
-        std::cout << "StatuetteAction::take_statuette" << std::endl;
+        // std::cout << "StatuetteAction::take_statuette" << std::endl;
         // TODO: get statuette
         bool success = true;
         if (success) {
@@ -824,13 +818,13 @@ public:
     };
 
     void drop_statuette() {
-        std::cout << "StatuetteAction::drop_statuette" << std::endl;
+        // std::cout << "StatuetteAction::drop_statuette" << std::endl;
         // TODO: drop statuette
         app_get_context().score += 15;
     };
 
     void take_side_sample() {
-        std::cout << "StatuetteAction::take_side_sample" << std::endl;
+        // std::cout << "StatuetteAction::take_side_sample" << std::endl;
         // TODO: get sample
         bool success = true;
         if (success) {
@@ -842,7 +836,7 @@ public:
     };
 
     void take_replica() {
-        std::cout << "StatuetteAction::take_replica" << std::endl;
+        // std::cout << "StatuetteAction::take_replica" << std::endl;
         // TODO: get statuette
         bool success = true;
         if (! success) {
@@ -852,13 +846,13 @@ public:
     };
 
     void drop_replica() {
-        std::cout << "StatuetteAction::drop_replica" << std::endl;
+        // std::cout << "StatuetteAction::drop_replica" << std::endl;
         // TODO: drop statuette
         app_get_context().score += 10;
     };
 
     void take_shed_sample(Sample *sample) {
-        std::cout << "StatuetteAction::take_shed_sample(" << as_number(sample->id()) << ")" << std::endl;
+        // std::cout << "StatuetteAction::take_shed_sample(" << as_number(sample->id()) << ")" << std::endl;
         // TODO: get sample
         bool success = true;
         if (success) {
@@ -991,12 +985,12 @@ public:
     };
 
     void approach_statuette() {
-        std::cout << "StatuetteOnlyAction::approach_statuette" << std::endl;
+        // std::cout << "StatuetteOnlyAction::approach_statuette" << std::endl;
         app_central_arm_gripping_statuette();
     };
 
     void take_statuette() {
-        std::cout << "StatuetteOnlyAction::take_statuette" << std::endl;
+        // std::cout << "StatuetteOnlyAction::take_statuette" << std::endl;
         // TODO: get statuette
         bool success = true;
         if (success) {
@@ -1009,18 +1003,19 @@ public:
     };
 
     void stepback_statuette() {
-        std::cout << "StatuetteOnlyAction::stepback_statuette" << std::endl;
+        // std::cout << "StatuetteOnlyAction::stepback_statuette" << std::endl;
         app_central_arm_gripping_statuette_up();
     };
 
     void drop_statuette() {
-        std::cout << "StatuetteOnlyAction::drop_statuette" << std::endl;
+        // std::cout << "StatuetteOnlyAction::drop_statuette" << std::endl;
         app_central_arm_releasing_statuette();
         app_get_context().score += 15;
     };
 
     void approach_replica() {
-        std::cout << "StatuetteOnlyAction::approach_replica" << std::endl;
+        // std::cout << "StatuetteOnlyAction::approach_replica" << std::endl;
+        app_central_arm_gripping_replica();
         if (app_camp_get_color() == CampColor::Purple) {
             app_central_arm_gripping_replica_purple();
         }
@@ -1030,7 +1025,7 @@ public:
     };
 
     void take_replica() {
-        std::cout << "StatuetteOnlyAction::take_replica" << std::endl;
+        // std::cout << "StatuetteOnlyAction::take_replica" << std::endl;
         // TODO: get statuette
         bool success = true;
         if (! success) {
@@ -1040,12 +1035,12 @@ public:
     };
 
     void stepback_replica() {
-        std::cout << "StatuetteOnlyAction::stepback_replica" << std::endl;
+        // std::cout << "StatuetteOnlyAction::stepback_replica" << std::endl;
         app_central_arm_gripping_replica_up();
     };
 
     void drop_replica() {
-        std::cout << "StatuetteOnlyAction::drop_replica" << std::endl;
+        // std::cout << "StatuetteOnlyAction::drop_replica" << std::endl;
         app_central_arm_releasing_replica();
         app_get_context().score += 10;
     };
@@ -1185,7 +1180,7 @@ public:
     };
 
     void drop_sample() {
-        std::cout << "DropInShedAction::drop_sample" << std::endl;
+        // std::cout << "DropInShedAction::drop_sample" << std::endl;
         // TODO: Drop sample with center arm
         Sample *sample = app_get_context().samples_in_robot.top();
         sample->set_loc(SampleLocation::Dropped);
@@ -1193,7 +1188,7 @@ public:
     };
 
     void enable_shed_obstacle(bool enable) {
-        std::cout << "DropInShedAction::enable_shed_obstacle(" << enable << ")" << std::endl;
+        // std::cout << "DropInShedAction::enable_shed_obstacle(" << enable << ")" << std::endl;
         app_get_shed_obstacles()[app_camp_get_color()]->enable(enable);
     };
 
@@ -1232,11 +1227,11 @@ public:
     };
 
     void foo() {
-        std::cout << "ExcavationSquaresAction::foo" << std::endl;
+        // std::cout << "ExcavationSquaresAction::foo" << std::endl;
     };
 
     void test1() {
-        std::cout << "ExcavationSquaresAction::test1" << std::endl;
+        // std::cout << "ExcavationSquaresAction::test1" << std::endl;
         // TODO: get value
         // results values:
         //   - 0: yellow
@@ -1245,12 +1240,12 @@ public:
         //   - 3: no square (already flipped)
         int result = 0;
         if (result == as_number(app_camp_get_color())) {
-            std::cout << "ExcavationSquaresAction::test1: Own square detected" << std::endl;
+            // std::cout << "ExcavationSquaresAction::test1: Own square detected" << std::endl;
             flip_square();
             flip_next(647.5);
         }
         else {
-            std::cout << "ExcavationSquaresAction::test1: Opponent square detected" << std::endl;
+            // std::cout << "ExcavationSquaresAction::test1: Opponent square detected" << std::endl;
             flip_next(647.5);
             flip_next(1037.5);
         }
@@ -1266,22 +1261,22 @@ public:
 
     /// 277.5 92.5 -92.5 -277.5
     void test2() {
-        std::cout << "ExcavationSquaresAction::test2" << std::endl;
+        // std::cout << "ExcavationSquaresAction::test2" << std::endl;
         int result = 0;
         if (result == as_number(app_camp_get_color())) {
-            std::cout << "ExcavationSquaresAction::test2: Own square detected" << std::endl;
+            // std::cout << "ExcavationSquaresAction::test2: Own square detected" << std::endl;
             flip_square();
             flip_next(-277.5);
         }
         else {
-            std::cout << "ExcavationSquaresAction::test2: Opponent square detected" << std::endl;
+            // std::cout << "ExcavationSquaresAction::test2: Opponent square detected" << std::endl;
             flip_next(92.5);
             flip_next(-92.5);
         }
     };
 
     void flip_next(double x) {
-        std::cout << "ExcavationSquaresAction::flip_next(" << x << ")" << std::endl;
+        // std::cout << "ExcavationSquaresAction::flip_next(" << x << ")" << std::endl;
         Pose *pose = new Pose(app_camp_adapt_distance(x), y_, angle_, MAX_SPEED_LINEAR, MAX_SPEED_ANGULAR, false);
         pose->set_after_pose(std::bind(&ExcavationSquaresAction::flip_square, this));
         Pose *cur_pose = current_pose();
@@ -1290,7 +1285,7 @@ public:
     };
 
     void flip_square() {
-        std::cout << "ExcavationSquaresAction::flip_square" << std::endl;
+        // std::cout << "ExcavationSquaresAction::flip_square" << std::endl;
         // TODO
         if (! at_leat_one_flip_) {
             app_get_context().score += 5;
@@ -1331,14 +1326,14 @@ public:
     ~PushAndEndAction() {};
 
     void before_push() {
-        std::cout << "PushAndEndAction::before_push" << std::endl;
+        // std::cout << "PushAndEndAction::before_push" << std::endl;
         app_samples_get_one(SampleId::TableFixedBlue)->obstacle()->enable(false);
         app_samples_get_one(SampleId::TableFixedRed)->obstacle()->enable(false);
         app_samples_get_one(SampleId::TableFixedGreen)->obstacle()->enable(false);
     };
 
     void after_action() override {
-        std::cout << "PushAndEndAction::after_action" << std::endl;
+        // std::cout << "PushAndEndAction::after_action" << std::endl;
         app_get_context().score += 1; // 1 sample
         app_get_context().score += 20;
         _pb_score.set_score(app_get_context().score);
