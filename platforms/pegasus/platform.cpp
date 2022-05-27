@@ -317,7 +317,7 @@ void pf_init_tasks(void)
 
     wizard = new cogip::wizard::Wizard(uartpb);
 
-    lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
+    //lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 
     obstacle_updater_start(ctrl_get_pose_current(controller));
 

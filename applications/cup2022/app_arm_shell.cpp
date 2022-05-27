@@ -76,7 +76,7 @@ void arm_shell_enter_callback(void)
 
 void app_arm_shell_init()
 {
-    cogip::shell::Menu *menu = new cogip::shell::Menu(
+    /*cogip::shell::Menu *menu = new cogip::shell::Menu(
         "Arm actions", "arm", &cogip::shell::root_menu, arm_shell_enter_callback);
 
     menu->push_back(
@@ -101,7 +101,7 @@ void app_arm_shell_init()
         new cogip::shell::Command("arm7", "Releasing replica", _cmd_releasing_replica));
 
     menu->push_back(
-        new cogip::shell::Command("arm8", "Folded", _cmd_folded));
+        new cogip::shell::Command("arm8", "Folded", _cmd_folded));*/
 }
 
 } // namespace app

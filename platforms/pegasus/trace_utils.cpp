@@ -22,7 +22,7 @@ static void *_thread_trace(void *arg)
 
     while (true) {
         if (pf_trace_on()) {
-            pf_send_pb_state();
+            //pf_send_pb_state();
         }
         riot::this_thread::sleep_for(std::chrono::milliseconds(TASK_PERIOD_MS));
     }

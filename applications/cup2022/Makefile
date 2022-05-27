@@ -7,10 +7,10 @@ BOARD ?= cogip-board
 USEMODULE += pegasus
 
 # Shell menus management
-USEMODULE += shell_platforms
+#USEMODULE += shell_platforms
 USEMODULE += shell_menu
-USEMODULE += shell_planners
-USEMODULE += shell_quadpid
+#USEMODULE += shell_planners
+#USEMODULE += shell_quadpid
 
 ifeq ($(CPU),native)
 	USEMODULE += shmem
@@ -18,5 +18,6 @@ endif
 
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
+CFLAGS += -DISR_STACKSIZE=1024
 
 include ../../Makefile.include

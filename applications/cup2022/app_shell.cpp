@@ -4,7 +4,7 @@
 
 #include "platform.hpp"
 #include "shell_menu/shell_menu.hpp"
-#include "shell_planners.hpp"
+//#include "shell_planners.hpp"
 
 #include "thread.h"
 
