@@ -34,6 +34,15 @@ void app_central_arm_taking_left(void);
 /// Central arm giving to storage wheel
 void app_central_arm_giving_wheel(void);
 
+/// Central arm drop gallery low prepare
+void app_central_drop_gallery_low_prepare(void);
+/// Central arm drop gallery low release
+void app_central_drop_gallery_low_release(void);
+/// Central arm drop gallery high prepare
+void app_central_drop_gallery_high_prepare(void);
+/// Central arm drop gallery high release
+void app_central_drop_gallery_high_release(void);
+
 void app_central_arm_gripping_statuette(void);
 void app_central_arm_gripping_statuette_up(void);
 void app_central_arm_releasing_statuette(void);
