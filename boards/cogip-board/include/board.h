@@ -31,7 +31,7 @@ extern "C" {
 /* Camp selection */
 #define GPIO_CAMP       GPIO_UNDEF
 /* Starting switch */
-#define GPIO_STARTER    GPIO_UNDEF
+#define GPIO_STARTER    GPIO_PIN(PORT_B, 4)
 
 /* Debug LED */
 #define GPIO_DEBUG_LED  GPIO_UNDEF
