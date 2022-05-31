@@ -1,4 +1,5 @@
 #include "platform.hpp"
+#include "trigonometry.h"
 #include "uartpb_config.hpp"
 
 #include "app_camp.hpp"
