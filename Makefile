@@ -12,6 +12,7 @@ clean: $(apps) $(examples)	## Clean build for all applications and examples
 
 distclean: PF_TARGET = distclean
 distclean: $(apps) $(examples)	## Clean build and configuration for all applications
+	@rm -rf build/
 
 $(apps) $(examples):
 	"$(MAKE)" MAKEFLAGS="-j$$(nproc)" -C $@ $(PF_TARGET) || exit $$?
