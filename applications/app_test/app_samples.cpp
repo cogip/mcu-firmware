@@ -1,3 +1,4 @@
+// Firmware includes
 #include "platform.hpp"
 #include "trigonometry.h"
 #include "uartpb_config.hpp"
@@ -5,8 +6,10 @@
 #include "app_camp.hpp"
 #include "app_samples.hpp"
 
-#include "event.h"
+// RIOT includes
+#include <event.h>
 
+// System includes
 #include <cmath>
 
 namespace cogip {
