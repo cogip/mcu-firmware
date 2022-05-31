@@ -228,8 +228,8 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t right_command = (int16_t) (command.distance() + command.angle());
     int16_t left_command = (int16_t) (command.distance() - command.angle());
 
-    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
-    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
+    motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0, left_command);
+    motor_set(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0, right_command);
 }
 
 int pf_is_camp_left(void)
