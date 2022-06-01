@@ -12,7 +12,7 @@ namespace obstacles {
 
 Obstacle::Obstacle(
     const cogip_defs::Coords &center, double radius)
-    : center_(center), radius_(radius)
+    : center_(center), radius_(radius), enabled_(true)
 {
 }
 
@@ -38,6 +38,12 @@ void Obstacle::pb_copy(PB_Message &message) const
         auto &bb_point = bb.get(bb.get_length());
         point.pb_copy(bb_point);
     }
+}
+
+void Obstacle::set_center(cogip_defs::Coords &center)
+{
+    center_ = center;
+    update_bounding_box();
 }
 
 } // namespace obstacles

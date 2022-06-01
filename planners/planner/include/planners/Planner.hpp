@@ -30,6 +30,7 @@ public:
         ctrl_t *ctrl,                               ///< [in] controller object
         path::Path &path                            ///< [in] application path
         );
+    virtual ~Planner();
 
     /// Start the trajectory planification and the associated controller.
     void start();
@@ -56,6 +57,7 @@ protected:
     bool started_;                                  ///< planner tarted
     bool allow_change_path_pose_;                   ///< Planner can automatically change next path pose
                                                     ///  to reach when current pose is reached
+    bool thread_exit_;                              ///< Exit Planner thread when set to true
 };
 
 } // namespace planners

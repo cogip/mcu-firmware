@@ -18,20 +18,20 @@ Rectangle::Rectangle(
     center_ = center;
     radius_ = sqrt(length_x_ * length_x_ + length_y_ * length_y_) / 2;
     push_back(cogip_defs::Coords(
-        center.x() + (length_x_ / 2) * cos(DEG2RAD(angle)) - (length_y_ / 2) * sin(DEG2RAD(angle)),
-        center.y() + (length_x_ / 2) * sin(DEG2RAD(angle)) + (length_y_ / 2) * cos(DEG2RAD(angle))
-    ));
-    push_back(cogip_defs::Coords(
-        center.x() - (length_x_ / 2) * cos(DEG2RAD(angle)) - (length_y_ / 2) * sin(DEG2RAD(angle)),
-        center.y() - (length_x_ / 2) * sin(DEG2RAD(angle)) + (length_y_ / 2) * cos(DEG2RAD(angle))
-    ));
-    push_back(cogip_defs::Coords(
         center.x() - (length_x_ / 2) * cos(DEG2RAD(angle)) + (length_y_ / 2) * sin(DEG2RAD(angle)),
         center.y() - (length_x_ / 2) * sin(DEG2RAD(angle)) - (length_y_ / 2) * cos(DEG2RAD(angle))
     ));
     push_back(cogip_defs::Coords(
         center.x() + (length_x_ / 2) * cos(DEG2RAD(angle)) + (length_y_ / 2) * sin(DEG2RAD(angle)),
         center.y() + (length_x_ / 2) * sin(DEG2RAD(angle)) - (length_y_ / 2) * cos(DEG2RAD(angle))
+    ));
+    push_back(cogip_defs::Coords(
+        center.x() + (length_x_ / 2) * cos(DEG2RAD(angle)) - (length_y_ / 2) * sin(DEG2RAD(angle)),
+        center.y() + (length_x_ / 2) * sin(DEG2RAD(angle)) + (length_y_ / 2) * cos(DEG2RAD(angle))
+    ));
+    push_back(cogip_defs::Coords(
+        center.x() - (length_x_ / 2) * cos(DEG2RAD(angle)) - (length_y_ / 2) * sin(DEG2RAD(angle)),
+        center.y() - (length_x_ / 2) * sin(DEG2RAD(angle)) + (length_y_ / 2) * cos(DEG2RAD(angle))
     ));
 
     for (const auto & point: *this) {

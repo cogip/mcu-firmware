@@ -4,12 +4,21 @@
 
 #include "uartpb_config.hpp"
 
+#include <iostream>
+
+namespace cogip {
+
+namespace app {
+
 // Read incoming Protobuf message and call the corresponding message handler
-void app_message_handler(cogip::uartpb::ReadBuffer &buffer)
+void app_uartpb_message_handler(cogip::uartpb::ReadBuffer &buffer)
 {
     PB_InputMessage *message = new PB_InputMessage();
-    message->deserialize(buffer);
-
+    EmbeddedProto::Error error = message->deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
     if (message->has_command()) {
         cogip::shell::handle_pb_command(message->command());
     }
@@ -35,3 +44,7 @@ void app_message_handler(cogip::uartpb::ReadBuffer &buffer)
     }
     delete message;
 }
+
+} // namespace app
+
+} // namespace cogip

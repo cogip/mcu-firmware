@@ -1,6 +1,10 @@
 #include "obstacles/Polygon.hpp"
 #include "platform.hpp"
 
+namespace cogip {
+
+namespace app {
+
 static const std::list<cogip::cogip_defs::Coords> border_points = {
     {
         AVOIDANCE_BORDER_X_MIN,
@@ -20,7 +24,7 @@ static const std::list<cogip::cogip_defs::Coords> border_points = {
     }
 };
 
-cogip::obstacles::Polygon *_borders = nullptr;
+static cogip::obstacles::Polygon *_borders = nullptr;
 
 const cogip::obstacles::Polygon &app_get_borders(void)
 {
@@ -29,3 +33,7 @@ const cogip::obstacles::Polygon &app_get_borders(void)
     }
     return *_borders;
 }
+
+} // namespace app
+
+} // namespace cogip

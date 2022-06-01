@@ -31,10 +31,10 @@ extern "C" {
 /* Camp selection */
 #define GPIO_CAMP       GPIO_UNDEF
 /* Starting switch */
-#define GPIO_STARTER    GPIO_UNDEF
+#define GPIO_STARTER    GPIO_PIN(PORT_B, 4)
 
 /* Debug LED */
-#define GPIO_DEBUG_LED  GPIO_UNDEF
+#define GPIO_DEBUG_LED  GPIO_PIN(PORT_A, 0)
 
 /* Servomotors half duplex direction pin */
 #define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)

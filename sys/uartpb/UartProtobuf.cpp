@@ -11,6 +11,11 @@ namespace cogip {
 
 namespace uartpb {
 
+static char reader_stack_[UARTPB_READER_STACKSIZE];  ///< reader thread stack
+static char rx_mem_[UART_BUFFER_SIZE];               ///< memory for UART incoming bytes
+static ReadBuffer read_buffer_;                      ///< buffer used to decode a message
+static WriteBuffer write_buffer_;                    ///< buffer used to encode a message
+
 UartProtobuf::UartProtobuf(
     message_handler_t message_handler,
     uart_t uart_dev, uint32_t uart_speed) :
@@ -35,7 +40,7 @@ void UartProtobuf::start_reader()
 
 void UartProtobuf::uart_rx_cb(uint8_t data)
 {
-    if (data == '\n') {
+    if (data == 0) {
         msg_t msg;
         msg.content.value = msg_length_;
         msg_send(&msg, reader_pid_);

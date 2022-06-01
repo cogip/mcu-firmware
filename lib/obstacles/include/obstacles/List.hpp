@@ -64,6 +64,9 @@ public:
     /// Delete all obstacles from the list.
     void clear();
 
+    /// Return number of enabled obstacles.
+    size_t enabled_obstacles() const;
+
 private:
     riot::mutex mutex_;                       ///< mutex protecting list access
 };

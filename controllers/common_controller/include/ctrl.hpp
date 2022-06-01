@@ -283,7 +283,7 @@ uint8_t ctrl_is_pose_reached(ctrl_t *ctrl);
  *
  * @return
  */
-void ctrl_set_pose_to_reach(ctrl_t *ctrl, const cogip::cogip_defs::Pose &pose_order);
+void ctrl_set_pose_to_reach(ctrl_t *ctrl, cogip::cogip_defs::Pose pose_order);
 
 /**
  * @brief Get pose order

@@ -50,10 +50,13 @@ static bool _is_avoidance_computed = false;
  */
 static void _validate_obstacles_points(void)
 {
-    const cogip::obstacles::Polygon &borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     for (auto l: cogip::obstacles::all_obstacles) {
         for (auto obstacle: *l) {
+            if (! obstacle->enabled()) {
+                continue;
+            }
 
             /* Check if obstacle center is inside borders */
             if (!borders.is_point_inside(obstacle->center())) {
@@ -98,6 +101,9 @@ static void _build_avoidance_graph(void)
             /* Check if that segment crosses a polygon */
             for (auto l: cogip::obstacles::all_obstacles) {
                 for (auto obstacle: *l) {
+                    if (! obstacle->enabled()) {
+                        continue;
+                    }
                     if (obstacle->is_segment_crossing(_valid_points[p],
                                                       _valid_points[p2])) {
                         collide = true;
@@ -240,21 +246,22 @@ bool avoidance_build_graph(const cogip::cogip_defs::Coords &s, const cogip::cogi
 {
     start_pose = s;
     finish_pose = f;
-    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
-    const cogip::obstacles::Polygon &borders = app_get_borders();
+    _is_avoidance_computed = false;
+    const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     if (!borders.is_point_inside(finish_pose)) {
-        _is_avoidance_computed = false;
         goto update_graph_error_finish_pose;
     }
 
     /* Check that start and destination point are not in an obstacle */
-    for (auto obstacle: *obstacles) {
-        if (obstacle->is_point_inside(finish_pose)) {
-            goto update_graph_error_finish_pose;
-        }
-        if (obstacle->is_point_inside(start_pose)) {
-            start_pose = obstacle->nearest_point(start_pose);
+    for (auto l: cogip::obstacles::all_obstacles) {
+        for (auto obstacle: *l) {
+            if (obstacle->is_point_inside(finish_pose)) {
+                goto update_graph_error_finish_pose;
+            }
+            if (obstacle->is_point_inside(start_pose)) {
+                start_pose = obstacle->nearest_point(start_pose);
+            }
         }
     }
 
@@ -278,7 +285,7 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
 {
     /* Get dynamic obstacle list */
     cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
-    const cogip::obstacles::Polygon &borders = app_get_borders();
+    const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     /* Check if that segment crosses a polygon */
     for (auto obstacle: *obstacles) {

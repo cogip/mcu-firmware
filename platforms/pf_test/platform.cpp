@@ -161,6 +161,11 @@ ctrl_t *pf_get_ctrl(void)
     return (ctrl_t *)&ctrl_quadpid;
 }
 
+cogip::planners::Planner *pf_get_planner(void)
+{
+    return (cogip::planners::Planner *)planner;
+}
+
 void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
                             cogip::cogip_defs::Polar &robot_speed,
                             cogip::cogip_defs::Polar &motor_command)
@@ -223,8 +228,8 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t right_command = (int16_t) (command.distance() + command.angle());
     int16_t left_command = (int16_t) (command.distance() - command.angle());
 
-    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
-    motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
+    motor_set(MOTOR_DRIVER_DEV(MOTOR_LEFT), 0, left_command);
+    motor_set(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0, right_command);
 }
 
 int pf_is_camp_left(void)
@@ -250,6 +255,24 @@ cogip::wizard::Wizard *pf_get_wizard()
 
 void pf_init(void)
 {
+    /* Initialize UARTPB */
+    uartpb = new cogip::uartpb::UartProtobuf(
+        cogip::app::app_uartpb_message_handler,
+        UART_DEV(1)
+        );
+
+    bool uartpb_res = uartpb->connect();
+    if (! uartpb_res) {
+        uartpb = nullptr;
+        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
+    }
+    else {
+        cogip::shell::register_uartpb(uartpb);
+        uartpb->start_reader();
+        output_message.set_reset(true);
+        uartpb->send_message(output_message);
+    }
+
 #ifdef MODULE_SHELL_PLATFORMS
     pf_shell_init();
 #endif /* MODULE_SHELL_PLATFORMS */
@@ -290,24 +313,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-
-    /* Initialize UARTPB */
-    uartpb = new cogip::uartpb::UartProtobuf(
-        app_message_handler,
-        UART_DEV(1)
-        );
-
-    bool uartpb_res = uartpb->connect();
-    if (! uartpb_res) {
-        uartpb = nullptr;
-        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
-    }
-    else {
-        cogip::shell::register_uartpb(uartpb);
-        uartpb->start_reader();
-        output_message.set_reset(true);
-        uartpb->send_message(output_message);
-    }
 
     wizard = new cogip::wizard::Wizard(uartpb);
 
