@@ -1,10 +1,9 @@
 <map id="sys/uartpb/include/uartpb/uartpb.hpp" name="sys/uartpb/include/uartpb/uartpb.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="237,5,379,47"/>
-<area shape="rect" id="node2" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="100,95,271,136"/>
-<area shape="rect" id="node3" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="217,184,399,225"/>
-<area shape="rect" id="node8" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="345,95,519,136"/>
-<area shape="rect" id="node4" href="$Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="235,273,381,315"/>
-<area shape="rect" id="node5" href="$cortex_2include_2platform_8hpp.html" title="Define hardware properties of Cortex platform. Units:" alt="" coords="5,363,187,404"/>
-<area shape="rect" id="node6" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="211,363,405,404"/>
-<area shape="rect" id="node7" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="430,363,615,404"/>
+<area shape="rect" id="node1" title=" " alt="" coords="142,5,285,47"/>
+<area shape="rect" id="node2" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="5,95,176,136"/>
+<area shape="rect" id="node3" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="122,184,305,225"/>
+<area shape="rect" id="node7" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="251,95,424,136"/>
+<area shape="rect" id="node4" href="$Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="140,273,287,315"/>
+<area shape="rect" id="node5" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="9,363,204,404"/>
+<area shape="rect" id="node6" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="229,363,414,404"/>
 </map>

@@ -45,6 +45,7 @@ var pf__test_2include_2platform_8hpp =
     [ "pf_ctrl_pre_running_cb", "group__platforms__pf__test.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b", null ],
     [ "pf_get_ctrl", "group__platforms__pf__test.html#gada66418f7a25f83900babc9406aeb623", null ],
     [ "pf_get_dyn_obstacles", "group__platforms__pf__test.html#ga4710e211e29d3b2da545113781f99a64", null ],
+    [ "pf_get_planner", "group__platforms__pf__test.html#gafb0313bac4a81343c3d55e8f50c2e887", null ],
     [ "pf_get_quadpid_ctrl", "group__platforms__pf__test.html#ga76464c76865b8a010f137488bf519fe3", null ],
     [ "pf_get_uartpb", "group__platforms__pf__test.html#ga98dfe5222245c9d0a4f12c04c3c3f4f5", null ],
     [ "pf_get_wizard", "group__platforms__pf__test.html#ga026956502bf7107f10d9313d0c6a74e4", null ],

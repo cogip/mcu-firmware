@@ -2,8 +2,8 @@ var group__platforms__pegasus =
 [
     [ "platform.hpp", "pegasus_2include_2platform_8hpp.html", null ],
     [ "pf_sensor_t", "structpf__sensor__t.html", [
-      [ "angle_offset", "group__platform__cortex.html#ga225b96e919422af01ca0a00843455dde", null ],
-      [ "distance_offset", "group__platform__cortex.html#ga770993624df37f0b423fdf977bd2dd56", null ]
+      [ "angle_offset", "group__platforms__pegasus.html#ga225b96e919422af01ca0a00843455dde", null ],
+      [ "distance_offset", "group__platforms__pegasus.html#ga770993624df37f0b423fdf977bd2dd56", null ]
     ] ],
     [ "AVOIDANCE_BORDER_X_MAX", "group__platforms__pegasus.html#ga5cd8534245dd8c7715965af083bd13c2", null ],
     [ "AVOIDANCE_BORDER_X_MIN", "group__platforms__pegasus.html#ga74d22d5c450365dc5f4ae75b8b6ff432", null ],
@@ -50,7 +50,9 @@ var group__platforms__pegasus =
     [ "pf_ctrl_pre_running_cb", "group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b", null ],
     [ "pf_get_ctrl", "group__platforms__pegasus.html#gada66418f7a25f83900babc9406aeb623", null ],
     [ "pf_get_dyn_obstacles", "group__platforms__pegasus.html#ga4710e211e29d3b2da545113781f99a64", null ],
+    [ "pf_get_planner", "group__platforms__pegasus.html#gafb0313bac4a81343c3d55e8f50c2e887", null ],
     [ "pf_get_quadpid_ctrl", "group__platforms__pegasus.html#ga76464c76865b8a010f137488bf519fe3", null ],
+    [ "pf_get_uartpb", "group__platforms__pegasus.html#ga98dfe5222245c9d0a4f12c04c3c3f4f5", null ],
     [ "pf_get_wizard", "group__platforms__pegasus.html#ga026956502bf7107f10d9313d0c6a74e4", null ],
     [ "pf_init", "group__platforms__pegasus.html#gad2d77ae9a60de6fba2ff595654fb94e0", null ],
     [ "pf_init_quadpid_params", "group__platforms__pegasus.html#ga096df40041a3b5fba1c96cd90524be73", null ],
@@ -60,5 +62,7 @@ var group__platforms__pegasus =
     [ "pf_print_state", "group__platforms__pegasus.html#gac80e892a7623dddeb945d663b43fc38d", null ],
     [ "pf_send_pb_state", "group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07", null ],
     [ "pf_set_copilot_connected", "group__platforms__pegasus.html#gaf83cc53998c27d898d71f8a7e981fdc0", null ],
-    [ "pf_trace_on", "group__platforms__pegasus.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ]
+    [ "pf_trace_on", "group__platforms__pegasus.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],
+    [ "angle_offset", "group__platforms__pegasus.html#ga225b96e919422af01ca0a00843455dde", null ],
+    [ "distance_offset", "group__platforms__pegasus.html#ga770993624df37f0b423fdf977bd2dd56", null ]
 ];

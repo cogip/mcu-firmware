@@ -1,9 +1,7 @@
 <map id="drivers/lds01_dma/include/lds01.h" name="drivers/lds01_dma/include/lds01.h">
-<area shape="rect" id="node1" title="Public API for LDS01 driver." alt="" coords="502,5,695,47"/>
-<area shape="rect" id="node2" href="$cortex_2include_2lds01__params_8h.html" title="LDS01 parameters for current application." alt="" coords="5,95,187,136"/>
-<area shape="rect" id="node3" href="$cortex_2lidar__utils_8hpp_source.html" title=" " alt="" coords="211,95,373,136"/>
-<area shape="rect" id="node4" href="$pegasus_2include_2lds01__params_8h.html" title="LDS01 parameters for current application." alt="" coords="397,95,592,136"/>
-<area shape="rect" id="node5" href="$pegasus_2lidar__utils_8hpp_source.html" title=" " alt="" coords="616,95,792,136"/>
-<area shape="rect" id="node6" href="$pf__test_2include_2lds01__params_8h.html" title="LDS01 parameters for current application." alt="" coords="817,95,1002,136"/>
-<area shape="rect" id="node7" href="$pf__test_2lidar__utils_8hpp_source.html" title=" " alt="" coords="1026,95,1193,136"/>
+<area shape="rect" id="node1" title="Public API for LDS01 driver." alt="" coords="318,5,511,47"/>
+<area shape="rect" id="node2" href="$pegasus_2include_2lds01__params_8h.html" title="LDS01 parameters for current application." alt="" coords="5,95,200,136"/>
+<area shape="rect" id="node3" href="$pegasus_2lidar__utils_8hpp_source.html" title=" " alt="" coords="224,95,400,136"/>
+<area shape="rect" id="node4" href="$pf__test_2include_2lds01__params_8h.html" title="LDS01 parameters for current application." alt="" coords="425,95,610,136"/>
+<area shape="rect" id="node5" href="$pf__test_2lidar__utils_8hpp_source.html" title=" " alt="" coords="634,95,801,136"/>
 </map>

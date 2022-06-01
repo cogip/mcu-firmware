@@ -1,8 +1,7 @@
 <map id="sys/uartpb/include/uartpb/ReadBuffer.hpp" name="sys/uartpb/include/uartpb/ReadBuffer.hpp">
-<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="223,5,393,47"/>
-<area shape="rect" id="node2" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="217,95,399,136"/>
-<area shape="rect" id="node3" href="$Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="235,184,381,225"/>
-<area shape="rect" id="node4" href="$cortex_2include_2platform_8hpp.html" title="Define hardware properties of Cortex platform. Units:" alt="" coords="5,273,187,315"/>
-<area shape="rect" id="node5" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="211,273,405,315"/>
-<area shape="rect" id="node6" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="430,273,615,315"/>
+<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="124,5,295,47"/>
+<area shape="rect" id="node2" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="118,95,301,136"/>
+<area shape="rect" id="node3" href="$Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="136,184,283,225"/>
+<area shape="rect" id="node4" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="5,273,200,315"/>
+<area shape="rect" id="node5" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="225,273,410,315"/>
 </map>

@@ -120,7 +120,8 @@ $(document).ready(function(){initNavTree('classcogip_1_1path_1_1Path.html',''); 
 
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">cogip::path::Path Class Reference</div>  </div>
 </div><!--header-->
@@ -159,39 +160,62 @@ $(document).ready(function(){initNavTree('classcogip_1_1path_1_1Path.html',''); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4d93ca0f5b8e8b39032f77e360dd90b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a4d93ca0f5b8e8b39032f77e360dd90b9">Path</a> (const std::vector&lt; <a class="el" href="classcogip_1_1path_1_1Pose.html">Pose</a> &gt; &amp;poses, bool play_in_loop=false)</td></tr>
-<tr class="memdesc:a4d93ca0f5b8e8b39032f77e360dd90b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constuctor.  <a href="classcogip_1_1path_1_1Path.html#a4d93ca0f5b8e8b39032f77e360dd90b9">More...</a><br /></td></tr>
-<tr class="separator:a4d93ca0f5b8e8b39032f77e360dd90b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8903791857430693d86f88009044baa5"><td class="memItemLeft" align="right" valign="top"><a id="a8903791857430693d86f88009044baa5"></a>
-const <a class="el" href="classcogip_1_1path_1_1Pose.html">cogip::path::Pose</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a8903791857430693d86f88009044baa5">current_pose</a> () const</td></tr>
-<tr class="memdesc:a8903791857430693d86f88009044baa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return current position. <br /></td></tr>
-<tr class="separator:a8903791857430693d86f88009044baa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0877da53564e45003992984da33e5665"><td class="memItemLeft" align="right" valign="top"><a id="a0877da53564e45003992984da33e5665"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a0877da53564e45003992984da33e5665">reset_current_pose_index</a> ()</td></tr>
-<tr class="memdesc:a0877da53564e45003992984da33e5665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset current position to index 0. <br /></td></tr>
-<tr class="separator:a0877da53564e45003992984da33e5665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaae75d0cc68ed0f9073ea3bc489b1b76"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#aaae75d0cc68ed0f9073ea3bc489b1b76">operator++</a> (int)</td></tr>
-<tr class="memdesc:aaae75d0cc68ed0f9073ea3bc489b1b76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment the current position in the robot path (going forward to the next position).  <a href="classcogip_1_1path_1_1Path.html#aaae75d0cc68ed0f9073ea3bc489b1b76">More...</a><br /></td></tr>
-<tr class="separator:aaae75d0cc68ed0f9073ea3bc489b1b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38bd60d9e84bddbe62d40853ad2e5306"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a38bd60d9e84bddbe62d40853ad2e5306">operator--</a> (int)</td></tr>
-<tr class="memdesc:a38bd60d9e84bddbe62d40853ad2e5306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decrement the current position in the robot path (going back to the last position).  <a href="classcogip_1_1path_1_1Path.html#a38bd60d9e84bddbe62d40853ad2e5306">More...</a><br /></td></tr>
-<tr class="separator:a38bd60d9e84bddbe62d40853ad2e5306"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ec90fb9aa21e6fc393bf1e47dcd43ff"><td class="memItemLeft" align="right" valign="top"><a id="a9ec90fb9aa21e6fc393bf1e47dcd43ff"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a9ec90fb9aa21e6fc393bf1e47dcd43ff">current_max_speed_linear</a> ()</td></tr>
-<tr class="memdesc:a9ec90fb9aa21e6fc393bf1e47dcd43ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return maximum linear speed to use in order to go to the current position. <br /></td></tr>
-<tr class="separator:a9ec90fb9aa21e6fc393bf1e47dcd43ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb764d6c72c64c7f1c278b333e1dde20"><td class="memItemLeft" align="right" valign="top"><a id="abb764d6c72c64c7f1c278b333e1dde20"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#abb764d6c72c64c7f1c278b333e1dde20">current_max_speed_angular</a> ()</td></tr>
-<tr class="memdesc:abb764d6c72c64c7f1c278b333e1dde20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return maximum angular speed to use in order to go to the current position. <br /></td></tr>
-<tr class="separator:abb764d6c72c64c7f1c278b333e1dde20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a0eb4784842f5e284df713ba24dac00"><td class="memItemLeft" align="right" valign="top"><a id="a4a0eb4784842f5e284df713ba24dac00"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a4a0eb4784842f5e284df713ba24dac00">horizontal_mirror_all_poses</a> ()</td></tr>
-<tr class="memdesc:a4a0eb4784842f5e284df713ba24dac00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mirror all points in path to match the two possible sides of the game. <br /></td></tr>
-<tr class="separator:a4a0eb4784842f5e284df713ba24dac00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e7fb129f4868768cb2b0a4b99e48b76"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a3e7fb129f4868768cb2b0a4b99e48b76">Path</a> (const std::vector&lt; <a class="el" href="classcogip_1_1path_1_1Pose.html">Pose</a> &gt; &amp;poses={}, bool play_in_loop=false)</td></tr>
+<tr class="memdesc:a3e7fb129f4868768cb2b0a4b99e48b76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constuctor.  <a href="classcogip_1_1path_1_1Path.html#a3e7fb129f4868768cb2b0a4b99e48b76">More...</a><br /></td></tr>
+<tr class="separator:a3e7fb129f4868768cb2b0a4b99e48b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41c529dca1c9842ff9fd7f0647c93c6a"><td class="memItemLeft" align="right" valign="top"><a id="a41c529dca1c9842ff9fd7f0647c93c6a"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a41c529dca1c9842ff9fd7f0647c93c6a">~Path</a> ()</td></tr>
+<tr class="memdesc:a41c529dca1c9842ff9fd7f0647c93c6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
+<tr class="separator:a41c529dca1c9842ff9fd7f0647c93c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a124926f5a5c0655232750baff4f43729"><td class="memItemLeft" align="right" valign="top"><a id="a124926f5a5c0655232750baff4f43729"></a>
+virtual const <a class="el" href="classcogip_1_1path_1_1Pose.html">cogip::path::Pose</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a124926f5a5c0655232750baff4f43729">current_pose</a> ()</td></tr>
+<tr class="memdesc:a124926f5a5c0655232750baff4f43729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return current position. <br /></td></tr>
+<tr class="separator:a124926f5a5c0655232750baff4f43729"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83a96e1a83f5dca851cb82af7a773d2a"><td class="memItemLeft" align="right" valign="top"><a id="a83a96e1a83f5dca851cb82af7a773d2a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a83a96e1a83f5dca851cb82af7a773d2a">reset_current_pose_index</a> ()</td></tr>
+<tr class="memdesc:a83a96e1a83f5dca851cb82af7a773d2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset current position to index 0. <br /></td></tr>
+<tr class="separator:a83a96e1a83f5dca851cb82af7a773d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab627d3f784281e445979b3f063cbec4a"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#ab627d3f784281e445979b3f063cbec4a">operator++</a> (int)</td></tr>
+<tr class="memdesc:ab627d3f784281e445979b3f063cbec4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment the current position in the robot path (going forward to the next position).  <a href="classcogip_1_1path_1_1Path.html#ab627d3f784281e445979b3f063cbec4a">More...</a><br /></td></tr>
+<tr class="separator:ab627d3f784281e445979b3f063cbec4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a433d15af3d6fbfaf93cc4e4ea94868cc"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a433d15af3d6fbfaf93cc4e4ea94868cc">operator--</a> (int)</td></tr>
+<tr class="memdesc:a433d15af3d6fbfaf93cc4e4ea94868cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decrement the current position in the robot path (going back to the last position).  <a href="classcogip_1_1path_1_1Path.html#a433d15af3d6fbfaf93cc4e4ea94868cc">More...</a><br /></td></tr>
+<tr class="separator:a433d15af3d6fbfaf93cc4e4ea94868cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca708e0ee6f7a1b9d65af6b56f169e54"><td class="memItemLeft" align="right" valign="top"><a id="aca708e0ee6f7a1b9d65af6b56f169e54"></a>
+virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#aca708e0ee6f7a1b9d65af6b56f169e54">current_max_speed_linear</a> ()</td></tr>
+<tr class="memdesc:aca708e0ee6f7a1b9d65af6b56f169e54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return maximum linear speed to use in order to go to the current position. <br /></td></tr>
+<tr class="separator:aca708e0ee6f7a1b9d65af6b56f169e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a927b66292a1ec7d6497f63c3b6db4d51"><td class="memItemLeft" align="right" valign="top"><a id="a927b66292a1ec7d6497f63c3b6db4d51"></a>
+virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a927b66292a1ec7d6497f63c3b6db4d51">current_max_speed_angular</a> ()</td></tr>
+<tr class="memdesc:a927b66292a1ec7d6497f63c3b6db4d51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return maximum angular speed to use in order to go to the current position. <br /></td></tr>
+<tr class="separator:a927b66292a1ec7d6497f63c3b6db4d51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c4539b490bcf3fc5cb24ffdbce00d45"><td class="memItemLeft" align="right" valign="top"><a id="a4c4539b490bcf3fc5cb24ffdbce00d45"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#a4c4539b490bcf3fc5cb24ffdbce00d45">horizontal_mirror_all_poses</a> ()</td></tr>
+<tr class="memdesc:a4c4539b490bcf3fc5cb24ffdbce00d45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mirror all points in path to match the two possible sides of the game. <br /></td></tr>
+<tr class="separator:a4c4539b490bcf3fc5cb24ffdbce00d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac466f5d779f005b5e5b32c1bdf50e77c"><td class="memItemLeft" align="right" valign="top"><a id="ac466f5d779f005b5e5b32c1bdf50e77c"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#ac466f5d779f005b5e5b32c1bdf50e77c">unreachable</a> ()</td></tr>
+<tr class="memdesc:ac466f5d779f005b5e5b32c1bdf50e77c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate that the current position is unreachable. <br /></td></tr>
+<tr class="separator:ac466f5d779f005b5e5b32c1bdf50e77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af94b785d1f587c491028211f0f6b2f87"><td class="memItemLeft" align="right" valign="top"><a id="af94b785d1f587c491028211f0f6b2f87"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#af94b785d1f587c491028211f0f6b2f87">next</a> ()</td></tr>
+<tr class="memdesc:af94b785d1f587c491028211f0f6b2f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Go to next position. <br /></td></tr>
+<tr class="separator:af94b785d1f587c491028211f0f6b2f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:acaa7fce36fa228316d17e5baa1247ba0"><td class="memItemLeft" align="right" valign="top"><a id="acaa7fce36fa228316d17e5baa1247ba0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#acaa7fce36fa228316d17e5baa1247ba0">play_in_loop_</a></td></tr>
+<tr class="memdesc:acaa7fce36fa228316d17e5baa1247ba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">play path in loop <br /></td></tr>
+<tr class="separator:acaa7fce36fa228316d17e5baa1247ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1af600a4756e4d52b91db548b51ce50"><td class="memItemLeft" align="right" valign="top"><a id="ab1af600a4756e4d52b91db548b51ce50"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html#ab1af600a4756e4d52b91db548b51ce50">current_pose_index_</a></td></tr>
+<tr class="memdesc:ab1af600a4756e4d52b91db548b51ce50"><td class="mdescLeft">&#160;</td><td class="mdescRight">index of the current position in the path <br /></td></tr>
+<tr class="separator:ab1af600a4756e4d52b91db548b51ce50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4d93ca0f5b8e8b39032f77e360dd90b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d93ca0f5b8e8b39032f77e360dd90b9">&#9670;&nbsp;</a></span>Path()</h2>
+<a id="a3e7fb129f4868768cb2b0a4b99e48b76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e7fb129f4868768cb2b0a4b99e48b76">&#9670;&nbsp;</a></span>Path()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +227,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td class="memname">cogip::path::Path::Path </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; <a class="el" href="classcogip_1_1path_1_1Pose.html">Pose</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>poses</em>, </td>
+          <td class="paramname"><em>poses</em> = <code>{}</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -238,20 +262,28 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aaae75d0cc68ed0f9073ea3bc489b1b76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaae75d0cc68ed0f9073ea3bc489b1b76">&#9670;&nbsp;</a></span>operator++()</h2>
+<a id="ab627d3f784281e445979b3f063cbec4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab627d3f784281e445979b3f063cbec4a">&#9670;&nbsp;</a></span>operator++()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t cogip::path::Path::operator++ </td>
+          <td class="memname">virtual size_t cogip::path::Path::operator++ </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Increment the current position in the robot path (going forward to the next position). </p>
@@ -259,20 +291,28 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a38bd60d9e84bddbe62d40853ad2e5306"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38bd60d9e84bddbe62d40853ad2e5306">&#9670;&nbsp;</a></span>operator--()</h2>
+<a id="a433d15af3d6fbfaf93cc4e4ea94868cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a433d15af3d6fbfaf93cc4e4ea94868cc">&#9670;&nbsp;</a></span>operator--()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t cogip::path::Path::operator-- </td>
+          <td class="memname">virtual size_t cogip::path::Path::operator-- </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Decrement the current position in the robot path (going back to the last position). </p>
@@ -287,7 +327,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sat May 21 2022 08:09:15 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Wed Jun 1 2022 07:20:46 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

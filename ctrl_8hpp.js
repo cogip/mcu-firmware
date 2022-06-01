@@ -32,7 +32,7 @@ var ctrl_8hpp =
     [ "ctrl_set_pose_current", "group__controller.html#gab5e4bfefef07968449475aa382f588f9", null ],
     [ "ctrl_set_pose_intermediate", "group__controller.html#gaeb2bc0490992071618839a13152c5ed6", null ],
     [ "ctrl_set_pose_reached", "group__controller.html#gad93d60c68e7c093f2e753d9d54db51b8", null ],
-    [ "ctrl_set_pose_to_reach", "group__controller.html#ga80e341ca2dd5394402013ad64092e9a9", null ],
+    [ "ctrl_set_pose_to_reach", "group__controller.html#gacbc6e33e5852d213e27f3503df9490ea", null ],
     [ "ctrl_set_speed_order", "group__controller.html#gae7b858c34fd7c4d410d7cb33f77e95cb", null ],
     [ "task_ctrl_update", "group__controller.html#ga4808b57587274de0f1294499b6c01336", null ]
 ];

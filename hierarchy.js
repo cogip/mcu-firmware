@@ -33,7 +33,6 @@ var hierarchy =
     [ "cogip::planners::Planner", "classcogip_1_1planners_1_1Planner.html", [
       [ "cogip::planners::AstarPlanner", "classcogip_1_1planners_1_1AstarPlanner.html", null ]
     ] ],
-    [ "Platform", "classPlatform.html", null ],
     [ "cogip::cogip_defs::Polar", "classcogip_1_1cogip__defs_1_1Polar.html", null ],
     [ "ReadBufferInterface", null, [
       [ "cogip::uartpb::ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html", null ]
