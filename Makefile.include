@@ -76,6 +76,7 @@ endif
 tmp_cxxexflags := $(CXXEXFLAGS)
 CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
 CXXEXFLAGS += -std=c++14
+CXXEXFLAGS += -Wno-pedantic
 
 .PHONY: world
 world: all
