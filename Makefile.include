@@ -16,6 +16,12 @@ $(foreach pkg,$(pkgs), $(shell ln -sf $(pkg) $(RIOTPKG)/$(notdir $(pkg))))
 QUIET ?= 1
 DEVELHELP ?= 1
 
+# Required features
+FEATURES_REQUIRED += cpp
+
+# Required modules
+USEMODULE += cpp11-compat
+
 define remote-flash-recipe
 	scp $(BINFILE) $(REMOTE_USER)@$(REMOTE_TARGET):/tmp/fw.bin
 	$(GDB) -nx -batch -ex "target extended-remote $(REMOTE_TARGET):3333" -ex "monitor reset halt" -ex "monitor flash write_image erase /tmp/fw.bin 0x08000000" -ex "monitor reset run"
