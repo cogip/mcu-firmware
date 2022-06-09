@@ -18,7 +18,7 @@
 #include <list>
 
 // Project includes
-#include "utils.h"
+#include "utils.hpp"
 
 #ifndef NB_SHELL_COMMANDS
 #  define NB_SHELL_COMMANDS 20    ///< max shell commands per menu

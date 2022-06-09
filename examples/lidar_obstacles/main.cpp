@@ -7,7 +7,7 @@
 #include "obstacles/obstacles.hpp"
 #include "obstacles/List.hpp"
 #include "obstacles/Rectangle.hpp"
-#include "tracefd/tracefd.hpp"
+#include "utils.hpp"
 
 // Application includes
 #include "common_defs.h"
@@ -43,12 +43,12 @@ static int _cmd_trace_on_off(int argc, char **argv)
     (void)argc;
     (void)argv;
     if (trace_on) {
-        cogip::tracefd::out.logf("Deactivate traces");
+        COGIP_DEBUG_COUT("Deactivate traces");
         cogip::shell::rename_command("_trace_off", "_trace_on");
         trace_on = false;
     }
     else {
-        cogip::tracefd::out.logf("Activate traces");
+        COGIP_DEBUG_COUT("Activate traces");
         cogip::shell::rename_command("_trace_on", "_trace_off");
         trace_on = true;
     }
@@ -57,30 +57,31 @@ static int _cmd_trace_on_off(int argc, char **argv)
 
 static void _print_state(void)
 {
-    cogip::tracefd::out.lock();
-
-    cogip::tracefd::out.printf(
+    COGIP_DEBUG_COUT(
         "{"
-        "\"mode\":0,"
-        "\"pose_current\":{\"x\":%.3lf,\"y\":%.3lf,\"O\":%.3lf},"
-        "\"pose_order\":{\"x\":%.3lf,\"y\":%.3lf,\"O\":%.3lf},"
-        "\"cycle\":%" PRIu32,
-        robot_state.x(), robot_state.y(), robot_state.O(),
-        robot_state.x(), robot_state.y(), robot_state.O(),
-        cycle
-        );
+            << "\"mode\":0,"
+            << "\"pose_current\":{"
+                << "\"O\":" << robot_state.O()
+                << "\"x\":" << robot_state.x()
+                << ",\"y\":" << robot_state.y()
+            << "},"
+            << "\"pose_order\":{"
+                << "\"O\":" << robot_state.O()
+                << "\"x\":" << robot_state.x()
+                << ",\"y\":" << robot_state.y()
+            << "},"
+            << "\"cycle\":" << cycle << ","
+    );
 
-    cogip::tracefd::out.printf(",\"obstacles\":");
-    cogip::obstacles::print_all_json(cogip::tracefd::out);
+    COGIP_DEBUG_COUT(",\"obstacles\":");
+    cogip::obstacles::print_all_json();
 
-    cogip::tracefd::out.printf("}\n");
-
-    cogip::tracefd::out.unlock();
+    COGIP_DEBUG_COUT("}\n");
 }
 
 int main(void)
 {
-    cogip::tracefd::out.logf("== Lidar obstacle detection example ==");
+    COGIP_DEBUG_COUT("== Lidar obstacle detection example ==");
 
     // Add print data command
     cogip::shell::root_menu.push_back(

@@ -33,7 +33,6 @@
 
 /* Project includes */
 #include "cogip_defs/Coords.hpp"
-#include "tracefd/File.hpp"
 
 #include "PB_Coords.hpp"
 
@@ -84,7 +83,7 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
  *
  * @return
  */
-void avoidance_print_path(cogip::tracefd::File &out);
+void avoidance_print_path(void);
 
 /**
  * @brief Copy list of intermediate positions to reach wanted path position

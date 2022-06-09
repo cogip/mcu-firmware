@@ -19,7 +19,7 @@ void app_wizard(void)
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_camp()) {
         std::string select_camp = wizard_message.get_camp().value();
-        std::cout << "Selected camp: " << select_camp << std::endl;
+        COGIP_DEBUG_COUT("Selected camp: " << select_camp);
         app_camp_set_color(select_camp == "yellow" ? CampColor::Yellow : CampColor::Purple);
     }
     else {

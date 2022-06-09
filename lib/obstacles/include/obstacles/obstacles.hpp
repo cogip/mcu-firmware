@@ -21,7 +21,6 @@
 #include "cogip_defs/Coords.hpp"
 #include "obstacles/Obstacle.hpp"
 #include "obstacles/List.hpp"
-#include "tracefd/File.hpp"
 
 namespace cogip {
 
@@ -37,9 +36,7 @@ bool is_point_in_obstacles(
     );
 
 /// Print all obstacles from all lists.
-void print_all_json(
-    cogip::tracefd::File &out    ///< [out] trace file descriptor
-    );
+void print_all_json(void);
 
 /// Copy data to Protobuf message.
 void pb_copy(

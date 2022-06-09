@@ -19,11 +19,11 @@ void app_wizard(void)
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_camp()) {
         std::string select_camp = wizard_message.get_camp().value();
-        std::cout << "Selected camp: " << select_camp << std::endl;
+        COGIP_DEBUG_COUT("Selected camp: " << select_camp);
         app_camp_set_color(select_camp == "yellow" ? CampColor::Yellow : CampColor::Purple);
     }
     else {
-        puts("Wizard error: bad response type for camp color.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type for camp color.");
     }
 
     wizard_message.clear();
@@ -31,10 +31,10 @@ void app_wizard(void)
     wizard_message.mutable_camera().set_value(true);
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_camera()) {
-        puts("Camera checked");
+        COGIP_DEBUG_COUT("Camera checked");
     }
     else {
-        puts("Wizard error: bad response type fro camera focus.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type fro camera focus.");
     }
 
     wizard_message.clear();
@@ -42,10 +42,10 @@ void app_wizard(void)
     wizard_message.mutable_message().mutable_value() = "Ready to start?";
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_message()) {
-        puts("Wizard start message acknowledged");
+        COGIP_DEBUG_COUT("Wizard start message acknowledged");
     }
     else {
-        puts("Wizard error: bad response type for message start.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type for message start.");
     }
 
     pf_get_planner()->set_allow_change_path_pose(true);
@@ -58,13 +58,13 @@ void app_wizard(void)
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_boolean()) {
         if (wizard_message.get_boolean().value()) {
-            puts("Wizard skipped");
+            COGIP_DEBUG_COUT("Wizard skipped");
             return;
         }
-        puts("Continue wizard");
+        COGIP_DEBUG_COUT("Continue wizard");
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -72,10 +72,10 @@ void app_wizard(void)
     wizard_message.mutable_integer().set_value(2);
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_integer()) {
-        printf("Wizard integer response: %" PRId32 "\n", wizard_message.get_integer().value());
+        COGIP_DEBUG_COUT("Wizard integer response: " << wizard_message.get_integer().value());
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -83,10 +83,10 @@ void app_wizard(void)
     wizard_message.mutable_floating().set_value(2.5);
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_floating()) {
-        printf("Wizard float response: %f\n", wizard_message.get_floating().value());
+        COGIP_DEBUG_COUT("Wizard float response: " << wizard_message.get_floating().value());
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -94,10 +94,10 @@ void app_wizard(void)
     wizard_message.mutable_str().mutable_value() = "foo";
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_str()) {
-        printf("Wizard string response: %s\n", wizard_message.get_str().value());
+        COGIP_DEBUG_COUT("Wizard string response: " << wizard_message.get_str().value());
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -109,10 +109,10 @@ void app_wizard(void)
     choice_integer.mutable_value() = 2;
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_choice_integer()) {
-        printf("Wizard choice integer response: %" PRId32 "\n", wizard_message.get_choice_integer().value());
+        COGIP_DEBUG_COUT("Wizard choice integer response: " << wizard_message.get_choice_integer().value());
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -124,10 +124,10 @@ void app_wizard(void)
     choice_floating.mutable_value() = 2.5;
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_choice_floating()) {
-        printf("Wizard choice floating response: %f\n", wizard_message.get_choice_floating().value());
+        COGIP_DEBUG_COUT("Wizard choice floating response: " << wizard_message.get_choice_floating().value());
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -139,10 +139,10 @@ void app_wizard(void)
     choice_str.mutable_value() = "bar";
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_choice_str()) {
-        printf("Wizard choice string response: %s\n", wizard_message.get_choice_str().value());
+        COGIP_DEBUG_COUT("Wizard choice string response: " << wizard_message.get_choice_str().value());
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -155,14 +155,14 @@ void app_wizard(void)
     select_integer.mutable_value().add(3);
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_select_integer()) {
-        printf("Wizard select integer response:");
+        COGIP_DEBUG_COUT("Wizard select integer response:");
         for(uint32_t i = 0; i < wizard_message.get_select_integer().value().get_length(); ++i) {
-          printf(" %" PRId32, wizard_message.get_select_integer().value().get_const(i).get());
+          COGIP_DEBUG_COUT(" " << wizard_message.get_select_integer().value().get_const(i).get());
         }
-        puts("");
+        COGIP_DEBUG_COUT("");
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -175,14 +175,14 @@ void app_wizard(void)
     select_floating.mutable_value().add(3.5);
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_select_floating()) {
-        printf("Wizard select floating response:");
+        COGIP_DEBUG_COUT("Wizard select floating response:");
         for(uint32_t i = 0; i < wizard_message.get_select_floating().value().get_length(); ++i) {
-          printf(" %f", wizard_message.get_select_floating().value().get_const(i).get());
+          COGIP_DEBUG_COUT(" " << wizard_message.get_select_floating().value().get_const(i).get());
         }
-        puts("");
+        COGIP_DEBUG_COUT("");
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 
     wizard_message.clear();
@@ -195,18 +195,18 @@ void app_wizard(void)
     select_str.mutable_value().get(1) = "baz";
     wizard_message = wizard->request(wizard_message);
     if (wizard_message.has_select_str()) {
-        printf("Wizard select string response:");
+        COGIP_DEBUG_COUT("Wizard select string response:");
         for(uint32_t i = 0; i < wizard_message.get_select_str().value().get_length(); ++i) {
-          printf(" %s", wizard_message.get_select_str().value().get_const(i).get_const());
+          COGIP_DEBUG_COUT(" " << wizard_message.get_select_str().value().get_const(i).get_const());
         }
-        puts("");
+        COGIP_DEBUG_COUT("");
     }
     else {
-        puts("Wizard error: bad response type.");
+        COGIP_DEBUG_COUT("Wizard error: bad response type.");
     }
 #endif
 
-    puts("Wizard done");
+    COGIP_DEBUG_COUT("Wizard done");
 }
 
 } // namespace app

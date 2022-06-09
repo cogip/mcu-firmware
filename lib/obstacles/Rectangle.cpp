@@ -1,10 +1,11 @@
-#include "obstacles/Rectangle.hpp"
 
 // System includes
 #include "cmath"
 
 // Project includes
+#include "obstacles/Rectangle.hpp"
 #include "trigonometry.h"
+#include "utils.hpp"
 
 namespace cogip {
 
@@ -39,16 +40,17 @@ Rectangle::Rectangle(
     }
 }
 
-void Rectangle::print_json(cogip::tracefd::File &out) const
+void Rectangle::print_json(void) const
 {
-    out.printf(
-        "{\"x\":%.3lf,\"y\":%.3lf,\"angle\":%.3lf,\"length_x\":%.3lf,\"length_y\":%.3lf}",
-        center_.x(),
-        center_.y(),
-        angle_,
-        length_x_,
-        length_y_
-        );
+    COGIP_DEBUG_COUT(
+        "{"
+            << "\"x\":" << center_.x()
+            << ",\"y\":" << center_.y()
+            << ",\"angle\":" << angle_
+            << ",\"length_x\":" << length_x_
+            << ",\"length_y\":" << length_y_
+        << "}"
+    );
 }
 
 void Rectangle::pb_copy(PB_Message &message) const

@@ -7,7 +7,7 @@
 
 /* Project includes */
 #include "ctrl.hpp"
-#include "utils.h"
+#include "utils.hpp"
 #include "platform.hpp"
 
 void ctrl_set_pose_reached(ctrl_t *ctrl)

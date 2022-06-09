@@ -30,7 +30,7 @@ public:
         double length_y                   ///< [in] length on Y of the rectangle
         );
 
-    void print_json(cogip::tracefd::File &out) const override;
+    void print_json(void) const override;
     void pb_copy(PB_Message &message) const override;
 
 private:

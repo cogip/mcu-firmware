@@ -12,7 +12,7 @@
 // Project includes
 #include "lds01.h"
 #include "lds01_params.h"
-#include "tracefd/tracefd.hpp"
+#include "utils.hpp"
 
 // Lidar device to use (defined in lds01_params.h)
 lds01_t lds01 = 0;
@@ -41,16 +41,16 @@ void new_frame_available_cb(void)
 }
 
 // Print data in JSON format
-static void _print_data(cogip::tracefd::File &out, const uint16_t *distances)
+static void _print_data(const uint16_t *distances)
 {
-    out.printf("{\"distances\":[");
+    COGIP_DEBUG_COUT("{\"distances\":[");
     for (uint32_t i = 0; i < LDS01_NB_ANGLES; i++) {
         if (i > 0) {
-            out.printf(",");
+            COGIP_DEBUG_COUT(",");
         }
-        out.printf("%u", distances[i]);
+        COGIP_DEBUG_COUT(distances[i]);
     }
-    out.printf("]}\n");
+    COGIP_DEBUG_COUT("]}\n");
 }
 
 // Shell command to print data
@@ -62,7 +62,7 @@ int lidar_cmd_print_data(int argc, char **argv)
     uint16_t distances[LDS01_NB_ANGLES];
     lds01_get_distances(lds01, distances);
 
-    _print_data(cogip::tracefd::out, distances);
+    _print_data(distances);
 
     return EXIT_SUCCESS;
 }

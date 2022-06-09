@@ -21,7 +21,6 @@
 
 // Project includes
 #include "obstacles/Obstacle.hpp"
-#include "tracefd/File.hpp"
 
 #include "PB_Obstacle.hpp"
 
@@ -52,9 +51,7 @@ public:
     void unlock() { mutex_.unlock(); };
 
     /// Print all obstacles from the list in JSON format.
-    void print_json(
-        cogip::tracefd::File &out             ///< [out] trace file descriptor
-        ) const;
+    void print_json(void) const;
 
     /// Copy data to Protobuf message.
     void pb_copy(

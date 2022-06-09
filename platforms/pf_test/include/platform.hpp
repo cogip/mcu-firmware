@@ -34,7 +34,7 @@
 #include "odometry.hpp"
 #include "path/Path.hpp"
 #include "planners/Planner.hpp"
-#include "utils.h"
+#include "utils.hpp"
 #include "wizard/Wizard.hpp"
 
 #define ROBOT_ID            0       /**< Robot ID for logs */
@@ -176,7 +176,7 @@ void pf_set_copilot_connected(bool connected);
  *
  * @return
  */
-void pf_print_state(cogip::tracefd::File &out);
+void pf_print_state(void);
 
 /**
  * @brief Send current robot state in Protobuf format over UART

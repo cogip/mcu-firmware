@@ -11,7 +11,7 @@
 // Project includes
 #include "lds01.h"
 #include "lds01_params.h"
-#include "tracefd/tracefd.hpp"
+#include "utils.hpp"
 
 // Lidar device to use (defined in lds01_params.h)
 lds01_t lds01 = 0;
@@ -71,6 +71,6 @@ void lidar_start(uint16_t max_distance, uint16_t min_intensity)
         lds01_start(lds01);
     }
     else {
-        cogip::tracefd::out.logf("Lidar initialisation failed.");
+        COGIP_DEBUG_CERR("Lidar initialisation failed.");
     }
 }

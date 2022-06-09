@@ -1,7 +1,8 @@
+// Project includes
 #include "obstacles/List.hpp"
 #include "obstacles/obstacles.hpp"
-
 #include "PB_Obstacle.hpp"
+#include "utils.hpp"
 
 namespace cogip {
 
@@ -25,7 +26,7 @@ void List::clear()
     std::vector<Obstacle *>::clear();
 }
 
-void List::print_json(cogip::tracefd::File &out) const
+void List::print_json(void) const
 {
     size_t i = 0;
     for (auto obs: *this) {
@@ -33,10 +34,10 @@ void List::print_json(cogip::tracefd::File &out) const
             continue;
         }
         if (i++ > 0) {
-            out.printf(",");
+            COGIP_DEBUG_COUT(",");
         }
 
-        obs->print_json(out);
+        obs->print_json();
     }
 }
 

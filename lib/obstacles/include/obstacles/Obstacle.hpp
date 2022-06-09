@@ -17,7 +17,6 @@
 // Project includes
 #include "cogip_defs/Coords.hpp"
 #include "cogip_defs/Polygon.hpp"
-#include "tracefd/File.hpp"
 
 #include "PB_Obstacle.hpp"
 
@@ -75,9 +74,7 @@ public:
         ) const = 0;
 
     /// Print obstacles in JSON format.
-    virtual void print_json(
-        cogip::tracefd::File &out         ///< [out] trace file descriptor
-        ) const = 0;
+    virtual void print_json(void) const = 0;
 
     /// Copy data to Protobuf message.
     virtual void pb_copy(

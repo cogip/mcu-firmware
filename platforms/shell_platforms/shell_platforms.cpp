@@ -16,7 +16,7 @@
 #include "ctrl.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "shell_platforms.hpp"
-#include "tracefd/tracefd.hpp"
+#include "utils.hpp"
 
 #ifdef MODULE_SHMEM
 #include "shmem.h"
@@ -34,7 +34,7 @@ static int _cmd_print_state(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pf_print_state(cogip::tracefd::out);
+    pf_print_state();
 
     return EXIT_SUCCESS;
 }
@@ -57,43 +57,43 @@ int pf_motors_test(int argc, char **argv)
             int32_t qdec_value = 0;
             int timeout = 3000;
 
-            cogip::tracefd::out.logf("### Testing motor %d of motor driver %d", j, i);
+            COGIP_DEBUG_COUT("### Testing motor " << j << " of motor driver " << i);
 
             /* Reset qdec */
             qdec_read_and_reset(QDEC_DEV(nb_motors + j));
 
             /* Forward */
-            cogip::tracefd::out.logf("    Forward move");
+            COGIP_DEBUG_COUT("    Forward move");
             motor_set(i, j, pwm_resolution / 4);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            cogip::tracefd::out.logf("    qdec value = %" PRId32, qdec_value);
-            cogip::tracefd::out.logf("    Done");
+            COGIP_DEBUG_COUT("    qdec value = " << qdec_value);
+            COGIP_DEBUG_COUT("    Done");
 
             /* Stop */
             timeout = 3000;
             qdec_value = 0;
-            cogip::tracefd::out.logf("    Stop");
+            COGIP_DEBUG_COUT("    Stop");
             motor_set(i, j, 0);
             xtimer_usleep(3 * US_PER_SEC);
-            cogip::tracefd::out.logf("    Done");
+            COGIP_DEBUG_COUT("    Done");
 
             /* Backward */
-            cogip::tracefd::out.logf("    Backward move");
+            COGIP_DEBUG_COUT("    Backward move");
             motor_set(i, j, -pwm_resolution / 4);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 xtimer_usleep(US_PER_MS);
             }
-            cogip::tracefd::out.logf("    qdec value = %" PRId32, qdec_value);
-            cogip::tracefd::out.logf("    Done");
+            COGIP_DEBUG_COUT("    qdec value = " << qdec_value);
+            COGIP_DEBUG_COUT("    Done");
 
             /* Stop */
-            cogip::tracefd::out.logf("    Stop");
+            COGIP_DEBUG_COUT("    Stop");
             motor_set(i, j, 0);
-            cogip::tracefd::out.logf("    Done");
+            COGIP_DEBUG_COUT("    Done");
         }
 
         nb_motors += nb_motors_tmp;
@@ -109,10 +109,7 @@ int _cmd_print_avoidance_path(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    cogip::tracefd::out.lock();
-    avoidance_print_path(cogip::tracefd::out);
-    cogip::tracefd::out.printf("\n");
-    cogip::tracefd::out.unlock();
+    avoidance_print_path();
 
     return EXIT_SUCCESS;
 }

@@ -16,7 +16,7 @@ void app_uartpb_message_handler(cogip::uartpb::ReadBuffer &buffer)
     PB_InputMessage *message = new PB_InputMessage();
     EmbeddedProto::Error error = message->deserialize(buffer);
     if (error != EmbeddedProto::Error::NO_ERRORS) {
-        std::cout << "Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        COGIP_DEBUG_COUT("Protobuf deserialization error: " << static_cast<int>(error));
         return;
     }
     if (message->has_command()) {
@@ -24,14 +24,14 @@ void app_uartpb_message_handler(cogip::uartpb::ReadBuffer &buffer)
     }
     else if (message->has_copilot_connected()) {
         pf_set_copilot_connected(true);
-        puts("Copilot connected");
+        COGIP_DEBUG_COUT("Copilot connected");
         if (cogip::shell::current_menu) {
             cogip::shell::current_menu->send_pb_message();
         }
     }
     else if (message->has_copilot_disconnected()) {
         pf_set_copilot_connected(false);
-        puts("Copilot disconnected");
+        COGIP_DEBUG_COUT("Copilot disconnected");
     }
     else if (message->has_wizard()) {
         pf_get_wizard()->handle_response(message->wizard());
@@ -40,7 +40,7 @@ void app_uartpb_message_handler(cogip::uartpb::ReadBuffer &buffer)
         app_samples_process(message->samples());
     }
     else {
-        printf("Unknown response type: %" PRIu32 "\n", static_cast<uint32_t>(message->get_which_type()));
+        COGIP_DEBUG_COUT("Unknown response type: " << static_cast<uint32_t>(message->get_which_type()));
     }
     delete message;
 }

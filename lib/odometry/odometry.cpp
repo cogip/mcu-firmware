@@ -3,7 +3,7 @@
 
 #include "odometry.hpp"
 #include "trigonometry.h"
-#include "utils.h"
+#include "utils.hpp"
 
 static double wheels_distance; /*!< robot wheels distance [pulse] */
 
