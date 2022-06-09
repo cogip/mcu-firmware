@@ -762,13 +762,6 @@ void ctrl_quadpid_shell_init(ctrl_quadpid_t *ctrl_quadpid_new)
 {
     ctrl_quadpid = ctrl_quadpid_new;
 
-    /* Add pose calibration command */
-    /*shell_command_t cmd_shell_pose = {
-        "cp", "Pose PID coefficients tuning",
-        ctrl_quadpid_pose_shell_cmd
-       };
-       pf_add_shell_command(&pf_shell_commands, &cmd_shell_pose);*/
-
     /* ctrl_quadpid speed menu and commands */
     cogip::shell::Menu *menu_speed = new cogip::shell::Menu(
         "QuadPID controller speed menu", "ctrl_quadpid_speed_menu", &cogip::shell::root_menu);
