@@ -5,11 +5,9 @@ void i2c_init(i2c_t dev)
     (void)dev;
 }
 
-int i2c_acquire(i2c_t dev)
+void i2c_acquire(i2c_t dev)
 {
     (void)dev;
-
-    return 0;
 }
 
 void i2c_release(i2c_t dev)
