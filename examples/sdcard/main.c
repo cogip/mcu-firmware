@@ -37,10 +37,6 @@ static fatfs_desc_t fs_desc = {
     }
 };
 
-/* Declare mtd devices (for use within diskio layer of fatfs) */
-/* Declared as `extern` in `RIOT/pkg/fatfs/fatfs_diskio/mtd/mtd_diskio.c` */
-mtd_dev_t *fatfs_mtd_devs[FF_VOLUMES];
-
 /* Define the vfs mount point */
 static vfs_mount_t flash_mount = {
     .fs = &fatfs_file_system,
@@ -205,7 +201,7 @@ static const shell_command_t shell_commands[] = {
 
 int main(void)
 {
-    fatfs_mtd_devs[fs_desc.vol_idx] = (mtd_dev_t *)&mtd_sdcard_dev;
+    fs_desc.dev = (mtd_dev_t *)&mtd_sdcard_dev;
 
     int res = vfs_mount(&flash_mount);
     if (res < 0) {
