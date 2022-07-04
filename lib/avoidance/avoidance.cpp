@@ -9,7 +9,7 @@
 #include "obstacles/obstacles.hpp"
 #include "obstacles/List.hpp"
 #include "platform.hpp"
-#include "utils.h"
+#include "utils.hpp"
 #include "cogip_defs/Coords.hpp"
 #include "PB_Coords.hpp"
 
@@ -306,27 +306,29 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
 /**
  * Print avoidance computed path
  */
-void avoidance_print_path(cogip::tracefd::File &out)
+void avoidance_print_path(void)
 {
-    out.printf("[");
+    COGIP_DEBUG_COUT("[");
     /* Print only if avoidance has already been computed successfully */
     if (_is_avoidance_computed) {
         /* Print all intermediate poses */
         for (auto i: _children) {
-            out.printf(
-                "{\"x\":%.3lf,\"y\":%.3lf},",
-                _valid_points[i].x(),
-                _valid_points[i].y()
-                );
+            COGIP_DEBUG_COUT(
+                "{"
+                    << "\"x\":" << _valid_points[i].x()
+                    << ",\"y\":" << _valid_points[i].y()
+                    << "},"
+            );
         }
         /* Print also finish pose */
-        out.printf(
-            "{\"x\":%.3lf,\"y\":%.3lf}",
-            finish_pose.x(),
-            finish_pose.y()
-            );
+        COGIP_DEBUG_COUT(
+            "{"
+            << "\"x\":" << finish_pose.x()
+            << ",\"y\":" << finish_pose.y()
+            << "},"
+        );
     }
-    out.printf("]");
+    COGIP_DEBUG_COUT("]");
 }
 
 void avoidance_pb_copy_path(

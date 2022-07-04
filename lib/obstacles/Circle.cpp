@@ -1,4 +1,6 @@
+// Project includes
 #include "obstacles/Circle.hpp"
+#include "utils.hpp"
 
 // System includes
 #include <cmath>
@@ -67,14 +69,15 @@ cogip_defs::Coords Circle::nearest_point(const cogip_defs::Coords &p) const
     );
 }
 
-void Circle::print_json(cogip::tracefd::File &out) const
+void Circle::print_json(void) const
 {
-    out.printf(
-        "{\"x\":%.3lf,\"y\":%.3lf,\"radius\":%.3lf}",
-        center_.x(),
-        center_.y(),
-        radius_
-        );
+    COGIP_DEBUG_COUT(
+        "{"
+            << "\"x\":" << center_.x()
+            << ",\"y\":" << center_.y()
+            << ",\"radius\":" << radius_
+        << "}"
+    );
 }
 
 void Circle::pb_copy(PB_Message &message) const

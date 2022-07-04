@@ -1,4 +1,6 @@
+// Project includes
 #include "obstacles/Polygon.hpp"
+#include "utils.hpp"
 
 namespace cogip {
 
@@ -118,24 +120,26 @@ cogip_defs::Coords Polygon::nearest_point(const cogip_defs::Coords &p) const
     return tmp;
 }
 
-void Polygon::print_json(cogip::tracefd::File &out) const
+void Polygon::print_json(void) const
 {
-    out.printf(
-        "{\"x\":%.3lf,\"y\":%.3lf,\"points\":[",
-        center_.x(),
-        center_.y()
-        );
+    COGIP_DEBUG_COUT(
+        "{"
+            << "\"x\":" << center_.x()
+            << ",\"y\":" << center_.y()
+            << ",\"points\":["
+    );
     for (auto it = begin(); it != end(); it++) {
         if (it != begin()) {
-            out.printf(",");
+            COGIP_DEBUG_COUT(",");
         }
-        out.printf(
-            "{\"x\":%.3lf,\"y\":%.3lf}",
-            it->x(),
-            it->y()
+        COGIP_DEBUG_COUT(
+            "{"
+                << "\"x\":" << it->x()
+                << ",\"y\":" << it->y()
+                << ",\"points\":["
             );
     }
-    out.printf("]}");
+    COGIP_DEBUG_COUT("]}");
 }
 
 void Polygon::pb_copy(PB_Message &) const

@@ -2,7 +2,7 @@
 #include "shell_menu_private.hpp"
 
 // Project includes
-#include "tracefd/tracefd.hpp"
+#include "utils.hpp"
 
 namespace cogip {
 
@@ -25,21 +25,21 @@ static int _display_json_help(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    cogip::tracefd::out.lock();
-    cogip::tracefd::out.printf("{\"name\":\"%s\",\"entries\":[", current_menu->name().c_str());
+    COGIP_DEBUG_COUT(
+        "{\"name\":\"" << current_menu->name().c_str() << "\",\"entries\":["
+    );
     shell_command_t *cmd = current_commands;
     for (; cmd->name != NULL; cmd++) {
         if (cmd != current_commands) {
-            cogip::tracefd::out.printf(",");
+            COGIP_DEBUG_COUT(",");
         }
-        cogip::tracefd::out.printf(
-            "{\"cmd\":\"%s\",\"desc\":\"%s\"}",
-            cmd->name,
-            cmd->desc
-            );
+        COGIP_DEBUG_COUT(
+            "{\"cmd\":\"" << cmd->name
+            << "\",\"desc\":\"" << cmd->desc
+            << "\"}"
+        );
     }
-    cogip::tracefd::out.printf("]}\n");
-    cogip::tracefd::out.unlock();
+    COGIP_DEBUG_COUT("]}");
 
     return EXIT_SUCCESS;
 }
@@ -50,7 +50,9 @@ static int _exit_menu(int argc, char **argv)
     (void)argv;
 
     if (current_menu->parent()) {
-        cogip::tracefd::out.logf("Exit shell menu: %s", current_menu->name().c_str());
+        COGIP_DEBUG_COUT(
+            "Exit shell menu: " << current_menu->name().c_str()
+        );
         current_menu->parent()->enter();
     }
 
@@ -120,7 +122,7 @@ static void run_pb_command_(Command *command, const Command::PB_Message &pb_comm
         argv[argc++] = args;
         for (i = 0; i < pb_command.get_desc().get_length(); i++) {
             if (i >= COMMAND_DESC_MAX_LENGTH || argc >= COMMAND_MAX_PB_ARGS) {
-                printf("Skip command '%s %s': arguments too long\n", pb_command.cmd(), pb_command.desc());
+                COGIP_DEBUG_COUT("Skip command '" << pb_command.cmd() << " " << pb_command.desc()  << "': arguments too long");
                 return;
             }
             char c = pb_command.desc()[i];
@@ -145,9 +147,10 @@ static void run_pb_command_(Command *command, const Command::PB_Message &pb_comm
 void handle_pb_command(const Command::PB_Message &pb_command)
 {
     if (cogip::shell::current_menu == nullptr) {
-        cogip::tracefd::out.logf(
-            "Warning: received PB command before current_menu is initialized: %s %s\n",
-            pb_command.cmd(), pb_command.desc());
+        COGIP_DEBUG_CERR(
+            "Warning: received PB command before current_menu is initialized: "
+            << pb_command.cmd() << pb_command.desc()
+        );
         return;
     }
 

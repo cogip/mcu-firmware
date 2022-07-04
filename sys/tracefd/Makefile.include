@@ -1,5 +1,0 @@
-USEMODULE_INCLUDES_tracefd := $(LAST_MAKEFILEDIR)/include
-USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_tracefd)
-
-CXXEXFLAGS += -fno-rtti
-CXXEXFLAGS += -Wno-pedantic

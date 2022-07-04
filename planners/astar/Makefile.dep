@@ -1,3 +1,2 @@
 USEMODULE += planner
 USEMODULE += avoidance
-USEMODULE += tracefd

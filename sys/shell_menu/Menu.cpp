@@ -4,9 +4,6 @@
 // System includes
 #include <cassert>
 
-// Project includes
-#include "tracefd/tracefd.hpp"
-
 #ifdef MODULE_UARTPB
 #  include "uartpb_config.hpp"
 #endif
@@ -86,7 +83,7 @@ void Menu::enter(void)
         i++;
     }
 
-    cogip::tracefd::out.logf("Enter shell menu: %s", current_menu->name().c_str());
+    COGIP_DEBUG_COUT("Enter shell menu: " << current_menu->name().c_str());
 
 #ifdef MODULE_UARTPB
     send_pb_message();

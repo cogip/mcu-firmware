@@ -12,7 +12,7 @@
 #pragma once
 
 #include "cogip_defs/Pose.hpp"
-#include "utils.h"
+#include "utils.hpp"
 
 #include <vector>
 

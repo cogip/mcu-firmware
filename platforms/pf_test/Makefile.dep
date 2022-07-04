@@ -17,7 +17,6 @@ USEMODULE += quadpid
 USEMODULE += cogip_defs
 USEMODULE += lds01_dma
 USEMODULE += obstacles
-USEMODULE += tracefd
 USEMODULE += wizard
 
 # Board features required

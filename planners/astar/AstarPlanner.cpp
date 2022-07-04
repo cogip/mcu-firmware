@@ -1,4 +1,3 @@
-#include "planners/astar/AstarPlanner.hpp"
 
 // RIOT includes
 #include "riot/chrono.hpp"
@@ -7,8 +6,8 @@
 // Project includes
 #include "app.hpp"
 #include "avoidance.hpp"
+#include "planners/astar/AstarPlanner.hpp"
 #include "platform.hpp"
-#include "tracefd/tracefd.hpp"
 
 // Enable or disable debug for this file only
 #define ENABLE_DEBUG        (0)
@@ -162,7 +161,7 @@ void *AstarPlanner::task_planner()
 {
     cogip::cogip_defs::Polar speed_order;
 
-    cogip::tracefd::out.logf("Game planner starting");
+    COGIP_DEBUG_COUT ("Game planner starting");
 
     path_.reset_current_pose_index();
 
@@ -174,7 +173,7 @@ void *AstarPlanner::task_planner()
     ctrl_set_speed_order(ctrl_, speed_order);
     ctrl_set_pose_reached(ctrl_);
 
-    cogip::tracefd::out.logf("Game planner started");
+    COGIP_DEBUG_COUT("Game planner started");
 
     while (! thread_exit_) {
         riot::time_point loop_start_time = riot::now();

@@ -11,11 +11,11 @@
 #include "planners/astar/AstarPlanner.hpp"
 #include "platform.hpp"
 #include "avoidance.hpp"
-#include "tracefd/tracefd.hpp"
 #include "path/Path.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "uartpb/UartProtobuf.hpp"
 #include "uartpb/ReadBuffer.hpp"
+#include "utils.hpp"
 
 /* Platform includes */
 #include "lidar_utils.hpp"
@@ -92,37 +92,34 @@ void pf_set_copilot_connected(bool connected)
     copilot_connected = connected;
 }
 
-void pf_print_state(cogip::tracefd::File &out)
+void pf_print_state(void)
 {
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
 
-    out.lock();
-
-    out.printf(
+    COGIP_DEBUG_COUT(
         "{"
-        "\"mode\":%u,"
-        "\"pose_current\":{\"O\":%.3lf,\"x\":%.3lf,\"y\":%.3lf},"
-        "\"pose_order\":{\"O\":%.3lf,\"x\":%.3lf,\"y\":%.3lf},"
-        "\"cycle\":%" PRIu32 ","
-        "\"speed_current\":{\"distance\":%.3lf,\"angle\":%.3lf},"
-        "\"speed_order\":{\"distance\":%.3lf,\"angle\":%.3lf}",
-        ctrl->control.current_mode,
-        ctrl->control.pose_current.O(), ctrl->control.pose_current.x(), ctrl->control.pose_current.y(),
-        ctrl->control.pose_order.O(), ctrl->control.pose_order.x(), ctrl->control.pose_order.y(),
-        ctrl->control.current_cycle,
-        ctrl->control.speed_current.distance(), ctrl->control.speed_current.angle(),
-        ctrl->control.speed_order.distance(), ctrl->control.speed_order.angle()
-        );
+            << "\"mode\":" << ctrl->control.current_mode << ","
+            << "\"pose_current\":{"
+                << "\"O\":" << ctrl->control.pose_current.O()
+                << "\"x\":" << ctrl->control.pose_current.x()
+                << ",\"y\":" << ctrl->control.pose_current.y()
+            << "},"
+            << "\"pose_order\":{"
+                << "\"O\":" << ctrl->control.pose_order.O()
+                << "\"x\":" << ctrl->control.pose_order.x()
+                << ",\"y\":" << ctrl->control.pose_order.y()
+            << "},"
+            << "\"cycle\":" << ctrl->control.current_cycle << ","
+            << "\"speed_current\":{\"distance\":" << ctrl->control.speed_current.distance()
+            << ",\"angle\":" << ctrl->control.speed_current.angle() << "},"
+            << ",\"path\":"
+    );
+    avoidance_print_path();
 
-    out.printf(",\"path\":");
-    avoidance_print_path(out);
+    COGIP_DEBUG_COUT(",\"obstacles\":");
+    cogip::obstacles::print_all_json();
 
-    out.printf(",\"obstacles\":");
-    cogip::obstacles::print_all_json(out);
-
-    out.printf("}\n");
-
-    out.unlock();
+    COGIP_DEBUG_COUT("}");
 }
 
 void pf_send_pb_state(void)
@@ -264,7 +261,7 @@ void pf_init(void)
     bool uartpb_res = uartpb->connect();
     if (! uartpb_res) {
         uartpb = nullptr;
-        cogip::tracefd::out.logf("UART initialization failed, error: %d\n", uartpb_res);
+        COGIP_DEBUG_CERR("UART initialization failed, error: " << uartpb_res);
     }
     else {
         cogip::shell::register_uartpb(uartpb);

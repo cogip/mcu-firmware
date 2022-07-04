@@ -7,8 +7,9 @@
 #include <set>
 
 /* Project includes */
-#include "trigonometry.h"
 #include "cogip_defs/Polygon.hpp"
+#include "trigonometry.h"
+#include "utils.hpp"
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"
@@ -20,21 +21,21 @@ namespace obstacles {
 std::set<List const *> all_obstacles;
 
 // Global functions
-void print_all_json(cogip::tracefd::File &out)
+void print_all_json(void)
 {
     size_t nb_obstacles = 0;
 
-    out.printf("[");
+    COGIP_DEBUG_COUT("[");
 
     for (auto l: all_obstacles) {
         if (nb_obstacles > 0 && l->enabled_obstacles() > 0) {
-            out.printf(",");
+            COGIP_DEBUG_COUT(",");
         }
 
-        l->print_json(out);
+        l->print_json();
         nb_obstacles += l->enabled_obstacles();
     }
-    out.printf("]");
+    COGIP_DEBUG_COUT("]");
 }
 
 void pb_copy(cogip::obstacles::List::PB_Message &message)
