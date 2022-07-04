@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uart_934',['uart',['../structlds01__params__t.html#a9dcfa044c8a975b31f7525a4fad05374',1,'lds01_params_t']]]
+  ['x_5f_896',['x_',['../classcogip_1_1cogip__defs_1_1Coords.html#a9adefcde766d9169dc59227235e4212e',1,'cogip::cogip_defs::Coords']]]
 ];

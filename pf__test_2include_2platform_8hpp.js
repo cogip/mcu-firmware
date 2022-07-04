@@ -54,7 +54,7 @@ var pf__test_2include_2platform_8hpp =
     [ "pf_init_tasks", "group__platforms__pf__test.html#gac3bbbd7ff3d70fb15bbd73b9203044f3", null ],
     [ "pf_is_camp_left", "group__platforms__pf__test.html#gadcb8588f477c2eda4b2f774b99b910d6", null ],
     [ "pf_is_game_launched", "group__platforms__pf__test.html#gae1a6aab08a0179e854ade7561e3dc079", null ],
-    [ "pf_print_state", "group__platforms__pf__test.html#gac80e892a7623dddeb945d663b43fc38d", null ],
+    [ "pf_print_state", "group__platforms__pf__test.html#gaaed945ac04303eef4f08d257f0a3c944", null ],
     [ "pf_send_pb_state", "group__platforms__pf__test.html#ga0fc74267bdda152e7626e2c284689d07", null ],
     [ "pf_set_copilot_connected", "group__platforms__pf__test.html#gaf83cc53998c27d898d71f8a7e981fdc0", null ],
     [ "pf_trace_on", "group__platforms__pf__test.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],

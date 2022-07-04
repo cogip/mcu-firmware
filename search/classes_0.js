@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['astarplanner_538',['AstarPlanner',['../classcogip_1_1planners_1_1AstarPlanner.html',1,'cogip::planners']]]
+  ['astarplanner_517',['AstarPlanner',['../classcogip_1_1planners_1_1AstarPlanner.html',1,'cogip::planners']]]
 ];

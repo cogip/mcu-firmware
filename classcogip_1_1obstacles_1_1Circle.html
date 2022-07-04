@@ -174,9 +174,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7ba3211091bf1c268dbf9607aca4a3b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Circle.html#a7ba3211091bf1c268dbf9607aca4a3b6">nearest_point</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;p) const override</td></tr>
 <tr class="memdesc:a7ba3211091bf1c268dbf9607aca4a3b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the nearest point of obstacle perimeter from given point.  <a href="classcogip_1_1obstacles_1_1Circle.html#a7ba3211091bf1c268dbf9607aca4a3b6">More...</a><br /></td></tr>
 <tr class="separator:a7ba3211091bf1c268dbf9607aca4a3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad28ba027fb65843a49c232f4d52399d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Circle.html#aad28ba027fb65843a49c232f4d52399d">print_json</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out) const override</td></tr>
-<tr class="memdesc:aad28ba027fb65843a49c232f4d52399d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print obstacles in JSON format.  <a href="classcogip_1_1obstacles_1_1Circle.html#aad28ba027fb65843a49c232f4d52399d">More...</a><br /></td></tr>
-<tr class="separator:aad28ba027fb65843a49c232f4d52399d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa470a327d9787796f5177f375ba9baef"><td class="memItemLeft" align="right" valign="top"><a id="aa470a327d9787796f5177f375ba9baef"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Circle.html#aa470a327d9787796f5177f375ba9baef">print_json</a> (void) const override</td></tr>
+<tr class="memdesc:aa470a327d9787796f5177f375ba9baef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print obstacles in JSON format. <br /></td></tr>
+<tr class="separator:aa470a327d9787796f5177f375ba9baef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a813510abbfedcb70c6a465b1e0933287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Circle.html#a813510abbfedcb70c6a465b1e0933287">pb_copy</a> (<a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7c81963cc733229cf5cf3cc849f69049">PB_Message</a> &amp;message) const override</td></tr>
 <tr class="memdesc:a813510abbfedcb70c6a465b1e0933287"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="classcogip_1_1obstacles_1_1Circle.html#a813510abbfedcb70c6a465b1e0933287">More...</a><br /></td></tr>
 <tr class="separator:a813510abbfedcb70c6a465b1e0933287"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -439,42 +440,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="aad28ba027fb65843a49c232f4d52399d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad28ba027fb65843a49c232f4d52399d">&#9670;&nbsp;</a></span>print_json()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cogip::obstacles::Circle::print_json </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print obstacles in JSON format. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>[out] trace file descriptor </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a066d4305e8b833f1bba25c33f1453520">cogip::obstacles::Obstacle</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>lib/obstacles/include/obstacles/<a class="el" href="Circle_8hpp_source.html">Circle.hpp</a></li>
 </ul>
@@ -482,7 +447,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Jun 1 2022 07:20:46 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Mon Jul 4 2022 17:58:59 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

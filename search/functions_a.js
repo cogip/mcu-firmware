@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['max_5fspeed_5fangular_742',['max_speed_angular',['../classcogip_1_1path_1_1Pose.html#a785a2558d555007e500cc857c7cff97a',1,'cogip::path::Pose']]],
-  ['max_5fspeed_5flinear_743',['max_speed_linear',['../classcogip_1_1path_1_1Pose.html#ac052e1c02ffe7096484b258aa841981a',1,'cogip::path::Pose']]],
-  ['menu_744',['Menu',['../classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b',1,'cogip::shell::Menu']]],
-  ['message_5freader_745',['message_reader',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7',1,'cogip::uartpb::UartProtobuf']]],
-  ['message_5freader_5fwrapper_746',['message_reader_wrapper',['../UartProtobuf_8hpp.html#af1754a88874b0fa1f3bd1b2f11a3737e',1,'cogip::uartpb']]],
-  ['motor_5fdrive_747',['motor_drive',['../group__platforms__pegasus.html#gaa17fe0f98ee21dc8abc9951936be4738',1,'motor_drive(const cogip::cogip_defs::Polar &amp;command):&#160;platform.hpp'],['../group__platforms__pf__test.html#gaa17fe0f98ee21dc8abc9951936be4738',1,'motor_drive(const cogip::cogip_defs::Polar &amp;command):&#160;platform.hpp']]]
+  ['name_716',['name',['../classcogip_1_1shell_1_1Command.html#ad8e613cf3e7b096f56c5cae0fe120077',1,'cogip::shell::Command::name()'],['../classcogip_1_1shell_1_1Menu.html#a4f551988c9e6df31da585edfba8d2d39',1,'cogip::shell::Menu::name()']]],
+  ['nearest_5fpoint_717',['nearest_point',['../classcogip_1_1obstacles_1_1Circle.html#a7ba3211091bf1c268dbf9607aca4a3b6',1,'cogip::obstacles::Circle::nearest_point()'],['../classcogip_1_1obstacles_1_1Obstacle.html#a76648fa5300ce016be0663b8935b6149',1,'cogip::obstacles::Obstacle::nearest_point()'],['../classcogip_1_1obstacles_1_1Polygon.html#ac1895bb71b1be481f4bb188cb4dab774',1,'cogip::obstacles::Polygon::nearest_point()']]],
+  ['new_5fframe_5favailable_5fcb_718',['new_frame_available_cb',['../pegasus_2include_2lds01__params_8h.html#a514230bfb6299f9d3a23bbbd13b370d5',1,'new_frame_available_cb(void):&#160;lds01_params.h'],['../pf__test_2include_2lds01__params_8h.html#a514230bfb6299f9d3a23bbbd13b370d5',1,'new_frame_available_cb(void):&#160;lds01_params.h']]],
+  ['next_719',['next',['../classcogip_1_1path_1_1Path.html#af94b785d1f587c491028211f0f6b2f87',1,'cogip::path::Path']]]
 ];

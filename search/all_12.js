@@ -1,16 +1,20 @@
 var searchData=
 [
-  ['trajectory_20planners_484',['Trajectory planners',['../group__planners.html',1,'']]],
-  ['test_20platform_485',['Test platform',['../group__platforms__pegasus.html',1,'']]],
-  ['test_20platform_486',['Test platform',['../group__platforms__pf__test.html',1,'']]],
-  ['trace_20file_20descriptor_20module_487',['Trace file descriptor module',['../group__sys__tracefd.html',1,'']]],
-  ['task_5fctrl_5fupdate_488',['task_ctrl_update',['../group__controller.html#ga4808b57587274de0f1294499b6c01336',1,'ctrl.hpp']]],
-  ['task_5fplanner_489',['task_planner',['../classcogip_1_1planners_1_1AstarPlanner.html#afcb4c4ae45eab4fcf126f2f24e61a3dd',1,'cogip::planners::AstarPlanner::task_planner()'],['../classcogip_1_1planners_1_1Planner.html#af4a4781c620ae1bebe21c3b843707257',1,'cogip::planners::Planner::task_planner()']]],
-  ['thread_5fexit_5f_490',['thread_exit_',['../classcogip_1_1planners_1_1Planner.html#a238baa3d4c12e833b47eaed19bbe05f4',1,'cogip::planners::Planner']]],
-  ['ti_491',['ti',['../structPID__t.html#ad91b1dd5cbce8d6486864a8c1dede23f',1,'PID_t']]],
-  ['tracefd_2ehpp_492',['tracefd.hpp',['../tracefd_8hpp.html',1,'']]],
-  ['tracefd_5fflush_5finterval_493',['TRACEFD_FLUSH_INTERVAL',['../group__sys__tracefd.html#gaa6cbb066b94e76ce05102a3fafd54490',1,'tracefd.hpp']]],
-  ['tracefd_5fprivate_2ehpp_494',['tracefd_private.hpp',['../tracefd__private_8hpp.html',1,'']]],
-  ['tracefd_5froot_5fdir_495',['TRACEFD_ROOT_DIR',['../group__sys__tracefd.html#ga31f015a8cfafc5e6f27b9f8466575c2b',1,'tracefd.hpp']]],
-  ['tracefd_5fthread_5fpriority_496',['TRACEFD_THREAD_PRIORITY',['../group__sys__tracefd.html#ga61367f941d6ec3f36b607133349cd22b',1,'tracefd.hpp']]]
+  ['uart_20protobuf_20module_476',['UART Protobuf module',['../group__sys__uartpb.html',1,'']]],
+  ['uart_477',['uart',['../structlds01__params__t.html#a9dcfa044c8a975b31f7525a4fad05374',1,'lds01_params_t']]],
+  ['uart_5frx_5fcb_478',['uart_rx_cb',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a85a0d58536beac8de1d516371599d4a6',1,'cogip::uartpb::UartProtobuf']]],
+  ['uart_5frx_5fcb_5fwrapper_479',['uart_rx_cb_wrapper',['../UartProtobuf_8hpp.html#a0e193cef4d940a5bfbebf6b108951e8d',1,'cogip::uartpb']]],
+  ['uartpb_2ehpp_480',['uartpb.hpp',['../uartpb_8hpp.html',1,'']]],
+  ['uartpb_5fbase64_5fdecode_5fbuffer_5fsize_481',['UARTPB_BASE64_DECODE_BUFFER_SIZE',['../ReadBuffer_8hpp.html#af92e59bd907fcf6053dd7a2f32bf44dd',1,'ReadBuffer.hpp']]],
+  ['uartpb_5fbase64_5fencode_5fbuffer_5fsize_482',['UARTPB_BASE64_ENCODE_BUFFER_SIZE',['../WriteBuffer_8hpp.html#ae7719dccda42f7573cdf465b1b26374e',1,'WriteBuffer.hpp']]],
+  ['uartpb_5finput_5fmessage_5flength_5fmax_483',['UARTPB_INPUT_MESSAGE_LENGTH_MAX',['../group__sys__uartpb.html#gab220a996741b8d0f15692ea83e8aa879',1,'uartpb.hpp']]],
+  ['uartpb_5foutput_5fmessage_5flength_5fmax_484',['UARTPB_OUTPUT_MESSAGE_LENGTH_MAX',['../group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b',1,'uartpb.hpp']]],
+  ['uartpb_5freader_5fprio_485',['UARTPB_READER_PRIO',['../group__sys__uartpb.html#ga8a0fef50aef48e661fe39616a4dcbac8',1,'uartpb.hpp']]],
+  ['uartpb_5freader_5fstacksize_486',['UARTPB_READER_STACKSIZE',['../group__sys__uartpb.html#gaee193c15950ce3df6cf32e356ba44d19',1,'uartpb.hpp']]],
+  ['uartprotobuf_487',['UartProtobuf',['../classcogip_1_1uartpb_1_1UartProtobuf.html',1,'cogip::uartpb::UartProtobuf'],['../classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4',1,'cogip::uartpb::UartProtobuf::UartProtobuf()']]],
+  ['uartprotobuf_2ehpp_488',['UartProtobuf.hpp',['../UartProtobuf_8hpp.html',1,'']]],
+  ['unlock_489',['unlock',['../classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1',1,'cogip::obstacles::List']]],
+  ['unreachable_490',['unreachable',['../classcogip_1_1path_1_1Path.html#ac466f5d779f005b5e5b32c1bdf50e77c',1,'cogip::path::Path']]],
+  ['update_5fbounding_5fbox_491',['update_bounding_box',['../classcogip_1_1obstacles_1_1Obstacle.html#afbbc35013fe5ee189740fda641ed4621',1,'cogip::obstacles::Obstacle']]],
+  ['update_5fpb_5fmessage_492',['update_pb_message',['../classcogip_1_1shell_1_1Command.html#a08573e94f578484fbf8f5c0866e22b0d',1,'cogip::shell::Command::update_pb_message()'],['../classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72',1,'cogip::shell::Menu::update_pb_message()']]]
 ];

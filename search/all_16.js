@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['x_529',['x',['../classcogip_1_1cogip__defs_1_1Coords.html#ae6736852dc2d28c35bfdebbc3e8f24b5',1,'cogip::cogip_defs::Coords']]],
-  ['x_5f_530',['x_',['../classcogip_1_1cogip__defs_1_1Coords.html#a9adefcde766d9169dc59227235e4212e',1,'cogip::cogip_defs::Coords']]]
+  ['y_510',['y',['../classcogip_1_1cogip__defs_1_1Coords.html#a6ab61e358c49f66805cca1957c20b2e2',1,'cogip::cogip_defs::Coords']]],
+  ['y_5f_511',['y_',['../classcogip_1_1cogip__defs_1_1Coords.html#ac021ff645dd3c0edc204c9701aa433c7',1,'cogip::cogip_defs::Coords']]]
 ];

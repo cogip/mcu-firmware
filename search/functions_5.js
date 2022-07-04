@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['file_670',['File',['../classcogip_1_1tracefd_1_1File.html#a1eea6697da1ceb855bb342333b7058cd',1,'cogip::tracefd::File::File(const std::string &amp;filename)'],['../classcogip_1_1tracefd_1_1File.html#a4c4533fe1559889922a729763ee84e93',1,'cogip::tracefd::File::File(FILE *f)']]],
-  ['flush_671',['flush',['../classcogip_1_1tracefd_1_1File.html#acdbac377bb39ba03931100c2d2560b92',1,'cogip::tracefd::File']]],
-  ['flush_5fall_672',['flush_all',['../tracefd_8hpp.html#a87b022c5b9bfe6a7ff55bba7e0147909',1,'cogip::tracefd']]]
+  ['get_5fbase64_5fdata_644',['get_base64_data',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a1ab198bc2a05f8962d508ba6fe12dd64',1,'cogip::uartpb::ReadBuffer::get_base64_data()'],['../classcogip_1_1uartpb_1_1WriteBuffer.html#a5a003d12811b56eb0fa4cc7429d40dfa',1,'cogip::uartpb::WriteBuffer::get_base64_data()']]],
+  ['get_5fbytes_5fwritten_645',['get_bytes_written',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a7190b6f1a5c31087c2f0749a5c08482e',1,'cogip::uartpb::ReadBuffer']]],
+  ['get_5fdata_646',['get_data',['../classcogip_1_1uartpb_1_1WriteBuffer.html#a8804e599f0461426050a4884fa972ef3',1,'cogip::uartpb::WriteBuffer']]],
+  ['get_5fdata_5farray_647',['get_data_array',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a439c39929012342a1450d179eb25fe4c',1,'cogip::uartpb::ReadBuffer']]]
 ];

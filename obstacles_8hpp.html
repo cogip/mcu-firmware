@@ -140,7 +140,6 @@ Gilles DOFFE <a href="#" onclick="location.href='mai'+'lto:'+'g.d'+'of'+'fe@'+'g
 <code>#include &quot;<a class="el" href="Coords_8hpp_source.html">cogip_defs/Coords.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Obstacle_8hpp_source.html">obstacles/Obstacle.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="List_8hpp_source.html">obstacles/List.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="File_8hpp_source.html">tracefd/File.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for obstacles.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -148,20 +147,18 @@ Gilles DOFFE <a href="#" onclick="location.href='mai'+'lto:'+'g.d'+'of'+'fe@'+'g
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="obstacles_8hpp__incl.png" border="0" usemap="#lib_2obstacles_2include_2obstacles_2obstacles_8hpp" alt=""/></div>
 <map name="lib_2obstacles_2include_2obstacles_2obstacles_8hpp" id="lib_2obstacles_2include_2obstacles_2obstacles_8hpp">
-<area shape="rect" title="Public API for obstacles module." alt="" coords="183,5,366,47"/>
+<area shape="rect" title="Public API for obstacles module." alt="" coords="82,5,265,47"/>
 <area shape="rect" title=" " alt="" coords="5,95,48,121"/>
 <area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="51,319,221,345"/>
-<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="188,169,361,196"/>
-<area shape="rect" href="File_8hpp.html" title="File class declaration." alt="" coords="669,244,792,271"/>
-<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="428,95,567,121"/>
+<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="175,169,348,196"/>
+<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="367,95,505,121"/>
 <area shape="rect" title=" " alt="" coords="77,393,195,420"/>
 <area shape="rect" title=" " alt="" coords="528,244,595,271"/>
 <area shape="rect" href="cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="173,244,349,271"/>
 <area shape="rect" title=" " alt="" coords="373,244,504,271"/>
-<area shape="rect" title=" " alt="" coords="422,319,485,345"/>
-<area shape="rect" title=" " alt="" coords="687,319,745,345"/>
-<area shape="rect" title=" " alt="" coords="770,319,889,345"/>
-<area shape="rect" title=" " alt="" coords="487,169,607,196"/>
+<area shape="rect" title=" " alt="" coords="494,319,557,345"/>
+<area shape="rect" title=" " alt="" coords="473,169,593,196"/>
+<area shape="rect" title=" " alt="" coords="618,169,737,196"/>
 </map>
 </div>
 </div>
@@ -172,9 +169,10 @@ Functions</h2></td></tr>
 <tr class="memitem:abe3c5f8b1593cc304f5a88bdf084cf43"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#abe3c5f8b1593cc304f5a88bdf084cf43">cogip::obstacles::is_point_in_obstacles</a> (const cogip_defs::Coords &amp;p, const Obstacle *filter)</td></tr>
 <tr class="memdesc:abe3c5f8b1593cc304f5a88bdf084cf43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given point is inside an obstacle.  <a href="obstacles_8hpp.html#abe3c5f8b1593cc304f5a88bdf084cf43">More...</a><br /></td></tr>
 <tr class="separator:abe3c5f8b1593cc304f5a88bdf084cf43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7adb2fcb2ee59abf32145acdc7e097fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#a7adb2fcb2ee59abf32145acdc7e097fe">cogip::obstacles::print_all_json</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out)</td></tr>
-<tr class="memdesc:a7adb2fcb2ee59abf32145acdc7e097fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all obstacles from all lists.  <a href="obstacles_8hpp.html#a7adb2fcb2ee59abf32145acdc7e097fe">More...</a><br /></td></tr>
-<tr class="separator:a7adb2fcb2ee59abf32145acdc7e097fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67df412a27314987f6cdf7c425c95e74"><td class="memItemLeft" align="right" valign="top"><a id="a67df412a27314987f6cdf7c425c95e74"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#a67df412a27314987f6cdf7c425c95e74">cogip::obstacles::print_all_json</a> (void)</td></tr>
+<tr class="memdesc:a67df412a27314987f6cdf7c425c95e74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all obstacles from all lists. <br /></td></tr>
+<tr class="separator:a67df412a27314987f6cdf7c425c95e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b88c84b2bd278cd43b651cd62cd0a76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="obstacles_8hpp.html#a1b88c84b2bd278cd43b651cd62cd0a76">cogip::obstacles::pb_copy</a> (<a class="el" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">cogip::obstacles::List::PB_Message</a> &amp;message)</td></tr>
 <tr class="memdesc:a1b88c84b2bd278cd43b651cd62cd0a76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="obstacles_8hpp.html#a1b88c84b2bd278cd43b651cd62cd0a76">More...</a><br /></td></tr>
 <tr class="separator:a1b88c84b2bd278cd43b651cd62cd0a76"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,37 +249,11 @@ std::set&lt; List const * &gt;&#160;</td><td class="memItemRight" valign="bottom
 
 </div>
 </div>
-<a id="a7adb2fcb2ee59abf32145acdc7e097fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7adb2fcb2ee59abf32145acdc7e097fe">&#9670;&nbsp;</a></span>print_all_json()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cogip::obstacles::print_all_json </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Print all obstacles from all lists. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>[out] trace file descriptor </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Jun 1 2022 07:20:46 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Mon Jul 4 2022 17:58:59 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

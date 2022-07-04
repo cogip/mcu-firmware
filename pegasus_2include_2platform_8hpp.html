@@ -149,7 +149,7 @@ Eric Courtois <a href="#" onclick="location.href='mai'+'lto:'+'eri'+'c.'+'cou'+'
 <code>#include &quot;odometry.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="Path_8hpp_source.html">path/Path.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Planner_8hpp_source.html">planners/Planner.hpp</a>&quot;</code><br />
-<code>#include &quot;utils.h&quot;</code><br />
+<code>#include &quot;utils.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="Wizard_8hpp_source.html">wizard/Wizard.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for platform.hpp:</div>
@@ -158,47 +158,46 @@ Eric Courtois <a href="#" onclick="location.href='mai'+'lto:'+'eri'+'c.'+'cou'+'
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="pegasus_2include_2platform_8hpp__incl.png" border="0" usemap="#platforms_2pegasus_2include_2platform_8hpp" alt=""/></div>
 <map name="platforms_2pegasus_2include_2platform_8hpp" id="platforms_2pegasus_2include_2platform_8hpp">
-<area shape="rect" title="Define hardware properties of test platform. Units:" alt="" coords="264,5,459,47"/>
-<area shape="rect" href="ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="226,169,297,196"/>
-<area shape="rect" href="odometry_8hpp_source.html" title=" " alt="" coords="206,244,317,271"/>
-<area shape="rect" href="quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="45,95,148,121"/>
-<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="920,95,1059,121"/>
-<area shape="rect" href="Path_8hpp.html" title="Path declaration." alt="" coords="406,169,517,196"/>
-<area shape="rect" href="utils_8h_source.html" title=" " alt="" coords="13,319,76,345"/>
-<area shape="rect" href="Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="224,95,382,121"/>
-<area shape="rect" href="Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="1453,95,1596,121"/>
-<area shape="rect" title=" " alt="" coords="78,244,149,271"/>
-<area shape="rect" title=" " alt="" coords="1018,319,1084,345"/>
-<area shape="rect" href="Polar_8hpp.html" title="Polar class declaration." alt="" coords="145,319,301,345"/>
-<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="326,319,480,345"/>
-<area shape="rect" title=" " alt="" coords="170,393,276,420"/>
-<area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="740,393,909,420"/>
-<area shape="rect" title=" " alt="" coords="350,393,456,420"/>
-<area shape="rect" title=" " alt="" coords="765,468,884,495"/>
-<area shape="rect" href="pid_8h_source.html" title=" " alt="" coords="96,169,150,196"/>
-<area shape="rect" title=" " alt="" coords="510,319,573,345"/>
-<area shape="rect" title=" " alt="" coords="1286,169,1406,196"/>
-<area shape="rect" title=" " alt="" coords="1194,319,1313,345"/>
-<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="840,169,1014,196"/>
-<area shape="rect" href="File_8hpp.html" title="File class declaration." alt="" coords="1088,244,1211,271"/>
-<area shape="rect" title=" " alt="" coords="582,244,712,271"/>
-<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="736,244,912,271"/>
-<area shape="rect" title=" " alt="" coords="1111,319,1170,345"/>
-<area shape="rect" href="path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="342,244,456,271"/>
-<area shape="rect" title=" " alt="" coords="8,393,80,420"/>
-<area shape="rect" title=" " alt="" coords="1430,169,1501,196"/>
-<area shape="rect" href="UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="1668,169,1847,196"/>
-<area shape="rect" title=" " alt="" coords="1525,169,1644,196"/>
-<area shape="rect" title=" " alt="" coords="1530,244,1636,271"/>
-<area shape="rect" title=" " alt="" coords="1711,244,1807,271"/>
-<area shape="rect" title=" " alt="" coords="1832,244,1908,271"/>
-<area shape="rect" href="uartpb_8hpp.html" title=" " alt="" coords="1604,319,1743,345"/>
-<area shape="rect" href="ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="1932,244,2098,271"/>
-<area shape="rect" href="WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="1337,244,1506,271"/>
-<area shape="rect" title=" " alt="" coords="2122,244,2273,271"/>
-<area shape="rect" title=" " alt="" coords="1909,319,1980,345"/>
-<area shape="rect" title=" " alt="" coords="2004,319,2168,345"/>
-<area shape="rect" title=" " alt="" coords="1338,319,1505,345"/>
+<area shape="rect" title="Define hardware properties of test platform. Units:" alt="" coords="308,5,503,47"/>
+<area shape="rect" href="ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="271,169,342,196"/>
+<area shape="rect" href="odometry_8hpp_source.html" title=" " alt="" coords="371,244,482,271"/>
+<area shape="rect" href="quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="399,95,502,121"/>
+<area shape="rect" href="List_8hpp.html" title="List obstacles class declaration." alt="" coords="645,169,784,196"/>
+<area shape="rect" href="Path_8hpp.html" title="Path declaration." alt="" coords="113,169,223,196"/>
+<area shape="rect" href="utils_8hpp_source.html" title=" " alt="" coords="13,319,91,345"/>
+<area shape="rect" href="Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="165,95,323,121"/>
+<area shape="rect" href="Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="1281,95,1423,121"/>
+<area shape="rect" title=" " alt="" coords="277,244,347,271"/>
+<area shape="rect" title=" " alt="" coords="1092,319,1159,345"/>
+<area shape="rect" href="Polar_8hpp.html" title="Polar class declaration." alt="" coords="455,319,611,345"/>
+<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="276,319,431,345"/>
+<area shape="rect" title=" " alt="" coords="480,393,587,420"/>
+<area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="845,393,1014,420"/>
+<area shape="rect" title=" " alt="" coords="301,393,406,420"/>
+<area shape="rect" title=" " alt="" coords="870,468,989,495"/>
+<area shape="rect" href="pid_8h_source.html" title=" " alt="" coords="469,169,523,196"/>
+<area shape="rect" title=" " alt="" coords="211,393,274,420"/>
+<area shape="rect" title=" " alt="" coords="507,244,627,271"/>
+<area shape="rect" title=" " alt="" coords="1001,244,1119,271"/>
+<area shape="rect" href="Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="752,244,925,271"/>
+<area shape="rect" title=" " alt="" coords="687,319,817,345"/>
+<area shape="rect" href="cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="841,319,1017,345"/>
+<area shape="rect" href="path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="87,244,201,271"/>
+<area shape="rect" title=" " alt="" coords="109,393,181,420"/>
+<area shape="rect" title=" " alt="" coords="5,393,85,420"/>
+<area shape="rect" title=" " alt="" coords="1553,169,1623,196"/>
+<area shape="rect" href="UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="1349,169,1528,196"/>
+<area shape="rect" title=" " alt="" coords="1206,169,1325,196"/>
+<area shape="rect" title=" " alt="" coords="1386,244,1491,271"/>
+<area shape="rect" title=" " alt="" coords="1516,244,1612,271"/>
+<area shape="rect" title=" " alt="" coords="1637,244,1713,271"/>
+<area shape="rect" href="uartpb_8hpp.html" title=" " alt="" coords="1467,319,1605,345"/>
+<area shape="rect" href="ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="1143,244,1310,271"/>
+<area shape="rect" href="WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="1737,244,1906,271"/>
+<area shape="rect" title=" " alt="" coords="1930,244,2081,271"/>
+<area shape="rect" title=" " alt="" coords="1183,319,1254,345"/>
+<area shape="rect" title=" " alt="" coords="1278,319,1442,345"/>
+<area shape="rect" title=" " alt="" coords="1738,319,1905,345"/>
 </map>
 </div>
 </div>
@@ -225,9 +224,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gaf83cc53998c27d898d71f8a7e981fdc0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaf83cc53998c27d898d71f8a7e981fdc0">pf_set_copilot_connected</a> (bool connected)</td></tr>
 <tr class="memdesc:gaf83cc53998c27d898d71f8a7e981fdc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set/unset copilot connected.  <a href="group__platforms__pegasus.html#gaf83cc53998c27d898d71f8a7e981fdc0">More...</a><br /></td></tr>
 <tr class="separator:gaf83cc53998c27d898d71f8a7e981fdc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac80e892a7623dddeb945d663b43fc38d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gac80e892a7623dddeb945d663b43fc38d">pf_print_state</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out)</td></tr>
-<tr class="memdesc:gac80e892a7623dddeb945d663b43fc38d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print current robot state in JSON format.  <a href="group__platforms__pegasus.html#gac80e892a7623dddeb945d663b43fc38d">More...</a><br /></td></tr>
-<tr class="separator:gac80e892a7623dddeb945d663b43fc38d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaed945ac04303eef4f08d257f0a3c944"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaaed945ac04303eef4f08d257f0a3c944">pf_print_state</a> (void)</td></tr>
+<tr class="memdesc:gaaed945ac04303eef4f08d257f0a3c944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print current robot state in JSON format.  <a href="group__platforms__pegasus.html#gaaed945ac04303eef4f08d257f0a3c944">More...</a><br /></td></tr>
+<tr class="separator:gaaed945ac04303eef4f08d257f0a3c944"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0fc74267bdda152e7626e2c284689d07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07">pf_send_pb_state</a> (void)</td></tr>
 <tr class="memdesc:ga0fc74267bdda152e7626e2c284689d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send current robot state in Protobuf format over UART.  <a href="group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07">More...</a><br /></td></tr>
 <tr class="separator:ga0fc74267bdda152e7626e2c284689d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -478,7 +477,7 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Jun 1 2022 07:20:46 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Mon Jul 4 2022 17:58:59 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

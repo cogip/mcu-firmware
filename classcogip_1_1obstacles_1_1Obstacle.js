@@ -11,7 +11,7 @@ var classcogip_1_1obstacles_1_1Obstacle =
     [ "is_segment_crossing", "classcogip_1_1obstacles_1_1Obstacle.html#a2fb8d45b7331f8991c0bf4ff42d9546b", null ],
     [ "nearest_point", "classcogip_1_1obstacles_1_1Obstacle.html#a76648fa5300ce016be0663b8935b6149", null ],
     [ "pb_copy", "classcogip_1_1obstacles_1_1Obstacle.html#a7ab3d5dfa1af292bfb09395861e8b2dc", null ],
-    [ "print_json", "classcogip_1_1obstacles_1_1Obstacle.html#a066d4305e8b833f1bba25c33f1453520", null ],
+    [ "print_json", "classcogip_1_1obstacles_1_1Obstacle.html#ae52c2d15278206a14f2ec6bede0ef524", null ],
     [ "radius", "classcogip_1_1obstacles_1_1Obstacle.html#ac79c25babac4c022f73cdc4df7ec74c9", null ],
     [ "set_center", "classcogip_1_1obstacles_1_1Obstacle.html#a7ffa5651a2a5aa54a49bbf255cfdb3db", null ],
     [ "update_bounding_box", "classcogip_1_1obstacles_1_1Obstacle.html#afbbc35013fe5ee189740fda641ed4621", null ],

@@ -6,5 +6,5 @@ var classcogip_1_1obstacles_1_1Polygon =
     [ "is_segment_crossing", "classcogip_1_1obstacles_1_1Polygon.html#a063bd0bf732f8e322386520badb1be2b", null ],
     [ "nearest_point", "classcogip_1_1obstacles_1_1Polygon.html#ac1895bb71b1be481f4bb188cb4dab774", null ],
     [ "pb_copy", "classcogip_1_1obstacles_1_1Polygon.html#a167af2fafd38e346256dca4a7dbb2daf", null ],
-    [ "print_json", "classcogip_1_1obstacles_1_1Polygon.html#a83a717ba0ac5e00dddca99775062c021", null ]
+    [ "print_json", "classcogip_1_1obstacles_1_1Polygon.html#a83e10458d141a8a7c623c013ec34257f", null ]
 ];

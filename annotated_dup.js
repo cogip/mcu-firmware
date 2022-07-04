@@ -26,9 +26,6 @@ var annotated_dup =
         [ "Command", "classcogip_1_1shell_1_1Command.html", "classcogip_1_1shell_1_1Command" ],
         [ "Menu", "classcogip_1_1shell_1_1Menu.html", "classcogip_1_1shell_1_1Menu" ]
       ] ],
-      [ "tracefd", null, [
-        [ "File", "classcogip_1_1tracefd_1_1File.html", "classcogip_1_1tracefd_1_1File" ]
-      ] ],
       [ "uartpb", null, [
         [ "ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html", "classcogip_1_1uartpb_1_1ReadBuffer" ],
         [ "UartProtobuf", "classcogip_1_1uartpb_1_1UartProtobuf.html", "classcogip_1_1uartpb_1_1UartProtobuf" ],

@@ -1,20 +1,10 @@
 var searchData=
 [
-  ['uart_20protobuf_20module_497',['UART Protobuf module',['../group__sys__uartpb.html',1,'']]],
-  ['uart_498',['uart',['../structlds01__params__t.html#a9dcfa044c8a975b31f7525a4fad05374',1,'lds01_params_t']]],
-  ['uart_5frx_5fcb_499',['uart_rx_cb',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a85a0d58536beac8de1d516371599d4a6',1,'cogip::uartpb::UartProtobuf']]],
-  ['uart_5frx_5fcb_5fwrapper_500',['uart_rx_cb_wrapper',['../UartProtobuf_8hpp.html#a0e193cef4d940a5bfbebf6b108951e8d',1,'cogip::uartpb']]],
-  ['uartpb_2ehpp_501',['uartpb.hpp',['../uartpb_8hpp.html',1,'']]],
-  ['uartpb_5fbase64_5fdecode_5fbuffer_5fsize_502',['UARTPB_BASE64_DECODE_BUFFER_SIZE',['../ReadBuffer_8hpp.html#af92e59bd907fcf6053dd7a2f32bf44dd',1,'ReadBuffer.hpp']]],
-  ['uartpb_5fbase64_5fencode_5fbuffer_5fsize_503',['UARTPB_BASE64_ENCODE_BUFFER_SIZE',['../WriteBuffer_8hpp.html#ae7719dccda42f7573cdf465b1b26374e',1,'WriteBuffer.hpp']]],
-  ['uartpb_5finput_5fmessage_5flength_5fmax_504',['UARTPB_INPUT_MESSAGE_LENGTH_MAX',['../group__sys__uartpb.html#gab220a996741b8d0f15692ea83e8aa879',1,'uartpb.hpp']]],
-  ['uartpb_5foutput_5fmessage_5flength_5fmax_505',['UARTPB_OUTPUT_MESSAGE_LENGTH_MAX',['../group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b',1,'uartpb.hpp']]],
-  ['uartpb_5freader_5fprio_506',['UARTPB_READER_PRIO',['../group__sys__uartpb.html#ga8a0fef50aef48e661fe39616a4dcbac8',1,'uartpb.hpp']]],
-  ['uartpb_5freader_5fstacksize_507',['UARTPB_READER_STACKSIZE',['../group__sys__uartpb.html#gaee193c15950ce3df6cf32e356ba44d19',1,'uartpb.hpp']]],
-  ['uartprotobuf_508',['UartProtobuf',['../classcogip_1_1uartpb_1_1UartProtobuf.html',1,'cogip::uartpb::UartProtobuf'],['../classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4',1,'cogip::uartpb::UartProtobuf::UartProtobuf()']]],
-  ['uartprotobuf_2ehpp_509',['UartProtobuf.hpp',['../UartProtobuf_8hpp.html',1,'']]],
-  ['unlock_510',['unlock',['../classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1',1,'cogip::obstacles::List::unlock()'],['../classcogip_1_1tracefd_1_1File.html#ae0a68f381e7074323fe257039ed7df64',1,'cogip::tracefd::File::unlock()']]],
-  ['unreachable_511',['unreachable',['../classcogip_1_1path_1_1Path.html#ac466f5d779f005b5e5b32c1bdf50e77c',1,'cogip::path::Path']]],
-  ['update_5fbounding_5fbox_512',['update_bounding_box',['../classcogip_1_1obstacles_1_1Obstacle.html#afbbc35013fe5ee189740fda641ed4621',1,'cogip::obstacles::Obstacle']]],
-  ['update_5fpb_5fmessage_513',['update_pb_message',['../classcogip_1_1shell_1_1Command.html#a08573e94f578484fbf8f5c0866e22b0d',1,'cogip::shell::Command::update_pb_message()'],['../classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72',1,'cogip::shell::Menu::update_pb_message()']]]
+  ['vacuum_5fpump_2eh_493',['vacuum_pump.h',['../vacuum__pump_8h.html',1,'']]],
+  ['vacuum_5fpump_5finit_494',['vacuum_pump_init',['../group__driver__vacuum__pump.html#gac125820d976df6d6f630732411b32145',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5fis_5funder_5fpressure_495',['vacuum_pump_is_under_pressure',['../group__driver__vacuum__pump.html#gad7fc52108572dd504e22ecdbaadafa3c',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5fparams_5ft_496',['vacuum_pump_params_t',['../structvacuum__pump__params__t.html',1,'']]],
+  ['vacuum_5fpump_5fstart_497',['vacuum_pump_start',['../group__driver__vacuum__pump.html#gac06fe9bdd82b72bf75ad78f62af8d975',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5fstop_498',['vacuum_pump_stop',['../group__driver__vacuum__pump.html#gadd86e5b7ab43dcd6484c62f7be6cd81e',1,'vacuum_pump.h']]],
+  ['vacuum_5fpump_5ft_499',['vacuum_pump_t',['../group__driver__vacuum__pump.html#gad99ecfeec89c500f08fb83686865bb7a',1,'vacuum_pump.h']]]
 ];

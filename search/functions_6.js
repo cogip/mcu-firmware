@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['get_5fbase64_5fdata_673',['get_base64_data',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a1ab198bc2a05f8962d508ba6fe12dd64',1,'cogip::uartpb::ReadBuffer::get_base64_data()'],['../classcogip_1_1uartpb_1_1WriteBuffer.html#a5a003d12811b56eb0fa4cc7429d40dfa',1,'cogip::uartpb::WriteBuffer::get_base64_data()']]],
-  ['get_5fbytes_5fwritten_674',['get_bytes_written',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a7190b6f1a5c31087c2f0749a5c08482e',1,'cogip::uartpb::ReadBuffer']]],
-  ['get_5fdata_675',['get_data',['../classcogip_1_1uartpb_1_1WriteBuffer.html#a8804e599f0461426050a4884fa972ef3',1,'cogip::uartpb::WriteBuffer']]],
-  ['get_5fdata_5farray_676',['get_data_array',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a439c39929012342a1450d179eb25fe4c',1,'cogip::uartpb::ReadBuffer']]]
+  ['handle_5fresponse_648',['handle_response',['../classcogip_1_1wizard_1_1Wizard.html#a7ec7508df6dfb0956d7214a685a262f2',1,'cogip::wizard::Wizard']]],
+  ['handler_649',['handler',['../classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729',1,'cogip::shell::Command']]],
+  ['horizontal_5fmirror_5fall_5fposes_650',['horizontal_mirror_all_poses',['../classcogip_1_1path_1_1Path.html#a4c4539b490bcf3fc5cb24ffdbce00d45',1,'cogip::path::Path']]]
 ];

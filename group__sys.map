@@ -1,7 +1,6 @@
 <map id="System modules" name="System modules">
-<area shape="rect" id="node1" title=" " alt="" coords="5,95,136,121"/>
-<area shape="rect" id="node2" href="$group__sys__tracefd.html" title="Trace file descriptor module." alt="" coords="199,5,348,45"/>
-<area shape="rect" id="node3" href="$group__sys__uartpb.html" title="Exchange Protobuf messages over UART module." alt="" coords="189,70,358,95"/>
-<area shape="rect" id="node4" href="$group__sys__shmem.html" title="Shared memory module." alt="" coords="184,119,363,145"/>
-<area shape="rect" id="node5" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="226,169,321,194"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,55,136,80"/>
+<area shape="rect" id="node2" href="$group__sys__uartpb.html" title="Exchange Protobuf messages over UART module." alt="" coords="189,5,358,31"/>
+<area shape="rect" id="node3" href="$group__sys__shmem.html" title="Shared memory module." alt="" coords="184,55,363,80"/>
+<area shape="rect" id="node4" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="226,104,321,129"/>
 </map>

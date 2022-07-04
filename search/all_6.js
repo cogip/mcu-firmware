@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['game_5fduration_5fsec_142',['GAME_DURATION_SEC',['../group__platforms__pegasus.html#gae845e7296ce0028216d3a2be9e365058',1,'GAME_DURATION_SEC():&#160;platform.hpp'],['../group__platforms__pf__test.html#gae845e7296ce0028216d3a2be9e365058',1,'GAME_DURATION_SEC():&#160;platform.hpp']]],
-  ['get_5fbase64_5fdata_143',['get_base64_data',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a1ab198bc2a05f8962d508ba6fe12dd64',1,'cogip::uartpb::ReadBuffer::get_base64_data()'],['../classcogip_1_1uartpb_1_1WriteBuffer.html#a5a003d12811b56eb0fa4cc7429d40dfa',1,'cogip::uartpb::WriteBuffer::get_base64_data()']]],
-  ['get_5fbytes_5fwritten_144',['get_bytes_written',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a7190b6f1a5c31087c2f0749a5c08482e',1,'cogip::uartpb::ReadBuffer']]],
-  ['get_5fdata_145',['get_data',['../classcogip_1_1uartpb_1_1WriteBuffer.html#a8804e599f0461426050a4884fa972ef3',1,'cogip::uartpb::WriteBuffer']]],
-  ['get_5fdata_5farray_146',['get_data_array',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a439c39929012342a1450d179eb25fe4c',1,'cogip::uartpb::ReadBuffer']]],
-  ['global_5fcommands_147',['global_commands',['../shell__menu_8hpp.html#a95f05d34f4667f1cd774c47f135f31ac',1,'cogip::shell']]],
-  ['gpio_5fenable_148',['gpio_enable',['../structvacuum__pump__params__t.html#a9f232686ff5835159b8361765f3eb55b',1,'vacuum_pump_params_t']]],
-  ['gpio_5ftest_149',['gpio_test',['../structvacuum__pump__params__t.html#a3ff30817a1629c1a52c0050cbcc90ca2',1,'vacuum_pump_params_t']]]
+  ['handle_5fresponse_143',['handle_response',['../classcogip_1_1wizard_1_1Wizard.html#a7ec7508df6dfb0956d7214a685a262f2',1,'cogip::wizard::Wizard']]],
+  ['handler_144',['handler',['../classcogip_1_1shell_1_1Command.html#ab132de1ca200cbefbf636b3b58059729',1,'cogip::shell::Command']]],
+  ['horizontal_5fmirror_5fall_5fposes_145',['horizontal_mirror_all_poses',['../classcogip_1_1path_1_1Path.html#a4c4539b490bcf3fc5cb24ffdbce00d45',1,'cogip::path::Path']]],
+  ['hardware_20platform_146',['Hardware platform',['../group__platforms.html',1,'']]]
 ];

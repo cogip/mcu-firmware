@@ -1,10 +1,11 @@
 var searchData=
 [
-  ['vacuum_5fpump_2eh_514',['vacuum_pump.h',['../vacuum__pump_8h.html',1,'']]],
-  ['vacuum_5fpump_5finit_515',['vacuum_pump_init',['../group__driver__vacuum__pump.html#gac125820d976df6d6f630732411b32145',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5fis_5funder_5fpressure_516',['vacuum_pump_is_under_pressure',['../group__driver__vacuum__pump.html#gad7fc52108572dd504e22ecdbaadafa3c',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5fparams_5ft_517',['vacuum_pump_params_t',['../structvacuum__pump__params__t.html',1,'']]],
-  ['vacuum_5fpump_5fstart_518',['vacuum_pump_start',['../group__driver__vacuum__pump.html#gac06fe9bdd82b72bf75ad78f62af8d975',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5fstop_519',['vacuum_pump_stop',['../group__driver__vacuum__pump.html#gadd86e5b7ab43dcd6484c62f7be6cd81e',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5ft_520',['vacuum_pump_t',['../group__driver__vacuum__pump.html#gad99ecfeec89c500f08fb83686865bb7a',1,'vacuum_pump.h']]]
+  ['wizard_20module_500',['Wizard module',['../group__lib__wizard.html',1,'']]],
+  ['wheels_5fdistance_501',['WHEELS_DISTANCE',['../group__platforms__pegasus.html#gaf84ab689cafbbd54fd9d5f3b7e376d6f',1,'WHEELS_DISTANCE():&#160;platform.hpp'],['../group__platforms__pf__test.html#gaf84ab689cafbbd54fd9d5f3b7e376d6f',1,'WHEELS_DISTANCE():&#160;platform.hpp']]],
+  ['wizard_502',['Wizard',['../classcogip_1_1wizard_1_1Wizard.html',1,'cogip::wizard::Wizard'],['../classcogip_1_1wizard_1_1Wizard.html#a9f8f1c72d4feb779e0415ad4706d76a1',1,'cogip::wizard::Wizard::Wizard()']]],
+  ['wizard_2ehpp_503',['Wizard.hpp',['../Wizard_8hpp.html',1,'']]],
+  ['wizard_5fname_5fmax_5flength_504',['WIZARD_NAME_MAX_LENGTH',['../group__lib__wizard.html#ga4b40753fd51245b8b150805686135e12',1,'Wizard.hpp']]],
+  ['wizard_5frep_5fmax_505',['WIZARD_REP_MAX',['../group__lib__wizard.html#ga3f0252a2b7d4f6acfe2eccdf79352e9a',1,'Wizard.hpp']]],
+  ['writebuffer_506',['WriteBuffer',['../classcogip_1_1uartpb_1_1WriteBuffer.html',1,'cogip::uartpb::WriteBuffer'],['../classcogip_1_1uartpb_1_1WriteBuffer.html#af6bf93218ba473d486bdde2c051fc60e',1,'cogip::uartpb::WriteBuffer::WriteBuffer()']]],
+  ['writebuffer_2ehpp_507',['WriteBuffer.hpp',['../WriteBuffer_8hpp.html',1,'']]]
 ];

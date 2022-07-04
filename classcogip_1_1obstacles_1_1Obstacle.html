@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1obstacles_1_1Obstacle.ht
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An obstacle used to detect and avoid collisions. </p>
 
-<p class="definition">Definition at line <a class="el" href="Obstacle_8hpp_source.html#l00037">37</a> of file <a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Obstacle_8hpp_source.html#l00036">36</a> of file <a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -196,9 +196,10 @@ virtual const <a class="el" href="classcogip_1_1cogip__defs_1_1Polygon.html">cog
 <tr class="memitem:a76648fa5300ce016be0663b8935b6149"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a76648fa5300ce016be0663b8935b6149">nearest_point</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;p) const =0</td></tr>
 <tr class="memdesc:a76648fa5300ce016be0663b8935b6149"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the nearest point of obstacle perimeter from given point.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#a76648fa5300ce016be0663b8935b6149">More...</a><br /></td></tr>
 <tr class="separator:a76648fa5300ce016be0663b8935b6149"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a066d4305e8b833f1bba25c33f1453520"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a066d4305e8b833f1bba25c33f1453520">print_json</a> (<a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;out) const =0</td></tr>
-<tr class="memdesc:a066d4305e8b833f1bba25c33f1453520"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print obstacles in JSON format.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#a066d4305e8b833f1bba25c33f1453520">More...</a><br /></td></tr>
-<tr class="separator:a066d4305e8b833f1bba25c33f1453520"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae52c2d15278206a14f2ec6bede0ef524"><td class="memItemLeft" align="right" valign="top"><a id="ae52c2d15278206a14f2ec6bede0ef524"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#ae52c2d15278206a14f2ec6bede0ef524">print_json</a> (void) const =0</td></tr>
+<tr class="memdesc:ae52c2d15278206a14f2ec6bede0ef524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print obstacles in JSON format. <br /></td></tr>
+<tr class="separator:ae52c2d15278206a14f2ec6bede0ef524"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ab3d5dfa1af292bfb09395861e8b2dc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7ab3d5dfa1af292bfb09395861e8b2dc">pb_copy</a> (<a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7c81963cc733229cf5cf3cc849f69049">PB_Message</a> &amp;message) const</td></tr>
 <tr class="memdesc:a7ab3d5dfa1af292bfb09395861e8b2dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#a7ab3d5dfa1af292bfb09395861e8b2dc">More...</a><br /></td></tr>
 <tr class="separator:a7ab3d5dfa1af292bfb09395861e8b2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -439,42 +440,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a066d4305e8b833f1bba25c33f1453520"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a066d4305e8b833f1bba25c33f1453520">&#9670;&nbsp;</a></span>print_json()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void cogip::obstacles::Obstacle::print_json </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1tracefd_1_1File.html">cogip::tracefd::File</a> &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print obstacles in JSON format. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>[out] trace file descriptor </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implemented in <a class="el" href="classcogip_1_1obstacles_1_1Polygon.html#a83a717ba0ac5e00dddca99775062c021">cogip::obstacles::Polygon</a>, <a class="el" href="classcogip_1_1obstacles_1_1Rectangle.html#a9961ead217773a785256c150716b8c38">cogip::obstacles::Rectangle</a>, and <a class="el" href="classcogip_1_1obstacles_1_1Circle.html#aad28ba027fb65843a49c232f4d52399d">cogip::obstacles::Circle</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>lib/obstacles/include/obstacles/<a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a></li>
 </ul>
@@ -482,7 +447,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Jun 1 2022 07:20:46 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Mon Jul 4 2022 17:58:59 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

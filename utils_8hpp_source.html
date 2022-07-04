@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>sys/tracefd Directory Reference</title>
+    <title>lib/utils/include/utils.hpp Source File</title>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="jquery.min.js"></script>
     <script src="jquery.powertip.min.js"></script>
@@ -100,7 +100,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('dir_eb029e738dbe02df480f19e94dbe34e4.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('utils_8hpp_source.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -120,21 +120,35 @@ $(document).ready(function(){initNavTree('dir_eb029e738dbe02df480f19e94dbe34e4.h
 
 <div class="header">
   <div class="headertitle">
-<div class="title">tracefd Directory Reference</div>  </div>
+<div class="title">utils.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="files"></a>
-Files</h2></td></tr>
-<tr class="memitem:tracefd__private_8hpp"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tracefd__private_8hpp.html">tracefd_private.hpp</a> <a href="tracefd__private_8hpp_source.html">[code]</a></td></tr>
-<tr class="memdesc:tracefd__private_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Private API for Trace file descriptor module This header provides function declarations that have different implementations whether the module is compiled for a native CPU or a real hardware. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-</div><!-- contents -->
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// RIOT includes</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;timex.h&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// System includes</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">typedef</span> void (*func_cb_t)(void);</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#define FALSE   (0)</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define TRUE    (!FALSE)</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#define MIN(a, b)   (((a) &lt; (b)) ? (a) : (b))</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#define MAX(a, b)   (((a) &gt; (b)) ? (a) : (b))</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#define COGIP_DEBUG_COUT(x)    (std::cout &lt;&lt; x &lt;&lt; std::endl)</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define COGIP_DEBUG_CERR(x)    (std::cout &lt;&lt; x &lt;&lt; std::endl)</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/* set interval to 20 milli-second */</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define THREAD_PERIOD_INTERVAL (20U * US_PER_MS)</span></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Jun 1 2022 07:20:46 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Mon Jul 4 2022 17:58:59 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

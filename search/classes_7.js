@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['readbuffer_565',['ReadBuffer',['../classcogip_1_1uartpb_1_1ReadBuffer.html',1,'cogip::uartpb']]],
-  ['rectangle_566',['Rectangle',['../classcogip_1_1obstacles_1_1Rectangle.html',1,'cogip::obstacles']]]
+  ['sd21_5fconf_5ft_545',['sd21_conf_t',['../structsd21__conf__t.html',1,'']]],
+  ['sd21_5fservo_5ft_546',['sd21_servo_t',['../structsd21__servo__t.html',1,'']]],
+  ['shmem_5fdata_5ft_547',['shmem_data_t',['../structshmem__data__t.html',1,'']]]
 ];

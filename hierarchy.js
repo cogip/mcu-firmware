@@ -12,7 +12,6 @@ var hierarchy =
     [ "ctrl_quadpid_parameters_t", "structctrl__quadpid__parameters__t.html", null ],
     [ "ctrl_quadpid_t", "structctrl__quadpid__t.html", null ],
     [ "ctrl_t", "structctrl__t.html", null ],
-    [ "cogip::tracefd::File", "classcogip_1_1tracefd_1_1File.html", null ],
     [ "lds01_params_t", "structlds01__params__t.html", null ],
     [ "list", null, [
       [ "cogip::shell::Menu", "classcogip_1_1shell_1_1Menu.html", null ]

@@ -1,10 +1,11 @@
 <map id="lib/path/include/path/Pose.hpp" name="lib/path/include/path/Pose.hpp">
-<area shape="rect" id="node1" title="Path Pose declaration." alt="" coords="297,5,451,47"/>
-<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="163,95,318,121"/>
-<area shape="rect" id="node6" href="$utils_8h_source.html" title=" " alt="" coords="343,95,405,121"/>
-<area shape="rect" id="node8" title=" " alt="" coords="429,95,492,121"/>
+<area shape="rect" id="node1" title="Path Pose declaration." alt="" coords="307,5,462,47"/>
+<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="166,95,321,121"/>
+<area shape="rect" id="node6" href="$utils_8hpp_source.html" title=" " alt="" coords="345,95,424,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="448,95,511,121"/>
 <area shape="rect" id="node3" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="5,169,175,196"/>
 <area shape="rect" id="node5" title=" " alt="" coords="199,169,304,196"/>
 <area shape="rect" id="node4" title=" " alt="" coords="31,244,149,271"/>
-<area shape="rect" id="node7" title=" " alt="" coords="338,169,410,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="342,169,414,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="438,169,518,196"/>
 </map>

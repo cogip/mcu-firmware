@@ -6,5 +6,5 @@ var avoidance_8hpp =
     [ "avoidance_check_recompute", "group__lib__avoidance.html#gab5b66d96b948baa8d2f7b27546b7f3cc", null ],
     [ "avoidance_get_pose", "group__lib__avoidance.html#gadf4fb730f1e83cf8bee4b2a21eeba008", null ],
     [ "avoidance_pb_copy_path", "group__lib__avoidance.html#ga08fb700c7273e58a380e21ffe540cda8", null ],
-    [ "avoidance_print_path", "group__lib__avoidance.html#ga193806f42744210ad70b45e22c9efe6f", null ]
+    [ "avoidance_print_path", "group__lib__avoidance.html#gaa7156dc92e989be3f91713faa1e70231", null ]
 ];
