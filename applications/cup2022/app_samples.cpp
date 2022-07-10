@@ -183,7 +183,7 @@ const DetectedSamples & app_samples_detect(void)
     for (uint32_t i = 0; i < samples.get_length(); i++) {
         auto & sample = samples[i];
         const cogip::cogip_defs::Pose robot_pose = ctrl_get_pose_current(pf_get_ctrl());
-        SampleColor color = (SampleColor)sample.get_tag().get();
+        SampleColor color = (SampleColor)sample.get_tag();
         double local_x = sample.get_x();
         double local_y = sample.get_y();
         local_y = local_y/75*100;
