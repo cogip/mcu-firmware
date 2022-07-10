@@ -1,7 +1,7 @@
 From abbe4231ef126dd9a8c1613b3070be4809a37cd6 Mon Sep 17 00:00:00 2001
 From: Eric Courtois <eric.courtois@gmail.com>
 Date: Sat, 20 Nov 2021 20:05:13 +0100
-Subject: [PATCH 2/4] protoc plugin: use .hpp extension for include files
+Subject: [PATCH] protoc plugin: use .hpp extension for include files
  instead of .h
 
 Signed-off-by: Eric Courtois <eric.courtois@gmail.com>
@@ -33,9 +33,9 @@ index 2154b51..b036be4 100644
          if self.descriptor.dependency:
 -            imported_dependencies = [os.path.splitext(dependency)[0] + ".h" for dependency in
 +            imported_dependencies = [os.path.splitext(dependency)[0] + ".hpp" for dependency in
-                                      self.descriptor.dependency]
+                                      self.descriptor.dependency if "embedded_proto_options.proto" not in dependency]
          return imported_dependencies
- 
--- 
+
+--
 2.25.1
 

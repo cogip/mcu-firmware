@@ -1,6 +1,6 @@
 PKG_NAME=embedded-proto
 PKG_URL=https://github.com/Embedded-AMS/EmbeddedProto.git
-PKG_VERSION=2.3.5
+PKG_VERSION=3.1.0
 PKG_LICENSE=GPL
 
 include $(RIOTBASE)/pkg/pkg.mk
