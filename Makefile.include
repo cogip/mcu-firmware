@@ -75,7 +75,7 @@ endif
 # Use C++14 by default
 tmp_cxxexflags := $(CXXEXFLAGS)
 CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
-CXXEXFLAGS += -std=c++14
+CXXEXFLAGS += -std=c++17
 CXXEXFLAGS += -Wno-pedantic
 
 .PHONY: world
