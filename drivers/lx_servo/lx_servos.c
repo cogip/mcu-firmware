@@ -55,7 +55,7 @@ static int lx_write(const lx_t *device, lx_write_command_t command, const uint8_
 {
     uart_half_duplex_set_tx(device->stream);
     if (device->stream->size < LX_PACKET_SIZE(length)) {
-        DEBUG("%s: Buffer too small on device %u!\n", __func__, device->id)
+        DEBUG("%s: Buffer too small on device %u!\n", __func__, device->id);
         return LX_BUFFER_TOO_SMALL;
     }
 
@@ -64,7 +64,7 @@ static int lx_write(const lx_t *device, lx_write_command_t command, const uint8_
     lx_writer_init(&pw, device->stream->buffer, device->stream->size);
     lx_writer_write_make(&pw, device->id, command, data, length);
     if (uart_half_duplex_send(device->stream, pw.size) != pw.size) {
-        DEBUG("%s: Timeout error on device %u!\n", __func__, device->id)
+        DEBUG("%s: Timeout error on device %u!\n", __func__, device->id);
         return LX_TIMEOUT;
     }
 
@@ -75,7 +75,7 @@ static int lx_read(const lx_t *device, lx_read_command_t command, uint8_t *data,
 {
     uart_half_duplex_set_tx(device->stream);
     if (device->stream->size < LX_PACKET_SIZE(length)) {
-        DEBUG("%s: Buffer too small on device %u!\n", __func__, device->id)
+        DEBUG("%s: Buffer too small on device %u!\n", __func__, device->id);
         return LX_BUFFER_TOO_SMALL;
     }
 
@@ -88,7 +88,7 @@ static int lx_read(const lx_t *device, lx_read_command_t command, uint8_t *data,
     uart_half_duplex_set_rx(device->stream);
     const size_t esize = LX_PACKET_SIZE(length);
     if (uart_half_duplex_recv(device->stream, esize) != esize) {
-        DEBUG("%s: Timeout error on device %u!\n", __func__, device->id)
+        DEBUG("%s: Timeout error on device %u!\n", __func__, device->id);
         return LX_TIMEOUT;
     }
 
@@ -96,12 +96,12 @@ static int lx_read(const lx_t *device, lx_read_command_t command, uint8_t *data,
     lx_reader_init(&pr, device->stream->buffer, esize);
 
     if (!lx_reader_is_valid(&pr)) {
-        DEBUG("%s: Invalid message from device %u!\n", __func__, device->id)
+        DEBUG("%s: Invalid message from device %u!\n", __func__, device->id);
         return LX_INVALID_MESSAGE;
     }
 
     if (lx_reader_response_get_payload_size(&pr) != LX_PACKET_PAYLOAD_SIZE(length)) {
-        DEBUG("%s: Invalid payload from device %u!\n", __func__, device->id)
+        DEBUG("%s: Invalid payload from device %u!\n", __func__, device->id);
         return LX_INVALID_MESSAGE;
     }
 

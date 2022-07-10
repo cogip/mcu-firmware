@@ -1,0 +1,37 @@
+From 797f150fc51b07360a23cca3956c617e82f99553 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Thu, 9 Jun 2022 15:11:51 +0200
+Subject: [PATCH] Use memcpy instead of strncpy
+
+To avoid this warning when copying same length strings [1].
+
+[1] error: 'char* strncpy(char*, const char*, size_t)' output truncated before terminating nul copying X bytes from a string of the same length [-Werror=stringop-truncation]
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ src/FieldStringBytes.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/FieldStringBytes.h b/src/FieldStringBytes.h
+index d7cc1d4..cb711d2 100644
+--- a/src/FieldStringBytes.h
++++ b/src/FieldStringBytes.h
+@@ -296,7 +296,7 @@ namespace EmbeddedProto
+         if(nullptr != rhs) {
+           const uint32_t rhs_MAX_LENGTH = strlen(rhs);
+           this->set_length(rhs_MAX_LENGTH);
+-          strncpy(this->get(), rhs, this->get_length());
++          memcpy(this->get(), rhs, this->get_length());
+ 
+           // Make sure the string is null terminated.
+           if(MAX_LENGTH > this->get_length())
+@@ -325,4 +325,4 @@ namespace EmbeddedProto
+ 
+ } // End of namespace EmbeddedProto
+ 
+-#endif // End of _FIELD_STRING_BYTES_H_
+\ No newline at end of file
++#endif // End of _FIELD_STRING_BYTES_H_
+-- 
+2.25.1
+
