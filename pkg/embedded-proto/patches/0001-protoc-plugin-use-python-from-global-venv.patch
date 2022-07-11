@@ -1,7 +1,7 @@
 From df95f23c8bdb202e377254087342debd1d873ba3 Mon Sep 17 00:00:00 2001
 From: Eric Courtois <eric.courtois@gmail.com>
 Date: Tue, 16 Nov 2021 21:58:33 +0100
-Subject: [PATCH 1/4] protoc plugin: use python from global venv
+Subject: [PATCH] protoc plugin: use python from global venv
 
 As we cannot call setup.sh during the build of the package
 to create a venv in the build directory, use python from venv loaded
@@ -17,11 +17,11 @@ index 2b1bed3..a78530a 100755
 --- a/protoc-gen-eams
 +++ b/protoc-gen-eams
 @@ -36,4 +36,4 @@
- 
- 
+
+
  EmbeddedProtoDir=$(dirname "$0")
 -$EmbeddedProtoDir/venv/bin/python $EmbeddedProtoDir/generator/protoc-gen-eams.py --protoc-plugin
 +python $EmbeddedProtoDir/generator/protoc-gen-eams.py --protoc-plugin
--- 
+--
 2.25.1
 

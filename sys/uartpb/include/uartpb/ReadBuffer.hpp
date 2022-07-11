@@ -38,9 +38,9 @@ public:
 
     bool peek(uint8_t &byte) const override;
 
-    void advance() override;
+    bool advance() override;
 
-    void advance(const uint32_t n) override;
+    bool advance(const uint32_t n) override;
 
     bool pop(uint8_t &byte) override;
 
