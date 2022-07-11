@@ -2,8 +2,8 @@ var classcogip_1_1uartpb_1_1ReadBuffer =
 [
     [ "ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html#ae525f06445d8fb568cd4011b99fa4a3a", null ],
     [ "~ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html#a829c7f76e453e498388928d84a5f5d02", null ],
-    [ "advance", "classcogip_1_1uartpb_1_1ReadBuffer.html#afa7c763004bf7e7f6ad3854d846b05f6", null ],
-    [ "advance", "classcogip_1_1uartpb_1_1ReadBuffer.html#acaf54a7c11681deb3c217103a30e9479", null ],
+    [ "advance", "classcogip_1_1uartpb_1_1ReadBuffer.html#ab51829a563a533fc6d0bd953aeb22ba6", null ],
+    [ "advance", "classcogip_1_1uartpb_1_1ReadBuffer.html#a6d6764294eabdbbd106d556d549faec8", null ],
     [ "base64_decode", "classcogip_1_1uartpb_1_1ReadBuffer.html#a92d1d35f17b7c2f4e98ee76e13d86e02", null ],
     [ "clear", "classcogip_1_1uartpb_1_1ReadBuffer.html#a9fdef60b13bddea859233ac1ded74f2b", null ],
     [ "get_base64_data", "classcogip_1_1uartpb_1_1ReadBuffer.html#a1ab198bc2a05f8962d508ba6fe12dd64", null ],
