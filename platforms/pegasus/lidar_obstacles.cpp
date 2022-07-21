@@ -45,3 +45,4 @@ void obstacles_handler(cogip::uartpb::ReadBuffer & buffer)
         obstacles.push_back(obstacle);
     }
 }
+

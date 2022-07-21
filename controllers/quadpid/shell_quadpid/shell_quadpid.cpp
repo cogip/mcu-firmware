@@ -296,7 +296,8 @@ static void run_cmd_in_thread(void *(func)(void *arg))
     ctrl_quadpid_thread_command_pid = thread_create(
         quadpid_thread_stack,
         sizeof(quadpid_thread_stack),
-        THREAD_PRIORITY_MAIN - 4, 0,
+        THREAD_PRIORITY_MAIN - 4,
+        THREAD_CREATE_STACKTEST,
         func,
         NULL,
         "command thread"

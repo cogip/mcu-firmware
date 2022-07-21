@@ -64,7 +64,7 @@ void trace_start(void)
         state_thread_stack,
         sizeof(state_thread_stack),
         TRACE_PRIO,
-        0,
+        THREAD_CREATE_STACKTEST,
         _thread_state,
         NULL,
         "State thread"

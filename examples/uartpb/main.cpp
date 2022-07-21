@@ -198,8 +198,14 @@ int main(void)
     uartpb.start_reader();
 
     sender_pid = thread_create(
-        sender_stack, sizeof(sender_stack), SENDER_PRIO,
-        THREAD_CREATE_SLEEPING, message_sender, NULL, "sender");
+        sender_stack,
+        sizeof(sender_stack),
+        SENDER_PRIO,
+        THREAD_CREATE_STACKTEST | THREAD_CREATE_SLEEPING,
+        message_sender,
+        NULL,
+        "sender"
+        );
 
     uartpb.send_message(reset_uuid);
 

@@ -206,8 +206,14 @@ int main(void)
 
     /* Start the frame reader thread */
     frame_updater_thread_pid = thread_create(
-        frame_updater_thread_stack, sizeof(frame_updater_thread_stack),
-        FRAME_READER_PRIO, 0, frame_updater_thread, NULL, "frame_reader");
+        frame_updater_thread_stack,
+        sizeof(frame_updater_thread_stack),
+        FRAME_READER_PRIO,
+        THREAD_CREATE_STACKTEST,
+        frame_updater_thread,
+        NULL,
+        "frame_reader"
+        );
 
     lds01_init(lds01, &lds01_params[0]);
 
