@@ -1,6 +1,7 @@
 #pragma once
 
 #include "obstacles/Circle.hpp"
+#include "uartpb/ReadBuffer.hpp"
 
 #include "PB_Samples.hpp"
 
@@ -117,7 +118,7 @@ void app_samples_init();
 
 const DetectedSamples & app_samples_detect(void);
 
-void app_samples_process(const PB_Samples<APP_SAMPLES_MAX_DETECTED> &samples);
+void app_samples_process(cogip::uartpb::ReadBuffer *buffer);
 
 }; // namespace app
 

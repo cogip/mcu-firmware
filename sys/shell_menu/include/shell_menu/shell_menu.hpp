@@ -24,6 +24,11 @@ namespace cogip {
 
 namespace shell {
 
+#ifdef MODULE_UARTPB
+inline constexpr uartpb::uuid_t command_uuid = 2168120333; ///< uuid for uartpb
+inline constexpr uartpb::uuid_t menu_uuid = 1485239280; ///< uuid for uartpb
+#endif
+
 extern Menu root_menu;            ///< root menu
 extern Menu *current_menu;        ///< pointer to the current menu
 extern std::list<Command *> global_commands;  ///< global commands, available in all menus
@@ -50,7 +55,7 @@ void register_uartpb(
     );
 
 /// Handle and execute a command coming from a Protobuf message
-void handle_pb_command(const Command::PB_Message &pb_command);
+void handle_pb_command(cogip::uartpb::ReadBuffer *buffer);
 #endif
 
 } // namespace shell

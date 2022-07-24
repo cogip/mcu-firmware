@@ -17,6 +17,7 @@ shell_command_t current_commands[NB_SHELL_COMMANDS];
 
 #ifdef MODULE_UARTPB
 cogip::uartpb::UartProtobuf *uart_protobuf = nullptr;
+static Command::PB_Message pb_command;
 #endif
 
 // Callbacks for default global commands
@@ -97,9 +98,11 @@ void rename_command(const std::string &old_name, const std::string &new_name)
 }
 
 #ifdef MODULE_UARTPB
+
 void register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)
 {
     uart_protobuf = uartpb_ptr;
+    uartpb_ptr->register_message_handler(command_uuid, handle_pb_command);
 }
 
 /// Execute a shell command callback using arguments from Protobuf message.
@@ -142,10 +145,11 @@ static void run_pb_command_(Command *command, const Command::PB_Message &pb_comm
     command->handler()(argc, argv);
 }
 
-
 // Handle a Protobuf command message
-void handle_pb_command(const Command::PB_Message &pb_command)
+void handle_pb_command(cogip::uartpb::ReadBuffer *buffer)
 {
+    pb_command.deserialize(*buffer);
+
     if (cogip::shell::current_menu == nullptr) {
         COGIP_DEBUG_CERR(
             "Warning: received PB command before current_menu is initialized: "

@@ -1,7 +1,6 @@
 // Firmware includes
 #include "platform.hpp"
 #include "trigonometry.h"
-#include "uartpb_config.hpp"
 
 #include "app_camp.hpp"
 #include "app_samples.hpp"
@@ -16,8 +15,10 @@ namespace cogip {
 
 namespace app {
 
-static PB_OutputMessage _output_message;
 static DetectedSamples _detected_samples;
+
+constexpr cogip::uartpb::uuid_t sample_request_uuid = 3781855956;
+constexpr cogip::uartpb::uuid_t sample_response_uuid = 1538397045;
 
 static std::map<CampColor, SamplesMap *> _samples;
 
@@ -56,6 +57,8 @@ void app_samples_init()
     if (_samples.size() == 2) {
         return;
     }
+
+    pf_get_uartpb()->register_message_handler(sample_response_uuid, app_samples_process);
 
     event_queue_init_detached(&_sample_queue);
     _sample_event.super.list_node.next = nullptr;
@@ -170,9 +173,7 @@ const DetectedSamples & app_samples_detect(void)
 {
     event_queue_claim(&_sample_queue);
     cogip::uartpb::UartProtobuf *uartpb = pf_get_uartpb();
-    _output_message.clear();
-    _output_message.set_req_samples(true);
-    uartpb->send_message(_output_message);
+    uartpb->send_message(sample_request_uuid);
     sample_event_t *event = (sample_event_t *)event_wait(&_sample_queue);
 
     auto & samples = event->pb_message.get_samples();
@@ -203,9 +204,14 @@ const DetectedSamples & app_samples_detect(void)
     return _detected_samples;
 }
 
-void app_samples_process(const PB_Samples<APP_SAMPLES_MAX_DETECTED> &samples)
+void app_samples_process(cogip::uartpb::ReadBuffer *buffer)
 {
-    _sample_event.pb_message = samples;
+    EmbeddedProto::Error error = _sample_event.pb_message.deserialize(*buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Samples: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
+
     event_post(&_sample_queue, (event_t *)&_sample_event);
 }
 
