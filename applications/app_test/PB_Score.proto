@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message PB_Score {
+    int32 value = 1;
+}

@@ -22,6 +22,9 @@ FEATURES_REQUIRED += cpp
 # Required modules
 USEMODULE += cpp11-compat
 
+# Required packages
+USEPKG += etl
+
 define remote-flash-recipe
 	scp $(BINFILE) $(REMOTE_USER)@$(REMOTE_TARGET):/tmp/fw.bin
 	$(GDB) -nx -batch -ex "target extended-remote $(REMOTE_TARGET):3333" -ex "monitor reset halt" -ex "monitor flash write_image erase /tmp/fw.bin 0x08000000" -ex "monitor reset run"
@@ -77,6 +80,7 @@ tmp_cxxexflags := $(CXXEXFLAGS)
 CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
 CXXEXFLAGS += -std=c++17
 CXXEXFLAGS += -Wno-pedantic
+CXXEXFLAGS += -Wno-cast-align
 
 .PHONY: world
 world: all

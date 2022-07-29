@@ -74,7 +74,7 @@ public:
 
     /// Message handler for responses.
     void handle_response(
-        const PB_Message &pb_message         ///< [in] received message
+        cogip::uartpb::ReadBuffer *buffer    ///< [in] buffer containing the received message
         );
 
     /// Send a request and wait for the response.
@@ -93,6 +93,7 @@ private:
     cogip::uartpb::UartProtobuf *uartpb_;    ///< uartpb pointer used to send/receive messages
     wizard_event_t event_;                   ///< event containing the response
     event_queue_t queue_;                    ///< queue receiving response events
+    bool queue_claimed_ = false;             ///< whether event queue has been claimed on the thread or not
 };
 
 } // namespace wizard

@@ -22,7 +22,6 @@
 #include "lidar_obstacles.hpp"
 #include "trace_utils.hpp"
 
-#include "uartpb_config.hpp"
 #include "PB_Command.hpp"
 #include "PB_State.hpp"
 
@@ -80,7 +79,12 @@ PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_B
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
 cogip::wizard::Wizard *wizard = nullptr;
-static PB_OutputMessage output_message;
+
+// Define uartpb uuids
+constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
+constexpr cogip::uartpb::uuid_t state_uuid = 3422642571;
+constexpr cogip::uartpb::uuid_t copilot_connected_uuid = 1132911482;
+constexpr cogip::uartpb::uuid_t copilot_disconnected_uuid = 1412808668;
 
 bool pf_trace_on(void)
 {
@@ -139,8 +143,7 @@ void pf_send_pb_state(void)
     avoidance_pb_copy_path(pb_state.mutable_path());
     cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
 
-    output_message.set_state(pb_state);
-    uartpb->send_message(output_message);
+    uartpb->send_message(state_uuid, &pb_state);
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -257,11 +260,25 @@ cogip::wizard::Wizard *pf_get_wizard()
     return wizard;
 }
 
+void handle_copilot_connected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer)
+{
+    pf_set_copilot_connected(true);
+    std::cout << "Copilot connected" << std::endl;
+    if (cogip::shell::current_menu) {
+        cogip::shell::current_menu->send_pb_message();
+    }
+}
+
+void handle_copilot_disconnected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer)
+{
+    pf_set_copilot_connected(false);
+    std::cout << "Copilot disconnected" << std::endl;
+}
+
 void pf_init(void)
 {
     /* Initialize UARTPB */
     uartpb = new cogip::uartpb::UartProtobuf(
-        cogip::app::app_uartpb_message_handler,
         UART_DEV(1)
         );
 
@@ -272,9 +289,10 @@ void pf_init(void)
     }
     else {
         cogip::shell::register_uartpb(uartpb);
+        uartpb->register_message_handler(copilot_connected_uuid, handle_copilot_connected);
+        uartpb->register_message_handler(copilot_disconnected_uuid, handle_copilot_disconnected);
         uartpb->start_reader();
-        output_message.set_reset(true);
-        uartpb->send_message(output_message);
+        uartpb->send_message(reset_uuid);
     }
 
 #ifdef MODULE_SHELL_PLATFORMS

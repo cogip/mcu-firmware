@@ -8,7 +8,6 @@
 #include "app_obstacles.hpp"
 #include "app_samples.hpp"
 #include "app_shell.hpp"
-#include "app_uartpb.hpp"
 
 /*
  * Machine parameters

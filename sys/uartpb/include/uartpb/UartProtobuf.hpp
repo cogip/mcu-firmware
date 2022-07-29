@@ -7,7 +7,9 @@
 /// @brief       Exchange Protobuf messages over UART module.
 /// @details     This module provides a class that controls an UART to send and
 ///              receive Protobuf messages using EmbbededProto.
-///              A callback function must also be provided to handle decoded messages.
+///              Each library/application using uartpb must define a unique id (32-bit integer
+///              of type cogip::uartpb::uuid_t) and registrer a callback function to send
+///              or receive their own messages.
 ///              See `examples/uartb`.
 /// @{
 /// @file
@@ -20,6 +22,7 @@
 #include "periph/uart.h"
 #include "ringbuffer.h"
 #include "thread.h"
+#include "etl/map.h"
 
 #include "uartpb/uartpb.hpp"
 #include "uartpb/ReadBuffer.hpp"
@@ -35,6 +38,12 @@
 namespace cogip {
 
 namespace uartpb {
+
+/// Custom type for uuids
+using uuid_t = uint32_t;
+
+/// Prototype for incoming Protobuf message handlers
+using message_handler_t = std::function<void(cogip::uartpb::ReadBuffer *)>;
 
 /// Function called when data is received on serial port.
 /// This wrapper is used to call the uart_rx_cb() function from UartProtobuf class
@@ -54,11 +63,9 @@ void *message_reader_wrapper(
 /// Generic UART Protobuf communication class.
 class UartProtobuf {
 public:
-    using message_handler_t = void (*)(cogip::uartpb::ReadBuffer &);
 
     /// Class constructor.
     UartProtobuf(
-        message_handler_t message_handler,        ///< [in] callback to process the message after decoding
         uart_t uart_dev,                          ///< [in] UART device
         uint32_t uart_speed=230400U               ///< [in] UART baud rate
         );
@@ -80,7 +87,17 @@ public:
 
     /// Send message on serial port.
     /// @return true if message was encoded and sent, false otherwise
-    bool send_message(const EmbeddedProto::MessageInterface &message);
+    bool send_message(
+        uuid_t uuid,                              ///< [in] message uuid
+        const EmbeddedProto::MessageInterface *message = nullptr
+                                                  ///< [in] message to send
+        );
+
+    /// Associate a message handle to a specific uuid
+    void register_message_handler(
+        uuid_t uuid,                              ///< [in] message uuid
+        message_handler_t handler                 ///< [in] message handler
+        );
 
 private:
     uart_t uart_dev_;                             ///< UART device
@@ -88,9 +105,9 @@ private:
     kernel_pid_t reader_pid_;                     ///< reader thread PID
     ringbuffer_t rx_buf_;                         ///< ring buffer for UART incoming bytes
     uint32_t msg_length_ = 0;                     ///< message length
-    void (*message_handler_)(cogip::uartpb::ReadBuffer &);
-                                                  ///< callback to process the message after decoding
     riot::mutex mutex_;                           ///< mutex protecting serial port access
+    etl::map<uuid_t, message_handler_t, UARTPB_MAX_HANDLERS> message_handlers_;
+                                                  ///< callbacks to process the message after decoding
 };
 
 } // namespace uartpb

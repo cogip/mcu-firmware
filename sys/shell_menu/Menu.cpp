@@ -4,10 +4,6 @@
 // System includes
 #include <cassert>
 
-#ifdef MODULE_UARTPB
-#  include "uartpb_config.hpp"
-#endif
-
 #include "PB_Menu.hpp"
 
 namespace cogip {
@@ -83,7 +79,7 @@ void Menu::enter(void)
         i++;
     }
 
-    COGIP_DEBUG_COUT("Enter shell menu: " << current_menu->name().c_str());
+    COGIP_DEBUG_COUT("Enter shell menu: " << current_menu->name());
 
 #ifdef MODULE_UARTPB
     send_pb_message();
@@ -111,14 +107,11 @@ void Menu::update_pb_message(void)
 }
 
 #ifdef MODULE_UARTPB
-static PB_OutputMessage output_message;
-
 void Menu::send_pb_message(void)
 {
     if (uart_protobuf) {
         update_pb_message();
-        output_message.set_menu(pb_message_);
-        uart_protobuf->send_message(output_message);
+        uart_protobuf->send_message(menu_uuid, &pb_message_);
     }
 }
 #endif

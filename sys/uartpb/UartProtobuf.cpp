@@ -1,5 +1,8 @@
 #include "uartpb/UartProtobuf.hpp"
 
+// System includes
+#include <iostream>
+
 // RIOT includes
 #include "riot/chrono.hpp"
 #include "riot/thread.hpp"
@@ -17,11 +20,9 @@ static ReadBuffer read_buffer_;                      ///< buffer used to decode 
 static WriteBuffer write_buffer_;                    ///< buffer used to encode a message
 
 UartProtobuf::UartProtobuf(
-    message_handler_t message_handler,
     uart_t uart_dev, uint32_t uart_speed) :
     uart_dev_(uart_dev), uart_speed_(uart_speed)
 {
-    message_handler_ = message_handler;
     ringbuffer_init(&rx_buf_, rx_mem_, UART_BUFFER_SIZE);
 }
 
@@ -53,47 +54,81 @@ void UartProtobuf::uart_rx_cb(uint8_t data)
 
 void UartProtobuf::message_reader()
 {
+    uuid_t uuid;
     msg_t msg;
     msg_t msg_queue[8];
     msg_init_queue(msg_queue, 8);
 
     while (1) {
+        // Wait for a new message
         msg_receive(&msg);
+
+        // Read and check message length
         uint32_t message_length = (uint32_t)msg.content.value;
         assert(message_length <= UARTPB_INPUT_MESSAGE_LENGTH_MAX);
-        read_buffer_.clear();
-        ringbuffer_get(&rx_buf_, (char *)read_buffer_.get_base64_data(), message_length);
-        size_t res = read_buffer_.base64_decode();
-        if (res > 0 && message_handler_) {
-            message_handler_(read_buffer_);
+
+        // Read uuid
+        ringbuffer_get(&rx_buf_, (char *)&uuid, sizeof(uuid_t));
+        message_length -= sizeof(uuid_t);
+
+        // Check a handler corresponding to the uuid is registered
+        if (message_handlers_.count(uuid) != 1) {
+            std::cout << "Unknown message uuid: " << uuid << std::endl;
+            continue;
         }
+
+        // Read Protobuf message if any
+        if (message_length > 0) {
+            read_buffer_.clear();
+            ringbuffer_get(&rx_buf_, (char *)read_buffer_.get_base64_data(), message_length);
+            size_t res = read_buffer_.base64_decode();
+            if (res <= 0) {
+                std::cout << "Failed to base64 decode Protobuf message (res = " << res <<  ")" << std::endl;
+                continue;
+            }
+        }
+
+        message_handlers_[uuid](message_length > 0 ? &read_buffer_ : nullptr);
     }
 }
-
-bool UartProtobuf::send_message(const EmbeddedProto::MessageInterface &message)
+bool UartProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterface *message)
 {
     bool success = true;
+    size_t base64_size = 0;
+    char separator = '\n';
     mutex_.lock();
-    write_buffer_.clear();
-    auto serialization_status = message.serialize(write_buffer_);
-    if(EmbeddedProto::Error::NO_ERRORS != serialization_status) {
-        puts("Failed to serialize Protobuf message.");
-        success = false;
-    }
-    else {
-        size_t base64_size = write_buffer_.base64_encode();
-        if (base64_size == 0) {
-            puts("Failed to base64 encode Protobuf serialized message.");
+
+    if (message) {
+        write_buffer_.clear();
+        auto serialization_status = message->serialize(write_buffer_);
+        if(EmbeddedProto::Error::NO_ERRORS != serialization_status) {
+            puts("Failed to serialize Protobuf message.");
             success = false;
         }
         else {
-            uart_write(uart_dev_, write_buffer_.get_base64_data(), base64_size+1);
+            base64_size = write_buffer_.base64_encode();
+            if (base64_size == 0) {
+                puts("Failed to base64 encode Protobuf serialized message.");
+                success = false;
+            }
         }
+    }
+    if (success) {
+        uart_write(uart_dev_, (uint8_t *)&uuid, sizeof(uuid_t));
+        if (message) {
+            uart_write(uart_dev_, write_buffer_.get_base64_data(), base64_size);
+        }
+        uart_write(uart_dev_, (uint8_t *)&separator, 1);
     }
 
     mutex_.unlock();
 
     return success;
+}
+
+void UartProtobuf::register_message_handler(uuid_t uuid, message_handler_t handler)
+{
+    message_handlers_[uuid] = handler;
 }
 
 } // namespace uartpb

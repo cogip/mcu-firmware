@@ -6,8 +6,6 @@
 #include "thread.h"
 #include "xtimer.h"
 
-#include "uartpb_config.hpp"
-
 // Projet includes
 #include "shell_menu/shell_menu.hpp"
 
@@ -20,8 +18,6 @@
 #include "PB_RespHello.hpp"
 #include "PB_RespPing.hpp"
 #include "PB_RespPong.hpp"
-#include "PB_ExampleInputMessage.hpp"
-#include "PB_ExampleOutputMessage.hpp"
 
 #include "uartpb/UartProtobuf.hpp"
 #include "uartpb/ReadBuffer.hpp"
@@ -33,86 +29,78 @@ static char sender_stack[THREAD_STACKSIZE_MAIN];
 bool suspend_sender = false;
 
 cogip::uartpb::UartProtobuf *uartpb = nullptr;
-static PB_OutputMessage output_message;
 
-static void handle_response_hello(const PB_RespHello &hello)
+constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
+constexpr cogip::uartpb::uuid_t req_hello_uuid = 3938291130;
+constexpr cogip::uartpb::uuid_t req_ping_uuid = 2537089183;
+constexpr cogip::uartpb::uuid_t req_pong_uuid = 3650317449;
+constexpr cogip::uartpb::uuid_t resp_hello_uuid = 4187249687;
+constexpr cogip::uartpb::uuid_t resp_ping_uuid = 4288740491;
+constexpr cogip::uartpb::uuid_t resp_pong_uuid = 2687718320;
+
+static PB_RespHello resp_hello;
+static PB_RespPing resp_ping;
+static PB_RespPong resp_pong;
+
+static PB_ReqHello<64> req_hello;
+static PB_ReqPing req_ping;
+static PB_ReqPong req_pong;
+
+static void handle_response_hello(cogip::uartpb::ReadBuffer *buffer)
 {
-    printf("<<== Hello response with number=%" PRId32 "\n\n", (int32_t)hello.get_number());
+    resp_hello.deserialize(*buffer);
+    std::cout << "<<== Hello response with number=" << resp_hello.get_number() << std::endl;
 }
 
-static void handle_response_ping(const PB_RespPing &ping)
+static void handle_response_ping(cogip::uartpb::ReadBuffer *buffer)
 {
-    printf("<<== Ping response with color=%s\n\n", get_color_name((cogip::cogip_defs::Color)ping.get_color()));
+    resp_ping.deserialize(*buffer);
+    std::cout << "<<== Ping response with color="<< get_color_name((cogip::cogip_defs::Color)resp_ping.get_color()) << std::endl;
 }
 
-static void handle_response_pong(const PB_RespPong &pong)
+static void handle_response_pong(cogip::uartpb::ReadBuffer *buffer)
 {
-    const cogip::cogip_defs::Pose &pose = pong.get_new_pose();
-    printf(
-        "<<== Pong response with pose={x=%.2lf, y=%.2lf, angle=%.2lf}\n\n",
-        pose.x(), pose.y(), pose.O()
-        );
-}
-
-void message_handler(cogip::uartpb::ReadBuffer &buffer)
-{
-    PB_ExampleInputMessage *message = new PB_ExampleInputMessage();
-    message->deserialize(buffer);
-
-    if (message->has_resp_hello()) {
-        handle_response_hello(message->resp_hello());
-    }
-    else if (message->has_resp_ping()) {
-        handle_response_ping(message->resp_ping());
-    }
-    else if (message->has_resp_pong()) {
-        handle_response_pong(message->resp_pong());
-    }
-    else {
-        printf("Unknown response type: %" PRIu32 "\n", static_cast<uint32_t>(message->get_which_type()));
-    }
-
-    delete message;
+    resp_pong.deserialize(*buffer);
+    const cogip::cogip_defs::Pose &pose = resp_pong.get_new_pose();
+    std::cout
+        << "<<== Pong response with pose={x=" << pose.x()
+        << ", y=" << pose.y() << ", angle=" << pose.O() << "}"
+        << std::endl;
 }
 
 static void send_hello()
 {
-    PB_ReqHello<64> hello;
-    hello.set_number(std::rand());
-    hello.mutable_message() = "hellohello";
-    printf(
-        "==>> Hello request  with number=%" PRIi32 " and message='%s'\n",
-        (int32_t)hello.get_number(), (const char *)hello.get_message().get_const()
-        );
+    req_hello.set_number(std::rand());
+    req_hello.mutable_message() = "hellohello";
+    std::cout
+        << "==>> Hello request  with number=" << (int32_t)req_hello.get_number()
+        << " and message='" << req_hello.get_message().get_const() << "'"
+        << std::endl;
 
-    output_message.set_req_hello(hello);
-    uartpb->send_message(output_message);
+    uartpb->send_message(req_hello_uuid, &req_hello);
 }
 
 static void send_ping()
 {
-    PB_ReqPing ping;
-    ping.set_color((PB_Color)cogip::cogip_defs::Color::RED);
+    req_ping.set_color((PB_Color)cogip::cogip_defs::Color::RED);
 
-    printf("==>> Ping request  with color=%s\n", get_color_name((cogip::cogip_defs::Color)ping.get_color()));
+    std::cout << "==>> Ping request  with color=" << get_color_name((cogip::cogip_defs::Color)req_ping.get_color()) << std::endl;
 
-    output_message.set_req_ping(ping);
-    uartpb->send_message(output_message);
+    uartpb->send_message(req_ping_uuid, &req_ping);
 }
 
 static void send_pong()
 {
-    PB_ReqPong pong;
     cogip::cogip_defs::Pose pose = {15, 30, 90};
-    pose.pb_copy(pong.mutable_pose());
+    pose.pb_copy(req_pong.mutable_pose());
 
-    printf(
-        "==>> Pong request  with pose={x=%.2lf, y=%.2lf, angle=%.2lf}\n",
-        (double)pong.get_pose().get_x(), (double)pong.get_pose().get_y(), (double)pong.get_pose().get_O()
-        );
+    std::cout
+        << "==>> Pong request  with pose={x=" << req_pong.get_pose().get_x()
+        << ", y=" << req_pong.get_pose().get_y()
+        << ", angle=" << req_pong.get_pose().get_O() << "}"
+        << std::endl;
 
-    output_message.set_req_pong(pong);
-    uartpb->send_message(output_message);
+    uartpb->send_message(req_pong_uuid, &req_pong);
 }
 
 static void *message_sender(void *arg)
@@ -176,14 +164,14 @@ static int cmd_sub(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    printf("Sub-menu command\n");
+    std::cout << "Sub-menu command" << std::endl;
 
     return 0;
 }
 
 int main(void)
 {
-    printf("\n== UART/EmbeddedProto Example ==\n");
+    std::cout << std::endl << "== UART/EmbeddedProto Example ==" << std::endl;
 
     cogip::shell::root_menu.push_back(
         new cogip::shell::Command("hello", "Send hello", cmd_hello));
@@ -197,14 +185,15 @@ int main(void)
         "Sub-menu", "sub", &cogip::shell::root_menu);
     menu->push_back(new cogip::shell::Command("cmd", "Sub-menu command", cmd_sub));
 
-    uartpb = new cogip::uartpb::UartProtobuf(
-        message_handler,
-        UART_DEV(1)
-        );
+    uartpb = new cogip::uartpb::UartProtobuf(UART_DEV(1));
+
+    uartpb->register_message_handler(resp_hello_uuid, handle_response_hello);
+    uartpb->register_message_handler(resp_ping_uuid, handle_response_ping);
+    uartpb->register_message_handler(resp_pong_uuid, handle_response_pong);
 
     bool res = uartpb->connect();
     if (! res) {
-        printf("UART initialization status: %d\n", res);
+        std::cout << "UART initialization status: " << res << std::endl;
         exit(1);
     }
 
@@ -214,8 +203,7 @@ int main(void)
         sender_stack, sizeof(sender_stack), SENDER_PRIO,
         THREAD_CREATE_SLEEPING, message_sender, NULL, "sender");
 
-    output_message.set_reset(true);
-    uartpb->send_message(output_message);
+    uartpb->send_message(reset_uuid);
 
     // Start shell
     cogip::shell::register_uartpb(uartpb);

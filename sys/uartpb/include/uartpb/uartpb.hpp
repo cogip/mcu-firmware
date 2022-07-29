@@ -28,4 +28,8 @@
 #define UARTPB_OUTPUT_MESSAGE_LENGTH_MAX  (4*1024)           ///< max outgoing message length
 #endif
 
+#ifndef UARTPB_MAX_HANDLERS
+#define UARTPB_MAX_HANDLERS  16                              ///< max numbers of registered message handlers
+#endif
+
 /// @}
