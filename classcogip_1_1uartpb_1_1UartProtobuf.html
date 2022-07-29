@@ -120,7 +120,6 @@ $(document).ready(function(){initNavTree('classcogip_1_1uartpb_1_1UartProtobuf.h
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">cogip::uartpb::UartProtobuf Class Reference</div>  </div>
@@ -132,21 +131,15 @@ $(document).ready(function(){initNavTree('classcogip_1_1uartpb_1_1UartProtobuf.h
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Generic UART Protobuf communication class. </p>
 
-<p class="definition">Definition at line <a class="el" href="UartProtobuf_8hpp_source.html#l00055">55</a> of file <a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="UartProtobuf_8hpp_source.html#l00064">64</a> of file <a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="UartProtobuf_8hpp_source.html">UartProtobuf.hpp</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:abd11e0ea5619050678936d32d56cbc55"><td class="memItemLeft" align="right" valign="top"><a id="abd11e0ea5619050678936d32d56cbc55"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>message_handler_t</b> = void(*)(<a class="el" href="classcogip_1_1uartpb_1_1ReadBuffer.html">cogip::uartpb::ReadBuffer</a> &amp;)</td></tr>
-<tr class="separator:abd11e0ea5619050678936d32d56cbc55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a98373f7fe0b46d2364ab223a039272e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4">UartProtobuf</a> (message_handler_t message_handler, uart_t uart_dev, uint32_t uart_speed=230400U)</td></tr>
-<tr class="memdesc:a98373f7fe0b46d2364ab223a039272e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a98373f7fe0b46d2364ab223a039272e4">More...</a><br /></td></tr>
-<tr class="separator:a98373f7fe0b46d2364ab223a039272e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d3c919bdc23b83ece9a756c1c979d08"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a5d3c919bdc23b83ece9a756c1c979d08">UartProtobuf</a> (uart_t uart_dev, uint32_t uart_speed=230400U)</td></tr>
+<tr class="memdesc:a5d3c919bdc23b83ece9a756c1c979d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a5d3c919bdc23b83ece9a756c1c979d08">More...</a><br /></td></tr>
+<tr class="separator:a5d3c919bdc23b83ece9a756c1c979d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87b9fb4539bf844e355a70cdc206e7c0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a87b9fb4539bf844e355a70cdc206e7c0">connect</a> ()</td></tr>
 <tr class="memdesc:a87b9fb4539bf844e355a70cdc206e7c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open serial port.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a87b9fb4539bf844e355a70cdc206e7c0">More...</a><br /></td></tr>
 <tr class="separator:a87b9fb4539bf844e355a70cdc206e7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,13 +154,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7">message_reader</a> ()</td></tr>
 <tr class="memdesc:a3ef9cf01ce4bf920dca63c07f6b973e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait and decode incoming Protobuf messages. <br /></td></tr>
 <tr class="separator:a3ef9cf01ce4bf920dca63c07f6b973e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b654e94816ad6a821f400643b7c99e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a6b654e94816ad6a821f400643b7c99e5">send_message</a> (const EmbeddedProto::MessageInterface &amp;message)</td></tr>
-<tr class="memdesc:a6b654e94816ad6a821f400643b7c99e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send message on serial port.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a6b654e94816ad6a821f400643b7c99e5">More...</a><br /></td></tr>
-<tr class="separator:a6b654e94816ad6a821f400643b7c99e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0884b06c75349700089400f20f50ae18"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a0884b06c75349700089400f20f50ae18">send_message</a> (<a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">uuid_t</a> uuid, const EmbeddedProto::MessageInterface *message=nullptr)</td></tr>
+<tr class="memdesc:a0884b06c75349700089400f20f50ae18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send message on serial port.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a0884b06c75349700089400f20f50ae18">More...</a><br /></td></tr>
+<tr class="separator:a0884b06c75349700089400f20f50ae18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6be8b40eea2e5e06e5c5b2d4d80fa1fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html#a6be8b40eea2e5e06e5c5b2d4d80fa1fe">register_message_handler</a> (<a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">uuid_t</a> uuid, <a class="el" href="UartProtobuf_8hpp.html#aac782e2b6d5dc1bb2164420243435e82">message_handler_t</a> handler)</td></tr>
+<tr class="memdesc:a6be8b40eea2e5e06e5c5b2d4d80fa1fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Associate a message handle to a specific uuid.  <a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a6be8b40eea2e5e06e5c5b2d4d80fa1fe">More...</a><br /></td></tr>
+<tr class="separator:a6be8b40eea2e5e06e5c5b2d4d80fa1fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a98373f7fe0b46d2364ab223a039272e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98373f7fe0b46d2364ab223a039272e4">&#9670;&nbsp;</a></span>UartProtobuf()</h2>
+<a id="a5d3c919bdc23b83ece9a756c1c979d08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d3c919bdc23b83ece9a756c1c979d08">&#9670;&nbsp;</a></span>UartProtobuf()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -175,12 +171,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="memname">cogip::uartpb::UartProtobuf::UartProtobuf </td>
           <td>(</td>
-          <td class="paramtype">message_handler_t&#160;</td>
-          <td class="paramname"><em>message_handler</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">uart_t&#160;</td>
           <td class="paramname"><em>uart_dev</em>, </td>
         </tr>
@@ -201,7 +191,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>Class constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">message_handler</td><td>[in] callback to process the message after decoding </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">uart_dev</td><td>[in] UART device </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">uart_speed</td><td>[in] UART baud rate </td></tr>
   </table>
@@ -231,8 +220,45 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a6b654e94816ad6a821f400643b7c99e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b654e94816ad6a821f400643b7c99e5">&#9670;&nbsp;</a></span>send_message()</h2>
+<a id="a6be8b40eea2e5e06e5c5b2d4d80fa1fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6be8b40eea2e5e06e5c5b2d4d80fa1fe">&#9670;&nbsp;</a></span>register_message_handler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cogip::uartpb::UartProtobuf::register_message_handler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">uuid_t</a>&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="UartProtobuf_8hpp.html#aac782e2b6d5dc1bb2164420243435e82">message_handler_t</a>&#160;</td>
+          <td class="paramname"><em>handler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Associate a message handle to a specific uuid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">uuid</td><td>[in] message uuid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">handler</td><td>[in] message handler </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0884b06c75349700089400f20f50ae18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0884b06c75349700089400f20f50ae18">&#9670;&nbsp;</a></span>send_message()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -240,15 +266,32 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="memname">bool cogip::uartpb::UartProtobuf::send_message </td>
           <td>(</td>
-          <td class="paramtype">const EmbeddedProto::MessageInterface &amp;&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">uuid_t</a>&#160;</td>
+          <td class="paramname"><em>uuid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const EmbeddedProto::MessageInterface *&#160;</td>
+          <td class="paramname"><em>message</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Send message on serial port. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if message was encoded and sent, false otherwise </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">uuid</td><td>[in] message uuid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">message</td><td>[in] message to send </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -285,7 +328,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Mon Jul 11 2022 17:31:40 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Jul 29 2022 14:58:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

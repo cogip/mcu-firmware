@@ -13,10 +13,11 @@ var searchData=
   ['max_5fspeed_5fm_5fper_5fs_296',['MAX_SPEED_M_PER_S',['../group__platforms__pegasus.html#ga32da0bbd33cdc029772d5728b4424f12',1,'MAX_SPEED_M_PER_S():&#160;platform.hpp'],['../group__platforms__pf__test.html#ga32da0bbd33cdc029772d5728b4424f12',1,'MAX_SPEED_M_PER_S():&#160;platform.hpp']]],
   ['menu_297',['Menu',['../classcogip_1_1shell_1_1Menu.html',1,'cogip::shell::Menu'],['../classcogip_1_1shell_1_1Menu.html#ac0e489282e9331bd3f177e122c10c69b',1,'cogip::shell::Menu::Menu()']]],
   ['menu_2ehpp_298',['Menu.hpp',['../Menu_8hpp.html',1,'']]],
-  ['message_5freader_299',['message_reader',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7',1,'cogip::uartpb::UartProtobuf']]],
-  ['message_5freader_5fwrapper_300',['message_reader_wrapper',['../UartProtobuf_8hpp.html#af1754a88874b0fa1f3bd1b2f11a3737e',1,'cogip::uartpb']]],
-  ['min_5fangle_5ffor_5fpose_5freached_301',['min_angle_for_pose_reached',['../structctrl__quadpid__parameters__t.html#a9b9d4a94b7089b5a7ae3621b438f0251',1,'ctrl_quadpid_parameters_t']]],
-  ['min_5fangle_5ffor_5ftarget_5forientation_302',['min_angle_for_target_orientation',['../structctrl__quadpid__parameters__t.html#a64a381bdc20a855bc3372dc4f6754b0a',1,'ctrl_quadpid_parameters_t']]],
-  ['min_5fdistance_5ffor_5fangular_5fswitch_303',['min_distance_for_angular_switch',['../structctrl__quadpid__parameters__t.html#a4ca9cf9a4278de51247b8681f45086c7',1,'ctrl_quadpid_parameters_t']]],
-  ['motor_5fdrive_304',['motor_drive',['../group__platforms__pegasus.html#gaa17fe0f98ee21dc8abc9951936be4738',1,'motor_drive(const cogip::cogip_defs::Polar &amp;command):&#160;platform.hpp'],['../group__platforms__pf__test.html#gaa17fe0f98ee21dc8abc9951936be4738',1,'motor_drive(const cogip::cogip_defs::Polar &amp;command):&#160;platform.hpp']]]
+  ['message_5fhandler_5ft_299',['message_handler_t',['../UartProtobuf_8hpp.html#aac782e2b6d5dc1bb2164420243435e82',1,'cogip::uartpb']]],
+  ['message_5freader_300',['message_reader',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7',1,'cogip::uartpb::UartProtobuf']]],
+  ['message_5freader_5fwrapper_301',['message_reader_wrapper',['../UartProtobuf_8hpp.html#af1754a88874b0fa1f3bd1b2f11a3737e',1,'cogip::uartpb']]],
+  ['min_5fangle_5ffor_5fpose_5freached_302',['min_angle_for_pose_reached',['../structctrl__quadpid__parameters__t.html#a9b9d4a94b7089b5a7ae3621b438f0251',1,'ctrl_quadpid_parameters_t']]],
+  ['min_5fangle_5ffor_5ftarget_5forientation_303',['min_angle_for_target_orientation',['../structctrl__quadpid__parameters__t.html#a64a381bdc20a855bc3372dc4f6754b0a',1,'ctrl_quadpid_parameters_t']]],
+  ['min_5fdistance_5ffor_5fangular_5fswitch_304',['min_distance_for_angular_switch',['../structctrl__quadpid__parameters__t.html#a4ca9cf9a4278de51247b8681f45086c7',1,'ctrl_quadpid_parameters_t']]],
+  ['motor_5fdrive_305',['motor_drive',['../group__platforms__pegasus.html#gaa17fe0f98ee21dc8abc9951936be4738',1,'motor_drive(const cogip::cogip_defs::Polar &amp;command):&#160;platform.hpp'],['../group__platforms__pf__test.html#gaa17fe0f98ee21dc8abc9951936be4738',1,'motor_drive(const cogip::cogip_defs::Polar &amp;command):&#160;platform.hpp']]]
 ];

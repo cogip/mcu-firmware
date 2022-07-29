@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vacuum_5fpump_5ft_910',['vacuum_pump_t',['../group__driver__vacuum__pump.html#gad99ecfeec89c500f08fb83686865bb7a',1,'vacuum_pump.h']]]
+  ['sd21_5ft_914',['sd21_t',['../group__sd21.html#gad6475199c1a4f67775a2dd92f7e2596b',1,'sd21.h']]],
+  ['speed_5forder_5fcb_5ft_915',['speed_order_cb_t',['../group__controller.html#ga9c1b638e3f06d26040f8e3c7d6889fc9',1,'ctrl.hpp']]]
 ];
