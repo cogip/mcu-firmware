@@ -70,3 +70,6 @@ pkg/*
 
 # Protobuf generated files
 *_pb2.py
+
+# Patches timestamp files
+patches/*.patched
