@@ -51,6 +51,15 @@ Edit ~/.bashrc file and add $HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bi
 PATH=${PATH}:$HOME/toolchain/gcc-arm-none-eabi-8-2018-q4-major/bin/
 ```
 
+### Quilt
+
+Quilt is a tool to manage large sets of patches by keeping track of the changes each patch makes.
+It is used to apply patches on RIOT-OS
+
+```bash
+$ sudo apt install quilt
+```
+
 ### Python Virtual Environment
 
 ```bash
