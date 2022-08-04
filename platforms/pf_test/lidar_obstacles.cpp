@@ -5,7 +5,6 @@
 
 // RIOT includes
 #include <ztimer.h>
-#include "riot/thread.hpp"
 
 // Project includes
 #include "lds01.h"

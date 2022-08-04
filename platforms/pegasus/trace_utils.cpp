@@ -2,7 +2,6 @@
 
 // RIOT includes
 #include <ztimer.h>
-#include "riot/thread.hpp"
 
 // Application includes
 #include "platform.hpp"

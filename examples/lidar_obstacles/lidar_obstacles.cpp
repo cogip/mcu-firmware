@@ -2,7 +2,6 @@
 #include <cmath>
 
 // RIOT includes
-#include "riot/thread.hpp"
 #include <ztimer.h>
 
 // Project includes
@@ -26,10 +25,11 @@
 #define M_PI                  3.14159265358979323846
 #define DEG2RAD(a)            (a * (2.0 * M_PI) / 360.0)
 
+/* Thread stack */
+char obstacle_updater_thread_stack[THREAD_STACKSIZE_MAIN];
+
 // Obstacles id of Lidar detected obstacles
 cogip::obstacles::List * lidar_obstacles = nullptr;
-
-riot::thread *obstacle_updater_thread = nullptr;
 
 // Find consecutive obstacles and keep the nearest at the middle
 static bool _filter_distances(const uint16_t *raw_distances, uint16_t *filtered_distances)
@@ -125,8 +125,9 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstac
 }
 
 // Thread loop
-static void _thread_obstacle_updater(const cogip::cogip_defs::Pose &robot_state)
+static void* _thread_obstacle_updater(void *data)
 {
+    const cogip::cogip_defs::Pose *robot_state = (cogip::cogip_defs::Pose *) data;
     uint16_t raw_distances[LDS01_NB_ANGLES];
     uint16_t filtered_distances[LDS01_NB_ANGLES];
 
@@ -141,17 +142,26 @@ static void _thread_obstacle_updater(const cogip::cogip_defs::Pose &robot_state)
         }
 
         if (_filter_distances(raw_distances, filtered_distances) == true) {
-            _update_dynamic_obstacles_from_lidar(lidar_obstacles, robot_state, filtered_distances);
+            _update_dynamic_obstacles_from_lidar(lidar_obstacles, *robot_state, filtered_distances);
         }
 
         ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
 
     }
+
+    return NULL;
 }
 
 void obstacle_updater_start(const cogip::cogip_defs::Pose &robot_state)
 {
     lidar_obstacles = new cogip::obstacles::List();
 
-    obstacle_updater_thread = new riot::thread(_thread_obstacle_updater, robot_state);
+    thread_create(
+        obstacle_updater_thread_stack,
+        sizeof(obstacle_updater_thread_stack),
+        THREAD_PRIORITY_MAIN - 1, 0,
+        _thread_obstacle_updater,
+        (void *)&robot_state,
+        "Obstacle updater"
+    );
 }

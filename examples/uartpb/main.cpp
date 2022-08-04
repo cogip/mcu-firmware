@@ -1,7 +1,6 @@
 // RIOT includes
 #include "periph/uart.h"
 #include "ringbuffer.h"
-#include "riot/thread.hpp"
 #include "thread.h"
 #include "ztimer.h"
 

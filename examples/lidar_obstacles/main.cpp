@@ -1,6 +1,5 @@
 // RIOT includes
 #include <ztimer.h>
-#include "riot/thread.hpp"
 
 // Project includes
 #include "shell_menu/shell_menu.hpp"
@@ -25,6 +24,9 @@ uint32_t cycle = 1;
 cogip::cogip_defs::Pose robot_state = { 0.0, 1000.0, 0.0 };
 
 static bool trace_on = false;
+
+/* Thread stack */
+char trace_thread_stack[THREAD_STACKSIZE_MAIN];
 
 // Periodic task
 #define TASK_PERIOD_USEC    (100 * US_PER_MS)
@@ -79,6 +81,24 @@ static void _print_state(void)
     COGIP_DEBUG_COUT("}\n");
 }
 
+static void* _trace_thread(void *data)
+{
+    (void)data;
+
+    // Init loop iteration start time
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
+
+    while (true) {
+        if (trace_on) {
+            _print_state();
+        }
+        cycle++;
+
+        // Wait thread period to end
+        ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
+    }
+}
+
 int main(void)
 {
     COGIP_DEBUG_COUT("== Lidar obstacle detection example ==");
@@ -99,20 +119,14 @@ int main(void)
 
     obstacle_updater_start(robot_state);
 
-    riot::thread trace_thread([] {
-        // Init loop iteration start time
-        ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
-
-        while (true) {
-            if (trace_on) {
-                _print_state();
-            }
-            cycle++;
-
-            // Wait thread period to end
-            ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
-        }
-    });
+    thread_create(
+        trace_thread_stack,
+        sizeof(trace_thread_stack),
+        THREAD_PRIORITY_MAIN - 1, 0,
+        _trace_thread,
+        NULL,
+        "Trace thread"
+    );
 
     // Start shell
     cogip::shell::start();

@@ -4,7 +4,6 @@
 #include <iostream>
 
 // RIOT includes
-#include "riot/thread.hpp"
 
 #include "Errors.h"
 
