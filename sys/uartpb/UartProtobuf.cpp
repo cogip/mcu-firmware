@@ -94,7 +94,7 @@ bool UartProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfa
     bool success = true;
     size_t base64_size = 0;
     char separator = '\n';
-    mutex_.lock();
+    mutex_lock(&mutex_);
 
     if (message) {
         write_buffer_.clear();
@@ -119,7 +119,7 @@ bool UartProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfa
         uart_write(uart_dev_, (uint8_t *)&separator, 1);
     }
 
-    mutex_.unlock();
+    mutex_unlock(&mutex_);
 
     return success;
 }

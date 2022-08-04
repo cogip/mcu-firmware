@@ -16,8 +16,8 @@
 #include <vector>
 
 // RIOT includes
+#include <mutex.h>
 #include "native_sched.h"
-#include "riot/mutex.hpp"
 
 // Project includes
 #include "obstacles/Obstacle.hpp"
@@ -45,10 +45,10 @@ public:
     ~List();
 
     /// Lock the list to avoid using/modifying it from several thread at the same time.
-    void lock() { mutex_.lock(); };
+    void lock() { mutex_lock(&mutex_); };
 
     /// Unlock the list.
-    void unlock() { mutex_.unlock(); };
+    void unlock() { mutex_unlock(&mutex_); };
 
     /// Print all obstacles from the list in JSON format.
     void print_json(void) const;
@@ -65,7 +65,7 @@ public:
     size_t enabled_obstacles() const;
 
 private:
-    riot::mutex mutex_;                       ///< mutex protecting list access
+    mutex_t mutex_ = MUTEX_INIT;            ///< mutex protecting list access
 };
 
 } // namespace obstacles

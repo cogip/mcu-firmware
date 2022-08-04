@@ -18,7 +18,7 @@
 #pragma once
 
 // RIOT includes
-#include "riot/mutex.hpp"
+#include <mutex.h>
 #include "periph/uart.h"
 #include "ringbuffer.h"
 #include "thread.h"
@@ -105,7 +105,7 @@ private:
     kernel_pid_t reader_pid_;                     ///< reader thread PID
     ringbuffer_t rx_buf_;                         ///< ring buffer for UART incoming bytes
     uint32_t msg_length_ = 0;                     ///< message length
-    riot::mutex mutex_;                           ///< mutex protecting serial port access
+    mutex_t mutex_ = MUTEX_INIT;                  ///< mutex protecting serial port access
     etl::map<uuid_t, message_handler_t, UARTPB_MAX_HANDLERS> message_handlers_;
                                                   ///< callbacks to process the message after decoding
 };
