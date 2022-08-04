@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "pca9548.h"
-#include "xtimer.h"
 
 #ifdef MODULE_SHELL_PCA9548
 #   include "shell_pca9548.h"

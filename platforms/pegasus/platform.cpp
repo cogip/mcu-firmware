@@ -1,6 +1,5 @@
 /* RIOT includes */
 #include "log.h"
-#include "xtimer.h"
 #include "periph/qdec.h"
 
 /* Project includes */

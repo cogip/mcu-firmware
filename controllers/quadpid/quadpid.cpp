@@ -8,7 +8,6 @@
 #include "debug.h"
 #include "irq.h"
 #include "log.h"
-#include "xtimer.h"
 
 /* Project includes */
 #include "ctrl.hpp"

@@ -21,6 +21,9 @@ FEATURES_REQUIRED += cpp
 
 # Required modules
 USEMODULE += cpp11-compat
+USEMODULE += ztimer_sec
+USEMODULE += ztimer_msec
+USEMODULE += ztimer_usec
 
 # Required packages
 USEPKG += etl

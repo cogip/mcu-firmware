@@ -1,10 +1,9 @@
 // RIOT includes
 #include "periph/uart.h"
 #include "ringbuffer.h"
-#include "riot/chrono.hpp"
 #include "riot/thread.hpp"
 #include "thread.h"
-#include "xtimer.h"
+#include "ztimer.h"
 
 // Projet includes
 #include "shell_menu/shell_menu.hpp"
@@ -114,7 +113,7 @@ static void *message_sender(void *arg)
             thread_sleep();
         }
 
-        riot::this_thread::sleep_for(std::chrono::seconds(2));
+        ztimer_sleep(ZTIMER_SEC, 2);
 
         if (is_ping) {
             send_ping();

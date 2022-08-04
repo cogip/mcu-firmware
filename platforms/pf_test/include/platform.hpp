@@ -37,7 +37,8 @@
 #include "utils.hpp"
 #include "wizard/Wizard.hpp"
 
-#define ROBOT_ID            0       /**< Robot ID for logs */
+#define ROBOT_ID                            0       /**< Robot ID for logs */
+#define CONTROLLER_SPEED_LOOP_PERIOD_MSEC   20      /**< Motion controller speed loop default period */
 
 /**
  * @name Robot mechanical properties
@@ -91,13 +92,13 @@
 #define MAX_SPEED_DEG_PER_S 270                                                 /**< Maximum speed (deg/s) */
 
 #define MAX_ACC_LINEAR      ((MAX_ACC_M_PER_S2 * 1000) \
-                            * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) */
+                            * ((double)CONTROLLER_SPEED_LOOP_PERIOD_MSEC))      /**< Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) */
 #define MAX_SPEED_LINEAR    ((MAX_SPEED_M_PER_S * 1000) \
-                            * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum speed (pulses/THREAD_PERIOD_INTERVAL) */
+                            * ((double)CONTROLLER_SPEED_LOOP_PERIOD_MSEC))      /**< Maximum speed (pulses/THREAD_PERIOD_INTERVAL) */
 #define MAX_ACC_ANGULAR     (MAX_ACC_DEG_PER_S2 \
-                            * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) */
+                            * ((double)CONTROLLER_SPEED_LOOP_PERIOD_MSEC))      /**< Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) */
 #define MAX_SPEED_ANGULAR   (MAX_SPEED_DEG_PER_S \
-                            * ((double)THREAD_PERIOD_INTERVAL / US_PER_SEC))    /**< Maximum speed (pulses/THREAD_PERIOD_INTERVAL) */
+                            * ((double)CONTROLLER_SPEED_LOOP_PERIOD_MSEC))      /**< Maximum speed (pulses/THREAD_PERIOD_INTERVAL) */
 
 #define LOW_SPEED_LINEAR        (MAX_SPEED_LINEAR / 4)                          /**< Low speed (mm/THREAD_PERIOD_INTERVAL) */
 #define NORMAL_SPEED_LINEAR     (MAX_SPEED_LINEAR / 2)                          /**< Normal speed (mm/THREAD_PERIOD_INTERVAL) */

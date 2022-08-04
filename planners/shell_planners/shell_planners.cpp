@@ -6,7 +6,6 @@
 
 /* RIOT includes */
 #include "fmt.h"
-#include "xtimer.h"
 
 /* Project includes */
 #include "shell_menu/shell_menu.hpp"

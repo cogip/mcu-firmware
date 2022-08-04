@@ -1,5 +1,5 @@
 // RIOT includes
-#include "riot/chrono.hpp"
+#include <ztimer.h>
 #include "riot/thread.hpp"
 
 // Project includes
@@ -27,7 +27,7 @@ cogip::cogip_defs::Pose robot_state = { 0.0, 1000.0, 0.0 };
 static bool trace_on = false;
 
 // Periodic task
-#define TASK_PERIOD_MS 100
+#define TASK_PERIOD_USEC    (100 * US_PER_MS)
 
 static void _init_border_obstacles(void)
 {
@@ -100,12 +100,17 @@ int main(void)
     obstacle_updater_start(robot_state);
 
     riot::thread trace_thread([] {
+        // Init loop iteration start time
+        ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
+
         while (true) {
             if (trace_on) {
                 _print_state();
             }
             cycle++;
-            riot::this_thread::sleep_for(std::chrono::milliseconds(TASK_PERIOD_MS));
+
+            // Wait thread period to end
+            ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
         }
     });
 

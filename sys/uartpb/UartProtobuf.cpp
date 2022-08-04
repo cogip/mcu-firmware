@@ -4,9 +4,7 @@
 #include <iostream>
 
 // RIOT includes
-#include "riot/chrono.hpp"
 #include "riot/thread.hpp"
-#include "xtimer.h"
 
 #include "Errors.h"
 

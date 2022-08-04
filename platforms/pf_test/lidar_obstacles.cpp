@@ -4,7 +4,7 @@
 #include <cmath>
 
 // RIOT includes
-#include "riot/chrono.hpp"
+#include <ztimer.h>
 #include "riot/thread.hpp"
 
 // Project includes
@@ -19,7 +19,7 @@
 #define NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE 3
 
 // Periodic task
-#define TASK_PERIOD_MS        50
+#define TASK_PERIOD_USEC    (50 * US_PER_MS)
 
 // Thread priority
 #define OBSTACLE_UPDATER_PRIO (THREAD_PRIORITY_MAIN - 1)
@@ -134,6 +134,9 @@ static void *_thread_obstacle_updater(void *arg)
     uint16_t raw_distances[LDS01_NB_ANGLES];
     uint16_t filtered_distances[LDS01_NB_ANGLES];
 
+    // Init loop iteration start time
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
+
     while (true) {
         lds01_get_distances(lidar_get_device(), raw_distances);
         // A Lidar distance is from the robot center to the edge of beacon support
@@ -146,7 +149,8 @@ static void *_thread_obstacle_updater(void *arg)
             _update_dynamic_obstacles_from_lidar(lidar_obstacles, *robot_state, filtered_distances);
         }
 
-        riot::this_thread::sleep_for(std::chrono::milliseconds(TASK_PERIOD_MS));
+        // Wait thread period to end
+        ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
     }
 
     return EXIT_SUCCESS;
