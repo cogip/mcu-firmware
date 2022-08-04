@@ -1,0 +1,39 @@
+From 945e5c94e727969e1f2964f27ca7e0e4ec7ee695 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Mon, 1 Aug 2022 15:35:24 +0200
+Subject: [PATCH] sys/newlib_syscalls_default: set _init() and _fini() as weak
+
+The _init() and _fini() functions are already defined into the
+C RunTime (crti.o) object file provided by the arm-none-eabi toolchain.
+To avoid multiple definition error, set them as 'weak'.
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ sys/newlib_syscalls_default/syscalls.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sys/newlib_syscalls_default/syscalls.c b/sys/newlib_syscalls_default/syscalls.c
+index ab692e831d..336638aa5f 100644
+--- a/sys/newlib_syscalls_default/syscalls.c
++++ b/sys/newlib_syscalls_default/syscalls.c
+@@ -149,7 +149,7 @@ static const struct heap heaps[NUM_HEAPS] = {
+ /**
+  * @brief Initialize NewLib, called by __libc_init_array() from the startup script
+  */
+-void _init(void)
++__attribute__ ((weak)) void _init(void)
+ {
+     /* nothing to do here */
+ }
+@@ -158,7 +158,7 @@ void _init(void)
+  * @brief Free resources on NewLib de-initialization, not used for RIOT
+  */
+ /* __attribute__((used)) fixes linker errors when building with LTO, but without nano.specs */
+-__attribute__((used)) void _fini(void)
++__attribute__ ((weak)) __attribute__((used)) void _fini(void)
+ {
+     /* nothing to do here */
+ }
+-- 
+2.37.0
+

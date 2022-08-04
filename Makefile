@@ -3,6 +3,12 @@ apps := $(foreach dir,$(wildcard applications/*/Makefile),$(subst Makefile, , $(
 examples := $(foreach dir,$(wildcard examples/*/Makefile),$(subst Makefile, , $(dir)))
 boards := $(foreach dir,$(wildcard boards/*),$(subst boards/, , $(dir)))
 
+# List of patch stamp files
+patchstamps := $(addsuffix ed, $(realpath $(wildcard riot-patches/*.patch)))
+
+# Paths
+riot_path := ../RIOT
+
 .PHONY: all clean distclean doc docman doclatex docclean help $(apps) $(examples)
 
 all: $(apps) $(examples)	## Build all applications and examples (default target)
@@ -12,8 +18,16 @@ clean: $(apps) $(examples)	## Clean build for all applications and examples
 
 distclean: PF_TARGET = distclean
 distclean: $(apps) $(examples)	## Clean build and configuration for all applications
+	@cd $(riot_path) && (quilt pop -a || true) && rm patches .pc -rf
+	@rm -f $(patchstamps)
 
-$(apps) $(examples):
+%.patched: %.patch
+	@if [ "$(PF_TARGET)" != "distclean" ]; then \
+		cd $(riot_path) && quilt import $< && quilt push; \
+		touch $@; \
+	fi
+
+$(apps) $(examples): $(patchstamps)
 	"$(MAKE)" MAKEFLAGS="-j$$(nproc)" -C $@ $(PF_TARGET) || exit $$?
 
 doc: 			## Generate doxygen
