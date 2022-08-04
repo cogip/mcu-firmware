@@ -72,4 +72,4 @@ pkg/*
 *_pb2.py
 
 # Patches timestamp files
-patches/*.patched
+riot-patches/*.patched
