@@ -1,5 +1,23 @@
 #!/bin/bash
 
+    echo "Error... Usage:"
+    echo "  $ tools/check-codingrules.sh [apply]"
+    exit 1
+fi
+
+apply=$1
+
+if [ -n "$apply" ]; then
+    while true; do
+        read -p "Are you sure to apply uncrustify corrections to all your source files [Yy/Nn] ? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes with [Yy] or no with [Nn].";;
+        esac
+    done
+fi
+
 # Filter to only check .c and .h files
 FILES_TO_CHECK=$(find . -name '*.c' -o -name '*.h')
 for FILE in ${FILES_TO_CHECK}; do
@@ -14,11 +32,15 @@ UNCRUSTIFIED_FILES=$(find . -name '*.uncrustify')
 EXIT_STATUS=0
 for FILE in ${UNCRUSTIFIED_FILES}; do
     ORIGIN_FILE=$(echo ${FILE%.*}) # Remove the string ".uncrustify" from the filename
-    diff --color -u ${ORIGIN_FILE} ${FILE}
+    if [ -z "$apply" ]; then
+        diff --color -u ${ORIGIN_FILE} ${FILE}
+    else
+        mv -v ${FILE} ${ORIGIN_FILE}
+    fi
     if [ $? -ne 0 ]; then
         EXIT_STATUS=1
     fi
-    rm ${FILE}
+    rm -f ${FILE}
 done
 
 exit ${EXIT_STATUS}
