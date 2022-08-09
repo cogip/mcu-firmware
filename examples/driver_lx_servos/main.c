@@ -491,7 +491,6 @@ static int cmd_move_wait(int argc, char **argv)
 
 static int cmd_move_start(int argc, char **argv)
 {
-    int id = -1;
     lx_t device;
 
     if (argc < 2) {
@@ -501,7 +500,7 @@ static int cmd_move_start(int argc, char **argv)
 
     for (uint8_t i = 1; i < argc; i++) {
         /* parse parameters */
-        id = parse_dev(argv[i]);
+        int id = parse_dev(argv[i]);
         if (id < 0) {
             return -1;
         }
@@ -626,16 +625,16 @@ static int cmd_status(int argc, char **argv)
     /* SERVO_ID_READ */
     ret = lx_servo_id_read(&device, (uint8_t *)&id);
     if (ret) {
-        printf("ID - Error %u\n", ret);
+        printf("ID - Error %d\n", ret);
     }
     else {
-        printf("ID                                          = %u\n", id);
+        printf("ID                                          = %d\n", id);
     }
 
     /* SERVO_MOVE_TIME_READ */
     ret = lx_servo_move_time_read(&device, &angle, &time);
     if (ret) {
-        printf("MOVE_TIME - Error %u\n", ret);
+        printf("MOVE_TIME - Error %d\n", ret);
     }
     else {
         printf("MOVE_TIME - angle                           = %u\n", angle);
@@ -645,7 +644,7 @@ static int cmd_status(int argc, char **argv)
     /* SERVO_ANGLE_OFFSET_READ */
     ret = lx_servo_position_offset_read(&device, &angle_offset);
     if (ret) {
-        printf("ANGLE_OFFSET - Error %u\n", ret);
+        printf("ANGLE_OFFSET - Error %d\n", ret);
     }
     else {
         printf("ANGLE_OFFSET                                = %d\n", angle_offset);
@@ -654,7 +653,7 @@ static int cmd_status(int argc, char **argv)
     /* SERVO_ANGLE_LIMIT_READ */
     ret = lx_servo_position_limit_read(&device, &angle_min, &angle_max);
     if (ret) {
-        printf("ANGLE_LIMIT - Error %u\n", ret);
+        printf("ANGLE_LIMIT - Error %d\n", ret);
     }
     else {
         printf("ANGLE_LIMIT_min                             = %u\n", angle_min);
@@ -664,7 +663,7 @@ static int cmd_status(int argc, char **argv)
     /* SERVO_VIN_LIMIT_READ */
     ret = lx_servo_vin_limit_read(&device, &vin_min, &vin_max);
     if (ret) {
-        printf("VIN_LIMIT - Error %u\n", ret);
+        printf("VIN_LIMIT - Error %d\n", ret);
     }
     else {
         printf("VIN_LIMIT_min                               = %u\n", vin_min);
@@ -674,7 +673,7 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_TEMP_MAX_LIMIT_READ */
     ret = lx_servo_temp_max_limit_read(&device, &temp_max_limit);
     if (ret) {
-        printf("TEMP_MAX_LIMIT - Error %u\n", ret);
+        printf("TEMP_MAX_LIMIT - Error %d\n", ret);
     }
     else {
         printf("TEMP_MAX_LIMIT                              = %u\n", temp_max_limit);
@@ -683,7 +682,7 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_TEMP_READ */
     ret = lx_servo_temp_read(&device, &temp);
     if (ret) {
-        printf("TEMP - Error %u\n", ret);
+        printf("TEMP - Error %d\n", ret);
     }
     else {
         printf("TEMP                                        = %u\n", temp);
@@ -692,7 +691,7 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_VIN_READ */
     ret = lx_servo_vin_read(&device, &vin);
     if (ret) {
-        printf("VIN - Error %u\n", ret);
+        printf("VIN - Error %d\n", ret);
     }
     else {
         printf("VIN                                         = %u\n", vin);
@@ -701,7 +700,7 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_POS_READ */
     ret = lx_servo_pos_read(&device, &pos);
     if (ret) {
-        printf("POS - Error %u\n", ret);
+        printf("POS - Error %d\n", ret);
     }
     else {
         printf("POS                                         = %d\n", pos);
@@ -710,7 +709,7 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_OR_MOTOR_MODE_READ */
     ret = lx_servo_or_motor_mode_read(&device, &mode, &speed);
     if (ret) {
-        printf("SERVO_OR_MOTOR_MODE - Error %u\n", ret);
+        printf("SERVO_OR_MOTOR_MODE - Error %d\n", ret);
     }
     else {
         printf("SERVO_OR_MOTOR_MODE - mode                  = %s\n", (mode == 0 ? "Servo" : "Motor"));
@@ -720,7 +719,7 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_LOAD_OR_UNLOAD_READ */
     ret = lx_servo_load_or_unload_read(&device, &load);
     if (ret) {
-        printf("LOAD_OR_UNLOAD - Error %u\n", ret);
+        printf("LOAD_OR_UNLOAD - Error %d\n", ret);
     }
     else {
         printf("LOAD_OR_UNLOAD                              = %s\n", (mode == 0 ? "Unload" : "Load"));
@@ -729,7 +728,7 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_LED_CTRL_READ */
     ret = lx_servo_led_ctrl_read(&device, &led);
     if (ret) {
-        printf("LX_SERVO_LED_CTRL - Error %u\n", ret);
+        printf("LX_SERVO_LED_CTRL - Error %d\n", ret);
     }
     else {
         printf("LX_SERVO_LED_CTRL                           = %s\n", (led == 0 ? "ON" : "OFF"));
@@ -738,12 +737,12 @@ static int cmd_status(int argc, char **argv)
     /* LX_SERVO_LED_ERROR_READ */
     ret = lx_servo_led_error_read(&device, &led_status);
     if (ret) {
-        printf("LX_SERVO_LED_ERROR - Error %u\n", ret);
+        printf("LX_SERVO_LED_ERROR - Error %d\n", ret);
     }
     else {
-        printf("LX_SERVO_LED_ERROR - Over temperature       = %s\n", (led_status & LX_SERVO_ERROR_OVER_TEMPERATURE ? "Yes" : "No"));
-        printf("LX_SERVO_LED_ERROR - Over voltage           = %s\n", (led_status & LX_SERVO_ERROR_OVER_VOLTAGE ? "Yes" : "No"));
-        printf("LX_SERVO_LED_ERROR - Stalled                = %s\n", (led_status & LX_SERVO_ERROR_STALLED ? "Yes" : "No"));
+        printf("LX_SERVO_LED_ERROR - Over temperature       = %s\n", ((led_status & LX_SERVO_ERROR_OVER_TEMPERATURE) ? "Yes" : "No"));
+        printf("LX_SERVO_LED_ERROR - Over voltage           = %s\n", ((led_status & LX_SERVO_ERROR_OVER_VOLTAGE) ? "Yes" : "No"));
+        printf("LX_SERVO_LED_ERROR - Stalled                = %s\n", ((led_status & LX_SERVO_ERROR_STALLED) ? "Yes" : "No"));
     }
 
     return LX_OK;
