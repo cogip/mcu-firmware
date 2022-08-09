@@ -74,7 +74,6 @@ extern "C" {
 
 /**
  * @brief Describe DC motor with PWM channel and GPIOs
- * @{
  */
 static const motor_driver_config_t motor_driver_config[] = {
     {
@@ -84,8 +83,9 @@ static const motor_driver_config_t motor_driver_config[] = {
         .pwm_mode = PWM_LEFT,
         .pwm_frequency = 20000U,
         .pwm_resolution = 1500U,
-        .nb_motors = 2,
+        .nb_motors = 1,
         .motors = {
+            /* Left motor */
             {
                 .pwm_channel = 2,
                 .gpio_enable = GPIO_PIN(PORT_A, 12),
@@ -95,6 +95,19 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_enable_invert = 0,
                 .gpio_brake_invert = 0,
             },
+        },
+        .cb = NULL
+    },
+    {
+        .pwm_dev = 1,
+        .mode = MOTOR_DRIVER_2_DIRS,
+        .mode_brake = MOTOR_BRAKE_LOW,
+        .pwm_mode = PWM_LEFT,
+        .pwm_frequency = 20000U,
+        .pwm_resolution = 1500U,
+        .nb_motors = 1,
+        .motors = {
+            /* Right motor */
             {
                 .pwm_channel = 0,
                 .gpio_enable = GPIO_PIN(PORT_A, 11),
