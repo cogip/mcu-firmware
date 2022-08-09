@@ -10,6 +10,10 @@ fi
 
 apply=$1
 
+##################
+### uncrustify ###
+##################
+
 if [ -n "$apply" ]; then
     while true; do
         read -p "Are you sure to apply uncrustify corrections to all your source files [Yy/Nn] ? " yn
@@ -47,5 +51,18 @@ for FILE in ${UNCRUSTIFIED_FILES}; do
     fi
     rm -f ${FILE}
 done
+
+################
+### cppcheck ###
+################
+FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' \)" )
+cppcheck --std=c++17 --enable=style,performance,portability --force --error-exitcode=2 --quiet -j 1 \
+    --template "{file}:{line}: {severity} ({id}): {message}"         \
+    --inline-suppr ${DEFAULT_SUPPRESSIONS} ${CPPCHECK_OPTIONS} ${@}  \
+    ${FILES_TO_CHECK}
+
+if [ $? -ne 0 ]; then
+    EXIT_STATUS=$(( $EXIT_STATUS + 1 ))
+fi
 
 exit ${EXIT_STATUS}
