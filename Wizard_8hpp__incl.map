@@ -1,19 +1,19 @@
 <map id="lib/wizard/include/wizard/Wizard.hpp" name="lib/wizard/include/wizard/Wizard.hpp">
-<area shape="rect" id="node1" title="Public API for wizard module." alt="" coords="467,5,614,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="356,95,427,121"/>
-<area shape="rect" id="node3" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="451,95,630,121"/>
-<area shape="rect" id="node17" title=" " alt="" coords="655,95,773,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,169,124,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="148,169,253,196"/>
-<area shape="rect" id="node6" title=" " alt="" coords="278,169,374,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="399,169,475,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="499,169,583,196"/>
-<area shape="rect" id="node9" href="$uartpb_8hpp.html" title=" " alt="" coords="681,244,819,271"/>
-<area shape="rect" id="node10" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="852,169,1019,196"/>
-<area shape="rect" id="node14" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="607,169,776,196"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1043,169,1193,196"/>
-<area shape="rect" id="node11" title=" " alt="" coords="843,244,910,271"/>
-<area shape="rect" id="node12" title=" " alt="" coords="1123,244,1193,271"/>
-<area shape="rect" id="node13" title=" " alt="" coords="935,244,1099,271"/>
-<area shape="rect" id="node15" title=" " alt="" coords="489,244,656,271"/>
+<area shape="rect" id="node1" title="Public API for wizard module." alt="" coords="425,5,571,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="313,95,384,121"/>
+<area shape="rect" id="node3" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="409,95,587,121"/>
+<area shape="rect" id="node17" title=" " alt="" coords="612,95,731,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,169,81,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="105,169,211,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="235,169,331,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="356,169,432,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="456,169,540,196"/>
+<area shape="rect" id="node9" href="$uartpb_8hpp.html" title=" " alt="" coords="638,244,777,271"/>
+<area shape="rect" id="node10" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="809,169,976,196"/>
+<area shape="rect" id="node14" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="564,169,733,196"/>
+<area shape="rect" id="node16" title=" " alt="" coords="1000,169,1151,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="801,244,867,271"/>
+<area shape="rect" id="node12" title=" " alt="" coords="1080,244,1151,271"/>
+<area shape="rect" id="node13" title=" " alt="" coords="892,244,1056,271"/>
+<area shape="rect" id="node15" title=" " alt="" coords="447,244,613,271"/>
 </map>

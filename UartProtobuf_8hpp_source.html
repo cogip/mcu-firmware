@@ -132,7 +132,7 @@ $(document).ready(function(){initNavTree('UartProtobuf_8hpp_source.html',''); in
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// RIOT includes</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;riot/mutex.hpp&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;mutex.h&gt;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;periph/uart.h&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;ringbuffer.h&quot;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;thread.h&quot;</span></div>
@@ -200,7 +200,7 @@ $(document).ready(function(){initNavTree('UartProtobuf_8hpp_source.html',''); in
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    kernel_pid_t reader_pid_;                     </div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    ringbuffer_t rx_buf_;                         </div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    uint32_t msg_length_ = 0;                     </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    riot::mutex mutex_;                           </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    mutex_t mutex_ = MUTEX_INIT;                  </div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    etl::map&lt;uuid_t, message_handler_t, UARTPB_MAX_HANDLERS&gt; message_handlers_;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;};</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
@@ -228,7 +228,7 @@ $(document).ready(function(){initNavTree('UartProtobuf_8hpp_source.html',''); in
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html_a85a0d58536beac8de1d516371599d4a6"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html#a85a0d58536beac8de1d516371599d4a6">cogip::uartpb::UartProtobuf::uart_rx_cb</a></div><div class="ttdeci">void uart_rx_cb(uint8_t data)</div><div class="ttdoc">Function call for each incomming bytes on serial port.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu Aug 4 2022 09:31:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Aug 9 2022 19:39:15 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -7,6 +7,7 @@ var pegasus_2include_2platform_8hpp =
     [ "BEACON_SUPPORT_DIAMETER", "group__platforms__pegasus.html#gac29f8f04063a544765c462958121f7b6", null ],
     [ "CAMP_LEFT", "group__platforms__pegasus.html#gad21e7bb8b4debcf74f4acc8ad0cbc933", null ],
     [ "CAMP_RIGHT", "group__platforms__pegasus.html#gafe8dc1d20e67d4cfb47f66dd8ccae899", null ],
+    [ "CONTROLLER_SPEED_LOOP_PERIOD_MSEC", "group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787", null ],
     [ "GAME_DURATION_SEC", "group__platforms__pegasus.html#gae845e7296ce0028216d3a2be9e365058", null ],
     [ "LIDAR_MAX_DISTANCE", "group__platforms__pegasus.html#ga4425fa03d24c2428b9e9d5737fb68e41", null ],
     [ "LIDAR_MIN_DISTANCE", "group__platforms__pegasus.html#ga36450e4acf6ec010f57500ffd80bc99c", null ],
