@@ -14,14 +14,18 @@
 #include "shell_menu/Command.hpp"
 
 // System includes
-#include <string>
-#include <list>
+#include <etl/list.h>
+#include <etl/string.h>
 
 // Project includes
 #include "utils.hpp"
 
 #ifndef NB_SHELL_COMMANDS
 #  define NB_SHELL_COMMANDS 20    ///< max shell commands per menu
+#endif
+
+#ifndef NB_SHELL_MENUS
+#  define NB_SHELL_MENUS 10       ///< max shell menus
 #endif
 
 namespace cogip {
@@ -33,21 +37,21 @@ namespace shell {
 /// It has a name and a command to enter it.
 /// A callback can be specified to be executed at menu entry.
 /// It is linked to its parent menu.
-class Menu : public std::list<Command *> {
+class Menu : public etl::list<Command *, NB_SHELL_COMMANDS> {
 public:
     /// Constructor.
     Menu(
-        const std::string &name,      ///< [in] name of the menu
-        const std::string &cmd,       ///< [in] command name to enter the menu
-        Menu *parent = nullptr,       ///< [in] parent menu (optional)
-        func_cb_t enter_cb = nullptr  ///< [in] callback function executed at menu entry (optional)
+        const etl::string<COMMAND_NAME_MAX_LENGTH> &name, ///< [in] name of the menu
+        const etl::string<COMMAND_NAME_MAX_LENGTH> &cmd,  ///< [in] command name to enter the menu
+        Menu *parent = nullptr,                           ///< [in] parent menu (optional)
+        func_cb_t enter_cb = nullptr                      ///< [in] callback function executed at menu entry (optional)
         );
 
     /// Enter this menu.
     void enter(void);
 
     /// Return the name of this menu.
-    const std::string & name(void) const { return name_; };
+    const etl::string<COMMAND_NAME_MAX_LENGTH> & name(void) const { return name_; };
 
     /// Return the parent of this menu.
     Menu * parent(void) const { return parent_; };
@@ -61,10 +65,11 @@ public:
 #endif
 
 private:
-    std::string name_;                ///< menu name
-    std::string cmd_;                 ///< command to enter this menu
-    Menu *parent_;                    ///< pointer to the parent menu
-    func_cb_t enter_cb_;              ///< function to execute at menu entry
+    etl::string<COMMAND_NAME_MAX_LENGTH> name_;  ///< menu name
+    etl::string<COMMAND_NAME_MAX_LENGTH> cmd_;   ///< command to enter this menu
+    Menu *parent_;                               ///< pointer to the parent menu
+    func_cb_t enter_cb_;                         ///< function to execute at menu entry
+    Command enter_cmd_;                          ///< command used to enter this menu
 };
 
 } // namespace shell

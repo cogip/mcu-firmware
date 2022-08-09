@@ -99,18 +99,22 @@ static void* _trace_thread(void *data)
     }
 }
 
+static cogip::shell::Command _cmd_trace_on = { "_trace_on", "Activate/deactivate trace", _cmd_trace_on_off };
+static cogip::shell::Command _cmd_lidar_data = { "_lidar_data",  "Print Lidar data", lidar_cmd_print_data };
+#ifdef MODULE_SHMEM
+static cogip::shell::Command _cmd_shmem = SHMEM_SET_KEY_CMD;
+#endif
+
 int main(void)
 {
     COGIP_DEBUG_COUT("== Lidar obstacle detection example ==");
 
     // Add print data command
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("_trace_on", "Activate/deactivate trace", _cmd_trace_on_off));
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("_lidar_data", "Print Lidar data", lidar_cmd_print_data));
+    cogip::shell::root_menu().push_back(&_cmd_trace_on);
+    cogip::shell::root_menu().push_back(&_cmd_lidar_data);
 
 #ifdef MODULE_SHMEM
-    cogip::shell::root_menu.push_back(new cogip::shell::Command(SHMEM_SET_KEY_CMD));
+    cogip::shell::root_menu().push_back(&_cmd_shmem);
 #endif
 
     _init_border_obstacles();

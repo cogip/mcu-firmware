@@ -166,32 +166,31 @@ static int sd21_cmd_switch_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+static cogip::shell::Menu _menu_sd21 = { "SD21 menu", "sd21_menu", &cogip::shell::root_menu() };
+static cogip::shell::Command _cmd_d = { "d", "sd21 device <d>", sd21_cmd_device_cb };
+static cogip::shell::Command _cmd_o = { "o", "Opened position", sd21_cmd_opened_cb };
+static cogip::shell::Command _cmd_c = { "c", "Closed position", sd21_cmd_closed_cb };
+static cogip::shell::Command _cmd_n = { "n", "Next servomotor", sd21_cmd_next_servo_cb };
+static cogip::shell::Command _cmd_p = { "p", "Previous servomotor", sd21_cmd_previous_servo_cb };
+static cogip::shell::Command _cmd_r = { "r", "Reset to center position", sd21_cmd_reset_cb };
+static cogip::shell::Command _cmd_inc = { "+", "Add " STR(SD21_SERVO_POS_STEP) "microseconds to current position", sd21_cmd_add_cb };
+static cogip::shell::Command _cmd_dec = { "-", "Substract " STR(SD21_SERVO_POS_STEP) "microseconds from current position", sd21_cmd_sub_cb };
+static cogip::shell::Command _cmd_switch = { "switch", "Switch to predefined position <n> (n between 0 and 9)", sd21_cmd_switch_cb };
+
 extern "C"
 void sd21_shell_init(const sd21_conf_t *sd21_config_new)
 {
     /* SD21 new_config */
     sd21_config = sd21_config_new;
 
-    /* SD21 menu and commands */
-    cogip::shell::Menu *menu = new cogip::shell::Menu(
-        "SD21 menu", "sd21_menu", &cogip::shell::root_menu);
-
-    menu->push_back(new cogip::shell::Command(
-        "d", "sd21 device <d>", sd21_cmd_device_cb));
-    menu->push_back(new cogip::shell::Command(
-        "o", "Opened position", sd21_cmd_opened_cb));
-    menu->push_back(new cogip::shell::Command(
-        "c", "Closed position", sd21_cmd_closed_cb));
-    menu->push_back(new cogip::shell::Command(
-        "n", "Next servomotor", sd21_cmd_next_servo_cb));
-    menu->push_back(new cogip::shell::Command(
-        "p", "Previous servomotor", sd21_cmd_previous_servo_cb));
-    menu->push_back(new cogip::shell::Command(
-        "r", "Reset to center position", sd21_cmd_reset_cb));
-    menu->push_back(new cogip::shell::Command(
-        "+", "Add " STR(SD21_SERVO_POS_STEP) "microseconds to current position", sd21_cmd_add_cb));
-    menu->push_back(new cogip::shell::Command(
-        "-", "Substract " STR(SD21_SERVO_POS_STEP) "microseconds from current position", sd21_cmd_sub_cb));
-    menu->push_back(new cogip::shell::Command(
-        "switch", "Switch to predefined position <n> (n between 0 and 9)", sd21_cmd_switch_cb));
+    /* SD21 menu */
+    _menu_sd21.push_back(&_cmd_d);
+    _menu_sd21.push_back(&_cmd_o);
+    _menu_sd21.push_back(&_cmd_c);
+    _menu_sd21.push_back(&_cmd_n);
+    _menu_sd21.push_back(&_cmd_p);
+    _menu_sd21.push_back(&_cmd_r);
+    _menu_sd21.push_back(&_cmd_inc);
+    _menu_sd21.push_back(&_cmd_dec);
+    _menu_sd21.push_back(&_cmd_switch);
 }

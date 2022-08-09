@@ -27,16 +27,18 @@ static int print_data_cmd_cb(int argc, char **argv)
     return 0;
 }
 
+static cogip::shell::Command _cmd_data = { "data", "Print data from the shared memory", print_data_cmd_cb };
+static cogip::shell::Command _cmd_shmem = SHMEM_SET_KEY_CMD;
+
 int main(void)
 {
     puts("\n== shmem example ==");
 
     // make set_key command available in all menus
-    cogip::shell::add_global_command(new cogip::shell::Command(SHMEM_SET_KEY_CMD));
+    cogip::shell::root_menu().push_back(&_cmd_shmem);
 
     // Add print data command
-    cogip::shell::root_menu.push_back(new cogip::shell::Command(
-        "data", "Print data from the shared memory", print_data_cmd_cb));
+    cogip::shell::root_menu().push_back(&_cmd_data);
 
     // Start shell
     cogip::shell::start();

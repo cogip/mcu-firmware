@@ -90,6 +90,14 @@ void pln_menu_enter(void)
     planner->start();
 }
 
+static cogip::shell::Menu _menu_planner = { "Planners menu", "pln_menu", &cogip::shell::root_menu(), pln_menu_enter };
+static cogip::shell::Command _cmd_n = { "n", "Go to next position", pln_cmd_go_next_cb };
+static cogip::shell::Command _cmd_p = { "p", "Go to previous position", pln_cmd_go_previous_cb };
+static cogip::shell::Command _cmd_s = { "s", "Go back to start position", pln_cmd_go_start_cb };
+static cogip::shell::Command _cmd_a = { "a", "Launch action", pln_cmd_launch_action_cb };
+static cogip::shell::Command _cmd_P = { "P", "Play", pln_cmd_play_cb };
+static cogip::shell::Command _cmd_S = { "S", "Stop", pln_cmd_stop_cb };
+
 /* Init shell commands */
 void pln_shell_init(cogip::planners::Planner *pln)
 {
@@ -97,20 +105,11 @@ void pln_shell_init(cogip::planners::Planner *pln)
 
     /* Planners menu and commands */
     if (! planner_menu) {
-        planner_menu = new cogip::shell::Menu(
-            "Planners menu", "pln_menu", &cogip::shell::root_menu, pln_menu_enter);
-
-        planner_menu->push_back(new cogip::shell::Command(
-            "n", "Go to next position", pln_cmd_go_next_cb));
-        planner_menu->push_back(new cogip::shell::Command(
-            "p", "Go to previous position", pln_cmd_go_previous_cb));
-        planner_menu->push_back(new cogip::shell::Command(
-            "s", "Go back to start position", pln_cmd_go_start_cb));
-        planner_menu->push_back(new cogip::shell::Command(
-            "a", "Launch action", pln_cmd_launch_action_cb));
-        planner_menu->push_back(new cogip::shell::Command(
-            "P", "Play", pln_cmd_play_cb));
-        planner_menu->push_back(new cogip::shell::Command(
-            "S", "Stop", pln_cmd_stop_cb));
+        _menu_planner.push_back(&_cmd_n);
+        _menu_planner.push_back(&_cmd_p);
+        _menu_planner.push_back(&_cmd_s);
+        _menu_planner.push_back(&_cmd_a);
+        _menu_planner.push_back(&_cmd_P);
+        _menu_planner.push_back(&_cmd_S);
     }
 }

@@ -25,13 +25,13 @@ namespace cogip {
 namespace shell {
 
 #ifdef MODULE_UARTPB
-inline constexpr uartpb::uuid_t command_uuid = 2168120333; ///< uuid for uartpb
-inline constexpr uartpb::uuid_t menu_uuid = 1485239280; ///< uuid for uartpb
+inline constexpr uartpb::uuid_t command_uuid = 2168120333;  ///< command uuid for uartpb
+inline constexpr uartpb::uuid_t menu_uuid = 1485239280;     ///< menu uuid for uartpb
 #endif
 
-extern Menu root_menu;            ///< root menu
-extern Menu *current_menu;        ///< pointer to the current menu
-extern std::list<Command *> global_commands;  ///< global commands, available in all menus
+Menu & root_menu();                                              ///< root menu
+extern Menu *current_menu;                                       ///< pointer to the current menu
+extern etl::list<Command *, NB_SHELL_COMMANDS> global_commands;  ///< global commands, available in all menus
 
 /// Start the main menu.
 void start(void);
@@ -43,8 +43,8 @@ void add_global_command(
 
 /// Rename a command.
 void rename_command(
-    const std::string &old_name,  ///< [in] old command name
-    const std::string &new_name   ///< [in] new command name
+    const etl::string<COMMAND_NAME_MAX_LENGTH> &old_name,  ///< [in] old command name
+    const etl::string<COMMAND_NAME_MAX_LENGTH> &new_name   ///< [in] new command name
     );
 
 #ifdef MODULE_UARTPB

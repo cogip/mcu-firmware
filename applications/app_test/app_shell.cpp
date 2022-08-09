@@ -20,7 +20,7 @@ static void *_wizard_thread_command(void *arg)
     return EXIT_SUCCESS;
 }
 
-static int _cmd_wizard(int argc, char **argv)
+static int _cmd_wizard_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -37,7 +37,7 @@ static int _cmd_wizard(int argc, char **argv)
     return 0;
 }
 
-static int _cmd_samples(int argc, char **argv)
+static int _cmd_samples_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -45,13 +45,13 @@ static int _cmd_samples(int argc, char **argv)
     return 0;
 }
 
+static cogip::shell::Command _cmd_wizard = { "wizard", "Run Wizard", _cmd_wizard_cb };
+static cogip::shell::Command _cmd_samples = { "_samples", "Get detected samples", _cmd_samples_cb };
+
 void app_shell_init()
 {
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("wizard", "Run Wizard", _cmd_wizard));
-
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("_samples", "Get detected samples", _cmd_samples));
+    cogip::shell::root_menu().push_back(&_cmd_wizard);
+    cogip::shell::root_menu().push_back(&_cmd_samples);
 }
 
 } // namespace app

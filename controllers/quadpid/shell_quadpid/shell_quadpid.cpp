@@ -758,45 +758,43 @@ static int ctrl_quadpid_pose_cmd_angular_kp_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+static cogip::shell::Menu _menu_speed = { "QuadPID controller speed menu", "ctrl_quadpid_speed_menu", &cogip::shell::root_menu() };
+static cogip::shell::Command _cmd_speed_l = { "l", "Linear speed characterization", ctrl_quadpid_speed_cmd_linear_speed_cb };
+static cogip::shell::Command _cmd_speed_a = { "a", "Angular speed characterization", ctrl_quadpid_speed_cmd_angular_speed_cb };
+static cogip::shell::Command _cmd_speed_L = { "L", "Linear speed PID test", ctrl_quadpid_speed_cmd_linear_pid_cb };
+static cogip::shell::Command _cmd_speed_A = { "A", "Angular speed PID test", ctrl_quadpid_speed_cmd_angular_pid_cb };
+static cogip::shell::Command _cmd_speed_p = { "p", "Set linear Kp to <kp>", ctrl_quadpid_speed_cmd_set_linear_kp_cb };
+static cogip::shell::Command _cmd_speed_i = { "i", "Set linear Ki to <ki>", ctrl_quadpid_speed_cmd_set_linear_ki_cb };
+static cogip::shell::Command _cmd_speed_d = { "d", "Set linear Kd to <kd>", ctrl_quadpid_speed_cmd_set_linear_kd_cb };
+static cogip::shell::Command _cmd_speed_P = { "P", "Set angular Kp to <kp>", ctrl_quadpid_speed_cmd_set_angular_kp_cb };
+static cogip::shell::Command _cmd_speed_I = { "I", "Set angular Ki to <ki>", ctrl_quadpid_speed_cmd_set_angular_ki_cb };
+static cogip::shell::Command _cmd_speed_D = { "D", "Set angular Kd to <kd>", ctrl_quadpid_speed_cmd_set_angular_kd_cb };
+static cogip::shell::Command _cmd_speed_r = { "r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)", ctrl_quadpid_speed_cmd_reset_coef_cb };
+
+static cogip::shell::Menu _menu_pose = { "QuadPID controller pose menu", "ctrl_quadpid_pose_menu", &cogip::shell::root_menu() };
+static cogip::shell::Command _cmd_pose_a = { "a", "Speed linear Kp calibration to <kp>", ctrl_quadpid_pose_cmd_linear_kp_cb };
+static cogip::shell::Command _cmd_pose_A = { "A", "Speed angular Kp calibration to <kp>", ctrl_quadpid_pose_cmd_angular_kp_cb };
+static cogip::shell::Command _cmd_pose_e = { "e", "Encoder reset command", ctrl_quadpid_pose_cmd_reset_cb };
+
 void ctrl_quadpid_shell_init(ctrl_quadpid_t *ctrl_quadpid_new)
 {
     ctrl_quadpid = ctrl_quadpid_new;
 
-    /* ctrl_quadpid speed menu and commands */
-    cogip::shell::Menu *menu_speed = new cogip::shell::Menu(
-        "QuadPID controller speed menu", "ctrl_quadpid_speed_menu", &cogip::shell::root_menu);
+    /* ctrl_quadpid speed menu */
+    _menu_speed.push_back(&_cmd_speed_l);
+    _menu_speed.push_back(&_cmd_speed_a);
+    _menu_speed.push_back(&_cmd_speed_L);
+    _menu_speed.push_back(&_cmd_speed_A);
+    _menu_speed.push_back(&_cmd_speed_p);
+    _menu_speed.push_back(&_cmd_speed_i);
+    _menu_speed.push_back(&_cmd_speed_d);
+    _menu_speed.push_back(&_cmd_speed_P);
+    _menu_speed.push_back(&_cmd_speed_I);
+    _menu_speed.push_back(&_cmd_speed_D);
+    _menu_speed.push_back(&_cmd_speed_r);
 
-    menu_speed->push_back(new cogip::shell::Command(
-        "l", "Linear speed characterization", ctrl_quadpid_speed_cmd_linear_speed_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "a", "Angular speed characterization", ctrl_quadpid_speed_cmd_angular_speed_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "L", "Linear speed PID test", ctrl_quadpid_speed_cmd_linear_pid_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "A", "Angular speed PID test", ctrl_quadpid_speed_cmd_angular_pid_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "p", "Set linear Kp to <kp>", ctrl_quadpid_speed_cmd_set_linear_kp_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "i", "Set linear Ki to <ki>", ctrl_quadpid_speed_cmd_set_linear_ki_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "d", "Set linear Kd to <kd>", ctrl_quadpid_speed_cmd_set_linear_kd_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "P", "Set angular Kp to <kp>", ctrl_quadpid_speed_cmd_set_angular_kp_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "I", "Set angular Ki to <ki>", ctrl_quadpid_speed_cmd_set_angular_ki_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "D", "Set angular Kd to <kd>", ctrl_quadpid_speed_cmd_set_angular_kd_cb));
-    menu_speed->push_back(new cogip::shell::Command(
-        "r", "Reset PID coefficients to (Kp = 1, Ki = 0, Kd = 0)", ctrl_quadpid_speed_cmd_reset_coef_cb));
-
-    /* ctrl_quadpid pose menu and commands */
-    cogip::shell::Menu *menu_pose = new cogip::shell::Menu(
-        "QuadPID controller pose menu", "ctrl_quadpid_pose_menu", &cogip::shell::root_menu);
-
-    menu_pose->push_back(new cogip::shell::Command(
-        "a", "Speed linear Kp calibration to <kp>", ctrl_quadpid_pose_cmd_linear_kp_cb));
-    menu_pose->push_back(new cogip::shell::Command(
-        "A", "Speed angular Kp calibration to <kp>", ctrl_quadpid_pose_cmd_angular_kp_cb));
-    menu_pose->push_back(new cogip::shell::Command(
-        "e", "Encoder reset command", ctrl_quadpid_pose_cmd_reset_cb));
+    /* ctrl_quadpid pose menu */
+    _menu_pose.push_back(&_cmd_pose_a);
+    _menu_pose.push_back(&_cmd_pose_A);
+    _menu_pose.push_back(&_cmd_pose_e);
 }

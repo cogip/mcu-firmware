@@ -10,6 +10,12 @@ namespace cogip {
 
 namespace shell {
 
+std::ostream& operator << (std::ostream& os, const etl::istring& str)
+{
+    os << str.c_str();
+    return os;
+}
+
 /// Protobuf message type. Shortcut for original template type.
 using PB_Message = PB_Menu<
     COMMAND_NAME_MAX_LENGTH, NB_SHELL_COMMANDS,
@@ -24,8 +30,8 @@ static int _cmd_enter_sub_menu(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    auto it = all_menus.find(argv[0]);
-    if (it != all_menus.end()) {
+    auto it = all_menus().find(argv[0]);
+    if (it != all_menus().end()) {
         it->second->enter();
     }
 
@@ -34,19 +40,20 @@ static int _cmd_enter_sub_menu(int argc, char **argv)
 
 // menu methods
 Menu::Menu(
-    const std::string &name, const std::string &cmd,
+    const etl::string<COMMAND_NAME_MAX_LENGTH> &name,
+    const etl::string<COMMAND_NAME_MAX_LENGTH> &cmd,
     Menu *parent, func_cb_t enter_cb) : name_(name), cmd_(cmd), parent_(parent)
 {
     enter_cb_ = enter_cb;
 
     if (cmd != "") {
-        assert(all_menus.count(cmd) == 0);
-        all_menus[cmd] = this;
+        assert(all_menus().count(cmd) == 0);
+        all_menus()[cmd] = this;
     }
 
-    std::string menu_desc = "Enter " + name;
     if (parent) {
-        parent->push_back(new Command(cmd, menu_desc, _cmd_enter_sub_menu));
+        enter_cmd_ = { cmd, name, _cmd_enter_sub_menu };
+        parent->push_back(&enter_cmd_);
     }
 }
 
