@@ -28,7 +28,6 @@
 #include "lx_writer.h"
 
 #include "periph/uart.h"
-#include "xtimer.h"
 #include "byteorder.h"
 
 #include <string.h>

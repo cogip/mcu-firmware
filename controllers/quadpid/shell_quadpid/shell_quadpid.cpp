@@ -6,7 +6,7 @@
 /* RIOT includes */
 #include "fmt.h"
 #include "thread.h"
-#include "xtimer.h"
+#include "ztimer.h"
 
 /* Project includes */
 #include "platform.hpp"
@@ -190,7 +190,7 @@ static void shell_seq_identify_robot_tf(ctrl_t *ctrl_quadpid)
             ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
             break;
         }
-        xtimer_usleep(US_PER_SEC);
+        ztimer_sleep(ZTIMER_SEC, 1);
     } while (ctrl_get_mode(ctrl_quadpid) != CTRL_MODE_STOP && --timeout);
 
     if (!timeout) {
@@ -223,7 +223,7 @@ static void shell_seq_speed_pid_only(ctrl_t *ctrl_quadpid)
             ctrl_set_mode(ctrl_quadpid, CTRL_MODE_STOP);
             break;
         }
-        xtimer_usleep(US_PER_SEC);
+        ztimer_sleep(ZTIMER_SEC, 1);
     } while (ctrl_get_mode(ctrl_quadpid) != CTRL_MODE_STOP && --timeout);
 
     if (!timeout) {
@@ -247,7 +247,7 @@ static void ctrl_quadpid_pose_shell_seq(ctrl_t *ctrl_quadpid, const cogip::cogip
 
     /* Wait for position reached */
     while (!ctrl_is_pose_reached(ctrl_quadpid)) {
-        xtimer_usleep(10 * US_PER_MS);
+        ztimer_sleep(ZTIMER_MSEC, 10);
     }
 
     /* Stop the controller */

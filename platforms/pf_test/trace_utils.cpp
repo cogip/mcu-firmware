@@ -1,13 +1,13 @@
 #include "trace_utils.hpp"
 
 // RIOT includes
-#include "riot/thread.hpp"
+#include <ztimer.h>
 
 // Application includes
 #include "platform.hpp"
 
 /* Periodic task */
-#define TASK_PERIOD_MS 100
+#define TASK_PERIOD_USEC    (100 * US_PER_MS)
 
 /* Thread stack */
 static char trace_thread_stack[THREAD_STACKSIZE_MEDIUM];
@@ -20,11 +20,16 @@ static void *_thread_trace(void *arg)
 {
     (void)arg;
 
+    // Init loop iteration start time
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
+
     while (true) {
         if (pf_trace_on()) {
             pf_send_pb_state();
         }
-        riot::this_thread::sleep_for(std::chrono::milliseconds(TASK_PERIOD_MS));
+
+        // Wait thread period to end
+        ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
     }
 
     return NULL;

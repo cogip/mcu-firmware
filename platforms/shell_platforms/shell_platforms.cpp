@@ -6,11 +6,13 @@
 
 /* RIOT includes */
 #include "log.h"
+#include "motor_driver.h"
 #include "shell.h"
-#include "xtimer.h"
+#include "ztimer.h"
 #include "periph/qdec.h"
 
 /* Project includes */
+#include "board.h"
 #include "avoidance.hpp"
 #include "platform.hpp"
 #include "ctrl.hpp"
@@ -67,7 +69,7 @@ int pf_motors_test(int argc, char **argv)
             motor_set(i, j, pwm_resolution / 4);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
-                xtimer_usleep(US_PER_MS);
+                ztimer_sleep(ZTIMER_MSEC, 1);
             }
             COGIP_DEBUG_COUT("    qdec value = " << qdec_value);
             COGIP_DEBUG_COUT("    Done");
@@ -77,7 +79,7 @@ int pf_motors_test(int argc, char **argv)
             qdec_value = 0;
             COGIP_DEBUG_COUT("    Stop");
             motor_set(i, j, 0);
-            xtimer_usleep(3 * US_PER_SEC);
+            ztimer_sleep(ZTIMER_SEC, 3);
             COGIP_DEBUG_COUT("    Done");
 
             /* Backward */
@@ -85,7 +87,7 @@ int pf_motors_test(int argc, char **argv)
             motor_set(i, j, -pwm_resolution / 4);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
-                xtimer_usleep(US_PER_MS);
+                ztimer_sleep(ZTIMER_MSEC, 1);
             }
             COGIP_DEBUG_COUT("    qdec value = " << qdec_value);
             COGIP_DEBUG_COUT("    Done");

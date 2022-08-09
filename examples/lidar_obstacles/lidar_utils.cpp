@@ -6,8 +6,7 @@
 
 // RIOT includes
 #include "event.h"
-#include "riot/chrono.hpp"
-#include "riot/thread.hpp"
+#include <ztimer.h>
 
 // Project includes
 #include "lds01.h"
@@ -21,17 +20,21 @@ lds01_t lds01 = 0;
 static event_t new_frame_event;
 static event_queue_t new_frame_queue;
 
-riot::thread *lidar_updater_thread = nullptr;
+/* Thread stack */
+char lidar_frame_updater_thread_stack[THREAD_STACKSIZE_MAIN];
 
 // Thread loop
-static void _thread_lidar_frame_updater(void)
+static void* _thread_lidar_frame_updater(void *data)
 {
+    (void)data;
     event_t *event;
     event_queue_init(&new_frame_queue);
 
     while ((event = event_wait(&new_frame_queue))) {
         lds01_update_last_frame(lds01);
     }
+
+    return NULL;
 }
 
 // Callback for LDS01 DMA driver
@@ -75,10 +78,17 @@ lds01_t lidar_get_device(void)
 void lidar_start(uint16_t max_distance, uint16_t min_intensity)
 {
     // Start the frame updater thread
-    lidar_updater_thread = new riot::thread(_thread_lidar_frame_updater);
+    thread_create(
+        lidar_frame_updater_thread_stack,
+        sizeof(lidar_frame_updater_thread_stack),
+        THREAD_PRIORITY_MAIN - 1, 0,
+        _thread_lidar_frame_updater,
+        NULL,
+        "Lidar frame updater"
+    );
 
     if (lds01_init(lds01, &lds01_params[0]) == 0) {
-        riot::this_thread::sleep_for(std::chrono::milliseconds(500));
+        ztimer_sleep(ZTIMER_MSEC, 500);
         lds01_set_distance_filter(lds01, max_distance);
         lds01_set_min_intensity(lds01, min_intensity);
         lds01_start(lds01);

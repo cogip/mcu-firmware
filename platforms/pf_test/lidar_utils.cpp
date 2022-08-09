@@ -5,8 +5,7 @@
 
 // RIOT includes
 #include "event.h"
-#include "riot/chrono.hpp"
-#include "riot/thread.hpp"
+#include <ztimer.h>
 
 // Project includes
 #include "lds01.h"
@@ -65,7 +64,7 @@ void lidar_start(uint16_t max_distance, uint16_t min_intensity)
         );
 
     if (lds01_init(lds01, &lds01_params[0]) == 0) {
-        riot::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        ztimer_sleep(ZTIMER_SEC, 1);
         lds01_set_distance_filter(lds01, max_distance);
         lds01_set_min_intensity(lds01, min_intensity);
         lds01_start(lds01);

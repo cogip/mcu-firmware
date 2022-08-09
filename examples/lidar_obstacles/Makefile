@@ -6,7 +6,6 @@ BOARD ?= nucleo-f446re
 USEMODULE += event
 USEMODULE += printf_float
 USEMODULE += ps
-USEMODULE += xtimer
 
 USEMODULE += cogip_defs
 USEMODULE += lds01_dma

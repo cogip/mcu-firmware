@@ -3,12 +3,14 @@
 #include "debug.h"
 #include "irq.h"
 #include "log.h"
-#include "xtimer.h"
+#include "ztimer.h"
 
 /* Project includes */
 #include "ctrl.hpp"
 #include "utils.hpp"
 #include "platform.hpp"
+
+#define TASK_PERIOD_USEC    (CONTROLLER_SPEED_LOOP_PERIOD_MSEC * US_PER_MS)
 
 void ctrl_set_pose_reached(ctrl_t *ctrl)
 {
@@ -197,8 +199,10 @@ void *task_ctrl_update(void *arg)
 
     DEBUG("ctrl: Controller started\n");
 
+    // Init loop iteration start time
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
+
     for (;;) {
-        xtimer_ticks32_t loop_start_time = xtimer_now();
 
         ctrl_mode_t current_mode = ctrl->control.current_mode;
 
@@ -223,7 +227,8 @@ void *task_ctrl_update(void *arg)
         /* Current cycle finished */
         ctrl->control.current_cycle++;
 
-        xtimer_periodic_wakeup(&loop_start_time, THREAD_PERIOD_INTERVAL);
+        // Wait thread period to end
+        ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
     }
 
     return 0;

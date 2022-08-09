@@ -1,8 +1,12 @@
+/* System includes */
 #include <errno.h>
 #include <stdio.h>
 
+/* RIOT includes */
+#include <ztimer.h>
+
+/* Project includes */
 #include "sd21.h"
-#include "xtimer.h"
 
 #ifdef MODULE_SHELL_SD21
 #include "shell_sd21.h"
@@ -149,7 +153,7 @@ void sd21_init(const sd21_conf_t *sd21_config_new)
     sd21_numof = sizeof(*sd21_config) / sizeof(sd21_config[0]);
 
     for (sd21_t dev = 0; dev < sd21_numof; dev++) {
-        xtimer_usleep(250 * US_PER_MS);
+        ztimer_sleep(ZTIMER_MSEC, 250);
         /* Close all servomotors */
         for (uint8_t servo_id = 0; servo_id < sd21_config[dev].servos_nb;
              servo_id++) {
@@ -158,7 +162,7 @@ void sd21_init(const sd21_conf_t *sd21_config_new)
                        dev);
             }
             /* Wait a small tempo to avoid current peak */
-            xtimer_usleep(50 * US_PER_MS);
+            ztimer_sleep(ZTIMER_MSEC, 50);
         }
     }
 

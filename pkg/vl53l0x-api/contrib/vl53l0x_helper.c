@@ -18,7 +18,6 @@
 /* Project includes */
 #include "board.h"
 #include "vl53l0x.h"
-#include "xtimer.h"
 
 static VL53L0X_Dev_t devices[VL53L0X_NUMOF];
 static VL53L0X_Error status[VL53L0X_NUMOF];

@@ -1,7 +1,6 @@
 
 // RIOT includes
-#include "riot/chrono.hpp"
-#include "riot/thread.hpp"
+#include <ztimer.h>
 
 // Project includes
 #include "app.hpp"
@@ -14,7 +13,7 @@
 #include "debug.h"
 
 // Periodic task
-#define TASK_PERIOD_MS      (100)
+#define TASK_PERIOD_USEC    (100 * US_PER_MS)
 
 namespace cogip {
 
@@ -175,9 +174,10 @@ void *AstarPlanner::task_planner()
 
     COGIP_DEBUG_COUT("Game planner started");
 
-    while (! thread_exit_) {
-        riot::time_point loop_start_time = riot::now();
+    // Init loop iteration start time
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
 
+    while (! thread_exit_) {
         if (!started_) {
             goto yield_point;
         }
@@ -201,7 +201,8 @@ void *AstarPlanner::task_planner()
         ctrl_set_speed_order(ctrl_, speed_order);
 
 yield_point:
-        riot::this_thread::sleep_until(loop_start_time += std::chrono::milliseconds(TASK_PERIOD_MS));
+        // Wait thread period to end
+        ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
     }
 
     return 0;
