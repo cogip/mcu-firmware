@@ -1,0 +1,12 @@
+# Required features
+FEATURES_REQUIRED += cpp
+FEATURES_REQUIRED += libstdcpp
+
+# Required modules
+USEMODULE += thread
+USEMODULE += ztimer_sec
+USEMODULE += ztimer_msec
+USEMODULE += ztimer_usec
+
+# Required packages
+USEPKG += etl
