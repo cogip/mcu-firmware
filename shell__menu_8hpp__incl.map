@@ -1,12 +1,12 @@
 <map id="sys/shell_menu/include/shell_menu/shell_menu.hpp" name="sys/shell_menu/include/shell_menu/shell_menu.hpp">
-<area shape="rect" id="node1" title="Public functions from shell_menu namespace." alt="" coords="126,5,334,47"/>
+<area shape="rect" id="node1" title="Public functions from shell_menu namespace." alt="" coords="134,5,342,47"/>
 <area shape="rect" id="node2" href="$Command_8hpp.html" title="Command class declaration." alt="" coords="60,169,256,196"/>
-<area shape="rect" id="node6" href="$Menu_8hpp.html" title="Menu class declaration." alt="" coords="219,95,385,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="291,244,350,271"/>
+<area shape="rect" id="node6" href="$Menu_8hpp.html" title="Menu class declaration." alt="" coords="235,95,401,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="291,244,383,271"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,244,71,271"/>
 <area shape="rect" id="node5" title=" " alt="" coords="95,244,237,271"/>
-<area shape="rect" id="node7" title=" " alt="" coords="281,169,323,196"/>
-<area shape="rect" id="node8" href="$utils_8hpp_source.html" title=" " alt="" coords="399,169,477,196"/>
-<area shape="rect" id="node9" title=" " alt="" coords="494,244,566,271"/>
-<area shape="rect" id="node10" title=" " alt="" coords="390,244,470,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="281,169,355,196"/>
+<area shape="rect" id="node8" href="$utils_8hpp_source.html" title=" " alt="" coords="431,169,509,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="526,244,598,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="422,244,502,271"/>
 </map>

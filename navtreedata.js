@@ -52,9 +52,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"dir_2c9198b522db039cc7ed6feaf5fdda36.html",
-"group__driver__lx-servo.html#ga0e0056b64b4b3f5cba38f85bce0f083f",
-"group__platforms__pegasus.html#ga1e413308e51c5909c893387f35b2547e",
+"dir_2bfb20e9b254510ab1d9b418fd37b46c.html",
+"group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca",
+"group__platforms__pegasus.html#ga1dc63a69bc06342aca5ca9cb42e784fa",
 "group__sd21.html#ga14abca50ce462e5824e3b0da2d78a065"
 ];
 

@@ -137,38 +137,40 @@ $(document).ready(function(){initNavTree('shell__menu__private_8hpp_source.html'
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="UartProtobuf_8hpp.html">uartpb/UartProtobuf.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>cogip {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span>shell {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">extern</span> std::map&lt;std::string, Menu *&gt; <a class="code" href="shell__menu__private_8hpp.html#a763cc3d11a780ee82f4606cf5d7a2e17">all_menus</a>;     </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">extern</span> std::set&lt;Command *&gt; <a class="code" href="shell__menu__private_8hpp.html#acbb34ffa20a82dd15494489522b5d915">all_commands</a>;            </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#ifdef MODULE_UARTPB</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">extern</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a> *uart_protobuf;  </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">extern</span> shell_command_t <a class="code" href="shell__menu__private_8hpp.html#a399fcc54bbb5150646c445839e88f60c">current_commands</a>[<a class="code" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a>];</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} <span class="comment">// namespace shell</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;etl/map.h&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;etl/set.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>shell {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;etl::map&lt;etl::string&lt;COMMAND_NAME_MAX_LENGTH&gt;, Menu *, <a class="code" href="Menu_8hpp.html#a0508c65b91f16c6e4ae18667200cc5f7">NB_SHELL_MENUS</a>&gt; &amp; <a class="code" href="shell__menu__private_8hpp.html#a20222806f283fc76e4b543ae4f2b5185">all_menus</a>();  </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;etl::set&lt;Command *, NB_SHELL_COMMANDS * NB_SHELL_MENUS&gt; &amp; <a class="code" href="shell__menu__private_8hpp.html#aeccacebd775b252fac8b7ffd4f60b20f">all_commands</a>();              </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#ifdef MODULE_UARTPB</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">extern</span> <a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a> *uart_protobuf;  </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">extern</span> shell_command_t <a class="code" href="shell__menu__private_8hpp.html#a399fcc54bbb5150646c445839e88f60c">current_commands</a>[<a class="code" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a>];</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;} <span class="comment">// namespace shell</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aMenu_8hpp_html_a4f5e15b80e008c7f2e0711fada528979"><div class="ttname"><a href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a></div><div class="ttdeci">#define NB_SHELL_COMMANDS</div><div class="ttdoc">max shell commands per menu</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00024">Menu.hpp:24</a></div></div>
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a></div><div class="ttdoc">Generic UART Protobuf communication class.</div><div class="ttdef"><b>Definition:</b> <a href="UartProtobuf_8hpp_source.html#l00064">UartProtobuf.hpp:64</a></div></div>
 <div class="ttc" id="ashell__menu__private_8hpp_html_a399fcc54bbb5150646c445839e88f60c"><div class="ttname"><a href="shell__menu__private_8hpp.html#a399fcc54bbb5150646c445839e88f60c">cogip::shell::current_commands</a></div><div class="ttdeci">shell_command_t current_commands[NB_SHELL_COMMANDS]</div><div class="ttdoc">Shell commands used by RIOT shell module.</div></div>
-<div class="ttc" id="ashell__menu__private_8hpp_html_acbb34ffa20a82dd15494489522b5d915"><div class="ttname"><a href="shell__menu__private_8hpp.html#acbb34ffa20a82dd15494489522b5d915">cogip::shell::all_commands</a></div><div class="ttdeci">std::set&lt; Command * &gt; all_commands</div><div class="ttdoc">all commands</div></div>
+<div class="ttc" id="ashell__menu__private_8hpp_html_aeccacebd775b252fac8b7ffd4f60b20f"><div class="ttname"><a href="shell__menu__private_8hpp.html#aeccacebd775b252fac8b7ffd4f60b20f">cogip::shell::all_commands</a></div><div class="ttdeci">etl::set&lt; Command *, NB_SHELL_COMMANDS *NB_SHELL_MENUS &gt; &amp; all_commands()</div><div class="ttdoc">all commands</div></div>
 <div class="ttc" id="aUartProtobuf_8hpp_html"><div class="ttname"><a href="UartProtobuf_8hpp.html">UartProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over UART module.</div></div>
-<div class="ttc" id="ashell__menu__private_8hpp_html_a763cc3d11a780ee82f4606cf5d7a2e17"><div class="ttname"><a href="shell__menu__private_8hpp.html#a763cc3d11a780ee82f4606cf5d7a2e17">cogip::shell::all_menus</a></div><div class="ttdeci">std::map&lt; std::string, Menu * &gt; all_menus</div><div class="ttdoc">map containing all menus indexed by cmd</div></div>
+<div class="ttc" id="aMenu_8hpp_html_a0508c65b91f16c6e4ae18667200cc5f7"><div class="ttname"><a href="Menu_8hpp.html#a0508c65b91f16c6e4ae18667200cc5f7">NB_SHELL_MENUS</a></div><div class="ttdeci">#define NB_SHELL_MENUS</div><div class="ttdoc">max shell menus</div><div class="ttdef"><b>Definition:</b> <a href="Menu_8hpp_source.html#l00028">Menu.hpp:28</a></div></div>
+<div class="ttc" id="ashell__menu__private_8hpp_html_a20222806f283fc76e4b543ae4f2b5185"><div class="ttname"><a href="shell__menu__private_8hpp.html#a20222806f283fc76e4b543ae4f2b5185">cogip::shell::all_menus</a></div><div class="ttdeci">etl::map&lt; etl::string&lt; COMMAND_NAME_MAX_LENGTH &gt;, Menu *, NB_SHELL_MENUS &gt; &amp; all_menus()</div><div class="ttdoc">map containing all menus indexed by cmd</div></div>
 <div class="ttc" id="ashell__menu_8hpp_html"><div class="ttname"><a href="shell__menu_8hpp.html">shell_menu.hpp</a></div><div class="ttdoc">Public functions from shell_menu namespace.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Aug 9 2022 19:39:15 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Wed Aug 10 2022 20:03:36 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

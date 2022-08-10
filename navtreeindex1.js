@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"dir_2bfb20e9b254510ab1d9b418fd37b46c.html":[2,0,1,3,1,0],
 "dir_2c9198b522db039cc7ed6feaf5fdda36.html":[2,0,2,8,0],
 "dir_2ec1dc4c0adc5d88559793eb28c5f498.html":[2,0,1,0,0],
 "dir_34aeaa722609c780bba587621bd45020.html":[2,0,0,1,1],
@@ -93,8 +94,8 @@ var NAVTREEINDEX1 =
 "functions_x.html":[1,2,0,20],
 "functions_y.html":[1,2,0,21],
 "functions_~.html":[1,2,0,22],
-"globals.html":[2,1,0],
 "globals.html":[2,1,0,0],
+"globals.html":[2,1,0],
 "globals_b.html":[2,1,0,1],
 "globals_c.html":[2,1,0,2],
 "globals_defs.html":[2,1,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "group__driver__lx-servo.html":[0,2],
 "group__driver__lx-servo.html#ga03c10c8f96b41d0197cf0d3ffc1758fb":[2,0,1,2,0,0,27],
 "group__driver__lx-servo.html#ga03c10c8f96b41d0197cf0d3ffc1758fb":[0,2,29],
-"group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca":[0,2,3],
-"group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca":[2,0,1,2,0,0,1]
+"group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca":[0,2,3]
 };

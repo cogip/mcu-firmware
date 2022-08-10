@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('shell__menu__private_8hpp.html',''); i
 
 <div class="header">
   <div class="summary">
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">shell_menu_private.hpp File Reference<div class="ingroups"><a class="el" href="group__sys.html">System modules</a> &raquo; <a class="el" href="group__sys__shell__menu.html">Shell menu</a></div></div>  </div>
@@ -134,8 +135,9 @@ $(document).ready(function(){initNavTree('shell__menu__private_8hpp.html',''); i
 
 <p class="definition">Definition in file <a class="el" href="shell__menu__private_8hpp_source.html">shell_menu_private.hpp</a>.</p>
 </div><div class="textblock"><code>#include &quot;<a class="el" href="shell__menu_8hpp_source.html">shell_menu/shell_menu.hpp</a>&quot;</code><br />
-<code>#include &lt;map&gt;</code><br />
-<code>#include &lt;set&gt;</code><br />
+<code>#include &lt;etl/map.h&gt;</code><br />
+<code>#include &lt;etl/set.h&gt;</code><br />
+<code>#include &lt;array&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for shell_menu_private.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -143,34 +145,38 @@ $(document).ready(function(){initNavTree('shell__menu__private_8hpp.html',''); i
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="shell__menu__private_8hpp__incl.png" border="0" usemap="#sys_2shell__menu_2shell__menu__private_8hpp" alt=""/></div>
 <map name="sys_2shell__menu_2shell__menu__private_8hpp" id="sys_2shell__menu_2shell__menu__private_8hpp">
-<area shape="rect" title="Shell menu private variables." alt="" coords="303,5,461,47"/>
-<area shape="rect" href="shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="128,95,332,121"/>
-<area shape="rect" title=" " alt="" coords="357,95,407,121"/>
-<area shape="rect" title=" " alt="" coords="431,95,474,121"/>
+<area shape="rect" title="Shell menu private variables." alt="" coords="379,5,537,47"/>
+<area shape="rect" href="shell__menu_8hpp.html" title="Public functions from shell_menu namespace." alt="" coords="136,95,340,121"/>
+<area shape="rect" title=" " alt="" coords="364,95,448,121"/>
+<area shape="rect" title=" " alt="" coords="473,95,547,121"/>
+<area shape="rect" title=" " alt="" coords="571,95,627,121"/>
 <area shape="rect" href="Command_8hpp.html" title="Command class declaration." alt="" coords="60,244,256,271"/>
-<area shape="rect" href="Menu_8hpp.html" title="Menu class declaration." alt="" coords="219,169,385,196"/>
-<area shape="rect" title=" " alt="" coords="291,319,350,345"/>
+<area shape="rect" href="Menu_8hpp.html" title="Menu class declaration." alt="" coords="235,169,401,196"/>
+<area shape="rect" title=" " alt="" coords="291,319,383,345"/>
 <area shape="rect" title=" " alt="" coords="5,319,71,345"/>
 <area shape="rect" title=" " alt="" coords="95,319,237,345"/>
-<area shape="rect" title=" " alt="" coords="281,244,323,271"/>
-<area shape="rect" href="utils_8hpp_source.html" title=" " alt="" coords="399,244,477,271"/>
-<area shape="rect" title=" " alt="" coords="494,319,566,345"/>
-<area shape="rect" title=" " alt="" coords="390,319,470,345"/>
+<area shape="rect" title=" " alt="" coords="281,244,355,271"/>
+<area shape="rect" href="utils_8hpp_source.html" title=" " alt="" coords="431,244,509,271"/>
+<area shape="rect" title=" " alt="" coords="526,319,598,345"/>
+<area shape="rect" title=" " alt="" coords="422,319,502,345"/>
 </map>
 </div>
 </div>
 <p><a href="shell__menu__private_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a20222806f283fc76e4b543ae4f2b5185"><td class="memItemLeft" align="right" valign="top"><a id="a20222806f283fc76e4b543ae4f2b5185"></a>
+etl::map&lt; etl::string&lt; COMMAND_NAME_MAX_LENGTH &gt;, Menu *, <a class="el" href="Menu_8hpp.html#a0508c65b91f16c6e4ae18667200cc5f7">NB_SHELL_MENUS</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shell__menu__private_8hpp.html#a20222806f283fc76e4b543ae4f2b5185">cogip::shell::all_menus</a> ()</td></tr>
+<tr class="memdesc:a20222806f283fc76e4b543ae4f2b5185"><td class="mdescLeft">&#160;</td><td class="mdescRight">map containing all menus indexed by cmd <br /></td></tr>
+<tr class="separator:a20222806f283fc76e4b543ae4f2b5185"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeccacebd775b252fac8b7ffd4f60b20f"><td class="memItemLeft" align="right" valign="top"><a id="aeccacebd775b252fac8b7ffd4f60b20f"></a>
+etl::set&lt; Command *, <a class="el" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a> *<a class="el" href="Menu_8hpp.html#a0508c65b91f16c6e4ae18667200cc5f7">NB_SHELL_MENUS</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shell__menu__private_8hpp.html#aeccacebd775b252fac8b7ffd4f60b20f">cogip::shell::all_commands</a> ()</td></tr>
+<tr class="memdesc:aeccacebd775b252fac8b7ffd4f60b20f"><td class="mdescLeft">&#160;</td><td class="mdescRight">all commands <br /></td></tr>
+<tr class="separator:aeccacebd775b252fac8b7ffd4f60b20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a763cc3d11a780ee82f4606cf5d7a2e17"><td class="memItemLeft" align="right" valign="top"><a id="a763cc3d11a780ee82f4606cf5d7a2e17"></a>
-std::map&lt; std::string, Menu * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shell__menu__private_8hpp.html#a763cc3d11a780ee82f4606cf5d7a2e17">cogip::shell::all_menus</a></td></tr>
-<tr class="memdesc:a763cc3d11a780ee82f4606cf5d7a2e17"><td class="mdescLeft">&#160;</td><td class="mdescRight">map containing all menus indexed by cmd <br /></td></tr>
-<tr class="separator:a763cc3d11a780ee82f4606cf5d7a2e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbb34ffa20a82dd15494489522b5d915"><td class="memItemLeft" align="right" valign="top"><a id="acbb34ffa20a82dd15494489522b5d915"></a>
-std::set&lt; Command * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shell__menu__private_8hpp.html#acbb34ffa20a82dd15494489522b5d915">cogip::shell::all_commands</a></td></tr>
-<tr class="memdesc:acbb34ffa20a82dd15494489522b5d915"><td class="mdescLeft">&#160;</td><td class="mdescRight">all commands <br /></td></tr>
-<tr class="separator:acbb34ffa20a82dd15494489522b5d915"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a399fcc54bbb5150646c445839e88f60c"><td class="memItemLeft" align="right" valign="top">shell_command_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shell__menu__private_8hpp.html#a399fcc54bbb5150646c445839e88f60c">cogip::shell::current_commands</a> [<a class="el" href="Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979">NB_SHELL_COMMANDS</a>]</td></tr>
 <tr class="memdesc:a399fcc54bbb5150646c445839e88f60c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shell commands used by RIOT shell module.  <a href="shell__menu__private_8hpp.html#a399fcc54bbb5150646c445839e88f60c">More...</a><br /></td></tr>
 <tr class="separator:a399fcc54bbb5150646c445839e88f60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,7 +203,7 @@ std::set&lt; Command * &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Aug 9 2022 19:39:15 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Wed Aug 10 2022 20:03:36 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

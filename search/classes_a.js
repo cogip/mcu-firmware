@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['wizard_555',['Wizard',['../classcogip_1_1wizard_1_1Wizard.html',1,'cogip::wizard']]],
-  ['writebuffer_556',['WriteBuffer',['../classcogip_1_1uartpb_1_1WriteBuffer.html',1,'cogip::uartpb']]]
+  ['wizard_556',['Wizard',['../classcogip_1_1wizard_1_1Wizard.html',1,'cogip::wizard']]],
+  ['writebuffer_557',['WriteBuffer',['../classcogip_1_1uartpb_1_1WriteBuffer.html',1,'cogip::uartpb']]]
 ];
