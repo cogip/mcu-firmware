@@ -18,9 +18,9 @@ DEVELHELP ?= 1
 
 # Required features
 FEATURES_REQUIRED += cpp
+FEATURES_REQUIRED += libstdcpp
 
 # Required modules
-USEMODULE += cpp11-compat
 USEMODULE += ztimer_sec
 USEMODULE += ztimer_msec
 USEMODULE += ztimer_usec
@@ -84,6 +84,13 @@ CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
 CXXEXFLAGS += -std=c++17
 CXXEXFLAGS += -Wno-pedantic
 CXXEXFLAGS += -Wno-cast-align
+
+LINKFLAGS:=$(filter-out -nostartfiles,$(LINKFLAGS))
+
+# Using libstdcpp requires a larger ISR stack by default
+ifeq (,$(findstring -DISR_STACKSIZE=,$(CFLAGS)))
+	CFLAGS += -DISR_STACKSIZE=2048
+endif
 
 .PHONY: world
 world: all

@@ -126,7 +126,7 @@ static void *message_sender(void *arg)
     return NULL;
 }
 
-static int cmd_hello(int argc, char **argv)
+static int _cmd_hello_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -136,7 +136,7 @@ static int cmd_hello(int argc, char **argv)
     return 0;
 }
 
-static int cmd_start(int argc, char **argv)
+static int _cmd_start_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -147,7 +147,7 @@ static int cmd_start(int argc, char **argv)
     return 0;
 }
 
-static int cmd_stop(int argc, char **argv)
+static int _cmd_stop_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -157,7 +157,7 @@ static int cmd_stop(int argc, char **argv)
     return 0;
 }
 
-static int cmd_sub(int argc, char **argv)
+static int _cmd_sub_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -167,21 +167,23 @@ static int cmd_sub(int argc, char **argv)
     return 0;
 }
 
+static cogip::shell::Command _cmd_hello = { "hello", "Send hello", _cmd_hello_cb };
+static cogip::shell::Command _cmd_start = { "start", "Start sender thread", _cmd_start_cb };
+static cogip::shell::Command _cmd_stop = { "stop", "Stop sender thread", _cmd_stop_cb };
+
+static cogip::shell::Menu _menu_sub = { "Sub-menu", "sub", &cogip::shell::root_menu() };
+static cogip::shell::Command _cmd_sub = { "cmd", "Sub-menu command", _cmd_sub_cb };
+
 int main(void)
 {
     std::cout << std::endl << "== UART/EmbeddedProto Example ==" << std::endl;
 
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("hello", "Send hello", cmd_hello));
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("start", "Start sender thread", cmd_start));
-    cogip::shell::root_menu.push_back(
-        new cogip::shell::Command("stop", "Stop sender thread", cmd_stop));
+    cogip::shell::root_menu().push_back(&_cmd_hello);
+    cogip::shell::root_menu().push_back(&_cmd_start);
+    cogip::shell::root_menu().push_back(&_cmd_stop);
 
     // Add a sub-menu
-    cogip::shell::Menu *menu = new cogip::shell::Menu(
-        "Sub-menu", "sub", &cogip::shell::root_menu);
-    menu->push_back(new cogip::shell::Command("cmd", "Sub-menu command", cmd_sub));
+    _menu_sub.push_back(&_cmd_sub);
 
     uartpb = new cogip::uartpb::UartProtobuf(UART_DEV(1));
 

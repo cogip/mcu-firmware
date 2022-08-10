@@ -21,7 +21,7 @@ from PB_Menu_pb2 import PB_Menu
 
 serial_port = Serial()
 
-menu_uuid = 2168120333
+menu_uuid = 1485239280
 reset_uuid = 3351980141
 req_hello_uuid = 3938291130
 req_ping_uuid = 2537089183

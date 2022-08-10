@@ -3,6 +3,7 @@
 
 // RIOT includes
 #include <ztimer.h>
+#include "time_units.h"
 
 // Project includes
 #include "lds01.h"

@@ -17,15 +17,16 @@
 #include "uartpb/UartProtobuf.hpp"
 #endif
 
-#include <map>
-#include <set>
+#include <etl/map.h>
+#include <etl/set.h>
+#include <array>
 
 namespace cogip {
 
 namespace shell {
 
-extern std::map<std::string, Menu *> all_menus;     ///< map containing all menus indexed by cmd
-extern std::set<Command *> all_commands;            ///< all commands
+etl::map<etl::string<COMMAND_NAME_MAX_LENGTH>, Menu *, NB_SHELL_MENUS> & all_menus();  ///< map containing all menus indexed by cmd
+etl::set<Command *, NB_SHELL_COMMANDS * NB_SHELL_MENUS> & all_commands();              ///< all commands
 
 #ifdef MODULE_UARTPB
 extern cogip::uartpb::UartProtobuf *uart_protobuf;  ///< UartProtocol instance used to send new menu over UART

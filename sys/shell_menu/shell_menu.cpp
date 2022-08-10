@@ -8,10 +8,25 @@ namespace cogip {
 
 namespace shell {
 
-Menu root_menu("Main", "");
-std::map<std::string, Menu *> all_menus;
-std::set<Command *> all_commands;
-std::list<Command *> global_commands;
+// Following functions ensure 'Initialization On First Use' to avoid the 'Static Initialization Order Fiasco'.
+Menu & root_menu()
+{
+  static Menu menu("Main", "");
+  return menu;
+}
+
+etl::map<etl::string<COMMAND_NAME_MAX_LENGTH>, Menu *, NB_SHELL_MENUS> & all_menus()
+{
+  static etl::map<etl::string<COMMAND_NAME_MAX_LENGTH>, Menu *, NB_SHELL_MENUS> menus;
+  return menus;
+}
+
+etl::set<Command *, NB_SHELL_COMMANDS * NB_SHELL_MENUS> & all_commands()
+{
+    static etl::set<Command *, NB_SHELL_COMMANDS * NB_SHELL_MENUS> commands;
+    return commands;
+};
+
 Menu *current_menu = nullptr;
 shell_command_t current_commands[NB_SHELL_COMMANDS];
 
@@ -60,24 +75,37 @@ static int _exit_menu(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+Command cmd_help_json = {"_help_json", "Display available commands in JSON format", _display_json_help};
+Command cmd_exit = {"exit", "Exit current menu", _exit_menu};
+
+etl::list<Command*, NB_SHELL_COMMANDS> global_commands = {
+    &cmd_help_json,
+    &cmd_exit
+};
+
 void start(void)
 {
     char line_buf[SHELL_DEFAULT_BUFSIZE];
 
-    // Add default global commands
-    add_global_command(new Command("_help_json", "Display available commands in JSON format", _display_json_help));
-    add_global_command(new Command("exit", "Exit current menu", _exit_menu));
-
     // Enter the root menu
-    root_menu.enter();
+    root_menu().enter();
 
     shell_run(current_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 }
 
 void add_global_command(Command *command)
 {
+    if (global_commands.size() >= global_commands.max_size()) {
+        std::cout << "Error: Max number of global commands exceeded." << std::endl;
+        return;
+    }
+    if (all_commands().size() >= all_commands().max_size()) {
+        std::cout << "Error: Max number of commands exceeded." << std::endl;
+        return;
+    }
     global_commands.push_back(command);
-    all_commands.insert(command);
+    all_commands().insert(command);
+
 
     // Reload current menu
     if (current_menu) {
@@ -85,9 +113,11 @@ void add_global_command(Command *command)
     }
 }
 
-void rename_command(const std::string &old_name, const std::string &new_name)
+void rename_command(
+    const etl::string<COMMAND_NAME_MAX_LENGTH> &old_name,
+    const etl::string<COMMAND_NAME_MAX_LENGTH> &new_name)
 {
-    for (auto cmd: all_commands) {
+    for (auto cmd: all_commands()) {
         if (cmd->name() == old_name) {
             cmd->set_name(new_name);
         }

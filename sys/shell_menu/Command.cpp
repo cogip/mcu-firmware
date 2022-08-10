@@ -5,15 +5,18 @@ namespace cogip {
 
 namespace shell {
 
-Command::Command(const ::std::string &name, const ::std::string &desc, shell_command_handler_t handler)
-    : name_(name), desc_(desc), handler_(handler)
+Command::Command(
+    const etl::string<COMMAND_NAME_MAX_LENGTH> &name,
+    const etl::string<COMMAND_DESC_MAX_LENGTH> &desc,
+    shell_command_handler_t handler
+    ) : name_(name), desc_(desc), handler_(handler)
 {
-    all_commands.insert(this);
+    all_commands().insert(this);
 }
 
 Command::~Command()
 {
-    all_commands.erase(this);
+    all_commands().erase(this);
 }
 
 void Command::update_pb_message(void)

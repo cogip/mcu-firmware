@@ -12,7 +12,7 @@
 #pragma once
 
 // System includes
-#include <string>
+#include <etl/string.h>
 
 // RIOT includes
 #include "shell.h"
@@ -44,24 +44,24 @@ public:
 
     /// Constructor.
     Command(
-        const std::string &name,         ///< [in] command name
-        const std::string &desc,         ///< [in] description to print in the "help" command
-        shell_command_handler_t handler  ///< [in] the callback function
+        const etl::string<COMMAND_NAME_MAX_LENGTH> &name = "",  ///< [in] command name
+        const etl::string<COMMAND_DESC_MAX_LENGTH> &desc = "",  ///< [in] description to print in the "help" command
+        shell_command_handler_t handler = nullptr               ///< [in] the callback function
         );
 
     ///Destructor.
     ~Command();
 
     /// Return the name of this command.
-    const std::string & name(void) const { return name_; };
+    const etl::string<COMMAND_NAME_MAX_LENGTH> & name(void) const { return name_; };
 
     /// Return the name of this menu.
     void set_name(
-        const std::string & name         ///< [in] new command name
+        const etl::string<COMMAND_NAME_MAX_LENGTH> & name         ///< [in] new command name
         ) { name_ = name; };
 
     /// Return the description of this command.
-    const std::string & desc(void) const { return desc_; };
+    const etl::string<COMMAND_DESC_MAX_LENGTH> & desc(void) const { return desc_; };
 
     /// Return the name of this command.
     shell_command_handler_t handler(void) const { return handler_; };
@@ -73,9 +73,9 @@ public:
     const PB_Message &pb_message(void) const { return pb_message_; };
 
 private:
-    std::string name_;                   ///< name of the command
-    std::string desc_;                   ///< description to print in the "help" command
-    shell_command_handler_t handler_;    ///< the callback function
+    etl::string<COMMAND_NAME_MAX_LENGTH> name_;  ///< name of the command
+    etl::string<COMMAND_DESC_MAX_LENGTH> desc_;  ///< description to print in the "help" command
+    shell_command_handler_t handler_;            ///< the callback function
     PB_Message pb_message_;
 };
 

@@ -31,7 +31,7 @@
 /* Controller */
 static ctrl_t *ctrl = NULL;
 
-static int _cmd_print_state(int argc, char **argv)
+static int _cmd_print_state_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -41,7 +41,7 @@ static int _cmd_print_state(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-int pf_motors_test(int argc, char **argv)
+static int _cmd_motors_test_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -106,7 +106,7 @@ int pf_motors_test(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-int _cmd_print_avoidance_path(int argc, char **argv)
+static int _cmd_print_avoidance_path_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
@@ -116,25 +116,26 @@ int _cmd_print_avoidance_path(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+static cogip::shell::Command _cmd_print_state = { "_state", "Print current state", _cmd_print_state_cb };
+static cogip::shell::Command _cmd_print_avoidance_path = { "_avoidance_path", "Print avoidance current path", _cmd_print_avoidance_path_cb };
+#ifdef MODULE_SHMEM
+static cogip::shell::Command cmd_shmem = SHMEM_SET_KEY_CMD;
+#endif
+
+static cogip::shell::Menu _menu_pf = { "Platforms menu", "pf_menu", &cogip::shell::root_menu() };
+static cogip::shell::Command _cmd_motors_test = { "mt", "Test all DC motors", _cmd_motors_test_cb };
+
 void pf_shell_init(void)
 {
     ctrl = pf_get_ctrl();
 
     /* Global commands */
-    cogip::shell::add_global_command(new cogip::shell::Command(
-        "_state", "Print current state", _cmd_print_state
-    ));
-    cogip::shell::add_global_command(new cogip::shell::Command(
-        "_avoidance_path", "Print avoidance current path", _cmd_print_avoidance_path
-    ));
+    cogip::shell::add_global_command(&_cmd_print_state);
+    cogip::shell::add_global_command(&_cmd_print_avoidance_path);
 #ifdef MODULE_SHMEM
-    cogip::shell::add_global_command(new cogip::shell::Command(SHMEM_SET_KEY_CMD));
+    cogip::shell::add_global_command(&cmd_shmem);
 #endif
 
-    /* Platforms menu and commands */
-    cogip::shell::Menu *menu = new cogip::shell::Menu(
-        "Platforms menu", "pf_menu", &cogip::shell::root_menu);
-
-    menu->push_back(new cogip::shell::Command(
-        "mt", "Test all DC motors", pf_motors_test));
+    /* Platforms commands */
+    _menu_pf.push_back(&_cmd_motors_test);
 }
