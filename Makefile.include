@@ -8,6 +8,9 @@ BUILD_DIR = $(BINDIR)/build
 PKGDIRBASE = $(BUILD_DIR)/pkg
 RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
 
+# Apply RIOT-OS patches as soon as possible
+include $(MCUFIRMWAREBASE)/makefiles/riot-patches.mk.inc
+
 # Create a symbolic for each package in RIOT
 pkgs := $(foreach dir,$(wildcard $(RIOTBASE)/pkg/*/Makefile),$(subst Makefile,, $(dir)))
 $(foreach pkg,$(pkgs), $(shell ln -sf $(pkg) $(RIOTPKG)/$(notdir $(pkg))))
@@ -92,6 +95,7 @@ ifeq (,$(findstring -DISR_STACKSIZE=,$(CFLAGS)))
 	CFLAGS += -DISR_STACKSIZE=2048
 endif
 
+all: $(patchstamps)
 .PHONY: world
 world: all
 	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAM_LEN)

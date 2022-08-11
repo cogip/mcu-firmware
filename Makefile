@@ -1,13 +1,14 @@
+# Get absolute paths
+MCUFIRMWAREBASE := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
+
+# Apply RIOT-OS patches as soon as possible
+include $(MCUFIRMWAREBASE)/makefiles/riot-patches.mk.inc
+
 # List all applications
 apps := $(foreach dir,$(wildcard applications/*/Makefile),$(subst Makefile, , $(dir)))
 examples := $(foreach dir,$(wildcard examples/*/Makefile),$(subst Makefile, , $(dir)))
 boards := $(foreach dir,$(wildcard boards/*),$(subst boards/, , $(dir)))
-
-# List of patch stamp files
-patchstamps := $(addsuffix ed, $(realpath $(wildcard riot-patches/*.patch)))
-
-# Paths
-riot_path := ../RIOT
 
 .PHONY: all clean distclean doc docman doclatex docclean help $(apps) $(examples)
 
@@ -18,16 +19,14 @@ clean: $(apps) $(examples)	## Clean build for all applications and examples
 
 distclean: PF_TARGET = distclean
 distclean: $(apps) $(examples)	## Clean build and configuration for all applications
-	@cd $(riot_path) && (quilt pop -a || true) && rm patches .pc -rf
+	@cd $(RIOTBASE) && (quilt pop -a || true) && rm patches .pc -rf
 	@rm -f $(patchstamps)
 
-%.patched: %.patch
-	@if [ "$(PF_TARGET)" != "distclean" ]; then \
-		cd $(riot_path) && quilt import $< && quilt push; \
-		touch $@; \
-	fi
+ifneq ($(PF_TARGET),distclean)
+all: $(patchstamps)
+endif
 
-$(apps) $(examples): $(patchstamps)
+$(apps) $(examples):
 	"$(MAKE)" MAKEFLAGS="-j$$(nproc)" -C $@ $(PF_TARGET) || exit $$?
 
 doc: 			## Generate doxygen
