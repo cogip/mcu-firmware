@@ -76,7 +76,7 @@ char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static bool copilot_connected = false;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
-cogip::uartpb::UartProtobuf *uartpb = nullptr;
+cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
 cogip::wizard::Wizard *wizard = nullptr;
 
 // Define uartpb uuids
@@ -127,10 +127,6 @@ void pf_print_state(void)
 
 void pf_send_pb_state(void)
 {
-    if (uartpb == nullptr) {
-        return;
-    }
-
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
     pb_state.clear();
     pb_state.set_mode((PB_Mode)ctrl->control.current_mode);
@@ -142,7 +138,7 @@ void pf_send_pb_state(void)
     avoidance_pb_copy_path(pb_state.mutable_path());
     cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
 
-    uartpb->send_message(state_uuid, &pb_state);
+    uartpb.send_message(state_uuid, &pb_state);
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -249,7 +245,7 @@ cogip::obstacles::List *pf_get_dyn_obstacles(void)
     return lidar_obstacles;
 }
 
-cogip::uartpb::UartProtobuf *pf_get_uartpb()
+cogip::uartpb::UartProtobuf & pf_get_uartpb()
 {
     return uartpb;
 }
@@ -277,21 +273,16 @@ void handle_copilot_disconnected([[maybe_unused]] cogip::uartpb::ReadBuffer *buf
 void pf_init(void)
 {
     /* Initialize UARTPB */
-    uartpb = new cogip::uartpb::UartProtobuf(
-        UART_DEV(1)
-        );
-
-    bool uartpb_res = uartpb->connect();
+    bool uartpb_res = uartpb.connect();
     if (! uartpb_res) {
-        uartpb = nullptr;
         COGIP_DEBUG_CERR("UART initialization failed, error: " << uartpb_res);
     }
     else {
-        cogip::shell::register_uartpb(uartpb);
-        uartpb->register_message_handler(copilot_connected_uuid, handle_copilot_connected);
-        uartpb->register_message_handler(copilot_disconnected_uuid, handle_copilot_disconnected);
-        uartpb->start_reader();
-        uartpb->send_message(reset_uuid);
+        cogip::shell::register_uartpb(&uartpb);
+        uartpb.register_message_handler(copilot_connected_uuid, handle_copilot_connected);
+        uartpb.register_message_handler(copilot_disconnected_uuid, handle_copilot_disconnected);
+        uartpb.start_reader();
+        uartpb.send_message(reset_uuid);
     }
 
 #ifdef MODULE_SHELL_PLATFORMS
@@ -336,7 +327,7 @@ void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
 
-    wizard = new cogip::wizard::Wizard(uartpb);
+    wizard = new cogip::wizard::Wizard(&uartpb);
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 

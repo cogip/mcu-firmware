@@ -277,7 +277,7 @@ cogip::planners::Planner *pf_get_planner(void);
  *
  * return   uarpb pointer
  **/
-cogip::uartpb::UartProtobuf *pf_get_uartpb();
+cogip::uartpb::UartProtobuf & pf_get_uartpb();
 
 /**
  * @brief Returns wizard.

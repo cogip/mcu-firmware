@@ -108,6 +108,10 @@ private:
     mutex_t mutex_ = MUTEX_INIT;                  ///< mutex protecting serial port access
     etl::map<uuid_t, message_handler_t, UARTPB_MAX_HANDLERS> message_handlers_;
                                                   ///< callbacks to process the message after decoding
+    char reader_stack_[UARTPB_READER_STACKSIZE];  ///< reader thread stack
+    char rx_mem_[UART_BUFFER_SIZE];               ///< memory for UART incoming bytes
+    ReadBuffer read_buffer_;                      ///< buffer used to decode a message
+    WriteBuffer write_buffer_;                    ///< buffer used to encode a message
 };
 
 } // namespace uartpb

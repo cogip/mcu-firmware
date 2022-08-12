@@ -58,7 +58,7 @@ void app_samples_init()
         return;
     }
 
-    pf_get_uartpb()->register_message_handler(sample_response_uuid, app_samples_process);
+    pf_get_uartpb().register_message_handler(sample_response_uuid, app_samples_process);
 
     event_queue_init_detached(&_sample_queue);
     _sample_event.super.list_node.next = nullptr;
@@ -172,8 +172,8 @@ Sample *app_samples_get_one(SampleId id, bool opposite)
 const DetectedSamples & app_samples_detect(void)
 {
     event_queue_claim(&_sample_queue);
-    cogip::uartpb::UartProtobuf *uartpb = pf_get_uartpb();
-    uartpb->send_message(sample_request_uuid);
+    cogip::uartpb::UartProtobuf &uartpb = pf_get_uartpb();
+    uartpb.send_message(sample_request_uuid);
     sample_event_t *event = (sample_event_t *)event_wait(&_sample_queue);
 
     auto & samples = event->pb_message.get_samples();
