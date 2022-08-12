@@ -7,7 +7,7 @@
 #include "platform.hpp"
 
 /* Periodic task */
-#define TASK_PERIOD_USEC    (100 * US_PER_MS)
+#define TASK_PERIOD_USEC    (500 * US_PER_MS)
 
 /* Thread stack */
 static char trace_thread_stack[THREAD_STACKSIZE_MEDIUM];

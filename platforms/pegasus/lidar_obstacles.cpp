@@ -18,7 +18,7 @@
 #define NB_ANGLES_WITHOUT_OBSACLE_TO_IGNORE 3
 
 // Periodic task
-#define TASK_PERIOD_USEC    (50 * US_PER_MS)
+#define TASK_PERIOD_USEC    (200 * US_PER_MS)
 
 // Thread priority
 #define OBSTACLE_UPDATER_PRIO (THREAD_PRIORITY_MAIN - 1)
