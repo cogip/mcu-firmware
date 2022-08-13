@@ -284,7 +284,7 @@ cogip::uartpb::UartProtobuf & pf_get_uartpb();
  *
  * return   Wizard
  **/
-cogip::wizard::Wizard *pf_get_wizard();
+cogip::wizard::Wizard & pf_get_wizard();
 
 /**
  * @brief Initialize all platforms threads

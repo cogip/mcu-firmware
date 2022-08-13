@@ -77,7 +77,7 @@ static bool copilot_connected = false;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
 cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
-cogip::wizard::Wizard *wizard = nullptr;
+cogip::wizard::Wizard wizard(uartpb);
 
 // Define uartpb uuids
 constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
@@ -250,7 +250,7 @@ cogip::uartpb::UartProtobuf & pf_get_uartpb()
     return uartpb;
 }
 
-cogip::wizard::Wizard *pf_get_wizard()
+cogip::wizard::Wizard & pf_get_wizard()
 {
     return wizard;
 }
@@ -326,8 +326,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-
-    wizard = new cogip::wizard::Wizard(&uartpb);
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 
