@@ -80,7 +80,7 @@ void UartProtobuf::message_reader()
             }
         }
 
-        message_handlers_[uuid](message_length > 0 ? &read_buffer_ : nullptr);
+        message_handlers_[uuid](read_buffer_);
     }
 }
 bool UartProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterface *message)

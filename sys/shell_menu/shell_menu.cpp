@@ -176,9 +176,9 @@ static void run_pb_command_(Command *command, const Command::PB_Message &pb_comm
 }
 
 // Handle a Protobuf command message
-void handle_pb_command(cogip::uartpb::ReadBuffer *buffer)
+void handle_pb_command(cogip::uartpb::ReadBuffer & buffer)
 {
-    pb_command.deserialize(*buffer);
+    pb_command.deserialize(buffer);
 
     if (cogip::shell::current_menu == nullptr) {
         COGIP_DEBUG_CERR(

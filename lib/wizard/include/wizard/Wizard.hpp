@@ -74,7 +74,7 @@ public:
 
     /// Message handler for responses.
     void handle_response(
-        cogip::uartpb::ReadBuffer *buffer    ///< [in] buffer containing the received message
+        cogip::uartpb::ReadBuffer & buffer   ///< [in] buffer containing the received message
         );
 
     /// Send a request and wait for the response.

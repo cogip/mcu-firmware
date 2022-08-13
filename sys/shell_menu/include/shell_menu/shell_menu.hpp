@@ -55,7 +55,7 @@ void register_uartpb(
     );
 
 /// Handle and execute a command coming from a Protobuf message
-void handle_pb_command(cogip::uartpb::ReadBuffer *buffer);
+void handle_pb_command(cogip::uartpb::ReadBuffer & buffer);
 #endif
 
 } // namespace shell

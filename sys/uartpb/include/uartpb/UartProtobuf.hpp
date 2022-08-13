@@ -43,7 +43,7 @@ namespace uartpb {
 using uuid_t = uint32_t;
 
 /// Prototype for incoming Protobuf message handlers
-using message_handler_t = std::function<void(cogip::uartpb::ReadBuffer *)>;
+using message_handler_t = std::function<void(cogip::uartpb::ReadBuffer &)>;
 
 /// Function called when data is received on serial port.
 /// This wrapper is used to call the uart_rx_cb() function from UartProtobuf class

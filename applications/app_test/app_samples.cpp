@@ -204,9 +204,9 @@ const DetectedSamples & app_samples_detect(void)
     return _detected_samples;
 }
 
-void app_samples_process(cogip::uartpb::ReadBuffer *buffer)
+void app_samples_process(cogip::uartpb::ReadBuffer & buffer)
 {
-    EmbeddedProto::Error error = _sample_event.pb_message.deserialize(*buffer);
+    EmbeddedProto::Error error = _sample_event.pb_message.deserialize(buffer);
     if (error != EmbeddedProto::Error::NO_ERRORS) {
         std::cout << "Samples: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
         return;

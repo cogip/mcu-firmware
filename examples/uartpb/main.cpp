@@ -44,21 +44,21 @@ static PB_ReqHello<64> req_hello;
 static PB_ReqPing req_ping;
 static PB_ReqPong req_pong;
 
-static void handle_response_hello(cogip::uartpb::ReadBuffer *buffer)
+static void handle_response_hello(cogip::uartpb::ReadBuffer & buffer)
 {
-    resp_hello.deserialize(*buffer);
+    resp_hello.deserialize(buffer);
     std::cout << "<<== Hello response with number=" << resp_hello.get_number() << std::endl;
 }
 
-static void handle_response_ping(cogip::uartpb::ReadBuffer *buffer)
+static void handle_response_ping(cogip::uartpb::ReadBuffer & buffer)
 {
-    resp_ping.deserialize(*buffer);
+    resp_ping.deserialize(buffer);
     std::cout << "<<== Ping response with color="<< get_color_name((cogip::cogip_defs::Color)resp_ping.get_color()) << std::endl;
 }
 
-static void handle_response_pong(cogip::uartpb::ReadBuffer *buffer)
+static void handle_response_pong(cogip::uartpb::ReadBuffer & buffer)
 {
-    resp_pong.deserialize(*buffer);
+    resp_pong.deserialize(buffer);
     const cogip::cogip_defs::Pose &pose = resp_pong.get_new_pose();
     std::cout
         << "<<== Pong response with pose={x=" << pose.x()

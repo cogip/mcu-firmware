@@ -16,9 +16,9 @@ Wizard::Wizard(cogip::uartpb::UartProtobuf & uartpb) : uartpb_(uartpb)
     uartpb_.register_message_handler(wizard_uuid, std::bind(&Wizard::handle_response, this, std::placeholders::_1));
 }
 
-void Wizard::handle_response(cogip::uartpb::ReadBuffer *buffer)
+void Wizard::handle_response(cogip::uartpb::ReadBuffer & buffer)
 {
-    EmbeddedProto::Error error = event_.pb_message.deserialize(*buffer);
+    EmbeddedProto::Error error = event_.pb_message.deserialize(buffer);
     if (error != EmbeddedProto::Error::NO_ERRORS) {
         std::cout << "Wizard: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
         return;

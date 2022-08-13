@@ -255,7 +255,7 @@ cogip::wizard::Wizard & pf_get_wizard()
     return wizard;
 }
 
-void handle_copilot_connected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer)
+void handle_copilot_connected(cogip::uartpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
@@ -264,7 +264,7 @@ void handle_copilot_connected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer
     }
 }
 
-void handle_copilot_disconnected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer)
+void handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
 {
     pf_set_copilot_connected(false);
     std::cout << "Copilot disconnected" << std::endl;

@@ -118,7 +118,7 @@ void app_samples_init();
 
 const DetectedSamples & app_samples_detect(void);
 
-void app_samples_process(cogip::uartpb::ReadBuffer *buffer);
+void app_samples_process(cogip::uartpb::ReadBuffer & buffer);
 
 }; // namespace app
 
