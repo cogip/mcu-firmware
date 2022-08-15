@@ -4,7 +4,6 @@
 /* System includes */
 #include <cmath>
 #include <cstring>
-#include <set>
 
 /* Project includes */
 #include "cogip_defs/Polygon.hpp"
@@ -18,7 +17,7 @@ namespace cogip {
 
 namespace obstacles {
 
-std::set<List const *> all_obstacles;
+etl::set<List const *, OBSTACLE_MAX_LISTS> all_obstacles;
 
 // Global functions
 void print_all_json(void)

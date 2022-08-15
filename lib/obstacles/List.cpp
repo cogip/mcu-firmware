@@ -23,7 +23,7 @@ void List::clear()
     for (auto obs: *this) {
         delete obs;
     }
-    std::vector<Obstacle *>::clear();
+    etl::vector<Obstacle *, OBSTACLES_MAX_NUMBER>::clear();
 }
 
 void List::print_json(void) const
