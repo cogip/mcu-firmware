@@ -69,7 +69,7 @@ static void _validate_obstacles_points(void)
             }
 
             /* Build a bounding box around the obstacle center */
-            const cogip::cogip_defs::Polygon & bb = obstacle->bounding_box();
+            const cogip::obstacles::BoundingBox & bb = obstacle->bounding_box();
 
             /* Validate bounding box points */
             for (auto &point: bb) {

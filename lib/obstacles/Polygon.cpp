@@ -48,13 +48,12 @@ static bool _is_segment_crossing_segment(
     return true;
 }
 
-Polygon::Polygon(const std::list<cogip_defs::Coords> *points)
+Polygon::Polygon(const etl::ivector<cogip_defs::Coords> & points)
     : Obstacle(cogip_defs::Coords(0.0, 0.0), 0)
 {
-    if (points) {
-        for (const auto &point: *points) {
-            push_back(point);
-        }
+    for (const auto &point: points) {
+        push_back(point);
+        bounding_box_.push_back(point);
     }
 }
 

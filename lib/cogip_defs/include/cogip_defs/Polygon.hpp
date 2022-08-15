@@ -12,7 +12,7 @@
 #pragma once
 
 // System includes
-#include <vector>
+#include "etl/vector.h"
 
 // Project includes
 #include "cogip_defs/Coords.hpp"
@@ -22,13 +22,22 @@ namespace cogip {
 namespace cogip_defs {
 
 /// A polygon defined by a list of coordinates
-class Polygon : public std::vector<Coords> {
+template <size_t N>
+class Polygon : public etl::vector<Coords, N> {
 public:
     /// Find a point in this polygon and return its index.
     /// @return point index if found, -1 otherwise
     int point_index(
         const Coords &p  ///< [in] point to find
-        ) const;
+        ) const
+    {
+        auto it = std::find(this->begin(), this->end(), p);
+        if (it != this->end())
+        {
+            return it - this->begin();
+        }
+        return -1;
+    };
 };
 
 } // namespace cogip_defs
