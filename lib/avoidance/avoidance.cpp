@@ -1,7 +1,7 @@
 /* Standard includes */
 #include <math.h>
 #include <stdio.h>
-#include <deque>
+#include "etl/deque.h"
 
 /* Project includes */
 #include "app.hpp"
@@ -39,7 +39,7 @@ static cogip::cogip_defs::Coords finish_pose;
 /**
  * Indexes of valid points from the start pose to the final pose
  */
-static std::deque<int> _children;
+static etl::deque<int, AVOIDANCE_GRAPH_MAX_VERTICES> _children;
 
 /* Flag to indicate if a path has been successfully computed */
 static bool _is_avoidance_computed = false;
