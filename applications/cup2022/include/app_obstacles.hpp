@@ -23,10 +23,10 @@ public:
 void app_obstacles_init();
 
 /// Return excavation site obstacles.
-std::map<CampColor, FixedObstacle *> & app_get_excavation_sites_obstacles(void);
+etl::map<CampColor, FixedObstacle *, 2> & app_get_excavation_sites_obstacles(void);
 
 /// Return shed obstacles.
-std::map<CampColor, FixedObstacle *> & app_get_shed_obstacles(void);
+etl::map<CampColor, FixedObstacle *, 2> & app_get_shed_obstacles(void);
 
 } // namespace app
 

@@ -3,8 +3,7 @@
 #include "app_samples.hpp"
 
 #include <cstdint>
-#include <map>
-#include <stack>
+#include "etl/stack.h"
 
 namespace cogip {
 
@@ -16,10 +15,10 @@ public:
     ~Context() {};
 
     uint16_t score = 0;
-    std::map<SampleColor, Samples> samples_in_gallery;
-    std::map<SampleColor, Samples> samples_in_camp[4];
+    etl::map<SampleColor, Samples, SAMPLE_COLOR_COUNT> samples_in_gallery;
+    etl::map<SampleColor, Samples, SAMPLE_COLOR_COUNT> samples_in_camp[4];
 
-    std::stack<Sample *> samples_in_robot;
+    etl::stack<Sample *, 8> samples_in_robot;
 
 private:
 };

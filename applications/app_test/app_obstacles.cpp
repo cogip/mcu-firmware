@@ -6,8 +6,8 @@ namespace cogip {
 
 namespace app {
 
-static std::map<CampColor, FixedObstacle *> _excavation_site_obstacles;
-static std::map<CampColor, FixedObstacle *> _shed_obstacles;
+static etl::map<CampColor, FixedObstacle *, 2> _excavation_site_obstacles;
+static etl::map<CampColor, FixedObstacle *, 2> _shed_obstacles;
 
 void _init_border_obstacles(void)
 {
@@ -56,11 +56,11 @@ static void _init_excavation_sites_obstacles(void)
     _excavation_site_obstacles[CampColor::Purple] = obstacle;
 }
 
-std::map<CampColor, FixedObstacle *> & app_get_excavation_sites_obstacles(void) {
+etl::map<CampColor, FixedObstacle *, 2> & app_get_excavation_sites_obstacles(void) {
     return _excavation_site_obstacles;
 }
 
-std::map<CampColor, FixedObstacle *> & app_get_shed_obstacles(void) {
+etl::map<CampColor, FixedObstacle *, 2> & app_get_shed_obstacles(void) {
     return _shed_obstacles;
 }
 

@@ -20,7 +20,7 @@ static DetectedSamples _detected_samples;
 constexpr cogip::uartpb::uuid_t sample_request_uuid = 3781855956;
 constexpr cogip::uartpb::uuid_t sample_response_uuid = 1538397045;
 
-static std::map<CampColor, SamplesMap *> _samples;
+static etl::map<CampColor, SamplesMap *, 2> _samples;
 
 typedef struct {
     event_t super;

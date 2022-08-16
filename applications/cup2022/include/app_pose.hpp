@@ -5,6 +5,8 @@
 #include <iostream>
 #include <functional>
 
+#include "etl/vector.h"
+
 namespace cogip {
 
 namespace app {
@@ -35,7 +37,7 @@ private:
     std::function<void()> after_pose_ = []() {};
 };
 
-using Poses = std::vector<Pose *>;
+using Poses = etl::vector<Pose *, PATH_MAX_POSES>;
 
 std::ostream & operator << (std::ostream &out, const Pose *pose);
 std::ostream & operator << (std::ostream &out, const Poses &poses);

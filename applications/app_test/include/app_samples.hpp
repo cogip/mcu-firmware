@@ -5,8 +5,8 @@
 
 #include "PB_Samples.hpp"
 
-#include <list>
-#include <map>
+#include "etl/list.h"
+#include "etl/map.h"
 
 #define APP_SAMPLES_MAX_DETECTED 10
 #define APP_SAMPLE_RADIUS 75
@@ -16,14 +16,17 @@ namespace cogip {
 namespace app {
 
 /// Enum for sample colors
+constexpr auto SAMPLE_COLOR_START_LINE = __LINE__;
 enum class SampleColor {
     Blue = 13,
     Rock = 17,
     Green = 36,
     Red = 47
 };
+constexpr auto SAMPLE_COLOR_COUNT = __LINE__ - SAMPLE_COLOR_START_LINE - 3;
 
 /// Enum to identify each sample
+constexpr auto SAMPLE_ID_START_LINE = __LINE__;
 enum class SampleId {
     TableFixedBlue,
     TableFixedGreen,
@@ -41,13 +44,16 @@ enum class SampleId {
     RackTopGreen,
     RackTopRed,
 };
+constexpr auto SAMPLE_ID_COUNT = __LINE__ - SAMPLE_ID_START_LINE - 3;
 
+constexpr auto SAMPLE_LOCATION_START_LINE = __LINE__;
 enum class SampleLocation {
     OnTable,
     InRobot,
     Dropped,
     Unknown
 };
+constexpr auto SAMPLE_LOCATION_COUNT = __LINE__ - SAMPLE_LOCATION_START_LINE - 3;
 
 class SampleObstacle: public cogip::obstacles::Circle {
 public:
@@ -106,10 +112,10 @@ struct DetectedSample {
     double y;
 };
 
-using SampleIds = std::list<SampleId>;
-using SamplesMap = std::map<SampleId, Sample *>;
-using Samples = std::list<Sample *>;
-using DetectedSamples = std::list<DetectedSample *>;
+using SampleIds = etl::list<SampleId, SAMPLE_ID_COUNT>;
+using SamplesMap = etl::map<SampleId, Sample *, SAMPLE_ID_COUNT>;
+using Samples = etl::list<Sample *, SAMPLE_ID_COUNT * 2>;
+using DetectedSamples = etl::list<DetectedSample *, APP_SAMPLES_MAX_DETECTED>;
 
 SamplesMap &app_samples_get(bool opposite=false);
 Sample *app_samples_get_one(SampleId id, bool opposite=false);
