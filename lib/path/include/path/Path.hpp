@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <vector>
+#include "etl/vector.h"
 
 #include "path/Pose.hpp"
 
@@ -19,14 +19,20 @@ namespace cogip {
 
 namespace path {
 
+#ifndef PATH_MAX_POSES
+#define PATH_MAX_POSES 16
+#endif
+
+using Poses = etl::vector<Pose, PATH_MAX_POSES>;
+
 /// Path class.
-class Path : public std::vector<Pose> {
+class Path : public Poses {
 public:
     /// Constuctor.
     Path(
-        const std::vector<Pose> &poses={},  ///< list of positions defining the path
+        const Poses & poses={},  ///< list of positions defining the path
         bool play_in_loop=false             ///< play path in loop
-        ) : std::vector<Pose>(poses), play_in_loop_(play_in_loop), current_pose_index_(0) {};
+        ) : Poses(poses), play_in_loop_(play_in_loop), current_pose_index_(0) {};
 
     /// Destructor
     virtual ~Path() {};

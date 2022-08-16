@@ -19,4 +19,7 @@ endif
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 
+# Customize containers
+CFLAGS += -DPATH_MAX_POSES=3
+
 include ../../Makefile.include

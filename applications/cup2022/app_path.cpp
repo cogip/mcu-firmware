@@ -9,7 +9,7 @@
 // - For each actions: keep a status if its done (to avoid multiple puck capture
 //    if delivery was bypassed for any reason)
 // - Absolute coordinate recalibration on games frames (?)
-static std::vector<cogip::path::Pose> poses = {
+static cogip::path::Poses poses = {
     {
         -1200, 700, 0,
         MAX_SPEED_LINEAR,
