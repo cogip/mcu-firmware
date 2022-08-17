@@ -27,12 +27,8 @@ static cogip::path::Poses poses = {
     },
 };
 
-cogip::path::Path *_path = nullptr;
-
 cogip::path::Path &app_get_path(void)
 {
-    if (! _path) {
-        _path = new cogip::path::Path(poses, true);
-    }
-    return *_path;
+    static cogip::path::Path path(poses);
+    return path;
 }
