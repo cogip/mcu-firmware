@@ -270,7 +270,7 @@ ctrl_t *pf_get_ctrl(void);
  *
  * return   Planner
  **/
-cogip::planners::Planner *pf_get_planner(void);
+cogip::planners::Planner & pf_get_planner(void);
 
 /**
  * @brief Returns uarpb.

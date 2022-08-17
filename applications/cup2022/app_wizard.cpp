@@ -48,8 +48,8 @@ void app_wizard(void)
         puts("Wizard error: bad response type for message start.");
     }
 
-    pf_get_planner()->set_allow_change_path_pose(true);
-    pf_get_planner()->start();
+    pf_get_planner().set_allow_change_path_pose(true);
+    pf_get_planner().start();
 
 #if 0  // Keep unused code as examples for other types supported by wizard.
     wizard_message.clear();

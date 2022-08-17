@@ -66,9 +66,6 @@ static ctrl_quadpid_t ctrl_quadpid =
     }
 };
 
-/* Planner */
-cogip::planners::Planner *planner = nullptr;
-
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -156,9 +153,10 @@ ctrl_t *pf_get_ctrl(void)
     return (ctrl_t *)&ctrl_quadpid;
 }
 
-cogip::planners::Planner *pf_get_planner(void)
+cogip::planners::Planner & pf_get_planner(void)
 {
-    return (cogip::planners::Planner *)planner;
+  static cogip::planners::AstarPlanner planner((ctrl_t *)&ctrl_quadpid, app_get_path());
+  return planner;
 }
 
 void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
@@ -315,9 +313,6 @@ void pf_init(void)
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
 
-    /* Initialize planner */
-    planner = new cogip::planners::AstarPlanner(pf_get_ctrl(), app_get_path());
-
 #ifdef MODULE_SHELL_QUADPID
     ctrl_quadpid_shell_init(&ctrl_quadpid);
 #endif /* MODULE_SHELL_QUADPID */
@@ -341,7 +336,7 @@ void pf_init_tasks(void)
         "motion control"
         );
 
-    planner->start_thread();
+    pf_get_planner().start_thread();
 
     trace_start();
 }
