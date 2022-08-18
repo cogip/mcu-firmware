@@ -107,6 +107,7 @@ private:
 };
 
 struct DetectedSample {
+    DetectedSample(SampleColor color_, double x_, double y_) : color(color_), x(x_), y(y_) {};
     SampleColor color;
     double x;
     double y;
