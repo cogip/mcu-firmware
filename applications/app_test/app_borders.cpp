@@ -24,14 +24,10 @@ static const etl::vector<cogip::cogip_defs::Coords, 4> border_points = {
     }
 };
 
-static cogip::obstacles::Polygon *_borders = nullptr;
-
 const cogip::obstacles::Polygon &app_get_borders(void)
 {
-    if (! _borders) {
-        _borders = new cogip::obstacles::Polygon(border_points);
-    }
-    return *_borders;
+    static obstacles::Polygon borders(border_points);
+    return borders;
 }
 
 } // namespace app
