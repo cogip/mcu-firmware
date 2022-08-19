@@ -270,8 +270,14 @@ void pf_init(void)
     }
     else {
         cogip::shell::register_uartpb(&uartpb);
-        uartpb.register_message_handler(copilot_connected_uuid, handle_copilot_connected);
-        uartpb.register_message_handler(copilot_disconnected_uuid, handle_copilot_disconnected);
+        uartpb.register_message_handler(
+            copilot_connected_uuid,
+            cogip::uartpb::message_handler_t::create<handle_copilot_connected>()
+            );
+        uartpb.register_message_handler(
+            copilot_disconnected_uuid,
+            cogip::uartpb::message_handler_t::create<handle_copilot_disconnected>()
+            );
         uartpb.start_reader();
         uartpb.send_message(reset_uuid);
     }

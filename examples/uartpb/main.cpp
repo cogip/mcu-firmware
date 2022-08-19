@@ -185,9 +185,9 @@ int main(void)
     // Add a sub-menu
     _menu_sub.push_back(&_cmd_sub);
 
-    uartpb.register_message_handler(resp_hello_uuid, handle_response_hello);
-    uartpb.register_message_handler(resp_ping_uuid, handle_response_ping);
-    uartpb.register_message_handler(resp_pong_uuid, handle_response_pong);
+    uartpb.register_message_handler(resp_hello_uuid, cogip::uartpb::message_handler_t::create<handle_response_hello>());
+    uartpb.register_message_handler(resp_ping_uuid, cogip::uartpb::message_handler_t::create<handle_response_ping>());
+    uartpb.register_message_handler(resp_pong_uuid, cogip::uartpb::message_handler_t::create<handle_response_pong>());
 
     bool res = uartpb.connect();
     if (! res) {

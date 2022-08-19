@@ -56,7 +56,7 @@ void Sample::set_coords(double x, double y)
 
 void app_samples_init(etl::map<CampColor, SamplesMap, 2> & samples)
 {
-    pf_get_uartpb().register_message_handler(sample_response_uuid, app_samples_process);
+    pf_get_uartpb().register_message_handler(sample_response_uuid, uartpb::message_handler_t::create<app_samples_process>());
 
     event_queue_init_detached(&_sample_queue);
     _sample_event.super.list_node.next = nullptr;

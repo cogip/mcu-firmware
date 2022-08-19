@@ -132,7 +132,7 @@ void rename_command(
 void register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)
 {
     uart_protobuf = uartpb_ptr;
-    uartpb_ptr->register_message_handler(command_uuid, handle_pb_command);
+    uartpb_ptr->register_message_handler(command_uuid, uartpb::message_handler_t::create<handle_pb_command>());
 }
 
 /// Execute a shell command callback using arguments from Protobuf message.
