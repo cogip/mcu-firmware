@@ -284,11 +284,11 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
                                const cogip::cogip_defs::Coords &stop)
 {
     /* Get dynamic obstacle list */
-    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
+    cogip::obstacles::List & obstacles = pf_get_dyn_obstacles();
     const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     /* Check if that segment crosses a polygon */
-    for (auto obstacle: *obstacles) {
+    for (auto obstacle: obstacles) {
 
         /* Check if obstacle is inside borders */
         if (!borders.is_point_inside(obstacle->center())) {

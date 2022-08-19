@@ -2,6 +2,7 @@
 
 // System includes
 #include <cmath>
+#include "etl/pool.h"
 
 // RIOT includes
 #include <ztimer.h>
@@ -30,8 +31,13 @@
 // Thread stack
 static char obstacle_updater_thread_stack[THREAD_STACKSIZE_LARGE * 2];
 
+static etl::pool<cogip::obstacles::Circle, OBSTACLES_MAX_NUMBER> obstacles_pool;
+
 // Obstacles list of Lidar detected obstacles
-cogip::obstacles::List *lidar_obstacles = nullptr;
+cogip::obstacles::List & lidar_obstacles() {
+    static cogip::obstacles::List obstacles;
+    return obstacles;
+};
 
 // Find consecutive obstacles and keep the nearest at the middle
 static bool _filter_distances(const uint16_t *raw_distances, uint16_t *filtered_distances)
@@ -100,11 +106,14 @@ static bool _filter_distances(const uint16_t *raw_distances, uint16_t *filtered_
 }
 
 // Update obstacles list from lidar measurements
-static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstacles,
+static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List & obstacles,
                                                  const cogip::cogip_defs::Pose &origin,
                                                  const uint16_t *distances)
 {
-    obstacles->clear();
+    for (auto obstacle: obstacles) {
+        obstacles_pool.release(obstacle);
+    }
+    obstacles.clear();
 
     for (uint16_t angle = 0; angle < 360; angle++) {
         uint16_t distance = distances[angle];
@@ -122,7 +131,7 @@ static void _update_dynamic_obstacles_from_lidar(cogip::obstacles::List * obstac
             origin.y() + distance * sin(obstacle_angle)
         );
 
-        obstacles->push_back(new cogip::obstacles::Circle(center, LIDAR_OBSTACLE_RADIUS));
+        obstacles.push_back(obstacles_pool.create(center, LIDAR_OBSTACLE_RADIUS));
     }
 }
 
@@ -145,7 +154,7 @@ static void *_thread_obstacle_updater(void *arg)
         }
 
         if (_filter_distances(raw_distances, filtered_distances) == true) {
-            _update_dynamic_obstacles_from_lidar(lidar_obstacles, *robot_state, filtered_distances);
+            _update_dynamic_obstacles_from_lidar(lidar_obstacles(), *robot_state, filtered_distances);
         }
 
         // Wait thread period to end
@@ -157,8 +166,6 @@ static void *_thread_obstacle_updater(void *arg)
 
 void obstacle_updater_start(const cogip::cogip_defs::Pose &robot_state)
 {
-    lidar_obstacles = new cogip::obstacles::List();
-
     // Start the obstacle updater thread
     thread_create(
         obstacle_updater_thread_stack,

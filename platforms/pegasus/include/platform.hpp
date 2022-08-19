@@ -331,7 +331,7 @@ void motor_drive(const cogip::cogip_defs::Polar &command);
  *
  * @return                      dynamic obstacles list
  **/
-cogip::obstacles::List * pf_get_dyn_obstacles(void);
+cogip::obstacles::List & pf_get_dyn_obstacles(void);
 
 /**
  * @name Platform parameters for QuadPID controller.

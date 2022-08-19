@@ -57,9 +57,6 @@ public:
         PB_Message &message                 ///< [out] Protobuf message to fill
         ) const;
 
-    /// Delete all obstacles from the list.
-    void clear();
-
     /// Return number of enabled obstacles.
     size_t enabled_obstacles() const;
 

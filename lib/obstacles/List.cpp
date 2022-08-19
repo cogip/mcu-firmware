@@ -18,14 +18,6 @@ List::~List()
     all_obstacles.erase(this);
 }
 
-void List::clear()
-{
-    for (auto obs: *this) {
-        delete obs;
-    }
-    etl::vector<Obstacle *, OBSTACLES_MAX_NUMBER>::clear();
-}
-
 void List::print_json(void) const
 {
     size_t i = 0;
