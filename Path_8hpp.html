@@ -120,7 +120,9 @@ $(document).ready(function(){initNavTree('Path_8hpp.html',''); initResizable(); 
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a>  </div>
+<a href="#nested-classes">Data Structures</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">Path.hpp File Reference<div class="ingroups"><a class="el" href="group__lib.html">Lib</a> &raquo; <a class="el" href="group__lib__path.html">Path module</a></div></div>  </div>
 </div><!--header-->
@@ -133,7 +135,7 @@ $(document).ready(function(){initNavTree('Path_8hpp.html',''); initResizable(); 
 <dl class="section author"><dt>Author</dt><dd>Eric Courtois <a href="#" onclick="location.href='mai'+'lto:'+'eri'+'c.'+'cou'+'rt'+'ois'+'@g'+'mai'+'l.'+'com'; return false;">eric.<span style="display: none;">.nosp@m.</span>cour<span style="display: none;">.nosp@m.</span>tois@<span style="display: none;">.nosp@m.</span>gmai<span style="display: none;">.nosp@m.</span>l.com</a> </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="Path_8hpp_source.html">Path.hpp</a>.</p>
-</div><div class="textblock"><code>#include &lt;vector&gt;</code><br />
+</div><div class="textblock"><code>#include &quot;etl/vector.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="path_2include_2path_2Pose_8hpp_source.html">path/Pose.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for Path.hpp:</div>
@@ -142,9 +144,9 @@ $(document).ready(function(){initNavTree('Path_8hpp.html',''); initResizable(); 
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Path_8hpp__incl.png" border="0" usemap="#lib_2path_2include_2path_2Path_8hpp" alt=""/></div>
 <map name="lib_2path_2include_2path_2Path_8hpp" id="lib_2path_2include_2path_2Path_8hpp">
-<area shape="rect" title="Path declaration." alt="" coords="98,5,253,47"/>
-<area shape="rect" title=" " alt="" coords="79,169,141,196"/>
-<area shape="rect" href="path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="175,95,290,121"/>
+<area shape="rect" title="Path declaration." alt="" coords="171,5,326,47"/>
+<area shape="rect" title=" " alt="" coords="137,95,232,121"/>
+<area shape="rect" href="path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="257,95,371,121"/>
 <area shape="rect" href="cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="166,169,321,196"/>
 <area shape="rect" href="utils_8hpp_source.html" title=" " alt="" coords="345,169,424,196"/>
 <area shape="rect" href="Coords_8hpp.html" title="Coords declaration." alt="" coords="5,244,175,271"/>
@@ -177,12 +179,24 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1path_1_1Path.html">cogip::path::Path</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1path_1_1Path.html" title="Path class.">Path</a> class.  <a href="classcogip_1_1path_1_1Path.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:aeaeda107d49e9de6434f1b42748cd16b"><td class="memItemLeft" align="right" valign="top"><a id="aeaeda107d49e9de6434f1b42748cd16b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>PATH_MAX_POSES</b>&#160;&#160;&#160;16</td></tr>
+<tr class="separator:aeaeda107d49e9de6434f1b42748cd16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a65bd7460f4fc331b2d8f37e936139f5e"><td class="memItemLeft" align="right" valign="top"><a id="a65bd7460f4fc331b2d8f37e936139f5e"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::path::Poses</b> = etl::vector&lt; Pose, PATH_MAX_POSES &gt;</td></tr>
+<tr class="separator:a65bd7460f4fc331b2d8f37e936139f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri Aug 12 2022 20:42:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Wed Aug 24 2022 21:01:27 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

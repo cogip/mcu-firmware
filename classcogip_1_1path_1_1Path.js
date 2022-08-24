@@ -1,6 +1,6 @@
 var classcogip_1_1path_1_1Path =
 [
-    [ "Path", "classcogip_1_1path_1_1Path.html#a3e7fb129f4868768cb2b0a4b99e48b76", null ],
+    [ "Path", "classcogip_1_1path_1_1Path.html#a1709090538f608b00476784b35fbcf14", null ],
     [ "~Path", "classcogip_1_1path_1_1Path.html#a41c529dca1c9842ff9fd7f0647c93c6a", null ],
     [ "current_max_speed_angular", "classcogip_1_1path_1_1Path.html#a927b66292a1ec7d6497f63c3b6db4d51", null ],
     [ "current_max_speed_linear", "classcogip_1_1path_1_1Path.html#aca708e0ee6f7a1b9d65af6b56f169e54", null ],

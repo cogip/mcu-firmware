@@ -1,12 +1,11 @@
 <map id="lib/obstacles/include/obstacles/Rectangle.hpp" name="lib/obstacles/include/obstacles/Rectangle.hpp">
-<area shape="rect" id="node1" title="Rectangle obstacle class declaration." alt="" coords="145,5,330,47"/>
-<area shape="rect" id="node2" href="$obstacles_2include_2obstacles_2Polygon_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="153,95,321,121"/>
+<area shape="rect" id="node1" title="Rectangle obstacle class declaration." alt="" coords="79,5,265,47"/>
+<area shape="rect" id="node2" href="$obstacles_2include_2obstacles_2Polygon_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="88,95,256,121"/>
 <area shape="rect" id="node3" href="$Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="85,169,259,196"/>
-<area shape="rect" id="node10" title=" " alt="" coords="283,169,325,196"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,244,72,271"/>
 <area shape="rect" id="node5" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="25,319,194,345"/>
 <area shape="rect" id="node7" href="$cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="147,244,323,271"/>
 <area shape="rect" id="node9" title=" " alt="" coords="347,244,477,271"/>
 <area shape="rect" id="node6" title=" " alt="" coords="50,393,169,420"/>
-<area shape="rect" id="node8" title=" " alt="" coords="218,319,281,345"/>
+<area shape="rect" id="node8" title=" " alt="" coords="218,319,313,345"/>
 </map>

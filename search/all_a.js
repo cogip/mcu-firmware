@@ -13,7 +13,7 @@ var searchData=
   ['max_5fspeed_5fm_5fper_5fs_297',['MAX_SPEED_M_PER_S',['../group__platforms__pegasus.html#ga32da0bbd33cdc029772d5728b4424f12',1,'MAX_SPEED_M_PER_S():&#160;platform.hpp'],['../group__platforms__pf__test.html#ga32da0bbd33cdc029772d5728b4424f12',1,'MAX_SPEED_M_PER_S():&#160;platform.hpp']]],
   ['menu_298',['Menu',['../classcogip_1_1shell_1_1Menu.html',1,'cogip::shell::Menu'],['../classcogip_1_1shell_1_1Menu.html#a9a2fb50c9e6d895a5c82cc6e644c6e5e',1,'cogip::shell::Menu::Menu()']]],
   ['menu_2ehpp_299',['Menu.hpp',['../Menu_8hpp.html',1,'']]],
-  ['message_5fhandler_5ft_300',['message_handler_t',['../UartProtobuf_8hpp.html#aac782e2b6d5dc1bb2164420243435e82',1,'cogip::uartpb']]],
+  ['message_5fhandler_5ft_300',['message_handler_t',['../UartProtobuf_8hpp.html#aac05c5db9067a7b45628510178d6f463',1,'cogip::uartpb']]],
   ['message_5freader_301',['message_reader',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a3ef9cf01ce4bf920dca63c07f6b973e7',1,'cogip::uartpb::UartProtobuf']]],
   ['message_5freader_5fwrapper_302',['message_reader_wrapper',['../UartProtobuf_8hpp.html#af1754a88874b0fa1f3bd1b2f11a3737e',1,'cogip::uartpb']]],
   ['min_5fangle_5ffor_5fpose_5freached_303',['min_angle_for_pose_reached',['../structctrl__quadpid__parameters__t.html#a9b9d4a94b7089b5a7ae3621b438f0251',1,'ctrl_quadpid_parameters_t']]],

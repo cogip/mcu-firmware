@@ -33,6 +33,9 @@ var hierarchy =
       [ "cogip::planners::AstarPlanner", "classcogip_1_1planners_1_1AstarPlanner.html", null ]
     ] ],
     [ "cogip::cogip_defs::Polar", "classcogip_1_1cogip__defs_1_1Polar.html", null ],
+    [ "Poses", null, [
+      [ "cogip::path::Path", "classcogip_1_1path_1_1Path.html", null ]
+    ] ],
     [ "ReadBufferInterface", null, [
       [ "cogip::uartpb::ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html", null ]
     ] ],
@@ -42,11 +45,12 @@ var hierarchy =
     [ "cogip::uartpb::UartProtobuf", "classcogip_1_1uartpb_1_1UartProtobuf.html", null ],
     [ "vacuum_pump_params_t", "structvacuum__pump__params__t.html", null ],
     [ "vector", null, [
-      [ "cogip::cogip_defs::Polygon", "classcogip_1_1cogip__defs_1_1Polygon.html", [
-        [ "cogip::obstacles::Polygon", "classcogip_1_1obstacles_1_1Polygon.html", null ]
-      ] ],
+      [ "cogip::cogip_defs::Polygon< N >", "classcogip_1_1cogip__defs_1_1Polygon.html", null ],
       [ "cogip::obstacles::List", "classcogip_1_1obstacles_1_1List.html", null ],
-      [ "cogip::path::Path", "classcogip_1_1path_1_1Path.html", null ]
+      [ "cogip::cogip_defs::Polygon< OBSTACLE_BOUNDING_BOX_VERTICES >", "classcogip_1_1cogip__defs_1_1Polygon.html", null ],
+      [ "cogip::cogip_defs::Polygon< OBSTACLE_MAX_POINTS_IN_POLYGON >", "classcogip_1_1cogip__defs_1_1Polygon.html", [
+        [ "cogip::obstacles::Polygon", "classcogip_1_1obstacles_1_1Polygon.html", null ]
+      ] ]
     ] ],
     [ "cogip::wizard::Wizard", "classcogip_1_1wizard_1_1Wizard.html", null ],
     [ "WriteBufferInterface", null, [

@@ -133,71 +133,67 @@ $(document).ready(function(){initNavTree('List_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// Standard includes</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// RIOT includes</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;mutex.h&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;native_sched.h&quot;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">// Project includes</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Obstacle_8hpp.html">obstacles/Obstacle.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;PB_Obstacle.hpp&quot;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#ifndef OBSTACLES_MAX_NUMBER</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="List_8hpp.html#a8eb65ca038368f488adf6e95a2981f3b">   28</a></span>&#160;<span class="preprocessor">#  define OBSTACLES_MAX_NUMBER 32  </span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>cogip {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>obstacles {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html">   36</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1obstacles_1_1List.html">List</a>: <span class="keyword">public</span> std::vector&lt;Obstacle *&gt; {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">   39</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">PB_Message</a> = EmbeddedProto::RepeatedFieldFixedSize&lt;Obstacle::PB_Message, OBSTACLES_MAX_NUMBER&gt;;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classcogip_1_1obstacles_1_1List.html#af0a9e431101a57a48a3e61b5ba58b238">List</a>();</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="classcogip_1_1obstacles_1_1List.html#a621eb3162450fb01e970c5616818595d">~List</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html#a6e94d63861e29797d64229b5bee48157">   48</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a6e94d63861e29797d64229b5bee48157">lock</a>() { mutex_lock(&amp;mutex_); };</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1">   51</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1">unlock</a>() { mutex_unlock(&amp;mutex_); };</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#ae842caea1bad49e54c7900f834fa3528">print_json</a>(<span class="keywordtype">void</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a95980bcdf573b580ea06287c9f76d851">pb_copy</a>(</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">PB_Message</a> &amp;message                 </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a797c89003622cdbe9c408227a0c6b754">clear</a>();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#aa57b5af17d619da51c9677fb654d0ae0">enabled_obstacles</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// RIOT includes</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;mutex.h&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;native_sched.h&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// Project includes</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Obstacle_8hpp.html">obstacles/Obstacle.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;PB_Obstacle.hpp&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#ifndef OBSTACLES_MAX_NUMBER</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="List_8hpp.html#a8eb65ca038368f488adf6e95a2981f3b">   27</a></span>&#160;<span class="preprocessor">#  define OBSTACLES_MAX_NUMBER 32  </span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>obstacles {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html">   35</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1obstacles_1_1List.html">List</a>: <span class="keyword">public</span> etl::vector&lt;Obstacle *, OBSTACLES_MAX_NUMBER&gt; {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">   38</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">PB_Message</a> = EmbeddedProto::RepeatedFieldFixedSize&lt;Obstacle::PB_Message, OBSTACLES_MAX_NUMBER&gt;;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classcogip_1_1obstacles_1_1List.html#af0a9e431101a57a48a3e61b5ba58b238">List</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="classcogip_1_1obstacles_1_1List.html#a621eb3162450fb01e970c5616818595d">~List</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html#a6e94d63861e29797d64229b5bee48157">   47</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a6e94d63861e29797d64229b5bee48157">lock</a>() { mutex_lock(&amp;mutex_); };</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1">   50</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1">unlock</a>() { mutex_unlock(&amp;mutex_); };</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#ae842caea1bad49e54c7900f834fa3528">print_json</a>(<span class="keywordtype">void</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#a95980bcdf573b580ea06287c9f76d851">pb_copy</a>(</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">PB_Message</a> &amp;message                 </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classcogip_1_1obstacles_1_1List.html#aa57b5af17d619da51c9677fb654d0ae0">enabled_obstacles</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    mutex_t mutex_ = MUTEX_INIT;            </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;};</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    mutex_t mutex_ = MUTEX_INIT;            </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;};</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;} <span class="comment">// namespace obstacles</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;} <span class="comment">// namespace cogip</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;} <span class="comment">// namespace obstacles</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aObstacle_8hpp_html"><div class="ttname"><a href="Obstacle_8hpp.html">Obstacle.hpp</a></div><div class="ttdoc">Polygon obstacle class declaration.</div></div>
-<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html">cogip::obstacles::List</a></div><div class="ttdoc">List of obstacles.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00036">List.hpp:36</a></div></div>
-<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a1eda7f2df5d1ac2a0ed1827379114980"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">cogip::obstacles::List::PB_Message</a></div><div class="ttdeci">EmbeddedProto::RepeatedFieldFixedSize&lt; Obstacle::PB_Message, OBSTACLES_MAX_NUMBER &gt; PB_Message</div><div class="ttdoc">Protobuf message type. Shortcut for original template type.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00039">List.hpp:39</a></div></div>
+<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html">cogip::obstacles::List</a></div><div class="ttdoc">List of obstacles.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00035">List.hpp:35</a></div></div>
+<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a1eda7f2df5d1ac2a0ed1827379114980"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a1eda7f2df5d1ac2a0ed1827379114980">cogip::obstacles::List::PB_Message</a></div><div class="ttdeci">EmbeddedProto::RepeatedFieldFixedSize&lt; Obstacle::PB_Message, OBSTACLES_MAX_NUMBER &gt; PB_Message</div><div class="ttdoc">Protobuf message type. Shortcut for original template type.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00038">List.hpp:38</a></div></div>
 <div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a621eb3162450fb01e970c5616818595d"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a621eb3162450fb01e970c5616818595d">cogip::obstacles::List::~List</a></div><div class="ttdeci">~List()</div><div class="ttdoc">Destructor.</div></div>
-<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a6fc9b8f332d6b8f3631dfeedf826f1d1"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1">cogip::obstacles::List::unlock</a></div><div class="ttdeci">void unlock()</div><div class="ttdoc">Unlock the list.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00051">List.hpp:51</a></div></div>
-<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a797c89003622cdbe9c408227a0c6b754"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a797c89003622cdbe9c408227a0c6b754">cogip::obstacles::List::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Delete all obstacles from the list.</div></div>
+<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a6fc9b8f332d6b8f3631dfeedf826f1d1"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1">cogip::obstacles::List::unlock</a></div><div class="ttdeci">void unlock()</div><div class="ttdoc">Unlock the list.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00050">List.hpp:50</a></div></div>
 <div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_aa57b5af17d619da51c9677fb654d0ae0"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#aa57b5af17d619da51c9677fb654d0ae0">cogip::obstacles::List::enabled_obstacles</a></div><div class="ttdeci">size_t enabled_obstacles() const</div><div class="ttdoc">Return number of enabled obstacles.</div></div>
 <div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_ae842caea1bad49e54c7900f834fa3528"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#ae842caea1bad49e54c7900f834fa3528">cogip::obstacles::List::print_json</a></div><div class="ttdeci">void print_json(void) const</div><div class="ttdoc">Print all obstacles from the list in JSON format.</div></div>
 <div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_af0a9e431101a57a48a3e61b5ba58b238"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#af0a9e431101a57a48a3e61b5ba58b238">cogip::obstacles::List::List</a></div><div class="ttdeci">List()</div><div class="ttdoc">Constructor.</div></div>
 <div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a95980bcdf573b580ea06287c9f76d851"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a95980bcdf573b580ea06287c9f76d851">cogip::obstacles::List::pb_copy</a></div><div class="ttdeci">void pb_copy(PB_Message &amp;message) const</div><div class="ttdoc">Copy data to Protobuf message.</div></div>
-<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a6e94d63861e29797d64229b5bee48157"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a6e94d63861e29797d64229b5bee48157">cogip::obstacles::List::lock</a></div><div class="ttdeci">void lock()</div><div class="ttdoc">Lock the list to avoid using/modifying it from several thread at the same time.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00048">List.hpp:48</a></div></div>
+<div class="ttc" id="aclasscogip_1_1obstacles_1_1List_html_a6e94d63861e29797d64229b5bee48157"><div class="ttname"><a href="classcogip_1_1obstacles_1_1List.html#a6e94d63861e29797d64229b5bee48157">cogip::obstacles::List::lock</a></div><div class="ttdeci">void lock()</div><div class="ttdoc">Lock the list to avoid using/modifying it from several thread at the same time.</div><div class="ttdef"><b>Definition:</b> <a href="List_8hpp_source.html#l00047">List.hpp:47</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Fri Aug 12 2022 20:42:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Wed Aug 24 2022 21:01:27 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

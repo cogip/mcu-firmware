@@ -1,13 +1,13 @@
 <map id="cogip::planners::AstarPlanner" name="cogip::planners::AstarPlanner">
-<area shape="rect" id="node1" title="Astar planner class." alt="" coords="1389,28,1601,55"/>
-<area shape="rect" id="node2" href="$classcogip_1_1planners_1_1Planner.html" title="Virtual Planner class." alt="" coords="1161,28,1340,55"/>
-<area shape="rect" id="node3" href="$classcogip_1_1path_1_1Path.html" title="Path class." alt="" coords="835,5,965,32"/>
-<area shape="rect" id="node4" title=" " alt="" coords="552,5,704,32"/>
-<area shape="rect" id="node5" href="$structctrl__t.html" title="Controller default definition." alt="" coords="873,111,927,137"/>
-<area shape="rect" id="node11" href="$structctrl__configuration__t.html" title="Controller modes callbacks definitions." alt="" coords="1177,133,1324,160"/>
-<area shape="rect" id="node6" href="$structctrl__control__t.html" title="Controller general structure." alt="" coords="575,85,681,112"/>
-<area shape="rect" id="node7" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="213,49,356,90"/>
-<area shape="rect" id="node8" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="197,116,372,143"/>
-<area shape="rect" id="node9" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="5,109,148,150"/>
-<area shape="rect" id="node10" href="$structctrl__platform__configuration__t.html" title="Controllers pre and post callbacks for each mode." alt="" coords="523,136,733,163"/>
+<area shape="rect" id="node1" title="Astar planner class." alt="" coords="5,499,217,525"/>
+<area shape="rect" id="node2" href="$classcogip_1_1planners_1_1Planner.html" title="Virtual Planner class." alt="" coords="22,423,201,449"/>
+<area shape="rect" id="node3" href="$classcogip_1_1path_1_1Path.html" title="Path class." alt="" coords="10,319,141,345"/>
+<area shape="rect" id="node4" title=" " alt="" coords="45,229,105,256"/>
+<area shape="rect" id="node5" href="$structctrl__t.html" title="Controller default definition." alt="" coords="184,319,239,345"/>
+<area shape="rect" id="node11" href="$structctrl__configuration__t.html" title="Controller modes callbacks definitions." alt="" coords="270,423,417,449"/>
+<area shape="rect" id="node6" href="$structctrl__control__t.html" title="Controller general structure." alt="" coords="143,229,250,256"/>
+<area shape="rect" id="node7" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="47,96,189,137"/>
+<area shape="rect" id="node8" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="213,103,388,130"/>
+<area shape="rect" id="node9" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="229,5,372,47"/>
+<area shape="rect" id="node10" href="$structctrl__platform__configuration__t.html" title="Controllers pre and post callbacks for each mode." alt="" coords="274,229,485,256"/>
 </map>

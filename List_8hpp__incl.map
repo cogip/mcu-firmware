@@ -1,12 +1,12 @@
 <map id="lib/obstacles/include/obstacles/List.hpp" name="lib/obstacles/include/obstacles/List.hpp">
-<area shape="rect" id="node1" title="List obstacles class declaration." alt="" coords="66,5,221,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="33,169,99,196"/>
-<area shape="rect" id="node3" title=" " alt="" coords="64,244,127,271"/>
-<area shape="rect" id="node4" title=" " alt="" coords="44,95,120,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="145,95,265,121"/>
-<area shape="rect" id="node6" href="$Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="289,95,462,121"/>
-<area shape="rect" id="node10" title=" " alt="" coords="423,169,554,196"/>
-<area shape="rect" id="node7" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="228,244,397,271"/>
-<area shape="rect" id="node9" href="$cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="162,169,338,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="253,319,372,345"/>
+<area shape="rect" id="node1" title="List obstacles class declaration." alt="" coords="107,5,261,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="39,169,105,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="23,95,99,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="124,95,244,121"/>
+<area shape="rect" id="node5" href="$Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="268,95,441,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="453,169,584,196"/>
+<area shape="rect" id="node6" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="131,244,301,271"/>
+<area shape="rect" id="node8" href="$cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="253,169,429,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="157,319,275,345"/>
+<area shape="rect" id="node9" title=" " alt="" coords="325,244,419,271"/>
 </map>

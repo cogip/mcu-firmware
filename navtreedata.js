@@ -52,10 +52,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"dir_2bfb20e9b254510ab1d9b418fd37b46c.html",
-"group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca",
-"group__platforms__pegasus.html#ga1dc63a69bc06342aca5ca9cb42e784fa",
-"group__sd21.html#ga14abca50ce462e5824e3b0da2d78a065"
+"dir_203fc8c2471f6ead314dfd4de358be39.html",
+"group__driver__lx-servo.html#ga03c10c8f96b41d0197cf0d3ffc1758fb",
+"group__platforms__pegasus.html#ga128c544be070e5eb2e766506e28d9d91",
+"group__quadpid.html#gga3fde4952c6a108b241aeea054e68638daae39e9247308653dbcdaf02263fbae49",
+"vacuum__pump_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
