@@ -18,14 +18,6 @@ List::~List()
     all_obstacles.erase(this);
 }
 
-void List::clear()
-{
-    for (auto obs: *this) {
-        delete obs;
-    }
-    std::vector<Obstacle *>::clear();
-}
-
 void List::print_json(void) const
 {
     size_t i = 0;

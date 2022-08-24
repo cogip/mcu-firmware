@@ -3,7 +3,9 @@
 #include "path/Pose.hpp"
 
 #include <iostream>
-#include <functional>
+
+#include "etl/delegate.h"
+#include "etl/vector.h"
 
 namespace cogip {
 
@@ -27,15 +29,15 @@ public:
     void before_pose() const { before_pose_(); };
     void after_pose() const { after_pose_(); };
 
-    void set_before_pose(std::function<void()> f) { before_pose_ = f; };
-    void set_after_pose(std::function<void()> f) { after_pose_ = f; };
+    void set_before_pose(etl::delegate<void()> f) { before_pose_ = f; };
+    void set_after_pose(etl::delegate<void()> f) { after_pose_ = f; };
 
 private:
-    std::function<void()> before_pose_ = []() {};
-    std::function<void()> after_pose_ = []() {};
+    etl::delegate<void()> before_pose_ = []() {};
+    etl::delegate<void()> after_pose_ = []() {};
 };
 
-using Poses = std::vector<Pose *>;
+using Poses = etl::vector<Pose *, PATH_MAX_POSES>;
 
 std::ostream & operator << (std::ostream &out, const Pose *pose);
 std::ostream & operator << (std::ostream &out, const Poses &poses);

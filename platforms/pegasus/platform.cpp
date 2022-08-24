@@ -66,9 +66,6 @@ static ctrl_quadpid_t ctrl_quadpid =
     }
 };
 
-/* Planner */
-cogip::planners::Planner *planner = nullptr;
-
 /* Thread stacks */
 char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -76,8 +73,8 @@ char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static bool copilot_connected = false;
 PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
 
-cogip::uartpb::UartProtobuf *uartpb = nullptr;
-cogip::wizard::Wizard *wizard = nullptr;
+cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
+cogip::wizard::Wizard wizard(uartpb);
 
 // Define uartpb uuids
 constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
@@ -127,10 +124,6 @@ void pf_print_state(void)
 
 void pf_send_pb_state(void)
 {
-    if (uartpb == nullptr) {
-        return;
-    }
-
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
     pb_state.clear();
     pb_state.set_mode((PB_Mode)ctrl->control.current_mode);
@@ -142,7 +135,7 @@ void pf_send_pb_state(void)
     avoidance_pb_copy_path(pb_state.mutable_path());
     cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
 
-    uartpb->send_message(state_uuid, &pb_state);
+    uartpb.send_message(state_uuid, &pb_state);
 }
 
 void pf_init_quadpid_params(ctrl_quadpid_parameters_t ctrl_quadpid_params)
@@ -160,9 +153,10 @@ ctrl_t *pf_get_ctrl(void)
     return (ctrl_t *)&ctrl_quadpid;
 }
 
-cogip::planners::Planner *pf_get_planner(void)
+cogip::planners::Planner & pf_get_planner(void)
 {
-    return (cogip::planners::Planner *)planner;
+  static cogip::planners::AstarPlanner planner((ctrl_t *)&ctrl_quadpid, app_get_path());
+  return planner;
 }
 
 void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
@@ -244,22 +238,22 @@ int pf_is_camp_left(void)
     return 1;
 }
 
-cogip::obstacles::List *pf_get_dyn_obstacles(void)
+cogip::obstacles::List & pf_get_dyn_obstacles(void)
 {
-    return lidar_obstacles;
+    return lidar_obstacles();
 }
 
-cogip::uartpb::UartProtobuf *pf_get_uartpb()
+cogip::uartpb::UartProtobuf & pf_get_uartpb()
 {
     return uartpb;
 }
 
-cogip::wizard::Wizard *pf_get_wizard()
+cogip::wizard::Wizard & pf_get_wizard()
 {
     return wizard;
 }
 
-void handle_copilot_connected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer)
+void handle_copilot_connected(cogip::uartpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
@@ -268,7 +262,7 @@ void handle_copilot_connected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer
     }
 }
 
-void handle_copilot_disconnected([[maybe_unused]] cogip::uartpb::ReadBuffer *buffer)
+void handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
 {
     pf_set_copilot_connected(false);
     std::cout << "Copilot disconnected" << std::endl;
@@ -277,21 +271,22 @@ void handle_copilot_disconnected([[maybe_unused]] cogip::uartpb::ReadBuffer *buf
 void pf_init(void)
 {
     /* Initialize UARTPB */
-    uartpb = new cogip::uartpb::UartProtobuf(
-        UART_DEV(1)
-        );
-
-    bool uartpb_res = uartpb->connect();
+    bool uartpb_res = uartpb.connect();
     if (! uartpb_res) {
-        uartpb = nullptr;
         COGIP_DEBUG_CERR("UART initialization failed, error: " << uartpb_res);
     }
     else {
-        cogip::shell::register_uartpb(uartpb);
-        uartpb->register_message_handler(copilot_connected_uuid, handle_copilot_connected);
-        uartpb->register_message_handler(copilot_disconnected_uuid, handle_copilot_disconnected);
-        uartpb->start_reader();
-        uartpb->send_message(reset_uuid);
+        cogip::shell::register_uartpb(&uartpb);
+        uartpb.register_message_handler(
+            copilot_connected_uuid,
+            cogip::uartpb::message_handler_t::create<handle_copilot_connected>()
+            );
+        uartpb.register_message_handler(
+            copilot_disconnected_uuid,
+            cogip::uartpb::message_handler_t::create<handle_copilot_disconnected>()
+            );
+        uartpb.start_reader();
+        uartpb.send_message(reset_uuid);
     }
 
 #ifdef MODULE_SHELL_PLATFORMS
@@ -324,9 +319,6 @@ void pf_init(void)
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
 
-    /* Initialize planner */
-    planner = new cogip::planners::AstarPlanner(pf_get_ctrl(), app_get_path());
-
 #ifdef MODULE_SHELL_QUADPID
     ctrl_quadpid_shell_init(&ctrl_quadpid);
 #endif /* MODULE_SHELL_QUADPID */
@@ -335,8 +327,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-
-    wizard = new cogip::wizard::Wizard(uartpb);
 
     lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
 
@@ -352,7 +342,7 @@ void pf_init_tasks(void)
         "motion control"
         );
 
-    planner->start_thread();
+    pf_get_planner().start_thread();
 
     trace_start();
 }

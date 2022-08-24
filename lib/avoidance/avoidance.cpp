@@ -1,7 +1,7 @@
 /* Standard includes */
 #include <math.h>
 #include <stdio.h>
-#include <deque>
+#include "etl/deque.h"
 
 /* Project includes */
 #include "app.hpp"
@@ -39,7 +39,7 @@ static cogip::cogip_defs::Coords finish_pose;
 /**
  * Indexes of valid points from the start pose to the final pose
  */
-static std::deque<int> _children;
+static etl::deque<int, AVOIDANCE_GRAPH_MAX_VERTICES> _children;
 
 /* Flag to indicate if a path has been successfully computed */
 static bool _is_avoidance_computed = false;
@@ -69,7 +69,7 @@ static void _validate_obstacles_points(void)
             }
 
             /* Build a bounding box around the obstacle center */
-            const cogip::cogip_defs::Polygon & bb = obstacle->bounding_box();
+            const cogip::obstacles::BoundingBox & bb = obstacle->bounding_box();
 
             /* Validate bounding box points */
             for (auto &point: bb) {
@@ -284,11 +284,11 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
                                const cogip::cogip_defs::Coords &stop)
 {
     /* Get dynamic obstacle list */
-    cogip::obstacles::List *obstacles = pf_get_dyn_obstacles();
+    cogip::obstacles::List & obstacles = pf_get_dyn_obstacles();
     const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     /* Check if that segment crosses a polygon */
-    for (auto obstacle: *obstacles) {
+    for (auto obstacle: obstacles) {
 
         /* Check if obstacle is inside borders */
         if (!borders.is_point_inside(obstacle->center())) {

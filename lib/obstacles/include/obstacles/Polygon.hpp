@@ -13,22 +13,23 @@
 
 #include "obstacles/Obstacle.hpp"
 
-// System includes
-#include <list>
+#ifndef OBSTACLE_MAX_POINTS_IN_POLYGON
+#  define OBSTACLE_MAX_POINTS_IN_POLYGON 6  /**< max number of points defining a polygon */
+#endif
 
 namespace cogip {
 
 namespace obstacles {
 
 /// A polygon obstacle defined by the list of points
-class Polygon : public Obstacle, public cogip_defs::Polygon {
+class Polygon : public Obstacle, public cogip_defs::Polygon<OBSTACLE_MAX_POINTS_IN_POLYGON> {
 public:
     /// Constructor
-    Polygon(
-        const std::list<cogip_defs::Coords> *points = nullptr ///< [in] list of points defining th polygon (optional)
-        );
+    Polygon() {};
 
-    const cogip_defs::Polygon & bounding_box() const override { return *this; };
+    Polygon(
+        const etl::ivector<cogip_defs::Coords> & points  ///< [in] list of points defining th polygon
+        );
 
     bool is_point_inside(const cogip_defs::Coords &p) const override;
     bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const override;

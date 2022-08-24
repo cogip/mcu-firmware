@@ -15,18 +15,22 @@
 #pragma once
 
 // System includes
-#include <set>
+#include "etl/set.h"
 
 // Project includes
 #include "cogip_defs/Coords.hpp"
 #include "obstacles/Obstacle.hpp"
 #include "obstacles/List.hpp"
 
+#ifndef OBSTACLE_MAX_LISTS
+#  define OBSTACLE_MAX_LISTS 6  /**< maximun numver of obstacle lists */
+#endif
+
 namespace cogip {
 
 namespace obstacles {
 
-extern std::set<List const *> all_obstacles;  ///< List of all obstacle list
+extern etl::set<List const *, OBSTACLE_MAX_LISTS> all_obstacles;  ///< List of all obstacle lists
 
 /// Check if the given point is inside an obstacle.
 /// @return                  true if point is inside, false otherwise

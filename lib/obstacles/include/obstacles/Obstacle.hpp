@@ -32,6 +32,8 @@ namespace cogip {
 
 namespace obstacles {
 
+using BoundingBox = cogip_defs::Polygon<OBSTACLE_BOUNDING_BOX_VERTICES>;
+
 /// An obstacle used to detect and avoid collisions.
 class Obstacle {
 public:
@@ -41,8 +43,8 @@ public:
 
     /// Constructor
     Obstacle(
-        const cogip_defs::Coords &center, ///< [in] obstacle center
-        double radius                     ///< [in] obstacle circumscribed circle radius
+        const cogip_defs::Coords &center = {0, 0}, ///< [in] obstacle center
+        double radius = 0.0                        ///< [in] obstacle circumscribed circle radius
         );
 
     /// Destructor
@@ -52,7 +54,7 @@ public:
     void update_bounding_box();
 
     /// Return bounding box polygon.
-    virtual const cogip_defs::Polygon & bounding_box() const { return bounding_box_; };
+    virtual const BoundingBox & bounding_box() const { return bounding_box_; };
 
     /// Check if the given point is inside the obstacle.
     /// @return true if point is inside, false otherwise
@@ -99,7 +101,7 @@ public:
 protected:
     cogip_defs::Coords center_;           ///< obstacle center
     double radius_;                       ///< obstacle circumscribed circle radius
-    cogip_defs::Polygon bounding_box_;    ///< Precomputed bounding box for avoidance
+    BoundingBox bounding_box_;            ///< Precomputed bounding box for avoidance
     bool enabled_;                        ///< Obstacle enabled or not
 };
 

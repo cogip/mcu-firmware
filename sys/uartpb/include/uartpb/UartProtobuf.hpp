@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "etl/delegate.h"
+
 // RIOT includes
 #include <mutex.h>
 #include "periph/uart.h"
@@ -43,7 +45,7 @@ namespace uartpb {
 using uuid_t = uint32_t;
 
 /// Prototype for incoming Protobuf message handlers
-using message_handler_t = std::function<void(cogip::uartpb::ReadBuffer *)>;
+using message_handler_t = etl::delegate<void(cogip::uartpb::ReadBuffer &)>;
 
 /// Function called when data is received on serial port.
 /// This wrapper is used to call the uart_rx_cb() function from UartProtobuf class
@@ -108,6 +110,10 @@ private:
     mutex_t mutex_ = MUTEX_INIT;                  ///< mutex protecting serial port access
     etl::map<uuid_t, message_handler_t, UARTPB_MAX_HANDLERS> message_handlers_;
                                                   ///< callbacks to process the message after decoding
+    char reader_stack_[UARTPB_READER_STACKSIZE];  ///< reader thread stack
+    char rx_mem_[UART_BUFFER_SIZE];               ///< memory for UART incoming bytes
+    ReadBuffer read_buffer_;                      ///< buffer used to decode a message
+    WriteBuffer write_buffer_;                    ///< buffer used to encode a message
 };
 
 } // namespace uartpb

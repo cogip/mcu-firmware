@@ -14,8 +14,6 @@
 #include "cogip_defs/Pose.hpp"
 #include "utils.hpp"
 
-#include <vector>
-
 namespace cogip {
 
 namespace path {
@@ -60,8 +58,6 @@ protected:
     bool allow_reverse_;          ///< reverse mode
     func_cb_t act_;               ///< action callback
 };
-
-using Poses = std::vector<cogip::path::Pose>;
 
 } // namespace path
 

@@ -13,7 +13,6 @@
 
 // Standard includes
 #include <cstdint>
-#include <vector>
 
 // RIOT includes
 #include <mutex.h>
@@ -33,7 +32,7 @@ namespace cogip {
 namespace obstacles {
 
 /// List of obstacles.
-class List: public std::vector<Obstacle *> {
+class List: public etl::vector<Obstacle *, OBSTACLES_MAX_NUMBER> {
 public:
     /// Protobuf message type. Shortcut for original template type.
     using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<Obstacle::PB_Message, OBSTACLES_MAX_NUMBER>;
@@ -57,9 +56,6 @@ public:
     void pb_copy(
         PB_Message &message                 ///< [out] Protobuf message to fill
         ) const;
-
-    /// Delete all obstacles from the list.
-    void clear();
 
     /// Return number of enabled obstacles.
     size_t enabled_obstacles() const;

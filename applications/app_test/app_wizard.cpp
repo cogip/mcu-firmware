@@ -11,12 +11,12 @@ static cogip::wizard::Wizard::PB_Message wizard_message;
 
 void app_wizard(void)
 {
-    cogip::wizard::Wizard *wizard = pf_get_wizard();
+    cogip::wizard::Wizard & wizard = pf_get_wizard();
 
     wizard_message.clear();
     wizard_message.mutable_name() = "Choose your camp";
     wizard_message.mutable_camp().mutable_value() = "yellow";
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_camp()) {
         std::string select_camp = wizard_message.get_camp().value();
         COGIP_DEBUG_COUT("Selected camp: " << select_camp);
@@ -29,7 +29,7 @@ void app_wizard(void)
     wizard_message.clear();
     wizard_message.mutable_name() = "Check camera focus";
     wizard_message.mutable_camera().set_value(true);
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_camera()) {
         COGIP_DEBUG_COUT("Camera checked");
     }
@@ -40,7 +40,7 @@ void app_wizard(void)
     wizard_message.clear();
     wizard_message.mutable_name() = "Message";
     wizard_message.mutable_message().mutable_value() = "Ready to start?";
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_message()) {
         COGIP_DEBUG_COUT("Wizard start message acknowledged");
     }
@@ -48,14 +48,14 @@ void app_wizard(void)
         COGIP_DEBUG_COUT("Wizard error: bad response type for message start.");
     }
 
-    pf_get_planner()->set_allow_change_path_pose(true);
-    pf_get_planner()->start();
+    pf_get_planner().set_allow_change_path_pose(true);
+    pf_get_planner().start();
 
 #if 0  // Keep unused code as examples for other types supported by wizard.
     wizard_message.clear();
     wizard_message.mutable_name() = "Skip Wizard example?";
     wizard_message.mutable_boolean().set_value(true);
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_boolean()) {
         if (wizard_message.get_boolean().value()) {
             COGIP_DEBUG_COUT("Wizard skipped");
@@ -70,7 +70,7 @@ void app_wizard(void)
     wizard_message.clear();
     wizard_message.mutable_name() = "Enter an integer";
     wizard_message.mutable_integer().set_value(2);
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_integer()) {
         COGIP_DEBUG_COUT("Wizard integer response: " << wizard_message.get_integer().value());
     }
@@ -81,7 +81,7 @@ void app_wizard(void)
     wizard_message.clear();
     wizard_message.mutable_name() = "Enter a float";
     wizard_message.mutable_floating().set_value(2.5);
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_floating()) {
         COGIP_DEBUG_COUT("Wizard float response: " << wizard_message.get_floating().value());
     }
@@ -92,7 +92,7 @@ void app_wizard(void)
     wizard_message.clear();
     wizard_message.mutable_name() = "Enter a string";
     wizard_message.mutable_str().mutable_value() = "foo";
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_str()) {
         COGIP_DEBUG_COUT("Wizard string response: " << wizard_message.get_str().value());
     }
@@ -107,7 +107,7 @@ void app_wizard(void)
     choice_integer.mutable_choices().add(2);
     choice_integer.mutable_choices().add(3);
     choice_integer.mutable_value() = 2;
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_choice_integer()) {
         COGIP_DEBUG_COUT("Wizard choice integer response: " << wizard_message.get_choice_integer().value());
     }
@@ -122,7 +122,7 @@ void app_wizard(void)
     choice_floating.mutable_choices().add(2.5);
     choice_floating.mutable_choices().add(3.5);
     choice_floating.mutable_value() = 2.5;
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_choice_floating()) {
         COGIP_DEBUG_COUT("Wizard choice floating response: " << wizard_message.get_choice_floating().value());
     }
@@ -137,7 +137,7 @@ void app_wizard(void)
     choice_str.mutable_choices().get(1) = "bar";
     choice_str.mutable_choices().get(2) = "baz";
     choice_str.mutable_value() = "bar";
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_choice_str()) {
         COGIP_DEBUG_COUT("Wizard choice string response: " << wizard_message.get_choice_str().value());
     }
@@ -153,7 +153,7 @@ void app_wizard(void)
     select_integer.mutable_choices().add(3);
     select_integer.mutable_value().add(1);
     select_integer.mutable_value().add(3);
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_select_integer()) {
         COGIP_DEBUG_COUT("Wizard select integer response:");
         for(uint32_t i = 0; i < wizard_message.get_select_integer().value().get_length(); ++i) {
@@ -173,7 +173,7 @@ void app_wizard(void)
     select_floating.mutable_choices().add(3.5);
     select_floating.mutable_value().add(1.5);
     select_floating.mutable_value().add(3.5);
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_select_floating()) {
         COGIP_DEBUG_COUT("Wizard select floating response:");
         for(uint32_t i = 0; i < wizard_message.get_select_floating().value().get_length(); ++i) {
@@ -193,7 +193,7 @@ void app_wizard(void)
     select_str.mutable_choices().get(2) = "baz";
     select_str.mutable_value().get(0) = "foo";
     select_str.mutable_value().get(1) = "baz";
-    wizard_message = wizard->request(wizard_message);
+    wizard_message = wizard.request(wizard_message);
     if (wizard_message.has_select_str()) {
         COGIP_DEBUG_COUT("Wizard select string response:");
         for(uint32_t i = 0; i < wizard_message.get_select_str().value().get_length(); ++i) {

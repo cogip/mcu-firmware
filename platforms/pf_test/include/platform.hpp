@@ -270,21 +270,21 @@ ctrl_t *pf_get_ctrl(void);
  *
  * return   Planner
  **/
-cogip::planners::Planner *pf_get_planner(void);
+cogip::planners::Planner & pf_get_planner(void);
 
 /**
  * @brief Returns uarpb.
  *
  * return   uarpb pointer
  **/
-cogip::uartpb::UartProtobuf *pf_get_uartpb();
+cogip::uartpb::UartProtobuf & pf_get_uartpb();
 
 /**
  * @brief Returns wizard.
  *
  * return   Wizard
  **/
-cogip::wizard::Wizard *pf_get_wizard();
+cogip::wizard::Wizard & pf_get_wizard();
 
 /**
  * @brief Initialize all platforms threads
@@ -331,7 +331,7 @@ void motor_drive(const cogip::cogip_defs::Polar &command);
  *
  * @return                      dynamic obstacles list
  **/
-cogip::obstacles::List * pf_get_dyn_obstacles(void);
+cogip::obstacles::List & pf_get_dyn_obstacles(void);
 
 /**
  * @name Platform parameters for QuadPID controller.
