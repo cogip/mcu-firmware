@@ -82,6 +82,15 @@ ifneq ($(CPU),native)
 	.DEFAULT_GOAL := world
 endif
 
+# mallinfo2 is only available on native architecture making mallinfo deprecated
+ifeq ($(CPU),native)
+	CFLAGS += -D"MALLINFO=struct mallinfo2"
+	CFLAGS += -D"MALLINFO_FUNC()=mallinfo2()"
+else
+	CFLAGS += -D"MALLINFO=struct mallinfo"
+	CFLAGS += -D"MALLINFO_FUNC()=mallinfo()"
+endif
+
 # Use C++14 by default
 tmp_cxxexflags := $(CXXEXFLAGS)
 CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
