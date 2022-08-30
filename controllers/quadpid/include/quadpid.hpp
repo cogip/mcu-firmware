@@ -64,14 +64,17 @@ typedef struct {
     PID_t linear_pose_pid;                      /**< Linear pose Kp, Ki, Kd */
     PID_t angular_pose_pid;                     /**< Angular pose Kp, Ki, Kd */
 
+    /* cppcheck-suppress unusedStructMember */
     double min_distance_for_angular_switch;   /**< Distance approximation to
                                                      switch to angular
                                                      correction */
 
+    /* cppcheck-suppress unusedStructMember */
     double min_angle_for_pose_reached;        /**< Angle approximation to
                                                      switch to position reached
                                                      state */
 
+    /* cppcheck-suppress unusedStructMember */
     double min_angle_for_target_orientation;  /**< Angle approximation to
                                                      switch to linear
                                                      correction */
