@@ -150,7 +150,7 @@ static bool _dijkstra(void)
     uint8_t start = START_INDEX;
 
     /* Initialize all arrays */
-    for (int i = 0; i <= _valid_points_count; i++) {
+    for (i = 0; i <= _valid_points_count; i++) {
         /* No point checked */
         checked[i] = false;
         /* All distances set to infinite */
