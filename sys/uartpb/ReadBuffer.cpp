@@ -107,7 +107,7 @@ size_t ReadBuffer::base64_decode()
         return 0;
     }
     if (pb_buffer_size > UARTPB_INPUT_MESSAGE_LENGTH_MAX) {
-        printf("Failed to base64 decode, buffer too small (%u > %u).\n", pb_buffer_size, UARTPB_INPUT_MESSAGE_LENGTH_MAX);
+        printf("Failed to base64 decode, buffer too small (%zu > %u).\n", pb_buffer_size, UARTPB_INPUT_MESSAGE_LENGTH_MAX);
         return 0;
     }
     ret = ::base64_decode(base64_data_, base64_message_length, data_, &pb_buffer_size);

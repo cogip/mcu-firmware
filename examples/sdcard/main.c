@@ -64,7 +64,7 @@ int test_write_vfs(int argc, char **argv)
 
     res = vfs_write(fd, line1, len1);
     if (res != (ssize_t)len1) {
-        printf("Write line1: error (written=%d, expected=%u)\n", res, len1);
+        printf("Write line1: error (written=%d, expected=%zu)\n", res, len1);
     }
     else {
         printf("Write line1: success\n");
@@ -72,7 +72,7 @@ int test_write_vfs(int argc, char **argv)
 
     res = vfs_write(fd, line2, len2);
     if (res != (ssize_t)len2) {
-        printf("Write line2: error (written=%d, expected=%u)\n", res, len2);
+        printf("Write line2: error (written=%d, expected=%zu)\n", res, len2);
     }
     else {
         printf("Write line2: success\n");
@@ -110,7 +110,7 @@ int test_write_std(int argc, char **argv)
     len = write(fd, line1, len1);
     if (len != (ssize_t)len1) {
         errsv = errno;
-        printf("Write line1: error (written=%d, expected=%u)\n", len, len1);
+        printf("Write line1: error (written=%d, expected=%zu)\n", len, len1);
         printf("Last errno: %d\n", errsv);
         perror("Last error");
     }
@@ -121,7 +121,7 @@ int test_write_std(int argc, char **argv)
     len = write(fd, line2, len2);
     if (len != (ssize_t)len2) {
         errsv = errno;
-        printf("Write line2: error (written=%d, expected=%u)\n", len, len2);
+        printf("Write line2: error (written=%d, expected=%zu)\n", len, len2);
         printf("Last errno: %d\n", errsv);
         perror("Last error");
     }
@@ -176,6 +176,7 @@ int test_write_newlib(int argc, char **argv)
         printf("File '%s' flush: failed\n", test_write_filename);
         printf("Last errno: %d\n", errsv);
         perror("Last error");
+        fclose(f);
         return 1;
     }
     printf("File '%s' flush: success\n", test_write_filename);
