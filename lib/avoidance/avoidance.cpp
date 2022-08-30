@@ -284,7 +284,7 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
                                const cogip::cogip_defs::Coords &stop)
 {
     /* Get dynamic obstacle list */
-    cogip::obstacles::List & obstacles = pf_get_dyn_obstacles();
+    const cogip::obstacles::List & obstacles = pf_get_dyn_obstacles();
     const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     /* Check if that segment crosses a polygon */
