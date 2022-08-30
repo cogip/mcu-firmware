@@ -29,6 +29,7 @@
 typedef struct {
     uint8_t intensity[2];   /**< intentity bytes */
     uint8_t distance[2];    /**< distance bytes */
+    // cppcheck-suppress unusedStructMember
     uint8_t reserved[2];    /**< reserved bytes */
 } lds01_offset_t;
 
