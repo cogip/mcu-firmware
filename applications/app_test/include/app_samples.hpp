@@ -57,7 +57,7 @@ constexpr auto SAMPLE_LOCATION_COUNT = __LINE__ - SAMPLE_LOCATION_START_LINE - 3
 
 class SampleObstacle: public cogip::obstacles::Circle {
 public:
-    SampleObstacle(const cogip::cogip_defs::Coords &center);
+    explicit SampleObstacle(const cogip::cogip_defs::Coords &center);
 };
 
 class Sample {

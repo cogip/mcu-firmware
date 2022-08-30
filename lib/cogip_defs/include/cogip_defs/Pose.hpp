@@ -30,7 +30,7 @@ public:
         ) : Coords(x, y), O_(O) {};
 
     /// Constructor from Protobuf class
-    Pose(const PB_Pose &pose) : Coords(pose.get_x(), pose.get_y()), O_(pose.get_O()) {};
+    explicit Pose(const PB_Pose &pose) : Coords(pose.get_x(), pose.get_y()), O_(pose.get_O()) {};
 
     /// Return coordinates.
     Coords coords(void) const { return Coords(x_, y_); };

@@ -27,7 +27,7 @@ public:
         ) : distance_(distance), angle_(angle) {};
 
     /// Constructor from Protobuf class
-    Polar(const PB_Polar &polar) :
+    explicit Polar(const PB_Polar &polar) :
         distance_(polar.get_distance()),
         angle_(polar.get_angle()) {};
 

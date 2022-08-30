@@ -27,7 +27,7 @@ public:
     /// Constructor
     Polygon() {};
 
-    Polygon(
+    explicit Polygon(
         const etl::ivector<cogip_defs::Coords> & points  ///< [in] list of points defining th polygon
         );
 
