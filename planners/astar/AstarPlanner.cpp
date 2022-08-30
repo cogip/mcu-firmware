@@ -110,18 +110,16 @@ int AstarPlanner::trajectory_get_route_update(const cogip::cogip_defs::Pose &rob
         // next position in the path. If no position is reachable, return an error
         nb_pose_reachable = path_.size();
         while ((!avoidance_status) && (nb_pose_reachable-- > 0)) {
-            if (!avoidance_status) {
-                if (!allow_change_path_pose_) {
-                    goto trajectory_get_route_update_error;
-                }
-                path_.unreachable();
-                if (*current_path_pos == *path_.current_pose()) {
-                    goto trajectory_get_route_update_error;
-                }
-                current_path_pos = path_.current_pose();
-                avoidance_status = avoidance_build_graph(robot_pose,
-                                                         *current_path_pos);
+            if (!allow_change_path_pose_) {
+                goto trajectory_get_route_update_error;
             }
+            path_.unreachable();
+            if (*current_path_pos == *path_.current_pose()) {
+                goto trajectory_get_route_update_error;
+            }
+            current_path_pos = path_.current_pose();
+            avoidance_status = avoidance_build_graph(robot_pose,
+                                                        *current_path_pos);
         }
         if (nb_pose_reachable < 0) {
             path_.unreachable();
