@@ -31,7 +31,7 @@ jobs:
     - name: Install toolchain
       run: |
         sudo apt-get update
-        sudo apt-get install -qq build-essential gcc-multilib g++-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi uncrustify protobuf-compiler quilt
+        sudo apt-get install -qq build-essential gcc-multilib g++-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi uncrustify protobuf-compiler quilt cppcheck
         gcc --version
         arm-none-eabi-gcc --version
     - name: Install Python packages
