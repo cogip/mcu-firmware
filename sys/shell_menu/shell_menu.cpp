@@ -169,6 +169,7 @@ static void run_pb_command_(Command *command, const Command::PB_Message &pb_comm
             }
         }
         // Add null-character after last argument
+        // cppcheck-suppress unreadVariable
         args[i] = '\0';
     }
     // Execute shell command callback

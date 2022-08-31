@@ -59,7 +59,7 @@ static void handle_response_ping(cogip::uartpb::ReadBuffer & buffer)
 static void handle_response_pong(cogip::uartpb::ReadBuffer & buffer)
 {
     resp_pong.deserialize(buffer);
-    const cogip::cogip_defs::Pose &pose = resp_pong.get_new_pose();
+    const PB_Pose &pose = resp_pong.get_new_pose();
     std::cout
         << "<<== Pong response with pose={x=" << pose.x()
         << ", y=" << pose.y() << ", angle=" << pose.O() << "}"

@@ -67,7 +67,7 @@ class UartProtobuf {
 public:
 
     /// Class constructor.
-    UartProtobuf(
+    explicit UartProtobuf(
         uart_t uart_dev,                          ///< [in] UART device
         uint32_t uart_speed=230400U               ///< [in] UART baud rate
         );

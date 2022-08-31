@@ -266,7 +266,7 @@ int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command)
 
             ctrl_set_pose_reached(ctrl);
 
-            command = {0, 0};
+            command = {0.0, 0.0};
             return 0;
         }
     }

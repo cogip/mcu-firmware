@@ -46,7 +46,7 @@ static int pca9548_cmd_previous_channel_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    channel_id = (channel_id <= 0) ? 0 : channel_id - 1;
+    channel_id = (channel_id == 0) ? 0 : channel_id - 1;
 
     return EXIT_SUCCESS;
 }
@@ -56,7 +56,7 @@ static int pca9548_cmd_refresh_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    channel_id = (channel_id <= 0) ? 0 : channel_id - 1;
+    channel_id = (channel_id == 0) ? 0 : channel_id - 1;
 
     return EXIT_SUCCESS;
 }

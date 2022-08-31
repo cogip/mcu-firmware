@@ -120,20 +120,27 @@ typedef struct {
     cogip::cogip_defs::Pose pose_current; /**< Current position */
     cogip::cogip_defs::Polar speed_order;   /**< Speed order to reach the position */
     cogip::cogip_defs::Polar speed_current; /**< Current speed reaching the position */
+    /* cppcheck-suppress unusedStructMember */
     speed_order_cb_t speed_order_cb;    /**< Optional @ref speed_order_cb_t. */
 
+    /* cppcheck-suppress unusedStructMember */
     uint8_t pose_reached;               /**< Boolean set when pose_order is reached */
+    /* cppcheck-suppress unusedStructMember */
     uint8_t pose_intermediate;          /**< Boolean set when current pose_order is
                                              not the final destination */
+    /* cppcheck-suppress unusedStructMember */
     uint8_t allow_reverse;              /**< Boolean to allow going backward to reach
                                              the pose_order */
+    /* cppcheck-suppress unusedStructMember */
     uint8_t anti_blocking_on;           /**< Continuous cycles number the controller is
                                              blocked */
+    /* cppcheck-suppress unusedStructMember */
     uint16_t blocking_cycles;           /**< Continuous cycles number the controller is
                                              blocked */
 
     ctrl_mode_t current_mode;           /**< Current controller mode */
 
+    /* cppcheck-suppress unusedStructMember */
     uint32_t current_cycle;             /**< Count each control loop turn.
                                              Reset when a new controller mode is set,
                                              incremented on each loop turn otherwise */

@@ -1,7 +1,34 @@
 #!/bin/bash
 
+EXCLUDE_DIRECTORIES="venv bin"
+
+if [ $# -gt 1 ] || [ $# -eq 1 ] && [ "$1" != "apply" ]; then
+    echo "Error... Usage:"
+    echo "  $ tools/check-codingrules.sh [apply]"
+    exit 1
+fi
+
+apply=$1
+
+##################
+### uncrustify ###
+##################
+
+if [ -n "$apply" ]; then
+    while true; do
+        read -p "Are you sure to apply uncrustify corrections to all your source files [Yy/Nn] ? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes with [Yy] or no with [Nn].";;
+        esac
+    done
+fi
+
 # Filter to only check .c and .h files
-FILES_TO_CHECK=$(find . -name '*.c' -o -name '*.h')
+for directory in $EXCLUDE_DIRECTORIES; do find_exclude="$find_exclude $sep -not -path '*/$directory/*'"; sep='-a'; done
+find_exclude=$(echo $find_exclude | tr -s ' ')
+FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.h' \)" )
 for FILE in ${FILES_TO_CHECK}; do
     uncrustify -q -l C -c tools/codingrules-uncrustify-riot.cfg {} $FILE
 done
@@ -14,11 +41,28 @@ UNCRUSTIFIED_FILES=$(find . -name '*.uncrustify')
 EXIT_STATUS=0
 for FILE in ${UNCRUSTIFIED_FILES}; do
     ORIGIN_FILE=$(echo ${FILE%.*}) # Remove the string ".uncrustify" from the filename
-    diff --color -u ${ORIGIN_FILE} ${FILE}
+    if [ -z "$apply" ]; then
+        diff --color -u ${ORIGIN_FILE} ${FILE}
+    else
+        mv -v ${FILE} ${ORIGIN_FILE}
+    fi
     if [ $? -ne 0 ]; then
         EXIT_STATUS=1
     fi
-    rm ${FILE}
+    rm -f ${FILE}
 done
+
+################
+### cppcheck ###
+################
+FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' \)" )
+cppcheck --std=c++17 --enable=style,performance,portability --force --error-exitcode=2 --quiet -j 1 \
+    --template "{file}:{line}: {severity} ({id}): {message}"         \
+    --inline-suppr ${DEFAULT_SUPPRESSIONS} ${CPPCHECK_OPTIONS} ${@}  \
+    ${FILES_TO_CHECK}
+
+if [ $? -ne 0 ]; then
+    EXIT_STATUS=$(( $EXIT_STATUS + 1 ))
+fi
 
 exit ${EXIT_STATUS}

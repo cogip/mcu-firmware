@@ -74,7 +74,7 @@ void UartProtobuf::message_reader()
             read_buffer_.clear();
             ringbuffer_get(&rx_buf_, (char *)read_buffer_.get_base64_data(), message_length);
             size_t res = read_buffer_.base64_decode();
-            if (res <= 0) {
+            if (res == 0) {
                 std::cout << "Failed to base64 decode Protobuf message (res = " << res <<  ")" << std::endl;
                 continue;
             }

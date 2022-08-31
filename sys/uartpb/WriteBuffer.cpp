@@ -68,7 +68,7 @@ size_t WriteBuffer::base64_encode()
         return 0;
     }
     if (base64_buffer_size > UARTPB_BASE64_ENCODE_BUFFER_SIZE) {
-        printf("Failed to base64 encode, buffer too small (%u > %u).\n", base64_buffer_size, UARTPB_BASE64_ENCODE_BUFFER_SIZE);
+        printf("Failed to base64 encode, buffer too small (%zu > %u).\n", base64_buffer_size, UARTPB_BASE64_ENCODE_BUFFER_SIZE);
         return 0;
     }
 

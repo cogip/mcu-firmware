@@ -68,7 +68,7 @@ public:
         >;
 
     /// Constructor.
-    Wizard(
+    explicit Wizard(
         cogip::uartpb::UartProtobuf & uartpb  ///< [in] uartpb pointer used to send/receive messages
         );
 

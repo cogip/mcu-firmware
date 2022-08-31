@@ -159,9 +159,13 @@ cogip::planners::Planner & pf_get_planner(void)
   return planner;
 }
 
-void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
-                            cogip::cogip_defs::Polar &robot_speed,
-                            cogip::cogip_defs::Polar &motor_command)
+void pf_ctrl_pre_running_cb(
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Pose &robot_pose,
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Polar &robot_speed,
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Polar &motor_command)
 {
     (void)motor_command;
 
@@ -172,9 +176,13 @@ void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &robot_pose,
     odometry_update(robot_pose, robot_speed, SEGMENT);
 }
 
-void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose,
-                          cogip::cogip_defs::Polar &robot_speed,
-                          cogip::cogip_defs::Polar &motor_command)
+void pf_ctrl_post_stop_cb(
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Pose &robot_pose,
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Polar &robot_speed,
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Polar &motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;
@@ -187,9 +195,13 @@ void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &robot_pose,
     motor_drive(motor_command);
 }
 
-void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &robot_pose,
-                             cogip::cogip_defs::Polar &robot_speed,
-                             cogip::cogip_defs::Polar &motor_command)
+void pf_ctrl_post_running_cb(
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Pose &robot_pose,
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Polar &robot_speed,
+    /* cppcheck-suppress constParameter */
+    cogip::cogip_defs::Polar &motor_command)
 {
     (void)robot_pose;
     (void)robot_speed;

@@ -149,14 +149,6 @@
 /** @} */
 
 /**
- * @brief    General sensor structure
- */
-typedef struct {
-    double angle_offset;        /**< angle offset from robot front axis */
-    double distance_offset;     /**< distance from robot center */
-} pf_sensor_t;
-
-/**
  * @brief Get trace mode status
  *
  * @return                      true if trace mode is activited, false otherwise

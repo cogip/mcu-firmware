@@ -327,7 +327,7 @@ lx_comm_error_t lx_servo_or_motor_mode_write(const lx_t *device, const bool mode
     data[0] = (uint8_t)(mode);
     data[1] = 0;
     data[2] = (uint8_t)(speed & 0xFF);
-    data[3] = (uint8_t)((speed >> 8) & 0xFF);
+    data[3] = (uint8_t)(((uint16_t)speed >> 8) & 0xFF);
 
     return lx_write(device, LX_SERVO_OR_MOTOR_MODE_WRITE, data, 4);
 }

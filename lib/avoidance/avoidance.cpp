@@ -150,7 +150,7 @@ static bool _dijkstra(void)
     uint8_t start = START_INDEX;
 
     /* Initialize all arrays */
-    for (int i = 0; i <= _valid_points_count; i++) {
+    for (i = 0; i <= _valid_points_count; i++) {
         /* No point checked */
         checked[i] = false;
         /* All distances set to infinite */
@@ -284,7 +284,7 @@ bool avoidance_check_recompute(const cogip::cogip_defs::Coords &start,
                                const cogip::cogip_defs::Coords &stop)
 {
     /* Get dynamic obstacle list */
-    cogip::obstacles::List & obstacles = pf_get_dyn_obstacles();
+    const cogip::obstacles::List & obstacles = pf_get_dyn_obstacles();
     const cogip::obstacles::Polygon &borders = cogip::app::app_get_borders();
 
     /* Check if that segment crosses a polygon */

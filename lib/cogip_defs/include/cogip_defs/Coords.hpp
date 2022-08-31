@@ -27,7 +27,7 @@ public:
         ) : x_(x), y_(y) {};
 
     /// Constructor from Protobuf class
-    Coords(const PB_Coords &coords) : x_(coords.get_x()), y_(coords.get_y()) {};
+    explicit Coords(const PB_Coords &coords) : x_(coords.get_x()), y_(coords.get_y()) {};
 
     /// Return X coordinate.
     double x(void) const { return x_; };
