@@ -46,7 +46,6 @@ var annotated_dup =
     [ "lx_t", "structlx__t.html", "structlx__t" ],
     [ "lx_writer_t", "structlx__writer__t.html", "structlx__writer__t" ],
     [ "pca9548_conf_t", "structpca9548__conf__t.html", "structpca9548__conf__t" ],
-    [ "pf_sensor_t", "structpf__sensor__t.html", "structpf__sensor__t" ],
     [ "PID", "structPID.html", null ],
     [ "PID_t", "structPID__t.html", "structPID__t" ],
     [ "sd21_conf_t", "structsd21__conf__t.html", "structsd21__conf__t" ],

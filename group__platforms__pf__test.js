@@ -1,10 +1,6 @@
 var group__platforms__pf__test =
 [
     [ "platform.hpp", "pf__test_2include_2platform_8hpp.html", null ],
-    [ "pf_sensor_t", "structpf__sensor__t.html", [
-      [ "angle_offset", "group__platforms__pegasus.html#ga225b96e919422af01ca0a00843455dde", null ],
-      [ "distance_offset", "group__platforms__pegasus.html#ga770993624df37f0b423fdf977bd2dd56", null ]
-    ] ],
     [ "AVOIDANCE_BORDER_X_MAX", "group__platforms__pf__test.html#ga5cd8534245dd8c7715965af083bd13c2", null ],
     [ "AVOIDANCE_BORDER_X_MIN", "group__platforms__pf__test.html#ga74d22d5c450365dc5f4ae75b8b6ff432", null ],
     [ "AVOIDANCE_BORDER_Y_MAX", "group__platforms__pf__test.html#ga128c544be070e5eb2e766506e28d9d91", null ],

@@ -26,7 +26,6 @@ var hierarchy =
       ] ]
     ] ],
     [ "pca9548_conf_t", "structpca9548__conf__t.html", null ],
-    [ "pf_sensor_t", "structpf__sensor__t.html", null ],
     [ "PID", "structPID.html", null ],
     [ "PID_t", "structPID__t.html", null ],
     [ "cogip::planners::Planner", "classcogip_1_1planners_1_1Planner.html", [
