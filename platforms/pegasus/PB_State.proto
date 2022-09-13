@@ -4,7 +4,6 @@ import "PB_Mode.proto";
 import "PB_Coords.proto";
 import "PB_Pose.proto";
 import "PB_Polar.proto";
-import "PB_Obstacle.proto";
 
 message PB_State {
     PB_Mode mode = 1;
@@ -13,5 +12,4 @@ message PB_State {
     PB_Polar speed_current = 4;
     PB_Polar speed_order = 5;
     repeated PB_Coords path = 6;
-    repeated PB_Obstacle obstacles = 7;
 }

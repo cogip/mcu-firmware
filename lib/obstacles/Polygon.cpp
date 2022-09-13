@@ -53,7 +53,6 @@ Polygon::Polygon(const etl::ivector<cogip_defs::Coords> & points)
 {
     for (const auto &point: points) {
         push_back(point);
-        bounding_box_.push_back(point);
     }
 }
 
@@ -117,33 +116,6 @@ cogip_defs::Coords Polygon::nearest_point(const cogip_defs::Coords &p) const
     }
 
     return tmp;
-}
-
-void Polygon::print_json(void) const
-{
-    COGIP_DEBUG_COUT(
-        "{"
-            << "\"x\":" << center_.x()
-            << ",\"y\":" << center_.y()
-            << ",\"points\":["
-    );
-    for (auto it = begin(); it != end(); it++) {
-        if (it != begin()) {
-            COGIP_DEBUG_COUT(",");
-        }
-        COGIP_DEBUG_COUT(
-            "{"
-                << "\"x\":" << it->x()
-                << ",\"y\":" << it->y()
-                << ",\"points\":["
-            );
-    }
-    COGIP_DEBUG_COUT("]}");
-}
-
-void Polygon::pb_copy(PB_Message &) const
-{
-    // Polygon is not supported by the simulator, so do nothing.
 }
 
 } // namespace obstacles

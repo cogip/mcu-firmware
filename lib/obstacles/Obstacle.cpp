@@ -31,19 +31,9 @@ void Obstacle::update_bounding_box()
     }
 }
 
-void Obstacle::pb_copy(PB_Message &message) const
-{
-    auto &bb = message.mutable_bounding_box();
-    for (const auto &point: bounding_box_) {
-        auto &bb_point = bb.get(bb.get_length());
-        point.pb_copy(bb_point);
-    }
-}
-
 void Obstacle::set_center(cogip_defs::Coords &center)
 {
     center_ = center;
-    update_bounding_box();
 }
 
 } // namespace obstacles

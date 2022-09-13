@@ -39,15 +39,6 @@ bool is_point_in_obstacles(
     const Obstacle *filter       ///< [in] obstacle to filter
     );
 
-/// Print all obstacles from all lists.
-void print_all_json(void);
-
-/// Copy data to Protobuf message.
-void pb_copy(
-    cogip::obstacles::List::PB_Message &message
-                                 ///< [out] Protobuf message to fill
-    );
-
 } // namespace obstacles
 
 } // namespace cogip

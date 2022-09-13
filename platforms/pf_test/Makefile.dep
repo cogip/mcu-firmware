@@ -14,7 +14,6 @@ USEMODULE += pid
 USEMODULE += astar
 USEMODULE += quadpid
 USEMODULE += cogip_defs
-USEMODULE += lds01_dma
 USEMODULE += obstacles
 USEMODULE += wizard
 
