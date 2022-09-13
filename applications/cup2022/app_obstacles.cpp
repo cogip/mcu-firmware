@@ -70,8 +70,8 @@ etl::map<CampColor, FixedObstacle *, 2> & app_get_shed_obstacles(void) {
 
 void app_obstacles_init()
 {
-    _init_border_obstacles();
-    _init_excavation_sites_obstacles();
+    // _init_border_obstacles();
+    // _init_excavation_sites_obstacles();
 }
 
 } // namespace app

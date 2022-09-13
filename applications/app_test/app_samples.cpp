@@ -157,7 +157,7 @@ SamplesMap &app_samples_get(bool opposite)
     static etl::map<CampColor, SamplesMap, 2> samples;
     static bool initialized = false;
     if (! initialized) {
-        app_samples_init(samples);
+        // app_samples_init(samples);
         initialized = true;
     }
     return samples[app_camp_get_color(opposite)];
