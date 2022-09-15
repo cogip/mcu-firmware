@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "PB_Rectangle.proto";
+import "PB_Circle.proto";
+
+message PB_Obstacles {
+    repeated PB_Circle circles = 1;
+    repeated PB_Rectangle rectangles = 2;
+}

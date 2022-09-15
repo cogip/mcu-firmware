@@ -66,6 +66,9 @@ void UartProtobuf::message_reader()
         // Check a handler corresponding to the uuid is registered
         if (message_handlers_.count(uuid) != 1) {
             std::cout << "Unknown message uuid: " << uuid << std::endl;
+            if (message_length > 0) {
+                ringbuffer_remove(&rx_buf_, message_length);
+            }
             continue;
         }
 

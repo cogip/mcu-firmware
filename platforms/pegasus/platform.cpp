@@ -17,7 +17,6 @@
 #include "utils.hpp"
 
 /* Platform includes */
-#include "lidar_utils.hpp"
 #include "lidar_obstacles.hpp"
 #include "trace_utils.hpp"
 
@@ -71,16 +70,19 @@ char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool copilot_connected = false;
-PB_State<AVOIDANCE_GRAPH_MAX_VERTICES, OBSTACLES_MAX_NUMBER, OBSTACLE_BOUNDING_BOX_VERTICES> pb_state;
+PB_Pose pb_pose;
+PB_State<AVOIDANCE_GRAPH_MAX_VERTICES> pb_state;
 
 cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
 cogip::wizard::Wizard wizard(uartpb);
 
 // Define uartpb uuids
 constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
+constexpr cogip::uartpb::uuid_t pose_uuid = 1534060156;
 constexpr cogip::uartpb::uuid_t state_uuid = 3422642571;
 constexpr cogip::uartpb::uuid_t copilot_connected_uuid = 1132911482;
 constexpr cogip::uartpb::uuid_t copilot_disconnected_uuid = 1412808668;
+constexpr cogip::uartpb::uuid_t obstacles_uuid = 3138845474;
 
 bool pf_trace_on(void)
 {
@@ -116,10 +118,14 @@ void pf_print_state(void)
     );
     avoidance_print_path();
 
-    COGIP_DEBUG_COUT(",\"obstacles\":");
-    cogip::obstacles::print_all_json();
-
     COGIP_DEBUG_COUT("}");
+}
+
+void pf_send_pb_pose(void)
+{
+    ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
+    ctrl->control.pose_current.pb_copy(pb_pose);
+    uartpb.send_message(pose_uuid, &pb_pose);
 }
 
 void pf_send_pb_state(void)
@@ -127,13 +133,11 @@ void pf_send_pb_state(void)
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
     pb_state.clear();
     pb_state.set_mode((PB_Mode)ctrl->control.current_mode);
-    ctrl->control.pose_current.pb_copy(pb_state.mutable_pose_current());
     ctrl->control.pose_order.pb_copy(pb_state.mutable_pose_order());
     pb_state.mutable_cycle() = ctrl->control.current_cycle;
     ctrl->control.speed_current.pb_copy(pb_state.mutable_speed_current());
     ctrl->control.speed_order.pb_copy(pb_state.mutable_speed_order());
     avoidance_pb_copy_path(pb_state.mutable_path());
-    cogip::obstacles::pb_copy(pb_state.mutable_obstacles());
 
     uartpb.send_message(state_uuid, &pb_state);
 }
@@ -297,6 +301,11 @@ void pf_init(void)
             copilot_disconnected_uuid,
             cogip::uartpb::message_handler_t::create<handle_copilot_disconnected>()
             );
+        uartpb.register_message_handler(
+            obstacles_uuid,
+            cogip::uartpb::message_handler_t::create<obstacles_handler>()
+            );
+
         uartpb.start_reader();
         uartpb.send_message(reset_uuid);
     }
@@ -339,10 +348,6 @@ void pf_init(void)
 void pf_init_tasks(void)
 {
     ctrl_t *controller = pf_get_ctrl();
-
-    lidar_start(LIDAR_MAX_DISTANCE, LIDAR_MINIMUN_INTENSITY);
-
-    obstacle_updater_start(ctrl_get_pose_current(controller));
 
     /* Create controller thread */
     thread_create(

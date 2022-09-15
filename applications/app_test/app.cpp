@@ -12,7 +12,7 @@ void app_init(void)
     pf_init_quadpid_params(ctrl_quadpid_params);
 
     cogip::app::app_obstacles_init();
-    cogip::app::app_samples_get();
+    // cogip::app::app_samples_get();
     cogip::app::app_shell_init();
 }
 

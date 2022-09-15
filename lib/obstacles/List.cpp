@@ -1,7 +1,6 @@
 // Project includes
 #include "obstacles/List.hpp"
 #include "obstacles/obstacles.hpp"
-#include "PB_Obstacle.hpp"
 #include "utils.hpp"
 
 namespace cogip {
@@ -16,30 +15,6 @@ List::List()
 List::~List()
 {
     all_obstacles.erase(this);
-}
-
-void List::print_json(void) const
-{
-    size_t i = 0;
-    for (auto obs: *this) {
-        if (! obs->enabled()) {
-            continue;
-        }
-        if (i++ > 0) {
-            COGIP_DEBUG_COUT(",");
-        }
-
-        obs->print_json();
-    }
-}
-
-void List::pb_copy(PB_Message &message) const {
-    for (auto obs: *this) {
-        if (! obs->enabled()) {
-            continue;
-        }
-        obs->pb_copy(message.get(message.get_length()));
-    }
 }
 
 size_t List::enabled_obstacles() const

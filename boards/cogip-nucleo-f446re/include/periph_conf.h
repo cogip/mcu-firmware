@@ -94,20 +94,6 @@ static const uart_conf_t uart_config[] = {
         .dma_chan = UINT8_MAX,
 #endif
     },
-    {
-        .dev = USART3,
-        .rcc_mask = RCC_APB1ENR_USART3EN,
-        .rx_pin = GPIO_PIN(PORT_C, 11),
-        .tx_pin = GPIO_PIN(PORT_C, 10),
-        .rx_af = GPIO_AF7,
-        .tx_af = GPIO_AF7,
-        .bus = APB1,
-        .irqn = USART3_IRQn,
-#ifdef MODULE_PERIPH_DMA
-        .dma = DMA_STREAM_UNDEF,
-        .dma_chan = UINT8_MAX,
-#endif
-    },
 };
 
 #define UART_0_ISR          (isr_usart2)

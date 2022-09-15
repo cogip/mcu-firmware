@@ -21,8 +21,6 @@
 // Project includes
 #include "obstacles/Obstacle.hpp"
 
-#include "PB_Obstacle.hpp"
-
 #ifndef OBSTACLES_MAX_NUMBER
 #  define OBSTACLES_MAX_NUMBER 32  ///< Maximum number of obstacles
 #endif
@@ -34,9 +32,6 @@ namespace obstacles {
 /// List of obstacles.
 class List: public etl::vector<Obstacle *, OBSTACLES_MAX_NUMBER> {
 public:
-    /// Protobuf message type. Shortcut for original template type.
-    using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<Obstacle::PB_Message, OBSTACLES_MAX_NUMBER>;
-
     /// Constructor.
     List();
 
@@ -48,14 +43,6 @@ public:
 
     /// Unlock the list.
     void unlock() { mutex_unlock(&mutex_); };
-
-    /// Print all obstacles from the list in JSON format.
-    void print_json(void) const;
-
-    /// Copy data to Protobuf message.
-    void pb_copy(
-        PB_Message &message                 ///< [out] Protobuf message to fill
-        ) const;
 
     /// Return number of enabled obstacles.
     size_t enabled_obstacles() const;

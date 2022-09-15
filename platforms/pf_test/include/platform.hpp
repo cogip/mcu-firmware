@@ -172,6 +172,12 @@ void pf_set_copilot_connected(bool connected);
 void pf_print_state(void);
 
 /**
+ * @brief Send current robot pose in Protobuf format over UART
+ * @return
+ */
+void pf_send_pb_pose(void);
+
+/**
  * @brief Send current robot state in Protobuf format over UART
  * @return
  */

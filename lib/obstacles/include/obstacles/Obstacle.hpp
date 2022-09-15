@@ -18,8 +18,6 @@
 #include "cogip_defs/Coords.hpp"
 #include "cogip_defs/Polygon.hpp"
 
-#include "PB_Obstacle.hpp"
-
 #ifndef OBSTACLE_BOUNDING_BOX_VERTICES
 #  define OBSTACLE_BOUNDING_BOX_VERTICES    6  /**< number of bounding box vertices */
 #endif
@@ -37,10 +35,6 @@ using BoundingBox = cogip_defs::Polygon<OBSTACLE_BOUNDING_BOX_VERTICES>;
 /// An obstacle used to detect and avoid collisions.
 class Obstacle {
 public:
-
-    /// Protobuf message type. Shortcut for original template type.
-    using PB_Message = PB_Obstacle<OBSTACLE_BOUNDING_BOX_VERTICES>;
-
     /// Constructor
     Obstacle(
         const cogip_defs::Coords &center = {0, 0}, ///< [in] obstacle center
@@ -54,7 +48,7 @@ public:
     void update_bounding_box();
 
     /// Return bounding box polygon.
-    virtual const BoundingBox & bounding_box() const { return bounding_box_; };
+    virtual BoundingBox & bounding_box() { return bounding_box_; };
 
     /// Check if the given point is inside the obstacle.
     /// @return true if point is inside, false otherwise
@@ -74,14 +68,6 @@ public:
     virtual cogip_defs::Coords nearest_point(
         const cogip_defs::Coords &p       ///< [in] point to check
         ) const = 0;
-
-    /// Print obstacles in JSON format.
-    virtual void print_json(void) const = 0;
-
-    /// Copy data to Protobuf message.
-    virtual void pb_copy(
-        PB_Message &message              ///< [out] Protobuf message to fill
-        ) const;
 
     /// Return obstacle center.
     const cogip_defs::Coords &center() const { return center_; };

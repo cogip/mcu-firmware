@@ -29,8 +29,6 @@ public:
     bool is_point_inside(const cogip_defs::Coords &p) const override;
     bool is_segment_crossing(const cogip_defs::Coords &a, const cogip_defs::Coords &b) const override;
     cogip_defs::Coords nearest_point(const cogip_defs::Coords &p) const override;
-    void print_json(void) const override;
-    void pb_copy(PB_Message &message) const override;
 
 private:
     /// Check if a line defined by two points A,B is crossing a circle.

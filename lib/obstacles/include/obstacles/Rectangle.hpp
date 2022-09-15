@@ -30,9 +30,6 @@ public:
         double length_y                   ///< [in] length on Y of the rectangle
         );
 
-    void print_json(void) const override;
-    void pb_copy(PB_Message &message) const override;
-
 private:
     double angle_;                        ///< angle of the rectangle
     double length_x_;                     ///< length on X axis when angle = 0
