@@ -1,9 +1,8 @@
 <map id="lib/obstacles/include/obstacles/Obstacle.hpp" name="lib/obstacles/include/obstacles/Obstacle.hpp">
-<area shape="rect" id="node1" title="Polygon obstacle class declaration." alt="" coords="83,5,261,47"/>
+<area shape="rect" id="node1" title="Polygon obstacle class declaration." alt="" coords="21,5,198,47"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,95,72,121"/>
 <area shape="rect" id="node3" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="25,169,194,196"/>
 <area shape="rect" id="node5" href="$cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html" title="Polygon class declaration." alt="" coords="147,95,323,121"/>
-<area shape="rect" id="node7" title=" " alt="" coords="347,95,477,121"/>
 <area shape="rect" id="node4" title=" " alt="" coords="50,244,169,271"/>
 <area shape="rect" id="node6" title=" " alt="" coords="218,169,313,196"/>
 </map>

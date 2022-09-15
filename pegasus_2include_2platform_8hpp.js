@@ -56,6 +56,7 @@ var pegasus_2include_2platform_8hpp =
     [ "pf_is_camp_left", "group__platforms__pegasus.html#gadcb8588f477c2eda4b2f774b99b910d6", null ],
     [ "pf_is_game_launched", "group__platforms__pegasus.html#gae1a6aab08a0179e854ade7561e3dc079", null ],
     [ "pf_print_state", "group__platforms__pegasus.html#gaaed945ac04303eef4f08d257f0a3c944", null ],
+    [ "pf_send_pb_pose", "group__platforms__pegasus.html#gac98f9f54dcfddb87cd08b39cc52a9f9a", null ],
     [ "pf_send_pb_state", "group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07", null ],
     [ "pf_set_copilot_connected", "group__platforms__pegasus.html#gaf83cc53998c27d898d71f8a7e981fdc0", null ],
     [ "pf_trace_on", "group__platforms__pegasus.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],

@@ -120,7 +120,6 @@ $(document).ready(function(){initNavTree('classcogip_1_1obstacles_1_1Obstacle.ht
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
@@ -133,7 +132,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1obstacles_1_1Obstacle.ht
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An obstacle used to detect and avoid collisions. </p>
 
-<p class="definition">Definition at line <a class="el" href="Obstacle_8hpp_source.html#l00038">38</a> of file <a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Obstacle_8hpp_source.html#l00036">36</a> of file <a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -163,13 +162,6 @@ $(document).ready(function(){initNavTree('classcogip_1_1obstacles_1_1Obstacle.ht
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a7c81963cc733229cf5cf3cc849f69049"><td class="memItemLeft" align="right" valign="top"><a id="a7c81963cc733229cf5cf3cc849f69049"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7c81963cc733229cf5cf3cc849f69049">PB_Message</a> = PB_Obstacle&lt; <a class="el" href="Obstacle_8hpp.html#a47513fde91e697692dff9c390619f39a">OBSTACLE_BOUNDING_BOX_VERTICES</a> &gt;</td></tr>
-<tr class="memdesc:a7c81963cc733229cf5cf3cc849f69049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protobuf message type. Shortcut for original template type. <br /></td></tr>
-<tr class="separator:a7c81963cc733229cf5cf3cc849f69049"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a05991a62c95fc8cc742c01777a8ec2fd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a05991a62c95fc8cc742c01777a8ec2fd">Obstacle</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;<a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7a56e847bb3343367b87e59865bdd2a2">center</a>={0, 0}, double <a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#ac79c25babac4c022f73cdc4df7ec74c9">radius</a>=0.0)</td></tr>
@@ -183,10 +175,10 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#afbbc35013fe5ee189740fda641ed4621">update_bounding_box</a> ()</td></tr>
 <tr class="memdesc:afbbc35013fe5ee189740fda641ed4621"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update bounding box. <br /></td></tr>
 <tr class="separator:afbbc35013fe5ee189740fda641ed4621"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab61e68bc96873ce096d3bfe3a80536e6"><td class="memItemLeft" align="right" valign="top"><a id="ab61e68bc96873ce096d3bfe3a80536e6"></a>
-virtual const <a class="el" href="classcogip_1_1cogip__defs_1_1Polygon.html">BoundingBox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#ab61e68bc96873ce096d3bfe3a80536e6">bounding_box</a> () const</td></tr>
-<tr class="memdesc:ab61e68bc96873ce096d3bfe3a80536e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return bounding box polygon. <br /></td></tr>
-<tr class="separator:ab61e68bc96873ce096d3bfe3a80536e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5104af305fda5d1080e4b08ac8f5b1ca"><td class="memItemLeft" align="right" valign="top"><a id="a5104af305fda5d1080e4b08ac8f5b1ca"></a>
+virtual <a class="el" href="classcogip_1_1cogip__defs_1_1Polygon.html">BoundingBox</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a5104af305fda5d1080e4b08ac8f5b1ca">bounding_box</a> ()</td></tr>
+<tr class="memdesc:a5104af305fda5d1080e4b08ac8f5b1ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return bounding box polygon. <br /></td></tr>
+<tr class="separator:a5104af305fda5d1080e4b08ac8f5b1ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade6c3826250e23329b13a7a8ee989a1c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#ade6c3826250e23329b13a7a8ee989a1c">is_point_inside</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;p) const =0</td></tr>
 <tr class="memdesc:ade6c3826250e23329b13a7a8ee989a1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given point is inside the obstacle.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#ade6c3826250e23329b13a7a8ee989a1c">More...</a><br /></td></tr>
 <tr class="separator:ade6c3826250e23329b13a7a8ee989a1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,13 +188,6 @@ virtual const <a class="el" href="classcogip_1_1cogip__defs_1_1Polygon.html">Bou
 <tr class="memitem:a76648fa5300ce016be0663b8935b6149"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a76648fa5300ce016be0663b8935b6149">nearest_point</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;p) const =0</td></tr>
 <tr class="memdesc:a76648fa5300ce016be0663b8935b6149"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the nearest point of obstacle perimeter from given point.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#a76648fa5300ce016be0663b8935b6149">More...</a><br /></td></tr>
 <tr class="separator:a76648fa5300ce016be0663b8935b6149"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae52c2d15278206a14f2ec6bede0ef524"><td class="memItemLeft" align="right" valign="top"><a id="ae52c2d15278206a14f2ec6bede0ef524"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#ae52c2d15278206a14f2ec6bede0ef524">print_json</a> (void) const =0</td></tr>
-<tr class="memdesc:ae52c2d15278206a14f2ec6bede0ef524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print obstacles in JSON format. <br /></td></tr>
-<tr class="separator:ae52c2d15278206a14f2ec6bede0ef524"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ab3d5dfa1af292bfb09395861e8b2dc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7ab3d5dfa1af292bfb09395861e8b2dc">pb_copy</a> (<a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7c81963cc733229cf5cf3cc849f69049">PB_Message</a> &amp;message) const</td></tr>
-<tr class="memdesc:a7ab3d5dfa1af292bfb09395861e8b2dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="classcogip_1_1obstacles_1_1Obstacle.html#a7ab3d5dfa1af292bfb09395861e8b2dc">More...</a><br /></td></tr>
-<tr class="separator:a7ab3d5dfa1af292bfb09395861e8b2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a56e847bb3343367b87e59865bdd2a2"><td class="memItemLeft" align="right" valign="top"><a id="a7a56e847bb3343367b87e59865bdd2a2"></a>
 const <a class="el" href="classcogip_1_1cogip__defs_1_1Coords.html">cogip_defs::Coords</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7a56e847bb3343367b87e59865bdd2a2">center</a> () const</td></tr>
 <tr class="memdesc:a7a56e847bb3343367b87e59865bdd2a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return obstacle center. <br /></td></tr>
@@ -404,42 +389,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a7ab3d5dfa1af292bfb09395861e8b2dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ab3d5dfa1af292bfb09395861e8b2dc">&#9670;&nbsp;</a></span>pb_copy()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void cogip::obstacles::Obstacle::pb_copy </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1obstacles_1_1Obstacle.html#a7c81963cc733229cf5cf3cc849f69049">PB_Message</a> &amp;&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Copy data to Protobuf message. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">message</td><td>[out] Protobuf message to fill </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Reimplemented in <a class="el" href="classcogip_1_1obstacles_1_1Polygon.html#a167af2fafd38e346256dca4a7dbb2daf">cogip::obstacles::Polygon</a>, <a class="el" href="classcogip_1_1obstacles_1_1Rectangle.html#abdfae83230e68af5d3a4e625b5092163">cogip::obstacles::Rectangle</a>, and <a class="el" href="classcogip_1_1obstacles_1_1Circle.html#a813510abbfedcb70c6a465b1e0933287">cogip::obstacles::Circle</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>lib/obstacles/include/obstacles/<a class="el" href="Obstacle_8hpp_source.html">Obstacle.hpp</a></li>
 </ul>
@@ -447,7 +396,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Aug 31 2022 08:07:52 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Sep 15 2022 16:03:26 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

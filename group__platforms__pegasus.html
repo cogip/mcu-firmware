@@ -172,6 +172,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gaaed945ac04303eef4f08d257f0a3c944"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaaed945ac04303eef4f08d257f0a3c944">pf_print_state</a> (void)</td></tr>
 <tr class="memdesc:gaaed945ac04303eef4f08d257f0a3c944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print current robot state in JSON format.  <a href="group__platforms__pegasus.html#gaaed945ac04303eef4f08d257f0a3c944">More...</a><br /></td></tr>
 <tr class="separator:gaaed945ac04303eef4f08d257f0a3c944"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac98f9f54dcfddb87cd08b39cc52a9f9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gac98f9f54dcfddb87cd08b39cc52a9f9a">pf_send_pb_pose</a> (void)</td></tr>
+<tr class="memdesc:gac98f9f54dcfddb87cd08b39cc52a9f9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send current robot pose in Protobuf format over UART.  <a href="group__platforms__pegasus.html#gac98f9f54dcfddb87cd08b39cc52a9f9a">More...</a><br /></td></tr>
+<tr class="separator:gac98f9f54dcfddb87cd08b39cc52a9f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0fc74267bdda152e7626e2c284689d07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07">pf_send_pb_state</a> (void)</td></tr>
 <tr class="memdesc:ga0fc74267bdda152e7626e2c284689d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send current robot state in Protobuf format over UART.  <a href="group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07">More...</a><br /></td></tr>
 <tr class="separator:ga0fc74267bdda152e7626e2c284689d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -932,6 +935,27 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 
 </div>
 </div>
+<a id="gac98f9f54dcfddb87cd08b39cc52a9f9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac98f9f54dcfddb87cd08b39cc52a9f9a">&#9670;&nbsp;</a></span>pf_send_pb_pose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pf_send_pb_pose </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send current robot pose in Protobuf format over UART. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
 <a id="ga0fc74267bdda152e7626e2c284689d07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga0fc74267bdda152e7626e2c284689d07">&#9670;&nbsp;</a></span>pf_send_pb_state()</h2>
 
@@ -1037,7 +1061,7 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 <div class="line">    .blocking_cycles_max = <a class="code" href="group__platforms__pegasus.html#ga01bacd6f9470eed0d74a58285526fe7a">PF_CTRL_BLOCKING_NB_ITERATIONS</a></div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="pegasus_2include_2platform_8hpp_source.html#l00332">332</a> of file <a class="el" href="pegasus_2include_2platform_8hpp_source.html">platform.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pegasus_2include_2platform_8hpp_source.html#l00339">339</a> of file <a class="el" href="pegasus_2include_2platform_8hpp_source.html">platform.hpp</a>.</p>
 
 </div>
 </div>
@@ -1056,7 +1080,7 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 <div class="ttc" id="agroup__platforms__pegasus_html_ga3984f9c2d95afbec45567dd92dcde0a7"><div class="ttname"><a href="group__platforms__pegasus.html#ga3984f9c2d95afbec45567dd92dcde0a7">PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD</a></div><div class="ttdeci">#define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD</div><div class="ttdoc">Speed error treshold.</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00115">platform.hpp:115</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Aug 31 2022 08:07:52 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu Sep 15 2022 16:03:26 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

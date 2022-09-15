@@ -40,7 +40,6 @@ var hierarchy =
     ] ],
     [ "sd21_conf_t", "structsd21__conf__t.html", null ],
     [ "sd21_servo_t", "structsd21__servo__t.html", null ],
-    [ "shmem_data_t", "structshmem__data__t.html", null ],
     [ "cogip::uartpb::UartProtobuf", "classcogip_1_1uartpb_1_1UartProtobuf.html", null ],
     [ "vacuum_pump_params_t", "structvacuum__pump__params__t.html", null ],
     [ "vector", null, [
