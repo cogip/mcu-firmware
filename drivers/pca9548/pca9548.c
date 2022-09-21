@@ -18,6 +18,7 @@ void pca9548_set_current_channel(pca9548_t dev, uint8_t channel)
     i2c_acquire(pca9548->i2c_dev_id);
 
     int err = 1;
+
     err = i2c_write_byte(pca9548->i2c_dev_id, pca9548->i2c_address, 1 << channel, 0);
 
     i2c_release(pca9548->i2c_dev_id);

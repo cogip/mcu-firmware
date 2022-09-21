@@ -161,6 +161,7 @@ int lds01_init(const lds01_t lds01, const lds01_params_t *params)
     mutex_init(&lds01_dev->data_lock);
 
     int res = uart_init(lds01_dev->params.uart, LDS01_UART_BAUD, lds01_rx_cb, (void *)lds01_dev);
+
     if (res == UART_NOBAUD) {
         printf("Error: Given baudrate (%u) not possible\n", LDS01_UART_BAUD);
         return 1;

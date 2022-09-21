@@ -140,6 +140,7 @@ void lds01_update_last_frame(const lds01_t lds01)
     unsigned bytes_read;
 
     bool skip = false;
+
     while (!ringbuffer_empty(&(lds01_dev->rx_buf)) &&
            ringbuffer_peek_one(&(lds01_dev->rx_buf)) != LDS01_FRAME_SYNC_BYTE) {
         ringbuffer_get_one(&(lds01_dev->rx_buf));

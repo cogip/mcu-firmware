@@ -774,6 +774,7 @@ int main(void)
     puts("This application is intended for testing LX TTL bus\n");
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
+
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     return 0;

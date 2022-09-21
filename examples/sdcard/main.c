@@ -56,6 +56,7 @@ int test_write_vfs(int argc, char **argv)
     int res = 0;
 
     int fd = vfs_open(test_write_filename, O_RDWR | O_CREAT | O_TRUNC, 0);
+
     if (fd < 0) {
         printf("Error while trying to create %s (%d)\n", test_write_filename, fd);
         return 1;
@@ -101,6 +102,7 @@ int test_write_std(int argc, char **argv)
     int errsv;
 
     int fd = open(test_write_filename, O_RDWR | O_CREAT | O_TRUNC);
+
     if (fd < 0) {
         printf("Error while trying to create %s\n", test_write_filename);
         return 1;
@@ -151,6 +153,7 @@ int test_write_newlib(int argc, char **argv)
     int errsv;
 
     FILE *f = fopen(test_write_filename, "w+");
+
     if (f == NULL) {
         printf("Error while trying to create %s\n", test_write_filename);
         return 1;
@@ -205,6 +208,7 @@ int main(void)
     fs_desc.dev = (mtd_dev_t *)&mtd_sdcard_dev;
 
     int res = vfs_mount(&flash_mount);
+
     if (res < 0) {
         puts("Error while mounting fatfs");
         return 1;
@@ -212,6 +216,7 @@ int main(void)
     puts("fatfs mounted successfully");
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
+
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     res = vfs_umount(&flash_mount);
