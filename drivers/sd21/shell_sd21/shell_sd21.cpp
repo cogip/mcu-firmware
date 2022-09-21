@@ -15,6 +15,9 @@
 #include "utils.h"
 #include "tracefd/tracefd.hpp"
 
+// Turn macro parameter into a string
+#define STR(x)  #x
+
 static const sd21_conf_t *sd21_config = NULL;
 
 /* Board and servo ids */
