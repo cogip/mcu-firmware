@@ -13,19 +13,39 @@
  * @author  Gilles DOFFE <g.doffe@gmail.com>
  * @}
  */
+#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "board.h"
 
 #include "board_internal.h"
 
+/**
+ * malloc() memory overhead (size + next address)
+ */
+#define MALLOC_OVERHEAD 8
 
 /**
- * Nothing to initialize at the moment.
+ * Pointer to start of the heap
+ */
+char *__sheap = 0;
+/*
+ * Pointer to end of the heap
+ */
+char *__eheap = 0;
+
+/**
+ * Board init function
  */
 void board_init(void)
 {
+    /* Allocation status*/
+    MALLINFO minfo = MALLINFO_FUNC();
+
+    /* Compute heap start address */
+    __sheap = (char *)malloc(0) - minfo.uordblks - MALLOC_OVERHEAD;
+    __eheap = (char *)sbrk(0);
+
     puts("COGIP native board initialized.");
 }
-
-
