@@ -54,8 +54,8 @@ var NAVTREEINDEX =
 ".html",
 "dir_586004c7066b506e67fde19a8a669253.html",
 "group__driver__lx-servo.html#ga763c9c7f081e57cfc25f3eca86ecaaca",
-"group__platforms__pegasus.html#ga638fd29df459976a828c6c82ef5782b8",
-"group__sd21.html#gga4b0742753cf496136b49c804c4d8e9dba880fc625ff0d9dd51d23ff8ffe6d1411"
+"group__platforms__pegasus.html#ga9b981ff872a2d0d83281b09cd467f781",
+"lx__reader_8h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
