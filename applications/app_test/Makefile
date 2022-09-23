@@ -20,6 +20,6 @@ endif
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 
 # Customize containers
-CFLAGS += -DPATH_MAX_POSES=3
+CFLAGS += -DPATH_MAX_POSES=6
 
 include ../../Makefile.include

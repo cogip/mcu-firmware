@@ -11,19 +11,34 @@
 // - Absolute coordinate recalibration on games frames (?)
 static cogip::path::Poses poses = {
     {
-        -1200, 700, 0,
+        225, 1000-225, 0,
         MAX_SPEED_LINEAR,
         MAX_SPEED_ANGULAR,
     },
     {
-        0, 700, 180,
+        450+125+200+125+225, -1000+225, 0,
         MAX_SPEED_LINEAR,
         MAX_SPEED_ANGULAR,
     },
     {
-        1200, 700, 0,
-        NORMAL_SPEED_LINEAR,
-        NORMAL_SPEED_ANGULAR,
+        3000-225, -1000+225, 90,
+        MAX_SPEED_LINEAR,
+        MAX_SPEED_ANGULAR,
+    },
+    {
+        3000-225, 50+225, 90,
+        MAX_SPEED_LINEAR,
+        MAX_SPEED_ANGULAR,
+    },
+    {
+        3000-(450+125+200+125+225), 1000-225, 180,
+        MAX_SPEED_LINEAR,
+        MAX_SPEED_ANGULAR,
+    },
+    {
+        225, 1000-225, 0,
+        MAX_SPEED_LINEAR,
+        MAX_SPEED_ANGULAR,
     },
 };
 

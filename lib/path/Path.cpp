@@ -44,8 +44,7 @@ void Path::horizontal_mirror_all_poses()
 {
     for (auto &pose: *this) {
         pose.set_x(-pose.x());
-        pose.set_O(180 - pose.O());
-        pose.set_O(((int)pose.O()) % 360);
+        pose.set_O(-pose.O());
     }
 }
 
