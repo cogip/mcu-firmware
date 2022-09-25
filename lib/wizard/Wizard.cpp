@@ -13,7 +13,7 @@ Wizard::Wizard(cogip::uartpb::UartProtobuf & uartpb) : uartpb_(uartpb)
 {
     event_queue_init_detached(&queue_);
     event_.super.list_node.next = nullptr;
-    uartpb_.register_message_handler(wizard_uuid, std::bind(&Wizard::handle_response, this, std::placeholders::_1));
+    uartpb_.register_message_handler(wizard_uuid, uartpb::message_handler_t::create<Wizard, &Wizard::handle_response>(*this));
 }
 
 void Wizard::handle_response(cogip::uartpb::ReadBuffer & buffer)
