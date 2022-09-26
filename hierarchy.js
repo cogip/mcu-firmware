@@ -19,6 +19,9 @@ var hierarchy =
     [ "lx_reader_t", "structlx__reader__t.html", null ],
     [ "lx_t", "structlx__t.html", null ],
     [ "lx_writer_t", "structlx__writer__t.html", null ],
+    [ "cogip::sysmon::MemoryStatus", "classcogip_1_1sysmon_1_1MemoryStatus.html", [
+      [ "cogip::sysmon::ThreadStatus", "classcogip_1_1sysmon_1_1ThreadStatus.html", null ]
+    ] ],
     [ "cogip::obstacles::Obstacle", "classcogip_1_1obstacles_1_1Obstacle.html", [
       [ "cogip::obstacles::Circle", "classcogip_1_1obstacles_1_1Circle.html", null ],
       [ "cogip::obstacles::Polygon", "classcogip_1_1obstacles_1_1Polygon.html", [
@@ -40,6 +43,7 @@ var hierarchy =
     ] ],
     [ "sd21_conf_t", "structsd21__conf__t.html", null ],
     [ "sd21_servo_t", "structsd21__servo__t.html", null ],
+    [ "sysmon_heap_t", "structsysmon__heap__t.html", null ],
     [ "cogip::uartpb::UartProtobuf", "classcogip_1_1uartpb_1_1UartProtobuf.html", null ],
     [ "vacuum_pump_params_t", "structvacuum__pump__params__t.html", null ],
     [ "vector", null, [

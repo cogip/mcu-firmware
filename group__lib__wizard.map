@@ -1,6 +1,7 @@
 <map id="Wizard module" name="Wizard module">
-<area shape="rect" id="node1" title="Wizard module This module is used to communicate with the Copilot at the beginning of a game to confi..." alt="" coords="96,31,216,56"/>
-<area shape="rect" id="node3" href="$group__lib__obstacles.html" title="Obstacles module." alt="" coords="300,5,439,31"/>
-<area shape="rect" id="node4" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="322,55,417,80"/>
-<area shape="rect" id="node2" href="$group__lib.html" title=" " alt="" coords="5,31,47,56"/>
+<area shape="rect" id="node1" title="Wizard module This module is used to communicate with the Copilot at the beginning of a game to confi..." alt="" coords="96,55,216,80"/>
+<area shape="rect" id="node3" href="$group__lib__obstacles.html" title="Obstacles module." alt="" coords="304,5,443,31"/>
+<area shape="rect" id="node4" href="$group__sys__sysmon.html" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="300,55,447,80"/>
+<area shape="rect" id="node5" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="326,104,421,129"/>
+<area shape="rect" id="node2" href="$group__lib.html" title=" " alt="" coords="5,55,47,80"/>
 </map>

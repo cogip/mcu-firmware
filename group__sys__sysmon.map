@@ -1,0 +1,8 @@
+<map id="System monitoring" name="System monitoring">
+<area shape="rect" id="node1" href="$group__lib__wizard.html" title="Wizard module This module is used to communicate with the Copilot at the beginning of a game to confi..." alt="" coords="427,5,547,31"/>
+<area shape="rect" id="node2" href="$group__sys.html" title=" " alt="" coords="5,80,136,105"/>
+<area shape="rect" id="node5" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="185,80,332,105"/>
+<area shape="rect" id="node3" href="$group__lib__obstacles.html" title="Obstacles module." alt="" coords="418,55,557,80"/>
+<area shape="rect" id="node4" href="$group__sys__sysmon__heap.html" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="416,104,559,129"/>
+<area shape="rect" id="node6" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="440,153,535,179"/>
+</map>
