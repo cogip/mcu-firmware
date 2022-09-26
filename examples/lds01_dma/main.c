@@ -57,6 +57,7 @@ static void *frame_updater_thread(void *arg)
 {
     (void)arg;
     event_t *event;
+
     event_queue_init(&new_frame_queue);
 
     while ((event = event_wait(&new_frame_queue))) {
@@ -120,6 +121,7 @@ static int cmd_set_distance_filter(int argc, char **argv)
     }
 
     uint32_t new_filter = strtoul(argv[1], NULL, 0);
+
     lds01_set_distance_filter(lds01, new_filter);
 
     return 0;
@@ -141,6 +143,7 @@ static int cmd_set_intensity_threshold(int argc, char **argv)
     }
 
     uint32_t new_threshold = strtoul(argv[1], NULL, 0);
+
     lds01_set_min_intensity(lds01, new_threshold);
 
     return 0;
@@ -203,13 +206,20 @@ int main(void)
 
     /* Start the frame reader thread */
     frame_updater_thread_pid = thread_create(
-        frame_updater_thread_stack, sizeof(frame_updater_thread_stack),
-        FRAME_READER_PRIO, 0, frame_updater_thread, NULL, "frame_reader");
+        frame_updater_thread_stack,
+        sizeof(frame_updater_thread_stack),
+        FRAME_READER_PRIO,
+        THREAD_CREATE_STACKTEST,
+        frame_updater_thread,
+        NULL,
+        "frame_reader"
+        );
 
     lds01_init(lds01, &lds01_params[0]);
 
     /* Run the shell */
     char line_buf[SHELL_BUFSIZE];
+
     shell_run(shell_commands, line_buf, SHELL_BUFSIZE);
     return 0;
 }

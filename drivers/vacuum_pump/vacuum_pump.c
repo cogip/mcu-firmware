@@ -25,6 +25,7 @@ int vacuum_pump_init(const vacuum_pump_t vacuum_pump, const vacuum_pump_params_t
     vacuum_pump_dev->params = *params;
 
     int res = gpio_init(vacuum_pump_dev->params.gpio_enable, GPIO_OUT);
+
     if (res) {
         printf("Error: Cannot initialize vacuum pump enable GPIO\n");
         return -1;

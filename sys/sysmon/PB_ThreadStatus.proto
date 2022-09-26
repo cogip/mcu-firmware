@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+// All message type names are prefixed with "PB_" to avoid collisions
+// C++ classes already defined in code and Protobuf generated types.
+
+import "PB_MemoryStatus.proto";
+
+message PB_ThreadStatus {
+    uint32 pid = 1;
+    string name = 2;
+    PB_MemoryStatus stack_status = 3;
+}

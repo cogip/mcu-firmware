@@ -53,7 +53,7 @@ void Planner::start_thread()
         planner_thread_stack,
         sizeof(planner_thread_stack),
         THREAD_PRIORITY_MAIN - 2,
-        0,
+        THREAD_CREATE_STACKTEST,
         start_task,
         this,
         "planner"

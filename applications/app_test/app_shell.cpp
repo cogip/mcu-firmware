@@ -28,7 +28,7 @@ static int _cmd_wizard_cb(int argc, char **argv)
         wizard_thread_stack,
         sizeof(wizard_thread_stack),
         WIZARD_THREAD_PRIO,
-        0,
+        THREAD_CREATE_STACKTEST,
         _wizard_thread_command,
         NULL,
         "Wizard"

@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+// All message type names are prefixed with "PB_" to avoid collisions
+// C++ classes already defined in code and Protobuf generated types.
+
+message PB_MemoryStatus {
+    uint32 memory_size = 1;
+    uint32 memory_used = 3;
+}

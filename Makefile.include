@@ -18,6 +18,7 @@ $(foreach pkg,$(pkgs), $(shell ln -sf $(pkg) $(RIOTPKG)/$(notdir $(pkg))))
 # Development options
 QUIET ?= 1
 DEVELHELP ?= 1
+THREAD_NAMES = 1
 
 # Required features
 FEATURES_REQUIRED += cpp
@@ -79,6 +80,15 @@ endif
 # As RIOT Makefile.include is included, RAMSIZE can be computed
 ifneq ($(CPU),native)
 	.DEFAULT_GOAL := world
+endif
+
+# mallinfo2 is only available on native architecture making mallinfo deprecated
+ifeq ($(CPU),native)
+	CFLAGS += -D"MALLINFO=struct mallinfo2"
+	CFLAGS += -D"MALLINFO_FUNC()=mallinfo2()"
+else
+	CFLAGS += -D"MALLINFO=struct mallinfo"
+	CFLAGS += -D"MALLINFO_FUNC()=mallinfo()"
 endif
 
 # Use C++14 by default

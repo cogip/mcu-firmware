@@ -124,6 +124,7 @@ int main(void)
 
     /* Run the shell */
     char line_buf[SHELL_BUFSIZE];
+
     shell_run(shell_commands, line_buf, SHELL_BUFSIZE);
     return 0;
 }

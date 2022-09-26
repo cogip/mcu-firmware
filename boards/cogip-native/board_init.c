@@ -13,34 +13,39 @@
  * @author  Gilles DOFFE <g.doffe@gmail.com>
  * @}
  */
+#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "board.h"
 
 #include "board_internal.h"
 
-#ifdef MODULE_MTD
-#include "mtd_native.h"
-#endif
+/**
+ * malloc() memory overhead (size + next address)
+ */
+#define MALLOC_OVERHEAD 8
 
 /**
- * Nothing to initialize at the moment.
+ * Pointer to start of the heap
+ */
+char *__sheap = 0;
+/*
+ * Pointer to end of the heap
+ */
+char *__eheap = 0;
+
+/**
+ * Board init function
  */
 void board_init(void)
 {
+    /* Allocation status*/
+    MALLINFO minfo = MALLINFO_FUNC();
+
+    /* Compute heap start address */
+    __sheap = (char *)malloc(0) - minfo.uordblks - MALLOC_OVERHEAD;
+    __eheap = (char *)sbrk(0);
+
     puts("COGIP native board initialized.");
 }
-
-#ifdef MODULE_MTD
-static mtd_native_dev_t mtd0_dev = {
-    .dev = {
-        .driver = &native_flash_driver,
-        .sector_count = MTD_SECTOR_NUM,
-        .pages_per_sector = MTD_SECTOR_SIZE / MTD_PAGE_SIZE,
-        .page_size = MTD_PAGE_SIZE,
-    },
-    .fname = MTD_NATIVE_FILENAME,
-};
-
-mtd_dev_t *mtd0 = (mtd_dev_t *)&mtd0_dev;
-#endif

@@ -344,7 +344,8 @@ void pf_init_tasks(void)
     thread_create(
         controller_thread_stack,
         sizeof(controller_thread_stack),
-        THREAD_PRIORITY_MAIN - 4, 0,
+        THREAD_PRIORITY_MAIN - 4,
+        THREAD_CREATE_STACKTEST,
         task_ctrl_update,
         (void *)controller,
         "motion control"

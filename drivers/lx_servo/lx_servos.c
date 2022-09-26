@@ -86,12 +86,14 @@ static int lx_read(const lx_t *device, lx_read_command_t command, uint8_t *data,
 
     uart_half_duplex_set_rx(device->stream);
     const size_t esize = LX_PACKET_SIZE(length);
+
     if (uart_half_duplex_recv(device->stream, esize) != esize) {
         DEBUG("%s: Timeout error on device %u!\n", __func__, device->id);
         return LX_TIMEOUT;
     }
 
     lx_reader_t pr;
+
     lx_reader_init(&pr, device->stream->buffer, esize);
 
     if (!lx_reader_is_valid(&pr)) {

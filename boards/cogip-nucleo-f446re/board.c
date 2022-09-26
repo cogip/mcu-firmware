@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 COGIP Robotics association
+ * Copyright (C) 2022 COGIP Robotics association
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
