@@ -11,6 +11,9 @@ RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
 # Apply RIOT-OS patches as soon as possible
 include $(MCUFIRMWAREBASE)/makefiles/riot-patches.mk.inc
 
+# Function to check version
+include $(MCUFIRMWAREBASE)/makefiles/version_check.mk.inc
+
 # Create a symbolic for each package in RIOT
 pkgs := $(foreach dir,$(wildcard $(RIOTBASE)/pkg/*/Makefile),$(subst Makefile,, $(dir)))
 $(foreach pkg,$(pkgs), $(shell ln -sf $(pkg) $(RIOTPKG)/$(notdir $(pkg))))
@@ -82,8 +85,15 @@ ifneq ($(CPU),native)
 	.DEFAULT_GOAL := world
 endif
 
-# mallinfo2 is only available on native architecture making mallinfo deprecated
+# mallinfo2 is only available on native architecture with glibc >=2.33, making mallinfo deprecated
+mallinfo := mallinfo
 ifeq ($(CPU),native)
+	GLIBC_VERSION := $(shell ldd --version | head -1 | awk '{print $$NF}')
+	ifeq ($(call version_ge,$(GLIBC_VERSION),2.33),TRUE)
+		mallinfo := mallinfo2
+	endif
+endif
+ifeq ($(mallinfo), mallinfo2)
 	CFLAGS += -D"MALLINFO=struct mallinfo2"
 	CFLAGS += -D"MALLINFO_FUNC()=mallinfo2()"
 else
