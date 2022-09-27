@@ -54,7 +54,7 @@ extern "C" {
  *
  * @return                      0 on success
  */
-void native_motor_driver_qdec_simulation( \
+void cogip_native_motor_driver_qdec_simulation( \
     const motor_driver_t motor_driver, uint8_t motor_id, \
     int32_t pwm_duty_cycle);
 
@@ -82,7 +82,7 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_brake_invert = 0,
             },
         },
-        .cb = native_motor_driver_qdec_simulation,
+        .cb = cogip_native_motor_driver_qdec_simulation,
     },
     {
         .pwm_dev = 1,
@@ -103,7 +103,7 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_brake_invert = 0,
             },
         },
-        .cb = native_motor_driver_qdec_simulation,
+        .cb = cogip_native_motor_driver_qdec_simulation,
     },
 };
 
