@@ -26,7 +26,7 @@
 #define SIMU_ENC_BUFSIZE    3
 extern int32_t qdecs_value[QDEC_NUMOF];
 
-void native_motor_driver_qdec_simulation(
+void cogip_native_motor_driver_qdec_simulation(
     const motor_driver_t motor_driver, uint8_t motor_id,
     int32_t pwm_duty_cycle)
 {

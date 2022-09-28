@@ -314,12 +314,6 @@ void pf_init(void)
     pf_shell_init();
 #endif /* MODULE_SHELL_PLATFORMS */
 
-    /* Debug LED */
-    //if (gpio_init(GPIO_DEBUG_LED, GPIO_OUT)) {
-    //    puts("WARNING: GPIO_DEBUG_LED not initialized!");
-    //}
-    //gpio_clear(GPIO_DEBUG_LED);
-
     motor_driver_init(MOTOR_DRIVER_DEV(MOTOR_LEFT));
     motor_driver_init(MOTOR_DRIVER_DEV(MOTOR_RIGHT));
 
@@ -335,8 +329,6 @@ void pf_init(void)
 
     /* Init odometry */
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
-
-    //gpio_clear(GPIO_DEBUG_LED);
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
 
