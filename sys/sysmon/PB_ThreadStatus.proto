@@ -8,5 +8,7 @@ import "PB_MemoryStatus.proto";
 message PB_ThreadStatus {
     uint32 pid = 1;
     string name = 2;
-    PB_MemoryStatus stack_status = 3;
+    uint32 loops = 3;
+    uint32 overshots = 4;
+    PB_MemoryStatus stack_status = 5;
 }

@@ -127,6 +127,23 @@ static void _update_threads_status(void)
     }
 }
 
+void update_thread_sched_status(kernel_pid_t pid, bool has_overshot)
+{
+    mutex_lock(&_mutex_sysmon);
+
+    if (! _sysmon_threads_status[pid]) {
+        _sysmon_threads_status[pid] = threads_status_pool.create();
+    }
+
+    _sysmon_threads_status[pid]->inc_loops();
+
+    if (has_overshot) {
+        _sysmon_threads_status[pid]->inc_overshots();
+    }
+
+    mutex_unlock(&_mutex_sysmon);
+}
+
 void display_threads_status(void)
 {
     for (kernel_pid_t i = KERNEL_PID_FIRST; i <= KERNEL_PID_LAST; i++) {
@@ -138,6 +155,8 @@ void display_threads_status(void)
             std::cout << "Thread '" << thread->name << "' with pid " << i << std::endl;
             std::cout << "  stack size = " <<_sysmon_threads_status[i]->size() << " bytes" << std::endl;
             std::cout << "  stack used = " <<_sysmon_threads_status[i]->used() << " bytes" << std::endl;
+            std::cout << "  loops      = " <<_sysmon_threads_status[i]->loops() << std::endl;
+            std::cout << "  overshots  = " <<_sysmon_threads_status[i]->overshots() << std::endl;
 
             mutex_unlock(&_mutex_sysmon);
         }

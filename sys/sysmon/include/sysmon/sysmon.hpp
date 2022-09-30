@@ -36,6 +36,10 @@ void display_heap_status(void);
 void display_threads_status(void);
 /// Start system monitoring thread
 void sysmon_start(void);
+/// Update threads scheduling status
+/// @param  pid             Thread pid
+/// @param  has_overshot    Period overshot
+void update_thread_sched_status(kernel_pid_t pid, bool has_overshot);
 
 #ifdef MODULE_UARTPB
 /// Register uartpb serial interface for messaging
