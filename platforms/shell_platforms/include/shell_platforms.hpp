@@ -14,10 +14,8 @@
  * The common platform shell code defines shell commands to retrieve
  * informations from the platform component which has a central role.
  * For now the shell has the following commands:
- * * _dyn_obstacles : Print dynamic obstacles
- * * _help_json     : Display available commands in JSON format
- * * _pose          : Print current pose
- * * _set_shm_key   : Set shared memory key to communicate with simulator
+ * * _state         : Print current state
+ * * mt             : Test all DC motors
  *
  * @{
  * @file

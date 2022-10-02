@@ -13,16 +13,11 @@
 
 /* Project includes */
 #include "board.h"
-#include "avoidance.hpp"
 #include "platform.hpp"
 #include "ctrl.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "shell_platforms.hpp"
 #include "utils.hpp"
-
-#ifdef MODULE_SHMEM
-#include "shmem.h"
-#endif
 
 /* Enable or disable debug for this file only */
 #define ENABLE_DEBUG        (0)
@@ -106,21 +101,7 @@ static int _cmd_motors_test_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static int _cmd_print_avoidance_path_cb(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    avoidance_print_path();
-
-    return EXIT_SUCCESS;
-}
-
 static cogip::shell::Command _cmd_print_state = { "_state", "Print current state", _cmd_print_state_cb };
-static cogip::shell::Command _cmd_print_avoidance_path = { "_avoidance_path", "Print avoidance current path", _cmd_print_avoidance_path_cb };
-#ifdef MODULE_SHMEM
-static cogip::shell::Command cmd_shmem = SHMEM_SET_KEY_CMD;
-#endif
 
 static cogip::shell::Menu _menu_pf = { "Platforms menu", "pf_menu", &cogip::shell::root_menu() };
 static cogip::shell::Command _cmd_motors_test = { "mt", "Test all DC motors", _cmd_motors_test_cb };
@@ -131,10 +112,6 @@ void pf_shell_init(void)
 
     /* Global commands */
     cogip::shell::add_global_command(&_cmd_print_state);
-    cogip::shell::add_global_command(&_cmd_print_avoidance_path);
-#ifdef MODULE_SHMEM
-    cogip::shell::add_global_command(&cmd_shmem);
-#endif
 
     /* Platforms commands */
     _menu_pf.push_back(&_cmd_motors_test);

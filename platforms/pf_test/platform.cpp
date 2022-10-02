@@ -5,19 +5,13 @@
 /* Project includes */
 #include "app.hpp"
 #include "board.h"
-#include "obstacles/obstacles.hpp"
-#include "obstacles/Obstacle.hpp"
-#include "planners/astar/AstarPlanner.hpp"
 #include "platform.hpp"
-#include "avoidance.hpp"
-#include "path/Path.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "uartpb/UartProtobuf.hpp"
 #include "uartpb/ReadBuffer.hpp"
 #include "utils.hpp"
 
 /* Platform includes */
-#include "lidar_obstacles.hpp"
 #include "trace_utils.hpp"
 
 #include "PB_Command.hpp"
@@ -71,10 +65,9 @@ char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool copilot_connected = false;
 PB_Pose pb_pose;
-PB_State<AVOIDANCE_GRAPH_MAX_VERTICES> pb_state;
+PB_State pb_state;
 
 cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
-cogip::wizard::Wizard wizard(uartpb);
 
 // Define uartpb uuids
 constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
@@ -82,7 +75,6 @@ constexpr cogip::uartpb::uuid_t pose_uuid = 1534060156;
 constexpr cogip::uartpb::uuid_t state_uuid = 3422642571;
 constexpr cogip::uartpb::uuid_t copilot_connected_uuid = 1132911482;
 constexpr cogip::uartpb::uuid_t copilot_disconnected_uuid = 1412808668;
-constexpr cogip::uartpb::uuid_t obstacles_uuid = 3138845474;
 
 bool pf_trace_on(void)
 {
@@ -106,17 +98,10 @@ void pf_print_state(void)
                 << "\"x\":" << ctrl->control.pose_current.x()
                 << ",\"y\":" << ctrl->control.pose_current.y()
             << "},"
-            << "\"pose_order\":{"
-                << "\"O\":" << ctrl->control.pose_order.O()
-                << "\"x\":" << ctrl->control.pose_order.x()
-                << ",\"y\":" << ctrl->control.pose_order.y()
-            << "},"
             << "\"cycle\":" << ctrl->control.current_cycle << ","
             << "\"speed_current\":{\"distance\":" << ctrl->control.speed_current.distance()
-            << ",\"angle\":" << ctrl->control.speed_current.angle() << "},"
-            << ",\"path\":"
+            << ",\"angle\":" << ctrl->control.speed_current.angle() << "}"
     );
-    avoidance_print_path();
 
     COGIP_DEBUG_COUT("}");
 }
@@ -133,11 +118,10 @@ void pf_send_pb_state(void)
     ctrl_t *ctrl = (ctrl_t *)&ctrl_quadpid;
     pb_state.clear();
     pb_state.set_mode((PB_Mode)ctrl->control.current_mode);
-    ctrl->control.pose_order.pb_copy(pb_state.mutable_pose_order());
     pb_state.mutable_cycle() = ctrl->control.current_cycle;
     ctrl->control.speed_current.pb_copy(pb_state.mutable_speed_current());
     ctrl->control.speed_order.pb_copy(pb_state.mutable_speed_order());
-    avoidance_pb_copy_path(pb_state.mutable_path());
+
     uartpb.send_message(state_uuid, &pb_state);
 }
 
@@ -154,12 +138,6 @@ ctrl_quadpid_t *pf_get_quadpid_ctrl(void)
 ctrl_t *pf_get_ctrl(void)
 {
     return (ctrl_t *)&ctrl_quadpid;
-}
-
-cogip::planners::Planner & pf_get_planner(void)
-{
-  static cogip::planners::AstarPlanner planner((ctrl_t *)&ctrl_quadpid, app_get_path());
-  return planner;
 }
 
 void pf_ctrl_pre_running_cb(
@@ -240,25 +218,9 @@ void motor_drive(const cogip::cogip_defs::Polar &command)
     motor_set(MOTOR_DRIVER_DEV(MOTOR_RIGHT), 0, right_command);
 }
 
-int pf_is_camp_left(void)
-{
-    /* Color switch for coords translations */
-    return 1;
-}
-
-cogip::obstacles::List & pf_get_dyn_obstacles(void)
-{
-    return lidar_obstacles();
-}
-
 cogip::uartpb::UartProtobuf & pf_get_uartpb()
 {
     return uartpb;
-}
-
-cogip::wizard::Wizard & pf_get_wizard()
-{
-    return wizard;
 }
 
 void handle_copilot_connected(cogip::uartpb::ReadBuffer &)
@@ -292,10 +254,6 @@ void pf_init(void)
         uartpb.register_message_handler(
             copilot_disconnected_uuid,
             cogip::uartpb::message_handler_t::create<handle_copilot_disconnected>()
-            );
-        uartpb.register_message_handler(
-            obstacles_uuid,
-            cogip::uartpb::message_handler_t::create<obstacles_handler>()
             );
 
         uartpb.start_reader();
@@ -342,8 +300,6 @@ void pf_init_tasks(void)
         (void *)controller,
         "motion control"
         );
-
-    pf_get_planner().start_thread();
 
     trace_start();
 }

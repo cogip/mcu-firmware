@@ -1,15 +1,11 @@
 syntax = "proto3";
 
 import "PB_Mode.proto";
-import "PB_Coords.proto";
-import "PB_Pose.proto";
 import "PB_Polar.proto";
 
 message PB_State {
     PB_Mode mode = 1;
-    PB_Pose pose_order = 2;
-    uint32 cycle = 3;
-    PB_Polar speed_current = 4;
-    PB_Polar speed_order = 5;
-    repeated PB_Coords path = 6;
+    uint32 cycle = 2;
+    PB_Polar speed_current = 3;
+    PB_Polar speed_order = 4;
 }
