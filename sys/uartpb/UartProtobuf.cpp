@@ -106,7 +106,7 @@ bool UartProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfa
             puts("Failed to serialize Protobuf message.");
             success = false;
         }
-        else {
+        else if (write_buffer_.get_size() > 0) {
             base64_size = write_buffer_.base64_encode();
             if (base64_size == 0) {
                 puts("Failed to base64 encode Protobuf serialized message.");
@@ -116,7 +116,7 @@ bool UartProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfa
     }
     if (success) {
         uart_write(uart_dev_, (uint8_t *)&uuid, sizeof(uuid_t));
-        if (message) {
+        if (message && (write_buffer_.get_size() > 0)) {
             uart_write(uart_dev_, write_buffer_.get_base64_data(), base64_size);
         }
         uart_write(uart_dev_, (uint8_t *)&separator, 1);
