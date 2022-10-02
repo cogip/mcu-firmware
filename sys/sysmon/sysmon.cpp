@@ -186,7 +186,7 @@ static void *_thread_status_updater(void *data)
 {
     (void)data;
 
-    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_SEC);
 
     while (true) {
         pb_sysmon_message_.clear();
