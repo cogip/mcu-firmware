@@ -6,8 +6,8 @@
 #include "app.hpp"
 #include "board.h"
 #include "platform.hpp"
+#include "path/Pose.hpp"
 #include "shell_menu/shell_menu.hpp"
-#include "uartpb/UartProtobuf.hpp"
 #include "uartpb/ReadBuffer.hpp"
 #include "utils.hpp"
 
@@ -15,6 +15,7 @@
 #include "trace_utils.hpp"
 
 #include "PB_Command.hpp"
+#include "PB_PathPose.hpp"
 #include "PB_State.hpp"
 
 #ifdef MODULE_SHELL_PLATFORMS
@@ -72,6 +73,7 @@ cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
 // Define uartpb uuids
 constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
 constexpr cogip::uartpb::uuid_t pose_uuid = 1534060156;
+constexpr cogip::uartpb::uuid_t start_pose_uuid = 2741980922;
 constexpr cogip::uartpb::uuid_t state_uuid = 3422642571;
 constexpr cogip::uartpb::uuid_t copilot_connected_uuid = 1132911482;
 constexpr cogip::uartpb::uuid_t copilot_disconnected_uuid = 1412808668;
@@ -245,6 +247,47 @@ void handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
     std::cout << "Copilot disconnected" << std::endl;
 }
 
+void handle_pose(cogip::uartpb::ReadBuffer &buffer)
+{
+    ctrl_t *controller = pf_get_ctrl();
+    PB_PathPose pb_pose_to_reach;
+    EmbeddedProto::Error error = pb_pose_to_reach.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
+    cogip::path::Pose pose_to_reach;
+    pose_to_reach.pb_read(pb_pose_to_reach);
+    cogip::cogip_defs::Pose pose(pose_to_reach.x(), pose_to_reach.y(), pose_to_reach.O());
+    cogip::cogip_defs::Polar speed_order;
+    speed_order.set_distance(pose_to_reach.max_speed_linear());
+    speed_order.set_angle(pose_to_reach.max_speed_angular());
+    ctrl_set_allow_reverse(controller, pose_to_reach.allow_reverse());
+    ctrl_set_pose_to_reach(controller, pose);
+    ctrl_set_speed_order(controller, speed_order);
+    ctrl_set_pose_intermediate(controller, false);
+    ctrl_set_mode(controller, CTRL_MODE_RUNNING);
+}
+
+void handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
+{
+    ctrl_t *controller = pf_get_ctrl();
+    PB_PathPose pb_start_pose;
+    EmbeddedProto::Error error = pb_start_pose.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
+    cogip::path::Pose start_pose;
+    start_pose.pb_read(pb_start_pose);
+    cogip::cogip_defs::Pose pose(start_pose.x(), start_pose.y(), start_pose.O());
+    ctrl_set_pose_current(controller, pose);
+    ctrl_set_pose_to_reach(controller, pose);
+    ctrl_set_pose_reached(controller);
+    ctrl_set_pose_intermediate(controller, false);
+    ctrl_set_mode(controller, CTRL_MODE_STOP);
+}
+
 void pf_init(void)
 {
     /* Initialize UARTPB */
@@ -253,6 +296,7 @@ void pf_init(void)
         COGIP_DEBUG_CERR("UART initialization failed, error: " << uartpb_res);
     }
     else {
+        ctrl_register_uartpb(&uartpb);
         cogip::shell::register_uartpb(&uartpb);
         uartpb.register_message_handler(
             copilot_connected_uuid,
@@ -261,6 +305,14 @@ void pf_init(void)
         uartpb.register_message_handler(
             copilot_disconnected_uuid,
             cogip::uartpb::message_handler_t::create<handle_copilot_disconnected>()
+            );
+        uartpb.register_message_handler(
+            pose_uuid,
+            cogip::uartpb::message_handler_t::create<handle_pose>()
+            );
+        uartpb.register_message_handler(
+            start_pose_uuid,
+            cogip::uartpb::message_handler_t::create<handle_start_pose>()
             );
 
         uartpb.start_reader();
@@ -292,6 +344,13 @@ void pf_init(void)
 #ifdef MODULE_SHELL_QUADPID
     ctrl_quadpid_shell_init(&ctrl_quadpid);
 #endif /* MODULE_SHELL_QUADPID */
+
+    ctrl_t *controller = pf_get_ctrl();
+    ctrl_set_allow_reverse(controller, true);
+    ctrl_set_pose_to_reach(controller, cogip::path::Pose());
+    ctrl_set_speed_order(controller, cogip::cogip_defs::Polar());
+    ctrl_set_pose_intermediate(controller, false);
+    ctrl_set_mode(controller, CTRL_MODE_STOP);
 }
 
 void pf_init_tasks(void)
