@@ -14,6 +14,8 @@
 #include "cogip_defs/Pose.hpp"
 #include "utils.hpp"
 
+#include "PB_PathPose.hpp"
+
 namespace cogip {
 
 namespace path {
@@ -30,7 +32,7 @@ public:
         double max_speed_angular=0.0,   ///< [in] max speed angular
         bool allow_reverse=true,        ///< [in] reverse mode
         func_cb_t act_=nullptr          ///< [in] action callback
-        ) : cogip_defs::Pose(x, y, O), max_speed_linear_(max_speed_linear), max_speed_angular_(max_speed_angular), allow_reverse_(allow_reverse), act_(act_) {};
+        );
 
     /// Destructor
     virtual ~Pose() {};
@@ -52,7 +54,17 @@ public:
     /// Execute action callback if set.
     virtual void act() const { if (act_) act_(); }
 
-protected:
+    /// Initialize the object from a Protobuf message.
+    void pb_read(
+        const PB_PathPose &path_pose  ///< [in] Protobuf message to read
+    );
+
+    /// Copy object to a Probobuf message.
+    void pb_copy(
+        PB_PathPose &path_pose    ///< [out] Protobuf message to fill
+        ) const;
+
+private:
     double max_speed_linear_;     ///< max speed
     double max_speed_angular_;    ///< max speed
     bool allow_reverse_;          ///< reverse mode

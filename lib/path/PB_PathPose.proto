@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "PB_SpeedEnum.proto";
+import "PB_Pose.proto";
+
+message PB_PathPose {
+    PB_Pose pose = 1;
+    PB_SpeedEnum max_speed_linear_enum = 2;
+    PB_SpeedEnum max_speed_angular_enum = 3;
+    bool allow_reverse = 4;
+}
