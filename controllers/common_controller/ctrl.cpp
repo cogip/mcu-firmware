@@ -12,6 +12,15 @@
 
 #define TASK_PERIOD_USEC    (CONTROLLER_SPEED_LOOP_PERIOD_MSEC * US_PER_MS)
 
+#ifdef MODULE_UARTPB
+cogip::uartpb::UartProtobuf *uart_protobuf = nullptr;
+
+void ctrl_register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)
+{
+    uart_protobuf = uartpb_ptr;
+}
+#endif // MODULE_UARTPB
+
 void ctrl_set_pose_reached(ctrl_t *ctrl)
 {
     if (ctrl->control.pose_reached) {
@@ -21,6 +30,12 @@ void ctrl_set_pose_reached(ctrl_t *ctrl)
     DEBUG("ctrl: Pose is reached\n");
 
     ctrl->control.pose_reached = TRUE;
+
+#ifdef MODULE_UARTPB
+    if (uart_protobuf) {
+        uart_protobuf->send_message(pose_reached_uuid);
+    }
+#endif // MODULE_UARTPB
 }
 
 uint32_t ctrl_get_current_cycle(ctrl_t *ctrl)
