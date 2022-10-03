@@ -14,6 +14,7 @@
 #include "PB_Sysmon.hpp"
 #include "sysmon/sysmon.hpp"
 #include "sysmon/ThreadStatus.hpp"
+#include "thread/thread.hpp"
 #ifdef MODULE_UARTPB
 #include "uartpb/UartProtobuf.hpp"
 #endif
@@ -195,8 +196,7 @@ static void *_thread_status_updater(void *data)
 #ifdef MODULE_UARTPB
         _uartpb_send_status();
 #endif
-
-        ztimer_periodic_wakeup(ZTIMER_SEC, &loop_start_time, TASK_PERIOD_SEC);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_SEC, &loop_start_time, TASK_PERIOD_SEC);
     }
 
     return 0;

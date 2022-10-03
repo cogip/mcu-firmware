@@ -9,6 +9,7 @@
 #include "ctrl.hpp"
 #include "utils.hpp"
 #include "platform.hpp"
+#include "thread/thread.hpp"
 
 #define TASK_PERIOD_USEC    (CONTROLLER_SPEED_LOOP_PERIOD_MSEC * US_PER_MS)
 
@@ -243,7 +244,7 @@ void *task_ctrl_update(void *arg)
         ctrl->control.current_cycle++;
 
         // Wait thread period to end
-        ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
     }
 
     return 0;

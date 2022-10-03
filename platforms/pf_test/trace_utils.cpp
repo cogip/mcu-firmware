@@ -5,6 +5,7 @@
 
 // Application includes
 #include "platform.hpp"
+#include "thread/thread.hpp"
 
 /* Periodic task */
 #define TASK_PERIOD_MSEC_POSE    (50)
@@ -31,7 +32,7 @@ static void *_thread_pose(void *arg)
         }
 
         // Wait thread period to end
-        ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, TASK_PERIOD_MSEC_POSE);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, TASK_PERIOD_MSEC_POSE);
     }
 
     return NULL;
@@ -50,7 +51,7 @@ static void *_thread_state(void *arg)
         }
 
         // Wait thread period to end
-        ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, TASK_PERIOD_MSEC_STATE);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, TASK_PERIOD_MSEC_STATE);
     }
 
     return NULL;
