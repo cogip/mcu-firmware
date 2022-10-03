@@ -1,1 +1,2 @@
 USEMODULE += common_controller
+USEMODULE += path

@@ -60,6 +60,12 @@
 /* Project includes */
 #include "odometry.hpp"
 
+#ifdef MODULE_UARTPB
+#include "uartpb/UartProtobuf.hpp"
+
+inline constexpr cogip::uartpb::uuid_t pose_reached_uuid = 2736246403;  ///< pose reached uuid for uartpb
+#endif // MODULE_UARTPB
+
 /**
  * @brief   Pre-controller callback. Called before the controller process
  *
@@ -204,6 +210,13 @@ struct ctrl_t {
                                                          callbacks */
     ctrl_control_t control;                         /**< Control variables */
 };
+
+#ifdef MODULE_UARTPB
+/// Register an UartProtobuf instance that will be used to send controller events.
+void ctrl_register_uartpb(
+    cogip::uartpb::UartProtobuf *uartpb_ptr
+    );
+#endif
 
 /**
  * @brief Get current elapsed cycle

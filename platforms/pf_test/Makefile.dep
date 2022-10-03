@@ -11,11 +11,8 @@ USEMODULE += shell_commands
 # mcu-firmware modules
 USEMODULE += uartpb
 USEMODULE += pid
-USEMODULE += astar
 USEMODULE += quadpid
 USEMODULE += cogip_defs
-USEMODULE += obstacles
-USEMODULE += wizard
 
 # Board features required
 FEATURES_REQUIRED += periph_qdec

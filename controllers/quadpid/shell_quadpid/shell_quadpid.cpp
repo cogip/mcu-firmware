@@ -656,12 +656,12 @@ static int ctrl_quadpid_speed_cmd_reset_coef_cb(int argc, char **argv)
 static cogip::path::Pose poses_calibration[] = {
     {
         0, 0, 90,
-        0.0,
+        0.0, 0.0,
         false
     },
     {
         500, 500, 0,
-        0.0,
+        0.0, 0.0,
         false
     },
 };

@@ -8,7 +8,6 @@ int main(void)
     app_init();
 
     pf_init_tasks();
-    app_init_tasks();
 
     // Start shell
     cogip::shell::start();

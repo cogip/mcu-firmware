@@ -30,12 +30,9 @@
 /* Project includes */
 #include "ctrl.hpp"
 #include "quadpid.hpp"
-#include "obstacles/List.hpp"
 #include "odometry.hpp"
-#include "path/Path.hpp"
-#include "planners/Planner.hpp"
 #include "utils.hpp"
-#include "wizard/Wizard.hpp"
+#include "uartpb/UartProtobuf.hpp"
 
 #define ROBOT_ID                            0       /**< Robot ID for logs */
 #define CONTROLLER_SPEED_LOOP_PERIOD_MSEC   20      /**< Motion controller speed loop default period */
@@ -170,13 +167,6 @@ void pf_send_pb_state(void);
 int pf_is_game_launched(void);
 
 /**
- * @brief Check the robot starting camp to mirror or not the path
- *
- * @return                      Return 1(true) if started, 0(false) otherwise
- */
-int pf_is_camp_left(void);
-
-/**
  * @brief Callback that prepares motion control CTRL_MODE_RUNNING, mainly
  * reading encoders and compute position and speed
  *
@@ -243,25 +233,11 @@ ctrl_quadpid_t *pf_get_quadpid_ctrl(void);
 ctrl_t *pf_get_ctrl(void);
 
 /**
- * @brief Returns platform planner.
- *
- * return   Planner
- **/
-cogip::planners::Planner & pf_get_planner(void);
-
-/**
  * @brief Returns uarpb.
  *
  * return   uarpb pointer
  **/
 cogip::uartpb::UartProtobuf & pf_get_uartpb();
-
-/**
- * @brief Returns wizard.
- *
- * return   Wizard
- **/
-cogip::wizard::Wizard & pf_get_wizard();
 
 /**
  * @brief Initialize all platforms threads
@@ -302,13 +278,6 @@ void encoder_reset(void);
  * @return
  **/
 void motor_drive(const cogip::cogip_defs::Polar &command);
-
-/**
- * @brief Get dynamic obstacles list.
- *
- * @return                      dynamic obstacles list
- **/
-cogip::obstacles::List & pf_get_dyn_obstacles(void);
 
 /**
  * @name Platform parameters for QuadPID controller.

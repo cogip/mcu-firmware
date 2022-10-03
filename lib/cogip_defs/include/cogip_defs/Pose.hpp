@@ -63,7 +63,7 @@ public:
         pose.set_O(O_);
     };
 
-private:
+protected:
     double O_;                ///< 0-orientation
 };
 
