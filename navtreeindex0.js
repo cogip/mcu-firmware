@@ -1,7 +1,6 @@
 var NAVTREEINDEX0 =
 {
 ".html":[1,0,0],
-".html":[1,0,0,3],
 ".html":[1,0,0,4],
 ".html":[1,0,0,5],
 ".html":[1,0,0,6],
@@ -9,6 +8,7 @@ var NAVTREEINDEX0 =
 ".html":[1,0,0,0],
 ".html":[1,0,0,1],
 ".html":[1,0,0,2],
+".html":[1,0,0,3],
 "AstarPlanner_8hpp.html":[2,0,3,0,0,0,0,0],
 "AstarPlanner_8hpp_source.html":[2,0,3,0,0,0,0,0],
 "Circle_8hpp.html":[2,0,2,2,0,0,0],
@@ -99,6 +99,7 @@ var NAVTREEINDEX0 =
 "classcogip_1_1cogip__defs_1_1Pose.html#a7f53b8e6949418932d26f3f05ecbf8ea":[1,0,0,0,3,0],
 "classcogip_1_1cogip__defs_1_1Pose.html#a9926a28b46f31da29c93c52aba8c5797":[1,0,0,0,3,4],
 "classcogip_1_1cogip__defs_1_1Pose.html#aab52dffae18a83dfd659f3a96061af98":[1,0,0,0,3,7],
+"classcogip_1_1cogip__defs_1_1Pose.html#abc22593c1974c32a5c56e977f592290e":[1,0,0,0,3,8],
 "classcogip_1_1obstacles_1_1Circle.html":[1,0,0,1,0],
 "classcogip_1_1obstacles_1_1Circle.html#a057e24dbe620bcca2e6116fa1b463f7e":[1,0,0,1,0,1],
 "classcogip_1_1obstacles_1_1Circle.html#a1bf6c3fbec79e56e8eeab5e1d07692cb":[1,0,0,1,0,2],
@@ -152,15 +153,13 @@ var NAVTREEINDEX0 =
 "classcogip_1_1path_1_1Pose.html":[1,0,0,2,1],
 "classcogip_1_1path_1_1Pose.html#a4fdea04a57e7e73dc10737819e14fd63":[1,0,0,2,1,2],
 "classcogip_1_1path_1_1Pose.html#a785a2558d555007e500cc857c7cff97a":[1,0,0,2,1,4],
-"classcogip_1_1path_1_1Pose.html#a7c1469406699b15c8e23b558abb4e8e8":[1,0,0,2,1,6],
-"classcogip_1_1path_1_1Pose.html#a9c352d1c2843f1a0ca497493a839bfc9":[1,0,0,2,1,7],
-"classcogip_1_1path_1_1Pose.html#a9e08cafe2be9a016b9a6cffc3f9d34a4":[1,0,0,2,1,10],
-"classcogip_1_1path_1_1Pose.html#ab174ad66e82cffed738d0478c926b367":[1,0,0,2,1,9],
+"classcogip_1_1path_1_1Pose.html#a7c1469406699b15c8e23b558abb4e8e8":[1,0,0,2,1,8],
+"classcogip_1_1path_1_1Pose.html#abcf9fbf7b6c2c7c8a4a0902ba4336066":[1,0,0,2,1,7],
 "classcogip_1_1path_1_1Pose.html#ac052e1c02ffe7096484b258aa841981a":[1,0,0,2,1,5],
 "classcogip_1_1path_1_1Pose.html#ac3121274467b3f8fc7a7a2f79e23eea4":[1,0,0,2,1,3],
 "classcogip_1_1path_1_1Pose.html#ac787b8623a57afe29e69891d8c834113":[1,0,0,2,1,0],
+"classcogip_1_1path_1_1Pose.html#ac83620ac8faf9f9c74ba3cdcfb4e61eb":[1,0,0,2,1,6],
 "classcogip_1_1path_1_1Pose.html#ada398f18673f1c8b676678f232546ca6":[1,0,0,2,1,1],
-"classcogip_1_1path_1_1Pose.html#adaa26c0740ea927c0185bdb032f2d94c":[1,0,0,2,1,8],
 "classcogip_1_1planners_1_1AstarPlanner.html":[1,0,0,3,0],
 "classcogip_1_1planners_1_1AstarPlanner.html#a3c2615249740fa63aaf77027744b9b6f":[1,0,0,3,0,0],
 "classcogip_1_1planners_1_1AstarPlanner.html#afcb4c4ae45eab4fcf126f2f24e61a3dd":[1,0,0,3,0,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classcogip_1_1wizard_1_1Wizard.html#a749eb0e505b91f15f4f7e348a4f891c9":[1,0,0,7,0,2],
 "classcogip_1_1wizard_1_1Wizard.html#a8704bf110f276b293ea96d38ccf0f908":[1,0,0,7,0,0],
 "classcogip_1_1wizard_1_1Wizard.html#ad3ca773af8e8be47cf23e850c7725ec9":[1,0,0,7,0,1],
-"cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html":[2,0,2,1,0,0,2]
+"cogip__defs_2include_2cogip__defs_2Polygon_8hpp.html":[2,0,2,1,0,0,2],
+"cogip__defs_2include_2cogip__defs_2Polygon_8hpp_source.html":[2,0,2,1,0,0,2]
 };

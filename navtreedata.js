@@ -52,10 +52,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"cogip__defs_2include_2cogip__defs_2Polygon_8hpp_source.html",
-"group__driver__lds01__dma.html#ga1a44f6faf4a286031da459d4a1d10319",
+"cogip__defs_2include_2cogip__defs_2Pose_8hpp.html",
+"group__driver__lds01__dma.html#ga2c25f198ab9420b51d63dc850a2c4aeb",
 "group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787",
-"group__sd21.html#ga5724741256f8107a9c6143d4ead53c42"
+"group__sd21.html#gga4b0742753cf496136b49c804c4d8e9dba880fc625ff0d9dd51d23ff8ffe6d1411"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

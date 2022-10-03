@@ -1,8 +1,4 @@
 <map id="lib/obstacles/include/obstacles/List.hpp" name="lib/obstacles/include/obstacles/List.hpp">
-<area shape="rect" id="node1" title="List obstacles class declaration." alt="" coords="442,5,597,47"/>
+<area shape="rect" id="node1" title="List obstacles class declaration." alt="" coords="19,5,174,47"/>
 <area shape="rect" id="node2" href="$obstacles_8hpp.html" title="Public API for obstacles module." alt="" coords="5,95,188,136"/>
-<area shape="rect" id="node3" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="213,95,407,136"/>
-<area shape="rect" id="node4" href="$pegasus_2lidar__obstacles_8hpp_source.html" title=" " alt="" coords="431,95,607,136"/>
-<area shape="rect" id="node5" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="632,95,817,136"/>
-<area shape="rect" id="node6" href="$pf__test_2lidar__obstacles_8hpp_source.html" title=" " alt="" coords="841,95,1008,136"/>
 </map>

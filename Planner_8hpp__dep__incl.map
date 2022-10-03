@@ -1,7 +1,5 @@
 <map id="planners/planner/include/planners/Planner.hpp" name="planners/planner/include/planners/Planner.hpp">
-<area shape="rect" id="node1" title="Virtual class defining common API for all planner implementations." alt="" coords="381,5,564,47"/>
+<area shape="rect" id="node1" title="Virtual class defining common API for all planner implementations." alt="" coords="151,5,333,47"/>
 <area shape="rect" id="node2" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="5,95,239,136"/>
 <area shape="rect" id="node3" href="$shell__planners_8hpp_source.html" title=" " alt="" coords="263,95,461,136"/>
-<area shape="rect" id="node4" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="486,95,681,136"/>
-<area shape="rect" id="node5" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="705,95,891,136"/>
 </map>

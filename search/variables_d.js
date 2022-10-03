@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['radius_5f_904',['radius_',['../classcogip_1_1obstacles_1_1Obstacle.html#a5f47fdd227d23fb79e68eb73ef4d62d6',1,'cogip::obstacles::Obstacle']]],
-  ['regul_905',['regul',['../structctrl__quadpid__parameters__t.html#ab0651a8c149a4b56a17b4332dfd2d8a0',1,'ctrl_quadpid_parameters_t']]]
+  ['quadpid_5fparams_891',['quadpid_params',['../structctrl__quadpid__t.html#ab039e8ac844b32e4c9c4883af2bf7e23',1,'ctrl_quadpid_t']]]
 ];

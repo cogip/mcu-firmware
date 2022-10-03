@@ -1,10 +1,10 @@
 <map id="controllers/common_controller/include/ctrl.hpp" name="controllers/common_controller/include/ctrl.hpp">
-<area shape="rect" id="node1" title="Common controllers API and datas." alt="" coords="374,5,526,61"/>
-<area shape="rect" id="node2" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="314,109,471,151"/>
-<area shape="rect" id="node4" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="197,206,391,247"/>
-<area shape="rect" id="node5" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="416,206,601,247"/>
-<area shape="rect" id="node6" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="547,109,729,151"/>
-<area shape="rect" id="node3" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="5,199,172,255"/>
-<area shape="rect" id="node7" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="848,206,1081,247"/>
-<area shape="rect" id="node8" href="$shell__planners_8hpp_source.html" title=" " alt="" coords="625,206,824,247"/>
+<area shape="rect" id="node1" title="Common controllers API and datas." alt="" coords="353,5,505,61"/>
+<area shape="rect" id="node2" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="251,109,408,151"/>
+<area shape="rect" id="node4" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="5,206,200,247"/>
+<area shape="rect" id="node5" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="415,206,601,247"/>
+<area shape="rect" id="node6" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="633,109,815,151"/>
+<area shape="rect" id="node3" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="225,199,391,255"/>
+<area shape="rect" id="node7" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="847,206,1081,247"/>
+<area shape="rect" id="node8" href="$shell__planners_8hpp_source.html" title=" " alt="" coords="625,206,823,247"/>
 </map>

@@ -1,12 +1,8 @@
 <map id="lib/obstacles/include/obstacles/Obstacle.hpp" name="lib/obstacles/include/obstacles/Obstacle.hpp">
-<area shape="rect" id="node1" title="Polygon obstacle class declaration." alt="" coords="373,5,551,47"/>
-<area shape="rect" id="node2" href="$Circle_8hpp.html" title="Circle obstacle class declaration." alt="" coords="210,95,367,136"/>
-<area shape="rect" id="node3" href="$List_8hpp.html" title="List obstacles class declaration." alt="" coords="442,95,597,136"/>
-<area shape="rect" id="node4" href="$obstacles_8hpp.html" title="Public API for obstacles module." alt="" coords="5,184,188,225"/>
-<area shape="rect" id="node9" href="$obstacles_2include_2obstacles_2Polygon_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="829,95,1001,136"/>
-<area shape="rect" id="node5" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="213,184,407,225"/>
-<area shape="rect" id="node6" href="$pegasus_2lidar__obstacles_8hpp_source.html" title=" " alt="" coords="431,184,607,225"/>
-<area shape="rect" id="node7" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="632,184,817,225"/>
-<area shape="rect" id="node8" href="$pf__test_2lidar__obstacles_8hpp_source.html" title=" " alt="" coords="841,184,1008,225"/>
-<area shape="rect" id="node10" href="$Rectangle_8hpp.html" title="Rectangle obstacle class declaration." alt="" coords="1032,184,1217,225"/>
+<area shape="rect" id="node1" title="Polygon obstacle class declaration." alt="" coords="233,5,410,47"/>
+<area shape="rect" id="node2" href="$Circle_8hpp.html" title="Circle obstacle class declaration." alt="" coords="5,95,163,136"/>
+<area shape="rect" id="node3" href="$List_8hpp.html" title="List obstacles class declaration." alt="" coords="187,95,341,136"/>
+<area shape="rect" id="node4" href="$obstacles_8hpp.html" title="Public API for obstacles module." alt="" coords="189,184,371,225"/>
+<area shape="rect" id="node5" href="$obstacles_2include_2obstacles_2Polygon_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="417,95,589,136"/>
+<area shape="rect" id="node6" href="$Rectangle_8hpp.html" title="Rectangle obstacle class declaration." alt="" coords="410,184,595,225"/>
 </map>
