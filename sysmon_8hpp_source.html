@@ -135,28 +135,30 @@ $(document).ready(function(){initNavTree('sysmon_8hpp_source.html',''); initResi
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>sysmon {</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sysmon_8hpp.html#a69bd9da9603c5d9828db81f28139b8e9">display_heap_status</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sysmon_8hpp.html#af837da14aecce41f3911e8c915452cf4">display_threads_status</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sysmon_8hpp.html#a128724994fd12f12735134d534149b5b">sysmon_start</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#ifdef MODULE_UARTPB</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">void</span> register_uartpb(<a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a> *);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace sysmon</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sysmon_8hpp.html#a8d7f036ec8cae4d0ffff5c42eceb4f1d">display_heap_status</a>();</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sysmon_8hpp.html#a8dafdf8ef441ea532ca03a875bf35ccc">display_threads_status</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sysmon_8hpp.html#ac592eb4d46c6e1db1490bb6d9363a3ec">sysmon_start</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">void</span> <a class="code" href="sysmon_8hpp.html#ad1d096acacff00b0e6a844d4bd992f67">update_thread_sched_status</a>(kernel_pid_t pid, <span class="keywordtype">bool</span> has_overshot);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#ifdef MODULE_UARTPB</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> register_uartpb(<a class="code" href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a> *);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// namespace sysmon</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasscogip_1_1uartpb_1_1UartProtobuf_html"><div class="ttname"><a href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a></div><div class="ttdoc">Generic UART Protobuf communication class.</div><div class="ttdef"><b>Definition:</b> <a href="UartProtobuf_8hpp_source.html#l00066">UartProtobuf.hpp:66</a></div></div>
-<div class="ttc" id="asysmon_8hpp_html_a69bd9da9603c5d9828db81f28139b8e9"><div class="ttname"><a href="sysmon_8hpp.html#a69bd9da9603c5d9828db81f28139b8e9">cogip::sysmon::display_heap_status</a></div><div class="ttdeci">void display_heap_status(void)</div><div class="ttdoc">Display heap memory status.</div></div>
-<div class="ttc" id="asysmon_8hpp_html_af837da14aecce41f3911e8c915452cf4"><div class="ttname"><a href="sysmon_8hpp.html#af837da14aecce41f3911e8c915452cf4">cogip::sysmon::display_threads_status</a></div><div class="ttdeci">void display_threads_status(void)</div><div class="ttdoc">Display each thread status.</div></div>
-<div class="ttc" id="asysmon_8hpp_html_a128724994fd12f12735134d534149b5b"><div class="ttname"><a href="sysmon_8hpp.html#a128724994fd12f12735134d534149b5b">cogip::sysmon::sysmon_start</a></div><div class="ttdeci">void sysmon_start(void)</div><div class="ttdoc">Start system monitoring thread.</div></div>
+<div class="ttc" id="asysmon_8hpp_html_ac592eb4d46c6e1db1490bb6d9363a3ec"><div class="ttname"><a href="sysmon_8hpp.html#ac592eb4d46c6e1db1490bb6d9363a3ec">cogip::sysmon::sysmon_start</a></div><div class="ttdeci">void sysmon_start()</div><div class="ttdoc">Start system monitoring thread.</div></div>
+<div class="ttc" id="asysmon_8hpp_html_a8dafdf8ef441ea532ca03a875bf35ccc"><div class="ttname"><a href="sysmon_8hpp.html#a8dafdf8ef441ea532ca03a875bf35ccc">cogip::sysmon::display_threads_status</a></div><div class="ttdeci">void display_threads_status()</div><div class="ttdoc">Display each thread status.</div></div>
 <div class="ttc" id="aUartProtobuf_8hpp_html"><div class="ttname"><a href="UartProtobuf_8hpp.html">UartProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over UART module.</div></div>
+<div class="ttc" id="asysmon_8hpp_html_ad1d096acacff00b0e6a844d4bd992f67"><div class="ttname"><a href="sysmon_8hpp.html#ad1d096acacff00b0e6a844d4bd992f67">cogip::sysmon::update_thread_sched_status</a></div><div class="ttdeci">void update_thread_sched_status(kernel_pid_t pid, bool has_overshot)</div><div class="ttdoc">Update threads scheduling status.</div></div>
+<div class="ttc" id="asysmon_8hpp_html_a8d7f036ec8cae4d0ffff5c42eceb4f1d"><div class="ttname"><a href="sysmon_8hpp.html#a8d7f036ec8cae4d0ffff5c42eceb4f1d">cogip::sysmon::display_heap_status</a></div><div class="ttdeci">void display_heap_status()</div><div class="ttdoc">Display heap memory status.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Mon Oct 3 2022 04:20:40 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Oct 4 2022 16:01:56 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>
