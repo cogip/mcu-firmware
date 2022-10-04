@@ -31,11 +31,11 @@ namespace cogip {
 namespace sysmon {
 
 /// Display heap memory status
-void display_heap_status(void);
+void display_heap_status();
 /// Display each thread status
-void display_threads_status(void);
+void display_threads_status();
 /// Start system monitoring thread
-void sysmon_start(void);
+void sysmon_start();
 /// Update threads scheduling status
 /// @param  pid             Thread pid
 /// @param  has_overshot    Period overshot
