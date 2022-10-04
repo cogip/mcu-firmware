@@ -45,38 +45,54 @@ class ThreadStatus: public MemoryStatus {
 
     public:
         /// Constructor
-        ThreadStatus();
+        ThreadStatus() : MemoryStatus(), pid_(0), loops_(0), overshots_(0) {};
 
+        /// Increment thread loops number
+        void inc_loops() { loops_++; };
+        /// Increment thread overshots number
+        void inc_overshots() { overshots_++; };
+        /// Get thread loops number
+        uint32_t loops() const { return loops_; };
         /// Get thread name
-        inline etl::string<SYSMON_THREADSTATUS_NAME_MAX_LENGTH> name() const { return name_; };
+        etl::string<SYSMON_THREADSTATUS_NAME_MAX_LENGTH> name() const { return name_; };
+        /// Get thread overshots number
+        uint32_t overshots() const { return overshots_; };
         /// Get thread pid
-        inline uint32_t pid() const { return pid_; };
+        uint32_t pid() const { return pid_; };
+        /// Set thread loops number
+        void set_loops(const uint32_t loops) { loops_ = loops; };
         /// Set thread name
-        inline void set_name(const etl::string<SYSMON_THREADSTATUS_NAME_MAX_LENGTH> &name) { name_ = name; };
+        void set_name(const etl::string<SYSMON_THREADSTATUS_NAME_MAX_LENGTH> &name) { name_ = name; };
+        /// Set thread overshots number
+        void set_overshots(const uint32_t overshots) { overshots_ = overshots; };
         /// Set thread pid
-        inline void set_pid(const uint32_t pid) { pid_ = pid; };
+        void set_pid(const uint32_t pid) { pid_ = pid; };
 
         /// Return the Protobuf message.
-        const PB_Message &pb_message(void) const { return pb_message_; };
+        const PB_Message &pb_message() const { return pb_message_; };
         /// Update Protobuf message
-        void update_pb_message(void);
+        void update_pb_message();
 
     private:
         /// Thread pid
         uint32_t pid_;
         /// Thread name
         etl::string<SYSMON_THREADSTATUS_NAME_MAX_LENGTH> name_;
+        /// Thread loop number
+        uint32_t loops_;
+        /// Thread time overshot
+        uint32_t overshots_;
 
         /// Protobug message
         PB_Message pb_message_;
 };
 
 /// Display heap memory status
-void display_heap_status(void);
+void display_heap_status();
 /// Display each thread status
-void display_threads_status(void);
+void display_threads_status();
 /// Start system monitoring thread
-void sysmon_start(void);
+void sysmon_start();
 
 #ifdef MODULE_UARTPB
 /// Register uartpb serial interface for messaging

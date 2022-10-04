@@ -7,6 +7,7 @@
 #include "avoidance.hpp"
 #include "planners/astar/AstarPlanner.hpp"
 #include "platform.hpp"
+#include "thread/thread.hpp"
 
 // Enable or disable debug for this file only
 #define ENABLE_DEBUG        (0)
@@ -200,7 +201,7 @@ void *AstarPlanner::task_planner()
 
 yield_point:
         // Wait thread period to end
-        ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, TASK_PERIOD_USEC);
     }
 
     return 0;

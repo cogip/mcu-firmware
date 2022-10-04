@@ -42,18 +42,18 @@ class MemoryStatus {
     public:
         MemoryStatus();
         /// Get memory total size in bytes
-        inline std::size_t size() const { return size_; };
+        std::size_t size() const { return size_; };
         /// Get memory used size in bytes
-        inline std::size_t used() const { return used_; };
+        std::size_t used() const { return used_; };
         /// Set memory total size in bytes
-        inline void set_size(const std::size_t size) { size_ = size; };
+        void set_size(const std::size_t size) { size_ = size; };
         /// Set memory used size in bytes
-        inline void set_used(const std::size_t used) { used_ = used; };
+        void set_used(const std::size_t used) { used_ = used; };
 
         /// Return the Protobuf message.
-        const PB_Message &pb_message(void) const { return pb_message_; };
+        const PB_Message &pb_message() const { return pb_message_; };
         /// Update Protobuf message
-        void update_pb_message(void);
+        void update_pb_message();
 
     private:
         /// Memory total size in bytes

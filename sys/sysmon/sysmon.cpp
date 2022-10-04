@@ -14,6 +14,7 @@
 #include "PB_Sysmon.hpp"
 #include "sysmon/sysmon.hpp"
 #include "sysmon/ThreadStatus.hpp"
+#include "thread/thread.hpp"
 #ifdef MODULE_UARTPB
 #include "uartpb/UartProtobuf.hpp"
 #endif
@@ -127,6 +128,23 @@ static void _update_threads_status(void)
     }
 }
 
+void update_thread_sched_status(kernel_pid_t pid, bool has_overshot)
+{
+    mutex_lock(&_mutex_sysmon);
+
+    if (! _sysmon_threads_status[pid]) {
+        _sysmon_threads_status[pid] = threads_status_pool.create();
+    }
+
+    _sysmon_threads_status[pid]->inc_loops();
+
+    if (has_overshot) {
+        _sysmon_threads_status[pid]->inc_overshots();
+    }
+
+    mutex_unlock(&_mutex_sysmon);
+}
+
 void display_threads_status(void)
 {
     for (kernel_pid_t i = KERNEL_PID_FIRST; i <= KERNEL_PID_LAST; i++) {
@@ -138,6 +156,8 @@ void display_threads_status(void)
             std::cout << "Thread '" << thread->name << "' with pid " << i << std::endl;
             std::cout << "  stack size = " <<_sysmon_threads_status[i]->size() << " bytes" << std::endl;
             std::cout << "  stack used = " <<_sysmon_threads_status[i]->used() << " bytes" << std::endl;
+            std::cout << "  loops      = " <<_sysmon_threads_status[i]->loops() << std::endl;
+            std::cout << "  overshots  = " <<_sysmon_threads_status[i]->overshots() << std::endl;
 
             mutex_unlock(&_mutex_sysmon);
         }
@@ -167,7 +187,7 @@ static void *_thread_status_updater(void *data)
 {
     (void)data;
 
-    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_SEC);
 
     while (true) {
         pb_sysmon_message_.clear();
@@ -176,8 +196,7 @@ static void *_thread_status_updater(void *data)
 #ifdef MODULE_UARTPB
         _uartpb_send_status();
 #endif
-
-        ztimer_periodic_wakeup(ZTIMER_SEC, &loop_start_time, TASK_PERIOD_SEC);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_SEC, &loop_start_time, TASK_PERIOD_SEC);
     }
 
     return 0;
