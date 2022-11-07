@@ -35,7 +35,7 @@ ifneq ($(REMOTE_TARGET),)
 endif
 
 MCUFW_MODULE_DIRS = " \
-					controllers \
+					motion_control \
 					drivers \
 					lib \
 					planners \
