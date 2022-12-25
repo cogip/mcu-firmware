@@ -40,6 +40,8 @@ extern "C" {
 
 typedef uint8_t lx_id_t;    /**< device id type */
 
+#define LX_UART_BUFFER_SIZE 10
+
 /**
  * @brief   Descriptor struct for a lx-servos device
  */
