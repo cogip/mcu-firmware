@@ -26,8 +26,18 @@
 extern "C" {
 #endif
 
-/* Servomotors half duplex direction pin */
+/* Vacuum pumps */
+#define GPIO_VACUUM1_ENABLE GPIO_PIN(PORT_C, 13)
+#define GPIO_VACUUM1_TEST GPIO_PIN(PORT_C, 0)
+#define GPIO_VACUUM2_ENABLE GPIO_PIN(PORT_C, 14)
+#define GPIO_VACUUM2_TEST GPIO_PIN(PORT_C, 1)
+#define GPIO_VACUUM3_ENABLE GPIO_PIN(PORT_C, 15)
+#define GPIO_VACUUM3_TEST GPIO_PIN(PORT_C, 2)
+
+/* Servomotors */
 #define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
+#define LX_UART_DEV     2
+
 
 /* Motors */
 #define MOTOR_LEFT  0
