@@ -12,7 +12,7 @@
 #define TASK_PERIOD_MSEC_STATE    (200)
 
 /* Thread stack */
-static char pose_thread_stack[THREAD_STACKSIZE_SMALL];
+static char pose_thread_stack[THREAD_STACKSIZE_MEDIUM];
 static char state_thread_stack[THREAD_STACKSIZE_MEDIUM];
 
 /* Thread priority */
