@@ -1,0 +1,7 @@
+<map id="platforms/pegasus/include/Actuator.hpp" name="platforms/pegasus/include/Actuator.hpp">
+<area shape="rect" id="node1" title="Base actuators class definition." alt="" coords="115,5,309,47"/>
+<area shape="rect" id="node2" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="5,95,200,136"/>
+<area shape="rect" id="node4" href="$Pump_8hpp.html" title="C++ class representing a pump using vacuum_pump driver." alt="" coords="224,95,419,136"/>
+<area shape="rect" id="node3" href="$pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="5,184,200,225"/>
+<area shape="rect" id="node5" href="$pf__pumps_8hpp.html" title="Functions and definitions related to pumps." alt="" coords="224,184,419,225"/>
+</map>

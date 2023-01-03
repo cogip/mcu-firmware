@@ -168,9 +168,9 @@ Data Structures</h2></td></tr>
 <tr class="memitem:ac883fa80e720c1416abdd40d77a67d2b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lx__writer_8h.html#ac883fa80e720c1416abdd40d77a67d2b">lx_writer_get_size</a> (const <a class="el" href="structlx__writer__t.html">lx_writer_t</a> *writer)</td></tr>
 <tr class="memdesc:ac883fa80e720c1416abdd40d77a67d2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the data buffer's size to send.  <a href="lx__writer_8h.html#ac883fa80e720c1416abdd40d77a67d2b">More...</a><br /></td></tr>
 <tr class="separator:ac883fa80e720c1416abdd40d77a67d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c61878b2a83f4f4d4b37e2076c75091"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lx__writer_8h.html#a5c61878b2a83f4f4d4b37e2076c75091">lx_writer_write_make</a> (<a class="el" href="structlx__writer__t.html">lx_writer_t</a> *writer, uint8_t id, uint8_t reg, const uint8_t *buffer, size_t size)</td></tr>
-<tr class="memdesc:a5c61878b2a83f4f4d4b37e2076c75091"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a WRITE packet.  <a href="lx__writer_8h.html#a5c61878b2a83f4f4d4b37e2076c75091">More...</a><br /></td></tr>
-<tr class="separator:a5c61878b2a83f4f4d4b37e2076c75091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d9fa9832dd3fe3514582d02abd7c0e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lx__writer_8h.html#a3d9fa9832dd3fe3514582d02abd7c0e2">lx_writer_write_make</a> (<a class="el" href="structlx__writer__t.html">lx_writer_t</a> *writer, uint8_t id, <a class="el" href="group__driver__lx__servo.html#ga2cfd8212589372b19507ca3089d79a75">lx_write_command_t</a> write_command, const uint8_t *buffer, size_t size)</td></tr>
+<tr class="memdesc:a3d9fa9832dd3fe3514582d02abd7c0e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a WRITE packet.  <a href="lx__writer_8h.html#a3d9fa9832dd3fe3514582d02abd7c0e2">More...</a><br /></td></tr>
+<tr class="separator:a3d9fa9832dd3fe3514582d02abd7c0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d489be35a5c1626466e1f0194b72755"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lx__writer_8h.html#a3d489be35a5c1626466e1f0194b72755">lx_writer_read_make</a> (<a class="el" href="structlx__writer__t.html">lx_writer_t</a> *writer, uint8_t id, <a class="el" href="group__driver__lx__servo.html#ga86c0842f9ce337d78d115fb3bb5b186e">lx_read_command_t</a> read_command)</td></tr>
 <tr class="memdesc:a3d489be35a5c1626466e1f0194b72755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a READ packet.  <a href="lx__writer_8h.html#a3d489be35a5c1626466e1f0194b72755">More...</a><br /></td></tr>
 <tr class="separator:a3d489be35a5c1626466e1f0194b72755"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -318,8 +318,8 @@ Data Structures</h2></td></tr>
 
 </div>
 </div>
-<a id="a5c61878b2a83f4f4d4b37e2076c75091"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c61878b2a83f4f4d4b37e2076c75091">&#9670;&nbsp;</a></span>lx_writer_write_make()</h2>
+<a id="a3d9fa9832dd3fe3514582d02abd7c0e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d9fa9832dd3fe3514582d02abd7c0e2">&#9670;&nbsp;</a></span>lx_writer_write_make()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -339,8 +339,8 @@ Data Structures</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>reg</em>, </td>
+          <td class="paramtype"><a class="el" href="group__driver__lx__servo.html#ga2cfd8212589372b19507ca3089d79a75">lx_write_command_t</a>&#160;</td>
+          <td class="paramname"><em>write_command</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -367,7 +367,7 @@ Data Structures</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">writer</td><td>the packet writer </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>the destination's id </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">reg</td><td>the register to write in </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">write_command</td><td>the parameter write command </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">buffer</td><td>the data buffer to write </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>the data buffer's size </td></tr>
   </table>
@@ -380,7 +380,7 @@ Data Structures</h2></td></tr>
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Oct 9 2022 16:46:45 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jan 3 2023 17:31:13 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

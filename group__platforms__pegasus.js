@@ -1,6 +1,12 @@
 var group__platforms__pegasus =
 [
+    [ "Actuator.hpp", "Actuator_8hpp.html", null ],
+    [ "LxServo.hpp", "LxServo_8hpp.html", null ],
+    [ "pf_actuators.hpp", "pf__actuators_8hpp.html", null ],
+    [ "pf_pumps.hpp", "pf__pumps_8hpp.html", null ],
+    [ "pf_servos.hpp", "pf__servos_8hpp.html", null ],
     [ "platform.hpp", "pegasus_2include_2platform_8hpp.html", null ],
+    [ "Pump.hpp", "Pump_8hpp.html", null ],
     [ "AVOIDANCE_BORDER_X_MAX", "group__platforms__pegasus.html#ga5cd8534245dd8c7715965af083bd13c2", null ],
     [ "AVOIDANCE_BORDER_X_MIN", "group__platforms__pegasus.html#ga74d22d5c450365dc5f4ae75b8b6ff432", null ],
     [ "AVOIDANCE_BORDER_Y_MAX", "group__platforms__pegasus.html#ga128c544be070e5eb2e766506e28d9d91", null ],

@@ -1,0 +1,11 @@
+<map id="platforms/pegasus/include/pf_pumps.hpp" name="platforms/pegasus/include/pf_pumps.hpp">
+<area shape="rect" id="node1" title="Functions and definitions related to pumps." alt="" coords="258,5,453,47"/>
+<area shape="rect" id="node2" href="$Pump_8hpp.html" title="C++ class representing a pump using vacuum_pump driver." alt="" coords="312,95,399,121"/>
+<area shape="rect" id="node3" href="$vacuum__pump_8h.html" title="Public API for COGIP vacuum pump driver." alt="" coords="77,169,207,196"/>
+<area shape="rect" id="node7" href="$Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="231,169,335,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="359,169,495,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="519,169,583,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,244,76,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="101,244,183,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="207,244,314,271"/>
+</map>

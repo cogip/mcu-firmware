@@ -18,6 +18,19 @@ var annotated_dup =
         [ "Path", "classcogip_1_1path_1_1Path.html", "classcogip_1_1path_1_1Path" ],
         [ "Pose", "classcogip_1_1path_1_1Pose.html", "classcogip_1_1path_1_1Pose" ]
       ] ],
+      [ "pf", null, [
+        [ "actuators", null, [
+          [ "pumps", null, [
+            [ "Command", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command" ],
+            [ "Pump", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump" ]
+          ] ],
+          [ "servos", null, [
+            [ "Command", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command.html", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command" ],
+            [ "LxServo", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo" ]
+          ] ],
+          [ "Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", "classcogip_1_1pf_1_1actuators_1_1Actuator" ]
+        ] ]
+      ] ],
       [ "planners", null, [
         [ "AstarPlanner", "classcogip_1_1planners_1_1AstarPlanner.html", "classcogip_1_1planners_1_1AstarPlanner" ],
         [ "Planner", "classcogip_1_1planners_1_1Planner.html", "classcogip_1_1planners_1_1Planner" ]

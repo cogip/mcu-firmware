@@ -1,5 +1,6 @@
 var lx__servo_8h =
 [
+    [ "LX_UART_BUFFER_SIZE", "group__driver__lx-servo.html#ga7fd2450593f93aada65bfa0f16d5f682", null ],
     [ "lx_id_t", "group__driver__lx-servo.html#ga42631c7208ac426abd31e35e868e7544", null ],
     [ "lx_comm_error_t", "group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca", [
       [ "LX_OK", "group__driver__lx-servo.html#gga0cfccd74c85ef456907b71eb398ae3caaa67dc262dc2433fd25425c8e1bb53f71", null ],
