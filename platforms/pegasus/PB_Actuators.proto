@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+enum PB_ActuatorsTypeEnum
+{
+  SERVO = 0;
+  PUMP = 1;
+}
+
+enum PB_ActuatorsGroupEnum
+{
+  NO_GROUP = 0;
+}
+
+enum PB_ServoEnum
+{
+    UNUSED = 0;
+    ARM_CENTRAL_BASE = 1;
+    ARM_CENTRAL_MID = 2;
+    ARM_CENTRAL_HEAD = 3;
+    ARM_CENTRAL_LIFT = 5;
+    ARM_RIGHT_BASE = 9;
+    ARM_RIGHT_HEAD = 10;
+    ARM_LEFT_BASE = 11;
+    ARM_LEFT_HEAD = 12;
+    STORAGE = 4;
+    WHEEL = 13;
+}
+
+enum PB_PumpEnum
+{
+    ARM_LEFT_PUMP = 0;
+    ARM_CENTRAL_PUMP = 1;
+    ARM_RIGHT_PUMP = 2;
+}
+
+message PB_Servo {
+    PB_ActuatorsGroupEnum group = 1;
+    uint32 order = 2;
+    PB_ServoEnum id = 3;
+    uint32 position = 4;
+    uint32 command = 5;
+}
+
+message PB_Pump {
+    PB_ActuatorsGroupEnum group = 1;
+    uint32 order = 2;
+    PB_PumpEnum id = 3;
+    bool activated = 4;
+    bool under_pressure = 5;
+}
+
+message PB_ActuatorsState {
+    repeated PB_Servo servos = 1;
+    repeated PB_Pump pumps = 2;
+}
+
+message PB_ServoCommand {
+    PB_ServoEnum id = 1;
+    uint32 command = 2;
+    uint32 time = 3;
+}
+
+message PB_PumpCommand {
+    PB_PumpEnum id = 1;
+    bool command = 2;
+}
+
+message PB_ActuatorCommand {
+    oneof command {
+        PB_ServoCommand servo = 1;
+        PB_PumpCommand pump = 2;
+    }
+}

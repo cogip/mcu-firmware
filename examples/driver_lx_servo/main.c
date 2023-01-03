@@ -9,7 +9,6 @@
 /* Firmware includes */
 #include "lx_servo.h"
 #include "shell.h"
-#include "shell_commands.h"
 #include "stdio_uart.h"
 
 /* System includes */

@@ -13,7 +13,7 @@
 
 /* Platform includes */
 #include "trace_utils.hpp"
-
+#include "pf_actuators.hpp"
 #include "PB_Command.hpp"
 #include "PB_PathPose.hpp"
 #include "PB_State.hpp"
@@ -338,6 +338,9 @@ void pf_init(void)
 
     /* Init odometry */
     odometry_setup(WHEELS_DISTANCE / PULSE_PER_MM);
+
+    /* Init actuators */
+    cogip::pf::actuators::init();
 
     /*ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);*/
 

@@ -13,6 +13,8 @@ USEMODULE += uartpb
 USEMODULE += pid
 USEMODULE += quadpid
 USEMODULE += cogip_defs
+USEMODULE += lx_servo
+USEMODULE += vacuum_pump
 
 # Board features required
 FEATURES_REQUIRED += periph_qdec

@@ -69,13 +69,13 @@ size_t lx_writer_get_size(const lx_writer_t *writer);
 /**
  * @brief Build a WRITE packet
  *
- * @param[out] writer    the packet writer
- * @param[in] id         the destination's id
- * @param[in] reg        the register to write in
- * @param[in] buffer     the data buffer to write
- * @param[in] size       the data buffer's size
+ * @param[out] writer        the packet writer
+ * @param[in] id             the destination's id
+ * @param[in] write_command  the parameter write command
+ * @param[in] buffer         the data buffer to write
+ * @param[in] size           the data buffer's size
  */
-void lx_writer_write_make(lx_writer_t *writer, uint8_t id, uint8_t reg, const uint8_t *buffer, size_t size);
+void lx_writer_write_make(lx_writer_t *writer, uint8_t id, lx_write_command_t write_command, const uint8_t *buffer, size_t size);
 
 /**
  * @brief Build a READ packet

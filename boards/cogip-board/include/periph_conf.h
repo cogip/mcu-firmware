@@ -105,8 +105,7 @@ static const uart_conf_t uart_config[] = {
 
 #define UART_0_ISR      (isr_usart2)
 #define UART_1_ISR      (isr_usart1)
-#define UART_2_ISR      (isr_usart3)
-#define UART_3_ISR      (isr_uart5)
+#define UART_2_ISR      (isr_uart5)
 
 #define UART_NUMOF      ARRAY_SIZE(uart_config)
 /** @} */
