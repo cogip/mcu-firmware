@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_platform_engine := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_platform_engine)
+
+PROTOBUF_PATH_platform_engine := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_platform_engine)
