@@ -12,7 +12,7 @@
 #include "pid_ng/PID.hpp"
 
 #include "motion_control_common/Controller.hpp"
-#include "motion_control_common/MetaController.hpp"
+#include "dualpid_meta_controller/DualPIDMetaController.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
@@ -51,8 +51,6 @@ cogip::motion_control::PlatformEngine engine(
 );
 
 class QuadPIDMetaController: public cogip::motion_control::MetaController <10, 2, 2> {};
-class LinearDualPIDMetaController: public cogip::motion_control::MetaController <3, 1, 3> {};
-class AngularDualPIDMetaController: public cogip::motion_control::MetaController <3, 1, 3> {};
 
 int main(void)
 {
@@ -68,7 +66,7 @@ int main(void)
     std::cout << "PolarParallelMetaController created" << std::endl;
 
     // Linear dual PID meta controller
-    LinearDualPIDMetaController linear_dualpid_meta_controller;
+    cogip::motion_control::DualPIDMetaController linear_dualpid_meta_controller;
     polar_parallel_meta_controller.add_controller(&linear_dualpid_meta_controller);
     std::cout << "LinearDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
     // Linear pose PID controller
@@ -90,7 +88,7 @@ int main(void)
     std::cout << "SpeedPIDController created and added to LinearDualPIDMetaController" << std::endl;
 
     // Angular dual PID meta controller
-    AngularDualPIDMetaController angular_dualpid_meta_controller;
+    cogip::motion_control::DualPIDMetaController angular_dualpid_meta_controller;
     polar_parallel_meta_controller.add_controller(&angular_dualpid_meta_controller);
     std::cout << "AngularDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
     // Angular pose PID controller
