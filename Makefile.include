@@ -36,6 +36,10 @@ endif
 
 MCUFW_MODULE_DIRS = " \
 					motion_control \
+					motion_control/controllers \
+					motion_control/engines \
+					motion_control/filters \
+					motion_control/metas \
 					drivers \
 					lib \
 					planners \

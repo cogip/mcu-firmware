@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_motion_control_common := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_motion_control_common)
+
+PROTOBUF_PATH_motion_control_common := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_motion_control_common)
