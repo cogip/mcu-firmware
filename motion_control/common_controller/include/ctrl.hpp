@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    controller Common
+ * @defgroup    legacy_controller Legacy common
  * @ingroup     motion_control
  * @brief       Actuators motion speed and position controller
  *

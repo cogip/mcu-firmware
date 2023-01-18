@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    quadpid Quadruple PID actuator motion controller
+ * @defgroup    legacy_quadpid Quadruple PID actuator motion controller
  * @ingroup     motion_control
  * @brief       Actuators Quadruple PID  motion speed and position controller
  *
