@@ -13,6 +13,7 @@
 
 #include "motion_control_common/Controller.hpp"
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
+#include "quadpid_meta_controller/QuadPIDMetaController.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
@@ -49,8 +50,6 @@ cogip::motion_control::PlatformEngine engine(
     cogip::motion_control::platform_get_poses_cb_t::create<robot_poses>(),
     cogip::motion_control::platform_get_speeds_cb_t::create<robot_speeds>()
 );
-
-class QuadPIDMetaController: public cogip::motion_control::MetaController <10, 2, 2> {};
 
 int main(void)
 {
@@ -110,7 +109,7 @@ int main(void)
     std::cout << "SpeedPIDController created and added to AngularDualPIDMetaController" << std::endl;
 
     // Quad PID meta controller
-    QuadPIDMetaController quadpid_meta_controller;
+    cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
     quadpid_meta_controller.add_controller(&pose_straight_filter);
     quadpid_meta_controller.add_controller(&polar_parallel_meta_controller);
 

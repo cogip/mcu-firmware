@@ -8,6 +8,7 @@ USEMODULE += platform_engine
 USEMODULE += polar_parallel_meta_controller
 USEMODULE += pose_pid_controller
 USEMODULE += pose_straight_filter
+USEMODULE += quadpid_meta_controller
 USEMODULE += speed_pid_controller
 USEMODULE += speed_filter
 USEMODULE += pid_ng
