@@ -19,11 +19,11 @@ jobs:
 
     steps:
     - name: Clone mcu-firmware
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         path: 'mcu-firmware'
     - name: Clone RIOT
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: 'RIOT-OS/RIOT'
         ref: '2022.07'
