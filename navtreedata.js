@@ -29,7 +29,7 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Data Fields", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", null ],
+        [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ]
       ] ]
@@ -52,11 +52,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcogip_1_1sysmon_1_1ThreadStatus.html#aad1f5bea221d0756410d1a294ccad877",
-"group__controller.html#gga83512a82ac70fd30e2ba0512c79d1001a50346583ca11642d7966e22efb7d0c18",
-"group__driver__lx__servo.html#gga86c0842f9ce337d78d115fb3bb5b186eac959216a5c25dd6c086ce4b30c547625",
-"group__quadpid.html#ga5a2742885f1f7d2e3df5e80b1ac7f938",
-"structlds01__params__t.html#a9dcfa044c8a975b31f7525a4fad05374"
+"classcogip_1_1obstacles_1_1Obstacle.html#a1cb04b4e4f5e85216bb4de778e8351f0",
+"dir_934c08c1752220fc11f13f5780801862.html",
+"group__driver__lx-servo.html#gacba1ecef802a2f72d7721f24fca4ac93",
+"group__lib__avoidance.html#gab5b66d96b948baa8d2f7b27546b7f3cc",
+"group__sd21.html#gad6475199c1a4f67775a2dd92f7e2596b",
+"thread_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

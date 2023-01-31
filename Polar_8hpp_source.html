@@ -167,19 +167,31 @@ $(document).ready(function(){initNavTree('Polar_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        polar.set_angle(angle_);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    };</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">double</span> distance_;          </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">double</span> angle_;             </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;};</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;} <span class="comment">// namespace cogip_defs</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classcogip_1_1cogip__defs_1_1Polar.html#a82e111ceb99af0633e5c9985fdc1ad10">   59</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1cogip__defs_1_1Polar.html#a82e111ceb99af0633e5c9985fdc1ad10">reverse</a>(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <a class="code" href="classcogip_1_1cogip__defs_1_1Polar.html#a4b9da0dce29450852f5b049d913b669f">set_distance</a>(- distance_);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">if</span> (angle_ &lt; 0) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                <a class="code" href="classcogip_1_1cogip__defs_1_1Polar.html#ae0f1bcf7731cfc6011ccc3e151e9d157">set_angle</a>(angle_ + 180);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <a class="code" href="classcogip_1_1cogip__defs_1_1Polar.html#ae0f1bcf7731cfc6011ccc3e151e9d157">set_angle</a>(angle_ - 180);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">double</span> distance_;          </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">double</span> angle_;             </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;};</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <span class="comment">// namespace cogip_defs</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasscogip_1_1cogip__defs_1_1Polar_html"><div class="ttname"><a href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a></div><div class="ttdoc">Polar coordinate.</div><div class="ttdef"><b>Definition:</b> <a href="Polar_8hpp_source.html#l00021">Polar.hpp:21</a></div></div>
 <div class="ttc" id="aclasscogip_1_1cogip__defs_1_1Polar_html_ad3d524554bbb6d292dbddaadda32e982"><div class="ttname"><a href="classcogip_1_1cogip__defs_1_1Polar.html#ad3d524554bbb6d292dbddaadda32e982">cogip::cogip_defs::Polar::angle</a></div><div class="ttdeci">double angle(void) const</div><div class="ttdoc">Return angle.</div><div class="ttdef"><b>Definition:</b> <a href="Polar_8hpp_source.html#l00038">Polar.hpp:38</a></div></div>
+<div class="ttc" id="aclasscogip_1_1cogip__defs_1_1Polar_html_a82e111ceb99af0633e5c9985fdc1ad10"><div class="ttname"><a href="classcogip_1_1cogip__defs_1_1Polar.html#a82e111ceb99af0633e5c9985fdc1ad10">cogip::cogip_defs::Polar::reverse</a></div><div class="ttdeci">void reverse(void)</div><div class="ttdoc">Reverse distance and angle.</div><div class="ttdef"><b>Definition:</b> <a href="Polar_8hpp_source.html#l00059">Polar.hpp:59</a></div></div>
 <div class="ttc" id="aclasscogip_1_1cogip__defs_1_1Polar_html_a4b9da0dce29450852f5b049d913b669f"><div class="ttname"><a href="classcogip_1_1cogip__defs_1_1Polar.html#a4b9da0dce29450852f5b049d913b669f">cogip::cogip_defs::Polar::set_distance</a></div><div class="ttdeci">void set_distance(double distance)</div><div class="ttdoc">Set distance.</div><div class="ttdef"><b>Definition:</b> <a href="Polar_8hpp_source.html#l00041">Polar.hpp:41</a></div></div>
 <div class="ttc" id="aclasscogip_1_1cogip__defs_1_1Polar_html_a437c0afff180bc591d2a8f9ac5f75e4b"><div class="ttname"><a href="classcogip_1_1cogip__defs_1_1Polar.html#a437c0afff180bc591d2a8f9ac5f75e4b">cogip::cogip_defs::Polar::Polar</a></div><div class="ttdeci">Polar(double distance=0.0, double angle=0.0)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="Polar_8hpp_source.html#l00024">Polar.hpp:24</a></div></div>
 <div class="ttc" id="aclasscogip_1_1cogip__defs_1_1Polar_html_aa100222b95afb121b97e7e60b1f36d3b"><div class="ttname"><a href="classcogip_1_1cogip__defs_1_1Polar.html#aa100222b95afb121b97e7e60b1f36d3b">cogip::cogip_defs::Polar::Polar</a></div><div class="ttdeci">Polar(const PB_Polar &amp;polar)</div><div class="ttdoc">Constructor from Protobuf class.</div><div class="ttdef"><b>Definition:</b> <a href="Polar_8hpp_source.html#l00030">Polar.hpp:30</a></div></div>
@@ -188,7 +200,7 @@ $(document).ready(function(){initNavTree('Polar_8hpp_source.html',''); initResiz
 <div class="ttc" id="aclasscogip_1_1cogip__defs_1_1Polar_html_a1ea72ce091dca581c827ffe1a8d73fe4"><div class="ttname"><a href="classcogip_1_1cogip__defs_1_1Polar.html#a1ea72ce091dca581c827ffe1a8d73fe4">cogip::cogip_defs::Polar::pb_copy</a></div><div class="ttdeci">void pb_copy(PB_Polar &amp;polar) const</div><div class="ttdoc">Copy data to Protobuf message.</div><div class="ttdef"><b>Definition:</b> <a href="Polar_8hpp_source.html#l00051">Polar.hpp:51</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jan 3 2023 17:31:13 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jan 31 2023 00:29:42 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

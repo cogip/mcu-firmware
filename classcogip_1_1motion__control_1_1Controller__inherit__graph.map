@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::Controller&lt; INPUT_SIZE, OUTPUT_SIZE, ParamsT &gt;" name="cogip::motion_control::Controller&lt; INPUT_SIZE, OUTPUT_SIZE, ParamsT &gt;">
+<area shape="rect" id="node1" title="A controller transforms input data to outputs." alt="" coords="5,307,200,545"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="21,5,184,259"/>
+</map>

@@ -1,13 +1,8 @@
 var searchData=
 [
-  ['uart_5frx_5fcb_880',['uart_rx_cb',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a85a0d58536beac8de1d516371599d4a6',1,'cogip::uartpb::UartProtobuf']]],
-  ['uart_5frx_5fcb_5fwrapper_881',['uart_rx_cb_wrapper',['../UartProtobuf_8hpp.html#a0e193cef4d940a5bfbebf6b108951e8d',1,'cogip::uartpb']]],
-  ['uartprotobuf_882',['UartProtobuf',['../classcogip_1_1uartpb_1_1UartProtobuf.html#a5d3c919bdc23b83ece9a756c1c979d08',1,'cogip::uartpb::UartProtobuf']]],
-  ['under_5fpressure_883',['under_pressure',['../classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html#ae605d2fca6d6361e8b1b2f3fd582f391',1,'cogip::pf::actuators::pumps::Pump']]],
-  ['unlock_884',['unlock',['../classcogip_1_1obstacles_1_1List.html#a6fc9b8f332d6b8f3631dfeedf826f1d1',1,'cogip::obstacles::List']]],
-  ['unreachable_885',['unreachable',['../classcogip_1_1path_1_1Path.html#ac466f5d779f005b5e5b32c1bdf50e77c',1,'cogip::path::Path']]],
-  ['update_5fbounding_5fbox_886',['update_bounding_box',['../classcogip_1_1obstacles_1_1Obstacle.html#afbbc35013fe5ee189740fda641ed4621',1,'cogip::obstacles::Obstacle']]],
-  ['update_5fpb_5fmessage_887',['update_pb_message',['../classcogip_1_1shell_1_1Command.html#a08573e94f578484fbf8f5c0866e22b0d',1,'cogip::shell::Command::update_pb_message()'],['../classcogip_1_1shell_1_1Menu.html#a7d76f5f2ff4a23301412ef888194dc72',1,'cogip::shell::Menu::update_pb_message()'],['../classcogip_1_1sysmon_1_1MemoryStatus.html#a1aae507b42e8f5003c752ce4c62b0e3b',1,'cogip::sysmon::MemoryStatus::update_pb_message()'],['../classcogip_1_1sysmon_1_1ThreadStatus.html#a3f5a69f6154d356aba5e1683e3fbf448',1,'cogip::sysmon::ThreadStatus::update_pb_message()']]],
-  ['update_5fthread_5fsched_5fstatus_888',['update_thread_sched_status',['../sysmon_8hpp.html#ad1d096acacff00b0e6a844d4bd992f67',1,'cogip::sysmon']]],
-  ['used_889',['used',['../classcogip_1_1sysmon_1_1MemoryStatus.html#a37a33124ae6f9812e0b7cd2f96ad0676',1,'cogip::sysmon::MemoryStatus']]]
+  ['task_5fctrl_5fupdate_1069',['task_ctrl_update',['../group__legacy__controller.html#ga4808b57587274de0f1294499b6c01336',1,'ctrl.hpp']]],
+  ['task_5fplanner_1070',['task_planner',['../classcogip_1_1planners_1_1AstarPlanner.html#afcb4c4ae45eab4fcf126f2f24e61a3dd',1,'cogip::planners::AstarPlanner::task_planner()'],['../classcogip_1_1planners_1_1Planner.html#af4a4781c620ae1bebe21c3b843707257',1,'cogip::planners::Planner::task_planner()']]],
+  ['thread_5floop_1071',['thread_loop',['../classcogip_1_1motion__control_1_1BaseControllerEngine.html#af1240116809d2f90728493c2aeaaaa81',1,'cogip::motion_control::BaseControllerEngine']]],
+  ['thread_5fztimer_5fperiodic_5fwakeup_1072',['thread_ztimer_periodic_wakeup',['../thread_8hpp.html#a6c6ae8907195a1fcc9f9a6a02cd9912d',1,'cogip::thread']]],
+  ['threadstatus_1073',['ThreadStatus',['../classcogip_1_1sysmon_1_1ThreadStatus.html#a239540f52608598b4f7260b2bd8003df',1,'cogip::sysmon::ThreadStatus']]]
 ];

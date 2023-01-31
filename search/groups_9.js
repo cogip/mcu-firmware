@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['switch_20pca9548_20driver_1091',['switch PCA9548 driver',['../group__I2C.html',1,'']]],
-  ['servomotors_20sd21_20board_20driver_1092',['Servomotors SD21 board driver',['../group__sd21.html',1,'']]],
-  ['system_20modules_1093',['System modules',['../group__sys.html',1,'']]],
-  ['shell_20menu_1094',['Shell menu',['../group__sys__shell__menu.html',1,'']]],
-  ['shared_20memory_20module_1095',['Shared memory module',['../group__sys__shmem.html',1,'']]],
-  ['system_20monitoring_1096',['System monitoring',['../group__sys__sysmon.html',1,'']]],
-  ['sys_5fsysmon_5fheap_1097',['Sys_sysmon_heap',['../group__sys__sysmon__heap.html',1,'']]]
+  ['path_20module_1298',['Path module',['../group__lib__path.html',1,'']]],
+  ['platform_20engine_1299',['Platform engine',['../group__platform__engine.html',1,'']]],
+  ['polar_20parallel_20meta_2dcontroller_1300',['Polar parallel meta-controller',['../group__polar__parallel__meta__controller.html',1,'']]],
+  ['pose_20pid_20controller_1301',['Pose PID controller',['../group__pose__pid__controller.html',1,'']]],
+  ['pose_20straight_20filter_1302',['Pose straight filter',['../group__pose__straight__filter.html',1,'']]]
 ];

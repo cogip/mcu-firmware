@@ -1,0 +1,7 @@
+<map id="lib/pid_ng/include/pid_ng/PID.hpp" name="lib/pid_ng/include/pid_ng/PID.hpp">
+<area shape="rect" id="node1" title="PID implementation." alt="" coords="255,5,391,47"/>
+<area shape="rect" id="node2" href="$PosePIDControllerParameters_8hpp.html" title="Pose PID controller parameters." alt="" coords="32,95,307,165"/>
+<area shape="rect" id="node4" href="$SpeedPIDControllerParameters_8hpp.html" title="Speed PID controller parameters." alt="" coords="337,95,628,165"/>
+<area shape="rect" id="node3" href="$PosePIDController_8hpp.html" title="Pose PID controller." alt="" coords="5,213,307,269"/>
+<area shape="rect" id="node5" href="$SpeedPIDController_8hpp.html" title="Speed PID controller." alt="" coords="331,213,650,269"/>
+</map>

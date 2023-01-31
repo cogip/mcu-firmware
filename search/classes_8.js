@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['threadstatus_595',['ThreadStatus',['../classcogip_1_1sysmon_1_1ThreadStatus.html',1,'cogip::sysmon']]]
+  ['quadpidmetacontroller_712',['QuadPIDMetaController',['../classcogip_1_1motion__control_1_1QuadPIDMetaController.html',1,'cogip::motion_control']]]
 ];

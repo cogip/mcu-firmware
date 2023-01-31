@@ -1,0 +1,8 @@
+<map id="motion_control/motion_control_common/include/motion_control_common/MetaControllerParameters.hpp" name="motion_control/motion_control_common/include/motion_control_common/MetaControllerParameters.hpp">
+<area shape="rect" id="node1" title="Meta Controller parameters." alt="" coords="381,5,606,76"/>
+<area shape="rect" id="node2" href="$MetaController_8hpp.html" title="Simple meta&#45;controller to execute controllers in chain." alt="" coords="289,124,479,195"/>
+<area shape="rect" id="node5" href="$ParallelMetaController_8hpp.html" title="Meta&#45;controller to execute some controllers in pseudo parallel." alt="" coords="523,124,722,195"/>
+<area shape="rect" id="node3" href="$DualPIDMetaController_8hpp.html" title="Meta controller for pose and speed PID corrections." alt="" coords="5,250,240,321"/>
+<area shape="rect" id="node4" href="$QuadPIDMetaController_8hpp.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="265,250,503,321"/>
+<area shape="rect" id="node6" href="$PolarParallelMetaController_8hpp.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="527,243,758,328"/>
+</map>

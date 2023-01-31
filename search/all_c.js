@@ -1,20 +1,14 @@
 var searchData=
 [
-  ['obstacles_20module_326',['Obstacles module',['../group__lib__obstacles.html',1,'']]],
-  ['o_327',['O',['../classcogip_1_1cogip__defs_1_1Pose.html#a2479715ce1f6d9e9ade8fab8aad3f161',1,'cogip::cogip_defs::Pose']]],
-  ['o_5f_328',['O_',['../classcogip_1_1cogip__defs_1_1Pose.html#abc22593c1974c32a5c56e977f592290e',1,'cogip::cogip_defs::Pose']]],
-  ['obstacle_329',['Obstacle',['../classcogip_1_1obstacles_1_1Obstacle.html',1,'cogip::obstacles::Obstacle'],['../classcogip_1_1obstacles_1_1Obstacle.html#a05991a62c95fc8cc742c01777a8ec2fd',1,'cogip::obstacles::Obstacle::Obstacle()']]],
-  ['obstacle_2ehpp_330',['Obstacle.hpp',['../Obstacle_8hpp.html',1,'']]],
-  ['obstacle_5fbounding_5fbox_5fmargin_331',['OBSTACLE_BOUNDING_BOX_MARGIN',['../Obstacle_8hpp.html#afefd463fcccc8cb27d326e4059027dfb',1,'Obstacle.hpp']]],
-  ['obstacle_5fbounding_5fbox_5fvertices_332',['OBSTACLE_BOUNDING_BOX_VERTICES',['../Obstacle_8hpp.html#a47513fde91e697692dff9c390619f39a',1,'Obstacle.hpp']]],
-  ['obstacle_5fmax_5flists_333',['OBSTACLE_MAX_LISTS',['../group__lib__obstacles.html#ga62720f783a37187355f722e87e231026',1,'obstacles.hpp']]],
-  ['obstacle_5fmax_5fpoints_5fin_5fpolygon_334',['OBSTACLE_MAX_POINTS_IN_POLYGON',['../obstacles_2include_2obstacles_2Polygon_8hpp.html#a6c0fd41866fb8941622619f2b4d350bc',1,'Polygon.hpp']]],
-  ['obstacles_2ehpp_335',['obstacles.hpp',['../obstacles_8hpp.html',1,'']]],
-  ['obstacles_5fmax_5fnumber_336',['OBSTACLES_MAX_NUMBER',['../List_8hpp.html#a8eb65ca038368f488adf6e95a2981f3b',1,'List.hpp']]],
-  ['on_5fsegment_337',['on_segment',['../classcogip_1_1cogip__defs_1_1Coords.html#a7fe7fc917875c3a77907f66d2c4a7f2d',1,'cogip::cogip_defs::Coords']]],
-  ['operator_2b_2b_338',['operator++',['../classcogip_1_1path_1_1Path.html#ab627d3f784281e445979b3f063cbec4a',1,'cogip::path::Path']]],
-  ['operator_2d_2d_339',['operator--',['../classcogip_1_1path_1_1Path.html#a433d15af3d6fbfaf93cc4e4ea94868cc',1,'cogip::path::Path']]],
-  ['operator_3d_3d_340',['operator==',['../classcogip_1_1cogip__defs_1_1Coords.html#aeed87d930417ce463a07a73957415887',1,'cogip::cogip_defs::Coords::operator==()'],['../classcogip_1_1cogip__defs_1_1Pose.html#a9926a28b46f31da29c93c52aba8c5797',1,'cogip::cogip_defs::Pose::operator==()']]],
-  ['order_5f_341',['order_',['../classcogip_1_1pf_1_1actuators_1_1Actuator.html#ac74c9489918d2ccf8c11206d9e912caf',1,'cogip::pf::actuators::Actuator']]],
-  ['overshots_342',['overshots',['../classcogip_1_1sysmon_1_1ThreadStatus.html#aad1f5bea221d0756410d1a294ccad877',1,'cogip::sysmon::ThreadStatus']]]
+  ['name_359',['name',['../structsd21__servo__t.html#ae5447ac63ef4cfb969afbdcef864dac9',1,'sd21_servo_t::name()'],['../classcogip_1_1shell_1_1Command.html#a74b1ada30ae8fcb21f6022c6b5494498',1,'cogip::shell::Command::name()'],['../classcogip_1_1shell_1_1Menu.html#a3c865b5246a790cc77ae6271943e0625',1,'cogip::shell::Menu::name()'],['../classcogip_1_1sysmon_1_1ThreadStatus.html#a1d1fe3b2cb64dd0cefd5f07c23e170cd',1,'cogip::sysmon::ThreadStatus::name()']]],
+  ['nb_5fcontrollers_5f_360',['nb_controllers_',['../classcogip_1_1motion__control_1_1BaseMetaController.html#a0f720066e1468396478f669e67337ec6',1,'cogip::motion_control::BaseMetaController']]],
+  ['nb_5finputs_361',['nb_inputs',['../classcogip_1_1motion__control_1_1BaseController.html#a86c8595143bc8f9babf2cdbe00a93c99',1,'cogip::motion_control::BaseController::nb_inputs()'],['../classcogip_1_1motion__control_1_1Controller.html#a5b47087d4761df9a702b49d4ca83e678',1,'cogip::motion_control::Controller::nb_inputs()']]],
+  ['nb_5foutputs_362',['nb_outputs',['../classcogip_1_1motion__control_1_1BaseController.html#adf3e8f450844d5a366ffec22aaf8b82b',1,'cogip::motion_control::BaseController::nb_outputs()'],['../classcogip_1_1motion__control_1_1Controller.html#a31786f53db37d87d017a323b024f3b87',1,'cogip::motion_control::Controller::nb_outputs()']]],
+  ['nb_5fshell_5fcommands_363',['NB_SHELL_COMMANDS',['../Menu_8hpp.html#a4f5e15b80e008c7f2e0711fada528979',1,'Menu.hpp']]],
+  ['nb_5fshell_5fmenus_364',['NB_SHELL_MENUS',['../Menu_8hpp.html#a0508c65b91f16c6e4ae18667200cc5f7',1,'Menu.hpp']]],
+  ['nearest_5fpoint_365',['nearest_point',['../classcogip_1_1obstacles_1_1Circle.html#a7ba3211091bf1c268dbf9607aca4a3b6',1,'cogip::obstacles::Circle::nearest_point()'],['../classcogip_1_1obstacles_1_1Obstacle.html#a76648fa5300ce016be0663b8935b6149',1,'cogip::obstacles::Obstacle::nearest_point()'],['../classcogip_1_1obstacles_1_1Polygon.html#ac1895bb71b1be481f4bb188cb4dab774',1,'cogip::obstacles::Polygon::nearest_point()']]],
+  ['new_5fframe_5fcb_366',['new_frame_cb',['../structlds01__params__t.html#ab224958e163ac59609ff88899debf9e7',1,'lds01_params_t']]],
+  ['next_367',['next',['../classcogip_1_1path_1_1Path.html#af94b785d1f587c491028211f0f6b2f87',1,'cogip::path::Path']]],
+  ['normal_5fspeed_5fangular_368',['NORMAL_SPEED_ANGULAR',['../group__platforms__pegasus.html#ga45e51323f8b956c4e401c71ea801747b',1,'NORMAL_SPEED_ANGULAR():&#160;platform.hpp'],['../group__platforms__pf__test.html#ga45e51323f8b956c4e401c71ea801747b',1,'NORMAL_SPEED_ANGULAR():&#160;platform.hpp']]],
+  ['normal_5fspeed_5flinear_369',['NORMAL_SPEED_LINEAR',['../group__platforms__pegasus.html#gab862c98c166ef1edf097d0ccc8fe0cb1',1,'NORMAL_SPEED_LINEAR():&#160;platform.hpp'],['../group__platforms__pf__test.html#gab862c98c166ef1edf097d0ccc8fe0cb1',1,'NORMAL_SPEED_LINEAR():&#160;platform.hpp']]]
 ];

@@ -1,6 +1,6 @@
-<map id="controllers/quadpid/include/quadpid.hpp" name="controllers/quadpid/include/quadpid.hpp">
-<area shape="rect" id="node1" title="QuadPID controllers API and datas." alt="" coords="215,5,373,47"/>
-<area shape="rect" id="node2" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="5,95,172,151"/>
-<area shape="rect" id="node3" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="197,102,391,143"/>
-<area shape="rect" id="node4" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="416,102,601,143"/>
+<map id="motion_control/quadpid/include/quadpid.hpp" name="motion_control/quadpid/include/quadpid.hpp">
+<area shape="rect" id="node1" title="QuadPID controllers API and datas." alt="" coords="215,5,391,47"/>
+<area shape="rect" id="node2" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="5,95,181,151"/>
+<area shape="rect" id="node3" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="205,102,400,143"/>
+<area shape="rect" id="node4" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="425,102,610,143"/>
 </map>

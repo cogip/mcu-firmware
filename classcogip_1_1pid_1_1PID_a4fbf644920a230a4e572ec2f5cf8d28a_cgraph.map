@@ -1,0 +1,4 @@
+<map id="cogip::pid::PID::set_integral_term_limit" name="cogip::pid::PID::set_integral_term_limit">
+<area shape="rect" id="node1" title="Set integral term limit." alt="" coords="5,5,160,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pid_1_1PID.html#a3b49159d8c5639f9e4603d443a9559b6" title="Return integral term limit." alt="" coords="208,5,381,47"/>
+</map>

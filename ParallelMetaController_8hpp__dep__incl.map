@@ -1,0 +1,4 @@
+<map id="motion_control/motion_control_common/include/motion_control_common/ParallelMetaController.hpp" name="motion_control/motion_control_common/include/motion_control_common/ParallelMetaController.hpp">
+<area shape="rect" id="node1" title="Meta&#45;controller to execute some controllers in pseudo parallel." alt="" coords="21,5,220,76"/>
+<area shape="rect" id="node2" href="$PolarParallelMetaController_8hpp.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="5,124,236,209"/>
+</map>

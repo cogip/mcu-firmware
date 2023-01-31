@@ -7,6 +7,27 @@ var annotated_dup =
         [ "Polygon", "classcogip_1_1cogip__defs_1_1Polygon.html", "classcogip_1_1cogip__defs_1_1Polygon" ],
         [ "Pose", "classcogip_1_1cogip__defs_1_1Pose.html", "classcogip_1_1cogip__defs_1_1Pose" ]
       ] ],
+      [ "motion_control", null, [
+        [ "BaseController", "classcogip_1_1motion__control_1_1BaseController.html", "classcogip_1_1motion__control_1_1BaseController" ],
+        [ "BaseControllerEngine", "classcogip_1_1motion__control_1_1BaseControllerEngine.html", "classcogip_1_1motion__control_1_1BaseControllerEngine" ],
+        [ "BaseMetaController", "classcogip_1_1motion__control_1_1BaseMetaController.html", "classcogip_1_1motion__control_1_1BaseMetaController" ],
+        [ "Controller", "classcogip_1_1motion__control_1_1Controller.html", "classcogip_1_1motion__control_1_1Controller" ],
+        [ "DualPIDMetaController", "classcogip_1_1motion__control_1_1DualPIDMetaController.html", null ],
+        [ "MetaController", "classcogip_1_1motion__control_1_1MetaController.html", "classcogip_1_1motion__control_1_1MetaController" ],
+        [ "MetaControllerParameters", "classcogip_1_1motion__control_1_1MetaControllerParameters.html", null ],
+        [ "ParallelMetaController", "classcogip_1_1motion__control_1_1ParallelMetaController.html", "classcogip_1_1motion__control_1_1ParallelMetaController" ],
+        [ "PlatformEngine", "classcogip_1_1motion__control_1_1PlatformEngine.html", "classcogip_1_1motion__control_1_1PlatformEngine" ],
+        [ "PolarParallelMetaController", "classcogip_1_1motion__control_1_1PolarParallelMetaController.html", "classcogip_1_1motion__control_1_1PolarParallelMetaController" ],
+        [ "PosePIDController", "classcogip_1_1motion__control_1_1PosePIDController.html", "classcogip_1_1motion__control_1_1PosePIDController" ],
+        [ "PosePIDControllerParameters", "classcogip_1_1motion__control_1_1PosePIDControllerParameters.html", "classcogip_1_1motion__control_1_1PosePIDControllerParameters" ],
+        [ "PoseStraightFilter", "classcogip_1_1motion__control_1_1PoseStraightFilter.html", "classcogip_1_1motion__control_1_1PoseStraightFilter" ],
+        [ "PoseStraightFilterParameters", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters" ],
+        [ "QuadPIDMetaController", "classcogip_1_1motion__control_1_1QuadPIDMetaController.html", null ],
+        [ "SpeedFilter", "classcogip_1_1motion__control_1_1SpeedFilter.html", "classcogip_1_1motion__control_1_1SpeedFilter" ],
+        [ "SpeedFilterParameters", "classcogip_1_1motion__control_1_1SpeedFilterParameters.html", "classcogip_1_1motion__control_1_1SpeedFilterParameters" ],
+        [ "SpeedPIDController", "classcogip_1_1motion__control_1_1SpeedPIDController.html", "classcogip_1_1motion__control_1_1SpeedPIDController" ],
+        [ "SpeedPIDControllerParameters", "classcogip_1_1motion__control_1_1SpeedPIDControllerParameters.html", "classcogip_1_1motion__control_1_1SpeedPIDControllerParameters" ]
+      ] ],
       [ "obstacles", null, [
         [ "Circle", "classcogip_1_1obstacles_1_1Circle.html", "classcogip_1_1obstacles_1_1Circle" ],
         [ "List", "classcogip_1_1obstacles_1_1List.html", "classcogip_1_1obstacles_1_1List" ],
@@ -30,6 +51,9 @@ var annotated_dup =
           ] ],
           [ "Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", "classcogip_1_1pf_1_1actuators_1_1Actuator" ]
         ] ]
+      ] ],
+      [ "pid", null, [
+        [ "PID", "classcogip_1_1pid_1_1PID.html", "classcogip_1_1pid_1_1PID" ]
       ] ],
       [ "planners", null, [
         [ "AstarPlanner", "classcogip_1_1planners_1_1AstarPlanner.html", "classcogip_1_1planners_1_1AstarPlanner" ],

@@ -1,6 +1,9 @@
 <map id="lib/cogip_defs/include/cogip_defs/Pose.hpp" name="lib/cogip_defs/include/cogip_defs/Pose.hpp">
-<area shape="rect" id="node1" title="Pose class declaration." alt="" coords="89,5,251,47"/>
+<area shape="rect" id="node1" title="Pose class declaration." alt="" coords="273,5,435,47"/>
 <area shape="rect" id="node2" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="5,95,175,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="199,95,304,121"/>
+<area shape="rect" id="node4" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="199,95,355,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="379,95,484,121"/>
+<area shape="rect" id="node7" href="$trigonometry_8h_source.html" title=" " alt="" coords="507,95,625,121"/>
 <area shape="rect" id="node3" title=" " alt="" coords="31,169,149,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="223,169,330,196"/>
 </map>

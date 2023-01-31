@@ -1,6 +1,6 @@
 <map id="cogip::obstacles::Obstacle" name="cogip::obstacles::Obstacle">
-<area shape="rect" id="node1" title="An obstacle used to detect and avoid collisions." alt="" coords="97,5,289,32"/>
-<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Circle.html" title="Circle obstacle defined by its center and radius." alt="" coords="5,80,177,107"/>
-<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="202,80,389,107"/>
-<area shape="rect" id="node4" href="$classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Polygon." alt="" coords="195,155,395,181"/>
+<area shape="rect" id="node1" title="An obstacle used to detect and avoid collisions." alt="" coords="105,5,297,288"/>
+<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Circle.html" title="Circle obstacle defined by its center and radius." alt="" coords="5,343,188,465"/>
+<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="213,336,399,472"/>
+<area shape="rect" id="node4" href="$classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Polygon." alt="" coords="206,520,406,597"/>
 </map>

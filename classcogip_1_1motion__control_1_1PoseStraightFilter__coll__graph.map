@@ -1,0 +1,6 @@
+<map id="cogip::motion_control::PoseStraightFilter" name="cogip::motion_control::PoseStraightFilter">
+<area shape="rect" id="node1" title="Breaks down a movement into a straight trajectory." alt="" coords="117,595,280,701"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="83,321,314,545"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="5,5,168,259"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html" title="Movements switch tresholds." alt="" coords="193,71,429,193"/>
+</map>

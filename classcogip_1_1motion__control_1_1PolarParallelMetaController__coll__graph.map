@@ -1,0 +1,9 @@
+<map id="cogip::motion_control::PolarParallelMetaController" name="cogip::motion_control::PolarParallelMetaController">
+<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="244,809,452,916"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title=" " alt="" coords="245,595,451,760"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,387,168,479"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="47,5,209,259"/>
+<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="193,321,503,545"/>
+<area shape="rect" id="node6" href="$classcogip_1_1motion__control_1_1MetaControllerParameters.html" title="Empty Meta Controller parameters." alt="" coords="247,86,449,178"/>
+<area shape="rect" id="node7" title=" " alt="" coords="528,387,707,479"/>
+</map>

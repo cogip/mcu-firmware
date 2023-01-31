@@ -4,7 +4,7 @@ var modules =
     [ "Hardware platform", "group__platforms.html", "group__platforms" ],
     [ "LX servomotors driver", "group__driver__lx-servo.html", "group__driver__lx-servo" ],
     [ "Lib", "group__lib.html", "group__lib" ],
-    [ "Motion controllers", "group__controllers.html", "group__controllers" ],
+    [ "Motion control", "group__motion__control.html", "group__motion__control" ],
     [ "System modules", "group__sys.html", "group__sys" ],
     [ "Trajectory planners", "group__planners.html", "group__planners" ]
 ];

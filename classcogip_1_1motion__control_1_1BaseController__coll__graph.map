@@ -1,0 +1,3 @@
+<map id="cogip::motion_control::BaseController" name="cogip::motion_control::BaseController">
+<area shape="rect" id="node1" title="All controllers, filters and metas inherit from this class." alt="" coords="5,5,168,259"/>
+</map>

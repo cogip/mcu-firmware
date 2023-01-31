@@ -1,6 +1,6 @@
 <map id="ctrl_control_t" name="ctrl_control_t">
-<area shape="rect" id="node1" title="Controller general structure." alt="" coords="102,229,209,256"/>
-<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="5,96,148,137"/>
-<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="172,103,347,130"/>
-<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="188,5,331,47"/>
+<area shape="rect" id="node1" title="Controller general structure." alt="" coords="80,580,239,745"/>
+<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="5,293,148,488"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="172,293,347,488"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="188,5,331,244"/>
 </map>

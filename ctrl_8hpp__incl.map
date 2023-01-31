@@ -1,12 +1,13 @@
-<map id="controllers/common_controller/include/ctrl.hpp" name="controllers/common_controller/include/ctrl.hpp">
-<area shape="rect" id="node1" title="Common controllers API and datas." alt="" coords="41,5,193,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="25,109,95,136"/>
-<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="119,109,230,136"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,184,72,211"/>
-<area shape="rect" id="node5" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="97,184,253,211"/>
-<area shape="rect" id="node7" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="277,184,432,211"/>
-<area shape="rect" id="node6" title=" " alt="" coords="121,259,228,285"/>
-<area shape="rect" id="node8" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="261,259,430,285"/>
-<area shape="rect" id="node10" title=" " alt="" coords="454,259,559,285"/>
-<area shape="rect" id="node9" title=" " alt="" coords="286,333,405,360"/>
+<map id="motion_control/common_controller/include/ctrl.hpp" name="motion_control/common_controller/include/ctrl.hpp">
+<area shape="rect" id="node1" title="Common controllers API and datas." alt="" coords="5,5,200,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="10,95,81,121"/>
+<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="105,95,215,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="56,169,123,196"/>
+<area shape="rect" id="node5" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="46,244,202,271"/>
+<area shape="rect" id="node7" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="233,169,388,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="71,319,177,345"/>
+<area shape="rect" id="node8" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="226,244,395,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="419,244,525,271"/>
+<area shape="rect" id="node11" href="$trigonometry_8h_source.html" title=" " alt="" coords="548,244,665,271"/>
+<area shape="rect" id="node9" title=" " alt="" coords="251,319,370,345"/>
 </map>

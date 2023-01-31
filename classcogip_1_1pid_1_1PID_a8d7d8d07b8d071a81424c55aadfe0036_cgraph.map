@@ -1,0 +1,4 @@
+<map id="cogip::pid::PID::set_kd" name="cogip::pid::PID::set_kd">
+<area shape="rect" id="node1" title="Set derivative gain." alt="" coords="5,5,172,32"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pid_1_1PID.html#a0b68a14454a214b2c560f205bfb0f736" title="Return derivative gain." alt="" coords="220,5,359,32"/>
+</map>

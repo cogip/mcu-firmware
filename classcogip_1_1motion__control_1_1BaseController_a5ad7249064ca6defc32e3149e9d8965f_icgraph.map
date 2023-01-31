@@ -1,0 +1,5 @@
+<map id="cogip::motion_control::BaseController::set_meta" name="cogip::motion_control::BaseController::set_meta">
+<area shape="rect" id="node1" title="Set meta controller to which current controller belongs to return true if set, false otherwise." alt="" coords="252,75,447,117"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html#a68c8ae0fcf72649433bb00da4258e4a2" title="Add a controller to the controllers list." alt="" coords="5,5,204,91"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1MetaController.html#a9fce87f317acae4036cfb05fd66e39bd" title="Add a controller to the controllers chain." alt="" coords="21,115,188,171"/>
+</map>

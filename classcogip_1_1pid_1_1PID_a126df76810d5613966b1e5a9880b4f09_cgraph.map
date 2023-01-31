@@ -1,0 +1,4 @@
+<map id="cogip::pid::PID::set_ki" name="cogip::pid::PID::set_ki">
+<area shape="rect" id="node1" title="Set integral gain." alt="" coords="5,5,168,32"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pid_1_1PID.html#a3ed32f1da26b80aca804bb0c6d54cd54" title="Return integral gain." alt="" coords="216,5,351,32"/>
+</map>

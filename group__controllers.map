@@ -1,5 +1,6 @@
-<map id="Motion controllers" name="Motion controllers">
-<area shape="rect" id="node1" title=" " alt="" coords="5,35,145,60"/>
-<area shape="rect" id="node2" href="$group__controller.html" title="Actuators motion speed and position controller." alt="" coords="239,5,321,31"/>
-<area shape="rect" id="node3" href="$group__quadpid.html" title="Actuators Quadruple PID motion speed and position controller." alt="" coords="193,55,367,95"/>
+<map id="Controllers" name="Controllers">
+<area shape="rect" id="node1" title=" " alt="" coords="169,31,263,56"/>
+<area shape="rect" id="node2" href="$group__pose__pid__controller.html" title=" " alt="" coords="315,5,461,31"/>
+<area shape="rect" id="node3" href="$group__speed__pid__controller.html" title=" " alt="" coords="311,55,465,80"/>
+<area shape="rect" id="node4" href="$group__motion__control.html" title=" " alt="" coords="5,31,121,56"/>
 </map>

@@ -1,4 +1,4 @@
 <map id="cogip::cogip_defs::Pose" name="cogip::cogip_defs::Pose">
-<area shape="rect" id="node1" title="A robot position." alt="" coords="5,95,180,121"/>
-<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="21,5,164,47"/>
+<area shape="rect" id="node1" title="A robot position." alt="" coords="5,292,180,487"/>
+<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="21,5,164,244"/>
 </map>

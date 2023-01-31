@@ -122,6 +122,9 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <div class="textblock">Here is a list of all documented struct and union fields with links to the struct/union documentation for each field:</div>
 
 <h3><a id="index_p"></a>- p -</h3><ul>
+<li>parameters_
+: <a class="el" href="classcogip_1_1motion__control_1_1Controller.html#af5d5ced986666cedda4ad9306edb152f">cogip::motion_control::Controller&lt; INPUT_SIZE, OUTPUT_SIZE, ParamsT &gt;</a>
+</li>
 <li>parent()
 : <a class="el" href="classcogip_1_1shell_1_1Menu.html#a76cb41413135fa4e947ef3efd85847b9">cogip::shell::Menu</a>
 </li>
@@ -139,14 +142,12 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 , <a class="el" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html#ab6a9529960beb81d61709ac47cb468fd">cogip::pf::actuators::pumps::Pump</a>
 , <a class="el" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a1591170b08ab7a87ac1186352227976f">cogip::pf::actuators::servos::LxServo</a>
 </li>
-<li>pb_message()
-: <a class="el" href="classcogip_1_1shell_1_1Command.html#aaf020fc65ae0d3a56e18ee06249f7502">cogip::shell::Command</a>
-</li>
 <li>PB_Message
 : <a class="el" href="classcogip_1_1shell_1_1Command.html#ad930f371d92e8924714fe297c6579bac">cogip::shell::Command</a>
 </li>
 <li>pb_message()
-: <a class="el" href="classcogip_1_1sysmon_1_1MemoryStatus.html#ad68cfa89edc275a0907358e5756c9dab">cogip::sysmon::MemoryStatus</a>
+: <a class="el" href="classcogip_1_1shell_1_1Command.html#aaf020fc65ae0d3a56e18ee06249f7502">cogip::shell::Command</a>
+, <a class="el" href="classcogip_1_1sysmon_1_1MemoryStatus.html#ad68cfa89edc275a0907358e5756c9dab">cogip::sysmon::MemoryStatus</a>
 , <a class="el" href="classcogip_1_1sysmon_1_1ThreadStatus.html#a76602ad5494fe3377b20a32af6e2cb39">cogip::sysmon::ThreadStatus</a>
 </li>
 <li>PB_Message
@@ -160,10 +161,20 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 , <a class="el" href="structctrl__t.html#a4ac7390429f5c64272d5ea4c920834a1">ctrl_t</a>
 </li>
 <li>pid()
+: <a class="el" href="classcogip_1_1motion__control_1_1PosePIDControllerParameters.html#a8e20ec7ce0f05b07f6bba2592be41d3c">cogip::motion_control::PosePIDControllerParameters</a>
+, <a class="el" href="classcogip_1_1motion__control_1_1SpeedPIDControllerParameters.html#a7654a7c7deca57df9b8473ea83565f46">cogip::motion_control::SpeedPIDControllerParameters</a>
+</li>
+<li>PID()
+: <a class="el" href="classcogip_1_1pid_1_1PID.html#a23655d80a0098cde98efa5b0518daee6">cogip::pid::PID</a>
+</li>
+<li>pid()
 : <a class="el" href="classcogip_1_1sysmon_1_1ThreadStatus.html#a8a74537e466c50c95037abb5ce173c9d">cogip::sysmon::ThreadStatus</a>
 </li>
 <li>Planner()
 : <a class="el" href="classcogip_1_1planners_1_1Planner.html#a99a2bbbbd348c29ecd80d4a369293409">cogip::planners::Planner</a>
+</li>
+<li>PlatformEngine()
+: <a class="el" href="classcogip_1_1motion__control_1_1PlatformEngine.html#a30a6c5f64f71be60163849592769f2ad">cogip::motion_control::PlatformEngine</a>
 </li>
 <li>play_in_loop_
 : <a class="el" href="classcogip_1_1path_1_1Path.html#acaa7fce36fa228316d17e5baa1247ba0">cogip::path::Path</a>
@@ -172,7 +183,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 : <a class="el" href="classcogip_1_1cogip__defs_1_1Polygon.html#a0dc45ee4ad175fdadb6ee15608e71e44">cogip::cogip_defs::Polygon&lt; N &gt;</a>
 </li>
 <li>Polar()
-: <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#aa100222b95afb121b97e7e60b1f36d3b">cogip::cogip_defs::Polar</a>
+: <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html#a437c0afff180bc591d2a8f9ac5f75e4b">cogip::cogip_defs::Polar</a>
 </li>
 <li>Polygon()
 : <a class="el" href="classcogip_1_1obstacles_1_1Polygon.html#a658dfc57f37cec27d487cd8017dd8477">cogip::obstacles::Polygon</a>
@@ -196,14 +207,33 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 <li>pose_reached
 : <a class="el" href="structctrl__control__t.html#ac9e2af34b01e129822a85042c1e0a64c">ctrl_control_t</a>
 </li>
+<li>PosePIDController()
+: <a class="el" href="classcogip_1_1motion__control_1_1PosePIDController.html#a15d402608853b9ac0a5e38c5145db72c">cogip::motion_control::PosePIDController</a>
+</li>
+<li>PosePIDControllerParameters()
+: <a class="el" href="classcogip_1_1motion__control_1_1PosePIDControllerParameters.html#a857e10aed3337ca41351ee65ca9a8ce0">cogip::motion_control::PosePIDControllerParameters</a>
+</li>
+<li>PoseStraightFilter()
+: <a class="el" href="classcogip_1_1motion__control_1_1PoseStraightFilter.html#a1a8343e6652d76227d793ee16bca72c4">cogip::motion_control::PoseStraightFilter</a>
+</li>
+<li>PoseStraightFilterParameters()
+: <a class="el" href="classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a69aac5ce9faa4bca7b6d6f59b2778ddd">cogip::motion_control::PoseStraightFilterParameters</a>
+</li>
 <li>position
 : <a class="el" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1Command.html#aa2a76917986bae95ed4b12d0e5747139">cogip::pf::actuators::servos::Command</a>
 </li>
 <li>positions
 : <a class="el" href="structsd21__servo__t.html#a76ee30b4bd48170b9e9c942a0d60179f">sd21_servo_t</a>
 </li>
-<li>previous_error
-: <a class="el" href="structPID__t.html#a0c1f4925a109ad0d4cc961053c7368a1">PID_t</a>
+<li>prepare_inputs()
+: <a class="el" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html#a5694ed1bd5e5d113e84adb355f234f72">cogip::motion_control::BaseControllerEngine</a>
+</li>
+<li>previous_error()
+: <a class="el" href="classcogip_1_1pid_1_1PID.html#ad00e3129707a224911e3ab15c892ffea">cogip::pid::PID</a>
+, <a class="el" href="structPID__t.html#a0c1f4925a109ad0d4cc961053c7368a1">PID_t</a>
+</li>
+<li>process_outputs()
+: <a class="el" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html#a76083da85542be47a74af9560acf6bca">cogip::motion_control::BaseControllerEngine</a>
 </li>
 <li>Pump()
 : <a class="el" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html#a23d1c308b77ecf452b3c815d9e934e46">cogip::pf::actuators::pumps::Pump</a>
@@ -216,7 +246,7 @@ $(document).ready(function(){initNavTree('functions_p.html',''); initResizable()
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jan 3 2023 17:31:13 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jan 31 2023 00:29:42 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

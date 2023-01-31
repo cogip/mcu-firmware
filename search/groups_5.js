@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['motion_20controllers_1087',['Motion controllers',['../group__controllers.html',1,'']]]
+  ['hardware_20platform_1288',['Hardware platform',['../group__platforms.html',1,'']]]
 ];

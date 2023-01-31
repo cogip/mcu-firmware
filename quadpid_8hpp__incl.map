@@ -1,14 +1,15 @@
-<map id="controllers/quadpid/include/quadpid.hpp" name="controllers/quadpid/include/quadpid.hpp">
-<area shape="rect" id="node1" title="QuadPID controllers API and datas." alt="" coords="67,5,224,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="17,169,87,196"/>
-<area shape="rect" id="node3" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="74,95,145,121"/>
-<area shape="rect" id="node4" href="$odometry_8hpp_source.html" title=" " alt="" coords="119,169,230,196"/>
-<area shape="rect" id="node12" href="$pid_8h_source.html" title=" " alt="" coords="221,95,275,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,244,72,271"/>
-<area shape="rect" id="node6" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="97,244,253,271"/>
-<area shape="rect" id="node8" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="277,244,432,271"/>
-<area shape="rect" id="node7" title=" " alt="" coords="121,319,228,345"/>
-<area shape="rect" id="node9" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="261,319,430,345"/>
-<area shape="rect" id="node11" title=" " alt="" coords="454,319,559,345"/>
-<area shape="rect" id="node10" title=" " alt="" coords="286,393,405,420"/>
+<map id="motion_control/quadpid/include/quadpid.hpp" name="motion_control/quadpid/include/quadpid.hpp">
+<area shape="rect" id="node1" title="QuadPID controllers API and datas." alt="" coords="46,5,222,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,169,76,196"/>
+<area shape="rect" id="node3" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="63,95,133,121"/>
+<area shape="rect" id="node4" href="$odometry_8hpp_source.html" title=" " alt="" coords="108,169,219,196"/>
+<area shape="rect" id="node13" href="$pid_8h_source.html" title=" " alt="" coords="209,95,264,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="59,244,126,271"/>
+<area shape="rect" id="node6" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="49,319,205,345"/>
+<area shape="rect" id="node8" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="237,244,391,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="74,393,181,420"/>
+<area shape="rect" id="node9" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="229,319,399,345"/>
+<area shape="rect" id="node11" title=" " alt="" coords="423,319,528,345"/>
+<area shape="rect" id="node12" href="$trigonometry_8h_source.html" title=" " alt="" coords="551,319,669,345"/>
+<area shape="rect" id="node10" title=" " alt="" coords="255,393,373,420"/>
 </map>

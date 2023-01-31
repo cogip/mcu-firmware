@@ -1,0 +1,5 @@
+<map id="cogip::motion_control::BaseController::output" name="cogip::motion_control::BaseController::output">
+<area shape="rect" id="node1" title="Get output at given index return output." alt="" coords="261,53,437,94"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MetaController.html#a1fa82749a7114c8d047f62022e60c5db" title="Controller core method. Meta controller executes all sub&#45;controllers in chain." alt="" coords="28,5,191,61"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1PolarParallelMetaController.html#ad9fc16f24cb02dc6e5de2503d8458ef9" title="Sort outputs from each parallel controller." alt="" coords="5,85,213,141"/>
+</map>

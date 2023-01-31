@@ -1,4 +1,4 @@
 <map id="cogip::planners::AstarPlanner" name="cogip::planners::AstarPlanner">
-<area shape="rect" id="node1" title="Astar planner class." alt="" coords="5,80,217,107"/>
-<area shape="rect" id="node2" href="$classcogip_1_1planners_1_1Planner.html" title="Virtual Planner class." alt="" coords="22,5,201,32"/>
+<area shape="rect" id="node1" title="Astar planner class." alt="" coords="18,277,230,369"/>
+<area shape="rect" id="node2" href="$classcogip_1_1planners_1_1Planner.html" title="Virtual Planner class." alt="" coords="5,5,243,229"/>
 </map>

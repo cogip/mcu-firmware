@@ -1,0 +1,5 @@
+<map id="cogip::motion_control::BaseController::set_input" name="cogip::motion_control::BaseController::set_input">
+<area shape="rect" id="node1" title="Set input at given index." alt="" coords="261,53,456,94"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MetaController.html#a1fa82749a7114c8d047f62022e60c5db" title="Controller core method. Meta controller executes all sub&#45;controllers in chain." alt="" coords="28,5,191,61"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1PolarParallelMetaController.html#ad45b85a5b498201faab244e38337a5dd" title="Set inputs for each parallel controller." alt="" coords="5,85,213,141"/>
+</map>

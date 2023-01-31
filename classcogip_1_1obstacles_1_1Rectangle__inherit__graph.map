@@ -1,7 +1,7 @@
 <map id="cogip::obstacles::Rectangle" name="cogip::obstacles::Rectangle">
-<area shape="rect" id="node1" title="A rectangle obstacle which inherits from Polygon." alt="" coords="711,39,911,65"/>
-<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="476,39,663,65"/>
-<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="235,5,427,32"/>
-<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title=" " alt="" coords="235,56,428,112"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,71,187,97"/>
+<area shape="rect" id="node1" title="A rectangle obstacle which inherits from Polygon." alt="" coords="109,645,309,723"/>
+<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="116,461,303,597"/>
+<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="5,131,197,413"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title=" " alt="" coords="222,219,415,325"/>
+<area shape="rect" id="node5" title=" " alt="" coords="228,5,409,83"/>
 </map>

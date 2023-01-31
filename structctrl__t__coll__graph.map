@@ -1,9 +1,9 @@
 <map id="ctrl_t" name="ctrl_t">
-<area shape="rect" id="node1" title="Controller default definition." alt="" coords="252,319,307,345"/>
-<area shape="rect" id="node7" href="$structctrl__configuration__t.html" title="Controller modes callbacks definitions." alt="" coords="206,423,353,449"/>
-<area shape="rect" id="node2" href="$structctrl__control__t.html" title="Controller general structure." alt="" coords="90,229,197,256"/>
-<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="5,96,148,137"/>
-<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="172,103,347,130"/>
-<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="188,5,331,47"/>
-<area shape="rect" id="node6" href="$structctrl__platform__configuration__t.html" title="Controllers pre and post callbacks for each mode." alt="" coords="221,229,431,256"/>
+<area shape="rect" id="node1" title="Controller default definition." alt="" coords="227,808,281,885"/>
+<area shape="rect" id="node7" href="$structctrl__configuration__t.html" title="Controller modes callbacks definitions." alt="" coords="181,963,327,1040"/>
+<area shape="rect" id="node2" href="$structctrl__control__t.html" title="Controller general structure." alt="" coords="71,580,229,745"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Polar.html" title="Polar coordinate." alt="" coords="5,293,148,488"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="172,293,347,488"/>
+<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="188,5,331,244"/>
+<area shape="rect" id="node6" href="$structctrl__platform__configuration__t.html" title="Controllers pre and post callbacks for each mode." alt="" coords="254,587,465,738"/>
 </map>

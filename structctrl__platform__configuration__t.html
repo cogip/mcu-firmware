@@ -122,7 +122,7 @@ $(document).ready(function(){initNavTree('structctrl__platform__configuration__t
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">ctrl_platform_configuration_t Struct Reference<div class="ingroups"><a class="el" href="group__controllers.html">Motion controllers</a> &raquo; <a class="el" href="group__controller.html">Common</a></div></div>  </div>
+<div class="title">ctrl_platform_configuration_t Struct Reference<div class="ingroups"><a class="el" href="group__motion__control.html">Motion control</a> &raquo; <a class="el" href="group__legacy__controller.html">Legacy common</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -134,15 +134,25 @@ $(document).ready(function(){initNavTree('structctrl__platform__configuration__t
 <p class="definition">Definition at line <a class="el" href="ctrl_8hpp_source.html#l00158">158</a> of file <a class="el" href="ctrl_8hpp_source.html">ctrl.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="ctrl_8hpp_source.html">ctrl.hpp</a>&gt;</code></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for ctrl_platform_configuration_t:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="structctrl__platform__configuration__t__coll__graph.png" border="0" usemap="#ctrl__platform__configuration__t_coll__map" alt="Collaboration graph"/></div>
+<map name="ctrl__platform__configuration__t_coll__map" id="ctrl__platform__configuration__t_coll__map">
+<area shape="rect" title="Controllers pre and post callbacks for each mode." alt="" coords="5,5,216,156"/>
+</map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:ad2cb89558027fd6adf2a5637ddfc6093"><td class="memItemLeft" align="right" valign="top"><a id="ad2cb89558027fd6adf2a5637ddfc6093"></a>
-const <a class="el" href="group__controller.html#ga6249a908e06e43b827b251906a84b664">ctrl_pre_mode_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structctrl__platform__configuration__t.html#ad2cb89558027fd6adf2a5637ddfc6093">ctrl_pre_mode_cb</a> [<a class="el" href="group__controller.html#gga83512a82ac70fd30e2ba0512c79d1001a8a29387a8487f8e070c2ec9142a49b39">CTRL_MODE_NUMOF</a>]</td></tr>
+const <a class="el" href="group__legacy__controller.html#ga6249a908e06e43b827b251906a84b664">ctrl_pre_mode_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structctrl__platform__configuration__t.html#ad2cb89558027fd6adf2a5637ddfc6093">ctrl_pre_mode_cb</a> [<a class="el" href="group__legacy__controller.html#gga83512a82ac70fd30e2ba0512c79d1001a8a29387a8487f8e070c2ec9142a49b39">CTRL_MODE_NUMOF</a>]</td></tr>
 <tr class="memdesc:ad2cb89558027fd6adf2a5637ddfc6093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modes pre callbacks. <br /></td></tr>
 <tr class="separator:ad2cb89558027fd6adf2a5637ddfc6093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb144db0de0403e3b923a85b1e3b5cde"><td class="memItemLeft" align="right" valign="top"><a id="aeb144db0de0403e3b923a85b1e3b5cde"></a>
-const <a class="el" href="group__controller.html#ga7b80d1d208e2a69888bc71a684d85c1a">ctrl_post_mode_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structctrl__platform__configuration__t.html#aeb144db0de0403e3b923a85b1e3b5cde">ctrl_post_mode_cb</a> [<a class="el" href="group__controller.html#gga83512a82ac70fd30e2ba0512c79d1001a8a29387a8487f8e070c2ec9142a49b39">CTRL_MODE_NUMOF</a>]</td></tr>
+const <a class="el" href="group__legacy__controller.html#ga7b80d1d208e2a69888bc71a684d85c1a">ctrl_post_mode_cb_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structctrl__platform__configuration__t.html#aeb144db0de0403e3b923a85b1e3b5cde">ctrl_post_mode_cb</a> [<a class="el" href="group__legacy__controller.html#gga83512a82ac70fd30e2ba0512c79d1001a8a29387a8487f8e070c2ec9142a49b39">CTRL_MODE_NUMOF</a>]</td></tr>
 <tr class="memdesc:aeb144db0de0403e3b923a85b1e3b5cde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modes post callbacks. <br /></td></tr>
 <tr class="separator:aeb144db0de0403e3b923a85b1e3b5cde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26f5597864ab1e05ae7d8eb686e98191"><td class="memItemLeft" align="right" valign="top"><a id="a26f5597864ab1e05ae7d8eb686e98191"></a>
@@ -159,13 +169,13 @@ const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" 
 <tr class="separator:ae31b73291c6d84a716dbea00bb156b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>controllers/common_controller/include/<a class="el" href="ctrl_8hpp_source.html">ctrl.hpp</a></li>
+<li>motion_control/common_controller/include/<a class="el" href="ctrl_8hpp_source.html">ctrl.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jan 3 2023 17:31:13 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jan 31 2023 00:29:42 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -1,0 +1,16 @@
+<map id="motion_control/engines/platform_engine/include/platform_engine/PlatformEngine.hpp" name="motion_control/engines/platform_engine/include/platform_engine/PlatformEngine.hpp">
+<area shape="rect" id="node1" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="223,5,488,61"/>
+<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="199,117,354,143"/>
+<area shape="rect" id="node5" href="$Polar_8hpp.html" title="Polar class declaration." alt="" coords="5,199,161,225"/>
+<area shape="rect" id="node9" title=" " alt="" coords="378,117,490,143"/>
+<area shape="rect" id="node10" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="578,109,773,151"/>
+<area shape="rect" id="node3" href="$Coords_8hpp.html" title="Coords declaration." alt="" coords="328,199,497,225"/>
+<area shape="rect" id="node7" title=" " alt="" coords="521,199,627,225"/>
+<area shape="rect" id="node8" href="$trigonometry_8h_source.html" title=" " alt="" coords="186,199,303,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="353,273,472,300"/>
+<area shape="rect" id="node6" title=" " alt="" coords="30,273,137,300"/>
+<area shape="rect" id="node11" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="651,199,764,225"/>
+<area shape="rect" id="node12" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="579,273,724,300"/>
+<area shape="rect" id="node14" title=" " alt="" coords="715,348,809,375"/>
+<area shape="rect" id="node13" title=" " alt="" coords="610,348,690,375"/>
+</map>

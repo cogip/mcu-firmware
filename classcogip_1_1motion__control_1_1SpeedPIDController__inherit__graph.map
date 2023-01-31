@@ -1,0 +1,5 @@
+<map id="cogip::motion_control::SpeedPIDController" name="cogip::motion_control::SpeedPIDController">
+<area shape="rect" id="node1" title="PID speed controller." alt="" coords="52,593,225,700"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="5,307,272,545"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="57,5,220,259"/>
+</map>
