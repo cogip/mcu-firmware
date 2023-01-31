@@ -1,0 +1,192 @@
+/*
+ * Copyright (C) 2019 COGIP Robotics association <cogip35@gmail.com>
+ *
+ * This file is subject to the terms and conditions of the GNU Lesser
+ * General Public License v2.1. See the file LICENSE in the top level
+ * directory for more details.
+ */
+
+/**
+ * @defgroup    legacy_quadpid Quadruple PID actuator motion controller
+ * @ingroup     motion_control
+ * @brief       Actuators Quadruple PID  motion speed and position controller
+ *
+ * The QuadPID controller aims to control actuators motions according to a
+ * quadruple PID corrector:
+ *   * Linear pose corrector:   Regulate distance to the pose order.
+ *   * Angular pose corrector:  Regulate angle to the pose order.
+ *   * Linear speed corrector:  Regulate linear speed to the pose order.
+ *   * Angular speed corrector: Regulate rotation speed to the pose order.
+ *
+ * The structure ctrl_quadpid_t is used to represent the controller and inherit
+ * from ctrl_t
+ *   * linear_pose_pid:     Linear pose corrector
+ *   * angular_pose_pid:    Angular pose corrector
+ *   * linear_speed_pid:    Linear speed corrector
+ *   * angular_speed_pid:   Angular speed corrector
+ *
+ * @{
+ * @file
+ * @brief       QuadPID controllers API and datas
+ *
+ * @author      Gilles DOFFE <g.doffe@gmail.com>
+ * @author      Yannick GICQUEL <yannick.gicquel@gmail.com>
+ * @author      Stephen CLYMANS <sclymans@gmail.com>
+ */
+
+#pragma once
+
+/* Standard includes */
+#include <stdint.h>
+
+/* Project includes */
+#include "ctrl.hpp"
+#include "odometry.hpp"
+#include "pid.h"
+
+/**
+ * @brief    PID regulation modes.
+ */
+typedef enum {
+    CTRL_REGUL_IDLE = 0,        /**< No regulation */
+    CTRL_REGUL_POSE_DIST,       /**< Distance regulation, reach destination */
+    CTRL_REGUL_POSE_ANGL,       /**< Final angle correction */
+    CTRL_REGUL_POSE_PRE_ANGL,   /**< Pre-angle orientation to reach destination
+                                     with straight trajectory */
+} ctrl_regul_t;
+
+/**
+ * @brief    QuadPID controller specific configuration.
+ */
+typedef struct {
+    PID_t linear_speed_pid;                     /**< Linear speed Kp, Ki, Kd */
+    PID_t angular_speed_pid;                    /**< Angular speed Kp, Ki, Kd */
+    PID_t linear_pose_pid;                      /**< Linear pose Kp, Ki, Kd */
+    PID_t angular_pose_pid;                     /**< Angular pose Kp, Ki, Kd */
+
+    /* cppcheck-suppress unusedStructMember */
+    double min_distance_for_angular_switch;   /**< Distance approximation to
+                                                     switch to angular
+                                                     correction */
+
+    /* cppcheck-suppress unusedStructMember */
+    double min_angle_for_pose_reached;        /**< Angle approximation to
+                                                     switch to position reached
+                                                     state */
+
+    /* cppcheck-suppress unusedStructMember */
+    double min_angle_for_target_orientation;  /**< Angle approximation to
+                                                     switch to linear
+                                                     correction */
+
+    ctrl_regul_t regul;                         /**< Current regulation type */
+} ctrl_quadpid_parameters_t;
+
+/**
+ * @brief    QuadPID controller specific structure based on ctrl_t.
+ */
+typedef struct {
+    const ctrl_configuration_t *conf;                   /**< See ctrl_t */
+    const ctrl_platform_configuration_t *pf_conf;       /**< See ctrl_t */
+    ctrl_control_t control;                             /**< See ctrl_t */
+    ctrl_quadpid_parameters_t quadpid_params;           /**< QuadPID specific
+                                                           configuration */
+} ctrl_quadpid_t;
+
+/**
+ * @brief   QuadPID controller callback when a new pose to reach is set.
+ *
+ * @param[in]   ctrl            Controller object
+ *
+ * @return
+ */
+void ctrl_quadpid_set_pose_to_reach_cb(ctrl_t *ctrl);
+
+/**
+ * @brief   Speed regulation function.
+ *
+ * Perform the linear and angular speeds regulation according to the given
+ * speed order.
+ *
+ * @param[in]       ctrl            QuadPID controller object
+ * @param[in,out]   command         In: Linear and angular pose command \n
+ *                                  Out: Linear and angular speed command
+ * @param[in]       speed_current   Current linear and angular speed
+ *
+ * @return                      0 on success
+ * @return                      not 0 on error
+ */
+int ctrl_quadpid_speed(ctrl_quadpid_t *ctrl,
+                       cogip::cogip_defs::Polar &command,
+                       const cogip::cogip_defs::Polar &speed_current);
+
+/**
+ * @brief   QuadPID CTRL_MODE_STOP callback.
+ *
+ * Callback launched when controller is stopped
+ *
+ * @param[in]       ctrl        QuadPID controller object
+ * @param[out]   command        Null linear and angular speed command
+ *
+ * @return                      0 on success
+ * @return                      not 0 on error
+ */
+int ctrl_quadpid_stop(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
+
+/**
+ * @brief   QuadPID CTRL_MODE_PASSTHROUGH callback.
+ *
+ * Callback launched when controller is set in no-PID mode.
+ *
+ * @param[in]       ctrl        QuadPID controller object
+ * @param[out]   command        Linear and angular motors commands
+ *
+ * @return                      0 on success
+ * @return                      not 0 on error
+ */
+int ctrl_quadpid_nopid(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
+
+/**
+ * @brief   QuadPID CTRL_MODE_RUNNING_SPEED callback.
+ *
+ * Callback launched when controller is in running speed only mode.
+ *
+ * @param[in]       ctrl        QuadPID controller object
+ * @param[out]   command        Null linear and angular speed command
+ *
+ * @return                      0 on success
+ * @return                      not 0 on error
+ */
+int ctrl_quadpid_running_speed(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
+
+/**
+ * @brief   QuadPID CTRL_MODE_RUNNING callback.
+ *
+ * Callback launched when controller is in running mode
+ *
+ * @param[in]       ctrl        QuadPID controller object
+ * @param[out]   command        Null linear and angular speed command
+ *
+ * @return                      0 on success
+ * @return                      not 0 on error
+ */
+int ctrl_quadpid_ingame(ctrl_t *ctrl, cogip::cogip_defs::Polar &command);
+
+
+/**
+ * @brief    QuadPID controller static configuration.
+ *           Setup callbacks for each controller mode.
+ */
+static const ctrl_configuration_t ctrl_quadpid_conf = {
+    .ctrl_mode_cb = {
+        ctrl_quadpid_stop,          // CTRL_MODE_STOP
+        nullptr,                    // CTRL_MODE_IDLE
+        ctrl_quadpid_stop,          // CTRL_MODE_BLOCKED
+        ctrl_quadpid_ingame,        // CTRL_MODE_RUNNING
+        ctrl_quadpid_running_speed, // CTRL_MODE_RUNNING_SPEED
+        ctrl_quadpid_nopid          // CTRL_MODE_PASSTHROUGH
+    },
+    .set_pose_to_reach_cb = ctrl_quadpid_set_pose_to_reach_cb,
+};
+
+/** @} */

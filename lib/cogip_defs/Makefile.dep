@@ -1,1 +1,2 @@
 USEPKG += embedded-proto
+USEMODULE += trigonometry

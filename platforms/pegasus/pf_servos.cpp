@@ -115,6 +115,7 @@ void parallel_move(const etl::list<Command, COUNT> & commands, uint32_t wait) {
 }
 
 void pb_copy(PB_Message & pb_message) {
+    // cppcheck-suppress unusedVariable
     for (auto const & [id, servo] : _servos) {
         servo->pb_copy(pb_message.get(pb_message.get_length()));
     }

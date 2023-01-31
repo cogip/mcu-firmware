@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_pose_pid_controller := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_pose_pid_controller)
+
+PROTOBUF_PATH_pose_pid_controller := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_pose_pid_controller)

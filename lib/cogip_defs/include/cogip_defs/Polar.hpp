@@ -55,6 +55,18 @@ public:
         polar.set_angle(angle_);
     };
 
+    /// Reverse distance and angle
+    void reverse(void) {
+            set_distance(- distance_);
+
+            if (angle_ < 0) {
+                set_angle(angle_ + 180);
+            }
+            else {
+                set_angle(angle_ - 180);
+            }
+        }
+
 private:
     double distance_;          ///< distance
     double angle_;             ///< angle

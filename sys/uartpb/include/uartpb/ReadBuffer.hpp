@@ -77,3 +77,5 @@ private:
 } // namespace uartpb
 
 } // namespace cogip
+
+/// @}

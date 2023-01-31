@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_quadpid_meta_controller := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_quadpid_meta_controller)
+
+PROTOBUF_PATH_quadpid_meta_controller := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_quadpid_meta_controller)

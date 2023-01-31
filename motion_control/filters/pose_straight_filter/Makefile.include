@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_pose_straight_filter := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_pose_straight_filter)
+
+PROTOBUF_PATH_pose_straight_filter := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_pose_straight_filter)

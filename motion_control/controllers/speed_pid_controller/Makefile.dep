@@ -1,0 +1,3 @@
+USEMODULE += cogip_defs
+USEMODULE += motion_control_common
+USEMODULE += pid_ng

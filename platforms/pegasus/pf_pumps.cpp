@@ -32,6 +32,7 @@ Pump & get(Enum id) {
 }
 
 void pb_copy(PB_Message & pb_message) {
+    // cppcheck-suppress unusedVariable
     for (auto const & [id, pump] : _pumps) {
         pump->pb_copy(pb_message.get(pb_message.get_length()));
     }

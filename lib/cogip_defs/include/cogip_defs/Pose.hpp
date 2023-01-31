@@ -12,8 +12,9 @@
 #pragma once
 
 #include "cogip_defs/Coords.hpp"
-
+#include "cogip_defs/Polar.hpp"
 #include "PB_Pose.hpp"
+#include "trigonometry.h"
 
 namespace cogip {
 
@@ -61,6 +62,18 @@ public:
         pose.set_x(x_);
         pose.set_y(y_);
         pose.set_O(O_);
+    };
+
+    Polar operator-(const Pose& p) {
+        double error_x = x_ - p.x();
+        double error_y = y_ - p.y();
+
+        double error_O = limit_angle_rad(atan2(error_y, error_x) - DEG2RAD(p.O()));
+
+        return Polar(
+            sqrt(square(error_x) + square(error_y)),
+            RAD2DEG(error_O)
+        );
     };
 
 protected:
