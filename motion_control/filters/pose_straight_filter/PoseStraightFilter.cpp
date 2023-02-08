@@ -58,12 +58,13 @@ void PoseStraightFilter::execute() {
         target_angular_speed
     );
 
+    // Allow moving reversely
+    bool allow_reverse = (bool)inputs_[input_index++];
+
     if (!is_index_valid(input_index)) {
         return;
     }
 
-    // Allow moving reversely
-    bool allow_reverse = this->inputs_[10];
 
     // compute position error
     cogip_defs::Polar pos_err = target_pose - current_pose;
