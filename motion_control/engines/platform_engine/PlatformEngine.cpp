@@ -20,8 +20,7 @@ void PlatformEngine::prepare_inputs() {
     size_t index = 0;
 
     // Update current pose and speed
-    platform_get_poses_cb_(this->current_pose_, this->target_pose_);
-    platform_get_speeds_cb_(this->current_speed_, this->target_speed_);
+    platform_get_speed_and_pose_cb_(current_speed_, current_pose_);
 
     // Current pose
     controller_->set_input(index++, this->current_pose_.x());
