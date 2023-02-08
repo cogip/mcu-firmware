@@ -65,12 +65,20 @@ void PoseStraightFilter::execute() {
         return;
     }
 
+    // Position reached flag
+    target_pose_status_t pose_reached = target_pose_status_t::moving;
 
     // compute position error
     cogip_defs::Polar pos_err = target_pose - current_pose;
 
-    // position correction */
+    // Transition between straight move and final orientation
+    static bool transition_straight_to_rotate = false;
+
+    // position correction
     if (fabs(pos_err.distance()) > parameters_->linear_treshold()) {
+        // Transition between orientation to the point and straight move
+        static bool transition_rotate_to_straight = false;
+
         // go reverse ? */
         if (allow_reverse && fabs(pos_err.angle()) > 90) {
             pos_err.reverse();
@@ -78,10 +86,21 @@ void PoseStraightFilter::execute() {
 
         // if target point direction angle is too important, bot rotates on its starting point
         if (fabs(pos_err.angle()) > parameters_->angular_treshold()) {
+            transition_rotate_to_straight = true;
             pos_err.set_distance(0);
+        }
+        else if (transition_rotate_to_straight) {
+            pose_reached = target_pose_status_t::intermediate_reached;
+            transition_rotate_to_straight = false;
+            transition_straight_to_rotate = true;
         }
     }
     else {
+        if (transition_straight_to_rotate) {
+            pose_reached = target_pose_status_t::intermediate_reached;
+            transition_straight_to_rotate = false;
+        }
+
         // orientation correction only (position is reached)
         pos_err.set_distance(0);
 
@@ -90,6 +109,7 @@ void PoseStraightFilter::execute() {
 
         // orientation is reached
         if (fabs(pos_err.angle()) < parameters_->angular_treshold()) {
+            pose_reached = target_pose_status_t::reached;
             pos_err.set_angle(0);
         }
     }
@@ -107,6 +127,9 @@ void PoseStraightFilter::execute() {
     outputs_[4] = current_speed.angle();
     // Angular target speed
     outputs_[5] = target_speed.angle();
+
+    // Pose reached
+    outputs_[6] = (double)pose_reached;
 };
 
 } // namespace motion_control
