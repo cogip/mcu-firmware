@@ -86,8 +86,7 @@ void PoseStraightFilter::execute() {
         pos_err.set_distance(0);
 
         // final orientation error
-        // TODO: should not be necessary, already done in 'pos_err = target_pose - current_pose'
-        //pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+        pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
 
         // orientation is reached
         if (fabs(pos_err.angle()) < parameters_->angular_treshold()) {
