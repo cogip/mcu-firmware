@@ -40,12 +40,24 @@ void PlatformEngine::prepare_inputs() {
     controller_->set_input(index++, target_speed_.distance());
     controller_->set_input(index++, target_speed_.angle());
 
+    // Allow reverse
+    controller_->set_input(index++, allow_reverse_);
+
     if (index != controller_->nb_inputs()) {
         COGIP_DEBUG_CERR("PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.");
     }
 };
 
 void PlatformEngine::process_outputs() {
+    // Pose reached. Double cast is necessary to avoid imprecision in mantiss.
+    pose_reached_ = (target_pose_status_t)controller_->output(2);
+
+    cogip_defs::Polar command(
+        controller_->output(0),
+        controller_->output(1)
+    );
+
+    platform_process_commands_cb_(command);
 };
 
 } // namespace motion_control
