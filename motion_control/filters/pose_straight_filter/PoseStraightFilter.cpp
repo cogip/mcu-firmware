@@ -18,7 +18,7 @@ namespace cogip {
 namespace motion_control {
 
 void PoseStraightFilter::execute() {
-    std::cout << "Execute PoseStraightFilter" << std::endl;
+    COGIP_DEBUG_COUT("Execute PoseStraightFilter");
 
     size_t input_index = 0;
 

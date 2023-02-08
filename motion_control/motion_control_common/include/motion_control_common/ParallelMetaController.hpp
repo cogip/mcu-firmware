@@ -39,11 +39,11 @@ public:
     /// Controller core method. Meta controller executes all sub-controllers in parallel.
     void execute() override {
         if (this->empty()) {
-            std::cout << "Error: no controller added." << std::endl;
+            COGIP_DEBUG_COUT("Error: no controller added.");
             return;
         }
 
-        std::cout << "Execute ParallelMetaController" << std::endl;
+        COGIP_DEBUG_COUT("Execute ParallelMetaController");
 
         this->set_inputs();
 

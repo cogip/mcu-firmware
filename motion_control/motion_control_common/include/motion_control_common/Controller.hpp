@@ -15,6 +15,7 @@
 // Project includes
 #include "BaseController.hpp"
 #include "etl/vector.h"
+#include "utils.hpp"
 
 namespace cogip {
 
@@ -47,7 +48,7 @@ public:
         size_t index    ///< [in]  input index
         ) const override {
         if (index >= INPUT_SIZE) {
-            std::cout << "Error: not enough values." << std::endl;
+            COGIP_DEBUG_COUT("Error: not enough values.");
             return std::numeric_limits<double>::max();
         }
         return this->inputs_[index];
@@ -59,7 +60,7 @@ public:
         double value    ///< [in]  value to set at given index
         ) override {
         if (index >= INPUT_SIZE) {
-            std::cout << "Error: not enough input values." << std::endl;
+            COGIP_DEBUG_COUT("Error: not enough input values.");
             return;
         }
         this->inputs_[index] = value;
@@ -71,7 +72,7 @@ public:
         size_t index    ///< [in]  output index
         ) const override {
         if (index >= OUTPUT_SIZE) {
-            std::cout << "Error: cannot get output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ")." << std::endl;
+            COGIP_DEBUG_COUT("Error: cannot get output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ").");
             return std::numeric_limits<double>::max();
         }
         return this->outputs_[index];
@@ -83,7 +84,7 @@ public:
         double value    ///< [in]  value to set at given index
         ) override {
         if (index >= OUTPUT_SIZE) {
-            std::cout << "Error: cannot set output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ")." << std::endl;
+            COGIP_DEBUG_COUT("Error: cannot set output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ").");
             return;
         }
         this->outputs_[index] = value;

@@ -19,7 +19,7 @@ static char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 
 static void *_start_thread(void *arg)
 {
-    std::cout << "Engine start thread" << std::endl;
+    COGIP_DEBUG_COUT("Engine start thread");
     ((BaseControllerEngine *)arg)->thread_loop();
     return EXIT_SUCCESS;
 }
@@ -33,7 +33,7 @@ void BaseControllerEngine::thread_loop() {
     ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
 
     while (true) {
-        std::cout << "PlatformEngine loop" << std::endl;
+        COGIP_DEBUG_COUT("Engine loop");
 
         // Set controller inputs
         prepare_inputs();

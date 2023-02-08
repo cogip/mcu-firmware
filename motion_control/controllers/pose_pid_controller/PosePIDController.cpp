@@ -16,7 +16,7 @@ namespace cogip {
 namespace motion_control {
 
 void PosePIDController::execute() {
-    std::cout << "Execute PosePIDController" << std::endl;
+    COGIP_DEBUG_COUT("Execute PosePIDController");
 
     // Read position error.
     double position_error = this->inputs_[0];

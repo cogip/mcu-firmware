@@ -17,7 +17,7 @@ namespace cogip {
 namespace motion_control {
 
 void SpeedPIDController::execute() {
-    std::cout << "Execute SpeedPIDController" << std::endl;
+    COGIP_DEBUG_COUT("Execute SpeedPIDController");
 
     // Speed error
     double speed_error = this->inputs_[0];

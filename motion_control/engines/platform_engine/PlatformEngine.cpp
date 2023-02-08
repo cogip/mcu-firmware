@@ -41,7 +41,7 @@ void PlatformEngine::prepare_inputs() {
     controller_->set_input(index++, this->target_speed_.angle());
 
     if (index != controller_->nb_inputs()) {
-        std::cerr << "Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected." << std::endl;
+        COGIP_DEBUG_CERR("PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.");
     }
 };
 
