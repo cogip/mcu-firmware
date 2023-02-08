@@ -23,9 +23,9 @@ void PoseStraightFilter::execute() {
     size_t input_index = 0;
 
     // Current pose
-    double current_pose_x = this->inputs_[input_index++];
-    double current_pose_y = this->inputs_[input_index++];
-    double current_pose_O = this->inputs_[input_index++];
+    double current_pose_x = inputs_[input_index++];
+    double current_pose_y = inputs_[input_index++];
+    double current_pose_O = inputs_[input_index++];
     cogip_defs::Pose current_pose(
         current_pose_x,
         current_pose_y,
@@ -95,18 +95,18 @@ void PoseStraightFilter::execute() {
     }
 
     // Linear pose error
-    this->outputs_[0] = pos_err.distance();
+    outputs_[0] = pos_err.distance();
     // Linear current speed
-    this->outputs_[1] = current_speed.distance();
+    outputs_[1] = current_speed.distance();
     // Linear target speed
-    this->outputs_[2] = target_speed.distance();
+    outputs_[2] = target_speed.distance();
 
     // Angular pose error
-    this->outputs_[3] = pos_err.angle();
+    outputs_[3] = pos_err.angle();
     // Angular current speed
-    this->outputs_[4] = current_speed.angle();
+    outputs_[4] = current_speed.angle();
     // Angular target speed
-    this->outputs_[5] = target_speed.angle();
+    outputs_[5] = target_speed.angle();
 };
 
 } // namespace motion_control
