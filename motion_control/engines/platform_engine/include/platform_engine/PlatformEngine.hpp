@@ -32,7 +32,18 @@ public:
     /// Constructor
     PlatformEngine(
         platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb,    ///< [in]  Platform callback to get robot current speed and pose
-    ) : BaseControllerEngine(), platform_get_speed_and_pose_cb_(platform_get_speed_and_pose_cb) {};
+    ) : BaseControllerEngine(),
+        allow_reverse_(true),
+        platform_get_speed_and_pose_cb_(platform_get_speed_and_pose_cb) {};
+
+    /// Get if going backward is allowed
+    /// return     going backward permission
+    bool allow_reverse() const { return allow_reverse_; };
+
+    /// Set going backward permission
+    void set_allow_reverse(
+        bool allow_reverse                  ///< [in]   going backward permission
+        ) { allow_reverse_ = allow_reverse; };
 
 private:
     /// Prepare controller inputs from platform functions.
@@ -53,6 +64,8 @@ private:
     /// Robot target pose
     cogip_defs::Pose target_pose_;
 
+    /// Going backward permission
+    bool allow_reverse_;
 
     /// Platform callback to get target and current poses from platforms
     platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb_;
