@@ -36,37 +36,37 @@ protected:
 
     /// Set inputs for each parallel controller
     void set_inputs() override {
-        auto ctrl_iterator = this->begin();
+        auto ctrl_iterator = begin();
 
         BaseController *linear_ctrl = *ctrl_iterator++;
         BaseController *angular_ctrl = *ctrl_iterator++;
 
         // Linear pose error
-        linear_ctrl->set_input(0, this->inputs_[0]);
+        linear_ctrl->set_input(0, inputs_[0]);
         // Linear current speed
-        linear_ctrl->set_input(1, this->inputs_[1]);
+        linear_ctrl->set_input(1, inputs_[1]);
         // Linear target speed
-        linear_ctrl->set_input(2, this->inputs_[2]);
+        linear_ctrl->set_input(2, inputs_[2]);
 
         // Angular pose error
-        angular_ctrl->set_input(0, this->inputs_[3]);
+        angular_ctrl->set_input(0, inputs_[3]);
         // Angular current speed
-        angular_ctrl->set_input(1, this->inputs_[4]);
+        angular_ctrl->set_input(1, inputs_[4]);
         // Angular target speed
-        angular_ctrl->set_input(2, this->inputs_[5]);
+        angular_ctrl->set_input(2, inputs_[5]);
     };
 
     /// Sort outputs from each parallel controller
     void sort_outputs() override {
-        auto ctrl_iterator = this->begin();
+        auto ctrl_iterator = begin();
 
         BaseController *linear_ctrl = *ctrl_iterator++;
         BaseController *angular_ctrl = *ctrl_iterator++;
 
         // Linear command
-        this->outputs_[0] = linear_ctrl->output(0);
+        outputs_[0] = linear_ctrl->output(0);
         // Angular command
-        this->outputs_[1] = angular_ctrl->output(0);
+        outputs_[1] = angular_ctrl->output(0);
     };
 };
 
