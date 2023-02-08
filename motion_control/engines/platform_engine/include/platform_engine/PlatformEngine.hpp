@@ -25,6 +25,8 @@ namespace motion_control {
 /// Get current speed and pose from platform
 using platform_get_speed_and_pose_cb_t = etl::delegate<void(cogip_defs::Polar&, cogip_defs::Pose&)>;
 
+/// Process motion control commands
+using platform_process_commands_cb_t = etl::delegate<void(const cogip_defs::Polar&)>;
 
 /// Engine getting inputs from platform and setting outputs for the platform
 class PlatformEngine : public BaseControllerEngine {
@@ -32,9 +34,11 @@ public:
     /// Constructor
     PlatformEngine(
         platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb,    ///< [in]  Platform callback to get robot current speed and pose
+        platform_process_commands_cb_t platform_process_commands_cb         ///< [in]  Platform callback to get robot current speed and pose
     ) : BaseControllerEngine(),
         allow_reverse_(true),
-        platform_get_speed_and_pose_cb_(platform_get_speed_and_pose_cb) {};
+        platform_get_speed_and_pose_cb_(platform_get_speed_and_pose_cb),
+        platform_process_commands_cb_(platform_process_commands_cb) {};
 
     /// Get current speed
     /// return     current speed
@@ -100,6 +104,9 @@ private:
 
     /// Platform callback to get target and current poses from platforms
     platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb_;
+
+    /// Platform calback to drive motors according to commands
+    platform_process_commands_cb_t platform_process_commands_cb_;
 };
 
 } // namespace motion_control
