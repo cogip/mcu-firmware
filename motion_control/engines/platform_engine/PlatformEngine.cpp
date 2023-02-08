@@ -23,22 +23,22 @@ void PlatformEngine::prepare_inputs() {
     platform_get_speed_and_pose_cb_(current_speed_, current_pose_);
 
     // Current pose
-    controller_->set_input(index++, this->current_pose_.x());
-    controller_->set_input(index++, this->current_pose_.y());
-    controller_->set_input(index++, this->current_pose_.O());
+    controller_->set_input(index++, current_pose_.x());
+    controller_->set_input(index++, current_pose_.y());
+    controller_->set_input(index++, current_pose_.O());
 
     // Target pose
-    controller_->set_input(index++, this->target_pose_.x());
-    controller_->set_input(index++, this->target_pose_.y());
-    controller_->set_input(index++, this->target_pose_.O());
+    controller_->set_input(index++, target_pose_.x());
+    controller_->set_input(index++, target_pose_.y());
+    controller_->set_input(index++, target_pose_.O());
 
     // Current speed
-    controller_->set_input(index++, this->current_speed_.distance());
-    controller_->set_input(index++, this->current_speed_.angle());
+    controller_->set_input(index++, current_speed_.distance());
+    controller_->set_input(index++, current_speed_.angle());
 
     // Target speed
-    controller_->set_input(index++, this->target_speed_.distance());
-    controller_->set_input(index++, this->target_speed_.angle());
+    controller_->set_input(index++, target_speed_.distance());
+    controller_->set_input(index++, target_speed_.angle());
 
     if (index != controller_->nb_inputs()) {
         COGIP_DEBUG_CERR("PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.");
