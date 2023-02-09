@@ -1,1 +1,3 @@
 USEMODULE += motion_control_common
+USEMODULE += pose_pid_controller
+USEMODULE += speed_pid_controller
