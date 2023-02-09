@@ -7,7 +7,7 @@
 #include <ztimer.h>
 
 #ifndef CONTROLLER_PERIOD_USEC
-    #define CONTROLLER_PERIOD_USEC (10 * US_PER_MS)
+    #define CONTROLLER_PERIOD_USEC (20 * US_PER_MS)
 #endif
 
 namespace cogip {
