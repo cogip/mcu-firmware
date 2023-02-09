@@ -1,1 +1,3 @@
+USEMODULE += dualpid_meta_controller
 USEMODULE += motion_control_common
+USEMODULE += polar_parallel_meta_controller
