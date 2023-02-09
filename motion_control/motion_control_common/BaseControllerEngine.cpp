@@ -44,6 +44,8 @@ void BaseControllerEngine::thread_loop() {
 
         // Process controller outputs
         process_outputs();
+        // Next cycle
+        current_cycle_++;
 
         // Wait thread period to end
         thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, CONTROLLER_PERIOD_USEC);

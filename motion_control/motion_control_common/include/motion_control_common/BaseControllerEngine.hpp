@@ -22,7 +22,7 @@ namespace motion_control {
 class BaseControllerEngine {
 public:
     /// Constructor
-    BaseControllerEngine() : controller_(nullptr) {};
+    BaseControllerEngine() : controller_(nullptr), current_cycle_(0) {};
 
     /// Set the controller to launch.
     /// @param controller
@@ -34,6 +34,13 @@ public:
     /// Engine thread loop with period internally defined.
     virtual void thread_loop();
 
+    /// Return motion control current cycle
+    uint32_t current_cycle() const { return current_cycle_; };
+
+    /// Get pose reached flag
+    /// return     true if pose reached
+    target_pose_status_t pose_reached() const { return pose_reached_; };
+
 protected:
     /// Prepare controller inputs from platform functions.
     virtual void prepare_inputs() = 0;
@@ -43,6 +50,9 @@ protected:
 
     /// Controller to be launched by this engine. This could be a meta controller leading to the execution of a chain of controllers.
     BaseController *controller_;
+
+    /// Current motion control cycle
+    uint32_t current_cycle_;
 };
 
 } // namespace motion_control
