@@ -35,17 +35,20 @@ void BaseControllerEngine::thread_loop() {
     while (true) {
         COGIP_DEBUG_COUT("Engine loop");
 
-        // Set controller inputs
-        prepare_inputs();
+        if (pose_reached_ != reached) {
+            // Set controller inputs
+            prepare_inputs();
 
-        if (controller_) {
-            controller_->execute();
+            if (controller_) {
+                controller_->execute();
+            }
+
+            // Process controller outputs
+            process_outputs();
+
+            // Next cycle
+            current_cycle_++;
         }
-
-        // Process controller outputs
-        process_outputs();
-        // Next cycle
-        current_cycle_++;
 
         // Wait thread period to end
         thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, CONTROLLER_PERIOD_USEC);
