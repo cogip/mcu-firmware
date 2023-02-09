@@ -9,10 +9,15 @@ USEMODULE += shell
 USEMODULE += shell_commands
 
 # mcu-firmware modules
-USEMODULE += uartpb
-USEMODULE += pid
-USEMODULE += quadpid
 USEMODULE += cogip_defs
+USEMODULE += odometry
+USEMODULE += path
+USEMODULE += uartpb
+# Controllers
+USEMODULE += quadpid_meta_controller
+USEMODULE += platform_engine
+USEMODULE += pose_straight_filter
+USEMODULE += speed_filter
 
 # Board features required
 FEATURES_REQUIRED += periph_qdec

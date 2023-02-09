@@ -13,8 +13,8 @@
 
 /* Project includes */
 #include "board.h"
+#include "motion_control.hpp"
 #include "platform.hpp"
-#include "ctrl.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "shell_platforms.hpp"
 #include "utils.hpp"
@@ -23,15 +23,12 @@
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
 
-/* Controller */
-static ctrl_t *ctrl = NULL;
-
 static int _cmd_print_state_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
 
-    pf_print_state();
+    cogip::pf::motion_control::pf_print_state();
 
     return EXIT_SUCCESS;
 }
@@ -42,8 +39,6 @@ static int _cmd_motors_test_cb(int argc, char **argv)
     (void)argv;
 
     int nb_motors = 0;
-
-    ctrl_set_mode(ctrl, CTRL_MODE_IDLE);
 
     for (motor_driver_t i = 0; i < MOTOR_DRIVER_NUMOF; i++) {
         int nb_motors_tmp = motor_driver_config[i].nb_motors;
@@ -96,8 +91,6 @@ static int _cmd_motors_test_cb(int argc, char **argv)
         nb_motors += nb_motors_tmp;
     }
 
-    ctrl_set_mode(ctrl, CTRL_MODE_STOP);
-
     return EXIT_SUCCESS;
 }
 
@@ -108,8 +101,6 @@ static cogip::shell::Command _cmd_motors_test = { "mt", "Test all DC motors", _c
 
 void pf_shell_init(void)
 {
-    ctrl = pf_get_ctrl();
-
     /* Global commands */
     cogip::shell::add_global_command(&_cmd_print_state);
 

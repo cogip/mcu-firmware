@@ -1,40 +1,37 @@
 #pragma once
 
-/* Project includes */
-#include "quadpid.hpp"
+// Project includes
+#include "etl/numeric.h"
 
-static const ctrl_quadpid_parameters_t ctrl_quadpid_params = {
-    .linear_speed_pid = {
-        .kp = 25,
-        .ki = 1,
-        .kd = 0.,
-        .ti = 0.,
-        .previous_error = 0.
-    },
-    .angular_speed_pid = {
-        .kp = 25,
-        .ki = 1,
-        .kd = 0.,
-        .ti = 0.,
-        .previous_error = 0.
-    },
-    .linear_pose_pid = {
-        .kp = 0.1,
-        .ki = 0.,
-        .kd = 0,
-        .ti = 0.,
-        .previous_error = 0.
-    },
-    .angular_pose_pid = {
-        .kp = 0.1,
-        .ki = 0.,
-        .kd = 0,
-        .ti = 0.,
-        .previous_error = 0.
-    },
+// Linear pose PID
+constexpr double linear_pose_pid_kp = 2;
+constexpr double linear_pose_pid_ki = 0;
+constexpr double linear_pose_pid_kd = 0;
+// Angular pose PID
+constexpr double angular_pose_pid_kp = 2;
+constexpr double angular_pose_pid_ki = 0;
+constexpr double angular_pose_pid_kd = 0;
+// Linear speed PID
+constexpr double linear_speed_pid_kp = 100;
+constexpr double linear_speed_pid_ki = 0.2;
+constexpr double linear_speed_pid_kd = 0;
+// Angular speed PID
+constexpr double angular_speed_pid_kp = 100;
+constexpr double angular_speed_pid_ki = 0.2;
+constexpr double angular_speed_pid_kd = 0;
 
-    .min_distance_for_angular_switch = 5,       // mm,
-    .min_angle_for_pose_reached = 5,            // deg,
-    .min_angle_for_target_orientation = 5,      // deg,
-    .regul = CTRL_REGUL_POSE_DIST,
-};
+// Linear pose PID integral limit
+constexpr double linear_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+// Angular pose PID integral limit
+constexpr double angular_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+// Linear speed PID integral limit
+constexpr double linear_speed_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+//constexpr double linear_speed_pid_integral_limit = 2000;
+// Angular speed PID integral limit
+constexpr double angular_speed_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+//constexpr double angular_speed_pid_integral_limit = 2000;
+
+// Linear treshold
+constexpr double linear_treshold = 5;
+// Angular treshold
+constexpr double angular_treshold = 5;
