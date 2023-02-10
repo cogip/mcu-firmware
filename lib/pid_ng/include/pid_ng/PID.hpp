@@ -13,6 +13,8 @@
 
 #include <etl/limits.h>
 
+#include "PB_Pid.hpp"
+
 namespace cogip {
 
 namespace pid {
@@ -71,6 +73,18 @@ public:
 
     /// Compute PID.
     double compute(double error);
+
+    /// Copy data to Protobuf message.
+    void pb_copy(
+        PB_Pid &pid         ///< [out] Protobuf message to fill
+        ) const {
+        pid.set_kp(kp_);
+        pid.set_ki(ki_);
+        pid.set_kd(kd_);
+        pid.set_integral_term(integral_term_);
+        pid.set_integral_term_limit(integral_term_limit_);
+        pid.set_previous_error(previous_error_);
+    };
 
 private:
     double kp_;                     ///< proportional gain
