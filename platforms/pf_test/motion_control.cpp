@@ -300,6 +300,30 @@ static void _handle_pid_request([[maybe_unused]] cogip::uartpb::ReadBuffer & buf
     pf_send_pids();
 }
 
+/// Handle new pids config message.
+static void _handle_new_pids_config(cogip::uartpb::ReadBuffer & buffer)
+{
+    pb_pids.clear();
+
+    EmbeddedProto::Error error = pb_pids.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "New pids config: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
+
+    // Linear pose PID
+    linear_pose_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_POSE_PID));
+
+    // Angular pose PID
+    angular_pose_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_POSE_PID));
+
+    // Linear speed PID
+    linear_speed_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_SPEED_PID));
+
+    // Angular speed PID
+    angular_speed_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_SPEED_PID));
+}
+
 void pf_init_motion_control(void)
 {
     // Init motor driver
@@ -331,6 +355,12 @@ void pf_init_motion_control(void)
     pf_get_uartpb().register_message_handler(
         pid_request_uuid,
         cogip::uartpb::message_handler_t::create<_handle_pid_request>()
+    );
+
+    // Register new pids config
+    pf_get_uartpb().register_message_handler(
+        pid_uuid,
+        cogip::uartpb::message_handler_t::create<_handle_new_pids_config>()
     );
 }
 

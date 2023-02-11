@@ -74,6 +74,16 @@ public:
     /// Compute PID.
     double compute(double error);
 
+    /// Initialize the object from a Protobuf message.
+    void pb_read(
+        const PB_Pid &pid  ///< [in] Protobuf message to read
+        ) {
+        kp_ = pid.get_kp();
+        ki_ = pid.get_ki();
+        kd_ = pid.get_kd();
+        integral_term_limit_ = pid.get_integral_term_limit();
+    };
+
     /// Copy data to Protobuf message.
     void pb_copy(
         PB_Pid &pid         ///< [out] Protobuf message to fill
