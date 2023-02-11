@@ -16,6 +16,7 @@ USEMODULE += path
 USEMODULE += uartpb
 USEMODULE += vacuum_pump
 # Controllers
+USEMODULE += passthrough_pose_pid_controller
 USEMODULE += quadpid_meta_controller
 USEMODULE += platform_engine
 USEMODULE += pose_straight_filter

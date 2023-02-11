@@ -1,8 +1,10 @@
 /* RIOT includes */
 #include "log.h"
+#include "ztimer.h"
 
 /* Project includes */
 #include "app.hpp"
+#include "board.h"
 #include "motion_control.hpp"
 #include "platform.hpp"
 #include "shell_menu/shell_menu.hpp"
@@ -25,9 +27,37 @@
 static cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
 
 /* Thread stacks */
-char countdown_thread_stack[THREAD_STACKSIZE_DEFAULT];
+static char heartbeat_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool copilot_connected = false;
+
+// Heartbeat led blinking interval (ms)
+constexpr uint16_t heartbeat_leds_interval = 200;
+// Heartbeat thread period
+constexpr uint16_t heartbeat_period = 1800;
+
+static void *_heartbeat_thread(void *args)
+{
+    (void)args;
+
+    // Init loop iteration start time
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_MSEC);
+
+    while (true) {
+        gpio_set(HEARTBEAT_LED);
+        ztimer_sleep(ZTIMER_MSEC, heartbeat_leds_interval);
+        gpio_clear(HEARTBEAT_LED);
+        ztimer_sleep(ZTIMER_MSEC, heartbeat_leds_interval);
+        gpio_set(HEARTBEAT_LED);
+        ztimer_sleep(ZTIMER_MSEC, heartbeat_leds_interval);
+        gpio_clear(HEARTBEAT_LED);
+
+        // Wait thread period to end
+        ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, heartbeat_period);
+    }
+
+    return 0;
+}
 
 bool pf_trace_on(void)
 {
@@ -61,6 +91,16 @@ void handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
 
 void pf_init(void)
 {
+    thread_create(
+        heartbeat_thread_stack,
+        sizeof(heartbeat_thread_stack),
+        THREAD_PRIORITY_MAIN - 1,
+        THREAD_CREATE_STACKTEST,
+        _heartbeat_thread,
+        NULL,
+        "Heartbeat thread"
+    );
+
     /* Initialize UARTPB */
     bool uartpb_res = uartpb.connect();
     if (! uartpb_res) {

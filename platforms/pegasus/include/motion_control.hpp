@@ -29,17 +29,18 @@ constexpr cogip::uartpb::uuid_t start_pose_uuid = 2741980922;
 constexpr cogip::uartpb::uuid_t state_uuid = 3422642571;
 constexpr cogip::uartpb::uuid_t pid_uuid = 4159164681;
 constexpr cogip::uartpb::uuid_t pid_request_uuid = 3438831927;
+constexpr cogip::uartpb::uuid_t controller_uuid = 2750239003;
 
 constexpr uint16_t motion_control_thread_period_ms = 20;
 
 /// @name Robot mechanical properties
 ///
-/// To be computed :
+/// To be computed:
 ///  - pulse_per_mm             : number of pulses per mm of coding wheel
 ///  - wheels_distance          : distance between coding wheels (pulses)
 ///  - pulse_per_degree         : number of pulses per degree of coding wheel
 ///
-/// must be known :
+/// must be known:
 ///  - wheels_diameter          : coding wheel diameter (mm)
 ///  - wheels_distance_mm       : distance between coding wheels (mm)
 ///  - wheels_encoder_resolution: number of pulses by turn of coding wheels
@@ -48,24 +49,20 @@ constexpr uint16_t motion_control_thread_period_ms = 20;
 ///  - wheels_perimeter = pi*wheels_diameter
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
-///  - wheels_diameter = 60 mm
-///  - wheels_distance_mm = 280 mm
-///  - wheels_encoder_resolution = 2000
+///  - wheels_diameter = 55 mm
+///  - wheels_distance_mm = 198 mm
+///  - wheels_encoder_resolution = 4096 * 4 = 16384
 ///
 /// @{
-constexpr double robot_width = 330;                 ///< Robot width (mm)
-constexpr double robot_margin = (robot_width / 2);  ///< Point the most far from robot center (mm)
-constexpr double beacon_support_diameter = 70;      ///< Size of the beacon support (a cylinder of 70mm diameter to a cube of 100mm width)
-
-constexpr double pulse_per_mm = 9.986;              ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
-constexpr double wheels_distance = 2945.926;        ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
-constexpr double pulse_per_degree = 51.416;         ///< WHEELS_DISTANCE * 2 * PI / 360
+constexpr double pulse_per_mm = 94.821;             ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
+constexpr double wheels_distance_pulse = 18774.681; ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
+constexpr double pulse_per_degree = 327.68;         ///< WHEELS_DISTANCE * 2 * PI / 360
 /// @}
 
 /// @name Acceleration and speed profiles
 /// @{
 // Linear maximum speed and acceleration
-constexpr double platform_max_acc_m_per_s2 = 0.2;   ///< Maximum acceleration (m/s²)
+constexpr double platform_max_acc_m_per_s2 = 0.5;   ///< Maximum acceleration (m/s²)
 constexpr double platform_max_speed_m_per_s = 1.2;  ///< Maximum speed (m/s)
 constexpr double platform_max_acc_linear_mm_per_period2 = (
     (1000 * platform_max_acc_m_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
@@ -78,8 +75,8 @@ constexpr double platform_low_speed_linear_mm_per_period = (platform_max_speed_l
 constexpr double platform_normal_speed_linear_mm_per_period = (platform_max_speed_linear_mm_per_period / 2);  ///< Normal angular speed (deg/<motion_control_thread_period_ms>)
 
 // Angular maximum speed and acceleration
-constexpr double platform_max_acc_deg_per_s2 = 60;  ///< Maximum acceleration (deg/s²)
-constexpr double platform_max_speed_deg_per_s = 270; ///< Maximum speed (deg/s)
+constexpr double platform_max_acc_deg_per_s2 = 360;  ///< Maximum acceleration (deg/s²)
+constexpr double platform_max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
 constexpr double platform_max_acc_angular_deg_per_period2 = (
     (platform_max_acc_deg_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
@@ -117,7 +114,6 @@ void compute_current_speed_and_pose(
     cogip::cogip_defs::Polar &current_speed,    ///< [out]  robot current speed
     cogip::cogip_defs::Pose &current_pose       ///< [out]  robot current pose
     );
-
 
 /// Apply the given command to the motors
 void pf_motor_drive(
