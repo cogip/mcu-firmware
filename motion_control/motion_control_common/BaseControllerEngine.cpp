@@ -60,7 +60,7 @@ void BaseControllerEngine::start_thread() {
         controller_thread_stack,
         sizeof(controller_thread_stack),
         CONTROLLER_PRIO,
-        0,
+        THREAD_CREATE_STACKTEST,
         _start_thread,
         this,
         "Controller thread"
