@@ -33,6 +33,9 @@
 extern "C" {
 #endif
 
+/* Heartbeat LED */
+#define HEARTBEAT_LED   GPIO_PIN(1, 3)
+
 /* Starting switch */
 #define GPIO_STARTER    GPIO_PIN(1, 2)
 
