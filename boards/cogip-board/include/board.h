@@ -26,6 +26,9 @@
 extern "C" {
 #endif
 
+/* LEDs */
+#define HEARTBEAT_LED   GPIO_PIN(PORT_A, 5)
+
 /* Vacuum pumps */
 #define GPIO_VACUUM1_ENABLE GPIO_PIN(PORT_C, 13)
 #define GPIO_VACUUM1_TEST GPIO_PIN(PORT_C, 0)
