@@ -21,6 +21,7 @@
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 
+#include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
 #include "PB_Pid.hpp"
 #include "PB_State.hpp"
@@ -33,6 +34,7 @@ namespace motion_control {
 
 // Protobuf
 PB_Pose pb_pose;
+PB_Controller pb_controller;
 PB_State pb_state;
 PB_Pids<PID_COUNT> pb_pids;
 
@@ -324,6 +326,40 @@ static void _handle_new_pids_config(cogip::uartpb::ReadBuffer & buffer)
     angular_speed_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_SPEED_PID));
 }
 
+/// Handle controller change request
+static void _handle_set_controller(cogip::uartpb::ReadBuffer & buffer)
+{
+    pb_controller.clear();
+
+    EmbeddedProto::Error error = pb_controller.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Controller change request: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
+
+    // Change controller
+    std::cout << "Change to controller " << static_cast<uint32_t>(pb_controller.id()) << std::endl;
+    switch (static_cast<uint32_t>(pb_controller.id())) {
+    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
+        pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TEST):
+        pf_motion_control_platform_engine.set_controller(pf_linear_speed_controller_test);
+        pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(platform_max_speed_linear_mm_per_period, 0));
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TEST):
+        pf_motion_control_platform_engine.set_controller(pf_angular_speed_controller_test);
+        pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(0, platform_max_speed_angular_deg_per_period));
+        break;
+
+    default:
+        pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
+        break;
+    }
+}
+
 void pf_init_motion_control(void)
 {
     // Init motor driver
@@ -361,6 +397,12 @@ void pf_init_motion_control(void)
     pf_get_uartpb().register_message_handler(
         pid_uuid,
         cogip::uartpb::message_handler_t::create<_handle_new_pids_config>()
+    );
+
+    // Register new pids config
+    pf_get_uartpb().register_message_handler(
+        controller_uuid,
+        cogip::uartpb::message_handler_t::create<_handle_set_controller>()
     );
 }
 

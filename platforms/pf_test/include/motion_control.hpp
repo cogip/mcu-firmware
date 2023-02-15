@@ -29,6 +29,7 @@ constexpr cogip::uartpb::uuid_t start_pose_uuid = 2741980922;
 constexpr cogip::uartpb::uuid_t state_uuid = 3422642571;
 constexpr cogip::uartpb::uuid_t pid_uuid = 4159164681;
 constexpr cogip::uartpb::uuid_t pid_request_uuid = 3438831927;
+constexpr cogip::uartpb::uuid_t controller_uuid = 2750239003;
 
 constexpr uint16_t motion_control_thread_period_ms = 20;
 
