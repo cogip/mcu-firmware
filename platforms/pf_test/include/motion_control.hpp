@@ -48,18 +48,14 @@ constexpr uint16_t motion_control_thread_period_ms = 20;
 ///  - wheels_perimeter = pi*wheels_diameter
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
-///  - wheels_diameter = 60 mm
-///  - wheels_distance_mm = 280 mm
-///  - wheels_encoder_resolution = 2000
+///  - wheels_diameter = 55 mm
+///  - wheels_distance_mm = 198 mm
+///  - wheels_encoder_resolution = 4096 * 4 = 16384
 ///
 /// @{
-constexpr double robot_width = 333.54;              ///< Robot width (mm)
-constexpr double robot_margin = (robot_width / 2);  ///< Point the most far from robot center (mm)
-constexpr double beacon_support_diameter = 70;      ///< Size of the beacon support (a cylinder of 70mm diameter to a cube of 100mm width)
-
-constexpr double pulse_per_mm = 6.299;              ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
-constexpr double wheels_distance = 724.365 ;        ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
-constexpr double pulse_per_degree = 12.64;          ///< WHEELS_DISTANCE * 2 * PI / 360
+constexpr double pulse_per_mm = 94.821;             ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
+constexpr double wheels_distance_pulse = 18774.681; ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
+constexpr double pulse_per_degree = 327.68;         ///< WHEELS_DISTANCE * 2 * PI / 360
 /// @}
 
 /// @name Acceleration and speed profiles

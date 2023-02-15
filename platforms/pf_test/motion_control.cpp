@@ -340,7 +340,7 @@ void pf_init_motion_control(void)
     }
 
     // Init odometry
-    odometry_setup(wheels_distance / pulse_per_mm);
+    odometry_setup(wheels_distance_pulse / pulse_per_mm);
 
     //TODO: update
     //ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
