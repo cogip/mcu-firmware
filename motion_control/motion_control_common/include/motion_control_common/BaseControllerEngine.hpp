@@ -37,6 +37,9 @@ public:
     /// Return motion control current cycle
     uint32_t current_cycle() const { return current_cycle_; };
 
+    /// Get controller
+    BaseController* controller() const { return controller_; };
+
     /// Get pose reached flag
     /// return     true if pose reached
     target_pose_status_t pose_reached() const { return pose_reached_; };
