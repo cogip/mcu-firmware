@@ -22,6 +22,12 @@ namespace cogip {
 
 namespace motion_control {
 
+/// Status of a position to reach
+/// - reached:      the position has been reached
+/// - intermediate: a transient position has been reached
+/// - ongoing:      moving
+typedef enum {moving = 0, reached, intermediate_reached} target_pose_status_t;
+
 // Forward declarations
 class BaseMetaController;
 

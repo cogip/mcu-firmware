@@ -22,7 +22,7 @@ namespace motion_control {
 class BaseControllerEngine {
 public:
     /// Constructor
-    BaseControllerEngine() : controller_(nullptr), current_cycle_(0) {};
+    BaseControllerEngine() : controller_(nullptr), current_cycle_(0), pose_reached_(moving) {};
 
     /// Set the controller to launch.
     /// @param controller
@@ -41,6 +41,12 @@ public:
     /// return     true if pose reached
     target_pose_status_t pose_reached() const { return pose_reached_; };
 
+    /// Set pose reached flag
+    void set_pose_reached(
+        target_pose_status_t pose_reached       ///< [in]   pose reached flag
+        ) { pose_reached_ = pose_reached; };
+
+
 protected:
     /// Prepare controller inputs from platform functions.
     virtual void prepare_inputs() = 0;
@@ -53,6 +59,9 @@ protected:
 
     /// Current motion control cycle
     uint32_t current_cycle_;
+
+    /// Pose reached flag
+    target_pose_status_t pose_reached_;
 };
 
 } // namespace motion_control
