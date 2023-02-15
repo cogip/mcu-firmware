@@ -43,7 +43,7 @@ public:
             return;
         }
         if (this->back()->nb_outputs() != OUTPUT_SIZE) {
-            COGIP_DEBUG_CERR("Error: First controller must have the same number of inputs (" << this->back()->nb_inputs() << ") "
+            COGIP_DEBUG_CERR("Error: First controller must have the same number of outputs (" << this->back()->nb_inputs() << ") "
                       << "as the last controller (" << this->back()->nb_inputs() << ").");
             return;
         }
@@ -83,7 +83,7 @@ public:
             return;
         }
         if (this->empty() && INPUT_SIZE != ctrl->nb_inputs()) {
-            COGIP_DEBUG_COUT("Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ").");
+            COGIP_DEBUG_CERR("Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ").");
             return;
         }
         this->push_back(ctrl);
