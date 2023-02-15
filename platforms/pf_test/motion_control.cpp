@@ -9,6 +9,8 @@
 #include "path/Pose.hpp"
 #include "platform.hpp"
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
+#include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
+#include "passthrough_pose_pid_controller/PassthroughPosePIDControllerParameters.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
@@ -38,8 +40,13 @@ PB_Controller pb_controller;
 PB_State pb_state;
 PB_Pids<PID_COUNT> pb_pids;
 
+// PID tuning period
+constexpr uint16_t motion_control_pid_tuning_period_ms = 3000;
+
 // Motion controllers
 static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller;
+static cogip::motion_control::QuadPIDMetaController* pf_linear_speed_controller_test;
+static cogip::motion_control::QuadPIDMetaController* pf_angular_speed_controller_test;
 // Motion control engine
 static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
         cogip::motion_control::platform_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose>(),
@@ -74,14 +81,17 @@ static cogip::pid::PID angular_speed_pid(
     angular_speed_pid_kd,
     angular_speed_pid_integral_limit
     );
-
+// PID null
+static cogip::pid::PID null_pid(0, 0, 0, 0);
 
 /// Initialize platform QuadPID meta controller
 /// Return initialized QuadPID meta controller
 static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_init(void) {
     // Filter controller behavior to always moves in a straight line
-    static cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters = cogip::motion_control::PoseStraightFilterParameters(2, 2);
-    static cogip::motion_control::PoseStraightFilter pose_straight_filter = cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);
+    static cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters =
+        cogip::motion_control::PoseStraightFilterParameters(linear_treshold, angular_treshold);
+    static cogip::motion_control::PoseStraightFilter pose_straight_filter =
+        cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);
     std::cout << "PoseStraightFilter created" << std::endl;
 
     // Split angular and linear controls
@@ -121,6 +131,134 @@ static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_
     static cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(
         platform_max_speed_angular_deg_per_period,
         platform_max_acc_angular_deg_per_period2
+        );
+    static cogip::motion_control::SpeedFilter angular_speed_filter(&angular_speed_filter_parameters);
+    angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
+    std::cout << "SpeedFilter created and added to AngularDualPIDMetaController" << std::endl;
+    static cogip::motion_control::SpeedPIDControllerParameters angular_speed_controller_parameters(&angular_speed_pid);
+    static cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters);
+    angular_dualpid_meta_controller.add_controller(&angular_speed_controller);
+    std::cout << "SpeedPIDController created and added to AngularDualPIDMetaController" << std::endl;
+
+    // Quad PID meta controller
+    static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
+    quadpid_meta_controller.add_controller(&pose_straight_filter);
+    quadpid_meta_controller.add_controller(&polar_parallel_meta_controller);
+
+    return &quadpid_meta_controller;
+}
+
+/// Initialize platform QuadPID meta controller
+/// Return initialized QuadPID meta controller
+static cogip::motion_control::QuadPIDMetaController* pf_linear_speed_controller_test_init(void) {
+    // Filter controller behavior to always moves in a straight line
+    static cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters =
+        cogip::motion_control::PoseStraightFilterParameters(linear_treshold, angular_treshold);
+    static cogip::motion_control::PoseStraightFilter pose_straight_filter =
+        cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);
+    std::cout << "PoseStraightFilter created" << std::endl;
+
+    // Split angular and linear controls
+    static cogip::motion_control::PolarParallelMetaController polar_parallel_meta_controller;
+    std::cout << "PolarParallelMetaController created" << std::endl;
+
+    // Linear dual PID meta controller
+    static cogip::motion_control::DualPIDMetaController linear_dualpid_meta_controller;
+    polar_parallel_meta_controller.add_controller(&linear_dualpid_meta_controller);
+    std::cout << "LinearDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
+    static cogip::motion_control::PassthroughPosePIDControllerParameters linear_position_controller_parameters(&linear_pose_pid);
+    static cogip::motion_control::PassthroughPosePIDController linear_position_controller(&linear_position_controller_parameters);
+    linear_dualpid_meta_controller.add_controller(&linear_position_controller);
+    std::cout << "PosePIDController created and added to LinearDualPIDMetaController" << std::endl;
+    // Linear speed filter
+    static cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
+        UINT16_MAX,
+        UINT16_MAX
+        );
+    static cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters);
+    linear_dualpid_meta_controller.add_controller(&linear_speed_filter);
+    std::cout << "SpeedFilter created and added to LinearDualPIDMetaController" << std::endl;
+    static cogip::motion_control::SpeedPIDControllerParameters linear_speed_controller_parameters(&linear_speed_pid);
+    static cogip::motion_control::SpeedPIDController linear_speed_controller(&linear_speed_controller_parameters);
+    linear_dualpid_meta_controller.add_controller(&linear_speed_controller);
+    std::cout << "SpeedPIDController created and added to LinearDualPIDMetaController" << std::endl;
+
+    // Angular dual PID meta controller
+    static cogip::motion_control::DualPIDMetaController angular_dualpid_meta_controller;
+    polar_parallel_meta_controller.add_controller(&angular_dualpid_meta_controller);
+    std::cout << "AngularDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
+    static cogip::motion_control::PassthroughPosePIDControllerParameters angular_position_controller_parameters(&null_pid);
+    static cogip::motion_control::PassthroughPosePIDController angular_position_controller(&angular_position_controller_parameters);
+    angular_dualpid_meta_controller.add_controller(&angular_position_controller);
+    std::cout << "PosePIDController created and added to AngularDualPIDMetaController" << std::endl;
+    // Angular speed filter
+    static cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(
+        0,
+        0
+        );
+    static cogip::motion_control::SpeedFilter angular_speed_filter(&angular_speed_filter_parameters);
+    angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
+    std::cout << "SpeedFilter created and added to AngularDualPIDMetaController" << std::endl;
+    static cogip::motion_control::SpeedPIDControllerParameters angular_speed_controller_parameters(&null_pid);
+    static cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters);
+    angular_dualpid_meta_controller.add_controller(&angular_speed_controller);
+    std::cout << "SpeedPIDController created and added to AngularDualPIDMetaController" << std::endl;
+
+    // Quad PID meta controller
+    static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
+    quadpid_meta_controller.add_controller(&pose_straight_filter);
+    quadpid_meta_controller.add_controller(&polar_parallel_meta_controller);
+
+    return &quadpid_meta_controller;
+}
+
+/// Initialize platform QuadPID meta controller
+/// Return initialized QuadPID meta controller
+static cogip::motion_control::QuadPIDMetaController* pf_angular_speed_controller_test_init(void) {
+    // Filter controller behavior to always moves in a straight line
+    static cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters =
+        cogip::motion_control::PoseStraightFilterParameters(linear_treshold, angular_treshold);
+    static cogip::motion_control::PoseStraightFilter pose_straight_filter =
+        cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);
+    std::cout << "PoseStraightFilter created" << std::endl;
+
+    // Split angular and linear controls
+    static cogip::motion_control::PolarParallelMetaController polar_parallel_meta_controller;
+    std::cout << "PolarParallelMetaController created" << std::endl;
+
+    // Linear dual PID meta controller
+    static cogip::motion_control::DualPIDMetaController linear_dualpid_meta_controller;
+    polar_parallel_meta_controller.add_controller(&linear_dualpid_meta_controller);
+    std::cout << "LinearDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
+    static cogip::motion_control::PassthroughPosePIDControllerParameters linear_position_controller_parameters(&linear_pose_pid);
+    static cogip::motion_control::PassthroughPosePIDController linear_position_controller(&linear_position_controller_parameters);
+    linear_dualpid_meta_controller.add_controller(&linear_position_controller);
+    std::cout << "PosePIDController created and added to LinearDualPIDMetaController" << std::endl;
+    // Linear speed filter
+    static cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
+        0,
+        0
+        );
+    static cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters);
+    linear_dualpid_meta_controller.add_controller(&linear_speed_filter);
+    std::cout << "SpeedFilter created and added to LinearDualPIDMetaController" << std::endl;
+    static cogip::motion_control::SpeedPIDControllerParameters linear_speed_controller_parameters(&null_pid);
+    static cogip::motion_control::SpeedPIDController linear_speed_controller(&linear_speed_controller_parameters);
+    linear_dualpid_meta_controller.add_controller(&linear_speed_controller);
+    std::cout << "SpeedPIDController created and added to LinearDualPIDMetaController" << std::endl;
+
+    // Angular dual PID meta controller
+    static cogip::motion_control::DualPIDMetaController angular_dualpid_meta_controller;
+    polar_parallel_meta_controller.add_controller(&angular_dualpid_meta_controller);
+    std::cout << "AngularDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
+    static cogip::motion_control::PassthroughPosePIDControllerParameters angular_position_controller_parameters(&angular_pose_pid);
+    static cogip::motion_control::PassthroughPosePIDController angular_position_controller(&angular_position_controller_parameters);
+    angular_dualpid_meta_controller.add_controller(&angular_position_controller);
+    std::cout << "PosePIDController created and added to AngularDualPIDMetaController" << std::endl;
+    // Angular speed filter
+    static cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(
+        UINT16_MAX,
+        UINT16_MAX
         );
     static cogip::motion_control::SpeedFilter angular_speed_filter(&angular_speed_filter_parameters);
     angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
@@ -203,6 +341,7 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
         std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
         return;
     }
+
     cogip::path::Pose pose_to_reach;
     pose_to_reach.pb_read(pb_pose_to_reach);
     cogip::cogip_defs::Pose pose(pose_to_reach.x(), pose_to_reach.y(), pose_to_reach.O());
@@ -263,13 +402,21 @@ void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cog
 
 void pf_motor_drive(const cogip::cogip_defs::Polar &command)
 {
-    int16_t right_command = 0;
-    int16_t left_command = 0;
+    if (pf_motion_control_platform_engine.controller() == static_cast<cogip::motion_control::BaseController *>(pf_angular_speed_controller_test)) {
+        static uint32_t last_cycle = 0;
+        if (pf_motion_control_platform_engine.current_cycle() - last_cycle >= (motion_control_pid_tuning_period_ms/motion_control_thread_period_ms)) {
+            pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
+            last_cycle = pf_motion_control_platform_engine.current_cycle();
+        }
+        else {
+            pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
+        }
+    }
 
     if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::moving) {
         // Compute motor commands with Polar motion control result
-        right_command = (int16_t) (command.distance() + command.angle());
-        left_command = (int16_t) (command.distance() - command.angle());
+        int16_t right_command = (int16_t) (command.distance() + command.angle());
+        int16_t left_command = (int16_t) (command.distance() - command.angle());
 
         // Apply motor commands
         motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
@@ -383,6 +530,8 @@ void pf_init_motion_control(void)
 
     // Init controllers
     pf_quadpid_meta_controller = pf_quadpid_meta_controller_init();
+    pf_linear_speed_controller_test = pf_linear_speed_controller_test_init();
+    pf_angular_speed_controller_test = pf_angular_speed_controller_test_init();
 
     // Associate a controller to the engine
     pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
