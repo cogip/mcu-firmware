@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "platform.hpp"
+#include "motion_control.hpp"
 
 #include "PB_SpeedEnum.hpp"
 
@@ -16,8 +16,8 @@ Pose::Pose(
     bool allow_reverse, func_cb_t act_
     ) : cogip_defs::Pose(x, y, O), allow_reverse_(allow_reverse), act_(act_)
 {
-    max_speed_linear_ =  std::min(max_speed_linear, (double)MAX_SPEED_LINEAR);
-    max_speed_angular_ = std::min(max_speed_angular, (double)MAX_SPEED_ANGULAR);
+    max_speed_linear_ =  std::min(max_speed_linear, (double)max_speed_linear);
+    max_speed_angular_ = std::min(max_speed_angular, (double)max_speed_angular);
 }
 
 void Pose::pb_read(const PB_PathPose &path_pose)
@@ -31,27 +31,27 @@ void Pose::pb_read(const PB_PathPose &path_pose)
     double speed_order = 0;
     switch (path_pose.get_max_speed_linear_enum()) {
         case PB_SpeedEnum::LOW:
-            speed_order = LOW_SPEED_LINEAR;
+            speed_order = cogip::pf::motion_control::platform_low_speed_linear_mm_per_period;
             break;
         case PB_SpeedEnum::MAX:
-            speed_order = MAX_SPEED_LINEAR;
+            speed_order = cogip::pf::motion_control::platform_max_speed_linear_mm_per_period;
             break;
         case PB_SpeedEnum::NORMAL:
         default:
-            speed_order =  NORMAL_SPEED_LINEAR;
+            speed_order =  cogip::pf::motion_control::platform_normal_speed_linear_mm_per_period;
     }
     max_speed_linear_ = speed_order;
 
     switch (path_pose.get_max_speed_angular_enum()) {
         case PB_SpeedEnum::LOW:
-            speed_order =  LOW_SPEED_ANGULAR;
+            speed_order =  cogip::pf::motion_control::platform_low_speed_angular_deg_per_period;
             break;
         case PB_SpeedEnum::MAX:
-            speed_order =  MAX_SPEED_ANGULAR;
+            speed_order =  cogip::pf::motion_control::platform_max_speed_angular_deg_per_period;
             break;
         case PB_SpeedEnum::NORMAL:
         default:
-            speed_order =  NORMAL_SPEED_ANGULAR;
+            speed_order =  cogip::pf::motion_control::platform_normal_speed_angular_deg_per_period;
     }
     max_speed_angular_ = speed_order;
 }
@@ -63,20 +63,20 @@ void Pose::pb_copy(PB_PathPose &path_pose) const {
     pose.set_O(O_);
     path_pose.set_allow_reverse(allow_reverse_);
 
-    if (max_speed_linear_ == LOW_SPEED_LINEAR) {
+    if (max_speed_linear_ == cogip::pf::motion_control::platform_low_speed_linear_mm_per_period) {
         path_pose.set_max_speed_linear_enum(PB_SpeedEnum::LOW);
     }
-    else if (max_speed_linear_ == MAX_SPEED_LINEAR) {
+    else if (max_speed_linear_ == cogip::pf::motion_control::platform_max_speed_linear_mm_per_period) {
         path_pose.set_max_speed_linear_enum(PB_SpeedEnum::MAX);
     }
     else {
         path_pose.set_max_speed_linear_enum(PB_SpeedEnum::NORMAL);
     }
 
-    if (max_speed_angular_ == LOW_SPEED_ANGULAR) {
+    if (max_speed_angular_ == cogip::pf::motion_control::platform_low_speed_angular_deg_per_period) {
         path_pose.set_max_speed_angular_enum(PB_SpeedEnum::LOW);
     }
-    else if (max_speed_angular_ == MAX_SPEED_ANGULAR) {
+    else if (max_speed_angular_ == cogip::pf::motion_control::platform_max_speed_angular_deg_per_period) {
         path_pose.set_max_speed_angular_enum(PB_SpeedEnum::MAX);
     }
     else {

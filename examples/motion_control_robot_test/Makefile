@@ -2,6 +2,7 @@ APPLICATION = controller_robot_test
 
 BOARD ?= cogip-native
 
+# Motion control
 USEMODULE += dualpid_meta_controller
 USEMODULE += pid_ng
 USEMODULE += platform_engine
@@ -11,13 +12,16 @@ USEMODULE += pose_straight_filter
 USEMODULE += quadpid_meta_controller
 USEMODULE += speed_pid_controller
 USEMODULE += speed_filter
-USEMODULE += pid_ng
 
 # Shell
 USEMODULE += ps
 USEMODULE += shell
 USEMODULE += shell_commands
 
+# Misc
+USEMODULE += utils
+
+# Embedded Template Library
 USEPKG += etl
 
 include ../../Makefile.include

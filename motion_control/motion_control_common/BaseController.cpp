@@ -1,4 +1,6 @@
+// Project includes
 #include "motion_control_common/BaseController.hpp"
+#include "utils.hpp"
 
 namespace cogip {
 
@@ -6,7 +8,7 @@ namespace motion_control {
 
 bool BaseController::set_meta(BaseMetaController *meta) {
     if (meta_) {
-        std::cout << "Error: Controller already associated to a MetaController." << std::endl;
+        COGIP_DEBUG_COUT("Error: Controller already associated to a MetaController.");
         return false;
     }
     meta_ = meta;
@@ -15,7 +17,7 @@ bool BaseController::set_meta(BaseMetaController *meta) {
 
 bool BaseController::is_index_valid(size_t index) {
     if (index != nb_inputs()) {
-       std::cerr << "Wrong number of inputs, " << index << " given, " << nb_inputs() << " expected." << std::endl;
+       COGIP_DEBUG_CERR("Wrong number of inputs, " << index << " given, " << nb_inputs() << " expected.");
 
        return false;
     }

@@ -7,7 +7,7 @@
 #include <ztimer.h>
 
 #ifndef CONTROLLER_PERIOD_USEC
-    #define CONTROLLER_PERIOD_USEC (10 * US_PER_MS)
+    #define CONTROLLER_PERIOD_USEC (20 * US_PER_MS)
 #endif
 
 namespace cogip {
@@ -19,7 +19,7 @@ static char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 
 static void *_start_thread(void *arg)
 {
-    std::cout << "Engine start thread" << std::endl;
+    COGIP_DEBUG_COUT("Engine start thread");
     ((BaseControllerEngine *)arg)->thread_loop();
     return EXIT_SUCCESS;
 }
@@ -33,17 +33,22 @@ void BaseControllerEngine::thread_loop() {
     ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
 
     while (true) {
-        std::cout << "PlatformEngine loop" << std::endl;
+        COGIP_DEBUG_COUT("Engine loop");
 
-        // Set controller inputs
-        prepare_inputs();
+        if (pose_reached_ != reached) {
+            // Set controller inputs
+            prepare_inputs();
 
-        if (controller_) {
-            controller_->execute();
+            if (controller_) {
+                controller_->execute();
+            }
+
+            // Process controller outputs
+            process_outputs();
+
+            // Next cycle
+            current_cycle_++;
         }
-
-        // Process controller outputs
-        process_outputs();
 
         // Wait thread period to end
         thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, CONTROLLER_PERIOD_USEC);
@@ -55,7 +60,7 @@ void BaseControllerEngine::start_thread() {
         controller_thread_stack,
         sizeof(controller_thread_stack),
         CONTROLLER_PRIO,
-        0,
+        THREAD_CREATE_STACKTEST,
         _start_thread,
         this,
         "Controller thread"

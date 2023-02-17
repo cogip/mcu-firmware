@@ -6,9 +6,6 @@
 
 void app_init(void)
 {
-    /* Init quadpid controller */
-    pf_init_quadpid_params(ctrl_quadpid_params);
-
     /* Init shell commands */
     cogip::app::arms::shell_init();
 }

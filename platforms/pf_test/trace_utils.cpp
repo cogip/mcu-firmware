@@ -4,6 +4,7 @@
 #include <ztimer.h>
 
 // Application includes
+#include "motion_control.hpp"
 #include "platform.hpp"
 #include "thread/thread.hpp"
 
@@ -28,7 +29,7 @@ static void *_thread_pose(void *arg)
 
     while (true) {
         if (pf_trace_on()) {
-            pf_send_pb_pose();
+            cogip::pf::motion_control::pf_send_pb_pose();
         }
 
         // Wait thread period to end
@@ -47,7 +48,7 @@ static void *_thread_state(void *arg)
 
     while (true) {
         if (pf_trace_on()) {
-            pf_send_pb_state();
+            cogip::pf::motion_control::pf_send_pb_state();
         }
 
         // Wait thread period to end
@@ -76,7 +77,7 @@ void trace_start(void)
         pose_thread_stack,
         sizeof(pose_thread_stack),
         TRACE_PRIO,
-        0,
+        THREAD_CREATE_STACKTEST,
         _thread_pose,
         NULL,
         "Pose thread"

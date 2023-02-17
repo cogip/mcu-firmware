@@ -33,6 +33,9 @@
 extern "C" {
 #endif
 
+/* Heartbeat LED */
+#define HEARTBEAT_LED   GPIO_PIN(1, 3)
+
 /* Starting switch */
 #define GPIO_STARTER    GPIO_PIN(1, 2)
 
@@ -70,7 +73,7 @@ static const motor_driver_config_t motor_driver_config[] = {
         .pwm_mode = PWM_LEFT,
         .pwm_frequency = 20000U,
         .pwm_resolution = 1000U,
-        .nb_motors = 1,
+        .nb_motors = 2,
         .motors = {
             {
                 .pwm_channel = 0,
@@ -81,18 +84,6 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_enable_invert = 0,
                 .gpio_brake_invert = 0,
             },
-        },
-        .cb = cogip_native_motor_driver_qdec_simulation,
-    },
-    {
-        .pwm_dev = 1,
-        .mode = MOTOR_DRIVER_1_DIR_BRAKE,
-        .mode_brake = MOTOR_BRAKE_LOW,
-        .pwm_mode = PWM_LEFT,
-        .pwm_frequency = 20000U,
-        .pwm_resolution = 1000U,
-        .nb_motors = 1,
-        .motors = {
             {
                 .pwm_channel = 1,
                 .gpio_enable = GPIO_PIN(0, 0),

@@ -22,34 +22,29 @@
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 
 
-void robot_speeds(cogip::cogip_defs::Polar& speed_current,
-    cogip::cogip_defs::Polar& speed_target)
-{
-    static double i = 0;
-
-    speed_current.set_distance(i++);
-    speed_current.set_angle(i++);
-    speed_target.set_distance(i++);
-    speed_target.set_angle(i++);
-}
-
-void robot_poses(cogip::cogip_defs::Pose& pose_current,
-    cogip::cogip_defs::Pose& pose_target)
+void compute_current_speed_and_pose(cogip::cogip_defs::Polar& speed_current,
+    cogip::cogip_defs::Pose& pose_current)
 {
     static uint32_t i = 0;
 
+    speed_current.set_distance(i++);
+    speed_current.set_angle(i++);
     pose_current.set_x(i++);
     pose_current.set_y(i++);
     pose_current.set_O(i++);
-    pose_target.set_x(i++);
-    pose_target.set_y(i++);
-    pose_target.set_O(i++);
 }
 
-cogip::motion_control::PlatformEngine engine(
-    cogip::motion_control::platform_get_poses_cb_t::create<robot_poses>(),
-    cogip::motion_control::platform_get_speeds_cb_t::create<robot_speeds>()
+void process_commands(const cogip::cogip_defs::Polar& output)
+{
+    (void)output;
+}
+
+// Motion control engine
+static cogip::motion_control::PlatformEngine motion_control_platform_engine(
+        cogip::motion_control::platform_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose>(),
+        cogip::motion_control::platform_process_commands_cb_t::create<process_commands>()
 );
+
 
 int main(void)
 {
@@ -113,10 +108,10 @@ int main(void)
     quadpid_meta_controller.add_controller(&pose_straight_filter);
     quadpid_meta_controller.add_controller(&polar_parallel_meta_controller);
 
-    engine.set_controller(&quadpid_meta_controller);
+    motion_control_platform_engine.set_controller(&quadpid_meta_controller);
 
     puts("\n== Start thread with current controller ==");
-    engine.start_thread();
+    motion_control_platform_engine.start_thread();
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);

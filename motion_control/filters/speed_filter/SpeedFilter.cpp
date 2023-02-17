@@ -48,7 +48,7 @@ static double limit_speed_order(
 }
 
 void SpeedFilter::execute() {
-    std::cout << "Execute SpeedFilter" << std::endl;
+    COGIP_DEBUG_COUT("Execute SpeedFilter");
 
     // Speed order
     double speed_order = this->inputs_[0];

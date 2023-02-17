@@ -29,6 +29,9 @@
 extern "C" {
 #endif
 
+/* LEDs */
+#define HEARTBEAT_LED   GPIO_PIN(PORT_A, 5)
+
 /* Motors */
 #define MOTOR_LEFT  0
 #define MOTOR_RIGHT 1

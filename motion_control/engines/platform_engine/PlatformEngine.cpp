@@ -20,33 +20,44 @@ void PlatformEngine::prepare_inputs() {
     size_t index = 0;
 
     // Update current pose and speed
-    platform_get_poses_cb_(this->current_pose_, this->target_pose_);
-    platform_get_speeds_cb_(this->current_speed_, this->target_speed_);
+    platform_get_speed_and_pose_cb_(current_speed_, current_pose_);
 
     // Current pose
-    controller_->set_input(index++, this->current_pose_.x());
-    controller_->set_input(index++, this->current_pose_.y());
-    controller_->set_input(index++, this->current_pose_.O());
+    controller_->set_input(index++, current_pose_.x());
+    controller_->set_input(index++, current_pose_.y());
+    controller_->set_input(index++, current_pose_.O());
 
     // Target pose
-    controller_->set_input(index++, this->target_pose_.x());
-    controller_->set_input(index++, this->target_pose_.y());
-    controller_->set_input(index++, this->target_pose_.O());
+    controller_->set_input(index++, target_pose_.x());
+    controller_->set_input(index++, target_pose_.y());
+    controller_->set_input(index++, target_pose_.O());
 
     // Current speed
-    controller_->set_input(index++, this->current_speed_.distance());
-    controller_->set_input(index++, this->current_speed_.angle());
+    controller_->set_input(index++, current_speed_.distance());
+    controller_->set_input(index++, current_speed_.angle());
 
     // Target speed
-    controller_->set_input(index++, this->target_speed_.distance());
-    controller_->set_input(index++, this->target_speed_.angle());
+    controller_->set_input(index++, target_speed_.distance());
+    controller_->set_input(index++, target_speed_.angle());
+
+    // Allow reverse
+    controller_->set_input(index++, allow_reverse_);
 
     if (index != controller_->nb_inputs()) {
-        std::cerr << "Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected." << std::endl;
+        COGIP_DEBUG_CERR("PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.");
     }
 };
 
 void PlatformEngine::process_outputs() {
+    // Pose reached. Double cast is necessary to avoid imprecision in mantiss.
+    pose_reached_ = (target_pose_status_t)controller_->output(2);
+
+    cogip_defs::Polar command(
+        controller_->output(0),
+        controller_->output(1)
+    );
+
+    platform_process_commands_cb_(command);
 };
 
 } // namespace motion_control

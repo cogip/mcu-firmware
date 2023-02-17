@@ -18,14 +18,14 @@ namespace cogip {
 namespace motion_control {
 
 void PoseStraightFilter::execute() {
-    std::cout << "Execute PoseStraightFilter" << std::endl;
+    COGIP_DEBUG_COUT("Execute PoseStraightFilter");
 
     size_t input_index = 0;
 
     // Current pose
-    double current_pose_x = this->inputs_[input_index++];
-    double current_pose_y = this->inputs_[input_index++];
-    double current_pose_O = this->inputs_[input_index++];
+    double current_pose_x = inputs_[input_index++];
+    double current_pose_y = inputs_[input_index++];
+    double current_pose_O = inputs_[input_index++];
     cogip_defs::Pose current_pose(
         current_pose_x,
         current_pose_y,
@@ -58,18 +58,27 @@ void PoseStraightFilter::execute() {
         target_angular_speed
     );
 
+    // Allow moving reversely
+    bool allow_reverse = (bool)inputs_[input_index++];
+
     if (!is_index_valid(input_index)) {
         return;
     }
 
-    // Allow moving reversely
-    bool allow_reverse = this->inputs_[10];
+    // Position reached flag
+    target_pose_status_t pose_reached = target_pose_status_t::moving;
 
     // compute position error
     cogip_defs::Polar pos_err = target_pose - current_pose;
 
-    // position correction */
+    // Transition between straight move and final orientation
+    static bool transition_straight_to_rotate = false;
+
+    // position correction
     if (fabs(pos_err.distance()) > parameters_->linear_treshold()) {
+        // Transition between orientation to the point and straight move
+        static bool transition_rotate_to_straight = false;
+
         // go reverse ? */
         if (allow_reverse && fabs(pos_err.angle()) > 90) {
             pos_err.reverse();
@@ -77,36 +86,50 @@ void PoseStraightFilter::execute() {
 
         // if target point direction angle is too important, bot rotates on its starting point
         if (fabs(pos_err.angle()) > parameters_->angular_treshold()) {
+            transition_rotate_to_straight = true;
             pos_err.set_distance(0);
+        }
+        else if (transition_rotate_to_straight) {
+            pose_reached = target_pose_status_t::intermediate_reached;
+            transition_rotate_to_straight = false;
+            transition_straight_to_rotate = true;
         }
     }
     else {
+        if (transition_straight_to_rotate) {
+            pose_reached = target_pose_status_t::intermediate_reached;
+            transition_straight_to_rotate = false;
+        }
+
         // orientation correction only (position is reached)
         pos_err.set_distance(0);
 
         // final orientation error
-        // TODO: should not be necessary, already done in 'pos_err = target_pose - current_pose'
-        //pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+        pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
 
         // orientation is reached
         if (fabs(pos_err.angle()) < parameters_->angular_treshold()) {
+            pose_reached = target_pose_status_t::reached;
             pos_err.set_angle(0);
         }
     }
 
     // Linear pose error
-    this->outputs_[0] = pos_err.distance();
+    outputs_[0] = pos_err.distance();
     // Linear current speed
-    this->outputs_[1] = current_speed.distance();
+    outputs_[1] = current_speed.distance();
     // Linear target speed
-    this->outputs_[2] = target_speed.distance();
+    outputs_[2] = target_speed.distance();
 
     // Angular pose error
-    this->outputs_[3] = pos_err.angle();
+    outputs_[3] = pos_err.angle();
     // Angular current speed
-    this->outputs_[4] = current_speed.angle();
+    outputs_[4] = current_speed.angle();
     // Angular target speed
-    this->outputs_[5] = target_speed.angle();
+    outputs_[5] = target_speed.angle();
+
+    // Pose reached
+    outputs_[6] = (double)pose_reached;
 };
 
 } // namespace motion_control

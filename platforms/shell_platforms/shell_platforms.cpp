@@ -13,25 +13,18 @@
 
 /* Project includes */
 #include "board.h"
+#include "motion_control.hpp"
 #include "platform.hpp"
-#include "ctrl.hpp"
 #include "shell_menu/shell_menu.hpp"
 #include "shell_platforms.hpp"
 #include "utils.hpp"
-
-/* Enable or disable debug for this file only */
-#define ENABLE_DEBUG        (0)
-#include "debug.h"
-
-/* Controller */
-static ctrl_t *ctrl = NULL;
 
 static int _cmd_print_state_cb(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
 
-    pf_print_state();
+    cogip::pf::motion_control::pf_print_state();
 
     return EXIT_SUCCESS;
 }
@@ -43,8 +36,6 @@ static int _cmd_motors_test_cb(int argc, char **argv)
 
     int nb_motors = 0;
 
-    ctrl_set_mode(ctrl, CTRL_MODE_IDLE);
-
     for (motor_driver_t i = 0; i < MOTOR_DRIVER_NUMOF; i++) {
         int nb_motors_tmp = motor_driver_config[i].nb_motors;
         int pwm_resolution = motor_driver_config[i].pwm_resolution;
@@ -54,49 +45,49 @@ static int _cmd_motors_test_cb(int argc, char **argv)
             int32_t qdec_value = 0;
             int timeout = 3000;
 
-            COGIP_DEBUG_COUT("### Testing motor " << j << " of motor driver " << i);
+            std::cout << "### Testing motor " << j << " of motor driver " << i << std::endl;
 
             /* Reset qdec */
             qdec_read_and_reset(QDEC_DEV(nb_motors + j));
 
             /* Forward */
-            COGIP_DEBUG_COUT("    Forward move");
-            motor_set(i, j, pwm_resolution / 4);
+            std::cout << "    Forward move" << std::endl;
+            motor_set(i, j, pwm_resolution);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 ztimer_sleep(ZTIMER_MSEC, 1);
             }
-            COGIP_DEBUG_COUT("    qdec value = " << qdec_value);
-            COGIP_DEBUG_COUT("    Done");
+            std::cout << "    qdec value = " << qdec_value;
+            std::cout << "    Done" << std::endl;
 
             /* Stop */
             timeout = 3000;
             qdec_value = 0;
-            COGIP_DEBUG_COUT("    Stop");
-            motor_set(i, j, 0);
+            std::cout << "    Stop" << std::endl;
+            motor_brake(i, j);
             ztimer_sleep(ZTIMER_SEC, 3);
-            COGIP_DEBUG_COUT("    Done");
+            std::cout << "    Done" << std::endl;
 
             /* Backward */
-            COGIP_DEBUG_COUT("    Backward move");
-            motor_set(i, j, -pwm_resolution / 4);
+            std::cout << "    Backward move" << std::endl;
+            motor_set(i, j, -pwm_resolution);
             while (timeout--) {
                 qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 ztimer_sleep(ZTIMER_MSEC, 1);
             }
-            COGIP_DEBUG_COUT("    qdec value = " << qdec_value);
-            COGIP_DEBUG_COUT("    Done");
+            std::cout << "    qdec value = " << qdec_value;
+            std::cout << "    Done" << std::endl;
 
             /* Stop */
-            COGIP_DEBUG_COUT("    Stop");
-            motor_set(i, j, 0);
-            COGIP_DEBUG_COUT("    Done");
+            std::cout << "    Stop" << std::endl;
+            motor_brake(i, j);
+            std::cout << "    Done" << std::endl;
+
+            ztimer_sleep(ZTIMER_SEC, 2);
         }
 
         nb_motors += nb_motors_tmp;
     }
-
-    ctrl_set_mode(ctrl, CTRL_MODE_STOP);
 
     return EXIT_SUCCESS;
 }
@@ -108,8 +99,6 @@ static cogip::shell::Command _cmd_motors_test = { "mt", "Test all DC motors", _c
 
 void pf_shell_init(void)
 {
-    ctrl = pf_get_ctrl();
-
     /* Global commands */
     cogip::shell::add_global_command(&_cmd_print_state);
 

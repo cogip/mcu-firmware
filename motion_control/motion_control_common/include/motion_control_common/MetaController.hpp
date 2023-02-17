@@ -39,16 +39,16 @@ public:
     /// Controller core method. Meta controller executes all sub-controllers in chain.
     void execute() override {
         if (this->empty()) {
-            std::cerr << "Error: no controller added." << std::endl;
+            COGIP_DEBUG_CERR("Error: no controller added.");
             return;
         }
         if (this->back()->nb_outputs() != OUTPUT_SIZE) {
-            std::cerr << "Error: First controller must have the same number of inputs (" << this->back()->nb_inputs() << ") "
-                      << "as the last controller (" << this->back()->nb_inputs() << ")." << std::endl;
+            COGIP_DEBUG_CERR("Error: First controller must have the same number of outputs (" << this->back()->nb_inputs() << ") "
+                      << "as the last controller (" << this->back()->nb_inputs() << ").");
             return;
         }
 
-        std::cout << "Execute MetaController" << std::endl;
+        COGIP_DEBUG_COUT("Execute MetaController");
 
         // Execute each controller in chain.
         BaseController *previous = nullptr;
@@ -83,8 +83,7 @@ public:
             return;
         }
         if (this->empty() && INPUT_SIZE != ctrl->nb_inputs()) {
-            std::cout << "Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") "
-                         "as the meta controller (" << INPUT_SIZE << ")." << std::endl;
+            COGIP_DEBUG_CERR("Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ").");
             return;
         }
         this->push_back(ctrl);

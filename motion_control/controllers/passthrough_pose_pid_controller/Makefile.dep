@@ -1,0 +1,2 @@
+USEMODULE += motion_control_common
+USEMODULE += pid_ng

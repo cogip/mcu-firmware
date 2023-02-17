@@ -24,9 +24,11 @@ namespace motion_control {
 /// Input 3-5:  target pose
 /// Input 6-7:  current speed
 /// Input 8-9:  target speed
+/// Input 10:   allow reverse
 /// Output 0:   linear motor command
 /// Output 1:   angular motor command
-class QuadPIDMetaController: public MetaController <10, 2, 2> {};
+/// Output 2:   pose_reached
+class QuadPIDMetaController: public MetaController <11, 3, 2> {};
 
 } // namespace motion_control
 
