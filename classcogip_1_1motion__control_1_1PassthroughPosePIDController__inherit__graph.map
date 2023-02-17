@@ -1,0 +1,5 @@
+<map id="cogip::motion_control::PassthroughPosePIDController" name="cogip::motion_control::PassthroughPosePIDController">
+<area shape="rect" id="node1" title="Pose PID controller." alt="" coords="5,593,248,700"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="13,307,241,545"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="45,5,208,259"/>
+</map>

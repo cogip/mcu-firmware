@@ -128,9 +128,9 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1QuadP
  <a href="classcogip_1_1motion__control_1_1QuadPIDMetaController.html#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Run 2 (meta-)controllers, one for linear control, one for angular control. </p>
-<p>Input 0-2: current pose Input 3-5: target pose Input 6-7: current speed Input 8-9: target speed Output 0: linear motor command Output 1: angular motor command </p>
+<p>Input 0-2: current pose Input 3-5: target pose Input 6-7: current speed Input 8-9: target speed Input 10: allow reverse Output 0: linear motor command Output 1: angular motor command Output 2: pose_reached </p>
 
-<p class="definition">Definition at line <a class="el" href="QuadPIDMetaController_8hpp_source.html#l00029">29</a> of file <a class="el" href="QuadPIDMetaController_8hpp_source.html">QuadPIDMetaController.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="QuadPIDMetaController_8hpp_source.html#l00031">31</a> of file <a class="el" href="QuadPIDMetaController_8hpp_source.html">QuadPIDMetaController.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="QuadPIDMetaController_8hpp_source.html">QuadPIDMetaController.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -167,7 +167,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1QuadP
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_methods_classcogip_1_1motion__control_1_1MetaController"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcogip_1_1motion__control_1_1MetaController')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcogip_1_1motion__control_1_1MetaController.html">cogip::motion_control::MetaController&lt; 10, 2, 2 &gt;</a></td></tr>
+<tr class="inherit_header pub_methods_classcogip_1_1motion__control_1_1MetaController"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcogip_1_1motion__control_1_1MetaController')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcogip_1_1motion__control_1_1MetaController.html">cogip::motion_control::MetaController&lt; 11, 3, 2 &gt;</a></td></tr>
 <tr class="memitem:a1fa82749a7114c8d047f62022e60c5db inherit pub_methods_classcogip_1_1motion__control_1_1MetaController"><td class="memItemLeft" align="right" valign="top"><a id="a1fa82749a7114c8d047f62022e60c5db"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1MetaController.html#a1fa82749a7114c8d047f62022e60c5db">execute</a> () override</td></tr>
 <tr class="memdesc:a1fa82749a7114c8d047f62022e60c5db inherit pub_methods_classcogip_1_1motion__control_1_1MetaController"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controller core method. Meta controller executes all sub-controllers in chain. <br /></td></tr>
@@ -256,7 +256,7 @@ const <a class="el" href="classcogip_1_1motion__control_1_1MetaControllerParamet
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jan 31 2023 00:29:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Feb 17 2023 16:35:50 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

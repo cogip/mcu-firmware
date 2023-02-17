@@ -11,7 +11,7 @@ var searchData=
   ['all_5fmenus_8',['all_menus',['../shell__menu__private_8hpp.html#a20222806f283fc76e4b543ae4f2b5185',1,'cogip::shell']]],
   ['all_5fobstacles_9',['all_obstacles',['../obstacles_8hpp.html#ad60b9f04cac9c8ce481afd945cc49caa',1,'cogip::obstacles']]],
   ['allow_5fchange_5fpath_5fpose_5f_10',['allow_change_path_pose_',['../classcogip_1_1planners_1_1Planner.html#a548987884a2ac5a1e3681dab7223e3bc',1,'cogip::planners::Planner']]],
-  ['allow_5freverse_11',['allow_reverse',['../structctrl__control__t.html#a13d46f5f45c550a7c40a08c399c151d1',1,'ctrl_control_t::allow_reverse()'],['../classcogip_1_1path_1_1Pose.html#ac3121274467b3f8fc7a7a2f79e23eea4',1,'cogip::path::Pose::allow_reverse()']]],
+  ['allow_5freverse_11',['allow_reverse',['../structctrl__control__t.html#a13d46f5f45c550a7c40a08c399c151d1',1,'ctrl_control_t::allow_reverse()'],['../classcogip_1_1path_1_1Pose.html#ac3121274467b3f8fc7a7a2f79e23eea4',1,'cogip::path::Pose::allow_reverse()'],['../classcogip_1_1motion__control_1_1PlatformEngine.html#a0e8f05c16679db24fb02fe4a42e4fd75',1,'cogip::motion_control::PlatformEngine::allow_reverse()']]],
   ['angle_12',['angle',['../classcogip_1_1cogip__defs_1_1Polar.html#ad3d524554bbb6d292dbddaadda32e982',1,'cogip::cogip_defs::Polar']]],
   ['angular_5fpose_5fpid_13',['angular_pose_pid',['../structctrl__quadpid__parameters__t.html#a59669e64165ea24647c3f108341c3e99',1,'ctrl_quadpid_parameters_t']]],
   ['angular_5fspeed_5fpid_14',['angular_speed_pid',['../structctrl__quadpid__parameters__t.html#ade825581a885aecfd669dcecaf801afe',1,'ctrl_quadpid_parameters_t']]],

@@ -7,6 +7,8 @@ var classcogip_1_1pid_1_1PID =
     [ "kd", "classcogip_1_1pid_1_1PID.html#a0b68a14454a214b2c560f205bfb0f736", null ],
     [ "ki", "classcogip_1_1pid_1_1PID.html#a3ed32f1da26b80aca804bb0c6d54cd54", null ],
     [ "kp", "classcogip_1_1pid_1_1PID.html#a1df8da1f10162723fc1359b28b2e2633", null ],
+    [ "pb_copy", "classcogip_1_1pid_1_1PID.html#acc08909d0816b6ea3d7f5f79d28bed8b", null ],
+    [ "pb_read", "classcogip_1_1pid_1_1PID.html#a3db195ba2075ec0c6d1647f2261d4dcf", null ],
     [ "previous_error", "classcogip_1_1pid_1_1PID.html#ad00e3129707a224911e3ab15c892ffea", null ],
     [ "reset", "classcogip_1_1pid_1_1PID.html#a76f59b065d66d36bf8f41ef0eba87df6", null ],
     [ "set_integral_term_limit", "classcogip_1_1pid_1_1PID.html#a4fbf644920a230a4e572ec2f5cf8d28a", null ],

@@ -16,6 +16,8 @@ var annotated_dup =
         [ "MetaController", "classcogip_1_1motion__control_1_1MetaController.html", "classcogip_1_1motion__control_1_1MetaController" ],
         [ "MetaControllerParameters", "classcogip_1_1motion__control_1_1MetaControllerParameters.html", null ],
         [ "ParallelMetaController", "classcogip_1_1motion__control_1_1ParallelMetaController.html", "classcogip_1_1motion__control_1_1ParallelMetaController" ],
+        [ "PassthroughPosePIDController", "classcogip_1_1motion__control_1_1PassthroughPosePIDController.html", "classcogip_1_1motion__control_1_1PassthroughPosePIDController" ],
+        [ "PassthroughPosePIDControllerParameters", "classcogip_1_1motion__control_1_1PassthroughPosePIDControllerParameters.html", "classcogip_1_1motion__control_1_1PassthroughPosePIDControllerParameters" ],
         [ "PlatformEngine", "classcogip_1_1motion__control_1_1PlatformEngine.html", "classcogip_1_1motion__control_1_1PlatformEngine" ],
         [ "PolarParallelMetaController", "classcogip_1_1motion__control_1_1PolarParallelMetaController.html", "classcogip_1_1motion__control_1_1PolarParallelMetaController" ],
         [ "PosePIDController", "classcogip_1_1motion__control_1_1PosePIDController.html", "classcogip_1_1motion__control_1_1PosePIDController" ],

@@ -1,5 +1,6 @@
 <map id="motion_control/controllers/pose_pid_controller/include/pose_pid_controller/PosePIDControllerParameters.hpp" name="motion_control/controllers/pose_pid_controller/include/pose_pid_controller/PosePIDControllerParameters.hpp">
 <area shape="rect" id="node1" title="Pose PID controller parameters." alt="" coords="5,5,280,76"/>
 <area shape="rect" id="node2" href="$PID_8hpp.html" title="PID implementation." alt="" coords="83,124,202,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="97,199,189,225"/>
+<area shape="rect" id="node3" title=" " alt="" coords="38,199,130,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="154,199,249,225"/>
 </map>

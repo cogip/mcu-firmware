@@ -1,8 +1,6 @@
 var dir_bbdb8556b98a46a8970b87076f55c1f4 =
 [
-    [ "BaseController.hpp", "BaseController_8hpp.html", [
-      [ "BaseController", "classcogip_1_1motion__control_1_1BaseController.html", "classcogip_1_1motion__control_1_1BaseController" ]
-    ] ],
+    [ "BaseController.hpp", "BaseController_8hpp.html", "BaseController_8hpp" ],
     [ "BaseControllerEngine.hpp", "BaseControllerEngine_8hpp.html", [
       [ "BaseControllerEngine", "classcogip_1_1motion__control_1_1BaseControllerEngine.html", "classcogip_1_1motion__control_1_1BaseControllerEngine" ]
     ] ],

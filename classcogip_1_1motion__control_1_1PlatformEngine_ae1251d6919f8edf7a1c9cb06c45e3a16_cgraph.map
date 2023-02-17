@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::PlatformEngine::set_target_pose" name="cogip::motion_control::PlatformEngine::set_target_pose">
+<area shape="rect" id="node1" title="Set target pose." alt="" coords="5,5,168,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1PlatformEngine.html#a38bab576528a7a22b0dbe61c2f2a9979" title="Get target pose return target pose." alt="" coords="216,13,431,54"/>
+</map>

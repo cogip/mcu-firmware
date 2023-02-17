@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1pid_1_1PID.html',''); in
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classcogip_1_1pid_1_1PID.html" title="PID.">PID</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00021">21</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00023">23</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="PID_8hpp_source.html">PID.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -141,7 +141,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1pid_1_1PID.html',''); in
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classcogip_1_1pid_1_1PID__coll__graph.png" border="0" usemap="#cogip_1_1pid_1_1PID_coll__map" alt="Collaboration graph"/></div>
 <map name="cogip_1_1pid_1_1PID_coll__map" id="cogip_1_1pid_1_1PID_coll__map">
-<area shape="rect" title="PID." alt="" coords="5,5,204,259"/>
+<area shape="rect" title="PID." alt="" coords="5,5,204,288"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -194,6 +194,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1pid_1_1PID.html#a23a7e02bfd84354cb23f975dd32e039d">compute</a> (double error)</td></tr>
 <tr class="memdesc:a23a7e02bfd84354cb23f975dd32e039d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute <a class="el" href="classcogip_1_1pid_1_1PID.html" title="PID.">PID</a>. <br /></td></tr>
 <tr class="separator:a23a7e02bfd84354cb23f975dd32e039d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3db195ba2075ec0c6d1647f2261d4dcf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1pid_1_1PID.html#a3db195ba2075ec0c6d1647f2261d4dcf">pb_read</a> (const PB_Pid &amp;pid)</td></tr>
+<tr class="memdesc:a3db195ba2075ec0c6d1647f2261d4dcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the object from a Protobuf message.  <a href="classcogip_1_1pid_1_1PID.html#a3db195ba2075ec0c6d1647f2261d4dcf">More...</a><br /></td></tr>
+<tr class="separator:a3db195ba2075ec0c6d1647f2261d4dcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc08909d0816b6ea3d7f5f79d28bed8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1pid_1_1PID.html#acc08909d0816b6ea3d7f5f79d28bed8b">pb_copy</a> (PB_Pid &amp;pid) const</td></tr>
+<tr class="memdesc:acc08909d0816b6ea3d7f5f79d28bed8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="classcogip_1_1pid_1_1PID.html#acc08909d0816b6ea3d7f5f79d28bed8b">More...</a><br /></td></tr>
+<tr class="separator:acc08909d0816b6ea3d7f5f79d28bed8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a23655d80a0098cde98efa5b0518daee6"></a>
@@ -253,11 +259,83 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00024">24</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00026">26</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="acc08909d0816b6ea3d7f5f79d28bed8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc08909d0816b6ea3d7f5f79d28bed8b">&#9670;&nbsp;</a></span>pb_copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cogip::pid::PID::pb_copy </td>
+          <td>(</td>
+          <td class="paramtype">PB_Pid &amp;&#160;</td>
+          <td class="paramname"><em>pid</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copy data to Protobuf message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">pid</td><td>[out] Protobuf message to fill </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00088">88</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3db195ba2075ec0c6d1647f2261d4dcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3db195ba2075ec0c6d1647f2261d4dcf">&#9670;&nbsp;</a></span>pb_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cogip::pid::PID::pb_read </td>
+          <td>(</td>
+          <td class="paramtype">const PB_Pid &amp;&#160;</td>
+          <td class="paramname"><em>pid</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize the object from a Protobuf message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pid</td><td>[in] Protobuf message to read </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00078">78</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a4fbf644920a230a4e572ec2f5cf8d28a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4fbf644920a230a4e572ec2f5cf8d28a">&#9670;&nbsp;</a></span>set_integral_term_limit()</h2>
 
@@ -290,7 +368,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00062">62</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00064">64</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
@@ -337,7 +415,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00057">57</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00059">59</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -384,7 +462,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00052">52</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00054">54</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-3-summary" class="dynsummary" style="display:block;">
@@ -431,7 +509,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00047">47</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PID_8hpp_source.html#l00049">49</a> of file <a class="el" href="PID_8hpp_source.html">PID.hpp</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary" style="display:block;">
@@ -453,7 +531,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jan 31 2023 00:29:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Feb 17 2023 16:35:50 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

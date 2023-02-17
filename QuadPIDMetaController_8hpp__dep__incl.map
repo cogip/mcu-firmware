@@ -1,0 +1,5 @@
+<map id="motion_control/metas/quadpid_meta_controller/include/quadpid_meta_controller/QuadPIDMetaController.hpp" name="motion_control/metas/quadpid_meta_controller/include/quadpid_meta_controller/QuadPIDMetaController.hpp">
+<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="90,5,329,76"/>
+<area shape="rect" id="node2" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,124,200,165"/>
+<area shape="rect" id="node3" href="$pf__test_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="225,124,410,165"/>
+</map>

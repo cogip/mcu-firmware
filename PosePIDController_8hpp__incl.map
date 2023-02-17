@@ -1,10 +1,13 @@
 <map id="motion_control/controllers/pose_pid_controller/include/pose_pid_controller/PosePIDController.hpp" name="motion_control/controllers/pose_pid_controller/include/pose_pid_controller/PosePIDController.hpp">
-<area shape="rect" id="node1" title="Pose PID controller." alt="" coords="101,5,402,61"/>
-<area shape="rect" id="node2" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="41,109,225,151"/>
-<area shape="rect" id="node6" href="$PosePIDControllerParameters_8hpp.html" title="Pose PID controller parameters." alt="" coords="249,117,491,143"/>
-<area shape="rect" id="node3" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="5,199,151,225"/>
-<area shape="rect" id="node5" title=" " alt="" coords="141,273,236,300"/>
-<area shape="rect" id="node4" title=" " alt="" coords="37,273,117,300"/>
-<area shape="rect" id="node7" href="$PID_8hpp.html" title="PID implementation." alt="" coords="311,199,429,225"/>
-<area shape="rect" id="node8" title=" " alt="" coords="324,273,416,300"/>
+<area shape="rect" id="node1" title="Pose PID controller." alt="" coords="133,5,434,61"/>
+<area shape="rect" id="node2" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="73,109,257,151"/>
+<area shape="rect" id="node8" href="$PosePIDControllerParameters_8hpp.html" title="Pose PID controller parameters." alt="" coords="287,117,528,143"/>
+<area shape="rect" id="node3" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="81,199,227,225"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,273,100,300"/>
+<area shape="rect" id="node6" href="$utils_8hpp_source.html" title=" " alt="" coords="251,199,329,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="142,273,222,300"/>
+<area shape="rect" id="node7" title=" " alt="" coords="254,273,326,300"/>
+<area shape="rect" id="node9" href="$PID_8hpp.html" title="PID implementation." alt="" coords="353,199,472,225"/>
+<area shape="rect" id="node10" title=" " alt="" coords="359,273,451,300"/>
+<area shape="rect" id="node11" title=" " alt="" coords="475,273,569,300"/>
 </map>

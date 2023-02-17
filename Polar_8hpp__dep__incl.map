@@ -1,16 +1,18 @@
 <map id="lib/cogip_defs/include/cogip_defs/Polar.hpp" name="lib/cogip_defs/include/cogip_defs/Polar.hpp">
-<area shape="rect" id="node1" title="Polar class declaration." alt="" coords="503,5,665,47"/>
-<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="503,95,665,136"/>
-<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="326,191,482,233"/>
-<area shape="rect" id="node14" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="686,184,951,240"/>
-<area shape="rect" id="node12" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="507,191,661,233"/>
-<area shape="rect" id="node4" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="307,288,501,329"/>
-<area shape="rect" id="node5" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="224,377,400,419"/>
-<area shape="rect" id="node7" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="5,474,200,515"/>
-<area shape="rect" id="node8" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="425,474,610,515"/>
-<area shape="rect" id="node9" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="619,377,802,419"/>
-<area shape="rect" id="node6" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="224,467,400,523"/>
-<area shape="rect" id="node10" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="857,474,1090,515"/>
-<area shape="rect" id="node11" href="$shell__planners_8hpp_source.html" title=" " alt="" coords="634,474,833,515"/>
-<area shape="rect" id="node13" href="$Path_8hpp.html" title="Path declaration." alt="" coords="604,288,759,329"/>
+<area shape="rect" id="node1" title="Polar class declaration." alt="" coords="493,5,656,47"/>
+<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="493,95,656,136"/>
+<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="307,191,463,233"/>
+<area shape="rect" id="node16" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="722,184,987,240"/>
+<area shape="rect" id="node14" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="497,191,652,233"/>
+<area shape="rect" id="node4" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="60,288,255,329"/>
+<area shape="rect" id="node5" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="5,377,181,419"/>
+<area shape="rect" id="node10" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="279,288,473,329"/>
+<area shape="rect" id="node12" href="$pf__test_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="677,288,862,329"/>
+<area shape="rect" id="node7" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="274,377,457,419"/>
+<area shape="rect" id="node6" href="$shell__quadpid_8hpp_source.html" title=" " alt="" coords="5,467,181,523"/>
+<area shape="rect" id="node8" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="482,474,715,515"/>
+<area shape="rect" id="node9" href="$shell__planners_8hpp_source.html" title=" " alt="" coords="259,474,458,515"/>
+<area shape="rect" id="node11" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="508,377,703,419"/>
+<area shape="rect" id="node13" href="$pf__test_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="741,377,926,419"/>
+<area shape="rect" id="node15" href="$Path_8hpp.html" title="Path declaration." alt="" coords="497,288,652,329"/>
 </map>

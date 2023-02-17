@@ -8,13 +8,13 @@ var hierarchy =
       [ "cogip::motion_control::BaseMetaController", "classcogip_1_1motion__control_1_1BaseMetaController.html", [
         [ "cogip::motion_control::MetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
         [ "cogip::motion_control::ParallelMetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ],
-        [ "cogip::motion_control::MetaController< 10, 2, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", [
+        [ "cogip::motion_control::MetaController< 11, 3, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", [
           [ "cogip::motion_control::QuadPIDMetaController", "classcogip_1_1motion__control_1_1QuadPIDMetaController.html", null ]
         ] ],
         [ "cogip::motion_control::MetaController< 3, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", [
           [ "cogip::motion_control::DualPIDMetaController", "classcogip_1_1motion__control_1_1DualPIDMetaController.html", null ]
         ] ],
-        [ "cogip::motion_control::ParallelMetaController< 6, 2, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", [
+        [ "cogip::motion_control::ParallelMetaController< 7, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", [
           [ "cogip::motion_control::PolarParallelMetaController", "classcogip_1_1motion__control_1_1PolarParallelMetaController.html", null ]
         ] ]
       ] ],
@@ -22,11 +22,14 @@ var hierarchy =
       [ "cogip::motion_control::Controller< 1, 1, SpeedPIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::SpeedPIDController", "classcogip_1_1motion__control_1_1SpeedPIDController.html", null ]
       ] ],
-      [ "cogip::motion_control::Controller< 10, 6, PoseStraightFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
+      [ "cogip::motion_control::Controller< 11, 7, PoseStraightFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::PoseStraightFilter", "classcogip_1_1motion__control_1_1PoseStraightFilter.html", null ]
       ] ],
       [ "cogip::motion_control::Controller< 3, 1, SpeedFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::SpeedFilter", "classcogip_1_1motion__control_1_1SpeedFilter.html", null ]
+      ] ],
+      [ "cogip::motion_control::Controller< 3, 3, PassthroughPosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
+        [ "cogip::motion_control::PassthroughPosePIDController", "classcogip_1_1motion__control_1_1PassthroughPosePIDController.html", null ]
       ] ],
       [ "cogip::motion_control::Controller< 3, 3, PosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::PosePIDController", "classcogip_1_1motion__control_1_1PosePIDController.html", null ]
@@ -34,9 +37,9 @@ var hierarchy =
       [ "cogip::motion_control::Controller< INPUT_SIZE, OUTPUT_SIZE, MetaControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::MetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
         [ "cogip::motion_control::ParallelMetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ],
-        [ "cogip::motion_control::MetaController< 10, 2, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
+        [ "cogip::motion_control::MetaController< 11, 3, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
         [ "cogip::motion_control::MetaController< 3, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
-        [ "cogip::motion_control::ParallelMetaController< 6, 2, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
+        [ "cogip::motion_control::ParallelMetaController< 7, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
       ] ]
     ] ],
     [ "cogip::motion_control::BaseControllerEngine", "classcogip_1_1motion__control_1_1BaseControllerEngine.html", [
@@ -61,9 +64,9 @@ var hierarchy =
       [ "cogip::motion_control::MetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::ParallelMetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ],
       [ "cogip::shell::Menu", "classcogip_1_1shell_1_1Menu.html", null ],
-      [ "cogip::motion_control::MetaController< 10, 2, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
+      [ "cogip::motion_control::MetaController< 11, 3, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::MetaController< 3, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
-      [ "cogip::motion_control::ParallelMetaController< 6, 2, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
+      [ "cogip::motion_control::ParallelMetaController< 7, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
     ] ],
     [ "lx_reader_t", "structlx__reader__t.html", null ],
     [ "lx_t", "structlx__t.html", null ],
@@ -78,6 +81,7 @@ var hierarchy =
         [ "cogip::obstacles::Rectangle", "classcogip_1_1obstacles_1_1Rectangle.html", null ]
       ] ]
     ] ],
+    [ "cogip::motion_control::PassthroughPosePIDControllerParameters", "classcogip_1_1motion__control_1_1PassthroughPosePIDControllerParameters.html", null ],
     [ "pca9548_conf_t", "structpca9548__conf__t.html", null ],
     [ "PID", "structPID.html", null ],
     [ "cogip::pid::PID", "classcogip_1_1pid_1_1PID.html", null ],

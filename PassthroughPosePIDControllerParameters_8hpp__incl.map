@@ -1,0 +1,6 @@
+<map id="motion_control/controllers/passthrough_pose_pid_controller/include/passthrough_pose_pid_controller/PassthroughPosePIDControllerParameters.hpp" name="motion_control/controllers/passthrough_pose_pid_controller/include/passthrough_pose_pid_controller/PassthroughPosePIDControllerParameters.hpp">
+<area shape="rect" id="node1" title="Pose PID controller parameters." alt="" coords="5,5,296,91"/>
+<area shape="rect" id="node2" href="$PID_8hpp.html" title="PID implementation." alt="" coords="91,139,210,165"/>
+<area shape="rect" id="node3" title=" " alt="" coords="46,213,138,240"/>
+<area shape="rect" id="node4" title=" " alt="" coords="162,213,257,240"/>
+</map>

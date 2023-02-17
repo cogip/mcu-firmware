@@ -122,7 +122,8 @@ $(document).ready(function(){initNavTree('group__platforms__pegasus.html',''); i
   <div class="summary">
 <a href="#files">Files</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">Test platform<div class="ingroups"><a class="el" href="group__platforms.html">Hardware platform</a></div></div>  </div>
 </div><!--header-->
@@ -190,33 +191,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gaaed945ac04303eef4f08d257f0a3c944"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaaed945ac04303eef4f08d257f0a3c944">pf_print_state</a> (void)</td></tr>
 <tr class="memdesc:gaaed945ac04303eef4f08d257f0a3c944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print current robot state in JSON format.  <a href="group__platforms__pegasus.html#gaaed945ac04303eef4f08d257f0a3c944">More...</a><br /></td></tr>
 <tr class="separator:gaaed945ac04303eef4f08d257f0a3c944"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac98f9f54dcfddb87cd08b39cc52a9f9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gac98f9f54dcfddb87cd08b39cc52a9f9a">pf_send_pb_pose</a> (void)</td></tr>
-<tr class="memdesc:gac98f9f54dcfddb87cd08b39cc52a9f9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send current robot pose in Protobuf format over UART.  <a href="group__platforms__pegasus.html#gac98f9f54dcfddb87cd08b39cc52a9f9a">More...</a><br /></td></tr>
-<tr class="separator:gac98f9f54dcfddb87cd08b39cc52a9f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0fc74267bdda152e7626e2c284689d07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07">pf_send_pb_state</a> (void)</td></tr>
-<tr class="memdesc:ga0fc74267bdda152e7626e2c284689d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send current robot state in Protobuf format over UART.  <a href="group__platforms__pegasus.html#ga0fc74267bdda152e7626e2c284689d07">More...</a><br /></td></tr>
-<tr class="separator:ga0fc74267bdda152e7626e2c284689d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae1a6aab08a0179e854ade7561e3dc079"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gae1a6aab08a0179e854ade7561e3dc079">pf_is_game_launched</a> (void)</td></tr>
 <tr class="memdesc:gae1a6aab08a0179e854ade7561e3dc079"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a game is started.  <a href="group__platforms__pegasus.html#gae1a6aab08a0179e854ade7561e3dc079">More...</a><br /></td></tr>
 <tr class="separator:gae1a6aab08a0179e854ade7561e3dc079"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadf1ea194fa6cf1a4fd7c499bc1518e7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">pf_ctrl_pre_running_cb</a> (<a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;robot_pose, <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;robot_speed, <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;motor_command)</td></tr>
-<tr class="memdesc:gadf1ea194fa6cf1a4fd7c499bc1518e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback that prepares motion control CTRL_MODE_RUNNING, mainly reading encoders and compute position and speed.  <a href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">More...</a><br /></td></tr>
-<tr class="separator:gadf1ea194fa6cf1a4fd7c499bc1518e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1e413308e51c5909c893387f35b2547e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga1e413308e51c5909c893387f35b2547e">pf_ctrl_post_running_cb</a> (<a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;robot_pose, <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;robot_speed, <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;motor_command)</td></tr>
-<tr class="memdesc:ga1e413308e51c5909c893387f35b2547e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback that drives actuators after motion control CTRL_MODE_RUNNING, sending motion command to the motors.  <a href="group__platforms__pegasus.html#ga1e413308e51c5909c893387f35b2547e">More...</a><br /></td></tr>
-<tr class="separator:ga1e413308e51c5909c893387f35b2547e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2b7ce11a87f88a40ae10837767c85b01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga2b7ce11a87f88a40ae10837767c85b01">pf_ctrl_post_stop_cb</a> (<a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;robot_pose, <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;robot_speed, <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;motor_command)</td></tr>
-<tr class="memdesc:ga2b7ce11a87f88a40ae10837767c85b01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback that drives actuators after motion control CTRL_MODE_STOP, stopping the motors.  <a href="group__platforms__pegasus.html#ga2b7ce11a87f88a40ae10837767c85b01">More...</a><br /></td></tr>
-<tr class="separator:ga2b7ce11a87f88a40ae10837767c85b01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga096df40041a3b5fba1c96cd90524be73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga096df40041a3b5fba1c96cd90524be73">pf_init_quadpid_params</a> (<a class="el" href="structctrl__quadpid__parameters__t.html">ctrl_quadpid_parameters_t</a> ctrl_quadpid_params)</td></tr>
-<tr class="memdesc:ga096df40041a3b5fba1c96cd90524be73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize quadPID controller specific parameters, mainly <a class="el" href="structPID.html">PID</a> coefficients.  <a href="group__platforms__pegasus.html#ga096df40041a3b5fba1c96cd90524be73">More...</a><br /></td></tr>
-<tr class="separator:ga096df40041a3b5fba1c96cd90524be73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga76464c76865b8a010f137488bf519fe3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structctrl__quadpid__t.html">ctrl_quadpid_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga76464c76865b8a010f137488bf519fe3">pf_get_quadpid_ctrl</a> (void)</td></tr>
-<tr class="memdesc:ga76464c76865b8a010f137488bf519fe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns platform QuadPID controller.  <a href="group__platforms__pegasus.html#ga76464c76865b8a010f137488bf519fe3">More...</a><br /></td></tr>
-<tr class="separator:ga76464c76865b8a010f137488bf519fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gada66418f7a25f83900babc9406aeb623"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structctrl__t.html">ctrl_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gada66418f7a25f83900babc9406aeb623">pf_get_ctrl</a> (void)</td></tr>
-<tr class="memdesc:gada66418f7a25f83900babc9406aeb623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns platform controller.  <a href="group__platforms__pegasus.html#gada66418f7a25f83900babc9406aeb623">More...</a><br /></td></tr>
-<tr class="separator:gada66418f7a25f83900babc9406aeb623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga47177f8977d43047562b0cb1c6a4aa46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcogip_1_1uartpb_1_1UartProtobuf.html">cogip::uartpb::UartProtobuf</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga47177f8977d43047562b0cb1c6a4aa46">pf_get_uartpb</a> ()</td></tr>
 <tr class="memdesc:ga47177f8977d43047562b0cb1c6a4aa46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns uarpb.  <a href="group__platforms__pegasus.html#ga47177f8977d43047562b0cb1c6a4aa46">More...</a><br /></td></tr>
 <tr class="separator:ga47177f8977d43047562b0cb1c6a4aa46"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,61 +203,18 @@ Functions</h2></td></tr>
 <tr class="memitem:gad2d77ae9a60de6fba2ff595654fb94e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gad2d77ae9a60de6fba2ff595654fb94e0">pf_init</a> (void)</td></tr>
 <tr class="memdesc:gad2d77ae9a60de6fba2ff595654fb94e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Platform initialization.  <a href="group__platforms__pegasus.html#gad2d77ae9a60de6fba2ff595654fb94e0">More...</a><br /></td></tr>
 <tr class="separator:gad2d77ae9a60de6fba2ff595654fb94e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacfb18ba9414b572439d5c8ac640ed302"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gacfb18ba9414b572439d5c8ac640ed302">encoder_read</a> (<a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;robot_speed)</td></tr>
-<tr class="memdesc:gacfb18ba9414b572439d5c8ac640ed302"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read quadrature encoders to get linear and angular robot speed.  <a href="group__platforms__pegasus.html#gacfb18ba9414b572439d5c8ac640ed302">More...</a><br /></td></tr>
-<tr class="separator:gacfb18ba9414b572439d5c8ac640ed302"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9b981ff872a2d0d83281b09cd467f781"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga9b981ff872a2d0d83281b09cd467f781">encoder_reset</a> (void)</td></tr>
-<tr class="memdesc:ga9b981ff872a2d0d83281b09cd467f781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset quadrature encoders buffers.  <a href="group__platforms__pegasus.html#ga9b981ff872a2d0d83281b09cd467f781">More...</a><br /></td></tr>
-<tr class="separator:ga9b981ff872a2d0d83281b09cd467f781"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa17fe0f98ee21dc8abc9951936be4738"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaa17fe0f98ee21dc8abc9951936be4738">motor_drive</a> (const <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;command)</td></tr>
-<tr class="memdesc:gaa17fe0f98ee21dc8abc9951936be4738"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the given command to the motors.  <a href="group__platforms__pegasus.html#gaa17fe0f98ee21dc8abc9951936be4738">More...</a><br /></td></tr>
-<tr class="separator:gaa17fe0f98ee21dc8abc9951936be4738"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
-Robot mechanical properties</h2></td></tr>
-<tr><td class="ititle" colspan="2"><p><a class="anchor" id="amgrpa4c06e999b0e3ba0eed987e8ddde1fcc"></a>To be computed :</p>
-<ul>
-<li>PULSE_PER_MM : Number of pulses per mm of coding wheel</li>
-<li>WHEELS_DISTANCE : Distance between coding wheels (pulses)</li>
-<li>PULSE_PER_DEGREE : Number of pulses per degree of coding wheel</li>
-</ul>
-<p>Must be known :</p><ul>
-<li>WHEELS_DIAMETER : Coding wheel diameter (mm)</li>
-<li>WHEELS_DISTANCE_MM : Distance between coding wheels (mm)</li>
-<li>WHEELS_ENCODER_RESOLUTION: Number of pulses by turn of coding wheels</li>
-</ul>
-<p>Intermediate calculation:</p><ul>
-<li>WHEELS_PERIMETER = pi*WHEELS_DIAMETER</li>
-<li>PULSE_PER_MM = WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER</li>
-<li>WHEELS_DIAMETER = 60 mm</li>
-<li>WHEELS_DISTANCE_MM = 280 mm</li>
-<li>WHEELS_ENCODER_RESOLUTION = 2000 </li>
-</ul>
-</td></tr>
-<tr class="memitem:ga638fd29df459976a828c6c82ef5782b8"><td class="memItemLeft" align="right" valign="top"><a id="ga638fd29df459976a828c6c82ef5782b8"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga638fd29df459976a828c6c82ef5782b8">ROBOT_WIDTH</a>&#160;&#160;&#160;330</td></tr>
-<tr class="memdesc:ga638fd29df459976a828c6c82ef5782b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot width (mm) <br /></td></tr>
-<tr class="separator:ga638fd29df459976a828c6c82ef5782b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga20bfc6e334cd82ff28874034f9f0a891"><td class="memItemLeft" align="right" valign="top"><a id="ga20bfc6e334cd82ff28874034f9f0a891"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga20bfc6e334cd82ff28874034f9f0a891">ROBOT_MARGIN</a>&#160;&#160;&#160;(<a class="el" href="group__platforms__pf__test.html#ga638fd29df459976a828c6c82ef5782b8">ROBOT_WIDTH</a> / 2)</td></tr>
-<tr class="memdesc:ga20bfc6e334cd82ff28874034f9f0a891"><td class="mdescLeft">&#160;</td><td class="mdescRight">Point the most far from robot center (mm) <br /></td></tr>
-<tr class="separator:ga20bfc6e334cd82ff28874034f9f0a891"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac29f8f04063a544765c462958121f7b6"><td class="memItemLeft" align="right" valign="top"><a id="gac29f8f04063a544765c462958121f7b6"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gac29f8f04063a544765c462958121f7b6">BEACON_SUPPORT_DIAMETER</a>&#160;&#160;&#160;70</td></tr>
-<tr class="memdesc:gac29f8f04063a544765c462958121f7b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the beacon support (a cylinder of 70mm diameter to a cube of 100mm width) <br /></td></tr>
-<tr class="separator:gac29f8f04063a544765c462958121f7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga08c0f465176ed8ed950f1fcba75fcdfe"><td class="memItemLeft" align="right" valign="top"><a id="ga08c0f465176ed8ed950f1fcba75fcdfe"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga08c0f465176ed8ed950f1fcba75fcdfe">PULSE_PER_MM</a>&#160;&#160;&#160;9.986</td></tr>
-<tr class="memdesc:ga08c0f465176ed8ed950f1fcba75fcdfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER. <br /></td></tr>
-<tr class="separator:ga08c0f465176ed8ed950f1fcba75fcdfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf84ab689cafbbd54fd9d5f3b7e376d6f"><td class="memItemLeft" align="right" valign="top"><a id="gaf84ab689cafbbd54fd9d5f3b7e376d6f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaf84ab689cafbbd54fd9d5f3b7e376d6f">WHEELS_DISTANCE</a>&#160;&#160;&#160;2945.926</td></tr>
-<tr class="memdesc:gaf84ab689cafbbd54fd9d5f3b7e376d6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">WHEELS_DISTANCE_MM * PULSE_PER_MM. <br /></td></tr>
-<tr class="separator:gaf84ab689cafbbd54fd9d5f3b7e376d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacbb08326267508e235c00d143e155eca"><td class="memItemLeft" align="right" valign="top"><a id="gacbb08326267508e235c00d143e155eca"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gacbb08326267508e235c00d143e155eca">PULSE_PER_DEGREE</a>&#160;&#160;&#160;51.416</td></tr>
-<tr class="memdesc:gacbb08326267508e235c00d143e155eca"><td class="mdescLeft">&#160;</td><td class="mdescRight">WHEELS_DISTANCE * 2 * PI / 360. <br /></td></tr>
-<tr class="separator:gacbb08326267508e235c00d143e155eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ga5ccfd7b313ae630c6974ba12b0b2b1c8"><td class="memItemLeft" align="right" valign="top"><a id="ga5ccfd7b313ae630c6974ba12b0b2b1c8"></a>
+constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reset_uuid</b> = 3351980141</td></tr>
+<tr class="separator:ga5ccfd7b313ae630c6974ba12b0b2b1c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga78b72c33d3267dcff8d52ab68a2f413b"><td class="memItemLeft" align="right" valign="top"><a id="ga78b72c33d3267dcff8d52ab68a2f413b"></a>
+constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>copilot_connected_uuid</b> = 1132911482</td></tr>
+<tr class="separator:ga78b72c33d3267dcff8d52ab68a2f413b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga847afb65cbdd69744edb057a1b73c88e"><td class="memItemLeft" align="right" valign="top"><a id="ga847afb65cbdd69744edb057a1b73c88e"></a>
+constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>copilot_disconnected_uuid</b> = 1412808668</td></tr>
+<tr class="separator:ga847afb65cbdd69744edb057a1b73c88e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
 Eurobot general properties</h2></td></tr>
@@ -298,398 +232,27 @@ Eurobot general properties</h2></td></tr>
 <tr class="separator:gafe8dc1d20e67d4cfb47f66dd8ccae899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
-Acceleration and speed profiles</h2></td></tr>
-<tr class="memitem:gad44fe5f33a2fedb35592df216ef1ff21"><td class="memItemLeft" align="right" valign="top"><a id="gad44fe5f33a2fedb35592df216ef1ff21"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gad44fe5f33a2fedb35592df216ef1ff21">MAX_ACC_M_PER_S2</a>&#160;&#160;&#160;0.2</td></tr>
-<tr class="memdesc:gad44fe5f33a2fedb35592df216ef1ff21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum acceleration (m/s²) <br /></td></tr>
-<tr class="separator:gad44fe5f33a2fedb35592df216ef1ff21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga32da0bbd33cdc029772d5728b4424f12"><td class="memItemLeft" align="right" valign="top"><a id="ga32da0bbd33cdc029772d5728b4424f12"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga32da0bbd33cdc029772d5728b4424f12">MAX_SPEED_M_PER_S</a>&#160;&#160;&#160;1.2</td></tr>
-<tr class="memdesc:ga32da0bbd33cdc029772d5728b4424f12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum speed (m/s) <br /></td></tr>
-<tr class="separator:ga32da0bbd33cdc029772d5728b4424f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac9130784434c65a8a60447ad481d991a"><td class="memItemLeft" align="right" valign="top"><a id="gac9130784434c65a8a60447ad481d991a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gac9130784434c65a8a60447ad481d991a">MAX_ACC_DEG_PER_S2</a>&#160;&#160;&#160;60</td></tr>
-<tr class="memdesc:gac9130784434c65a8a60447ad481d991a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum acceleration (deg/s²) <br /></td></tr>
-<tr class="separator:gac9130784434c65a8a60447ad481d991a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa4e706bb78bf9d7c6f6cf16752b2cfea"><td class="memItemLeft" align="right" valign="top"><a id="gaa4e706bb78bf9d7c6f6cf16752b2cfea"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaa4e706bb78bf9d7c6f6cf16752b2cfea">MAX_SPEED_DEG_PER_S</a>&#160;&#160;&#160;270</td></tr>
-<tr class="memdesc:gaa4e706bb78bf9d7c6f6cf16752b2cfea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum speed (deg/s) <br /></td></tr>
-<tr class="separator:gaa4e706bb78bf9d7c6f6cf16752b2cfea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga99cb2c3e9fb016f84b61dad3daa31cfd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga99cb2c3e9fb016f84b61dad3daa31cfd">MAX_ACC_LINEAR</a></td></tr>
-<tr class="memdesc:ga99cb2c3e9fb016f84b61dad3daa31cfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²)  <a href="group__platforms__pegasus.html#ga99cb2c3e9fb016f84b61dad3daa31cfd">More...</a><br /></td></tr>
-<tr class="separator:ga99cb2c3e9fb016f84b61dad3daa31cfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa7f0517fa8be74d41a7ce1f29b20c2d5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaa7f0517fa8be74d41a7ce1f29b20c2d5">MAX_SPEED_LINEAR</a></td></tr>
-<tr class="memdesc:gaa7f0517fa8be74d41a7ce1f29b20c2d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum speed (pulses/THREAD_PERIOD_INTERVAL)  <a href="group__platforms__pegasus.html#gaa7f0517fa8be74d41a7ce1f29b20c2d5">More...</a><br /></td></tr>
-<tr class="separator:gaa7f0517fa8be74d41a7ce1f29b20c2d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaa73aa6e387bc878d5e0f918d7eed106"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gaaa73aa6e387bc878d5e0f918d7eed106">MAX_ACC_ANGULAR</a></td></tr>
-<tr class="memdesc:gaaa73aa6e387bc878d5e0f918d7eed106"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²)  <a href="group__platforms__pegasus.html#gaaa73aa6e387bc878d5e0f918d7eed106">More...</a><br /></td></tr>
-<tr class="separator:gaaa73aa6e387bc878d5e0f918d7eed106"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4063aed924265a3d6abf6e40e0941707"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga4063aed924265a3d6abf6e40e0941707">MAX_SPEED_ANGULAR</a></td></tr>
-<tr class="memdesc:ga4063aed924265a3d6abf6e40e0941707"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum speed (pulses/THREAD_PERIOD_INTERVAL)  <a href="group__platforms__pegasus.html#ga4063aed924265a3d6abf6e40e0941707">More...</a><br /></td></tr>
-<tr class="separator:ga4063aed924265a3d6abf6e40e0941707"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga39d39c4a69ef45d797ae1998c0107ee9"><td class="memItemLeft" align="right" valign="top"><a id="ga39d39c4a69ef45d797ae1998c0107ee9"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga39d39c4a69ef45d797ae1998c0107ee9">LOW_SPEED_LINEAR</a>&#160;&#160;&#160;(<a class="el" href="group__platforms__pf__test.html#gaa7f0517fa8be74d41a7ce1f29b20c2d5">MAX_SPEED_LINEAR</a> / 4)</td></tr>
-<tr class="memdesc:ga39d39c4a69ef45d797ae1998c0107ee9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low speed (mm/THREAD_PERIOD_INTERVAL) <br /></td></tr>
-<tr class="separator:ga39d39c4a69ef45d797ae1998c0107ee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab862c98c166ef1edf097d0ccc8fe0cb1"><td class="memItemLeft" align="right" valign="top"><a id="gab862c98c166ef1edf097d0ccc8fe0cb1"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#gab862c98c166ef1edf097d0ccc8fe0cb1">NORMAL_SPEED_LINEAR</a>&#160;&#160;&#160;(<a class="el" href="group__platforms__pf__test.html#gaa7f0517fa8be74d41a7ce1f29b20c2d5">MAX_SPEED_LINEAR</a> / 2)</td></tr>
-<tr class="memdesc:gab862c98c166ef1edf097d0ccc8fe0cb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normal speed (mm/THREAD_PERIOD_INTERVAL) <br /></td></tr>
-<tr class="separator:gab862c98c166ef1edf097d0ccc8fe0cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga01b991071eb3a90da5bda254ae466955"><td class="memItemLeft" align="right" valign="top"><a id="ga01b991071eb3a90da5bda254ae466955"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga01b991071eb3a90da5bda254ae466955">LOW_SPEED_ANGULAR</a>&#160;&#160;&#160;(<a class="el" href="group__platforms__pf__test.html#ga4063aed924265a3d6abf6e40e0941707">MAX_SPEED_ANGULAR</a> / 4)</td></tr>
-<tr class="memdesc:ga01b991071eb3a90da5bda254ae466955"><td class="mdescLeft">&#160;</td><td class="mdescRight">Low speed (mm/THREAD_PERIOD_INTERVAL) <br /></td></tr>
-<tr class="separator:ga01b991071eb3a90da5bda254ae466955"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga45e51323f8b956c4e401c71ea801747b"><td class="memItemLeft" align="right" valign="top"><a id="ga45e51323f8b956c4e401c71ea801747b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga45e51323f8b956c4e401c71ea801747b">NORMAL_SPEED_ANGULAR</a>&#160;&#160;&#160;(<a class="el" href="group__platforms__pf__test.html#ga4063aed924265a3d6abf6e40e0941707">MAX_SPEED_ANGULAR</a> / 2)</td></tr>
-<tr class="memdesc:ga45e51323f8b956c4e401c71ea801747b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normal speed (mm/THREAD_PERIOD_INTERVAL) <br /></td></tr>
-<tr class="separator:ga45e51323f8b956c4e401c71ea801747b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
-Anti-blocking</h2></td></tr>
-<tr><td class="ititle" colspan="2"><p><a class="anchor" id="amgrp25c9f5e0c6d614d88e6a77e9e423ae89"></a>Quadpid controller anti-blocking characteristics </p>
-</td></tr>
-<tr class="memitem:ga90289a6f37fb07848596fac167c12f20"><td class="memItemLeft" align="right" valign="top"><a id="ga90289a6f37fb07848596fac167c12f20"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga90289a6f37fb07848596fac167c12f20">PF_CTRL_BLOCKING_SPEED_TRESHOLD</a>&#160;&#160;&#160;1</td></tr>
-<tr class="memdesc:ga90289a6f37fb07848596fac167c12f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimal speed treshold. <br /></td></tr>
-<tr class="separator:ga90289a6f37fb07848596fac167c12f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3984f9c2d95afbec45567dd92dcde0a7"><td class="memItemLeft" align="right" valign="top"><a id="ga3984f9c2d95afbec45567dd92dcde0a7"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga3984f9c2d95afbec45567dd92dcde0a7">PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD</a>&#160;&#160;&#160;1.5</td></tr>
-<tr class="memdesc:ga3984f9c2d95afbec45567dd92dcde0a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Speed error treshold. <br /></td></tr>
-<tr class="separator:ga3984f9c2d95afbec45567dd92dcde0a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga01bacd6f9470eed0d74a58285526fe7a"><td class="memItemLeft" align="right" valign="top"><a id="ga01bacd6f9470eed0d74a58285526fe7a"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga01bacd6f9470eed0d74a58285526fe7a">PF_CTRL_BLOCKING_NB_ITERATIONS</a>&#160;&#160;&#160;40</td></tr>
-<tr class="memdesc:ga01bacd6f9470eed0d74a58285526fe7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of interation before considering the robot blocked. <br /></td></tr>
-<tr class="separator:ga01bacd6f9470eed0d74a58285526fe7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
 Avoidance borders</h2></td></tr>
 <tr><td class="ititle" colspan="2"><p><a class="anchor" id="amgrp686d23230d2315a6cb12de13a7b34205"></a>Borders in which the robot can move (mm) </p>
 </td></tr>
 <tr class="memitem:ga74d22d5c450365dc5f4ae75b8b6ff432"><td class="memItemLeft" align="right" valign="top"><a id="ga74d22d5c450365dc5f4ae75b8b6ff432"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga74d22d5c450365dc5f4ae75b8b6ff432">AVOIDANCE_BORDER_X_MIN</a>&#160;&#160;&#160;(<a class="el" href="group__platforms__pf__test.html#ga20bfc6e334cd82ff28874034f9f0a891">ROBOT_MARGIN</a> + 10)</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga74d22d5c450365dc5f4ae75b8b6ff432">AVOIDANCE_BORDER_X_MIN</a>&#160;&#160;&#160;(ROBOT_MARGIN + 10)</td></tr>
 <tr class="memdesc:ga74d22d5c450365dc5f4ae75b8b6ff432"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimal X axis border. <br /></td></tr>
 <tr class="separator:ga74d22d5c450365dc5f4ae75b8b6ff432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5cd8534245dd8c7715965af083bd13c2"><td class="memItemLeft" align="right" valign="top"><a id="ga5cd8534245dd8c7715965af083bd13c2"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga5cd8534245dd8c7715965af083bd13c2">AVOIDANCE_BORDER_X_MAX</a>&#160;&#160;&#160;(3000 - <a class="el" href="group__platforms__pf__test.html#ga20bfc6e334cd82ff28874034f9f0a891">ROBOT_MARGIN</a> - 10)</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga5cd8534245dd8c7715965af083bd13c2">AVOIDANCE_BORDER_X_MAX</a>&#160;&#160;&#160;(3000 - ROBOT_MARGIN - 10)</td></tr>
 <tr class="memdesc:ga5cd8534245dd8c7715965af083bd13c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal X axis border. <br /></td></tr>
 <tr class="separator:ga5cd8534245dd8c7715965af083bd13c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9913d7c0d202417eecb4661db31e4522"><td class="memItemLeft" align="right" valign="top"><a id="ga9913d7c0d202417eecb4661db31e4522"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga9913d7c0d202417eecb4661db31e4522">AVOIDANCE_BORDER_Y_MIN</a>&#160;&#160;&#160;(-1000 + <a class="el" href="group__platforms__pf__test.html#ga20bfc6e334cd82ff28874034f9f0a891">ROBOT_MARGIN</a> + 10)</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga9913d7c0d202417eecb4661db31e4522">AVOIDANCE_BORDER_Y_MIN</a>&#160;&#160;&#160;(-1000 + ROBOT_MARGIN + 10)</td></tr>
 <tr class="memdesc:ga9913d7c0d202417eecb4661db31e4522"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimal Y axis border. <br /></td></tr>
 <tr class="separator:ga9913d7c0d202417eecb4661db31e4522"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga128c544be070e5eb2e766506e28d9d91"><td class="memItemLeft" align="right" valign="top"><a id="ga128c544be070e5eb2e766506e28d9d91"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platforms__pegasus.html#ga128c544be070e5eb2e766506e28d9d91">AVOIDANCE_BORDER_Y_MAX</a>&#160;&#160;&#160;(<a class="el" href="group__platforms__pf__test.html#ga9913d7c0d202417eecb4661db31e4522">AVOIDANCE_BORDER_Y_MIN</a> * -1)</td></tr>
 <tr class="memdesc:ga128c544be070e5eb2e766506e28d9d91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal Y axis border. <br /></td></tr>
 <tr class="separator:ga128c544be070e5eb2e766506e28d9d91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
-Platform parameters for QuadPID controller.</h2></td></tr>
-<tr class="memitem:ga608925865d22e4a6089fb2b2bdabe56a"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="structctrl__platform__configuration__t.html">ctrl_platform_configuration_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ctrl_pf_quadpid_conf</b></td></tr>
-<tr class="separator:ga608925865d22e4a6089fb2b2bdabe56a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="gaaa73aa6e387bc878d5e0f918d7eed106"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaaa73aa6e387bc878d5e0f918d7eed106">&#9670;&nbsp;</a></span>MAX_ACC_ANGULAR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_ACC_ANGULAR</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                            (<a class="code" href="group__platforms__pegasus.html#gac9130784434c65a8a60447ad481d991a">MAX_ACC_DEG_PER_S2</a> \</div>
-<div class="line">                            * ((double)<a class="code" href="group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787">CONTROLLER_SPEED_LOOP_PERIOD_MSEC</a>))</div>
-</div><!-- fragment -->
-<p>Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) </p>
-
-<p class="definition">Definition at line <a class="el" href="pegasus_2include_2platform_8hpp_source.html#l00095">95</a> of file <a class="el" href="pegasus_2include_2platform_8hpp_source.html">platform.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ga99cb2c3e9fb016f84b61dad3daa31cfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga99cb2c3e9fb016f84b61dad3daa31cfd">&#9670;&nbsp;</a></span>MAX_ACC_LINEAR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_ACC_LINEAR</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                            ((<a class="code" href="group__platforms__pegasus.html#gad44fe5f33a2fedb35592df216ef1ff21">MAX_ACC_M_PER_S2</a> * 1000) \</div>
-<div class="line">                            * ((<span class="keywordtype">double</span>)<a class="code" href="group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787">CONTROLLER_SPEED_LOOP_PERIOD_MSEC</a>))</div>
-</div><!-- fragment -->
-<p>Maximum acceleration (pulses/THREAD_PERIOD_INTERVAL²) </p>
-
-<p class="definition">Definition at line <a class="el" href="pegasus_2include_2platform_8hpp_source.html#l00091">91</a> of file <a class="el" href="pegasus_2include_2platform_8hpp_source.html">platform.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ga4063aed924265a3d6abf6e40e0941707"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga4063aed924265a3d6abf6e40e0941707">&#9670;&nbsp;</a></span>MAX_SPEED_ANGULAR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_SPEED_ANGULAR</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                            (<a class="code" href="group__platforms__pegasus.html#gaa4e706bb78bf9d7c6f6cf16752b2cfea">MAX_SPEED_DEG_PER_S</a> \</div>
-<div class="line">                            * ((double)<a class="code" href="group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787">CONTROLLER_SPEED_LOOP_PERIOD_MSEC</a>))</div>
-</div><!-- fragment -->
-<p>Maximum speed (pulses/THREAD_PERIOD_INTERVAL) </p>
-
-<p class="definition">Definition at line <a class="el" href="pegasus_2include_2platform_8hpp_source.html#l00097">97</a> of file <a class="el" href="pegasus_2include_2platform_8hpp_source.html">platform.hpp</a>.</p>
-
-</div>
-</div>
-<a id="gaa7f0517fa8be74d41a7ce1f29b20c2d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaa7f0517fa8be74d41a7ce1f29b20c2d5">&#9670;&nbsp;</a></span>MAX_SPEED_LINEAR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_SPEED_LINEAR</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">                            ((<a class="code" href="group__platforms__pegasus.html#ga32da0bbd33cdc029772d5728b4424f12">MAX_SPEED_M_PER_S</a> * 1000) \</div>
-<div class="line">                            * ((<span class="keywordtype">double</span>)<a class="code" href="group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787">CONTROLLER_SPEED_LOOP_PERIOD_MSEC</a>))</div>
-</div><!-- fragment -->
-<p>Maximum speed (pulses/THREAD_PERIOD_INTERVAL) </p>
-
-<p class="definition">Definition at line <a class="el" href="pegasus_2include_2platform_8hpp_source.html#l00093">93</a> of file <a class="el" href="pegasus_2include_2platform_8hpp_source.html">platform.hpp</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="gacfb18ba9414b572439d5c8ac640ed302"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gacfb18ba9414b572439d5c8ac640ed302">&#9670;&nbsp;</a></span>encoder_read()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int encoder_read </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>robot_speed</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Read quadrature encoders to get linear and angular robot speed. </p>
-<p>param[out] robot_speed Linear and angular speed</p>
-<dl class="section return"><dt>Returns</dt><dd>0 if success, non 0 on error </dd></dl>
-
-</div>
-</div>
-<a id="ga9b981ff872a2d0d83281b09cd467f781"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9b981ff872a2d0d83281b09cd467f781">&#9670;&nbsp;</a></span>encoder_reset()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void encoder_reset </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Reset quadrature encoders buffers. </p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="gaa17fe0f98ee21dc8abc9951936be4738"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaa17fe0f98ee21dc8abc9951936be4738">&#9670;&nbsp;</a></span>motor_drive()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void motor_drive </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Apply the given command to the motors. </p>
-<p>param[in] command Linear and angular speeds command</p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="ga1e413308e51c5909c893387f35b2547e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1e413308e51c5909c893387f35b2547e">&#9670;&nbsp;</a></span>pf_ctrl_post_running_cb()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pf_ctrl_post_running_cb </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;&#160;</td>
-          <td class="paramname"><em>robot_pose</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>robot_speed</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>motor_command</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Callback that drives actuators after motion control CTRL_MODE_RUNNING, sending motion command to the motors. </p>
-<p>param[in] robot_pose Not used param[in] robot_speed Not used param[in] motor_command Motion command to send to the motors</p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="ga2b7ce11a87f88a40ae10837767c85b01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2b7ce11a87f88a40ae10837767c85b01">&#9670;&nbsp;</a></span>pf_ctrl_post_stop_cb()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pf_ctrl_post_stop_cb </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;&#160;</td>
-          <td class="paramname"><em>robot_pose</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>robot_speed</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>motor_command</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Callback that drives actuators after motion control CTRL_MODE_STOP, stopping the motors. </p>
-<p>param[in] robot_pose Not used param[in] robot_speed Not used param[in] motor_command Motion command forced to {0, 0}.</p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="gadf1ea194fa6cf1a4fd7c499bc1518e7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gadf1ea194fa6cf1a4fd7c499bc1518e7b">&#9670;&nbsp;</a></span>pf_ctrl_pre_running_cb()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pf_ctrl_pre_running_cb </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Pose.html">cogip::cogip_defs::Pose</a> &amp;&#160;</td>
-          <td class="paramname"><em>robot_pose</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>robot_speed</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcogip_1_1cogip__defs_1_1Polar.html">cogip::cogip_defs::Polar</a> &amp;&#160;</td>
-          <td class="paramname"><em>motor_command</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Callback that prepares motion control CTRL_MODE_RUNNING, mainly reading encoders and compute position and speed. </p>
-<p>param[out] robot_pose Robot position computed from encoder data param[out] robot_speed Robot speed computed from encoder data param[in] motor_command Not used</p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="gada66418f7a25f83900babc9406aeb623"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gada66418f7a25f83900babc9406aeb623">&#9670;&nbsp;</a></span>pf_get_ctrl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structctrl__t.html">ctrl_t</a>* pf_get_ctrl </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns platform controller. </p>
-<p>return Controller </p>
-
-</div>
-</div>
-<a id="ga76464c76865b8a010f137488bf519fe3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga76464c76865b8a010f137488bf519fe3">&#9670;&nbsp;</a></span>pf_get_quadpid_ctrl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structctrl__quadpid__t.html">ctrl_quadpid_t</a>* pf_get_quadpid_ctrl </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns platform QuadPID controller. </p>
-<p>return QuadPID controller </p>
-
-</div>
-</div>
 <a id="ga47177f8977d43047562b0cb1c6a4aa46"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga47177f8977d43047562b0cb1c6a4aa46">&#9670;&nbsp;</a></span>pf_get_uartpb()</h2>
 
@@ -728,28 +291,6 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 
 <p>Platform initialization. </p>
 <p>Must be called before any use of platform variables or functions.</p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="ga096df40041a3b5fba1c96cd90524be73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga096df40041a3b5fba1c96cd90524be73">&#9670;&nbsp;</a></span>pf_init_quadpid_params()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pf_init_quadpid_params </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structctrl__quadpid__parameters__t.html">ctrl_quadpid_parameters_t</a>&#160;</td>
-          <td class="paramname"><em>ctrl_quadpid_params</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initialize quadPID controller specific parameters, mainly <a class="el" href="structPID.html">PID</a> coefficients. </p>
-<p>param[in] ctrl_quadpid_params QuadPID specific parameters.</p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
@@ -818,48 +359,6 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 
 </div>
 </div>
-<a id="gac98f9f54dcfddb87cd08b39cc52a9f9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac98f9f54dcfddb87cd08b39cc52a9f9a">&#9670;&nbsp;</a></span>pf_send_pb_pose()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pf_send_pb_pose </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send current robot pose in Protobuf format over UART. </p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
-<a id="ga0fc74267bdda152e7626e2c284689d07"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga0fc74267bdda152e7626e2c284689d07">&#9670;&nbsp;</a></span>pf_send_pb_state()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pf_send_pb_state </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send current robot state in Protobuf format over UART. </p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
 <a id="gaf83cc53998c27d898d71f8a7e981fdc0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaf83cc53998c27d898d71f8a7e981fdc0">&#9670;&nbsp;</a></span>pf_set_copilot_connected()</h2>
 
@@ -902,68 +401,11 @@ Platform parameters for QuadPID controller.</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="ga608925865d22e4a6089fb2b2bdabe56a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga608925865d22e4a6089fb2b2bdabe56a">&#9670;&nbsp;</a></span>ctrl_pf_quadpid_conf</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="structctrl__platform__configuration__t.html">ctrl_platform_configuration_t</a> ctrl_pf_quadpid_conf</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">    .ctrl_pre_mode_cb = {</div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">pf_ctrl_pre_running_cb</a>,  </div>
-<div class="line">        <span class="keyword">nullptr</span>,                 </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">pf_ctrl_pre_running_cb</a>,  </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">pf_ctrl_pre_running_cb</a>,  </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">pf_ctrl_pre_running_cb</a>,  </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">pf_ctrl_pre_running_cb</a>,  </div>
-<div class="line">    },</div>
-<div class="line">    .ctrl_post_mode_cb = {</div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#ga2b7ce11a87f88a40ae10837767c85b01">pf_ctrl_post_stop_cb</a>,    </div>
-<div class="line">        <span class="keyword">nullptr</span>,                 </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#ga2b7ce11a87f88a40ae10837767c85b01">pf_ctrl_post_stop_cb</a>,    </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#ga1e413308e51c5909c893387f35b2547e">pf_ctrl_post_running_cb</a>, </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#ga1e413308e51c5909c893387f35b2547e">pf_ctrl_post_running_cb</a>, </div>
-<div class="line">        <a class="code" href="group__platforms__pegasus.html#ga1e413308e51c5909c893387f35b2547e">pf_ctrl_post_running_cb</a>, </div>
-<div class="line">    },</div>
-<div class="line">    .blocking_speed_treshold = <a class="code" href="group__platforms__pegasus.html#ga90289a6f37fb07848596fac167c12f20">PF_CTRL_BLOCKING_SPEED_TRESHOLD</a>,</div>
-<div class="line">    .blocking_speed_error_treshold = <a class="code" href="group__platforms__pegasus.html#ga3984f9c2d95afbec45567dd92dcde0a7">PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD</a>,</div>
-<div class="line">    .blocking_cycles_max = <a class="code" href="group__platforms__pegasus.html#ga01bacd6f9470eed0d74a58285526fe7a">PF_CTRL_BLOCKING_NB_ITERATIONS</a></div>
-<div class="line">}</div>
-</div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="pegasus_2include_2platform_8hpp_source.html#l00287">287</a> of file <a class="el" href="pegasus_2include_2platform_8hpp_source.html">platform.hpp</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="agroup__platforms__pegasus_html_gadf1ea194fa6cf1a4fd7c499bc1518e7b"><div class="ttname"><a href="group__platforms__pegasus.html#gadf1ea194fa6cf1a4fd7c499bc1518e7b">pf_ctrl_pre_running_cb</a></div><div class="ttdeci">void pf_ctrl_pre_running_cb(cogip::cogip_defs::Pose &amp;robot_pose, cogip::cogip_defs::Polar &amp;robot_speed, cogip::cogip_defs::Polar &amp;motor_command)</div><div class="ttdoc">Callback that prepares motion control CTRL_MODE_RUNNING, mainly reading encoders and compute position...</div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_gaa4e706bb78bf9d7c6f6cf16752b2cfea"><div class="ttname"><a href="group__platforms__pegasus.html#gaa4e706bb78bf9d7c6f6cf16752b2cfea">MAX_SPEED_DEG_PER_S</a></div><div class="ttdeci">#define MAX_SPEED_DEG_PER_S</div><div class="ttdoc">Maximum speed (deg/s)</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00089">platform.hpp:89</a></div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_gac9130784434c65a8a60447ad481d991a"><div class="ttname"><a href="group__platforms__pegasus.html#gac9130784434c65a8a60447ad481d991a">MAX_ACC_DEG_PER_S2</a></div><div class="ttdeci">#define MAX_ACC_DEG_PER_S2</div><div class="ttdoc">Maximum acceleration (deg/s²)</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00088">platform.hpp:88</a></div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_gad44fe5f33a2fedb35592df216ef1ff21"><div class="ttname"><a href="group__platforms__pegasus.html#gad44fe5f33a2fedb35592df216ef1ff21">MAX_ACC_M_PER_S2</a></div><div class="ttdeci">#define MAX_ACC_M_PER_S2</div><div class="ttdoc">Maximum acceleration (m/s²)</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00086">platform.hpp:86</a></div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_ga01bacd6f9470eed0d74a58285526fe7a"><div class="ttname"><a href="group__platforms__pegasus.html#ga01bacd6f9470eed0d74a58285526fe7a">PF_CTRL_BLOCKING_NB_ITERATIONS</a></div><div class="ttdeci">#define PF_CTRL_BLOCKING_NB_ITERATIONS</div><div class="ttdoc">Number of interation before considering the robot blocked.</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00113">platform.hpp:113</a></div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_ga2b7ce11a87f88a40ae10837767c85b01"><div class="ttname"><a href="group__platforms__pegasus.html#ga2b7ce11a87f88a40ae10837767c85b01">pf_ctrl_post_stop_cb</a></div><div class="ttdeci">void pf_ctrl_post_stop_cb(cogip::cogip_defs::Pose &amp;robot_pose, cogip::cogip_defs::Polar &amp;robot_speed, cogip::cogip_defs::Polar &amp;motor_command)</div><div class="ttdoc">Callback that drives actuators after motion control CTRL_MODE_STOP, stopping the motors.</div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_ga32da0bbd33cdc029772d5728b4424f12"><div class="ttname"><a href="group__platforms__pegasus.html#ga32da0bbd33cdc029772d5728b4424f12">MAX_SPEED_M_PER_S</a></div><div class="ttdeci">#define MAX_SPEED_M_PER_S</div><div class="ttdoc">Maximum speed (m/s)</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00087">platform.hpp:87</a></div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_ga07a575aff9cc49fe868eb5ee53dbb787"><div class="ttname"><a href="group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787">CONTROLLER_SPEED_LOOP_PERIOD_MSEC</a></div><div class="ttdeci">#define CONTROLLER_SPEED_LOOP_PERIOD_MSEC</div><div class="ttdoc">Motion controller speed loop default period.</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00038">platform.hpp:38</a></div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_ga1e413308e51c5909c893387f35b2547e"><div class="ttname"><a href="group__platforms__pegasus.html#ga1e413308e51c5909c893387f35b2547e">pf_ctrl_post_running_cb</a></div><div class="ttdeci">void pf_ctrl_post_running_cb(cogip::cogip_defs::Pose &amp;robot_pose, cogip::cogip_defs::Polar &amp;robot_speed, cogip::cogip_defs::Polar &amp;motor_command)</div><div class="ttdoc">Callback that drives actuators after motion control CTRL_MODE_RUNNING, sending motion command to the ...</div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_ga90289a6f37fb07848596fac167c12f20"><div class="ttname"><a href="group__platforms__pegasus.html#ga90289a6f37fb07848596fac167c12f20">PF_CTRL_BLOCKING_SPEED_TRESHOLD</a></div><div class="ttdeci">#define PF_CTRL_BLOCKING_SPEED_TRESHOLD</div><div class="ttdoc">Minimal speed treshold.</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00111">platform.hpp:111</a></div></div>
-<div class="ttc" id="agroup__platforms__pegasus_html_ga3984f9c2d95afbec45567dd92dcde0a7"><div class="ttname"><a href="group__platforms__pegasus.html#ga3984f9c2d95afbec45567dd92dcde0a7">PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD</a></div><div class="ttdeci">#define PF_CTRL_BLOCKING_SPEED_ERR_TRESHOLD</div><div class="ttdoc">Speed error treshold.</div><div class="ttdef"><b>Definition:</b> <a href="pegasus_2include_2platform_8hpp_source.html#l00112">platform.hpp:112</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jan 31 2023 00:29:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Feb 17 2023 16:35:50 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

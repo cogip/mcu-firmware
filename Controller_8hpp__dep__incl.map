@@ -1,15 +1,18 @@
 <map id="motion_control/motion_control_common/include/motion_control_common/Controller.hpp" name="motion_control/motion_control_common/include/motion_control_common/Controller.hpp">
-<area shape="rect" id="node1" title="A simple controller." alt="" coords="1025,5,1215,76"/>
-<area shape="rect" id="node2" href="$PosePIDController_8hpp.html" title="Pose PID controller." alt="" coords="5,131,307,187"/>
-<area shape="rect" id="node3" href="$SpeedPIDController_8hpp.html" title="Speed PID controller." alt="" coords="331,131,650,187"/>
-<area shape="rect" id="node4" href="$PoseStraightFilter_8hpp.html" title="Breaks down a movement into a straight trajectory." alt="" coords="675,124,880,195"/>
-<area shape="rect" id="node5" href="$SpeedFilter_8hpp.html" title="Filter maximum speed and acceleration." alt="" coords="905,131,1111,187"/>
-<area shape="rect" id="node6" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="1136,124,1331,195"/>
-<area shape="rect" id="node8" href="$BaseMetaController_8hpp.html" title="Base class for meta controllers." alt="" coords="1405,124,1595,195"/>
-<area shape="rect" id="node9" href="$MetaController_8hpp.html" title="Simple meta&#45;controller to execute controllers in chain." alt="" coords="1299,243,1488,313"/>
-<area shape="rect" id="node12" href="$ParallelMetaController_8hpp.html" title="Meta&#45;controller to execute some controllers in pseudo parallel." alt="" coords="1533,243,1731,313"/>
-<area shape="rect" id="node7" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="1009,250,1274,306"/>
-<area shape="rect" id="node10" href="$DualPIDMetaController_8hpp.html" title="Meta controller for pose and speed PID corrections." alt="" coords="1015,369,1249,439"/>
-<area shape="rect" id="node11" href="$QuadPIDMetaController_8hpp.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="1274,369,1513,439"/>
-<area shape="rect" id="node13" href="$PolarParallelMetaController_8hpp.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="1537,361,1767,447"/>
+<area shape="rect" id="node1" title="A simple controller." alt="" coords="1257,5,1446,76"/>
+<area shape="rect" id="node2" href="$PassthroughPosePIDController_8hpp.html" title="Pose PID controller." alt="" coords="5,124,324,195"/>
+<area shape="rect" id="node3" href="$PosePIDController_8hpp.html" title="Pose PID controller." alt="" coords="349,131,650,187"/>
+<area shape="rect" id="node4" href="$SpeedPIDController_8hpp.html" title="Speed PID controller." alt="" coords="675,131,993,187"/>
+<area shape="rect" id="node5" href="$PoseStraightFilter_8hpp.html" title="Breaks down a movement into a straight trajectory." alt="" coords="1018,124,1223,195"/>
+<area shape="rect" id="node6" href="$SpeedFilter_8hpp.html" title="Filter maximum speed and acceleration." alt="" coords="1248,131,1455,187"/>
+<area shape="rect" id="node7" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="1223,243,1418,313"/>
+<area shape="rect" id="node11" href="$BaseMetaController_8hpp.html" title="Base class for meta controllers." alt="" coords="1581,124,1770,195"/>
+<area shape="rect" id="node12" href="$MetaController_8hpp.html" title="Simple meta&#45;controller to execute controllers in chain." alt="" coords="1471,243,1661,313"/>
+<area shape="rect" id="node15" href="$ParallelMetaController_8hpp.html" title="Meta&#45;controller to execute some controllers in pseudo parallel." alt="" coords="1708,243,1907,313"/>
+<area shape="rect" id="node8" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="1027,376,1292,432"/>
+<area shape="rect" id="node9" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="1093,495,1287,536"/>
+<area shape="rect" id="node10" href="$pf__test_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="1327,495,1512,536"/>
+<area shape="rect" id="node13" href="$DualPIDMetaController_8hpp.html" title="Meta controller for pose and speed PID corrections." alt="" coords="1579,369,1814,439"/>
+<area shape="rect" id="node14" href="$QuadPIDMetaController_8hpp.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="1316,369,1555,439"/>
+<area shape="rect" id="node16" href="$PolarParallelMetaController_8hpp.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="1839,361,2069,447"/>
 </map>

@@ -158,9 +158,23 @@ Gilles DOFFE <a href="#" onclick="location.href='mai'+'lto:'+'g.d'+'of'+'fe@'+'g
 <area shape="rect" title=" " alt="" coords="353,273,472,300"/>
 <area shape="rect" title=" " alt="" coords="30,273,137,300"/>
 <area shape="rect" href="Controller_8hpp.html" title="A simple controller." alt="" coords="651,199,764,225"/>
-<area shape="rect" href="BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="579,273,724,300"/>
-<area shape="rect" title=" " alt="" coords="715,348,809,375"/>
-<area shape="rect" title=" " alt="" coords="610,348,690,375"/>
+<area shape="rect" href="BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="635,273,780,300"/>
+<area shape="rect" title=" " alt="" coords="761,348,856,375"/>
+<area shape="rect" href="utils_8hpp_source.html" title=" " alt="" coords="532,273,611,300"/>
+<area shape="rect" title=" " alt="" coords="649,348,729,375"/>
+<area shape="rect" title=" " alt="" coords="535,348,607,375"/>
+</map>
+</div>
+</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="PlatformEngine_8hpp__dep__incl.png" border="0" usemap="#motion__control_2engines_2platform__engine_2include_2platform__engine_2PlatformEngine_8hppdep" alt=""/></div>
+<map name="motion__control_2engines_2platform__engine_2include_2platform__engine_2PlatformEngine_8hppdep" id="motion__control_2engines_2platform__engine_2include_2platform__engine_2PlatformEngine_8hppdep">
+<area shape="rect" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="77,5,342,61"/>
+<area shape="rect" href="pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,109,200,151"/>
+<area shape="rect" href="pf__test_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="225,109,410,151"/>
 </map>
 </div>
 </div>
@@ -174,20 +188,20 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a587d42ddca4a74fb085c49fded3d8d95"><td class="memItemLeft" align="right" valign="top"><a id="a587d42ddca4a74fb085c49fded3d8d95"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PlatformEngine_8hpp.html#a587d42ddca4a74fb085c49fded3d8d95">cogip::motion_control::platform_get_poses_cb_t</a> = etl::delegate&lt; void(cogip_defs::Pose &amp;, cogip_defs::Pose &amp;)&gt;</td></tr>
-<tr class="memdesc:a587d42ddca4a74fb085c49fded3d8d95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get current and target poses from platform. <br /></td></tr>
-<tr class="separator:a587d42ddca4a74fb085c49fded3d8d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa13c8d336256aa6e6bfa725644a96616"><td class="memItemLeft" align="right" valign="top"><a id="aa13c8d336256aa6e6bfa725644a96616"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PlatformEngine_8hpp.html#aa13c8d336256aa6e6bfa725644a96616">cogip::motion_control::platform_get_speeds_cb_t</a> = etl::delegate&lt; void(cogip_defs::Polar &amp;, cogip_defs::Polar &amp;)&gt;</td></tr>
-<tr class="memdesc:aa13c8d336256aa6e6bfa725644a96616"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get current and target speeds from platform. <br /></td></tr>
-<tr class="separator:aa13c8d336256aa6e6bfa725644a96616"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12c1c7ecbca7c7c5b68afee64cb058bb"><td class="memItemLeft" align="right" valign="top"><a id="a12c1c7ecbca7c7c5b68afee64cb058bb"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PlatformEngine_8hpp.html#a12c1c7ecbca7c7c5b68afee64cb058bb">cogip::motion_control::platform_get_speed_and_pose_cb_t</a> = etl::delegate&lt; void(cogip_defs::Polar &amp;, cogip_defs::Pose &amp;)&gt;</td></tr>
+<tr class="memdesc:a12c1c7ecbca7c7c5b68afee64cb058bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get current speed and pose from platform. <br /></td></tr>
+<tr class="separator:a12c1c7ecbca7c7c5b68afee64cb058bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a809fdabfd06812dfe093544ccf52aa21"><td class="memItemLeft" align="right" valign="top"><a id="a809fdabfd06812dfe093544ccf52aa21"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PlatformEngine_8hpp.html#a809fdabfd06812dfe093544ccf52aa21">cogip::motion_control::platform_process_commands_cb_t</a> = etl::delegate&lt; void(const cogip_defs::Polar &amp;)&gt;</td></tr>
+<tr class="memdesc:a809fdabfd06812dfe093544ccf52aa21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process motion control commands. <br /></td></tr>
+<tr class="separator:a809fdabfd06812dfe093544ccf52aa21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jan 31 2023 00:29:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Fri Feb 17 2023 16:35:50 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

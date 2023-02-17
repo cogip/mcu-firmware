@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::BaseControllerEngine::set_pose_reached" name="cogip::motion_control::BaseControllerEngine::set_pose_reached">
+<area shape="rect" id="node1" title="Set pose reached flag." alt="" coords="5,5,176,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseControllerEngine.html#a6bbd2c60a3b1e0988b7b4f7bc2f8bd41" title="Get pose reached flag return true if pose reached." alt="" coords="224,5,395,61"/>
+</map>
