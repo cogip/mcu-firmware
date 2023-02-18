@@ -31,6 +31,11 @@ public:
     /// return     PID parameters pointer
     pid::PID *pid() const { return pid_; };
 
+    /// Set PID
+    void set_pid(
+        pid::PID *pid               ///< [in]   new PID
+        ) { pid_ = pid; };
+
 private:
     /// PID parameters
     pid::PID *pid_;   ///< Speed PID
