@@ -22,7 +22,12 @@ namespace motion_control {
 class BaseControllerEngine {
 public:
     /// Constructor
-    BaseControllerEngine() : controller_(nullptr), current_cycle_(0), pose_reached_(moving) {};
+    BaseControllerEngine() :
+        controller_(nullptr),
+        current_cycle_(0),
+        pose_reached_(moving),
+        timeout_cycle_number_(0),
+        timeout_enable_(false) {};
 
     /// Set the controller to launch.
     /// @param controller
@@ -34,9 +39,6 @@ public:
     /// Engine thread loop with period internally defined.
     virtual void thread_loop();
 
-    /// Return motion control current cycle
-    uint32_t current_cycle() const { return current_cycle_; };
-
     /// Get controller
     BaseController* controller() const { return controller_; };
 
@@ -44,11 +46,34 @@ public:
     /// return     true if pose reached
     target_pose_status_t pose_reached() const { return pose_reached_; };
 
+    /// Return motion control current cycle
+    uint32_t current_cycle() const { return current_cycle_; };
+
+    /// Return motion control timeout cycle number
+    uint32_t timeout_cycle_number() const { return timeout_cycle_number_; };
+
+    /// Return motion control timeout enable flag
+    bool timeout_enable() const { return timeout_enable_; };
+
     /// Set pose reached flag
     void set_pose_reached(
         target_pose_status_t pose_reached       ///< [in]   pose reached flag
         ) { pose_reached_ = pose_reached; };
 
+    /// Set current cycle
+    void set_current_cycle(
+        uint32_t current_cycle                  ///< [in]   new current cycle
+        ) { current_cycle_ = current_cycle; };
+
+    /// Set timeout cycle number
+    void set_timeout_cycle_number(
+        uint32_t timeout_cycle_number           ///< [in]   timeout in cycles
+        ) { timeout_cycle_number_ = timeout_cycle_number; };
+
+    /// Set timeout enable
+    void set_timeout_enable(
+        bool timeout_enable                     ///< [in]   timeout enable flag
+        ) { timeout_enable_ = timeout_enable; };
 
 protected:
     /// Prepare controller inputs from platform functions.
@@ -65,6 +90,12 @@ protected:
 
     /// Pose reached flag
     target_pose_status_t pose_reached_;
+
+    /// Timeout before the engine considers it has reached the position, useful for speed only controllers.
+    uint32_t timeout_cycle_number_;
+
+    /// Timeout enable flag
+    bool timeout_enable_;
 };
 
 } // namespace motion_control
