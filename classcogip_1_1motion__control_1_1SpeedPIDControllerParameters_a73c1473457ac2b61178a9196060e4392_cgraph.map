@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::SpeedPIDControllerParameters::set_pid" name="cogip::motion_control::SpeedPIDControllerParameters::set_pid">
+<area shape="rect" id="node1" title="Set PID." alt="" coords="5,5,236,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1SpeedPIDControllerParameters.html#a7654a7c7deca57df9b8473ea83565f46" title="Get PID parameters return PID parameters pointer." alt="" coords="284,13,543,54"/>
+</map>

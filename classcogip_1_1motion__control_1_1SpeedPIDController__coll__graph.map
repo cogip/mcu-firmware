@@ -2,5 +2,5 @@
 <area shape="rect" id="node1" title="PID speed controller." alt="" coords="115,595,288,701"/>
 <area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="68,321,335,545"/>
 <area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="5,5,168,259"/>
-<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1SpeedPIDControllerParameters.html" title="Speed PID controller parameters." alt="" coords="193,79,439,185"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1SpeedPIDControllerParameters.html" title="Speed PID controller parameters." alt="" coords="193,71,439,193"/>
 </map>

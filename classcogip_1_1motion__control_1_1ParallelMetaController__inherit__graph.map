@@ -1,7 +1,7 @@
 <map id="cogip::motion_control::ParallelMetaController&lt; INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS &gt;" name="cogip::motion_control::ParallelMetaController&lt; INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS &gt;">
-<area shape="rect" id="node1" title="Parallel meta controllers are controllers containers to execute them in parallel." alt="" coords="241,593,455,759"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,380,168,472"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="136,5,299,259"/>
-<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="193,307,503,545"/>
-<area shape="rect" id="node5" title=" " alt="" coords="528,380,707,472"/>
+<area shape="rect" id="node1" title="Parallel meta controllers are controllers containers to execute them in parallel." alt="" coords="247,593,461,788"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,365,175,487"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="141,5,303,259"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,307,509,545"/>
+<area shape="rect" id="node5" title=" " alt="" coords="533,380,732,472"/>
 </map>

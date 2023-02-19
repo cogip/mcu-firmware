@@ -1,4 +1,4 @@
 <map id="cogip::motion_control::BaseMetaController" name="cogip::motion_control::BaseMetaController">
-<area shape="rect" id="node1" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,307,168,399"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="5,5,168,259"/>
+<area shape="rect" id="node1" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,307,175,428"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="9,5,171,259"/>
 </map>

@@ -1,12 +1,12 @@
 <map id="cogip::motion_control::BaseMetaController" name="cogip::motion_control::BaseMetaController">
-<area shape="rect" id="node1" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="451,307,614,399"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1MetaController.html" title="Meta controllers are controllers containers to execute them in chain." alt="" coords="5,461,188,597"/>
-<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title="Parallel meta controllers are controllers containers to execute them in parallel." alt="" coords="212,447,427,612"/>
-<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="451,469,614,590"/>
-<area shape="rect" id="node7" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="638,469,801,590"/>
-<area shape="rect" id="node9" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title=" " alt="" coords="829,447,1034,612"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="451,5,614,259"/>
-<area shape="rect" id="node6" href="$classcogip_1_1motion__control_1_1QuadPIDMetaController.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="423,667,605,759"/>
-<area shape="rect" id="node8" href="$classcogip_1_1motion__control_1_1DualPIDMetaController.html" title="Meta controller for at least one PID controller for position and one PID controller for speed in chai..." alt="" coords="630,667,809,759"/>
-<area shape="rect" id="node10" href="$classcogip_1_1motion__control_1_1PolarParallelMetaController.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="833,660,1041,767"/>
+<area shape="rect" id="node1" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="451,307,620,428"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1MetaController.html" title="Meta controllers are controllers containers to execute them in chain." alt="" coords="5,491,188,656"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title="Parallel meta controllers are controllers containers to execute them in parallel." alt="" coords="212,476,427,671"/>
+<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="451,498,620,649"/>
+<area shape="rect" id="node7" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="644,498,813,649"/>
+<area shape="rect" id="node9" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title=" " alt="" coords="841,476,1046,671"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="454,5,617,259"/>
+<area shape="rect" id="node6" href="$classcogip_1_1motion__control_1_1QuadPIDMetaController.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="432,726,615,818"/>
+<area shape="rect" id="node8" href="$classcogip_1_1motion__control_1_1DualPIDMetaController.html" title="Meta controller for at least one PID controller for position and one PID controller for speed in chai..." alt="" coords="639,726,818,818"/>
+<area shape="rect" id="node10" href="$classcogip_1_1motion__control_1_1PolarParallelMetaController.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="842,719,1050,825"/>
 </map>

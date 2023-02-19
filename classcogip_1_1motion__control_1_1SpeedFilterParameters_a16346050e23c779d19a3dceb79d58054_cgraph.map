@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::SpeedFilterParameters::set_max_acceleration" name="cogip::motion_control::SpeedFilterParameters::set_max_acceleration">
+<area shape="rect" id="node1" title="Set maximum acceleration." alt="" coords="5,5,183,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1SpeedFilterParameters.html#ae4a3c9f7c2533fde92cbb5f9fe7de7ff" title="Get maximum acceleration return maximum acceleration." alt="" coords="231,5,408,61"/>
+</map>

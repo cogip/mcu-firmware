@@ -1,13 +1,13 @@
 <map id="motion_control/metas/polar_parallel_meta_controller/include/polar_parallel_meta_controller/PolarParallelMetaController.hpp" name="motion_control/metas/polar_parallel_meta_controller/include/polar_parallel_meta_controller/PolarParallelMetaController.hpp">
-<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="141,5,371,91"/>
-<area shape="rect" id="node2" href="$ParallelMetaController_8hpp.html" title="Meta&#45;controller to execute some controllers in pseudo parallel." alt="" coords="157,139,355,180"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,228,80,255"/>
-<area shape="rect" id="node4" href="$BaseMetaController_8hpp.html" title="Base class for meta controllers." alt="" coords="104,228,283,255"/>
-<area shape="rect" id="node5" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="199,303,313,329"/>
-<area shape="rect" id="node11" href="$MetaControllerParameters_8hpp.html" title="Meta Controller parameters." alt="" coords="357,228,579,255"/>
-<area shape="rect" id="node6" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="183,377,329,404"/>
-<area shape="rect" id="node8" title=" " alt="" coords="107,452,202,479"/>
-<area shape="rect" id="node9" href="$utils_8hpp_source.html" title=" " alt="" coords="353,377,431,404"/>
-<area shape="rect" id="node7" title=" " alt="" coords="244,452,324,479"/>
-<area shape="rect" id="node10" title=" " alt="" coords="356,452,428,479"/>
+<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="161,5,392,91"/>
+<area shape="rect" id="node2" href="$ParallelMetaController_8hpp.html" title="Meta&#45;controller to execute some controllers in pseudo parallel." alt="" coords="177,139,376,180"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,228,100,255"/>
+<area shape="rect" id="node4" href="$BaseMetaController_8hpp.html" title="Base class for meta controllers." alt="" coords="125,228,303,255"/>
+<area shape="rect" id="node5" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="220,303,333,329"/>
+<area shape="rect" id="node11" href="$MetaControllerParameters_8hpp.html" title="Meta Controller parameters." alt="" coords="378,228,599,255"/>
+<area shape="rect" id="node6" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="204,377,349,404"/>
+<area shape="rect" id="node8" title=" " alt="" coords="128,452,223,479"/>
+<area shape="rect" id="node9" href="$utils_8hpp_source.html" title=" " alt="" coords="373,377,452,404"/>
+<area shape="rect" id="node7" title=" " alt="" coords="265,452,345,479"/>
+<area shape="rect" id="node10" title=" " alt="" coords="377,452,449,479"/>
 </map>

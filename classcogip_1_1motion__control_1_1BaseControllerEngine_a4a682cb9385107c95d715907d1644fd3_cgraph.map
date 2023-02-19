@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::BaseControllerEngine::set_timeout_cycle_number" name="cogip::motion_control::BaseControllerEngine::set_timeout_cycle_number">
+<area shape="rect" id="node1" title="Set timeout cycle number." alt="" coords="5,5,212,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseControllerEngine.html#a39a0bb3efd6f1ac6d0fef215f8dc4fc9" title="Return motion control timeout cycle number." alt="" coords="260,5,439,61"/>
+</map>

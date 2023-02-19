@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::BaseControllerEngine::set_timeout_enable" name="cogip::motion_control::BaseControllerEngine::set_timeout_enable">
+<area shape="rect" id="node1" title="Set timeout enable." alt="" coords="5,5,176,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseControllerEngine.html#a8c414413b445a0d7d38f8bc6708f30a8" title="Return motion control timeout enable flag." alt="" coords="224,5,395,61"/>
+</map>

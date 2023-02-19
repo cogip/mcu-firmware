@@ -59,14 +59,16 @@ var hierarchy =
     [ "ctrl_quadpid_parameters_t", "structctrl__quadpid__parameters__t.html", null ],
     [ "ctrl_quadpid_t", "structctrl__quadpid__t.html", null ],
     [ "ctrl_t", "structctrl__t.html", null ],
-    [ "lds01_params_t", "structlds01__params__t.html", null ],
-    [ "list", null, [
+    [ "deque", null, [
       [ "cogip::motion_control::MetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::ParallelMetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ],
-      [ "cogip::shell::Menu", "classcogip_1_1shell_1_1Menu.html", null ],
       [ "cogip::motion_control::MetaController< 11, 3, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::MetaController< 3, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::ParallelMetaController< 7, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
+    ] ],
+    [ "lds01_params_t", "structlds01__params__t.html", null ],
+    [ "list", null, [
+      [ "cogip::shell::Menu", "classcogip_1_1shell_1_1Menu.html", null ]
     ] ],
     [ "lx_reader_t", "structlx__reader__t.html", null ],
     [ "lx_t", "structlx__t.html", null ],

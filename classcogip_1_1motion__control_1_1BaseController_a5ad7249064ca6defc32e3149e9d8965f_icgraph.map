@@ -1,5 +1,9 @@
 <map id="cogip::motion_control::BaseController::set_meta" name="cogip::motion_control::BaseController::set_meta">
-<area shape="rect" id="node1" title="Set meta controller to which current controller belongs to return true if set, false otherwise." alt="" coords="252,75,447,117"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html#a68c8ae0fcf72649433bb00da4258e4a2" title="Add a controller to the controllers list." alt="" coords="5,5,204,91"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1MetaController.html#a9fce87f317acae4036cfb05fd66e39bd" title="Add a controller to the controllers chain." alt="" coords="21,115,188,171"/>
+<area shape="rect" id="node1" title="Set meta controller to which current controller belongs to return true if set, false otherwise." alt="" coords="252,265,447,306"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html#a68c8ae0fcf72649433bb00da4258e4a2" title="Add a controller to the end of the controllers chain." alt="" coords="5,5,204,91"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1MetaController.html#a9fce87f317acae4036cfb05fd66e39bd" title="Add a controller to the end of the controllers chain." alt="" coords="21,115,188,171"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html#a37ab7e20998a9cc1c13e1c6ca9abef11" title="Add a controller to the beginning of the controllers chain." alt="" coords="5,195,204,280"/>
+<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1MetaController.html#a47a04b836b96e43cbb9585e14d534e22" title="Add a controller to the beginning of the controllers chain." alt="" coords="7,304,202,360"/>
+<area shape="rect" id="node6" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html#a1427e29851afd8554d34da94d9eaced6" title="Replace a controller at the given position in the controllers chain." alt="" coords="5,384,204,469"/>
+<area shape="rect" id="node7" href="$classcogip_1_1motion__control_1_1MetaController.html#aebe56cf9d418a63cea85ebbf206fa64c" title="Replace a controller at the given position in the controllers chain." alt="" coords="9,493,200,549"/>
 </map>

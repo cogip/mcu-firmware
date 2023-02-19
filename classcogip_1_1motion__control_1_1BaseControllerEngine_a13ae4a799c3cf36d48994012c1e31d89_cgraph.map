@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::BaseControllerEngine::set_current_cycle" name="cogip::motion_control::BaseControllerEngine::set_current_cycle">
+<area shape="rect" id="node1" title="Set current cycle." alt="" coords="5,5,176,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseControllerEngine.html#a6f8ab3a68060a74333c61da7c2e18d88" title="Return motion control current cycle." alt="" coords="224,5,395,61"/>
+</map>

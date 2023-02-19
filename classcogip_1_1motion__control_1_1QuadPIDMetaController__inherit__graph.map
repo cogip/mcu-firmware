@@ -1,8 +1,8 @@
 <map id="cogip::motion_control::QuadPIDMetaController" name="cogip::motion_control::QuadPIDMetaController">
-<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="257,763,439,855"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="267,593,429,715"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,380,168,472"/>
-<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="136,5,299,259"/>
-<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="193,307,503,545"/>
-<area shape="rect" id="node6" title=" " alt="" coords="528,380,707,472"/>
+<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="263,792,445,884"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="269,593,439,744"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,365,175,487"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="141,5,303,259"/>
+<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,307,509,545"/>
+<area shape="rect" id="node6" title=" " alt="" coords="533,380,732,472"/>
 </map>
