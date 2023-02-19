@@ -284,6 +284,8 @@ void pf_send_pb_pose(void)
 
 void pf_send_pids(void)
 {
+    pb_pids.clear();
+
     // Linear pose PID
     linear_pose_pid.pb_copy(pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_POSE_PID));
     pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_POSE_PID).set_id(PB_PidEnum::LINEAR_POSE_PID);
@@ -299,11 +301,6 @@ void pf_send_pids(void)
     // Angular speed PID
     angular_speed_pid.pb_copy(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_SPEED_PID));
     pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_SPEED_PID).set_id(PB_PidEnum::ANGULAR_SPEED_PID);
-
-    pb_state.clear();
-    pb_state.mutable_cycle() = pf_motion_control_platform_engine.current_cycle();
-    pf_motion_control_platform_engine.current_speed().pb_copy(pb_state.mutable_speed_current());
-    pf_motion_control_platform_engine.target_speed().pb_copy(pb_state.mutable_speed_order());
 
     pf_get_uartpb().send_message(pid_uuid, &pb_pids);
 }
