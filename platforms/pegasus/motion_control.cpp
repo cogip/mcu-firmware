@@ -276,21 +276,6 @@ static cogip::motion_control::QuadPIDMetaController* pf_angular_speed_controller
     return &quadpid_meta_controller;
 }
 
-void pf_print_state(void)
-{
-    COGIP_DEBUG_COUT(
-        "{"
-            << "\"pose_current\":{"
-                << "\"O\":" << pf_motion_control_platform_engine.current_pose().O()
-                << ",\"x\":" << pf_motion_control_platform_engine.current_pose().x()
-                << ",\"y\":" << pf_motion_control_platform_engine.current_pose().y()
-            << "},"
-            << "\"cycle\":" << pf_motion_control_platform_engine.current_cycle() << ","
-            << "\"speed_current\":{\"distance\":" << pf_motion_control_platform_engine.current_speed().distance()
-            << ",\"angle\":" << pf_motion_control_platform_engine.current_speed().angle() << "}}"
-    );
-}
-
 void pf_send_pb_pose(void)
 {
     pf_motion_control_platform_engine.current_pose().pb_copy(pb_pose);
