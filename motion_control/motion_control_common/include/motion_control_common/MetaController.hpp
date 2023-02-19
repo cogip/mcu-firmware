@@ -13,7 +13,7 @@
 #pragma once
 
 // Project includes
-#include "etl/list.h"
+#include "etl/deque.h"
 #include "BaseMetaController.hpp"
 #include "Controller.hpp"
 #include "MetaControllerParameters.hpp"
@@ -34,7 +34,7 @@ template <
 class MetaController :
     public BaseMetaController,
     public Controller<INPUT_SIZE, OUTPUT_SIZE, MetaControllerParameters>,
-    private etl::list<BaseController *, NB_CONTROLLERS> {
+    private etl::deque<BaseController *, NB_CONTROLLERS> {
 public:
     /// Controller core method. Meta controller executes all sub-controllers in chain.
     void execute() override {
@@ -75,7 +75,7 @@ public:
         }
     };
 
-    /// Add a controller to the controllers chain.
+    /// Add a controller to the end of the controllers chain.
     void add_controller(
         BaseController *ctrl    ///< [in]  new controller to add
         ) override {
@@ -89,6 +89,48 @@ public:
         this->push_back(ctrl);
 
         nb_controllers_++;
+    };
+
+    /// Add a controller to the beginning of the controllers chain.
+    void prepend_controller(
+        BaseController *ctrl    ///< [in]  new controller to add
+        ) override {
+        if (! ctrl->set_meta(this)) {
+            return;
+        }
+        if (INPUT_SIZE != ctrl->nb_inputs()) {
+            COGIP_DEBUG_CERR("Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ").");
+            return;
+        }
+        this->push_front(ctrl);
+
+        nb_controllers_++;
+    };
+
+    /// Replace a controller at the given position in the controllers chain.
+    void replace_controller(
+        uint32_t index,             ///< [in]  index
+        BaseController *new_ctrl    ///< [in]  position of the controller to replace
+        ) override {
+        if (index >= nb_controllers_) {
+            return;
+        }
+
+        BaseController *ctrl_to_replace = (*this)[index];
+
+        if (ctrl_to_replace == new_ctrl) {
+            return;
+        }
+
+        if ((ctrl_to_replace->nb_inputs() != new_ctrl->nb_inputs())
+            || (ctrl_to_replace->nb_outputs() != new_ctrl->nb_outputs())
+            || (! new_ctrl->set_meta(this))
+            || (! ctrl_to_replace->set_meta(nullptr))
+            ) {
+            return;
+        }
+
+        (*this)[index] = new_ctrl;
     };
 };
 
