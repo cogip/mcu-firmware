@@ -34,7 +34,7 @@ template <
 class ParallelMetaController :
     public BaseMetaController,
     public Controller<INPUT_SIZE, OUTPUT_SIZE, MetaControllerParameters>,
-    protected etl::list<BaseController *, NB_CONTROLLERS> {
+    protected etl::vector<BaseController *, NB_CONTROLLERS> {
 public:
     /// Controller core method. Meta controller executes all sub-controllers in parallel.
     void execute() override {
@@ -66,6 +66,47 @@ public:
         this->push_back(ctrl);
 
         nb_controllers_++;
+    };
+
+    /// Add a controller to the beginning of the controllers chain.
+    void insert_controller(
+        BaseController *ctrl    ///< [in]  new controller to add
+        ) override {
+        if (! ctrl->set_meta(this)) {
+            return;
+        }
+        this->insert(this->end(), ctrl);
+
+        nb_controllers_++;
+    };
+
+    /// Replace a controller at the given position in the controllers chain.
+    void replace_controller(
+        uint32_t index,         ///< [in]  index
+        BaseController *ctrl    ///< [in]  position of the controller to replace
+        ) override {
+        if (! ctrl->set_meta(this)) {
+            return;
+        }
+        if (index >= nb_controllers_) {
+            return;
+        }
+
+        auto ctrl_iterator = this->end();
+
+        for (uint32_t i = 0; i < index; i++) {
+            ctrl_iterator++;
+        }
+
+        BaseController *ctrl_to_replace = *ctrl_iterator;
+
+        if ((ctrl_to_replace->nb_inputs() != ctrl->nb_inputs()) ||
+            (ctrl_to_replace->nb_outputs() != ctrl->nb_outputs())) {
+            return;
+        }
+
+        ctrl_iterator = this->erase(ctrl_iterator);
+        this->insert(--ctrl_iterator, ctrl);
     };
 
     protected:
