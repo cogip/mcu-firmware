@@ -49,8 +49,9 @@ void PlatformEngine::prepare_inputs() {
 };
 
 void PlatformEngine::process_outputs() {
-    // Pose reached. Double cast is necessary to avoid imprecision in mantiss.
-    pose_reached_ = (target_pose_status_t)controller_->output(2);
+    // If pose_reached_ is set to reached at this point, it has been set by the engine itself, do not override it.
+    if (pose_reached_ != reached)
+        pose_reached_ = (target_pose_status_t)controller_->output(2);
 
     cogip_defs::Polar command(
         controller_->output(0),

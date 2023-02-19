@@ -19,16 +19,6 @@
 #include "shell_platforms.hpp"
 #include "utils.hpp"
 
-static int _cmd_print_state_cb(int argc, char **argv)
-{
-    (void)argc;
-    (void)argv;
-
-    cogip::pf::motion_control::pf_print_state();
-
-    return EXIT_SUCCESS;
-}
-
 static int _cmd_motors_test_cb(int argc, char **argv)
 {
     (void)argc;
@@ -92,16 +82,11 @@ static int _cmd_motors_test_cb(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static cogip::shell::Command _cmd_print_state = { "_state", "Print current state", _cmd_print_state_cb };
-
 static cogip::shell::Menu _menu_pf = { "Platforms menu", "pf_menu", &cogip::shell::root_menu() };
 static cogip::shell::Command _cmd_motors_test = { "mt", "Test all DC motors", _cmd_motors_test_cb };
 
 void pf_shell_init(void)
 {
-    /* Global commands */
-    cogip::shell::add_global_command(&_cmd_print_state);
-
     /* Platforms commands */
     _menu_pf.push_back(&_cmd_motors_test);
 }

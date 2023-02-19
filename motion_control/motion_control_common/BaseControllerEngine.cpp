@@ -36,6 +36,8 @@ void BaseControllerEngine::thread_loop() {
         COGIP_DEBUG_COUT("Engine loop");
 
         if (pose_reached_ != reached) {
+            static uint32_t timeout_cycle_counter = timeout_cycle_number_;
+
             // Set controller inputs
             prepare_inputs();
 
@@ -43,11 +45,18 @@ void BaseControllerEngine::thread_loop() {
                 controller_->execute();
             }
 
+            // Next cycle
+            current_cycle_++;
+
+            // Consider pose reached on timeout
+            if ((timeout_enable_) && (!--timeout_cycle_counter)) {
+                timeout_cycle_counter = timeout_cycle_number_;
+                pose_reached_ = reached;
+            }
+
             // Process controller outputs
             process_outputs();
 
-            // Next cycle
-            current_cycle_++;
         }
 
         // Wait thread period to end

@@ -32,6 +32,16 @@ public:
     /// return maximum acceleration
     double max_acceleration() const { return max_acceleration_; };
 
+    /// Set maximum speed
+    void set_max_speed(
+        double max_speed                ///< [in]   maximum speed
+        ) { max_speed_ = max_speed; };
+
+    /// Set maximum acceleration
+    void set_max_acceleration(
+        double max_acceleration         ///< [in]   maximum acceleration
+        ) { max_acceleration_ = max_acceleration; };
+
 private:
     /// maximum speed the robot can reach
     double max_speed_;
