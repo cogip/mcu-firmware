@@ -7,7 +7,7 @@ namespace cogip {
 namespace motion_control {
 
 bool BaseController::set_meta(BaseMetaController *meta) {
-    if (meta_) {
+    if ((meta) && (meta_)) {
         COGIP_DEBUG_COUT("Error: Controller already associated to a MetaController.");
         return false;
     }
