@@ -194,6 +194,15 @@ static void pf_quadpid_meta_controller_restore(void) {
     angular_speed_controller_parameters.set_pid(&angular_speed_pid);
 }
 
+/// Disable linear pose control to avoid stopping once point is reached.
+static void pf_quadpid_meta_controller_linear_pose_controller_disabled(void) {
+    // Restore quad PID controller to its original state
+    pf_quadpid_meta_controller_restore();
+
+    // Disable pose PID correction by using a passthrough controller
+    linear_dualpid_meta_controller.replace_controller(0, &passthrough_linear_pose_controller);
+}
+
 /// Disable angular correction and linear speed filtering for linear speed PID setup.
 static void pf_quadpid_meta_controller_linear_speed_controller_test_setup(void) {
     // Restore quad PID controller to its original state
@@ -416,6 +425,11 @@ static void _handle_set_controller(cogip::uartpb::ReadBuffer & buffer)
     case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TEST):
         pf_quadpid_meta_controller_angular_speed_controller_test_setup();
         pf_motion_control_platform_engine.set_timeout_enable(true);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_POSE_DISABLED):
+        pf_quadpid_meta_controller_linear_pose_controller_disabled();
+        pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
