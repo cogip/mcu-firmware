@@ -1,4 +1,4 @@
-APPLICATION = cup2022
+APPLICATION = cup2023
 
 BOARD ?= cogip-board
 #BOARD ?= cogip-native
