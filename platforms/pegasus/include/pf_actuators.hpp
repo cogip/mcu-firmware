@@ -20,6 +20,7 @@ namespace actuators {
 /// Enum using to group actuators
 enum class GroupEnum: uint8_t {
     NO_GROUP = 0,
+    CENTRAL_LIFT = 1
 };
 
 /// Initialize all actuators

@@ -24,7 +24,7 @@ static etl::map<Enum, Motor *, COUNT> _motors;
 
 void init(void) {
     motor_driver_init(MOTOR_DRIVER_DEV(1));
-    _motors[Enum::CENTRAL_LIFT] = _motors_pool.create(Enum::CENTRAL_LIFT, GroupEnum::CENTRAL_LIFT, 0);
+    _motors[Enum::CENTRAL_LIFT_MOTOR] = _motors_pool.create(Enum::CENTRAL_LIFT_MOTOR, GroupEnum::CENTRAL_LIFT, 0);
 }
 
 Motor & get(Enum id) {

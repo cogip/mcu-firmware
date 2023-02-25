@@ -22,7 +22,7 @@ namespace motors {
 // Motors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: uint8_t {
-    CENTRAL_LIFT = 0,
+    CENTRAL_LIFT_MOTOR = 1,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 

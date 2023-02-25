@@ -25,6 +25,7 @@ enum PB_PumpEnum
 enum PB_MotorEnum
 {
     UNUSED_MOTOR = 0;
+    CENTRAL_LIFT = 1;
 }
 
 message PB_Servo {
