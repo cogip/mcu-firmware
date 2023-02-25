@@ -13,24 +13,12 @@ enum PB_ActuatorsGroupEnum
 
 enum PB_ServoEnum
 {
-    UNUSED = 0;
-    ARM_CENTRAL_BASE = 1;
-    ARM_CENTRAL_MID = 2;
-    ARM_CENTRAL_HEAD = 3;
-    ARM_CENTRAL_LIFT = 5;
-    ARM_RIGHT_BASE = 9;
-    ARM_RIGHT_HEAD = 10;
-    ARM_LEFT_BASE = 11;
-    ARM_LEFT_HEAD = 12;
-    STORAGE = 4;
-    WHEEL = 13;
+    UNUSED_SERVO = 0;
 }
 
 enum PB_PumpEnum
 {
-    ARM_LEFT_PUMP = 0;
-    ARM_CENTRAL_PUMP = 1;
-    ARM_RIGHT_PUMP = 2;
+    UNUSED_PUMP = 0;
 }
 
 message PB_Servo {
