@@ -26,6 +26,9 @@
 extern "C" {
 #endif
 
+/* Not connected GPIO for fake use */
+#define GPIO_OUTPUT_UNUSED     GPIO_PIN(PORT_B, 15)
+
 /* LEDs */
 #define HEARTBEAT_LED   GPIO_PIN(PORT_A, 0)
 
@@ -82,6 +85,48 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_dir_reverse = 1,
                 .gpio_enable_invert = 0,
                 .gpio_brake_invert = 1,
+            }
+        },
+        .cb = NULL
+    },
+    {
+        .pwm_dev = 1,
+        .mode = MOTOR_DRIVER_1_DIR,
+        .mode_brake = MOTOR_BRAKE_LOW,
+        .pwm_mode = PWM_LEFT,
+        .pwm_frequency = 20000U,
+        .pwm_resolution = 100U,
+        .nb_motors = 3,
+        .motors = {
+            /* Lift motor */
+            {
+                .pwm_channel = 2,
+                .gpio_enable = GPIO_PIN(PORT_A, 8),
+                .gpio_dir0 = GPIO_PIN(PORT_A, 11),
+                .gpio_dir1_or_brake = GPIO_UNDEF,
+                .gpio_dir_reverse = 0,
+                .gpio_enable_invert = 0,
+                .gpio_brake_invert = 0,
+            },
+            /* Ball conveyor (no PWM, no direction) */
+            {
+                .pwm_channel = -1,
+                .gpio_enable = GPIO_PIN(PORT_B, 1),
+                .gpio_dir0 = GPIO_OUTPUT_UNUSED,
+                .gpio_dir1_or_brake = GPIO_UNDEF,
+                .gpio_dir_reverse = 0,
+                .gpio_enable_invert = 0,
+                .gpio_brake_invert = 0,
+            },
+            /* Ball launcher (no direction, no enable) */
+            {
+                .pwm_channel = 1,
+                .gpio_enable = GPIO_OUTPUT_UNUSED,
+                .gpio_dir0 = GPIO_OUTPUT_UNUSED,
+                .gpio_dir1_or_brake = GPIO_UNDEF,
+                .gpio_dir_reverse = 0,
+                .gpio_enable_invert = 0,
+                .gpio_brake_invert = 0,
             }
         },
         .cb = NULL
