@@ -13,4 +13,7 @@ USEMODULE += shell_menu
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 
+# Update maximum number of motors for actuators
+CFLAGS += -DCONFIG_MOTOR_DRIVER_MAX=3
+
 include ../../Makefile.include
