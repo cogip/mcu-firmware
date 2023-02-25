@@ -2,10 +2,10 @@
 
 namespace cogip {
 namespace app {
-namespace arms {
+namespace actuators {
 
 void shell_init();
 
-} // namespace arms
+} // namespace actuators
 } // namespace app
 } // namespace cogip
