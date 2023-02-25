@@ -1,5 +1,6 @@
 <map id="cogip::pf::actuators::Actuator" name="cogip::pf::actuators::Actuator">
-<area shape="rect" id="node1" title=" " alt="" coords="91,5,237,112"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html" title="Class representing a pump using vacuum_pump driver." alt="" coords="5,175,152,325"/>
-<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="176,160,323,340"/>
+<area shape="rect" id="node1" title=" " alt="" coords="176,5,323,112"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="5,182,152,318"/>
+<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html" title="Class representing a pump using vacuum_pump driver." alt="" coords="176,175,323,325"/>
+<area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="347,160,493,340"/>
 </map>

@@ -2,7 +2,9 @@ var group__platforms__pegasus =
 [
     [ "Actuator.hpp", "Actuator_8hpp.html", null ],
     [ "LxServo.hpp", "LxServo_8hpp.html", null ],
+    [ "Motor.hpp", "Motor_8hpp.html", null ],
     [ "pf_actuators.hpp", "pf__actuators_8hpp.html", null ],
+    [ "pf_motors.hpp", "pf__motors_8hpp.html", null ],
     [ "pf_pumps.hpp", "pf__pumps_8hpp.html", null ],
     [ "pf_servos.hpp", "pf__servos_8hpp.html", null ],
     [ "platform.hpp", "pegasus_2include_2platform_8hpp.html", null ],

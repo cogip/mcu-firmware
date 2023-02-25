@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "cogip::pf::actuators::Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", [
+      [ "cogip::pf::actuators::motors::Motor", "classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html", null ],
       [ "cogip::pf::actuators::pumps::Pump", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html", null ],
       [ "cogip::pf::actuators::servos::LxServo", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html", null ]
     ] ],

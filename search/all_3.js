@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['deactivate_144',['deactivate',['../classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html#a2847f1f2abe29c25a9fe0d4958d4e2da',1,'cogip::pf::actuators::pumps::Pump']]],
+  ['deactivate_144',['deactivate',['../classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html#a5f3ced5dbe8e65cf0abe682d1dd5b9e7',1,'cogip::pf::actuators::motors::Motor::deactivate()'],['../classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html#a2847f1f2abe29c25a9fe0d4958d4e2da',1,'cogip::pf::actuators::pumps::Pump::deactivate()']]],
   ['default_5fposition_145',['default_position',['../structsd21__servo__t.html#a6e5e09f30d7a986018f5bec45ea009ec',1,'sd21_servo_t']]],
   ['default_5fspeed_146',['default_speed',['../structsd21__servo__t.html#a65f36bda988eeb22b3bf987a15d00902',1,'sd21_servo_t']]],
   ['desc_147',['desc',['../classcogip_1_1shell_1_1Command.html#a80845d9287d5fd2bbbebfeb4ac09c40e',1,'cogip::shell::Command']]],

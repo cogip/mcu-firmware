@@ -23,8 +23,10 @@ var searchData=
   ['min_5fangle_5ffor_5ftarget_5forientation_343',['min_angle_for_target_orientation',['../structctrl__quadpid__parameters__t.html#a64a381bdc20a855bc3372dc4f6754b0a',1,'ctrl_quadpid_parameters_t']]],
   ['min_5fdistance_5ffor_5fangular_5fswitch_344',['min_distance_for_angular_switch',['../structctrl__quadpid__parameters__t.html#a4ca9cf9a4278de51247b8681f45086c7',1,'ctrl_quadpid_parameters_t']]],
   ['motion_20control_345',['Motion control',['../group__motion__control.html',1,'']]],
-  ['move_346',['move',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ab3849b1cabc5b0f3d52fe8d6b47b0329',1,'cogip::pf::actuators::servos::LxServo::move()'],['../pf__servos_8hpp.html#aa2073ed5bddeedbad6e0c29b7a7cd3b3',1,'cogip::pf::actuators::servos::move()']]],
-  ['move_5fstart_347',['move_start',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a0a660ed8af351839cf24ff7224673f50',1,'cogip::pf::actuators::servos::LxServo']]],
-  ['move_5fstop_348',['move_stop',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a935801c223586d1e470806260dca3205',1,'cogip::pf::actuators::servos::LxServo']]],
-  ['move_5fwait_349',['move_wait',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a40ef3bb5ccaa396bc9a8aa95d1412c1e',1,'cogip::pf::actuators::servos::LxServo']]]
+  ['motor_346',['Motor',['../classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html',1,'cogip::pf::actuators::motors::Motor'],['../classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html#ab985438eed19fef8e01b890afdb1b95f',1,'cogip::pf::actuators::motors::Motor::Motor()']]],
+  ['motor_2ehpp_347',['Motor.hpp',['../Motor_8hpp.html',1,'']]],
+  ['move_348',['move',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ab3849b1cabc5b0f3d52fe8d6b47b0329',1,'cogip::pf::actuators::servos::LxServo::move()'],['../classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html#ab7a7b28ab696ffdf373418a1ccf6099b',1,'cogip::pf::actuators::motors::Motor::move()'],['../pf__servos_8hpp.html#aa2073ed5bddeedbad6e0c29b7a7cd3b3',1,'cogip::pf::actuators::servos::move()']]],
+  ['move_5fstart_349',['move_start',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a0a660ed8af351839cf24ff7224673f50',1,'cogip::pf::actuators::servos::LxServo']]],
+  ['move_5fstop_350',['move_stop',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a935801c223586d1e470806260dca3205',1,'cogip::pf::actuators::servos::LxServo']]],
+  ['move_5fwait_351',['move_wait',['../classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a40ef3bb5ccaa396bc9a8aa95d1412c1e',1,'cogip::pf::actuators::servos::LxServo']]]
 ];

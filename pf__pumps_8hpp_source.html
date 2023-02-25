@@ -141,55 +141,51 @@ $(document).ready(function(){initNavTree('pf__pumps_8hpp_source.html',''); initR
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// Servomotors ids</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;constexpr <span class="keyword">auto</span> START_LINE = __LINE__;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">enum class</span> Enum: <a class="code" href="group__driver__vacuum__pump.html#gad99ecfeec89c500f08fb83686865bb7a">vacuum_pump_t</a> {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    ARM_LEFT_PUMP = 0,</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    ARM_CENTRAL_PUMP = 1,</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    ARM_RIGHT_PUMP = 2</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;};</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;constexpr <span class="keyword">auto</span> COUNT = __LINE__ - START_LINE - 3;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    UNUSED_PUMP = 0</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;};</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;constexpr <span class="keyword">auto</span> COUNT = __LINE__ - START_LINE - 3;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">using</span> PB_Message = EmbeddedProto::RepeatedFieldFixedSize&lt;PB_Pump, COUNT&gt;;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">using</span> PB_Message = EmbeddedProto::RepeatedFieldFixedSize&lt;PB_Pump, COUNT&gt;;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html">   33</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html">Command</a> {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a5a7a45bdb6712645851076604ba46b69">   36</a></span>&#160;    <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a5a7a45bdb6712645851076604ba46b69">Command</a>(</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        Enum <span class="keywordtype">id</span>,        </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>  </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">   39</a></span>&#160;    ) : <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">id</a>(<a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">id</a>), <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>(<a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>) {};</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    Enum <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">id</a>;         </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">   42</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>;  </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pf__actuators_8hpp.html#aa8703a26db4165eca63c7426397b8e53">init</a>();</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html">Pump</a> &amp; <a class="code" href="pf__pumps_8hpp.html#ad5dcc7662ad36b434420e7e0c3ab45b2">get</a>(</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    Enum <span class="keywordtype">id</span>  </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pf__pumps_8hpp.html#afd798c65d5235c32813b418f7c8f9770">pb_copy</a>(</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    PB_Message &amp; pb_message  </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;} <span class="comment">// namespace pumps</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;} <span class="comment">// namespace actuators</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;} <span class="comment">// namespace pf</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html">   31</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html">Command</a> {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a5a7a45bdb6712645851076604ba46b69">   34</a></span>&#160;    <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a5a7a45bdb6712645851076604ba46b69">Command</a>(</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        Enum <span class="keywordtype">id</span>,        </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>  </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">   37</a></span>&#160;    ) : <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">id</a>(<a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">id</a>), <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>(<a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>) {};</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    Enum <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">id</a>;         </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">   40</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">activated</a>;  </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pf__actuators_8hpp.html#aa8703a26db4165eca63c7426397b8e53">init</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<a class="code" href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html">Pump</a> &amp; get(</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    Enum <span class="keywordtype">id</span>  </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">void</span> pb_copy(</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    PB_Message &amp; pb_message  </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;} <span class="comment">// namespace pumps</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;} <span class="comment">// namespace actuators</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;} <span class="comment">// namespace pf</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="apf__pumps_8hpp_html_ad5dcc7662ad36b434420e7e0c3ab45b2"><div class="ttname"><a href="pf__pumps_8hpp.html#ad5dcc7662ad36b434420e7e0c3ab45b2">cogip::pf::actuators::pumps::get</a></div><div class="ttdeci">Pump &amp; get(Enum id)</div><div class="ttdoc">Get a pump by id.</div></div>
-<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html">cogip::pf::actuators::pumps::Command</a></div><div class="ttdoc">Pump command class.</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00033">pf_pumps.hpp:33</a></div></div>
-<div class="ttc" id="apf__pumps_8hpp_html_afd798c65d5235c32813b418f7c8f9770"><div class="ttname"><a href="pf__pumps_8hpp.html#afd798c65d5235c32813b418f7c8f9770">cogip::pf::actuators::pumps::pb_copy</a></div><div class="ttdeci">void pb_copy(PB_Message &amp;pb_message)</div><div class="ttdoc">Copy data to Protobuf message.</div></div>
-<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html_a5a7a45bdb6712645851076604ba46b69"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a5a7a45bdb6712645851076604ba46b69">cogip::pf::actuators::pumps::Command::Command</a></div><div class="ttdeci">Command(Enum id, bool activated)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00036">pf_pumps.hpp:36</a></div></div>
-<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html_a2697ece0503943fa0b4ff3ac760d2e69"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">cogip::pf::actuators::pumps::Command::activated</a></div><div class="ttdeci">bool activated</div><div class="ttdoc">activate pump if true, deactivate otherwise</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00042">pf_pumps.hpp:42</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html">cogip::pf::actuators::pumps::Command</a></div><div class="ttdoc">Pump command class.</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00031">pf_pumps.hpp:31</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html_a5a7a45bdb6712645851076604ba46b69"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a5a7a45bdb6712645851076604ba46b69">cogip::pf::actuators::pumps::Command::Command</a></div><div class="ttdeci">Command(Enum id, bool activated)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00034">pf_pumps.hpp:34</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html_a2697ece0503943fa0b4ff3ac760d2e69"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#a2697ece0503943fa0b4ff3ac760d2e69">cogip::pf::actuators::pumps::Command::activated</a></div><div class="ttdeci">bool activated</div><div class="ttdoc">activate pump if true, deactivate otherwise</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00040">pf_pumps.hpp:40</a></div></div>
 <div class="ttc" id="agroup__driver__vacuum__pump_html_gad99ecfeec89c500f08fb83686865bb7a"><div class="ttname"><a href="group__driver__vacuum__pump.html#gad99ecfeec89c500f08fb83686865bb7a">vacuum_pump_t</a></div><div class="ttdeci">unsigned int vacuum_pump_t</div><div class="ttdoc">Default COGIP vacuum pump identifier definition.</div><div class="ttdef"><b>Definition:</b> <a href="vacuum__pump_8h_source.html#l00051">vacuum_pump.h:51</a></div></div>
 <div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Pump_html"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html">cogip::pf::actuators::pumps::Pump</a></div><div class="ttdoc">Class representing a pump using vacuum_pump driver.</div><div class="ttdef"><b>Definition:</b> <a href="Pump_8hpp_source.html#l00031">Pump.hpp:31</a></div></div>
-<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html_af22f73ea91998ea42374432bffbcbb34"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">cogip::pf::actuators::pumps::Command::id</a></div><div class="ttdeci">Enum id</div><div class="ttdoc">pump id</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00039">pf_pumps.hpp:39</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1pumps_1_1Command_html_af22f73ea91998ea42374432bffbcbb34"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html#af22f73ea91998ea42374432bffbcbb34">cogip::pf::actuators::pumps::Command::id</a></div><div class="ttdeci">Enum id</div><div class="ttdoc">pump id</div><div class="ttdef"><b>Definition:</b> <a href="pf__pumps_8hpp_source.html#l00037">pf_pumps.hpp:37</a></div></div>
 <div class="ttc" id="aPump_8hpp_html"><div class="ttname"><a href="Pump_8hpp.html">Pump.hpp</a></div><div class="ttdoc">C++ class representing a pump using vacuum_pump driver.</div></div>
 <div class="ttc" id="apf__actuators_8hpp_html_aa8703a26db4165eca63c7426397b8e53"><div class="ttname"><a href="pf__actuators_8hpp.html#aa8703a26db4165eca63c7426397b8e53">cogip::pf::actuators::init</a></div><div class="ttdeci">void init()</div><div class="ttdoc">Initialize all actuators.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Feb 19 2023 20:47:35 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat Feb 25 2023 16:19:21 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

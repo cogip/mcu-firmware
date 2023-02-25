@@ -43,6 +43,9 @@ var annotated_dup =
       ] ],
       [ "pf", null, [
         [ "actuators", null, [
+          [ "motors", null, [
+            [ "Motor", "classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html", "classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor" ]
+          ] ],
           [ "pumps", null, [
             [ "Command", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command" ],
             [ "Pump", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump" ]
