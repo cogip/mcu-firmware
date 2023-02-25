@@ -79,16 +79,6 @@ static void _lx_half_duplex_uart_init() {
 void init(void) {
     _lx_half_duplex_uart_init();
     LxServo::lx_stream = &_lx_stream;
-    _servos[Enum::ARM_CENTRAL_LIFT] = _servos_pool.create(Enum::ARM_CENTRAL_LIFT, GroupEnum::CENTRAL_ARM, 0);
-    _servos[Enum::ARM_CENTRAL_BASE] = _servos_pool.create(Enum::ARM_CENTRAL_BASE, GroupEnum::CENTRAL_ARM, 1);
-    _servos[Enum::ARM_CENTRAL_MID] = _servos_pool.create(Enum::ARM_CENTRAL_MID, GroupEnum::CENTRAL_ARM, 2);
-    _servos[Enum::ARM_CENTRAL_HEAD] = _servos_pool.create(Enum::ARM_CENTRAL_HEAD, GroupEnum::CENTRAL_ARM, 3);
-    _servos[Enum::ARM_RIGHT_BASE] = _servos_pool.create(Enum::ARM_RIGHT_BASE, GroupEnum::RIGHT_ARM, 0);
-    _servos[Enum::ARM_RIGHT_HEAD] = _servos_pool.create(Enum::ARM_RIGHT_HEAD, GroupEnum::RIGHT_ARM, 1);
-    _servos[Enum::ARM_LEFT_BASE] = _servos_pool.create(Enum::ARM_LEFT_BASE, GroupEnum::LEFT_ARM, 0);
-    _servos[Enum::ARM_LEFT_HEAD] = _servos_pool.create(Enum::ARM_LEFT_HEAD, GroupEnum::LEFT_ARM, 1);
-    _servos[Enum::STORAGE] = _servos_pool.create(Enum::STORAGE, GroupEnum::NO_GROUP);
-    _servos[Enum::WHEEL] = _servos_pool.create(Enum::WHEEL, GroupEnum::NO_GROUP);
 }
 
 LxServo & get(Enum id) {

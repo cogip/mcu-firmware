@@ -115,6 +115,7 @@ static const uart_conf_t uart_config[] = {
  * @{
  */
 static const pwm_conf_t pwm_config[] = {
+    /* Motion motors */
     {
         .dev = TIM2,
         .rcc_mask = RCC_APB1ENR_TIM2EN,
@@ -126,6 +127,19 @@ static const pwm_conf_t pwm_config[] = {
         },
         .af = GPIO_AF1,
         .bus = APB1
+    },
+    /* Actuators */
+    {
+        .dev = TIM8,
+        .rcc_mask = RCC_APB2ENR_TIM8EN,
+        .chan = {
+            { .pin = GPIO_PIN(PORT_C, 6), .cc_chan = 0 },
+            { .pin = GPIO_PIN(PORT_C, 7), .cc_chan = 1 },
+            { .pin = GPIO_PIN(PORT_C, 8), .cc_chan = 2 },
+            { .pin = GPIO_PIN(PORT_C, 9), .cc_chan = 3 }
+        },
+        .af = GPIO_AF3,
+        .bus = APB2
     },
 };
 

@@ -6,46 +6,34 @@
 /// @ingroup     platforms_pegasus
 /// @{
 /// @file
-/// @brief       Functions and definitions related to pumps.
+/// @brief       Functions and definitions related to motors.
 /// @author      Eric Courtois <eric.courtois@gmail.com>
+/// @author      Gilles DOFFE <g.doffe@gmail.com>
 
 #pragma once
 
-#include "Pump.hpp"
+#include "Motor.hpp"
 
 namespace cogip {
 namespace pf {
 namespace actuators {
-namespace pumps {
+namespace motors {
 
-// Servomotors ids
+// Motors ids
 constexpr auto START_LINE = __LINE__;
-enum class Enum: vacuum_pump_t {
-    UNUSED_PUMP = 0
+enum class Enum: uint8_t {
+    CENTRAL_LIFT_MOTOR = 1,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
-using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_Pump, COUNT>;
+using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_Motor, COUNT>;
 
-/// Pump command class.
-class Command {
-public:
-    /// Constructor.
-    Command(
-        Enum id,        ///< [in] pump id
-        bool activated  ///< [in] activate pump if true, deactivate otherwise
-    ) : id(id), activated(activated) {};
-
-    Enum id;         ///< pump id
-    bool activated;  ///< activate pump if true, deactivate otherwise
-};
-
-/// Initialize pumps.
+/// Initialize motors.
 void init();
 
-/// Get a pump by id.
-Pump & get(
-    Enum id  ///< [in] pump id
+/// Get a motor by id.
+Motor & get(
+    Enum id  ///< [in] motor id
 );
 
 /// Copy data to Protobuf message.
@@ -53,7 +41,7 @@ void pb_copy(
     PB_Message & pb_message  ///< [out] Protobuf message to fill
 );
 
-} // namespace pumps
+} // namespace motors
 } // namespace actuators
 } // namespace pf
 } // namespace cogip

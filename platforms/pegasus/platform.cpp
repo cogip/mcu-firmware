@@ -134,6 +134,7 @@ void pf_init(void)
 #endif /* MODULE_SHELL_PLATFORMS */
 
     cogip::pf::motion_control::pf_init_motion_control();
+    cogip::pf::actuators::init();
 }
 
 void pf_init_tasks(void)

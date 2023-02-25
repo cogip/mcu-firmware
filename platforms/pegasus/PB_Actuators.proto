@@ -4,6 +4,7 @@ enum PB_ActuatorsTypeEnum
 {
   SERVO = 0;
   PUMP = 1;
+  MOTOR = 2;
 }
 
 enum PB_ActuatorsGroupEnum
@@ -13,24 +14,18 @@ enum PB_ActuatorsGroupEnum
 
 enum PB_ServoEnum
 {
-    UNUSED = 0;
-    ARM_CENTRAL_BASE = 1;
-    ARM_CENTRAL_MID = 2;
-    ARM_CENTRAL_HEAD = 3;
-    ARM_CENTRAL_LIFT = 5;
-    ARM_RIGHT_BASE = 9;
-    ARM_RIGHT_HEAD = 10;
-    ARM_LEFT_BASE = 11;
-    ARM_LEFT_HEAD = 12;
-    STORAGE = 4;
-    WHEEL = 13;
+    UNUSED_SERVO = 0;
 }
 
 enum PB_PumpEnum
 {
-    ARM_LEFT_PUMP = 0;
-    ARM_CENTRAL_PUMP = 1;
-    ARM_RIGHT_PUMP = 2;
+    UNUSED_PUMP = 0;
+}
+
+enum PB_MotorEnum
+{
+    UNUSED_MOTOR = 0;
+    CENTRAL_LIFT = 1;
 }
 
 message PB_Servo {
@@ -49,9 +44,19 @@ message PB_Pump {
     bool under_pressure = 5;
 }
 
+message PB_Motor {
+    PB_ActuatorsGroupEnum group = 1;
+    uint32 order = 2;
+    PB_MotorEnum id = 3;
+    bool activated = 4;
+    bool direction = 5;
+    uint32 speed = 6;
+}
+
 message PB_ActuatorsState {
     repeated PB_Servo servos = 1;
     repeated PB_Pump pumps = 2;
+    repeated PB_Motor motors = 3;
 }
 
 message PB_ServoCommand {
@@ -65,9 +70,16 @@ message PB_PumpCommand {
     bool command = 2;
 }
 
+message PB_MotorCommand {
+    PB_MotorEnum id = 1;
+    bool direction = 3;
+    uint32 speed = 4;
+}
+
 message PB_ActuatorCommand {
     oneof command {
         PB_ServoCommand servo = 1;
         PB_PumpCommand pump = 2;
+        PB_MotorCommand motor = 3;
     }
 }

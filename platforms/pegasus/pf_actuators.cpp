@@ -6,6 +6,7 @@
 #include "pf_actuators.hpp"
 #include "pf_servos.hpp"
 #include "pf_pumps.hpp"
+#include "pf_motors.hpp"
 
 #include "platform.hpp"
 
@@ -31,7 +32,7 @@ constexpr cogip::uartpb::uuid_t thread_stop_uuid = 3781855956;
 constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
 constexpr cogip::uartpb::uuid_t command_uuid = 2552455996;
 
-static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT> _pb_state;
+static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::motors::COUNT> _pb_state;
 
 /// Build and send Protobuf actuators state message.
 static void _send_state() {
@@ -39,6 +40,7 @@ static void _send_state() {
     _pb_state.clear();
     servos::pb_copy(_pb_state.mutable_servos());
     pumps::pb_copy(_pb_state.mutable_pumps());
+    motors::pb_copy(_pb_state.mutable_motors());
     uartpb.send_message(state_uuid, &_pb_state);
 }
 
@@ -96,11 +98,21 @@ static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
         pumps::Enum id = pumps::Enum{(vacuum_pump_t)pb_pump_command.id()};
         pumps::get(id).activate(pb_pump_command.command());
     }
+    if (pb_command.has_motor()) {
+        const PB_MotorCommand & pb_motor_command = pb_command.get_motor();
+        motors::Enum id = motors::Enum{(uint8_t)pb_motor_command.id()};
+        if (pb_motor_command.speed())
+            motors::get(id).move(pb_motor_command.direction(), pb_motor_command.speed());
+        else {
+            motors::get(id).deactivate();
+        }
+    }
 }
 
 void init() {
     servos::init();
     pumps::init();
+    motors::init();
 
     _sender_pid = thread_create(
         _sender_stack,

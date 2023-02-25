@@ -3,7 +3,7 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-#include "pf_pumps.hpp"
+#include "pf_motors.hpp"
 #include "pf_actuators.hpp"
 
 #include "platform.hpp"
@@ -12,30 +12,33 @@
 #include "etl/pool.h"
 
 #include <ztimer.h>
+#include <motor_driver.h>
 
 namespace cogip {
 namespace pf {
 namespace actuators {
-namespace pumps {
+namespace motors {
 
-static etl::pool<Pump, COUNT> _pumps_pool;
-static etl::map<Enum, Pump *, COUNT> _pumps;
+static etl::pool<Motor, COUNT> _motors_pool;
+static etl::map<Enum, Motor *, COUNT> _motors;
 
 void init(void) {
+    motor_driver_init(MOTOR_DRIVER_DEV(1));
+    _motors[Enum::CENTRAL_LIFT_MOTOR] = _motors_pool.create(Enum::CENTRAL_LIFT_MOTOR, GroupEnum::CENTRAL_LIFT, 0);
 }
 
-Pump & get(Enum id) {
-    return *_pumps[id];
+Motor & get(Enum id) {
+    return *_motors[id];
 }
 
 void pb_copy(PB_Message & pb_message) {
     // cppcheck-suppress unusedVariable
-    for (auto const & [id, pump] : _pumps) {
-        pump->pb_copy(pb_message.get(pb_message.get_length()));
+    for (auto const & [id, motor] : _motors) {
+        motor->pb_copy(pb_message.get(pb_message.get_length()));
     }
 }
 
-} // namespace pumps
+} // namespace motors
 } // namespace actuators
 } // namespace pf
 } // namespace cogip
