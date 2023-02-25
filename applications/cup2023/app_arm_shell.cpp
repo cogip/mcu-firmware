@@ -1,4 +1,3 @@
-#include "app_arm.hpp"
 
 #include "shell_menu/shell_menu.hpp"
 
