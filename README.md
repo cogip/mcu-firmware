@@ -60,6 +60,23 @@ It is used to apply patches on RIOT-OS
 $ sudo apt install quilt
 ```
 
+### cqfd (for native architecture only)
+
+Cqfd wraps commands to run them inside the Docker container using your host
+current user.
+It can be configured with some pre defined commands called flavors and it can
+produce release artifacts.
+
+To install cqfd:
+
+```bash
+git clone git@github.com:savoirfairelinux/cqfd.git
+cd cqfd/
+sudo make install
+```
+
+For more information: [cqfd repository](https://github.com/savoirfairelinux/cqfd)
+
 ### Python Virtual Environment
 
 ```bash
@@ -71,7 +88,7 @@ $ pip install -r mcu-firmware/requirements.txt
 
 # Simulation target (x86_64 architecture)
 
-Assuming the platform is cortex
+Assuming the platform is pf_test and the application is app_test
 
 ## Build
 
@@ -85,6 +102,22 @@ $ make -j$(nproc) -C applications/<application_name>
 
 ```bash
 $ make -j$(nproc) BOARD=<board_name> -C applications/<application_name>
+```
+
+### Using cqfd
+
+#### Init cqfd docker image
+
+This command has to be done once per project:
+
+```bash
+$ cqfd init
+```
+
+#### Launch the build using a flavor
+
+```bash
+$ cqfd -b app_test-native
 ```
 
 ## Build and launch in debugger (only for native cpu architecture)
