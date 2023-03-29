@@ -198,6 +198,10 @@ static void pf_quadpid_meta_controller_restore(void) {
     linear_speed_controller_parameters.set_pid(&linear_speed_pid);
     // Angular speed PID controller parameters
     angular_speed_controller_parameters.set_pid(&angular_speed_pid);
+
+    // Sign target speed according to pose error
+    passthrough_linear_pose_controller_parameters.set_signed_target_speed(true);
+    passthrough_angular_pose_controller_parameters.set_signed_target_speed(true);
 }
 
 /// Disable linear pose control to avoid stopping once point is reached.
@@ -223,6 +227,9 @@ static void pf_quadpid_meta_controller_linear_speed_controller_test_setup(void) 
 
     // Disable angular speed loop by using a PID with all gain set to zero
     angular_speed_controller_parameters.set_pid(&null_pid);
+
+    // Do not sign target speed
+    passthrough_linear_pose_controller_parameters.set_signed_target_speed(false);
 }
 
 /// Disable linear correction and angular speed filtering for angular speed PID setup.
@@ -239,6 +246,9 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
 
     // Disable angular speed loop by using a PID with all gain set to zero
     linear_speed_controller_parameters.set_pid(&null_pid);
+
+    // Do not sign target speed
+    passthrough_angular_pose_controller_parameters.set_signed_target_speed(false);
 }
 
 /// Update current speed from quadrature encoders measure.
