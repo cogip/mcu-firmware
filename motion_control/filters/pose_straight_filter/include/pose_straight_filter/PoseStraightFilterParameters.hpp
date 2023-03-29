@@ -29,9 +29,19 @@ public:
     /// return angular treshold
     double angular_treshold() const { return angular_treshold_; };
 
+    /// Set angular treshold
+    void set_angular_treshold(
+        double angular_treshold                      ///< [in]   angular treshold
+        ) { angular_treshold_ = angular_treshold; };
+
     ///  Get linear treshold
     /// return Linear treshold
     double linear_treshold() const { return linear_treshold_; };
+
+    /// Set linear treshold
+    void set_linear_treshold(
+        double linear_treshold                      ///< [in]   linear treshold
+        ) { linear_treshold_ = linear_treshold; };
 
 private:
     /// the robot turns on itself until the angle error is lower than this treshold
