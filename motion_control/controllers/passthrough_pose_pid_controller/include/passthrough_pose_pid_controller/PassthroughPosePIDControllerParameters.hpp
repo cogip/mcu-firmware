@@ -24,16 +24,32 @@ class PassthroughPosePIDControllerParameters {
 public:
     /// Constructor
     PassthroughPosePIDControllerParameters(
-        pid::PID *pid = nullptr     ///< [in]  PID parameters
-    ) : pid_(pid) {};
+        double target_speed = 0.0,          ///< [in] PID parameters
+        bool signed_target_speed = true     ///< [in] target speed signed flag
+    ) : target_speed_(target_speed), signed_target_speed_(signed_target_speed) {};
 
-    /// Get PID parameters
-    /// return     PID parameters pointer
-    pid::PID *pid() const { return pid_; };
+    /// Get target speed parameter
+    /// return     target speed
+    double target_speed() const { return target_speed_; };
+
+    void set_target_speed(
+        double target_speed
+        ) { target_speed_ = target_speed; }
+
+    /// Get force target speed flag
+    /// return      force target speed flag
+    bool signed_target_speed() const { return signed_target_speed_; };
+
+    void set_signed_target_speed(
+        bool signed_target_speed
+        ) { signed_target_speed_ = signed_target_speed; }
 
 private:
-    /// PID parameters
-    pid::PID *pid_;   ///< Position PID
+    /// Target speed
+    double target_speed_;
+
+    /// Force target speed flag. If set, speed_order is forced to target_speed
+    bool signed_target_speed_;
 };
 
 } // namespace motion_control

@@ -133,11 +133,17 @@ static cogip::motion_control::SpeedPIDControllerParameters angular_speed_control
 static cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters);
 
 /// Linear PassthroughPosePIDControllerParameters.
-static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_linear_pose_controller_parameters(&null_pid);
+static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_linear_pose_controller_parameters(
+    platform_max_speed_linear_mm_per_period,
+    true
+    );
 /// Linear PassthroughPosePIDController replaces linear PosePIDController to bypass it, imposing target speed as speed order.
 static cogip::motion_control::PassthroughPosePIDController passthrough_linear_pose_controller(&passthrough_linear_pose_controller_parameters);
 /// Angular PassthroughPosePIDControllerParameters.
-static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_angular_pose_controller_parameters(&null_pid);
+static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_angular_pose_controller_parameters(
+    platform_max_speed_angular_deg_per_period,
+    true
+    );
 /// Angular PassthroughPosePIDController replaces angular PosePIDController to bypass it, imposing target speed as speed order.
 static cogip::motion_control::PassthroughPosePIDController passthrough_angular_pose_controller(&passthrough_angular_pose_controller_parameters);
 
