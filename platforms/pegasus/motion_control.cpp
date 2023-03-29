@@ -50,6 +50,10 @@ static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
         cogip::motion_control::platform_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose>(),
         cogip::motion_control::platform_process_commands_cb_t::create<pf_motor_drive>()
 );
+// Target pose
+static cogip::path::Pose target_pose;
+// Target speed
+static cogip::cogip_defs::Polar target_speed;
 
 // Linear pose PID controller
 static cogip::pid::PID linear_pose_pid(
