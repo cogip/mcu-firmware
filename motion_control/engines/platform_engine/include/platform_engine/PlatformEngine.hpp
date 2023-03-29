@@ -13,7 +13,7 @@
 #pragma once
 
 // Project includes
-#include "cogip_defs/Pose.hpp"
+#include "path/Pose.hpp"
 #include "cogip_defs/Polar.hpp"
 #include "etl/delegate.h"
 #include "motion_control_common/BaseControllerEngine.hpp"
@@ -36,7 +36,6 @@ public:
         platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb,    ///< [in]  Platform callback to get robot current speed and pose
         platform_process_commands_cb_t platform_process_commands_cb         ///< [in]  Platform callback to process commands output from last controller
     ) : BaseControllerEngine(),
-        allow_reverse_(true),
         platform_get_speed_and_pose_cb_(platform_get_speed_and_pose_cb),
         platform_process_commands_cb_(platform_process_commands_cb) {};
 
@@ -54,11 +53,7 @@ public:
 
     /// Get target pose
     /// return     target pose
-    const cogip_defs::Pose& target_pose() const { return target_pose_; };
-
-    /// Get if going backward is allowed
-    /// return     going backward permission
-    bool allow_reverse() const { return allow_reverse_; };
+    const path::Pose& target_pose() const { return target_pose_; };
 
     /// Set target speed
     void set_target_speed(
@@ -72,13 +67,8 @@ public:
 
     /// Set target pose
     void set_target_pose(
-        const cogip_defs::Pose& target_pose     ///< [in]   new target pose
+        const path::Pose& target_pose     ///< [in]   new target pose
         ) { target_pose_ = target_pose; };
-
-    /// Set going backward permission
-    void set_allow_reverse(
-        const bool allow_reverse                ///< [in]   going backward permission
-        ) { allow_reverse_ = allow_reverse; };
 
 private:
     /// Prepare controller inputs from platform functions.
@@ -97,10 +87,7 @@ private:
     cogip_defs::Pose current_pose_;
 
     /// Robot target pose
-    cogip_defs::Pose target_pose_;
-
-    /// Going backward permission
-    bool allow_reverse_;
+    path::Pose target_pose_;
 
     /// Platform callback to get target and current poses from platforms
     platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb_;

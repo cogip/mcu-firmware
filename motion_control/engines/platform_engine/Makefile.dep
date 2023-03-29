@@ -1,2 +1,3 @@
 USEMODULE += motion_control_common
 USEMODULE += cogip_defs
+USEMODULE += path
