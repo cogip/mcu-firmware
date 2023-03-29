@@ -248,7 +248,7 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
     // Disable pose PID correction by using a passthrough controller
     angular_dualpid_meta_controller.replace_controller(0, &passthrough_angular_pose_controller);
 
-    // Disable angular speed loop by using a PID with all gain set to zero
+    // Disable linear speed loop by using a PID with all gain set to zero
     linear_speed_controller_parameters.set_pid(&null_pid);
 
     // Do not sign target speed
@@ -382,7 +382,6 @@ void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cog
     pf_encoder_read(current_speed);
     odometry_update(current_pose, current_speed, SEGMENT);
 }
-
 
 void pf_motor_drive(const cogip::cogip_defs::Polar &command)
 {
