@@ -49,8 +49,8 @@ void PlatformEngine::prepare_inputs() {
 };
 
 void PlatformEngine::process_outputs() {
-    // If pose_reached_ is set to reached at this point, it has been set by the engine itself, do not override it.
-    if (pose_reached_ != reached)
+    // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
+    if (!timeout_enable_)
         pose_reached_ = (target_pose_status_t)controller_->output(2);
 
     cogip_defs::Polar command(
