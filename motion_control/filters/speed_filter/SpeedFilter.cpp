@@ -17,9 +17,8 @@ namespace cogip {
 
 namespace motion_control {
 
-static double limit_speed_order(
+double SpeedFilter::limit_speed_order(
     double speed_order,
-    double current_speed,
     double target_speed,
     double max_speed,
     double max_acc
@@ -27,22 +26,23 @@ static double limit_speed_order(
 {
     // Limit target speed
     target_speed = std::min(target_speed, max_speed);
-    target_speed = std::max(target_speed, -max_speed);
 
     // Limit speed command (maximum acceleration)
-    double a = speed_order - current_speed;
+    double a = speed_order - previous_speed_order_;
 
     if (a > max_acc) {
-        speed_order = current_speed + max_acc;
+        speed_order = previous_speed_order_ + max_acc;
     }
 
     if (a < -max_acc) {
-        speed_order = current_speed - max_acc;
+        speed_order = previous_speed_order_ - max_acc;
     }
 
     // Limit speed command
     speed_order = std::min(speed_order, target_speed);
     speed_order = std::max(speed_order, -target_speed);
+
+    previous_speed_order_ = speed_order;
 
     return speed_order;
 }
@@ -60,7 +60,6 @@ void SpeedFilter::execute() {
     // Limit speed order
     speed_order = limit_speed_order(
         speed_order,
-        current_speed,
         target_speed,
         parameters_->max_speed(),
         parameters_->max_acceleration()
