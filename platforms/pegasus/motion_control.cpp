@@ -341,6 +341,16 @@ void pf_start_motion_control(void)
     pf_motion_control_platform_engine.start_thread();
 }
 
+void pf_disable_motion_control()
+{
+    pf_motion_control_platform_engine.disable();
+}
+
+void pf_enable_motion_control()
+{
+    pf_motion_control_platform_engine.enable();
+}
+
 void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cogip::cogip_defs::Pose &current_pose)
 {
     pf_encoder_read(current_speed);

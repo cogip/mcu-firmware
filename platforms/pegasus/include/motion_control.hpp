@@ -101,6 +101,12 @@ void pf_init_motion_control(void);
 /// Start motion control
 void pf_start_motion_control(void);
 
+/// Make motion control engine thread loop disabled
+void pf_disable_motion_control();
+
+/// Make motion control engine thread loop enabled
+void pf_enable_motion_control();
+
 /// Send current robot pose in Protobuf format over UART
 void pf_send_pb_pose(void);
 
