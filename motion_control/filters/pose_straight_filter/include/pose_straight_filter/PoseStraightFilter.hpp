@@ -26,6 +26,7 @@ namespace motion_control {
 /// Input 3-5:  target pose
 /// Input 6-7:  current speed
 /// Input 8-9:  target speed
+/// Input 10:   allow reverse
 /// Output 0:   linear pose error
 /// Output 1:   linear current speed
 /// Output 2:   linear target speed

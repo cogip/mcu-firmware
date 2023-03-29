@@ -71,46 +71,38 @@ void PoseStraightFilter::execute() {
     // compute position error
     cogip_defs::Polar pos_err = target_pose - current_pose;
 
-    // Transition between straight move and final orientation
-    static bool transition_straight_to_rotate = false;
+    // If the robot is allowed to go backward, reverse the error if it shorten the move.
+    if (allow_reverse && (fabs(pos_err.angle()) > 90)) {
+        pos_err.reverse();
+    }
 
-    // position correction
+    // Each move is decomposed in three steps:
+    //   1. The robot rotates on its center to take the direction of the pose to reach.
+    //   2. The robot goes straight to that pose.
+    //   3. Once arrived at this pose, it rotates again on its center to the wanted angle.
+    // The angular treshold is used to check if a rotation of the robot on itself has to be done (step 1. and 3.).
+    // The linear treshold is used to check if the robot is close to the pose to reach (step 2.).
     if (fabs(pos_err.distance()) > parameters_->linear_treshold()) {
-        // Transition between orientation to the point and straight move
-        static bool transition_rotate_to_straight = false;
-
-        // go reverse ? */
-        if (allow_reverse && fabs(pos_err.angle()) > 90) {
-            pos_err.reverse();
-        }
-
-        // if target point direction angle is too important, bot rotates on its starting point
         if (fabs(pos_err.angle()) > parameters_->angular_treshold()) {
-            transition_rotate_to_straight = true;
-            pos_err.set_distance(0);
+            // So if the robot is far from the pose to reach and if the angle to reach this pose is too important,
+            // first rotate on itself to take the direction of the destination.
+            // Set the linear speed to 0 in such case.
+            target_speed.set_distance(0);
         }
-        else if (transition_rotate_to_straight) {
+        else {
+            // Once the angular direction is good, step 1. is completed, thus inform the platform through target pose status variable.
             pose_reached = target_pose_status_t::intermediate_reached;
-            transition_rotate_to_straight = false;
-            transition_straight_to_rotate = true;
         }
     }
-    else {
-        if (transition_straight_to_rotate) {
-            pose_reached = target_pose_status_t::intermediate_reached;
-            transition_straight_to_rotate = false;
-        }
-
-        // orientation correction only (position is reached)
-        pos_err.set_distance(0);
-
-        // final orientation error
+    else if (fabs(pos_err.distance()) <= parameters_->linear_treshold()) {
+        // If the linear error is below the linear treshold, the step 2. is completed.
+        // Thus inform the platform through target pose status variable.
+        pose_reached = target_pose_status_t::intermediate_reached;
+        // Start step 3. to reach the final wanted orientation.
         pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
-
-        // orientation is reached
         if (fabs(pos_err.angle()) < parameters_->angular_treshold()) {
+            // Pose is finally reached, inform the platform through target pose status variable.
             pose_reached = target_pose_status_t::reached;
-            pos_err.set_angle(0);
         }
     }
 
