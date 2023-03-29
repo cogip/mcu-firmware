@@ -313,23 +313,30 @@ void pf_send_pb_state(void)
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 {
-    PB_PathPose pb_pose_to_reach;
-    EmbeddedProto::Error error = pb_pose_to_reach.deserialize(buffer);
+    // Retrieve new target pose from protobuf message
+    PB_PathPose pb_path_target_pose;
+    EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
     if (error != EmbeddedProto::Error::NO_ERRORS) {
         std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
         return;
     }
 
-    cogip::path::Pose pose_to_reach;
-    pose_to_reach.pb_read(pb_pose_to_reach);
-    cogip::cogip_defs::Pose pose(pose_to_reach.x(), pose_to_reach.y(), pose_to_reach.O());
-    cogip::cogip_defs::Polar speed_order;
-    speed_order.set_distance(pose_to_reach.max_speed_linear());
-    speed_order.set_angle(pose_to_reach.max_speed_angular());
+    // Target pose
+    target_pose.pb_read(pb_path_target_pose);
 
-    pf_motion_control_platform_engine.set_target_pose(pose);
-    pf_motion_control_platform_engine.set_target_speed(speed_order);
-    pf_motion_control_platform_engine.set_allow_reverse(pose_to_reach.allow_reverse());
+    // Target speed
+    target_speed.set_distance(target_pose.max_speed_linear());
+    target_speed.set_angle(target_pose.max_speed_angular());
+    pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+    // Set target speed for passthrough controllers
+    passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
+    passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
+
+    // Deal with the first pose in the list
+    pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+    // New target pose, the robot is moving
     pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
 }
 
