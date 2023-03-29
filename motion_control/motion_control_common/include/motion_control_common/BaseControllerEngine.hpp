@@ -13,6 +13,7 @@
 #pragma once
 
 #include "Controller.hpp"
+#include "thread/thread.hpp"
 
 namespace cogip {
 
@@ -23,6 +24,7 @@ class BaseControllerEngine {
 public:
     /// Constructor
     BaseControllerEngine() :
+        enable_(true),
         controller_(nullptr),
         current_cycle_(0),
         pose_reached_(moving),
@@ -30,14 +32,21 @@ public:
         timeout_enable_(false) {};
 
     /// Set the controller to launch.
-    /// @param controller
-    void set_controller(BaseController *controller);
+    void set_controller(
+        BaseController *controller  ///< [in]   controller
+        );
 
     /// Start controller main thread, launching the thread loop.
     void start_thread();
 
     /// Engine thread loop with period internally defined.
     virtual void thread_loop();
+
+    /// Enable thread loop
+    void enable() { enable_ = true; };
+
+    /// Disable thread loop
+    void disable() { enable_ = false; };
 
     /// Get controller
     BaseController* controller() const { return controller_; };
@@ -81,6 +90,9 @@ protected:
 
     /// Process controller output for platform restitution.
     virtual void process_outputs() = 0;
+
+    /// Enable thread loop flag
+    bool enable_;
 
     /// Controller to be launched by this engine. This could be a meta controller leading to the execution of a chain of controllers.
     BaseController *controller_;
