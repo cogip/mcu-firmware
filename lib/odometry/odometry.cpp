@@ -5,29 +5,6 @@
 #include "trigonometry.h"
 #include "utils.hpp"
 
-static double wheels_distance; /*!< robot wheels distance [pulse] */
-
-void odometry_setup(double d)
-{
-    wheels_distance = d;
-}
-
-/**
- * \fn void limit_angle (void)
- * \brief limit angle from -pi to +pi
- */
-static void limit_angle(cogip::cogip_defs::Pose &p)
-{
-    /* limit angle from -pi to +pi */
-    if (p.O() > (M_PI * wheels_distance)) { /* > +pi */
-        p.set_O(p.O() - 2.0 * (M_PI * wheels_distance));
-    }
-
-    if (p.O() < -(M_PI * wheels_distance)) { /* < -pi */
-        p.set_O(p.O() + 2.0 * (M_PI * wheels_distance));
-    }
-}
-
 /**
  * \fn void odometry_by_segment (const double distance, const double angle)
  * \brief update new robot pose (x, y, O) approximated by straight line
@@ -44,9 +21,7 @@ odometry_by_segment(cogip::cogip_defs::Pose &p, const double distance, const dou
 
     p.set_x(p.x() + distance * cos(O_rad));
     p.set_y(p.y() + distance * sin(O_rad));
-    p.set_O(p.O() + angle);
-
-    limit_angle(p);
+    p.set_O(limit_angle_deg(p.O() + angle));
 }
 
 /**
@@ -77,11 +52,9 @@ odometry_by_arc(cogip::cogip_defs::Pose &p, const double distance, const double 
         double yo = p.y() + r * cos(O_rad);
 
         /* robot pose */
-        p.set_O(p.O() + angle);
-        p.set_x(xo + r * sin(O_rad));
-        p.set_y(yo - r * cos(O_rad));
-
-        limit_angle(p);
+        p.set_O(limit_angle_deg(p.O() + angle));
+        p.set_x(xo + r * sin(DEG2RAD(p.O())));
+        p.set_y(yo - r * cos(DEG2RAD(p.O())));
     }
 }
 
