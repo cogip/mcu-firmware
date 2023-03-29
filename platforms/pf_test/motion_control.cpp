@@ -350,10 +350,15 @@ void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
     }
     cogip::path::Pose start_pose;
     start_pose.pb_read(pb_start_pose);
-    cogip::cogip_defs::Pose pose(start_pose.x(), start_pose.y(), start_pose.O());
+    cogip::path::Pose pose(start_pose.x(), start_pose.y(), start_pose.O());
 
     pf_motion_control_platform_engine.set_current_pose(pose);
     pf_motion_control_platform_engine.set_target_pose(pose);
+    // New start pose, the robot is not moving
+    pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
+
+    pf_encoder_reset();
+    pf_motion_control_platform_engine.set_current_cycle(0);
 }
 
 void pf_start_motion_control(void)
