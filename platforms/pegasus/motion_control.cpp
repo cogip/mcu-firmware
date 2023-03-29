@@ -381,32 +381,48 @@ void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cog
 
 void pf_motor_drive(const cogip::cogip_defs::Polar &command)
 {
-    if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::moving) {
+    // Previous target pose status flag to avoid flooding protobuf serial bus.
+    static cogip::motion_control::target_pose_status_t previous_target_pose_status = cogip::motion_control::target_pose_status_t::moving;
+
+    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
+        // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
+        // The PWM driver will filter the value to the max PWM resolution defined for the board.
         // Compute motor commands with Polar motion control result
-        int16_t right_command = (int16_t) (command.distance() + command.angle());
-        int16_t left_command = (int16_t) (command.distance() - command.angle());
+        int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
+        int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
 
         // Apply motor commands
         motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
         motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
     }
     else {
-        // Reset speed PIDs if a pose has been reached (intermediate or final)
-        // Pose PIDs do not need to be reset as they only have Kp (no sum of error)
-        reset_speed_pids();
-
-        // Send message in case of final pose reached only
-        if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
+        // Send message in case of final pose reached only.
+        if ((pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached)
+            &&  (previous_target_pose_status != cogip::motion_control::target_pose_status_t::reached)) {
             pf_get_uartpb().send_message(pose_reached_uuid);
         }
 
-        // Brake motors as the robot should not move in this case
+        // Only useful for native architecture, to populate emulated QDEC data.
+        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, 0);
+        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, 0);
+
+        // Brake motors as the robot should not move in this case.
         motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
         motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
     }
 
-    // Send robot state
-    pf_send_pb_state();
+    // Backup target pose status flag to avoid flooding protobuf serial bus.
+    previous_target_pose_status = pf_motion_control_platform_engine.pose_reached();
+
+    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::moving) {
+        // Reset speed PIDs if a pose has been reached (intermediate or final).
+        // Pose PIDs do not need to be reset as they only have Kp (no sum of error).
+        reset_speed_pids();
+    }
+
+    // Send robot state only on calibration (when timeout is enabled).
+    if (pf_motion_control_platform_engine.timeout_enable())
+        pf_send_pb_state();
 }
 
 /// Handle pid request command message.
