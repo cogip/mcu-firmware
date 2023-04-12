@@ -26,6 +26,7 @@ enum PB_MotorEnum
 {
     UNUSED_MOTOR = 0;
     CENTRAL_LIFT = 1;
+    CONVEYOR_LAUNCHER = 2;
 }
 
 message PB_Servo {

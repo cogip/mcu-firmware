@@ -23,6 +23,7 @@ namespace motors {
 constexpr auto START_LINE = __LINE__;
 enum class Enum: uint8_t {
     CENTRAL_LIFT_MOTOR = 1,
+    CONVEYOR_LAUNCHER_MOTOR = 2,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
