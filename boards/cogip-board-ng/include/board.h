@@ -108,9 +108,9 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_enable_invert = 0,
                 .gpio_brake_invert = 0,
             },
-            /* Ball conveyor (no PWM, no direction) */
+            /* Ball launcher (no direction, no enable, just PWM) & conveyor (no PWM, no direction, just the enable) */
             {
-                .pwm_channel = -1,
+                .pwm_channel = 1,
                 .gpio_enable = GPIO_PIN(PORT_B, 1),
                 .gpio_dir0 = GPIO_OUTPUT_UNUSED,
                 .gpio_dir1_or_brake = GPIO_UNDEF,
@@ -118,16 +118,6 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_enable_invert = 0,
                 .gpio_brake_invert = 0,
             },
-            /* Ball launcher (no direction, no enable) */
-            {
-                .pwm_channel = 1,
-                .gpio_enable = GPIO_OUTPUT_UNUSED,
-                .gpio_dir0 = GPIO_OUTPUT_UNUSED,
-                .gpio_dir1_or_brake = GPIO_UNDEF,
-                .gpio_dir_reverse = 0,
-                .gpio_enable_invert = 0,
-                .gpio_brake_invert = 0,
-            }
         },
         .cb = NULL
     }
