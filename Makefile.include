@@ -103,6 +103,9 @@ CXXEXFLAGS += -std=c++17
 CXXEXFLAGS += -Wno-pedantic
 CXXEXFLAGS += -Wno-cast-align
 
+# Activate asserts debug
+CFLAGS += -DDEBUG_ASSERT_VERBOSE
+
 LINKFLAGS:=$(filter-out -nostartfiles,$(LINKFLAGS))
 
 # Using libstdcpp requires a larger ISR stack by default
