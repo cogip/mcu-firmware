@@ -24,36 +24,38 @@ static int _cmd_motors_test_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    int nb_motors = 0;
+    uint8_t nb_motors = 0;
 
-    cogip::pf::motion_control::pf_disable_motion_control();
+    for (motor_driver_t i = 1; i < MOTOR_DRIVER_NUMOF; i++) {
+        uint8_t nb_motors_tmp = motor_driver_config[i].nb_motors;
+        int16_t pwm_resolution = motor_driver_config[i].pwm_resolution;
 
-    for (motor_driver_t i = 0; i < MOTOR_DRIVER_NUMOF; i++) {
-        int nb_motors_tmp = motor_driver_config[i].nb_motors;
-        int pwm_resolution = motor_driver_config[i].pwm_resolution;
-
-        for (int j = 0; j < nb_motors_tmp; j++) {
+        for (uint8_t j = 0; j < nb_motors_tmp; j++) {
 
             int32_t qdec_value = 0;
-            int timeout = 3000;
+            int timeout = 1000;
 
             std::cout << "### Testing motor " << j << " of motor driver " << i << std::endl;
 
             /* Reset qdec */
-            qdec_read_and_reset(QDEC_DEV(nb_motors + j));
+            if (nb_motors + j < QDEC_NUMOF)
+                qdec_read_and_reset(QDEC_DEV(nb_motors + j));
+
+            motor_enable(i, j);
 
             /* Forward */
             std::cout << "    Forward move" << std::endl;
             motor_set(i, j, pwm_resolution);
             while (timeout--) {
-                qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
+                if (nb_motors + j < QDEC_NUMOF)
+                    qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 ztimer_sleep(ZTIMER_MSEC, 1);
             }
             std::cout << "    qdec value = " << qdec_value;
             std::cout << "    Done" << std::endl;
 
             /* Stop */
-            timeout = 3000;
+            timeout = 1000;
             qdec_value = 0;
             std::cout << "    Stop" << std::endl;
             motor_brake(i, j);
@@ -64,7 +66,8 @@ static int _cmd_motors_test_cb(int argc, char **argv)
             std::cout << "    Backward move" << std::endl;
             motor_set(i, j, -pwm_resolution);
             while (timeout--) {
-                qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
+                if (nb_motors + j < QDEC_NUMOF)
+                    qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
                 ztimer_sleep(ZTIMER_MSEC, 1);
             }
             std::cout << "    qdec value = " << qdec_value;
@@ -76,6 +79,8 @@ static int _cmd_motors_test_cb(int argc, char **argv)
             std::cout << "    Done" << std::endl;
 
             ztimer_sleep(ZTIMER_SEC, 2);
+
+            motor_disable(i, j);
         }
 
         nb_motors += nb_motors_tmp;
