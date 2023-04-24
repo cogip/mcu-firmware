@@ -26,7 +26,7 @@
 // uartpb UART device
 static cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
 
-/* Thread stacks */
+// Thread stacks
 static char heartbeat_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 static bool copilot_connected = false;
