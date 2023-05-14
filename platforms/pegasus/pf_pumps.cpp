@@ -22,6 +22,19 @@ static etl::pool<Pump, COUNT> _pumps_pool;
 static etl::map<Enum, Pump *, COUNT> _pumps;
 
 void init(void) {
+    // Right arm
+    _pumps[Enum::RIGHT_ARM_PUMP] = _pumps_pool.create(
+        Enum::RIGHT_ARM_PUMP,
+        GroupEnum::NO_GROUP,
+        0
+    );
+
+    // Left arm
+    _pumps[Enum::LEFT_ARM_PUMP] = _pumps_pool.create(
+        Enum::LEFT_ARM_PUMP,
+        GroupEnum::NO_GROUP,
+        0
+    );
 }
 
 Pump & get(Enum id) {

@@ -21,7 +21,8 @@ namespace pumps {
 // Servomotors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: vacuum_pump_t {
-    UNUSED_PUMP = 0
+    RIGHT_ARM_PUMP = 0,
+    LEFT_ARM_PUMP = 1,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
