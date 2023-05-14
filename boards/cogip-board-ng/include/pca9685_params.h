@@ -43,10 +43,10 @@ extern "C" {
 #define PCA9685_PARAM_MODE          (PWM_LEFT)
 
 /** PWM frequency in Hz: 100 */
-#define PCA9685_PARAM_FREQ          (100)
+#define PCA9685_PARAM_FREQ          (50)
 
 /** PWM resolution: 4096 */
-#define PCA9685_PARAM_RES           (4096)
+#define PCA9685_PARAM_RES           (2000)
 
 /** Output enable pin: not used */
 #define PCA9685_PARAM_OE_PIN        (GPIO_UNDEF)
