@@ -7,55 +7,62 @@
 /// @{
 /// @file
 /// @brief       C++ class representing a motor using motor driver.
-/// @author      Eric Courtois <eric.courtois@gmail.com>
+/// @author      Gilles DOFFE <g.doffe@gmail.com>
 
 #pragma once
 
 #include <motor_driver.h>
 
-#include "Actuator.hpp"
-#include "PB_Actuators.hpp"
+#include "PositionalActuator.hpp"
 
 #include <iosfwd>
 
 namespace cogip {
 namespace pf {
 namespace actuators {
-namespace motors {
+namespace positional_actuators {
 
 enum class Enum: uint8_t;
 
 std::ostream& operator << (std::ostream& os, Enum id);
 
 /// Class representing a motor using motor driver.
-class Motor: public Actuator {
+class Motor: public PositionalActuator {
 public:
     /// Constructor.
     Motor(
-        Enum id,           ///< [in] motor id
-        GroupEnum group,   ///< [in] actuator group
-        uint8_t order = 0  ///< [in] order in actuator group
-    );
+        Enum id,                            ///< [in] motor id
+        GroupEnum group,                    ///< [in] actuator group
+        uint8_t order = 0,                  ///< [in] order in actuator group
+        motor_driver_t motor_driver = 0,    ///< [in] motor driver id
+        uint8_t motor_id = 0,               ///< [in] motor id for the given motor driver
+        check_limit_switch_cb_t check_limit_switch_positive_direction_cb = nullptr, ///< [in] callback to check limit switch for positive direction
+        check_limit_switch_cb_t check_limit_switch_negative_direction_cb = nullptr  ///< [in] callback to check limit switch for negative direction
+    ) : PositionalActuator(id, group, order),
+        motor_driver_(motor_driver),
+        motor_id_(motor_id),
+        check_limit_switch_positive_direction_cb_(check_limit_switch_positive_direction_cb),
+        check_limit_switch_negative_direction_cb_(check_limit_switch_negative_direction_cb) { disable(); };
+
+    /// Disable the motor after checking direction.
+    bool disable_on_check();
+
+    /// Disable the motor.
+    void disable();
 
     /// Activate the motor.
-    void move(
-        bool direction,         ///< [in] motor rotation direction
-        const uint32_t speed    ///< [in] motor speed as a duty_cycle in percent
+    void actuate(
+        const int32_t command               ///< [in] motor speed as a duty_cycle in percent
     );
 
-    /// Stop the motor.
-    void deactivate();
-
-    /// Copy data to Protobuf message.
-    void pb_copy(
-        PB_Motor & pb_motor  ///< [out] Protobuf message to fill
-    ) const;
-
 private:
-    Enum id_;           ///< motor id
-    bool activated_;    ///< whether motor is activated or not
-    bool direction_;    ///< motor rotation direction
-    uint32_t speed_;     ///< motor speed as a duty_cycle in percent
+    motor_driver_t  motor_driver_;          ///< hardware motor driver id
+
+    uint8_t motor_id_;                      ///< motor id for the given motor driver
+
+    check_limit_switch_cb_t check_limit_switch_positive_direction_cb_;  ///< callback to check limit switch for positive direction
+
+    check_limit_switch_cb_t check_limit_switch_negative_direction_cb_;  ///< callback to check limit switch for negative direction
 };
 
 } // namespace motors
