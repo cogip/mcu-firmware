@@ -46,7 +46,7 @@ public:
 };
 
 /// Initialize LX servomotors.
-void init();
+void init(uart_half_duplex_t *lx_stream);
 
 /// Get a servo by id.
 LxServo & get(

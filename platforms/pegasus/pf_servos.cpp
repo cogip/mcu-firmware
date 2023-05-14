@@ -35,50 +35,12 @@ static etl::pool<LxServo, COUNT> _servos_pool;
 /// Map from servo id to servo object pointer
 static etl::map<Enum, LxServo *, COUNT> _servos;
 
-static void _dir_init([[maybe_unused]] uart_t uart) {
-    gpio_init(LX_DIR_PIN, GPIO_OUT);
-}
+void init(uart_half_duplex_t *lx_stream) {
+    // Half duplex stream that must have been initialized previously
+    LxServo::lx_stream = lx_stream;
 
-static void _dir_enable_tx([[maybe_unused]] uart_t uart) {
-    gpio_clear(LX_DIR_PIN);
-}
 
-static void _dir_disable_tx([[maybe_unused]] uart_t uart) {
-    gpio_set(LX_DIR_PIN);
-}
 
-static void _lx_half_duplex_uart_init() {
-    uart_half_duplex_params_t params = {
-        .uart = UART_DEV(LX_UART_DEV),
-        .baudrate = 115200,
-        .dir = { _dir_init, _dir_enable_tx, _dir_disable_tx },
-    };
-
-    int ret = uart_half_duplex_init(&_lx_stream, _lx_servos_buffer, ARRAY_SIZE(_lx_servos_buffer), &params);
-
-    if (ret == UART_HALF_DUPLEX_NODEV) {
-        puts("Error: invalid UART device given");
-    }
-    else if (ret == UART_HALF_DUPLEX_NOBAUD) {
-        puts("Error: given baudrate is not applicable");
-    }
-    else if (ret == UART_HALF_DUPLEX_INTERR) {
-        puts("Error: internal error");
-    }
-    else if (ret == UART_HALF_DUPLEX_NOMODE) {
-        puts("Error: given mode is not applicable");
-    }
-    else if (ret == UART_HALF_DUPLEX_NOBUFF) {
-        puts("Error: invalid buffer given");
-    }
-    else {
-        printf("Successfully initialized LX Servos TTL bus UART_DEV(%i)\n", params.uart);
-    }
-}
-
-void init(void) {
-    _lx_half_duplex_uart_init();
-    LxServo::lx_stream = &_lx_stream;
 }
 
 LxServo & get(Enum id) {
