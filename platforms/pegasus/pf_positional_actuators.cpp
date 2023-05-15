@@ -19,6 +19,8 @@
 #include "etl/map.h"
 #include "etl/pool.h"
 
+// RIOT includes
+#include <event.h>
 #include <ztimer.h>
 #include <motor_driver.h>
 
@@ -30,11 +32,12 @@ namespace positional_actuators {
 /// PCF857X I2C GPIOs expander
 static pcf857x_t pcf857x_dev;
 
-/// Thread stacks
+/// Positional actuator timeout thread stack
 static char _positional_actuators_timeout_thread_stack[THREAD_STACKSIZE_DEFAULT];
-/// Thread period (ms)
+/// Positional actuators timeout thread period (ms)
 constexpr uint16_t _positional_actuators_timeout_thread_period_ms = 100;
-
+/// GPIOs handler thread stack
+static char _gpio_handling_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 /// Motors memory pool
 static etl::pool<Motor, COUNT> _motors_pool;
@@ -47,41 +50,21 @@ static etl::pool<LxMotor, COUNT> _lxmotor_pool;
 /// Positional actuators map
 static etl::map<Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
 
-/// GPIOs interrupt callback
-static void gpio_cb(void *arg)
-{
-    int pin = (int)arg;
+/// GPIOs event pool
+static etl::pool<event_t, 20> _gpio_event_pool;
+/// GPIOs pin map
+static etl::map<event_t *, gpio_t, 20> _gpio_pins;
+/// GPIOs event map
+static etl::map<gpio_t, event_t *, 20> _gpio_events;
 
-    switch (pin)
-    {
-    case pin_limit_switch_central_lift_bottom:
-        std::cout << "pin_limit_switch_central_lift_bottom triggered" << std::endl;
-        _positional_actuators[Enum::MOTOR_CENTRAL_LIFT]->disable_on_check();
-        break;
-    case pin_limit_switch_central_lift_top:
-        std::cout << "pin_limit_switch_central_lift_top triggered" << std::endl;
-        _positional_actuators[Enum::MOTOR_CENTRAL_LIFT]->disable_on_check();
-        break;
-    case pin_limit_switch_right_arm_lift_bottom:
-        std::cout << "pin_limit_switch_right_arm_bottom triggered" << std::endl;
-        _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->disable_on_check();
-        break;
-    case pin_limit_switch_right_arm_lift_top:
-        std::cout << "pin_limit_switch_right_arm_top triggered" << std::endl;
-        _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->disable_on_check();
-        break;
-    case pin_limit_switch_left_arm_lift_bottom:
-        std::cout << "pin_limit_switch_left_arm_bottom triggered" << std::endl;
-        _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable_on_check();
-        break;
-    case pin_limit_switch_left_arm_lift_top:
-        std::cout << "pin_limit_switch_left_arm_top triggered" << std::endl;
-        _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable_on_check();
-        break;
-    default:
-        printf("INT: external interrupt from pin %i\n", (int)arg);
-        break;
-    }
+/// GPIO event queue
+static event_queue_t _new_gpio_event_queue;
+
+/// GPIOs interrupt callback
+static void _gpio_cb(void *arg)
+{
+    gpio_t pin = (int)arg;
+    event_post(&_new_gpio_event_queue, _gpio_events[pin]);
 }
 
 /// GPIO expander writer wrapper
@@ -95,21 +78,29 @@ int pf_pcf857x_gpio_read(gpio_t pin) {
 }
 
 /// Init GPIO expander interruptable pin
-static void init_interruptable_pin(int pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
+static void init_interruptable_pin(gpio_t pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
     // Initialize the pin as input with pull-up, interrupt on falling edge
-    if (gpio_init_int(pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, gpio_cb, (void *)pin) != 0) {
-        printf("Error: init pin %02i failed\n", pin);
+    if (gpio_init_int(pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, _gpio_cb, (void *)pin) != 0) {
+        std::cerr << "Error: init pin " << pin << " failed" << std::endl;
         return;
     }
+
+    _gpio_events[pin] = _gpio_event_pool.create();
+    _gpio_events[pin]->list_node.next = nullptr;
+    _gpio_pins[_gpio_events[pin]] = pin;
 }
 
 /// Init GPIO expander interruptable pin
-static void pcf857x_init_interruptable_pin(int pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
+static void pcf857x_init_interruptable_pin(gpio_t pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
     // Initialize the pin as input with pull-up, interrupt on falling edge
-    if (pcf857x_gpio_init_int(&pcf857x_dev, pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, gpio_cb, (void *)pin) != PCF857X_OK) {
-        printf("Error: init PCF857X pin %02i failed\n", pin);
+    if (pcf857x_gpio_init_int(&pcf857x_dev, pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, _gpio_cb, (void *)pin) != PCF857X_OK) {
+        std::cerr << "Error: init PCF857x pin " << pin << " failed" << std::endl;
         return;
     }
+
+    _gpio_events[pin] = _gpio_event_pool.create();
+    _gpio_events[pin]->list_node.next = nullptr;
+    _gpio_pins[_gpio_events[pin]] = pin;
 
     // Enable interrupt on that pin
     pcf857x_gpio_irq_enable(&pcf857x_dev, pin);
@@ -174,6 +165,53 @@ static void _pca9685_init() {
         puts("Error: PCA9685 PWM init failed!");
         return;
     }
+}
+
+/// GPIOs handling thread
+static void *_gpio_handling_thread(void *args)
+{
+    (void)args;
+    event_t *event;
+
+    // Initialize GPIOs event queue
+    event_queue_init(&_new_gpio_event_queue);
+
+    while ((event = event_wait(&_new_gpio_event_queue))) {
+        gpio_t pin = _gpio_pins[event];
+
+        switch (pin)
+        {
+        case pin_limit_switch_central_lift_bottom:
+            std::cout << "pin_limit_switch_central_lift_bottom triggered" << std::endl;
+            _positional_actuators[Enum::MOTOR_CENTRAL_LIFT]->disable_on_check();
+            break;
+        case pin_limit_switch_central_lift_top:
+            std::cout << "pin_limit_switch_central_lift_top triggered" << std::endl;
+            _positional_actuators[Enum::MOTOR_CENTRAL_LIFT]->disable_on_check();
+            break;
+        case pin_limit_switch_right_arm_lift_bottom:
+            std::cout << "pin_limit_switch_right_arm_bottom triggered" << std::endl;
+            _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->disable_on_check();
+            break;
+        case pin_limit_switch_right_arm_lift_top:
+            std::cout << "pin_limit_switch_right_arm_top triggered" << std::endl;
+            _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->disable_on_check();
+            break;
+        case pin_limit_switch_left_arm_lift_bottom:
+            std::cout << "pin_limit_switch_left_arm_bottom triggered" << std::endl;
+            _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable_on_check();
+            break;
+        case pin_limit_switch_left_arm_lift_top:
+            std::cout << "pin_limit_switch_left_arm_top triggered" << std::endl;
+            _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable_on_check();
+            break;
+        default:
+            std::cout << "INT: external interrupt from pin " << pin << std::endl;
+            break;
+        }
+    }
+
+    return nullptr;
 }
 
 static void *_positional_actuators_timeout_thread(void *args)
@@ -287,6 +325,17 @@ void init(uart_half_duplex_t *lx_stream) {
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_init);
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_off);
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_on);
+
+    // Positional actuators timeout thread
+    thread_create(
+        _gpio_handling_thread_stack,
+        sizeof(_gpio_handling_thread_stack),
+        THREAD_PRIORITY_MAIN - 1,
+        THREAD_CREATE_STACKTEST,
+        _gpio_handling_thread,
+        NULL,
+        "GPIO handling thread"
+    );
 
     // Positional actuators timeout thread
     thread_create(
