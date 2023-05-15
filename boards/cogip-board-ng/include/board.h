@@ -7,9 +7,9 @@
  */
 
 /**
- * @defgroup    boards_cogip-board COGIP 2018 Cortex board
- * @ingroup     boards_cogip-board
- * @brief       Support for the COGIP 2018 Cortex board
+ * @defgroup    boards_cogip-board-ng COGIP 2023 Pegasus board
+ * @ingroup     boards_cogip-board-ng
+ * @brief       Support for the COGIP 2023 Pegasus board
  * @{
  *
  * @file
@@ -117,7 +117,7 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_dir_reverse = 0,
                 .gpio_enable_invert = 0,
                 .gpio_brake_invert = 0,
-            },
+            }
         },
         .cb = NULL
     }
