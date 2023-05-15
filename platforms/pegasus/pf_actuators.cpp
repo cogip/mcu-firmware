@@ -8,7 +8,10 @@
 #include "pf_pumps.hpp"
 #include "pf_motors.hpp"
 
+#include "pcf857x_params.h"
 #include "pca9685_params.h"
+
+#include "board.h"
 #include "platform.hpp"
 
 #include "uartpb/UartProtobuf.hpp"
@@ -34,6 +37,9 @@ constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
 constexpr cogip::uartpb::uuid_t command_uuid = 2552455996;
 
 static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::motors::COUNT> _pb_state;
+
+/// PCF857X I2C GPIOs expander
+static pcf857x_t pcf857x_dev;
 
 /// PCA9685 I2C PWM driver
 static pca9685_t pca9685_dev;
@@ -113,10 +119,76 @@ static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
     }
 }
 
+/// GPIO expander interrupt callback
+static void gpio_cb(void *arg)
+{
+    int pin = (int)arg;
+
+    switch (pin)
+    {
+    case pin_limit_switch_central_lift_bottom:
+        puts("pin_limit_switch_central_lift_bottom triggered");
+        break;
+    case pin_limit_switch_central_lift_top:
+        puts("pin_limit_switch_central_lift_top triggered");
+        break;
+    default:
+        printf("INT: external interrupt from pin %i\n", (int)arg);
+        break;
+    }
+}
+
+/// Init GPIO expander interruptable pin
+static void init_interruptable_pin(int pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
+    // Initialize the pin as input with pull-up, interrupt on falling edge
+    if (gpio_init_int(pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, gpio_cb, (void *)pin) != 0) {
+        printf("Error: init pin %02i failed\n", pin);
+        return;
+    }
+}
+
+/// Init GPIO expander interruptable pin
+static void pcf857x_init_interruptable_pin(int pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
+    // Initialize the pin as input with pull-up, interrupt on falling edge
+    if (pcf857x_gpio_init_int(&pcf857x_dev, pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, gpio_cb, (void *)pin) != PCF857X_OK) {
+        printf("Error: init PCF857X pin %02i failed\n", pin);
+        return;
+    }
+
+    // Enable interrupt on that pin
+    pcf857x_gpio_irq_enable(&pcf857x_dev, pin);
+}
+
+/// Init GPIO expander output pin
+static void pcf857x_init_output_pin(int pin, int value) {
+    if (pcf857x_gpio_init(&pcf857x_dev, pin, GPIO_OUT) != PCF857X_OK) {
+        printf("Error: init PCF857X pin %02i failed\n", pin);
+        return;
+    }
+    pcf857x_gpio_write(&pcf857x_dev, pin, value);
+}
+
 void init() {
     servos::init();
     pumps::init();
     motors::init();
+
+    // Initialize GPIO expander
+    if (pcf857x_init(&pcf857x_dev, &pcf857x_params) != PCF857X_OK) {
+        puts("Error: PCF8575 init failed!");
+        return;
+    }
+
+    // Init GPIO expander pins - limit switches
+    init_interruptable_pin(pin_limit_switch_central_lift_top, false);
+    init_interruptable_pin(pin_limit_switch_central_lift_bottom, false);
+    pcf857x_init_interruptable_pin(pin_limit_switch_left_arm_top);
+    pcf857x_init_interruptable_pin(pin_limit_switch_left_arm_bottom);
+    pcf857x_init_interruptable_pin(pin_limit_switch_right_arm_top);
+    pcf857x_init_interruptable_pin(pin_limit_switch_right_arm_bottom);
+    pcf857x_init_interruptable_pin(pin_limit_switch_recal_right);
+    pcf857x_init_interruptable_pin(pin_limit_switch_recal_left);
+    pcf857x_init_output_pin(pin_led_strip, 0);
 
     // Init PCA9685
     if (pca9685_init(&pca9685_dev, &pca9685_params) != PCA9685_OK) {
