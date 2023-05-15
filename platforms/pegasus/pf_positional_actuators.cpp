@@ -205,6 +205,14 @@ static void *_gpio_handling_thread(void *args)
             std::cout << "pin_limit_switch_left_arm_top triggered" << std::endl;
             _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable_on_check();
             break;
+        case pin_sensor_pump_right:
+            std::cout << "pin_sensor_pump_right triggered" << std::endl;
+            _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->disable();
+            break;
+        case pin_sensor_pump_left:
+            std::cout << "pin_sensor_pump_left triggered" << std::endl;
+            _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable();
+            break;
         default:
             std::cout << "INT: external interrupt from pin " << pin << std::endl;
             break;
@@ -251,6 +259,10 @@ void init(uart_half_duplex_t *lx_stream) {
     // Init central lift limit switches GPIOs
     init_interruptable_pin(pin_limit_switch_central_lift_top, false, GPIO_RISING);
     init_interruptable_pin(pin_limit_switch_central_lift_bottom, false, GPIO_RISING);
+
+    // Init central lift limit switches GPIOs
+    init_interruptable_pin(pin_sensor_pump_right, false, GPIO_RISING);
+    init_interruptable_pin(pin_sensor_pump_left, false, GPIO_RISING);
 
     // Init GPIO expander pins - limit switches
     pcf857x_init_interruptable_pin(pin_limit_switch_left_arm_lift_top, true, GPIO_FALLING);

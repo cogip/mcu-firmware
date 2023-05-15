@@ -52,6 +52,8 @@ enum PCA9586Channels {
 
 /// Limit switches
 /// @{
+constexpr int pin_sensor_pump_right = GPIO_PIN(PORT_A, 15);
+constexpr int pin_sensor_pump_left = GPIO_PIN(PORT_C, 10);
 constexpr int pin_limit_switch_central_lift_top = GPIO_PIN(PORT_B, 14);
 constexpr int pin_limit_switch_central_lift_bottom = GPIO_PIN(PORT_B, 13);
 constexpr int pin_limit_switch_right_arm_lift_top = PCF857X_GPIO_PIN(PCF857X_PORT_0, 10);
