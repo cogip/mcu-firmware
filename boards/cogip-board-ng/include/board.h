@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "motor_driver.h"
+#include <motor_driver.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -96,7 +96,7 @@ static const motor_driver_config_t motor_driver_config[] = {
         .pwm_mode = PWM_LEFT,
         .pwm_frequency = 20000U,
         .pwm_resolution = 100U,
-        .nb_motors = 3,
+        .nb_motors = 2,
         .motors = {
             /* Lift motor */
             {
