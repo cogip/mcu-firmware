@@ -64,6 +64,14 @@ message PB_PositionalActuator {
     int32 command = 5;
 }
 
+message PB_ActuatorState {
+    oneof type {
+        PB_Servo servos = 1;
+        PB_Pump pumps = 2;
+        PB_PositionalActuator positional_actuators = 3;
+    }
+}
+
 message PB_ActuatorsState {
     repeated PB_Servo servos = 1;
     repeated PB_Pump pumps = 2;

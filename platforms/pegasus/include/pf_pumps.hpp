@@ -49,6 +49,9 @@ Pump & get(
     Enum id  ///< [in] pump id
 );
 
+/// Send pump state protobuf message
+void send_state(Enum pump);
+
 /// Copy data to Protobuf message.
 void pb_copy(
     PB_Message & pb_message  ///< [out] Protobuf message to fill

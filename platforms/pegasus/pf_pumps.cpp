@@ -21,6 +21,9 @@ namespace pumps {
 static etl::pool<Pump, COUNT> _pumps_pool;
 static etl::map<Enum, Pump *, COUNT> _pumps;
 
+// Pump protobuf message
+static PB_Pump _pb_pump;
+
 void init(void) {
     // Right arm
     _pumps[Enum::RIGHT_ARM_PUMP] = _pumps_pool.create(
@@ -39,6 +42,18 @@ void init(void) {
 
 Pump & get(Enum id) {
     return *_pumps[id];
+}
+
+void send_state(Enum pump) {
+    // Protobuf UART interface
+    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+
+    // Send protobuf message
+    _pb_pump.clear();
+    pumps::get(pump).pb_copy(_pb_pump);
+    if (!uartpb.send_message(actuator_state_uuid, &_pb_pump)) {
+        std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
+    }
 }
 
 void pb_copy(PB_Message & pb_message) {

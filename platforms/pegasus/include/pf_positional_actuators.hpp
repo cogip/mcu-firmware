@@ -105,6 +105,9 @@ PositionalActuator & get(
     Enum id  ///< [in] positional_actuator id
 );
 
+/// Send positional actuator state protobuf message
+void send_state(Enum positional_actuator);
+
 /// Copy data to Protobuf message.
 void pb_copy(
     PB_Message & pb_message  ///< [out] Protobuf message to fill

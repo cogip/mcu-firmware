@@ -29,6 +29,9 @@ namespace pf {
 namespace actuators {
 namespace positional_actuators {
 
+// Positional actuator protobuf message
+static PB_PositionalActuator _pb_positional_actuator;
+
 /// PCF857X I2C GPIOs expander
 static pcf857x_t pcf857x_dev;
 
@@ -209,11 +212,15 @@ static void *_gpio_handling_thread(void *args)
             std::cout << "pin_sensor_pump_right triggered" << std::endl;
             _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->disable();
             _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->set_blocked(true);
+            // Send servo state
+            positional_actuators::send_state(positional_actuators::Enum::LXMOTOR_RIGHT_ARM_LIFT);
             break;
         case pin_sensor_pump_left:
             std::cout << "pin_sensor_pump_left triggered" << std::endl;
             _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable();
             _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->set_blocked(true);
+            // Send servo state
+            positional_actuators::send_state(positional_actuators::Enum::LXMOTOR_LEFT_ARM_LIFT);
             break;
         default:
             std::cout << "INT: external interrupt from pin " << pin << std::endl;
@@ -379,6 +386,18 @@ void init(uart_half_duplex_t *lx_stream) {
 
 PositionalActuator & get(Enum id) {
     return *_positional_actuators[id];
+}
+
+void send_state(Enum positional_actuator) {
+    // Protobuf UART interface
+    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+
+    // Send protobuf message
+    _pb_positional_actuator.clear();
+    positional_actuators::get(positional_actuator).pb_copy(_pb_positional_actuator);
+    if (!uartpb.send_message(actuator_state_uuid, &_pb_positional_actuator)) {
+        std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
+    }
 }
 
 void pb_copy(PB_Message & pb_message) {

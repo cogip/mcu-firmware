@@ -11,12 +11,18 @@
 
 #pragma once
 
+// Firmware includes
+#include "uartpb/UartProtobuf.hpp"
+
 // Standard includes
 #include <cstdint>
 
 namespace cogip {
 namespace pf {
 namespace actuators {
+
+/// Actuator state protobuf message id
+constexpr cogip::uartpb::uuid_t actuator_state_uuid = 1674079543;
 
 /// LX servomotors IDs
 enum LXServoIDs {

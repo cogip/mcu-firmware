@@ -3,14 +3,17 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
+// Firmware includes
+#include "board.h"
 #include "pf_servos.hpp"
 #include "pf_actuators.hpp"
-
-#include "board.h"
+#include "platform.hpp"
+#include "uartpb/UartProtobuf.hpp"
 
 #include "etl/map.h"
 #include "etl/pool.h"
 
+// RIOT includes
 #include <periph/gpio.h>
 #include <ztimer.h>
 
@@ -28,6 +31,9 @@ static etl::pool<LxServo, COUNT> _servos_pool;
 
 /// Map from servo id to servo object pointer
 static etl::map<Enum, LxServo *, COUNT> _servos;
+
+// Servo protobuf message
+static PB_Servo _pb_servo;
 
 void init(uart_half_duplex_t *lx_stream) {
     // Half duplex stream that must have been initialized previously
@@ -75,6 +81,18 @@ void parallel_move(const etl::list<Command, COUNT> & commands, uint32_t wait) {
     }
     if (wait > 0) {
         ztimer_sleep(ZTIMER_MSEC, wait);
+    }
+}
+
+void send_state(Enum servo) {
+    // Protobuf UART interface
+    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+
+    // Send protobuf message
+    _pb_servo.clear();
+    servos::get(servo).pb_copy(_pb_servo);
+    if (!uartpb.send_message(actuator_state_uuid, &_pb_servo)) {
+        std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }
 

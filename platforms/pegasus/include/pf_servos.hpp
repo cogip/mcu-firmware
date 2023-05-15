@@ -67,6 +67,9 @@ void parallel_move(
     uint32_t wait = 0                            ///< [in] time to wait after move (in ms)
 );
 
+/// Send pump state protobuf message
+void send_state(Enum servo);
+
 /// Copy data to Protobuf message.
 void pb_copy(
     PB_Message & pb_message  ///< [out] Protobuf message to fill
