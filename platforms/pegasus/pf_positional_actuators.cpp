@@ -334,9 +334,14 @@ void init(uart_half_duplex_t *lx_stream) {
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_CHERRY_ESC
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_init);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_off);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_on);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_init_off);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_low);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_middle);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_high);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_max);
+
+    _positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC]->actuate(0);
+
 
     _positional_actuators[Enum::ANALOGSERVO_CHERRY_RELEASE] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_CHERRY_RELEASE,

@@ -75,9 +75,11 @@ constexpr int analog_servomotor_cherry_arm_deployed = 235;
 
 /// Cherry ESC servomotor positions
 /// @{
-constexpr int analog_servomotor_cherry_esc_init = 80;
-constexpr int analog_servomotor_cherry_esc_off = 150;
-constexpr int analog_servomotor_cherry_esc_on = 160;
+constexpr int analog_servomotor_cherry_esc_init_off = 150;
+constexpr int analog_servomotor_cherry_esc_low = 155;
+constexpr int analog_servomotor_cherry_esc_middle = 165;
+constexpr int analog_servomotor_cherry_esc_high = 175;
+constexpr int analog_servomotor_cherry_esc_max = 200;
 /// @}
 
 /// Cherry release servomotor positions
