@@ -69,7 +69,7 @@ constexpr int pin_led_panels = PCF857X_GPIO_PIN(PCF857X_PORT_0, 7);
 
 /// Cherry arm servomotor positions
 /// @{
-constexpr int analog_servomotor_cherry_arm_closed = 65;
+constexpr int analog_servomotor_cherry_arm_closed = 55;
 constexpr int analog_servomotor_cherry_arm_deployed = 235;
 /// @}
 
