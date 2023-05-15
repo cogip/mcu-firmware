@@ -1,1 +1,3 @@
 USEMODULE += mpu_stack_guard
+USEMODULE += pcf8575
+USEMODULE += pcf857x_irq
