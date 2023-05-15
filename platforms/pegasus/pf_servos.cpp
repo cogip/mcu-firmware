@@ -40,11 +40,11 @@ static void _dir_init([[maybe_unused]] uart_t uart) {
 }
 
 static void _dir_enable_tx([[maybe_unused]] uart_t uart) {
-    gpio_set(LX_DIR_PIN);
+    gpio_clear(LX_DIR_PIN);
 }
 
 static void _dir_disable_tx([[maybe_unused]] uart_t uart) {
-    gpio_clear(LX_DIR_PIN);
+    gpio_set(LX_DIR_PIN);
 }
 
 static void _lx_half_duplex_uart_init() {
