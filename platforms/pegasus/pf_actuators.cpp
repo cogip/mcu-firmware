@@ -8,6 +8,7 @@
 #include "pf_pumps.hpp"
 #include "pf_motors.hpp"
 
+#include "pca9685_params.h"
 #include "platform.hpp"
 
 #include "uartpb/UartProtobuf.hpp"
@@ -33,6 +34,9 @@ constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
 constexpr cogip::uartpb::uuid_t command_uuid = 2552455996;
 
 static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::motors::COUNT> _pb_state;
+
+/// PCA9685 I2C PWM driver
+static pca9685_t pca9685_dev;
 
 /// Build and send Protobuf actuators state message.
 static void _send_state() {
@@ -114,6 +118,15 @@ void init() {
     pumps::init();
     motors::init();
 
+    // Init PCA9685
+    if (pca9685_init(&pca9685_dev, &pca9685_params) != PCA9685_OK) {
+        puts("Error: PCA9685 init failed!");
+        return;
+    }
+    if (pca9685_pwm_init(&pca9685_dev, PWM_LEFT, 50, 2000) != 50) {
+        puts("Error: PCA9685 PWM init failed!");
+        return;
+    }
     _sender_pid = thread_create(
         _sender_stack,
         sizeof(_sender_stack),
