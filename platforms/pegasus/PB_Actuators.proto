@@ -41,24 +41,27 @@ enum PB_PositionalActuatorEnum
 message PB_Servo {
     PB_ActuatorsGroupEnum group = 1;
     uint32 order = 2;
-    PB_ServoEnum id = 3;
-    uint32 position = 4;
-    uint32 command = 5;
+    bool is_blocked = 3;
+    PB_ServoEnum id = 4;
+    uint32 position = 5;
+    uint32 command = 6;
 }
 
 message PB_Pump {
     PB_ActuatorsGroupEnum group = 1;
     uint32 order = 2;
-    PB_PumpEnum id = 3;
-    bool activated = 4;
-    bool under_pressure = 5;
+    bool is_blocked = 3;
+    PB_PumpEnum id = 4;
+    bool activated = 5;
+    bool under_pressure = 6;
 }
 
 message PB_PositionalActuator {
     PB_ActuatorsGroupEnum group = 1;
     uint32 order = 2;
-    PB_PositionalActuatorEnum id = 3;
-    int32 command = 4;
+    bool is_blocked = 3;
+    PB_PositionalActuatorEnum id = 4;
+    int32 command = 5;
 }
 
 message PB_ActuatorsState {

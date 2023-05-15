@@ -208,10 +208,12 @@ static void *_gpio_handling_thread(void *args)
         case pin_sensor_pump_right:
             std::cout << "pin_sensor_pump_right triggered" << std::endl;
             _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->disable();
+            _positional_actuators[Enum::LXMOTOR_RIGHT_ARM_LIFT]->set_blocked(true);
             break;
         case pin_sensor_pump_left:
             std::cout << "pin_sensor_pump_left triggered" << std::endl;
             _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->disable();
+            _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT]->set_blocked(true);
             break;
         default:
             std::cout << "INT: external interrupt from pin " << pin << std::endl;
