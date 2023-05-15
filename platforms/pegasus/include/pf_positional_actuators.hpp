@@ -35,8 +35,9 @@ enum class Enum: uint8_t {
     ONOFF_LED_PANELS = 2,
     ANALOGSERVO_CHERRY_ARM = 3,
     ANALOGSERVO_CHERRY_ESC = 4,
-    LXMOTOR_RIGHT_ARM_LIFT = 5,
-    LXMOTOR_LEFT_ARM_LIFT = 6
+    ANALOGSERVO_CHERRY_RELEASE = 5,
+    LXMOTOR_RIGHT_ARM_LIFT = 6,
+    LXMOTOR_LEFT_ARM_LIFT = 7
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
@@ -45,7 +46,8 @@ using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, 
 /// PCA9586 channels
 enum PCA9586Channels {
     CHANNEL_ANALOGSERVO_CHERRY_ARM = 0,
-    CHANNEL_ANALOGSERVO_CHERRY_ESC = 1
+    CHANNEL_ANALOGSERVO_CHERRY_ESC = 1,
+    CHANNEL_ANALOGSERVO_CHERRY_RELEASE = 2
 };
 
 /// Limit switches
@@ -74,6 +76,12 @@ constexpr int analog_servomotor_cherry_arm_deployed = 235;
 constexpr int analog_servomotor_cherry_esc_init = 80;
 constexpr int analog_servomotor_cherry_esc_off = 150;
 constexpr int analog_servomotor_cherry_esc_on = 160;
+/// @}
+
+/// Cherry release servomotor positions
+/// @{
+constexpr int analog_servomotor_cherry_release_down = 180;
+constexpr int analog_servomotor_cherry_release_up = 40;
 /// @}
 
 /// Actuators DC motors IDs

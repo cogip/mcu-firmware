@@ -326,6 +326,15 @@ void init(uart_half_duplex_t *lx_stream) {
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_off);
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_on);
 
+    _positional_actuators[Enum::ANALOGSERVO_CHERRY_RELEASE] = _analog_servo_pool.create(
+        Enum::ANALOGSERVO_CHERRY_RELEASE,
+        GroupEnum::NO_GROUP,
+        0,
+        PCA9586Channels::CHANNEL_ANALOGSERVO_CHERRY_RELEASE
+    );
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_RELEASE])->add_position(analog_servomotor_cherry_release_down);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_RELEASE])->add_position(analog_servomotor_cherry_release_up);
+
     // Positional actuators timeout thread
     thread_create(
         _gpio_handling_thread_stack,
