@@ -3,15 +3,13 @@
 
 // Firmware includes
 #include "app_actuators_shell.hpp"
-#include "pf_motors.hpp"
+#include "pf_positional_actuators.hpp"
 
 #include "shell_menu/shell_menu.hpp"
 
 namespace cogip {
 namespace app {
 namespace actuators {
-
-using MotorEnum = pf::actuators::motors::Enum;
 
 static void _wait_timeout(uint32_t timeout) {
     ztimer_sleep(ZTIMER_MSEC, timeout);
@@ -23,13 +21,11 @@ int _cmd_central_lift_test(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    pf::actuators::motors::get(MotorEnum::CENTRAL_LIFT_MOTOR).move(0, 90);
-    _wait_timeout(1000);
-    pf::actuators::motors::get(MotorEnum::CENTRAL_LIFT_MOTOR).deactivate();
-    _wait_timeout(1000);
-    pf::actuators::motors::get(MotorEnum::CENTRAL_LIFT_MOTOR).move(1, 100);
-    _wait_timeout(1000);
-    pf::actuators::motors::get(MotorEnum::CENTRAL_LIFT_MOTOR).deactivate();
+    pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::MOTOR_CENTRAL_LIFT).actuate_timeout(-100, 15);
+    _wait_timeout(3000);
+    pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::MOTOR_CENTRAL_LIFT).actuate_timeout(100, 2);
+    _wait_timeout(3000);
+    pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::MOTOR_CENTRAL_LIFT).actuate_timeout(100, 15);
 
     return EXIT_SUCCESS;
 }
