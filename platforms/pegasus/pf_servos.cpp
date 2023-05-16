@@ -84,6 +84,13 @@ void parallel_move(const etl::list<Command, COUNT> & commands, uint32_t wait) {
     }
 }
 
+void disable_all() {
+    for (auto & iterator: _servos) {
+        LxServo *servo = iterator.second;
+        servo->move_stop();
+    }
+}
+
 void send_state(Enum servo) {
     // Protobuf UART interface
     static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();

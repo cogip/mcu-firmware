@@ -52,6 +52,7 @@ enum PCA9586Channels {
 
 /// Limit switches
 /// @{
+constexpr int pin_24v_check = GPIO_PIN(PORT_C, 1);
 constexpr int pin_sensor_pump_right = GPIO_PIN(PORT_A, 15);
 constexpr int pin_sensor_pump_left = GPIO_PIN(PORT_C, 10);
 constexpr int pin_limit_switch_central_lift_top = GPIO_PIN(PORT_B, 14);
@@ -104,6 +105,9 @@ void pf_pcf857x_gpio_write(gpio_t pin, int value);
 PositionalActuator & get(
     Enum id  ///< [in] positional_actuator id
 );
+
+/// Disable all positional actuators
+void disable_all();
 
 /// Send positional actuator state protobuf message
 void send_state(Enum positional_actuator);

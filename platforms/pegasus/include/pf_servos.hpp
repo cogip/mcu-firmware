@@ -67,6 +67,9 @@ void parallel_move(
     uint32_t wait = 0                            ///< [in] time to wait after move (in ms)
 );
 
+/// Disable all servomotors
+void disable_all();
+
 /// Send pump state protobuf message
 void send_state(Enum servo);
 

@@ -49,6 +49,9 @@ Pump & get(
     Enum id  ///< [in] pump id
 );
 
+/// Disable all pumps
+void disable_all();
+
 /// Send pump state protobuf message
 void send_state(Enum pump);
 

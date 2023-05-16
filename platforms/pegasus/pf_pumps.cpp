@@ -44,6 +44,13 @@ Pump & get(Enum id) {
     return *_pumps[id];
 }
 
+void disable_all() {
+    for (auto & iterator: _pumps) {
+        Pump *pump = iterator.second;
+        pump->deactivate();
+    }
+}
+
 void send_state(Enum pump) {
     // Protobuf UART interface
     static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();

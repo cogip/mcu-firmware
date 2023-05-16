@@ -27,6 +27,7 @@ namespace actuators {
 static kernel_pid_t _sender_pid;
 static char _sender_stack[THREAD_STACKSIZE_MEDIUM];
 static  bool _suspend_sender = false;
+static  bool _suspend_actuators = false;
 
 constexpr cogip::uartpb::uuid_t thread_start_uuid = 1525532810;
 constexpr cogip::uartpb::uuid_t thread_stop_uuid = 3781855956;
@@ -73,6 +74,19 @@ static void *_thread_sender([[maybe_unused]] void *arg)
     return NULL;
 }
 
+/// Disable all actuators
+void enable_all() {
+    _suspend_actuators = false;
+}
+
+/// Disable all actuators
+void disable_all() {
+    positional_actuators::disable_all();
+    pumps::disable_all();
+    servos::disable_all();
+    _suspend_actuators = true;
+}
+
 /// Start threading sending actuators state.
 static void _handle_thread_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
@@ -92,24 +106,26 @@ static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
     static PB_ActuatorCommand pb_command;
     pb_command.clear();
     pb_command.deserialize(buffer);
-    if (pb_command.has_servo()) {
-        const PB_ServoCommand & pb_servo_command = pb_command.get_servo();
-        servos::move(
-            {
-                servos::Enum{(lx_id_t)pb_servo_command.id()},
-                (uint16_t)pb_servo_command.command()
-            }
-        );
-    }
-    else if (pb_command.has_pump()) {
-        const PB_PumpCommand & pb_pump_command = pb_command.get_pump();
-        pumps::Enum id = pumps::Enum{(vacuum_pump_t)pb_pump_command.id()};
-        pumps::get(id).activate(pb_pump_command.command());
-    }
-    if (pb_command.has_positional_actuator()) {
-        const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
-        positional_actuators::Enum id = positional_actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
-        positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
+    if (!_suspend_actuators) {
+        if (pb_command.has_servo()) {
+            const PB_ServoCommand & pb_servo_command = pb_command.get_servo();
+            servos::move(
+                {
+                    servos::Enum{(lx_id_t)pb_servo_command.id()},
+                    (uint16_t)pb_servo_command.command()
+                }
+            );
+        }
+        else if (pb_command.has_pump()) {
+            const PB_PumpCommand & pb_pump_command = pb_command.get_pump();
+            pumps::Enum id = pumps::Enum{(vacuum_pump_t)pb_pump_command.id()};
+            pumps::get(id).activate(pb_pump_command.command());
+        }
+        if (pb_command.has_positional_actuator()) {
+            const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
+            positional_actuators::Enum id = positional_actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
+            positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
+        }
     }
 }
 

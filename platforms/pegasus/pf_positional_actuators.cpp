@@ -184,6 +184,15 @@ static void *_gpio_handling_thread(void *args)
 
         switch (pin)
         {
+        case pin_24v_check:
+            std::cout << "pin_24V_check triggered" << std::endl;
+            if (!gpio_read(pin_24v_check)) {
+                actuators::disable_all();
+            }
+            else {
+                actuators::enable_all();
+            }
+            break;
         case pin_limit_switch_central_lift_bottom:
             std::cout << "pin_limit_switch_central_lift_bottom triggered" << std::endl;
             _positional_actuators[Enum::MOTOR_CENTRAL_LIFT]->disable_on_check();
@@ -231,6 +240,13 @@ static void *_gpio_handling_thread(void *args)
     return nullptr;
 }
 
+void disable_all() {
+    for (auto & iterator: _positional_actuators) {
+        PositionalActuator *positional_actuator = iterator.second;
+        positional_actuator->disable();
+    }
+}
+
 static void *_positional_actuators_timeout_thread(void *args)
 {
     (void)args;
@@ -265,11 +281,14 @@ void init(uart_half_duplex_t *lx_stream) {
     // Init PWM I2C driver
     _pca9685_init();
 
+    // Init 24V check GPIO
+    init_interruptable_pin(pin_24v_check, false, GPIO_BOTH);
+
     // Init central lift limit switches GPIOs
     init_interruptable_pin(pin_limit_switch_central_lift_top, false, GPIO_RISING);
     init_interruptable_pin(pin_limit_switch_central_lift_bottom, false, GPIO_RISING);
 
-    // Init central lift limit switches GPIOs
+    // Init sensor pumps GPIOs
     init_interruptable_pin(pin_sensor_pump_right, false, GPIO_RISING);
     init_interruptable_pin(pin_sensor_pump_left, false, GPIO_RISING);
 

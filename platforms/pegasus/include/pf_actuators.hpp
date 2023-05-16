@@ -38,6 +38,12 @@ enum class GroupEnum: uint8_t {
     NO_GROUP = 0,
 };
 
+/// Enable all actuators
+void enable_all();
+
+/// Disable all actuators
+void disable_all();
+
 /// Initialize all actuators
 void init();
 
