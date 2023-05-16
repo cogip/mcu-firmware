@@ -80,10 +80,10 @@ int pf_pcf857x_gpio_read(gpio_t pin) {
     return pcf857x_gpio_read(&pcf857x_dev, pin);
 }
 
-/// Init GPIO expander interruptable pin
-static void init_interruptable_pin(gpio_t pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
+/// Init interruptable pin with pullup
+static void init_interruptable_pin(gpio_t pin, gpio_mode_t mode, gpio_flank_t flank=GPIO_BOTH) {
     // Initialize the pin as input with pull-up, interrupt on falling edge
-    if (gpio_init_int(pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, _gpio_cb, (void *)pin) != 0) {
+    if (gpio_init_int(pin, mode, flank, _gpio_cb, (void *)pin) != 0) {
         std::cerr << "Error: init pin " << pin << " failed" << std::endl;
         return;
     }
@@ -284,15 +284,15 @@ void init(uart_half_duplex_t *lx_stream) {
     _pca9685_init();
 
     // Init 24V check GPIO
-    init_interruptable_pin(pin_24v_check, false, GPIO_BOTH);
+    init_interruptable_pin(pin_24v_check, GPIO_IN_PD, GPIO_BOTH);
 
     // Init central lift limit switches GPIOs
-    init_interruptable_pin(pin_limit_switch_central_lift_top, false, GPIO_RISING);
-    init_interruptable_pin(pin_limit_switch_central_lift_bottom, false, GPIO_RISING);
+    init_interruptable_pin(pin_limit_switch_central_lift_top, GPIO_IN, GPIO_RISING);
+    init_interruptable_pin(pin_limit_switch_central_lift_bottom, GPIO_IN, GPIO_RISING);
 
     // Init sensor pumps GPIOs
-    init_interruptable_pin(pin_sensor_pump_right, false, GPIO_RISING);
-    init_interruptable_pin(pin_sensor_pump_left, false, GPIO_RISING);
+    init_interruptable_pin(pin_sensor_pump_right, GPIO_IN, GPIO_RISING);
+    init_interruptable_pin(pin_sensor_pump_left, GPIO_IN, GPIO_RISING);
 
     // Init GPIO expander pins - limit switches
     pcf857x_init_interruptable_pin(pin_limit_switch_left_arm_lift_top, true, GPIO_FALLING);
