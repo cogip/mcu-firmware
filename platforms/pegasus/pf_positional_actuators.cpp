@@ -188,9 +188,11 @@ static void *_gpio_handling_thread(void *args)
             std::cout << "pin_24V_check triggered" << std::endl;
             if (!gpio_read(pin_24v_check)) {
                 actuators::disable_all();
+                send_emergency_button_pressed();
             }
             else {
                 actuators::enable_all();
+                send_emergency_button_released();
             }
             break;
         case pin_limit_switch_central_lift_bottom:
@@ -405,6 +407,26 @@ void init(uart_half_duplex_t *lx_stream) {
 
 PositionalActuator & get(Enum id) {
     return *_positional_actuators[id];
+}
+
+void send_emergency_button_pressed() {
+    // Protobuf UART interface
+    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+
+    // Send protobuf message
+    if (!uartpb.send_message(emergency_button_pressed_uuid)) {
+        std::cerr << "Error: emergency_button_pressed_uuid message not sent" << std::endl;
+    }
+}
+
+void send_emergency_button_released() {
+    // Protobuf UART interface
+    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+
+    // Send protobuf message
+    if (!uartpb.send_message(emergency_button_released_uuid)) {
+        std::cerr << "Error: emergency_button_released_uuid message not sent" << std::endl;
+    }
 }
 
 void send_state(Enum positional_actuator) {

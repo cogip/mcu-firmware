@@ -23,6 +23,10 @@ namespace actuators {
 
 /// Actuator state protobuf message id
 constexpr cogip::uartpb::uuid_t actuator_state_uuid = 1674079543;
+/// Emergency button released protobuf message id
+constexpr cogip::uartpb::uuid_t emergency_button_pressed_uuid = 1885006827;
+/// Emergency button pressed protobuf message id
+constexpr cogip::uartpb::uuid_t emergency_button_released_uuid = 1396723216;
 
 /// LX servomotors IDs
 enum LXServoIDs {

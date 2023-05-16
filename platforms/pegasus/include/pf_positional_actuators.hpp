@@ -109,6 +109,12 @@ PositionalActuator & get(
 /// Disable all positional actuators
 void disable_all();
 
+/// Send emergency button pressed protobuf message
+void send_emergency_button_pressed();
+
+/// Send emergency button released protobuf message
+void send_emergency_button_released();
+
 /// Send positional actuator state protobuf message
 void send_state(Enum positional_actuator);
 
