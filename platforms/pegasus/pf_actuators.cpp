@@ -29,6 +29,7 @@ static char _sender_stack[THREAD_STACKSIZE_MEDIUM];
 static  bool _suspend_sender = false;
 static  bool _suspend_actuators = false;
 
+constexpr cogip::uartpb::uuid_t end_game_uuid = 1666727656;
 constexpr cogip::uartpb::uuid_t thread_start_uuid = 1525532810;
 constexpr cogip::uartpb::uuid_t thread_stop_uuid = 3781855956;
 constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
@@ -85,6 +86,12 @@ void disable_all() {
     pumps::disable_all();
     servos::disable_all();
     _suspend_actuators = true;
+}
+
+/// Start threading sending actuators state.
+static void _handle_end_game([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+{
+    disable_all();
 }
 
 /// Start threading sending actuators state.
@@ -187,6 +194,10 @@ void init() {
         );
 
     cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+    uartpb.register_message_handler(
+        end_game_uuid,
+        uartpb::message_handler_t::create<_handle_end_game>()
+    );
     uartpb.register_message_handler(
         thread_start_uuid,
         uartpb::message_handler_t::create<_handle_thread_start>()
