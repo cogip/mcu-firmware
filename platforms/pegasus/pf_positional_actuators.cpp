@@ -369,6 +369,7 @@ void init(uart_half_duplex_t *lx_stream) {
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_middle);
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_high);
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_max);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC])->add_position(analog_servomotor_cherry_esc_release);
 
     _positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC]->actuate(0);
 

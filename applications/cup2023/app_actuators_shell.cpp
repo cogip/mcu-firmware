@@ -97,6 +97,20 @@ int _cmd_esc_test(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+int _cmd_esc_release_test(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+
+    constexpr int release = 5;
+
+    pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(release);
+    _wait_timeout(5000);
+    pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(off);
+
+    return EXIT_SUCCESS;
+}
+
 int _cmd_arm_pump_left_test(int argc, char **argv)
 {
     (void)argc;
@@ -121,8 +135,9 @@ static cogip::shell::Command cmd_0 = { "lift", "Test central lift", _cmd_central
 static cogip::shell::Command cmd_1 = { "rpump", "Test right arm & pump", _cmd_arm_pump_right_test };
 static cogip::shell::Command cmd_2 = { "lpump", "Test left arm & pump", _cmd_arm_pump_left_test };
 static cogip::shell::Command cmd_3 = { "esc", "Test ESC", _cmd_esc_test };
-static cogip::shell::Command cmd_4 = { "esc_arm_open", "Test ESC open arm", _cmd_esc_arm_open_test };
-static cogip::shell::Command cmd_5 = { "esc_arm_close", "Test ESC close arm", _cmd_esc_arm_close_test };
+static cogip::shell::Command cmd_4 = { "escr", "Test ESC release balls", _cmd_esc_release_test };
+static cogip::shell::Command cmd_5 = { "esc_arm_open", "Test ESC open arm", _cmd_esc_arm_open_test };
+static cogip::shell::Command cmd_6 = { "esc_arm_close", "Test ESC close arm", _cmd_esc_arm_close_test };
 
 void shell_init()
 {
@@ -132,6 +147,7 @@ void shell_init()
     actuators_menu.push_back(&cmd_3);
     actuators_menu.push_back(&cmd_4);
     actuators_menu.push_back(&cmd_5);
+    actuators_menu.push_back(&cmd_6);
 }
 
 } // namespace actuators

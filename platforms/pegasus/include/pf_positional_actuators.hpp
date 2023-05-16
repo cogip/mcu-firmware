@@ -84,6 +84,7 @@ constexpr int analog_servomotor_cherry_esc_low = 155 + PCA9685_OFFSET;
 constexpr int analog_servomotor_cherry_esc_middle = 165 + PCA9685_OFFSET;
 constexpr int analog_servomotor_cherry_esc_high = 175 + PCA9685_OFFSET;
 constexpr int analog_servomotor_cherry_esc_max = 200 + PCA9685_OFFSET;
+constexpr int analog_servomotor_cherry_esc_release = 140 + PCA9685_OFFSET;
 /// @}
 
 /// Cherry release servomotor positions
