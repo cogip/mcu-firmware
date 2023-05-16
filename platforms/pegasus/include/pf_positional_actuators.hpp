@@ -22,6 +22,9 @@
 #include <periph/gpio.h>
 #include <uart_half_duplex.h>
 
+#ifndef PCA9685_OFFSET
+    #define PCA9685_OFFSET 0
+#endif
 namespace cogip {
 namespace pf {
 namespace actuators {
@@ -76,11 +79,11 @@ constexpr int analog_servomotor_cherry_arm_deployed = 235;
 
 /// Cherry ESC servomotor positions
 /// @{
-constexpr int analog_servomotor_cherry_esc_init_off = 150;
-constexpr int analog_servomotor_cherry_esc_low = 155;
-constexpr int analog_servomotor_cherry_esc_middle = 165;
-constexpr int analog_servomotor_cherry_esc_high = 175;
-constexpr int analog_servomotor_cherry_esc_max = 200;
+constexpr int analog_servomotor_cherry_esc_init_off = 150 + PCA9685_OFFSET;
+constexpr int analog_servomotor_cherry_esc_low = 155 + PCA9685_OFFSET;
+constexpr int analog_servomotor_cherry_esc_middle = 165 + PCA9685_OFFSET;
+constexpr int analog_servomotor_cherry_esc_high = 175 + PCA9685_OFFSET;
+constexpr int analog_servomotor_cherry_esc_max = 200 + PCA9685_OFFSET;
 /// @}
 
 /// Cherry release servomotor positions
