@@ -83,6 +83,9 @@ void Motor::actuate(int32_t command) {
     else {
         motor_disable(motor_driver_, motor_id_);
     }
+
+    if (!timeout_period_)
+        timeout_period_ = default_timeout_period_;
 }
 
 } // namespace positional_actuators

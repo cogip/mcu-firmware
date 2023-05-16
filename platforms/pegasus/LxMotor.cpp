@@ -19,10 +19,11 @@ LxMotor::LxMotor(
     Enum id,
     GroupEnum group,
     uint8_t order,
+    uint32_t default_timeout_period,
     lx_id_t lx_id,
     check_limit_switch_cb_t check_limit_switch_positive_direction_cb,
     check_limit_switch_cb_t check_limit_switch_negative_direction_cb
-) : PositionalActuator(id, group, order),
+) : PositionalActuator(id, group, order, default_timeout_period),
     lx_id_(lx_id),
     check_limit_switch_positive_direction_cb_(check_limit_switch_positive_direction_cb),
     check_limit_switch_negative_direction_cb_(check_limit_switch_negative_direction_cb) {

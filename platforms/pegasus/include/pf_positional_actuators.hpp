@@ -93,6 +93,12 @@ constexpr int analog_servomotor_cherry_release_down = 180;
 constexpr int analog_servomotor_cherry_release_up = 40;
 /// @}
 
+/// Actuators timeouts
+/// @{
+constexpr uint32_t default_timeout_period_motor_central_lift = 35;
+/// @}
+
+
 /// Actuators DC motors IDs
 /// @{
 constexpr int actuator_central_lift_motor = 0;

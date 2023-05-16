@@ -22,8 +22,9 @@ AnalogServo::AnalogServo(
     Enum id,
     GroupEnum group,
     uint8_t order,
+    uint32_t default_timeout_period,
     int channel
-) : PositionalActuator(id, group, order), channel_(channel) {
+) : PositionalActuator(id, group, order, default_timeout_period), channel_(channel) {
 }
 
 void AnalogServo::add_position(uint16_t position) {

@@ -309,6 +309,7 @@ void init(uart_half_duplex_t *lx_stream) {
         Enum::MOTOR_CENTRAL_LIFT,
         GroupEnum::NO_GROUP,
         0,
+        default_timeout_period_motor_central_lift,
         ACTUATOR_MOTOR_DRIVER_1,
         actuator_central_lift_motor,
         check_limit_switch_central_lift_top,
@@ -317,6 +318,7 @@ void init(uart_half_duplex_t *lx_stream) {
         Enum::MOTOR_CONVEYOR_LAUNCHER,
         GroupEnum::NO_GROUP,
         0,
+        0,
         ACTUATOR_MOTOR_DRIVER_1,
         actuator_conveyor_launcher_motor);
 
@@ -324,6 +326,7 @@ void init(uart_half_duplex_t *lx_stream) {
     _positional_actuators[Enum::ONOFF_LED_PANELS] = _onoff_pool.create(
         Enum::ONOFF_LED_PANELS,
         GroupEnum::NO_GROUP,
+        0,
         0,
         true,
         1,
@@ -335,6 +338,7 @@ void init(uart_half_duplex_t *lx_stream) {
         Enum::LXMOTOR_RIGHT_ARM_LIFT,
         GroupEnum::NO_GROUP,
         0,
+        0,
         LXServoIDs::LXID_RIGHT_ARM_LIFT,
         check_limit_switch_right_arm_lift_top,
         check_limit_switch_right_arm_lift_bottom
@@ -342,6 +346,7 @@ void init(uart_half_duplex_t *lx_stream) {
     _positional_actuators[Enum::LXMOTOR_LEFT_ARM_LIFT] = _lxmotor_pool.create(
         Enum::LXMOTOR_LEFT_ARM_LIFT,
         GroupEnum::NO_GROUP,
+        0,
         0,
         LXServoIDs::LXID_LEFT_ARM_LIFT,
         check_limit_switch_left_arm_lift_top,
@@ -353,6 +358,7 @@ void init(uart_half_duplex_t *lx_stream) {
         Enum::ANALOGSERVO_CHERRY_ARM,
         GroupEnum::NO_GROUP,
         0,
+        0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_CHERRY_ARM
     );
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_CHERRY_ARM])->add_position(analog_servomotor_cherry_arm_closed);
@@ -361,6 +367,7 @@ void init(uart_half_duplex_t *lx_stream) {
     _positional_actuators[Enum::ANALOGSERVO_CHERRY_ESC] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_CHERRY_ESC,
         GroupEnum::NO_GROUP,
+        0,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_CHERRY_ESC
     );
@@ -377,6 +384,7 @@ void init(uart_half_duplex_t *lx_stream) {
     _positional_actuators[Enum::ANALOGSERVO_CHERRY_RELEASE] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_CHERRY_RELEASE,
         GroupEnum::NO_GROUP,
+        0,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_CHERRY_RELEASE
     );

@@ -23,7 +23,7 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 namespace positional_actuators {
-    
+
 typedef int (*check_limit_switch_cb_t)();
 
 enum class Enum: uint8_t;
@@ -37,11 +37,13 @@ public:
     PositionalActuator(
         Enum id,           ///< [in] positional_actuator id
         GroupEnum group,   ///< [in] actuator group
-        uint8_t order = 0  ///< [in] order in actuator group
-    ) : Actuator(group, order), id_(id), command_(0), timeout_period_(0) {};
+        uint8_t order = 0, ///< [in] order in actuator group
+        uint32_t default_timeout_period = 0 ///< [in] default timeout
+    ) : Actuator(group, order), id_(id), command_(0), timeout_period_(0), default_timeout_period_(default_timeout_period) {};
 
     /// Get timeout
     uint32_t timeout_period() { return timeout_period_; };
+
     /// Decrement timeout
     uint32_t decrement_timeout_period() {
         if (timeout_period_) timeout_period_--;
@@ -71,11 +73,13 @@ public:
     ) const;
 
 protected:
-    Enum id_;               ///< positional_actuator id
+    Enum id_;                   ///< positional_actuator id
 
-    int32_t command_;       ///< positional_actuator speed as a duty_cycle in percent
+    int32_t command_;           ///< positional_actuator speed as a duty_cycle in percent
 
     uint32_t timeout_period_;   ///< timeout to decrease, unit is the actuator thread period
+
+    uint32_t default_timeout_period_;  ///< if not 0, default timeout is applied in case of no timeout set
 };
 
 } // namespace positional_actuators

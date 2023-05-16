@@ -33,6 +33,7 @@ public:
         Enum id,                            ///< [in] motor id
         GroupEnum group,                    ///< [in] actuator group
         uint8_t order = 0,                  ///< [in] order in actuator group
+        uint32_t default_timeout_period = 0,///< [in] default timeout
         int servo_id = 0                    ///< [in] Servomotor ID on PCA9685
     );
 
