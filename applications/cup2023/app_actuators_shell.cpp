@@ -82,12 +82,14 @@ int _cmd_esc_test(int argc, char **argv)
     constexpr int high = 3;
     constexpr int max = 4;
 
+    pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(off);
+    _wait_timeout(100);
     pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(low);
-    _wait_timeout(2000);
+    _wait_timeout(100);
     pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(middle);
-    _wait_timeout(2000);
+    _wait_timeout(100);
     pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(high);
-    _wait_timeout(2000);
+    _wait_timeout(100);
     pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(max);
     _wait_timeout(5000);
     pf::actuators::positional_actuators::get(pf::actuators::positional_actuators::Enum::ANALOGSERVO_CHERRY_ESC).actuate(off);
