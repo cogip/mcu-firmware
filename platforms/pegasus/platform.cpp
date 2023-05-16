@@ -74,7 +74,15 @@ cogip::uartpb::UartProtobuf & pf_get_uartpb()
     return uartpb;
 }
 
-void handle_copilot_connected(cogip::uartpb::ReadBuffer &)
+/// Start threading sending actuators state.
+static void _handle_end_game([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+{
+    cogip::pf::actuators::disable_all();
+    cogip::pf::motion_control::pf_disable_motion_control();
+    cogip::pf::motion_control::pf_motor_drive({0, 0});
+}
+
+void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
@@ -83,7 +91,7 @@ void handle_copilot_connected(cogip::uartpb::ReadBuffer &)
     }
 }
 
-void handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
+void _handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
 {
     pf_set_copilot_connected(false);
     std::cout << "Copilot disconnected" << std::endl;
@@ -109,12 +117,16 @@ void pf_init(void)
     else {
         cogip::shell::register_uartpb(&uartpb);
         uartpb.register_message_handler(
+            end_game_uuid,
+            cogip::uartpb::message_handler_t::create<_handle_end_game>()
+        );
+        uartpb.register_message_handler(
             copilot_connected_uuid,
-            cogip::uartpb::message_handler_t::create<handle_copilot_connected>()
+            cogip::uartpb::message_handler_t::create<_handle_copilot_connected>()
             );
         uartpb.register_message_handler(
             copilot_disconnected_uuid,
-            cogip::uartpb::message_handler_t::create<handle_copilot_disconnected>()
+            cogip::uartpb::message_handler_t::create<_handle_copilot_disconnected>()
             );
         uartpb.register_message_handler(
             cogip::pf::motion_control::pose_uuid,
