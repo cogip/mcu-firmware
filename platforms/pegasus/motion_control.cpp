@@ -340,6 +340,8 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 
     // New target pose, the robot is moving
     pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
+
+    pf_enable_motion_control();
 }
 
 void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
