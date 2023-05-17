@@ -75,11 +75,24 @@ cogip::uartpb::UartProtobuf & pf_get_uartpb()
 }
 
 /// Start threading sending actuators state.
+static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+{
+    cogip::pf::actuators::enable_all();
+    cogip::pf::motion_control::pf_enable_motion_control();
+}
+
+/// Start threading sending actuators state.
 static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::disable_all();
     cogip::pf::motion_control::pf_disable_motion_control();
-    cogip::pf::motion_control::pf_motor_drive({0, 0});
+
+    // Small wait to ensure engine is disabled
+    ztimer_sleep(ZTIMER_MSEC, 100);
+
+    // Brake motors as the robot should not move in this case.
+    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
+    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
 }
 
 void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
@@ -116,6 +129,14 @@ void pf_init(void)
     }
     else {
         cogip::shell::register_uartpb(&uartpb);
+        uartpb.register_message_handler(
+            game_reset_uuid,
+            cogip::uartpb::message_handler_t::create<_handle_game_start>()
+        );
+        uartpb.register_message_handler(
+            game_start_uuid,
+            cogip::uartpb::message_handler_t::create<_handle_game_start>()
+        );
         uartpb.register_message_handler(
             game_end_uuid,
             cogip::uartpb::message_handler_t::create<_handle_game_end>()
