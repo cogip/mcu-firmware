@@ -245,7 +245,9 @@ static void *_gpio_handling_thread(void *args)
 void disable_all() {
     for (auto & iterator: _positional_actuators) {
         PositionalActuator *positional_actuator = iterator.second;
-        positional_actuator->disable();
+        if (iterator.first != Enum::ONOFF_LED_PANELS) {
+            positional_actuator->disable();
+        }
     }
 }
 
