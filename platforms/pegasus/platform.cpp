@@ -75,7 +75,7 @@ cogip::uartpb::UartProtobuf & pf_get_uartpb()
 }
 
 /// Start threading sending actuators state.
-static void _handle_end_game([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::disable_all();
     cogip::pf::motion_control::pf_disable_motion_control();
@@ -117,8 +117,8 @@ void pf_init(void)
     else {
         cogip::shell::register_uartpb(&uartpb);
         uartpb.register_message_handler(
-            end_game_uuid,
-            cogip::uartpb::message_handler_t::create<_handle_end_game>()
+            game_end_uuid,
+            cogip::uartpb::message_handler_t::create<_handle_game_end>()
         );
         uartpb.register_message_handler(
             copilot_connected_uuid,
