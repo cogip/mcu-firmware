@@ -108,6 +108,7 @@ static cogip::motion_control::PosePIDControllerParameters linear_pose_controller
 static cogip::motion_control::PosePIDController linear_pose_controller(&linear_pose_controller_parameters);
 /// Linear SpeedFilterParameters.
 static cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
+    platform_min_speed_linear_mm_per_period,
     platform_max_speed_linear_mm_per_period,
     platform_max_acc_linear_mm_per_period2
     );
@@ -126,6 +127,7 @@ static cogip::motion_control::PosePIDControllerParameters angular_pose_controlle
 static cogip::motion_control::PosePIDController angular_pose_controller(&angular_pose_controller_parameters);
 /// Angular SpeedFilterParameters.
 static cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(
+    platform_min_speed_angular_deg_per_period,
     platform_max_speed_angular_deg_per_period,
     platform_max_acc_angular_deg_per_period2
     );

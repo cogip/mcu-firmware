@@ -20,10 +20,15 @@ namespace motion_control {
 double SpeedFilter::limit_speed_order(
     double speed_order,
     double target_speed,
+    double min_speed,
     double max_speed,
     double max_acc
     )
 {
+    if (speed_order) {
+        speed_order = std::max(fabs(speed_order), min_speed) * speed_order/fabs(speed_order);
+    }
+
     // Limit target speed
     target_speed = std::min(target_speed, max_speed);
 
@@ -61,6 +66,7 @@ void SpeedFilter::execute() {
     speed_order = limit_speed_order(
         speed_order,
         target_speed,
+        parameters_->min_speed(),
         parameters_->max_speed(),
         parameters_->max_acceleration()
         );

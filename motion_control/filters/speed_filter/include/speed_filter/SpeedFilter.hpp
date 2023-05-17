@@ -36,6 +36,7 @@ public:
     double limit_speed_order(
         double speed_order,
         double target_speed,
+        double min_speed,
         double max_speed,
         double max_acc
     );

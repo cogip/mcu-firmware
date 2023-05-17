@@ -20,9 +20,14 @@ class SpeedFilterParameters {
 public:
     /// Constructor
     SpeedFilterParameters(
+        double min_speed = 0.0,         ///< [in]  see max_speed_
         double max_speed = 0.0,         ///< [in]  see max_speed_
         double max_acceleration = 0.0   ///< [in]  see max_acceleration_
-    ) :  max_speed_(max_speed), max_acceleration_(max_acceleration) {};
+    ) :  min_speed_(min_speed), max_speed_(max_speed), max_acceleration_(max_acceleration) {};
+
+    /// Get minimum speed
+    /// return minimum speed
+    double min_speed() const { return min_speed_; };
 
     /// Get maximum speed
     /// return maximum speed
@@ -31,6 +36,11 @@ public:
     /// Get maximum acceleration
     /// return maximum acceleration
     double max_acceleration() const { return max_acceleration_; };
+
+    /// Set minimum speed
+    void set_min_speed(
+        double min_speed                ///< [in]   minimum speed
+        ) { min_speed_ = min_speed; };
 
     /// Set maximum speed
     void set_max_speed(
@@ -43,6 +53,9 @@ public:
         ) { max_acceleration_ = max_acceleration; };
 
 private:
+    /// maximum speed the robot can reach
+    double min_speed_;
+
     /// maximum speed the robot can reach
     double max_speed_;
 
