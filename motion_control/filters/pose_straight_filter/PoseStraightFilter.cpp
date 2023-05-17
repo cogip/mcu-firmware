@@ -94,7 +94,7 @@ void PoseStraightFilter::execute() {
             pose_reached = target_pose_status_t::intermediate_reached;
         }
     }
-    else if (fabs(pos_err.distance()) <= parameters_->linear_treshold()) {
+    else {
         // If the linear error is below the linear treshold, the step 2. is completed.
         // Thus inform the platform through target pose status variable.
         pose_reached = target_pose_status_t::intermediate_reached;
