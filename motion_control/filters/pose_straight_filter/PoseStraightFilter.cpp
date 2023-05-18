@@ -61,6 +61,29 @@ void PoseStraightFilter::execute() {
     // Allow moving reversely
     bool allow_reverse = (bool)inputs_[input_index++];
 
+    // Force allow-reverse once step 2 is done
+    static bool force_allow_reverse = false;
+
+    // Keep trace of previous target pose
+    static cogip_defs::Pose previous_target_pose(
+        INT32_MAX,
+        INT32_MAX,
+        INT32_MAX
+    );
+
+    if (
+        (target_pose.x() != previous_target_pose.x())
+        || (target_pose.y() != previous_target_pose.y())
+        || (target_pose.O() != previous_target_pose.O())) {
+        force_allow_reverse = false;
+    }
+
+    previous_target_pose = target_pose;
+
+    if (force_allow_reverse) {
+        allow_reverse = true;
+    }
+
     if (!is_index_valid(input_index)) {
         return;
     }
@@ -92,6 +115,7 @@ void PoseStraightFilter::execute() {
         else {
             // Once the angular direction is good, step 1. is completed, thus inform the platform through target pose status variable.
             pose_reached = target_pose_status_t::intermediate_reached;
+            force_allow_reverse = true;
         }
     }
     else {
