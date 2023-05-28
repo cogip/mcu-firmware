@@ -31,7 +31,7 @@ inline constexpr size_t polar_parallel_meta_controller_nb_controllers = 2;
 /// Input 5:    angular target speed
 /// Input 6:    pose reached
 /// Output 0:   linear motor command
-/// Output 0:   angular motor command
+/// Output 1:   angular motor command
 class PolarParallelMetaController : public ParallelMetaController<7, 3, polar_parallel_meta_controller_nb_controllers> {
 protected:
 
