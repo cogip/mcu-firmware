@@ -24,67 +24,84 @@ static int _cmd_motors_test_cb(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    uint8_t nb_motors = 0;
-
-    for (motor_driver_t i = 1; i < MOTOR_DRIVER_NUMOF; i++) {
-        uint8_t nb_motors_tmp = motor_driver_config[i].nb_motors;
-        int16_t pwm_resolution = motor_driver_config[i].pwm_resolution;
-
-        for (uint8_t j = 0; j < nb_motors_tmp; j++) {
-
-            int32_t qdec_value = 0;
-            int timeout = 1000;
-
-            std::cout << "### Testing motor " << j << " of motor driver " << i << std::endl;
-
-            /* Reset qdec */
-            if (nb_motors + j < QDEC_NUMOF)
-                qdec_read_and_reset(QDEC_DEV(nb_motors + j));
-
-            motor_enable(i, j);
-
-            /* Forward */
-            std::cout << "    Forward move" << std::endl;
-            motor_set(i, j, pwm_resolution);
-            while (timeout--) {
-                if (nb_motors + j < QDEC_NUMOF)
-                    qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
-                ztimer_sleep(ZTIMER_MSEC, 1);
-            }
-            std::cout << "    qdec value = " << qdec_value;
-            std::cout << "    Done" << std::endl;
-
-            /* Stop */
-            timeout = 1000;
-            qdec_value = 0;
-            std::cout << "    Stop" << std::endl;
-            motor_brake(i, j);
-            ztimer_sleep(ZTIMER_SEC, 3);
-            std::cout << "    Done" << std::endl;
-
-            /* Backward */
-            std::cout << "    Backward move" << std::endl;
-            motor_set(i, j, -pwm_resolution);
-            while (timeout--) {
-                if (nb_motors + j < QDEC_NUMOF)
-                    qdec_value += qdec_read_and_reset(QDEC_DEV(nb_motors + j));
-                ztimer_sleep(ZTIMER_MSEC, 1);
-            }
-            std::cout << "    qdec value = " << qdec_value;
-            std::cout << "    Done" << std::endl;
-
-            /* Stop */
-            std::cout << "    Stop" << std::endl;
-            motor_brake(i, j);
-            std::cout << "    Done" << std::endl;
-
-            ztimer_sleep(ZTIMER_SEC, 2);
-
-            motor_disable(i, j);
-        }
-
-        nb_motors += nb_motors_tmp;
+    if (argc != 4) {
+        std::cerr << "Bad argument number, usage: " << argv[0] << " <motor_driver_id> <motor_id> <signed_pwm_percents>" << std::endl;
+        return -1;
     }
+
+    motor_driver_t motor_driver = atoi(argv[1]);
+    if(motor_driver >= MOTOR_DRIVER_NUMOF) {
+        std::cerr << "Bad motor driver ID, should be strictly lesser than " << MOTOR_DRIVER_NUMOF << std::endl;
+        return -1;
+    }
+
+    uint8_t motor = (uint8_t)atoi(argv[2]);
+    if(motor >= motor_driver_config[motor_driver].nb_motors) {
+        std::cerr << "Bad motor ID, should be strictly lesser than " << motor_driver_config[motor_driver].nb_motors << std::endl;
+        return -1;
+    }
+
+    int32_t pwm_percent = (int16_t)atoi(argv[3]);
+    if (abs(pwm_percent) > 100) {
+        std::cerr << "Bad pwm value, should be a signed percentage"  << std::endl;
+        return -1;
+    }
+
+    cogip::pf::motion_control::pf_disable_motion_control();
+
+    int16_t pwm_resolution = (int16_t)((motor_driver_config[motor_driver].pwm_resolution * pwm_percent) / 100);
+
+    int32_t qdec_value = 0;
+    int timeout = 3000;
+    int chrono = timeout;
+
+    std::cout << "### Testing motor " << (int)motor << " of motor driver " << motor_driver << std::endl;
+
+    /* Reset qdec */
+    if (motor < QDEC_NUMOF)
+        qdec_read_and_reset(QDEC_DEV(motor));
+
+    motor_enable(motor_driver, motor);
+
+    /* Forward */
+    chrono = timeout;
+    std::cout << "    Forward move" << std::endl;
+    motor_set(motor_driver, motor, pwm_resolution);
+    while (chrono--) {
+        if (motor < QDEC_NUMOF)
+            qdec_value += qdec_read_and_reset(QDEC_DEV(motor));
+        ztimer_sleep(ZTIMER_MSEC, 1);
+    }
+    std::cout << "    qdec value = " << qdec_value;
+    std::cout << "    Done" << std::endl;
+
+    /* Stop */
+    qdec_value = 0;
+    std::cout << "    Stop" << std::endl;
+    motor_brake(motor_driver, motor);
+    ztimer_sleep(ZTIMER_SEC, 3);
+    std::cout << "    Done" << std::endl;
+
+    /* Backward */
+    chrono = timeout;
+    std::cout << "    Backward move" << std::endl;
+    motor_set(motor_driver, motor, -pwm_resolution);
+    while (chrono--) {
+        if (motor < QDEC_NUMOF)
+            qdec_value += qdec_read_and_reset(QDEC_DEV(motor));
+        ztimer_sleep(ZTIMER_MSEC, 1);
+    }
+    std::cout << "    qdec value = " << qdec_value;
+    std::cout << "    Done" << std::endl;
+
+    /* Stop */
+    std::cout << "    Stop" << std::endl;
+    motor_brake(motor_driver, motor);
+    std::cout << "    Done" << std::endl;
+
+    ztimer_sleep(ZTIMER_SEC, 2);
+
+    motor_disable(motor_driver, motor);
 
     cogip::pf::motion_control::pf_enable_motion_control();
 
