@@ -150,6 +150,10 @@ void pf_init(void)
             cogip::uartpb::message_handler_t::create<_handle_copilot_disconnected>()
             );
         uartpb.register_message_handler(
+            cogip::pf::motion_control::brake_uuid,
+            cogip::uartpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_brake>()
+            );
+        uartpb.register_message_handler(
             cogip::pf::motion_control::pose_uuid,
             cogip::uartpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_target_pose>()
             );

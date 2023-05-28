@@ -313,6 +313,18 @@ void pf_send_pb_state(void)
     pf_get_uartpb().send_message(state_uuid, &pb_state);
 }
 
+
+void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
+    pf_disable_motion_control();
+
+    // Small wait to ensure engine is disabled
+    ztimer_sleep(ZTIMER_MSEC, 100);
+
+    // Brake motors as the robot should not move in this case.
+    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
+    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
+}
+
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 {
     // Retrieve new target pose from protobuf message

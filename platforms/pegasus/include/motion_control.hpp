@@ -23,6 +23,7 @@ enum class PidEnum: pid_id_t {
 };
 constexpr auto PID_COUNT = __LINE__ - START_LINE - 3;
 
+constexpr cogip::uartpb::uuid_t brake_uuid = 3239255374;
 constexpr cogip::uartpb::uuid_t pose_uuid = 1534060156;
 constexpr cogip::uartpb::uuid_t pose_reached_uuid = 2736246403;
 constexpr cogip::uartpb::uuid_t start_pose_uuid = 2741980922;
@@ -95,6 +96,9 @@ constexpr double platform_max_speed_angular_deg_per_period = (
 constexpr double platform_low_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 4);       ///< Low angular speed (deg/<motion_control_thread_period_ms>)
 constexpr double platform_normal_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 2);    ///< Normal angular speed (deg/<motion_control_thread_period_ms>)
 /// @}
+
+/// Handle brake signal to stop the robot
+void pf_handle_brake(cogip::uartpb::ReadBuffer &buffer);
 
 /// Get pose to reach from protobuf message
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer);
