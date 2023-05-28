@@ -20,6 +20,7 @@ namespace motion_control {
 double SpeedFilter::limit_speed_order(
     double speed_order,
     double target_speed,
+    double current_speed,
     double min_speed,
     double max_speed,
     double max_acc
@@ -33,14 +34,14 @@ double SpeedFilter::limit_speed_order(
     target_speed = std::min(target_speed, max_speed);
 
     // Limit speed command (maximum acceleration)
-    double a = speed_order - previous_speed_order_;
+    double a = speed_order - current_speed;
 
     if (a > max_acc) {
-        speed_order = previous_speed_order_ + max_acc;
+        speed_order = current_speed + max_acc;
     }
 
     if (a < -max_acc) {
-        speed_order = previous_speed_order_ - max_acc;
+        speed_order = current_speed - max_acc;
     }
 
     // Limit speed command
@@ -66,6 +67,7 @@ void SpeedFilter::execute() {
     speed_order = limit_speed_order(
         speed_order,
         target_speed,
+        current_speed,
         parameters_->min_speed(),
         parameters_->max_speed(),
         parameters_->max_acceleration()
