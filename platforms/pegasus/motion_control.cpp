@@ -40,6 +40,9 @@ PB_Controller pb_controller;
 PB_State pb_state;
 PB_Pids<PID_COUNT> pb_pids;
 
+
+static  bool _suspend_motion_control_messages = false;
+
 // PID tuning period
 constexpr uint16_t motion_control_pid_tuning_period_ms = 3000;
 
@@ -327,33 +330,39 @@ void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 {
-    // Retrieve new target pose from protobuf message
-    PB_PathPose pb_path_target_pose;
-    EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
-        return;
+    if (!_suspend_motion_control_messages) {
+        // Retrieve new target pose from protobuf message
+        PB_PathPose pb_path_target_pose;
+        EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
+        if (error != EmbeddedProto::Error::NO_ERRORS) {
+            std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+            return;
+        }
+
+        // Target pose
+        target_pose.pb_read(pb_path_target_pose);
+
+        std::cout << "Received new target pose: X=" << target_pose.x() << ", Y=" << target_pose.y() << ", O=" << target_pose.O() << std::endl;
+
+        // Target speed
+        //target_speed.set_distance(target_pose.max_speed_linear());
+        //target_speed.set_angle(target_pose.max_speed_angular());
+        target_speed.set_distance(platform_max_speed_linear_mm_per_period);
+        target_speed.set_angle(platform_max_speed_angular_deg_per_period);
+        pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+        // Set target speed for passthrough controllers
+        passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
+        passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
+
+        // Deal with the first pose in the list
+        pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+        // New target pose, the robot is moving
+        pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
+
+        pf_enable_motion_control();
     }
-
-    // Target pose
-    target_pose.pb_read(pb_path_target_pose);
-
-    // Target speed
-    target_speed.set_distance(target_pose.max_speed_linear());
-    target_speed.set_angle(target_pose.max_speed_angular());
-    pf_motion_control_platform_engine.set_target_speed(target_speed);
-
-    // Set target speed for passthrough controllers
-    passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
-    passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
-
-    // Deal with the first pose in the list
-    pf_motion_control_platform_engine.set_target_pose(target_pose);
-
-    // New target pose, the robot is moving
-    pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
-
-    pf_enable_motion_control();
 }
 
 void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
@@ -391,6 +400,16 @@ void pf_disable_motion_control()
 void pf_enable_motion_control()
 {
     pf_motion_control_platform_engine.enable();
+}
+
+void pf_enable_motion_control_messages()
+{
+    _suspend_motion_control_messages = false;
+}
+
+void pf_disable_motion_control_messages()
+{
+    _suspend_motion_control_messages = true;
 }
 
 void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cogip::cogip_defs::Pose &current_pose)
