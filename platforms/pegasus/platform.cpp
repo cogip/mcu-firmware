@@ -74,11 +74,13 @@ cogip::uartpb::UartProtobuf & pf_get_uartpb()
     return uartpb;
 }
 
-/// Start threading sending actuators state.
+/// Start game message handler
 static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::enable_all();
     cogip::pf::motion_control::pf_enable_motion_control();
+
+    cogip::pf::motion_control::pf_enable_motion_control_messages();
 }
 
 /// Start threading sending actuators state.
