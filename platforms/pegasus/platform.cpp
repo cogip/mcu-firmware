@@ -83,6 +83,15 @@ static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buff
     cogip::pf::motion_control::pf_enable_motion_control_messages();
 }
 
+/// Reset game message handler
+static void _handle_game_reset([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+{
+    cogip::pf::actuators::enable_all();
+    cogip::pf::motion_control::pf_enable_motion_control();
+
+    cogip::pf::motion_control::pf_enable_motion_control_messages();
+}
+
 /// Start threading sending actuators state.
 static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
@@ -133,7 +142,7 @@ void pf_init(void)
         cogip::shell::register_uartpb(&uartpb);
         uartpb.register_message_handler(
             game_reset_uuid,
-            cogip::uartpb::message_handler_t::create<_handle_game_start>()
+            cogip::uartpb::message_handler_t::create<_handle_game_reset>()
         );
         uartpb.register_message_handler(
             game_start_uuid,
