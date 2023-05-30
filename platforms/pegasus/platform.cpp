@@ -14,6 +14,7 @@
 /* Platform includes */
 #include "trace_utils.hpp"
 #include "pf_actuators.hpp"
+#include "pf_positional_actuators.hpp"
 #include "PB_Command.hpp"
 
 #ifdef MODULE_SHELL_PLATFORMS
@@ -96,14 +97,12 @@ static void _handle_game_reset([[maybe_unused]] cogip::uartpb::ReadBuffer & buff
 static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::disable_all();
-    cogip::pf::motion_control::pf_disable_motion_control();
 
-    // Small wait to ensure engine is disabled
-    ztimer_sleep(ZTIMER_MSEC, 100);
+    cogip::pf::motion_control::pf_handle_brake(buffer);
 
-    // Brake motors as the robot should not move in this case.
-    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
-    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
+    cogip::pf::motion_control::pf_disable_motion_control_messages();
+
+    cogip::pf::actuators::positional_actuators::get(cogip::pf::actuators::positional_actuators::Enum::ONOFF_LED_PANELS).actuate(1);
 }
 
 void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
