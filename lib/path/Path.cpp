@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#include "motion_control.hpp"
-
 namespace cogip {
 
 namespace path {
@@ -32,12 +30,12 @@ size_t Path::operator--(int)
 
 double Path::current_max_speed_linear()
 {
-    return std::min(at(current_pose_index_).max_speed_linear(), (double)pf::motion_control::platform_max_speed_linear_mm_per_period);
+    return at(current_pose_index_).max_speed_linear();
 }
 
 double Path::current_max_speed_angular()
 {
-    return std::min(at(current_pose_index_).max_speed_angular(), (double)pf::motion_control::platform_max_speed_angular_deg_per_period);
+    return at(current_pose_index_).max_speed_angular();
 }
 
 void Path::horizontal_mirror_all_poses()
