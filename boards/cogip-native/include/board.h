@@ -49,6 +49,9 @@ enum {
 /* GPIOs expander */
 #define PCF857X_PORT_0  0
 
+/* Servomotors */
+#define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
+#define LX_UART_DEV     2
 
 /* Motors */
 #define MOTOR_LEFT  0
