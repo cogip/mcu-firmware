@@ -46,8 +46,6 @@ enum {
 /* Heartbeat LED */
 #define HEARTBEAT_LED   GPIO_PIN(1, 3)
 
-/* Starting switch */
-#define GPIO_STARTER    GPIO_PIN(1, 2)
 /* GPIOs expander */
 #define PCF857X_PORT_0  0
 
