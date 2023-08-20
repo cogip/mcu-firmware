@@ -58,6 +58,13 @@ include $(MCUFIRMWAREBASE)/makefiles/global_vars.mk.inc
 # Global project requirements
 include $(MCUFIRMWAREBASE)/Makefile.dep
 
+clean_riot_patches:
+	@cd $(RIOTBASE) && (quilt pop -a || true) && rm patches .pc -rf
+	@rm -f $(patchstamps)
+
+all: $(patchstamps)
+distclean: clean_riot_patches
+
 # RIOT Makefile include
 include $(RIOTBASE)/Makefile.include
 
@@ -113,7 +120,6 @@ ifeq (,$(findstring -DISR_STACKSIZE=,$(CFLAGS)))
 	CFLAGS += -DISR_STACKSIZE=2048
 endif
 
-all: $(patchstamps)
 .PHONY: world
 world: all
 	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAM_LEN)
