@@ -33,6 +33,16 @@
 extern "C" {
 #endif
 
+/* Fake GPIOs */
+enum {
+    PORT_A = 0,
+    PORT_B,
+    PORT_C,
+    PORT_D,
+    PORT_E,
+    NATIVE_GPIO_PORT_NUMOF
+};
+
 /* Heartbeat LED */
 #define HEARTBEAT_LED   GPIO_PIN(1, 3)
 
