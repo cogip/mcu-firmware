@@ -6,6 +6,7 @@
 #include "app_conf.hpp"
 #include "board.h"
 #include "motion_control.hpp"
+#include "motion_motors_params.hpp"
 #include "path/Pose.hpp"
 #include "platform.hpp"
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
@@ -111,6 +112,7 @@ static cogip::motion_control::PosePIDControllerParameters linear_pose_controller
 static cogip::motion_control::PosePIDController linear_pose_controller(&linear_pose_controller_parameters);
 /// Linear SpeedFilterParameters.
 static cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
+    platform_min_speed_linear_mm_per_period,
     platform_max_speed_linear_mm_per_period,
     platform_max_acc_linear_mm_per_period2
     );
@@ -129,6 +131,7 @@ static cogip::motion_control::PosePIDControllerParameters angular_pose_controlle
 static cogip::motion_control::PosePIDController angular_pose_controller(&angular_pose_controller_parameters);
 /// Angular SpeedFilterParameters.
 static cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(
+    platform_min_speed_angular_deg_per_period,
     platform_max_speed_angular_deg_per_period,
     platform_max_acc_angular_deg_per_period2
     );
@@ -312,6 +315,18 @@ void pf_send_pb_state(void)
     pf_motion_control_platform_engine.target_speed().pb_copy(pb_state.mutable_speed_order());
 
     pf_get_uartpb().send_message(state_uuid, &pb_state);
+}
+
+
+void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
+    pf_disable_motion_control();
+
+    // Small wait to ensure engine is disabled
+    ztimer_sleep(ZTIMER_MSEC, 100);
+
+    // Brake motors as the robot should not move in this case.
+    motor_brake(&motion_motors_driver, MOTOR_LEFT);
+    motor_brake(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
