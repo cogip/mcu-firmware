@@ -34,6 +34,9 @@ namespace pf {
 
 namespace motion_control {
 
+// Motor driver
+static motor_driver_t motion_motors_driver;
+
 // Protobuf
 PB_Pose pb_pose;
 PB_Controller pb_controller;
@@ -396,8 +399,8 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
 
         // Apply motor commands
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
+        motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
+        motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
     }
     else {
         // Send message in case of final pose reached only.
@@ -407,12 +410,12 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         }
 
         // Only useful for native architecture, to populate emulated QDEC data.
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, 0);
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, 0);
+        motor_set(&motion_motors_driver, MOTOR_LEFT, 0);
+        motor_set(&motion_motors_driver, MOTOR_RIGHT, 0);
 
         // Brake motors as the robot should not move in this case.
-        motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
-        motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
+        motor_brake(&motion_motors_driver, MOTOR_LEFT);
+        motor_brake(&motion_motors_driver, MOTOR_RIGHT);
     }
 
     // Backup target pose status flag to avoid flooding protobuf serial bus.
@@ -502,7 +505,7 @@ static void _handle_set_controller(cogip::uartpb::ReadBuffer & buffer)
 void pf_init_motion_control(void)
 {
     // Init motor driver
-    motor_driver_init(MOTOR_DRIVER_DEV(0));
+    motor_driver_init(&motion_motors_driver, &motion_motors_params);
 
     // Setup qdec periphereal
     int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);

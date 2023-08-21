@@ -12,8 +12,9 @@
 #include "OnOff.hpp"
 #include "PositionalActuator.hpp"
 
-#include "pca9685_params.h"
-#include "pcf857x_params.h"
+#include "actuators_motors_params.hpp"
+#include "pca9685_params.hpp"
+#include "pcf857x_params.hpp"
 #include "platform.hpp"
 
 #include "etl/map.h"
@@ -28,6 +29,9 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 namespace positional_actuators {
+
+// Motion control motor driver
+static motor_driver_t actuators_motors_driver;
 
 // Positional actuator protobuf message
 static PB_PositionalActuator _pb_positional_actuator;
@@ -306,13 +310,13 @@ void init(uart_half_duplex_t *lx_stream) {
     pcf857x_init_output_pin(pin_led_panels, 0);
 
     // Motors driver init
-    motor_driver_init(ACTUATOR_MOTOR_DRIVER_1);
+    motor_driver_init(&actuators_motors_driver, &actuators_motors_params);
     _positional_actuators[Enum::MOTOR_CENTRAL_LIFT] = _motors_pool.create(
         Enum::MOTOR_CENTRAL_LIFT,
         GroupEnum::NO_GROUP,
         0,
         default_timeout_period_motor_central_lift,
-        ACTUATOR_MOTOR_DRIVER_1,
+        &actuators_motors_driver,
         actuator_central_lift_motor,
         check_limit_switch_central_lift_top,
         check_limit_switch_central_lift_bottom);
@@ -321,7 +325,7 @@ void init(uart_half_duplex_t *lx_stream) {
         GroupEnum::NO_GROUP,
         0,
         0,
-        ACTUATOR_MOTOR_DRIVER_1,
+        &actuators_motors_driver,
         actuator_conveyor_launcher_motor);
 
     // OnOff init

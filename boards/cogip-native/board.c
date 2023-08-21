@@ -27,37 +27,30 @@
 extern int32_t qdecs_value[QDEC_NUMOF];
 
 void cogip_native_motor_driver_qdec_simulation(
-    const motor_driver_t motor_driver, uint8_t motor_id,
+    const motor_driver_t *motor_driver, uint8_t motor_id,
     int32_t pwm_duty_cycle)
 {
     static int16_t simu_motor_encoder[QDEC_NUMOF][SIMU_ENC_BUFSIZE] = { 0, };
 
-    uint32_t i = 0, id = 0;
+    uint32_t i = 0;
     int32_t s = 0;
 
-    for (i = 0; i < motor_driver; i++) {
-        const motor_driver_config_t motor_driver_conf =
-            motor_driver_config[motor_driver];
-        id += motor_driver_conf.nb_motors;
-    }
-    id += motor_id;
-
-    if (id < QDEC_NUMOF) {
+    if (motor_id < QDEC_NUMOF) {
 
         for (i = 0; i < SIMU_ENC_BUFSIZE - 1; i++) {
-            s += simu_motor_encoder[id][i];
-            simu_motor_encoder[id][i] = simu_motor_encoder[id][i + 1];
+            s += simu_motor_encoder[motor_id][i];
+            simu_motor_encoder[motor_id][i] = simu_motor_encoder[motor_id][i + 1];
         }
 
-        s = (s + simu_motor_encoder[id][i] + pwm_duty_cycle) / (SIMU_ENC_BUFSIZE + 1);
-        simu_motor_encoder[id][i] = s;
-        qdecs_value[id] = s;
+        s = (s + simu_motor_encoder[motor_id][i] + pwm_duty_cycle) / (SIMU_ENC_BUFSIZE + 1);
+        simu_motor_encoder[motor_id][i] = s;
+        qdecs_value[motor_id] = s;
     }
     else {
-        LOG_ERROR("MOTOR-DRIVER=%u"             \
+        LOG_ERROR("MOTOR-DRIVER=%p"             \
                   "    MOTOR_ID = %u"                 \
                   "    no QDEC device associated",    \
-                  motor_driver, motor_id);
+                  (void *)motor_driver, motor_id);
     }
 }
 

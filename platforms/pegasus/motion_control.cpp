@@ -6,6 +6,7 @@
 #include "app_conf.hpp"
 #include "board.h"
 #include "motion_control.hpp"
+#include "motion_motors_params.hpp"
 #include "path/Pose.hpp"
 #include "platform.hpp"
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
@@ -33,6 +34,9 @@ namespace cogip {
 namespace pf {
 
 namespace motion_control {
+
+// Motion control motor driver
+static motor_driver_t motion_motors_driver;
 
 // Protobuf
 PB_Pose pb_pose;
@@ -324,8 +328,8 @@ void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
     ztimer_sleep(ZTIMER_MSEC, 100);
 
     // Brake motors as the robot should not move in this case.
-    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
-    motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
+    motor_brake(&motion_motors_driver, MOTOR_LEFT);
+    motor_brake(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
@@ -342,11 +346,7 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
         // Target pose
         target_pose.pb_read(pb_path_target_pose);
 
-        std::cout << "Received new target pose: X=" << target_pose.x() << ", Y=" << target_pose.y() << ", O=" << target_pose.O() << std::endl;
-
         // Target speed
-        //target_speed.set_distance(target_pose.max_speed_linear());
-        //target_speed.set_angle(target_pose.max_speed_angular());
         target_speed.set_distance(platform_max_speed_linear_mm_per_period);
         target_speed.set_angle(platform_max_speed_angular_deg_per_period);
         pf_motion_control_platform_engine.set_target_speed(target_speed);
@@ -431,8 +431,8 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
 
         // Apply motor commands
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
+        motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
+        motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
     }
     else {
         // Send message in case of final pose reached only.
@@ -442,12 +442,12 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         }
 
         // Only useful for native architecture, to populate emulated QDEC data.
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, 0);
-        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, 0);
+        motor_set(&motion_motors_driver, MOTOR_LEFT, 0);
+        motor_set(&motion_motors_driver, MOTOR_RIGHT, 0);
 
         // Brake motors as the robot should not move in this case.
-        motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
-        motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
+        motor_brake(&motion_motors_driver, MOTOR_LEFT);
+        motor_brake(&motion_motors_driver, MOTOR_RIGHT);
     }
 
     // Backup target pose status flag to avoid flooding protobuf serial bus.
@@ -537,7 +537,7 @@ static void _handle_set_controller(cogip::uartpb::ReadBuffer & buffer)
 void pf_init_motion_control(void)
 {
     // Init motor driver
-    motor_driver_init(MOTOR_DRIVER_DEV(0));
+    motor_driver_init(&motion_motors_driver, &motion_motors_params);
 
     // Setup qdec periphereal
     int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);

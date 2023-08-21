@@ -11,4 +11,3 @@ FEATURES_PROVIDED += periph_uart
 
 # Various other features (if any)
 FEATURES_PROVIDED += ethernet
-FEATURES_PROVIDED += motor_driver
