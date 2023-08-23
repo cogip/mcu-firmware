@@ -28,8 +28,8 @@ public:
         double x=0.0,                   ///< [in] X coordinate
         double y=0.0,                   ///< [in] Y coodinate
         double O=0.0,                   ///< [in] 0-orientation
-        double max_speed_linear=0.0,    ///< [in] max speed linear
-        double max_speed_angular=0.0,   ///< [in] max speed angular
+        double max_speed_ratio_linear=0.0,    ///< [in] max speed linear
+        double max_speed_ratio_angular=0.0,   ///< [in] max speed angular
         bool allow_reverse=true,        ///< [in] reverse mode
         func_cb_t act_=nullptr          ///< [in] action callback
         );
@@ -38,10 +38,10 @@ public:
     virtual ~Pose() {};
 
     /// Retourn max speed linear.
-    virtual double max_speed_linear() const { return max_speed_linear_; };
+    virtual double max_speed_ratio_linear() const { return max_speed_ratio_linear_; };
 
     /// Retourn max speed angular.
-    virtual double max_speed_angular() const { return max_speed_angular_; };
+    virtual double max_speed_ratio_angular() const { return max_speed_ratio_angular_; };
 
     /// Is reverse mode allowed or not.
     virtual bool allow_reverse() const { return allow_reverse_; };
@@ -65,8 +65,8 @@ public:
         ) const;
 
 private:
-    double max_speed_linear_;     ///< max speed
-    double max_speed_angular_;    ///< max speed
+    double max_speed_ratio_linear_;     ///< max speed
+    double max_speed_ratio_angular_;    ///< max speed
     bool allow_reverse_;          ///< reverse mode
     func_cb_t act_;               ///< action callback
 };

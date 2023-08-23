@@ -343,8 +343,8 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
     target_pose.pb_read(pb_path_target_pose);
 
     // Target speed
-    target_speed.set_distance(target_pose.max_speed_linear());
-    target_speed.set_angle(target_pose.max_speed_angular());
+    target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
+    target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);
     pf_motion_control_platform_engine.set_target_speed(target_speed);
 
     // Set target speed for passthrough controllers
