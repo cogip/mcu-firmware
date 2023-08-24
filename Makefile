@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := all
+
 # Get absolute paths
 MCUFIRMWAREBASE := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 RIOTBASE ?= $(MCUFIRMWAREBASE)/../RIOT/
@@ -7,7 +9,12 @@ apps := $(foreach dir,$(wildcard applications/*/Makefile),$(subst Makefile, , $(
 examples := $(foreach dir,$(wildcard examples/*/Makefile),$(subst Makefile, , $(dir)))
 boards := $(foreach dir,$(wildcard boards/*),$(subst boards/, , $(dir)))
 
-.PHONY: all clean distclean doc docman doclatex docclean help $(apps) $(examples)
+# RIOT-OS patches targets
+include $(MCUFIRMWAREBASE)/makefiles/riot-patches.mk.inc
+
+.PHONY: all clean distclean doc docman doclatex docclean help world
+.PHONY: distclean-riot-patches riot-patches
+.PHONY: $(apps) $(examples)
 
 all: $(apps) $(examples)	## Build all applications and examples (default target)
 

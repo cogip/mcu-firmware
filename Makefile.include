@@ -8,9 +8,6 @@ BUILD_DIR = $(BINDIR)/build
 PKGDIRBASE = $(BUILD_DIR)/pkg
 RIOTPKG ?= $(MCUFIRMWAREBASE)/pkg
 
-# Apply RIOT-OS patches as soon as possible
-include $(MCUFIRMWAREBASE)/makefiles/riot-patches.mk.inc
-
 # Function to check version
 include $(MCUFIRMWAREBASE)/makefiles/version_check.mk.inc
 
@@ -58,13 +55,6 @@ include $(MCUFIRMWAREBASE)/makefiles/global_vars.mk.inc
 # Global project requirements
 include $(MCUFIRMWAREBASE)/Makefile.dep
 
-clean_riot_patches:
-	@cd $(RIOTBASE) && (quilt pop -a || true) && rm patches .pc -rf
-	@rm -f $(patchstamps)
-
-all: $(patchstamps)
-distclean: clean_riot_patches
-
 # RIOT Makefile include
 include $(RIOTBASE)/Makefile.include
 
@@ -80,11 +70,6 @@ ifneq ($(wildcard $(APPDIR)/include/.*),)
 			INCLUDES += -I$(APPDIR)/include/simulation/
 		endif
 	endif
-endif
-
-# As RIOT Makefile.include is included, RAMSIZE can be computed
-ifneq ($(CPU),native)
-	.DEFAULT_GOAL := world
 endif
 
 # mallinfo2 is only available on native architecture with glibc >=2.33, making mallinfo deprecated
@@ -120,6 +105,10 @@ ifeq (,$(findstring -DISR_STACKSIZE=,$(CFLAGS)))
 	CFLAGS += -DISR_STACKSIZE=2048
 endif
 
+# As RIOT Makefile.include is included, RAMSIZE can be computed for not native architectures
+ifneq ($(CPU),native)
+	.DEFAULT_GOAL := world
+endif
 .PHONY: world
 world: all
 	$(Q)$(MCUFIRMWAREBASE)/tools/fwsize.sh $(SIZE) $(ELFFILE) $(FLASHSIZE) $(RAM_LEN)
