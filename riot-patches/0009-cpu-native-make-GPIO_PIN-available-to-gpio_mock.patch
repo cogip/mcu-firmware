@@ -1,0 +1,63 @@
+From 8d9d1a1910ce3624beb5cf454ef4109ef2eaf604 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Wed, 16 Aug 2023 17:01:15 +0200
+Subject: [PATCH 7/7] cpu/native: make GPIO_PIN available to gpio_mock
+
+If gpio_mock is used, GPIO_PIN is not defined for native architecture
+and defaults to macro from periph/gpio.h.
+Thus in the default GPIO_PIN macro, port is not considered and thus some
+GPIOs from different ports could overlap.
+For example on a switch/case test on a given pin, GPIO_PIN could return
+twice same value for two different pins, which leads to build error:
+ * GPIO_PIN(0,3) => 3
+ * GPIO_PIN(1,3) => 3
+Enable GPIO_PIN native definition for bot gpio_linux and gpio_mock
+drivers.
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ cpu/native/include/periph_cpu.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/cpu/native/include/periph_cpu.h b/cpu/native/include/periph_cpu.h
+index 668c877aee..fc42ff362c 100644
+--- a/cpu/native/include/periph_cpu.h
++++ b/cpu/native/include/periph_cpu.h
+@@ -44,10 +44,6 @@ extern "C" {
+  */
+ #define PROVIDES_PM_LAYERED_OFF
+ 
+-/* GPIO configuration only if the module is available (=Linux) */
+-#if defined(MODULE_PERIPH_GPIO_LINUX) || defined(DOXYGEN)
+-#include <linux/gpio.h>
+-
+ /**
+  * @name GPIO Configuration
+  * @{
+@@ -63,6 +59,10 @@ extern "C" {
+  */
+ #define GPIO_PIN(port, pin) (gpio_t)((port << GPIO_PORT_SHIFT) | pin)
+ 
++/* GPIO configuration only if the module is available (=Linux) */
++#if defined(MODULE_PERIPH_GPIO_LINUX) || defined(DOXYGEN)
++#include <linux/gpio.h>
++
+ #define HAVE_GPIO_MODE_T
+ #ifndef GPIOHANDLE_REQUEST_PULL_DOWN
+ #define GPIOHANDLE_REQUEST_PULL_DOWN    (0xFF)
+@@ -95,10 +95,10 @@ typedef enum {
+     GPIO_BOTH = GPIO_FALLING | GPIO_RISING          /**< emit interrupt on both flanks */
+ } gpio_flank_t;
+ 
+-/** @} */
+-
+ #endif /* MODULE_PERIPH_GPIO_LINUX | DOXYGEN */
+ 
++/** @} */
++
+ /**
+  * @brief   Prevent shared timer functions from being used
+  */
+-- 
+2.37.0
+
