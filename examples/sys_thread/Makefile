@@ -6,10 +6,10 @@ ifeq (native,$(findstring native,$(BOARD)))
 	CFLAGS += "-DUART_NUMOF=2"
 endif
 
-USEMODULE += heap_cmd
+USEMODULE += shell_cmd_heap
 USEMODULE += ps
 USEMODULE += shell
-USEMODULE += shell_commands
+USEMODULE += shell_cmds_default
 USEMODULE += sysmon
 USEMODULE += uartpb
 

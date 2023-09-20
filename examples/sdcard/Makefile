@@ -3,7 +3,7 @@ APPLICATION = sdcard
 BOARD ?= nucleo-f446re
 
 USEMODULE += shell
-USEMODULE += shell_commands
+USEMODULE += shell_cmds_default
 USEMODULE += ps
 USEMODULE += mtd_sdcard
 USEMODULE += vfs
