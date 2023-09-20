@@ -1,0 +1,48 @@
+From f7b32f642593c884f79d829b5d9a55fe444c9146 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Wed, 16 Aug 2023 16:48:50 +0200
+Subject: [PATCH 6/7] cpu/native: return 0 for all gpio_init*() calls
+
+If the gpio is initialized as an input or interruptable pin, the
+gpio_mock driver returns -1 leading to failed intialization.
+However that is not because nothing can change the GPIO state that it
+has to be an error.
+Return 0 in all cases.
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ cpu/native/periph/gpio_mock.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/cpu/native/periph/gpio_mock.c b/cpu/native/periph/gpio_mock.c
+index 3b1bb02445..e434c2017f 100644
+--- a/cpu/native/periph/gpio_mock.c
++++ b/cpu/native/periph/gpio_mock.c
+@@ -20,13 +20,10 @@
+ #include "periph/gpio.h"
+ 
+ int gpio_init(gpio_t pin, gpio_mode_t mode) {
+-  (void) pin;
+-  (void) mode;
++    (void) pin;
++    (void) mode;
+ 
+-  if (mode >= GPIO_OUT)
+     return 0;
+-  else
+-    return -1;
+ }
+ 
+ int gpio_init_int(gpio_t pin, gpio_mode_t mode, gpio_flank_t flank,
+@@ -38,7 +35,7 @@ int gpio_init_int(gpio_t pin, gpio_mode_t mode, gpio_flank_t flank,
+     (void) cb;
+     (void) arg;
+ 
+-    return -1;
++    return 0;
+ }
+ 
+ void gpio_irq_enable(gpio_t pin)
+-- 
+2.37.0
+
