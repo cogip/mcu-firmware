@@ -63,7 +63,7 @@ constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   
 /// @name Acceleration and speed profiles
 /// @{
 // Linear maximum speed and acceleration
-constexpr double platform_min_speed_m_per_s = 0.1;  ///< Minimum speed (m/s)
+constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
 constexpr double platform_max_speed_m_per_s = 2;  ///< Maximum speed (m/s)
 constexpr double platform_max_acc_m_per_s2 = platform_max_speed_m_per_s / 2;   ///< Maximum acceleration (m/s²)
 constexpr double platform_max_acc_linear_mm_per_period2 = (
