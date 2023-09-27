@@ -33,6 +33,10 @@ public:
     /// Limit acceleration and speed
     void execute() override;
 
+    /// Get previous speed order
+    /// return previous speed order
+    double previous_speed_order() const { return previous_speed_order_; };
+
 protected:
     /// Previous cycle speed_order
     double previous_speed_order_;
