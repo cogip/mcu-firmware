@@ -86,6 +86,14 @@ $ source venv/bin/activate
 $ pip install -r mcu-firmware/requirements.txt
 ```
 
+# Apply RIOT-OS patches
+
+Prior to any build, apply RIOT-OS patches
+
+```bash
+make riot-patches
+```
+
 # Simulation target (x86_64 architecture)
 
 Assuming the platform is pf_test and the application is app_test
