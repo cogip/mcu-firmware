@@ -4,11 +4,11 @@
 #include "etl/numeric.h"
 
 // Linear pose PID
-constexpr double linear_pose_pid_kp = 0.05;
+constexpr double linear_pose_pid_kp = 0.0325;
 constexpr double linear_pose_pid_ki = 0;
 constexpr double linear_pose_pid_kd = 0;
 // Angular pose PID
-constexpr double angular_pose_pid_kp = 0.065;
+constexpr double angular_pose_pid_kp = 0.06;
 constexpr double angular_pose_pid_ki = 0;
 constexpr double angular_pose_pid_kd = 0;
 // Linear speed PID
