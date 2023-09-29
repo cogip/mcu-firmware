@@ -13,6 +13,19 @@ namespace motion_control {
 #define MOTION_MOTORS_POST_CB nullptr
 #endif
 
+/**
+ * @brief Simulate QDEC on motor_set() calls
+ *
+ * @param[in] motor_driver      motor driver to which motor is attached
+ * @param[in] motor_id          motor ID on driver
+ * @param[in] pwm_duty_cycle    Signed PWM duty_cycle to set motor speed and direction
+ *
+ * @return                      0 on success
+ */
+void cogip_native_motor_driver_qdec_simulation(
+    const motor_driver_t *motor_driver, uint8_t motor_id,
+    int32_t pwm_duty_cycle);
+
 /// Motion control motors
 static const motor_driver_params_t motion_motors_params =
 {

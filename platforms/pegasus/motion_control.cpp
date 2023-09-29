@@ -534,6 +534,30 @@ static void _handle_set_controller(cogip::uartpb::ReadBuffer & buffer)
     pf_motion_control_platform_engine.set_current_cycle(0);
 }
 
+extern "C" {
+extern int32_t qdecs_value[QDEC_NUMOF];
+}
+
+void cogip_native_motor_driver_qdec_simulation(
+    const motor_driver_t *motor_driver, uint8_t motor_id,
+    int32_t pwm_duty_cycle)
+{
+    // Unused variables
+    (void) motor_driver;
+    (void) motor_id;
+    (void) pwm_duty_cycle;
+
+    // On native architecture set speeds at their theorical value, no error.
+    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
+        qdecs_value[MOTOR_RIGHT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm
+                                   + angular_speed_filter.previous_speed_order() * pulse_per_degree / 2)
+                                   * QDEC_RIGHT_POLARITY;
+        qdecs_value[MOTOR_LEFT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm
+                                  - angular_speed_filter.previous_speed_order() * pulse_per_degree / 2)
+                                  * QDEC_LEFT_POLARITY;
+    }
+}
+
 void pf_init_motion_control(void)
 {
     // Init motor driver
