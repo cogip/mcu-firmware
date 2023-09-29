@@ -24,4 +24,6 @@ USEMODULE += utils
 # Embedded Template Library
 USEPKG += etl
 
+INCLUDES += -I$(CURDIR)/include
+
 include ../../Makefile.include
