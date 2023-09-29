@@ -35,15 +35,15 @@ public:
     ) : PositionalActuator(id, group, order, default_timeout_period), use_gpio_expander_(use_gpio_expander), active_state_(active_state), pin_(pin) {};
 
     /// Disable the motor.
-    void disable();
+    void disable() override;
 
     /// Disable the positional actuator after conditions.
-    bool disable_on_check() { disable(); return true; };
+    bool disable_on_check() override { disable(); return true; };
 
     /// Activate the actuator.
     void actuate(
         const int32_t command               ///< [in] motor speed as a duty_cycle in percent
-    );
+    ) override;
 
 private:
     bool    use_gpio_expander_;              ///< [in] false if native GPIO, true for expander

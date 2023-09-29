@@ -41,15 +41,15 @@ public:
     void add_position(uint16_t);
 
     /// Disable the motor.
-    void disable();
+    void disable() override;
 
     /// Disable the positional actuator after conditions.
-    bool disable_on_check() { disable(); return true; };
+    bool disable_on_check() override { disable(); return true; };
 
     /// Activate the motor.
     void actuate(
         const int32_t command               ///< [in] servomotor position
-    );
+    ) override;
 
     static pca9685_t pca9685_dev;           ///< PCA9685 I2C PWM driver
 

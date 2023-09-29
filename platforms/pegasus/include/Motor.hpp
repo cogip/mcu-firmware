@@ -30,7 +30,7 @@ std::ostream& operator << (std::ostream& os, Enum id);
 class Motor: public PositionalActuator {
 public:
     /// Constructor.
-    Motor(
+    explicit Motor(
         Enum id,                            ///< [in] motor id
         GroupEnum group,                    ///< [in] actuator group
         uint8_t order = 0,                  ///< [in] order in actuator group
@@ -43,18 +43,18 @@ public:
         motor_driver_(motor_driver),
         motor_id_(motor_id),
         check_limit_switch_positive_direction_cb_(check_limit_switch_positive_direction_cb),
-        check_limit_switch_negative_direction_cb_(check_limit_switch_negative_direction_cb) { disable(); };
+        check_limit_switch_negative_direction_cb_(check_limit_switch_negative_direction_cb) { Motor::disable(); };
 
     /// Disable the motor after checking direction.
-    bool disable_on_check();
+    bool disable_on_check() override;
 
     /// Disable the motor.
-    void disable();
+    void disable() override;
 
     /// Activate the motor.
     void actuate(
         const int32_t command               ///< [in] motor speed as a duty_cycle in percent
-    );
+    ) override;
 
 private:
     motor_driver_t  motor_driver_;          ///< hardware motor driver id

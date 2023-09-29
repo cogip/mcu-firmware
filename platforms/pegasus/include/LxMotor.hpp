@@ -25,7 +25,7 @@ namespace positional_actuators {
 class LxMotor: public PositionalActuator {
 public:
     /// Constructor.
-    LxMotor(
+    explicit LxMotor(
         Enum id,                            ///< [in] motor id
         GroupEnum group,                    ///< [in] actuator group
         uint8_t order = 0,                  ///< [in] order in actuator group
@@ -36,15 +36,15 @@ public:
     );
 
     /// Disable the motor.
-    void disable();
+    void disable() override;
 
     /// Disable the positional actuator after conditions.
-    bool disable_on_check();
+    bool disable_on_check() override;
 
     /// Activate the motor.
     void actuate(
         const int32_t command               ///< [in] motor speed as a duty_cycle in percent
-    );
+    ) override;
 
     static uart_half_duplex_t *lx_stream;   ///< Serial half-duplex stream to communicate with LX servomotors
 
