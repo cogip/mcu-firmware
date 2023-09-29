@@ -64,17 +64,17 @@ extern "C" {
  * @brief   Allocate some memory to store the actual configuration
  */
 static const pca9685_params_t pca9685_params = {
-                            .i2c_dev = PCA9685_PARAM_DEV,
-                            .i2c_addr = PCA9685_PARAM_ADDR,
-                            .mode = PCA9685_PARAM_MODE,
-                            .freq = PCA9685_PARAM_FREQ,
-                            .res = PCA9685_PARAM_RES,
-                            .inv = PCA9685_PARAM_INV,
-                            .ext_freq = PCA9685_PARAM_EXT_FREQ,
-                            .oe_pin = PCA9685_PARAM_OE_PIN,
-                            .out_drv = PCA9685_PARAM_OUT_DRV,
-                            .out_ne = PCA9685_PARAM_OUT_NE,
-                        };
+    .i2c_dev = PCA9685_PARAM_DEV,
+    .i2c_addr = PCA9685_PARAM_ADDR,
+    .mode = PCA9685_PARAM_MODE,
+    .freq = PCA9685_PARAM_FREQ,
+    .res = PCA9685_PARAM_RES,
+    .inv = PCA9685_PARAM_INV,
+    .ext_freq = PCA9685_PARAM_EXT_FREQ,
+    .oe_pin = PCA9685_PARAM_OE_PIN,
+    .out_drv = PCA9685_PARAM_OUT_DRV,
+    .out_ne = PCA9685_PARAM_OUT_NE,
+};
 
 #ifdef __cplusplus
 }

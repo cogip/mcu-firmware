@@ -42,11 +42,11 @@ extern "C" {
 
 /** Default configuration parameter set */
 #define PCF857X_PARAMS { \
-                            .dev = PCF857X_PARAM_DEV, \
-                            .addr = PCF857X_PARAM_ADDR, \
-                            .exp = PCF857X_PARAM_EXP, \
-                            .int_pin = PCF857X_PARAM_INT_PIN, \
-                        }
+        .dev = PCF857X_PARAM_DEV, \
+        .addr = PCF857X_PARAM_ADDR, \
+        .exp = PCF857X_PARAM_EXP, \
+        .int_pin = PCF857X_PARAM_INT_PIN, \
+}
 
 /**
  * @brief   Allocate some memory to store the actual configuration
