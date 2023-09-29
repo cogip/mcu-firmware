@@ -18,6 +18,10 @@ jobs:
       RIOTBASE: ${GITHUB_WORKSPACE}/RIOT
 
     steps:
+    - name: Setup git
+      run: |
+        git config --global user.email "cogip35@gmail.com"
+        git config --global user.name "COGIP"
     - name: Clone mcu-firmware
       uses: actions/checkout@v3
       with:
@@ -48,6 +52,12 @@ jobs:
         python3 -m venv venv
         source venv/bin/activate
         python3 -m pip install -r requirements.txt
+        deactivate
+    - name: Apply RIOT patches
+      run: |
+        cd mcu-firmware
+        source venv/bin/activate
+        make riot-patches
         deactivate
     - name: Compile
       run: |
