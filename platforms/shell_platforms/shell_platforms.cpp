@@ -53,7 +53,6 @@ static int _cmd_motors_test_cb(int argc, char **argv)
 
     int32_t qdec_value = 0;
     int timeout = 3000;
-    int chrono = timeout;
 
     std::cout << "### Testing motor " << (int)motor << " of motor driver " << motor_driver << std::endl;
 
@@ -64,7 +63,7 @@ static int _cmd_motors_test_cb(int argc, char **argv)
     motor_enable(motor_driver, motor);
 
     /* Forward */
-    chrono = timeout;
+    int chrono = timeout;
     std::cout << "    Forward move" << std::endl;
     motor_set(motor_driver, motor, pwm_resolution);
     while (chrono--) {
