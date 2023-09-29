@@ -17,10 +17,6 @@
 #include "pf_positional_actuators.hpp"
 #include "PB_Command.hpp"
 
-#ifdef MODULE_SHELL_PLATFORMS
-#include "shell_platforms.hpp"
-#endif /* MODULE_SHELL_PLATFORMS */
-
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
 
@@ -175,10 +171,6 @@ void pf_init(void)
         uartpb.start_reader();
         uartpb.send_message(reset_uuid);
     }
-
-#ifdef MODULE_SHELL_PLATFORMS
-    pf_shell_init();
-#endif /* MODULE_SHELL_PLATFORMS */
 
     cogip::pf::motion_control::pf_init_motion_control();
     cogip::pf::actuators::init();

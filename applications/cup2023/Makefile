@@ -7,7 +7,6 @@ BOARD ?= cogip-board-ng
 USEMODULE += pegasus
 
 # Shell menus management
-USEMODULE += shell_platforms
 USEMODULE += shell_menu
 
 # Main thread stack size
