@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['y_1108',['y',['../classcogip_1_1cogip__defs_1_1Coords.html#a6ab61e358c49f66805cca1957c20b2e2',1,'cogip::cogip_defs::Coords']]]
+  ['y_1126',['y',['../classcogip_1_1cogip__defs_1_1Coords.html#a6ab61e358c49f66805cca1957c20b2e2',1,'cogip::cogip_defs::Coords']]]
 ];

@@ -3,6 +3,8 @@ var classcogip_1_1motion__control_1_1BaseControllerEngine =
     [ "BaseControllerEngine", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac79dd6fea9f77adc74a3ddf7671f7c57", null ],
     [ "controller", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac5f48b4b2e4264ed7a7d06365621f64e", null ],
     [ "current_cycle", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a6f8ab3a68060a74333c61da7c2e18d88", null ],
+    [ "disable", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ae57896052ce2d095d6271ae2a5a65ab8", null ],
+    [ "enable", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#aa4259848b24f46faf7eb249717739803", null ],
     [ "pose_reached", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a6bbd2c60a3b1e0988b7b4f7bc2f8bd41", null ],
     [ "prepare_inputs", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a5694ed1bd5e5d113e84adb355f234f72", null ],
     [ "process_outputs", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a76083da85542be47a74af9560acf6bca", null ],
@@ -17,6 +19,7 @@ var classcogip_1_1motion__control_1_1BaseControllerEngine =
     [ "timeout_enable", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a8c414413b445a0d7d38f8bc6708f30a8", null ],
     [ "controller_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ae23375c27605ce8d9addb8e020e064c8", null ],
     [ "current_cycle_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a9b86c82b2e2ec84471c66d383d1b3233", null ],
+    [ "enable_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ab895a40f3be30c40a52350846dbe7d1b", null ],
     [ "pose_reached_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#af83609958b49ab2becbf489963bf5395", null ],
     [ "timeout_cycle_number_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a44e317f0c809da2ec8ce8e9a663fd4b5", null ],
     [ "timeout_enable_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a3b612497f17016f2e68c7373e6ed4e21", null ]

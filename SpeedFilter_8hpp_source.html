@@ -141,27 +141,38 @@ $(document).ready(function(){initNavTree('SpeedFilter_8hpp_source.html',''); ini
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classcogip_1_1motion__control_1_1SpeedFilter.html">   27</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1motion__control_1_1SpeedFilter.html">SpeedFilter</a> : <span class="keyword">public</span> <a class="code" href="classcogip_1_1motion__control_1_1Controller.html">Controller</a>&lt;3, 1, SpeedFilterParameters&gt; {</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classcogip_1_1motion__control_1_1SpeedFilter.html#adc385633db9bb02d1282266641406e8a">   31</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classcogip_1_1motion__control_1_1SpeedFilter.html#adc385633db9bb02d1282266641406e8a">SpeedFilter</a>(<a class="code" href="classcogip_1_1motion__control_1_1SpeedFilterParameters.html">SpeedFilterParameters</a> *parameters) : <a class="code" href="classcogip_1_1motion__control_1_1Controller.html">Controller</a>(parameters) {};</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classcogip_1_1motion__control_1_1SpeedFilter.html#adc385633db9bb02d1282266641406e8a">   31</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classcogip_1_1motion__control_1_1SpeedFilter.html#adc385633db9bb02d1282266641406e8a">SpeedFilter</a>(<a class="code" href="classcogip_1_1motion__control_1_1SpeedFilterParameters.html">SpeedFilterParameters</a> *parameters) : <a class="code" href="classcogip_1_1motion__control_1_1Controller.html">Controller</a>(parameters), <a class="code" href="classcogip_1_1motion__control_1_1SpeedFilter.html#ae90b27f9f0d5ab7989c0e3fb25e33c48">previous_speed_order_</a>(0) {};</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1motion__control_1_1SpeedFilter.html#ae4d6f0ccbf9b6d02f350c5c59b9b2882">execute</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;};</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;} <span class="comment">// namespace motion_control</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">double</span> limit_speed_order(</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordtype">double</span> speed_order,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">double</span> target_speed,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">double</span> max_speed,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">double</span> max_acc</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    );</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classcogip_1_1motion__control_1_1SpeedFilter.html#ae90b27f9f0d5ab7989c0e3fb25e33c48">   45</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classcogip_1_1motion__control_1_1SpeedFilter.html#ae90b27f9f0d5ab7989c0e3fb25e33c48">previous_speed_order_</a>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">// namespace motion_control</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aSpeedFilterParameters_8hpp_html"><div class="ttname"><a href="SpeedFilterParameters_8hpp.html">SpeedFilterParameters.hpp</a></div><div class="ttdoc">Speed and acceleration limits.</div></div>
 <div class="ttc" id="aController_8hpp_html"><div class="ttname"><a href="Controller_8hpp.html">Controller.hpp</a></div><div class="ttdoc">A simple controller.</div></div>
 <div class="ttc" id="aclasscogip_1_1motion__control_1_1SpeedFilter_html_ae4d6f0ccbf9b6d02f350c5c59b9b2882"><div class="ttname"><a href="classcogip_1_1motion__control_1_1SpeedFilter.html#ae4d6f0ccbf9b6d02f350c5c59b9b2882">cogip::motion_control::SpeedFilter::execute</a></div><div class="ttdeci">void execute() override</div><div class="ttdoc">Limit acceleration and speed.</div></div>
+<div class="ttc" id="aclasscogip_1_1motion__control_1_1SpeedFilter_html_ae90b27f9f0d5ab7989c0e3fb25e33c48"><div class="ttname"><a href="classcogip_1_1motion__control_1_1SpeedFilter.html#ae90b27f9f0d5ab7989c0e3fb25e33c48">cogip::motion_control::SpeedFilter::previous_speed_order_</a></div><div class="ttdeci">double previous_speed_order_</div><div class="ttdoc">Previous cycle speed_order.</div><div class="ttdef"><b>Definition:</b> <a href="SpeedFilter_8hpp_source.html#l00045">SpeedFilter.hpp:45</a></div></div>
 <div class="ttc" id="aclasscogip_1_1motion__control_1_1Controller_html"><div class="ttname"><a href="classcogip_1_1motion__control_1_1Controller.html">cogip::motion_control::Controller</a></div><div class="ttdoc">A controller transforms input data to outputs.</div><div class="ttdef"><b>Definition:</b> <a href="Controller_8hpp_source.html#l00038">Controller.hpp:38</a></div></div>
 <div class="ttc" id="aclasscogip_1_1motion__control_1_1SpeedFilterParameters_html"><div class="ttname"><a href="classcogip_1_1motion__control_1_1SpeedFilterParameters.html">cogip::motion_control::SpeedFilterParameters</a></div><div class="ttdoc">Speed and acceleration limits.</div><div class="ttdef"><b>Definition:</b> <a href="SpeedFilterParameters_8hpp_source.html#l00019">SpeedFilterParameters.hpp:19</a></div></div>
 <div class="ttc" id="aclasscogip_1_1motion__control_1_1SpeedFilter_html"><div class="ttname"><a href="classcogip_1_1motion__control_1_1SpeedFilter.html">cogip::motion_control::SpeedFilter</a></div><div class="ttdoc">Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe...</div><div class="ttdef"><b>Definition:</b> <a href="SpeedFilter_8hpp_source.html#l00027">SpeedFilter.hpp:27</a></div></div>
 <div class="ttc" id="aclasscogip_1_1motion__control_1_1SpeedFilter_html_adc385633db9bb02d1282266641406e8a"><div class="ttname"><a href="classcogip_1_1motion__control_1_1SpeedFilter.html#adc385633db9bb02d1282266641406e8a">cogip::motion_control::SpeedFilter::SpeedFilter</a></div><div class="ttdeci">SpeedFilter(SpeedFilterParameters *parameters)</div><div class="ttdef"><b>Definition:</b> <a href="SpeedFilter_8hpp_source.html#l00031">SpeedFilter.hpp:31</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sat Feb 25 2023 16:19:21 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat Sep 30 2023 15:58:06 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

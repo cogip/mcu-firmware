@@ -18,7 +18,7 @@
 <area shape="rect" id="node10" href="$classcogip_1_1motion__control_1_1PolarParallelMetaController.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="635,836,843,943"/>
 <area shape="rect" id="node13" href="$classcogip_1_1motion__control_1_1SpeedPIDController.html" title="PID speed controller." alt="" coords="1123,637,1297,744"/>
 <area shape="rect" id="node15" href="$classcogip_1_1motion__control_1_1PoseStraightFilter.html" title="Breaks down a movement into a straight trajectory." alt="" coords="1402,637,1565,744"/>
-<area shape="rect" id="node17" href="$classcogip_1_1motion__control_1_1SpeedFilter.html" title="Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe..." alt="" coords="1649,637,1811,744"/>
+<area shape="rect" id="node17" href="$classcogip_1_1motion__control_1_1SpeedFilter.html" title="Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe..." alt="" coords="1637,630,1823,751"/>
 <area shape="rect" id="node19" href="$classcogip_1_1motion__control_1_1PassthroughPosePIDController.html" title="Pose PID controller." alt="" coords="1854,637,2097,744"/>
 <area shape="rect" id="node21" href="$classcogip_1_1motion__control_1_1PosePIDController.html" title="Pose PID controller." alt="" coords="2161,637,2325,744"/>
 </map>

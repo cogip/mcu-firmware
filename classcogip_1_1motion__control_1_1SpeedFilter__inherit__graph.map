@@ -1,5 +1,5 @@
 <map id="cogip::motion_control::SpeedFilter" name="cogip::motion_control::SpeedFilter">
-<area shape="rect" id="node1" title="Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe..." alt="" coords="31,593,194,700"/>
+<area shape="rect" id="node1" title="Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe..." alt="" coords="19,593,206,715"/>
 <area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="5,307,220,545"/>
 <area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="31,5,194,259"/>
 </map>
