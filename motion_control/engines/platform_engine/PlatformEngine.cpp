@@ -41,7 +41,7 @@ void PlatformEngine::prepare_inputs() {
     controller_->set_input(index++, target_speed_.angle());
 
     // Allow reverse
-    controller_->set_input(index++, allow_reverse_);
+    controller_->set_input(index++, target_pose_.allow_reverse());
 
     if (index != controller_->nb_inputs()) {
         COGIP_DEBUG_CERR("PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.");
@@ -49,8 +49,8 @@ void PlatformEngine::prepare_inputs() {
 };
 
 void PlatformEngine::process_outputs() {
-    // If pose_reached_ is set to reached at this point, it has been set by the engine itself, do not override it.
-    if (pose_reached_ != reached)
+    // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
+    if (!timeout_enable_)
         pose_reached_ = (target_pose_status_t)controller_->output(2);
 
     cogip_defs::Polar command(

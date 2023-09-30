@@ -50,6 +50,10 @@ static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
         cogip::motion_control::platform_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose>(),
         cogip::motion_control::platform_process_commands_cb_t::create<pf_motor_drive>()
 );
+// Target pose
+static cogip::path::Pose target_pose;
+// Target speed
+static cogip::cogip_defs::Polar target_speed;
 
 // Linear pose PID controller
 static cogip::pid::PID linear_pose_pid(
@@ -89,7 +93,7 @@ static void reset_speed_pids() {
 
 /// PoseStraightFilter parameters.
 static cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters =
-        cogip::motion_control::PoseStraightFilterParameters(linear_treshold, angular_treshold);
+        cogip::motion_control::PoseStraightFilterParameters(angular_treshold, linear_treshold, linear_deceleration_treshold);
 /// PoseStraightFilter controller to make the robot always moves in a straight line.
 static cogip::motion_control::PoseStraightFilter pose_straight_filter =
         cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);
@@ -133,11 +137,17 @@ static cogip::motion_control::SpeedPIDControllerParameters angular_speed_control
 static cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters);
 
 /// Linear PassthroughPosePIDControllerParameters.
-static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_linear_pose_controller_parameters(&null_pid);
+static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_linear_pose_controller_parameters(
+    platform_max_speed_linear_mm_per_period,
+    true
+    );
 /// Linear PassthroughPosePIDController replaces linear PosePIDController to bypass it, imposing target speed as speed order.
 static cogip::motion_control::PassthroughPosePIDController passthrough_linear_pose_controller(&passthrough_linear_pose_controller_parameters);
 /// Angular PassthroughPosePIDControllerParameters.
-static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_angular_pose_controller_parameters(&null_pid);
+static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_angular_pose_controller_parameters(
+    platform_max_speed_angular_deg_per_period,
+    true
+    );
 /// Angular PassthroughPosePIDController replaces angular PosePIDController to bypass it, imposing target speed as speed order.
 static cogip::motion_control::PassthroughPosePIDController passthrough_angular_pose_controller(&passthrough_angular_pose_controller_parameters);
 
@@ -192,6 +202,10 @@ static void pf_quadpid_meta_controller_restore(void) {
     linear_speed_controller_parameters.set_pid(&linear_speed_pid);
     // Angular speed PID controller parameters
     angular_speed_controller_parameters.set_pid(&angular_speed_pid);
+
+    // Sign target speed according to pose error
+    passthrough_linear_pose_controller_parameters.set_signed_target_speed(true);
+    passthrough_angular_pose_controller_parameters.set_signed_target_speed(true);
 }
 
 /// Disable linear pose control to avoid stopping once point is reached.
@@ -217,6 +231,9 @@ static void pf_quadpid_meta_controller_linear_speed_controller_test_setup(void) 
 
     // Disable angular speed loop by using a PID with all gain set to zero
     angular_speed_controller_parameters.set_pid(&null_pid);
+
+    // Do not sign target speed
+    passthrough_linear_pose_controller_parameters.set_signed_target_speed(false);
 }
 
 /// Disable linear correction and angular speed filtering for angular speed PID setup.
@@ -231,8 +248,11 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
     // Disable pose PID correction by using a passthrough controller
     angular_dualpid_meta_controller.replace_controller(0, &passthrough_angular_pose_controller);
 
-    // Disable angular speed loop by using a PID with all gain set to zero
+    // Disable linear speed loop by using a PID with all gain set to zero
     linear_speed_controller_parameters.set_pid(&null_pid);
+
+    // Do not sign target speed
+    passthrough_angular_pose_controller_parameters.set_signed_target_speed(false);
 }
 
 /// Update current speed from quadrature encoders measure.
@@ -293,23 +313,30 @@ void pf_send_pb_state(void)
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 {
-    PB_PathPose pb_pose_to_reach;
-    EmbeddedProto::Error error = pb_pose_to_reach.deserialize(buffer);
+    // Retrieve new target pose from protobuf message
+    PB_PathPose pb_path_target_pose;
+    EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
     if (error != EmbeddedProto::Error::NO_ERRORS) {
         std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
         return;
     }
 
-    cogip::path::Pose pose_to_reach;
-    pose_to_reach.pb_read(pb_pose_to_reach);
-    cogip::cogip_defs::Pose pose(pose_to_reach.x(), pose_to_reach.y(), pose_to_reach.O());
-    cogip::cogip_defs::Polar speed_order;
-    speed_order.set_distance(pose_to_reach.max_speed_linear());
-    speed_order.set_angle(pose_to_reach.max_speed_angular());
+    // Target pose
+    target_pose.pb_read(pb_path_target_pose);
 
-    pf_motion_control_platform_engine.set_target_pose(pose);
-    pf_motion_control_platform_engine.set_target_speed(speed_order);
-    pf_motion_control_platform_engine.set_allow_reverse(pose_to_reach.allow_reverse());
+    // Target speed
+    target_speed.set_distance(target_pose.max_speed_linear());
+    target_speed.set_angle(target_pose.max_speed_angular());
+    pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+    // Set target speed for passthrough controllers
+    passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
+    passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
+
+    // Deal with the first pose in the list
+    pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+    // New target pose, the robot is moving
     pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
 }
 
@@ -323,10 +350,15 @@ void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
     }
     cogip::path::Pose start_pose;
     start_pose.pb_read(pb_start_pose);
-    cogip::cogip_defs::Pose pose(start_pose.x(), start_pose.y(), start_pose.O());
+    cogip::path::Pose pose(start_pose.x(), start_pose.y(), start_pose.O());
 
     pf_motion_control_platform_engine.set_current_pose(pose);
     pf_motion_control_platform_engine.set_target_pose(pose);
+    // New start pose, the robot is not moving
+    pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
+
+    pf_encoder_reset();
+    pf_motion_control_platform_engine.set_current_cycle(0);
 }
 
 void pf_start_motion_control(void)
@@ -335,41 +367,66 @@ void pf_start_motion_control(void)
     pf_motion_control_platform_engine.start_thread();
 }
 
+void pf_disable_motion_control()
+{
+    pf_motion_control_platform_engine.disable();
+}
+
+void pf_enable_motion_control()
+{
+    pf_motion_control_platform_engine.enable();
+}
+
 void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cogip::cogip_defs::Pose &current_pose)
 {
     pf_encoder_read(current_speed);
     odometry_update(current_pose, current_speed, SEGMENT);
 }
 
-
 void pf_motor_drive(const cogip::cogip_defs::Polar &command)
 {
-    if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::moving) {
+    // Previous target pose status flag to avoid flooding protobuf serial bus.
+    static cogip::motion_control::target_pose_status_t previous_target_pose_status = cogip::motion_control::target_pose_status_t::moving;
+
+    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
+        // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
+        // The PWM driver will filter the value to the max PWM resolution defined for the board.
         // Compute motor commands with Polar motion control result
-        int16_t right_command = (int16_t) (command.distance() + command.angle());
-        int16_t left_command = (int16_t) (command.distance() - command.angle());
+        int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
+        int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
 
         // Apply motor commands
         motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, left_command);
         motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, right_command);
     }
     else {
-        // Reset speed PIDs if a pose has been reached (intermediate or final)
-        // Pose PIDs do not need to be reset as they only have Kp (no sum of error)
-        reset_speed_pids();
-
-        // Send message in case of final pose reached only
-        if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
+        // Send message in case of final pose reached only.
+        if ((pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached)
+            &&  (previous_target_pose_status != cogip::motion_control::target_pose_status_t::reached)) {
             pf_get_uartpb().send_message(pose_reached_uuid);
         }
 
-        // Brake motors as the robot should not move in this case
+        // Only useful for native architecture, to populate emulated QDEC data.
+        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_LEFT, 0);
+        motor_set(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT, 0);
+
+        // Brake motors as the robot should not move in this case.
         motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_LEFT);
         motor_brake(MOTOR_DRIVER_DEV(0), MOTOR_RIGHT);
     }
 
-    // Send robot state
-    pf_send_pb_state();
+    // Backup target pose status flag to avoid flooding protobuf serial bus.
+    previous_target_pose_status = pf_motion_control_platform_engine.pose_reached();
+
+    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::moving) {
+        // Reset speed PIDs if a pose has been reached (intermediate or final).
+        // Pose PIDs do not need to be reset as they only have Kp (no sum of error).
+        reset_speed_pids();
+    }
+
+    // Send robot state only on calibration (when timeout is enabled).
+    if (pf_motion_control_platform_engine.timeout_enable())
+        pf_send_pb_state();
 }
 
 /// Handle pid request command message.
@@ -456,9 +513,6 @@ void pf_init_motion_control(void)
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
-
-    // Init odometry
-    odometry_setup(wheels_distance_pulse / pulse_per_mm);
 
     //TODO: update
     //ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);

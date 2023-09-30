@@ -26,6 +26,8 @@ static int _cmd_motors_test_cb(int argc, char **argv)
 
     int nb_motors = 0;
 
+    cogip::pf::motion_control::pf_disable_motion_control();
+
     for (motor_driver_t i = 0; i < MOTOR_DRIVER_NUMOF; i++) {
         int nb_motors_tmp = motor_driver_config[i].nb_motors;
         int pwm_resolution = motor_driver_config[i].pwm_resolution;
@@ -78,6 +80,8 @@ static int _cmd_motors_test_cb(int argc, char **argv)
 
         nb_motors += nb_motors_tmp;
     }
+
+    cogip::pf::motion_control::pf_enable_motion_control();
 
     return EXIT_SUCCESS;
 }

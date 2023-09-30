@@ -1,0 +1,13 @@
+[project]
+org='cogip'
+name='cqfd'
+build_context=.
+
+[build]
+command='echo "No default target"'
+docker_run_args="-v $(readlink -f ../RIOT):$(readlink -f ../RIOT) -v /tmp/socat/:/tmp/socat/ -v /dev/pts/:/dev/pts"
+flavors="app_test-native"
+
+[app_test-native]
+command='make -C applications/app_test BOARD=cogip-native WERROR=0 -j all &&
+  applications/app_test/bin/cogip-native/app_test.elf -c /dev/null -c /tmp/socat/ttySTM32'

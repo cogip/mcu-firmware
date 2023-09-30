@@ -28,10 +28,21 @@ class SpeedFilter : public Controller<3, 1, SpeedFilterParameters> {
 public:
     /// @brief
     /// @param parameters
-    explicit SpeedFilter(SpeedFilterParameters *parameters) : Controller(parameters) {};
+    explicit SpeedFilter(SpeedFilterParameters *parameters) : Controller(parameters), previous_speed_order_(0) {};
 
     /// Limit acceleration and speed
     void execute() override;
+
+    double limit_speed_order(
+        double speed_order,
+        double target_speed,
+        double max_speed,
+        double max_acc
+    );
+
+protected:
+    /// Previous cycle speed_order
+    double previous_speed_order_;
 };
 
 } // namespace motion_control
