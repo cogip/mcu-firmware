@@ -106,6 +106,10 @@ void PoseStraightFilter::execute() {
         }
     }
 
+    if (fabs(pos_err.distance()) < parameters_->linear_deceleration_treshold()) {
+        target_speed.set_distance((fabs(pos_err.distance() / parameters_->linear_deceleration_treshold())) * target_speed.distance());
+    }
+
     // Linear pose error
     outputs_[0] = pos_err.distance();
     // Linear current speed
