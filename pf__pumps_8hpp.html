@@ -173,7 +173,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::actuators
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:aa8e27481c5b74eddce53c79690ffc04f"><td class="memItemLeft" align="right" valign="top"><a id="aa8e27481c5b74eddce53c79690ffc04f"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Enum</b> : vacuum_pump_t { <b>UNUSED_PUMP</b> = 0
+<tr class="memitem:aa8e27481c5b74eddce53c79690ffc04f"><td class="memItemLeft" align="right" valign="top"><a id="aa8e27481c5b74eddce53c79690ffc04f"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Enum</b> : vacuum_pump_t { <b>RIGHT_ARM_PUMP</b> = 0, 
+<b>LEFT_ARM_PUMP</b> = 1
  }</td></tr>
 <tr class="separator:aa8e27481c5b74eddce53c79690ffc04f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -186,6 +187,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__
 <tr class="memitem:ad5dcc7662ad36b434420e7e0c3ab45b2"><td class="memItemLeft" align="right" valign="top">Pump &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__pumps_8hpp.html#ad5dcc7662ad36b434420e7e0c3ab45b2">cogip::pf::actuators::pumps::get</a> (Enum id)</td></tr>
 <tr class="memdesc:ad5dcc7662ad36b434420e7e0c3ab45b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pump by id.  <a href="pf__pumps_8hpp.html#ad5dcc7662ad36b434420e7e0c3ab45b2">More...</a><br /></td></tr>
 <tr class="separator:ad5dcc7662ad36b434420e7e0c3ab45b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2f5bd12cf1623f1f81d0f9510154873"><td class="memItemLeft" align="right" valign="top"><a id="af2f5bd12cf1623f1f81d0f9510154873"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__pumps_8hpp.html#af2f5bd12cf1623f1f81d0f9510154873">cogip::pf::actuators::pumps::disable_all</a> ()</td></tr>
+<tr class="memdesc:af2f5bd12cf1623f1f81d0f9510154873"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all pumps. <br /></td></tr>
+<tr class="separator:af2f5bd12cf1623f1f81d0f9510154873"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3df954e14fe683dbbe694ac3b148452c"><td class="memItemLeft" align="right" valign="top"><a id="a3df954e14fe683dbbe694ac3b148452c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__pumps_8hpp.html#a3df954e14fe683dbbe694ac3b148452c">cogip::pf::actuators::pumps::send_state</a> (Enum pump)</td></tr>
+<tr class="memdesc:a3df954e14fe683dbbe694ac3b148452c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send pump state protobuf message. <br /></td></tr>
+<tr class="separator:a3df954e14fe683dbbe694ac3b148452c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd798c65d5235c32813b418f7c8f9770"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__pumps_8hpp.html#afd798c65d5235c32813b418f7c8f9770">cogip::pf::actuators::pumps::pb_copy</a> (PB_Message &amp;pb_message)</td></tr>
 <tr class="memdesc:afd798c65d5235c32813b418f7c8f9770"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="pf__pumps_8hpp.html#afd798c65d5235c32813b418f7c8f9770">More...</a><br /></td></tr>
 <tr class="separator:afd798c65d5235c32813b418f7c8f9770"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,7 +265,7 @@ constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sat Sep 30 2023 15:58:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Oct 1 2023 10:38:43 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

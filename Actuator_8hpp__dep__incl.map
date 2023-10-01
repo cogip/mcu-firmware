@@ -1,9 +1,13 @@
 <map id="platforms/pegasus/include/Actuator.hpp" name="platforms/pegasus/include/Actuator.hpp">
-<area shape="rect" id="node1" title="Base actuators class definition." alt="" coords="224,5,419,47"/>
-<area shape="rect" id="node2" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="5,95,200,136"/>
-<area shape="rect" id="node4" href="$Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="224,95,419,136"/>
-<area shape="rect" id="node6" href="$Pump_8hpp.html" title="C++ class representing a pump using vacuum_pump driver." alt="" coords="443,95,637,136"/>
-<area shape="rect" id="node3" href="$pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="5,184,200,225"/>
-<area shape="rect" id="node5" href="$pf__motors_8hpp.html" title="Functions and definitions related to motors." alt="" coords="224,184,419,225"/>
-<area shape="rect" id="node7" href="$pf__pumps_8hpp.html" title="Functions and definitions related to pumps." alt="" coords="443,184,637,225"/>
+<area shape="rect" id="node1" title="Base actuators class definition." alt="" coords="1112,5,1307,47"/>
+<area shape="rect" id="node2" href="$PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="552,95,747,136"/>
+<area shape="rect" id="node8" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="1112,95,1307,136"/>
+<area shape="rect" id="node10" href="$Pump_8hpp.html" title="C++ class representing a pump using vacuum_pump driver." alt="" coords="1331,95,1525,136"/>
+<area shape="rect" id="node3" href="$AnalogServo_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="5,184,200,225"/>
+<area shape="rect" id="node4" href="$LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="224,184,419,225"/>
+<area shape="rect" id="node5" href="$Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="443,184,637,225"/>
+<area shape="rect" id="node6" href="$OnOff_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="661,184,856,225"/>
+<area shape="rect" id="node7" href="$pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="881,184,1087,225"/>
+<area shape="rect" id="node9" href="$pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="1112,184,1307,225"/>
+<area shape="rect" id="node11" href="$pf__pumps_8hpp.html" title="Functions and definitions related to pumps." alt="" coords="1331,184,1525,225"/>
 </map>

@@ -174,16 +174,18 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::actuators
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a74a8d92caa7ff52e82c5ff9ef124dd8b"><td class="memItemLeft" align="right" valign="top"><a id="a74a8d92caa7ff52e82c5ff9ef124dd8b"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Enum</b> : lx_id_t { <b>UNUSED_SERVO</b> = 1
+<tr class="memitem:a74a8d92caa7ff52e82c5ff9ef124dd8b"><td class="memItemLeft" align="right" valign="top"><a id="a74a8d92caa7ff52e82c5ff9ef124dd8b"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Enum</b> : lx_id_t { <b>LXSERVO_BALL_SWITCH</b> = 1, 
+<b>LXSERVO_RIGHT_ARM</b> = 2, 
+<b>LXSERVO_LEFT_ARM</b> = 4
  }</td></tr>
 <tr class="separator:a74a8d92caa7ff52e82c5ff9ef124dd8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5b802b4799d00e006fd0572ac92682eb"><td class="memItemLeft" align="right" valign="top"><a id="a5b802b4799d00e006fd0572ac92682eb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__servos_8hpp.html#a5b802b4799d00e006fd0572ac92682eb">cogip::pf::actuators::servos::init</a> ()</td></tr>
-<tr class="memdesc:a5b802b4799d00e006fd0572ac92682eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize LX servomotors. <br /></td></tr>
-<tr class="separator:a5b802b4799d00e006fd0572ac92682eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a366a00e2b9ca285802a9e4a8fbacb971"><td class="memItemLeft" align="right" valign="top"><a id="a366a00e2b9ca285802a9e4a8fbacb971"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__servos_8hpp.html#a366a00e2b9ca285802a9e4a8fbacb971">cogip::pf::actuators::servos::init</a> (uart_half_duplex_t *lx_stream)</td></tr>
+<tr class="memdesc:a366a00e2b9ca285802a9e4a8fbacb971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize LX servomotors. <br /></td></tr>
+<tr class="separator:a366a00e2b9ca285802a9e4a8fbacb971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75ec65343c6b1d52e16bf4dd078b7674"><td class="memItemLeft" align="right" valign="top">LxServo &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__servos_8hpp.html#a75ec65343c6b1d52e16bf4dd078b7674">cogip::pf::actuators::servos::get</a> (Enum id)</td></tr>
 <tr class="memdesc:a75ec65343c6b1d52e16bf4dd078b7674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a servo by id.  <a href="pf__servos_8hpp.html#a75ec65343c6b1d52e16bf4dd078b7674">More...</a><br /></td></tr>
 <tr class="separator:a75ec65343c6b1d52e16bf4dd078b7674"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,6 +195,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__
 <tr class="memitem:a3371c64cbad425381b133aaf789843d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__servos_8hpp.html#a3371c64cbad425381b133aaf789843d1">cogip::pf::actuators::servos::parallel_move</a> (const etl::list&lt; Command, COUNT &gt; &amp;commands, uint32_t wait=0)</td></tr>
 <tr class="memdesc:a3371c64cbad425381b133aaf789843d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move mutliple servos in parallel according to the given commands.  <a href="pf__servos_8hpp.html#a3371c64cbad425381b133aaf789843d1">More...</a><br /></td></tr>
 <tr class="separator:a3371c64cbad425381b133aaf789843d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc9496d415b7fa64f1128ee2f18403f7"><td class="memItemLeft" align="right" valign="top"><a id="afc9496d415b7fa64f1128ee2f18403f7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__servos_8hpp.html#afc9496d415b7fa64f1128ee2f18403f7">cogip::pf::actuators::servos::disable_all</a> ()</td></tr>
+<tr class="memdesc:afc9496d415b7fa64f1128ee2f18403f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all servomotors. <br /></td></tr>
+<tr class="separator:afc9496d415b7fa64f1128ee2f18403f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeabe8404c6d245cbe17e267498c773a8"><td class="memItemLeft" align="right" valign="top"><a id="aeabe8404c6d245cbe17e267498c773a8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__servos_8hpp.html#aeabe8404c6d245cbe17e267498c773a8">cogip::pf::actuators::servos::send_state</a> (Enum servo)</td></tr>
+<tr class="memdesc:aeabe8404c6d245cbe17e267498c773a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send pump state protobuf message. <br /></td></tr>
+<tr class="separator:aeabe8404c6d245cbe17e267498c773a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a058c95e0ed4bd1ea73b9f464d99e7b5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__servos_8hpp.html#a058c95e0ed4bd1ea73b9f464d99e7b5b">cogip::pf::actuators::servos::pb_copy</a> (PB_Message &amp;pb_message)</td></tr>
 <tr class="memdesc:a058c95e0ed4bd1ea73b9f464d99e7b5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="pf__servos_8hpp.html#a058c95e0ed4bd1ea73b9f464d99e7b5b">More...</a><br /></td></tr>
 <tr class="separator:a058c95e0ed4bd1ea73b9f464d99e7b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -338,7 +348,7 @@ constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sat Sep 30 2023 15:58:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Oct 1 2023 10:38:43 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

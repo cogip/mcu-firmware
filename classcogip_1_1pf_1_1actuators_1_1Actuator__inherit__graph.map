@@ -1,6 +1,10 @@
 <map id="cogip::pf::actuators::Actuator" name="cogip::pf::actuators::Actuator">
-<area shape="rect" id="node1" title=" " alt="" coords="176,5,323,112"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="5,182,152,318"/>
-<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html" title="Class representing a pump using vacuum_pump driver." alt="" coords="176,175,323,325"/>
-<area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="347,160,493,340"/>
+<area shape="rect" id="node1" title=" " alt="" coords="503,5,649,156"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="255,204,478,457"/>
+<area shape="rect" id="node7" href="$classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html" title="Class representing a pump using vacuum_pump driver." alt="" coords="503,255,649,406"/>
+<area shape="rect" id="node8" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="673,241,820,421"/>
+<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html" title="Class representing a servomotor driven by pca9685." alt="" coords="5,505,168,671"/>
+<area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html" title="Class representing a LX Servomotor in motor mode." alt="" coords="192,513,355,663"/>
+<area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="379,513,541,663"/>
+<area shape="rect" id="node6" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html" title="Class representing a motor using motor driver." alt="" coords="565,513,728,663"/>
 </map>

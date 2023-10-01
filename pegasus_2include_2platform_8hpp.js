@@ -18,5 +18,8 @@ var pegasus_2include_2platform_8hpp =
     [ "pf_trace_on", "group__platforms__pegasus.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],
     [ "copilot_connected_uuid", "group__platforms__pegasus.html#ga78b72c33d3267dcff8d52ab68a2f413b", null ],
     [ "copilot_disconnected_uuid", "group__platforms__pegasus.html#ga847afb65cbdd69744edb057a1b73c88e", null ],
+    [ "game_end_uuid", "group__platforms__pegasus.html#gace3baae9fdcd7ae85e06400e392138e6", null ],
+    [ "game_reset_uuid", "group__platforms__pegasus.html#gaea519d4a1d0a6168b72147ddc1075577", null ],
+    [ "game_start_uuid", "group__platforms__pegasus.html#ga583f6751e88c527534e0e07a3583926b", null ],
     [ "reset_uuid", "group__platforms__pegasus.html#ga5ccfd7b313ae630c6974ba12b0b2b1c8", null ]
 ];

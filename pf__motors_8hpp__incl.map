@@ -1,8 +1,0 @@
-<map id="platforms/pegasus/include/pf_motors.hpp" name="platforms/pegasus/include/pf_motors.hpp">
-<area shape="rect" id="node1" title="Functions and definitions related to motors." alt="" coords="173,5,368,47"/>
-<area shape="rect" id="node2" href="$Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="227,95,314,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,169,123,196"/>
-<area shape="rect" id="node4" href="$Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="147,169,251,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="275,169,411,196"/>
-<area shape="rect" id="node6" title=" " alt="" coords="435,169,499,196"/>
-</map>

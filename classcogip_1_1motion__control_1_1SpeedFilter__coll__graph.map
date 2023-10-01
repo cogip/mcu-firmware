@@ -2,5 +2,5 @@
 <area shape="rect" id="node1" title="Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe..." alt="" coords="95,595,281,716"/>
 <area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="81,321,295,545"/>
 <area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="5,5,168,259"/>
-<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1SpeedFilterParameters.html" title="Speed and acceleration limits." alt="" coords="192,57,387,207"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1SpeedFilterParameters.html" title="Speed and acceleration limits." alt="" coords="192,42,387,222"/>
 </map>

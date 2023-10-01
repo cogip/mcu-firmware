@@ -1,7 +1,7 @@
 <map id="platforms/pegasus/include" name="platforms/pegasus/include">
 <area shape="rect" id="node1" href="dir_d3020243a99718dde3edc06f6a330f1d.html" title="include" alt="" coords="116,52,188,100"/>
 <area shape="rect" id="node2" href="dir_a408b6d3a4a484720bc3ecfeac8947e3.html" title="sys" alt="" coords="32,340,104,388"/>
-<area shape="rect" id="edge3-headlabel" href="dir_000097_000021.html" title="1" alt="" coords="46,312,56,327"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000097_000021.html" title="2" alt="" coords="46,312,56,327"/>
 <area shape="rect" id="node3" href="dir_b9b8bbce311057038c01ad4896c8ba16.html" title="motion_control" alt="" coords="32,148,152,196"/>
 <area shape="rect" id="edge4-headlabel" href="dir_000097_000004.html" title="2" alt="" coords="119,130,129,145"/>
 <area shape="rect" id="node4" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="176,148,248,196"/>

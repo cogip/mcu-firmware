@@ -1,4 +1,4 @@
 <map id="cogip::pf::actuators::servos::LxServo" name="cogip::pf::actuators::servos::LxServo">
-<area shape="rect" id="node1" title="Class representing a servomotor using lx_servo driver." alt="" coords="5,160,152,340"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="5,5,152,112"/>
+<area shape="rect" id="node1" title="Class representing a servomotor using lx_servo driver." alt="" coords="5,204,152,384"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="5,5,152,156"/>
 </map>

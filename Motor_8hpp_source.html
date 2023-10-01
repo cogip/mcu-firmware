@@ -133,57 +133,65 @@ $(document).ready(function(){initNavTree('Motor_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;motor_driver.h&gt;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Actuator_8hpp.html">Actuator.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;PB_Actuators.hpp&quot;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;iosfwd&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span>cogip {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>pf {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>actuators {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>motors {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">enum class</span> Enum: uint8_t;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;std::ostream&amp; operator &lt;&lt; (std::ostream&amp; os, Enum id);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html">   31</a></span>&#160;class Motor: public Actuator {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;public:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    Motor(</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        Enum id,           </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        GroupEnum group,   </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        uint8_t order = 0  </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    );</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    void move(</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        bool direction,         </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        const uint32_t speed    </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    );</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    void deactivate();</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    void pb_copy(</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        PB_Motor &amp; pb_motor  </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    ) const;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="PositionalActuator_8hpp.html">PositionalActuator.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;iosfwd&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span>pf {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>actuators {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>positional_actuators {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">enum class</span> Enum: uint8_t;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;std::ostream&amp; operator &lt;&lt; (std::ostream&amp; os, Enum id);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html">   30</a></span>&#160;class Motor: public PositionalActuator {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;public:</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#aeb69bc5c944c4a75affd0572542da92a">   33</a></span>&#160;    explicit Motor(</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        Enum id,                            </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        GroupEnum group,                    </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        uint8_t order = 0,                  </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        uint32_t default_timeout_period = 0,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        motor_driver_t motor_driver = 0,    </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        uint8_t motor_id = 0,               </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        check_limit_switch_cb_t check_limit_switch_positive_direction_cb = nullptr, </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        check_limit_switch_cb_t check_limit_switch_negative_direction_cb = nullptr  </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    ) : PositionalActuator(id, group, order, default_timeout_period),</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        motor_driver_(motor_driver),</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        motor_id_(motor_id),</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        check_limit_switch_positive_direction_cb_(check_limit_switch_positive_direction_cb),</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        check_limit_switch_negative_direction_cb_(check_limit_switch_negative_direction_cb) { Motor::disable(); };</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    bool disable_on_check() override;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    void disable() override;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;private:</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    Enum id_;           </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    bool activated_;    </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    bool direction_;    </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    uint32_t speed_;     </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;};</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace motors</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;} <span class="comment">// namespace actuators</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;} <span class="comment">// namespace app</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    void actuate(</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        const int32_t command               </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    ) override;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;private:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    motor_driver_t  motor_driver_;          </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    uint8_t motor_id_;                      </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    check_limit_switch_cb_t check_limit_switch_positive_direction_cb_;  </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    check_limit_switch_cb_t check_limit_switch_negative_direction_cb_;  </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;} <span class="comment">// namespace motors</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;} <span class="comment">// namespace actuators</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;} <span class="comment">// namespace app</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aActuator_8hpp_html"><div class="ttname"><a href="Actuator_8hpp.html">Actuator.hpp</a></div><div class="ttdoc">Base actuators class definition.</div></div>
+<div class="ttc" id="aPositionalActuator_8hpp_html"><div class="ttname"><a href="PositionalActuator_8hpp.html">PositionalActuator.hpp</a></div><div class="ttdoc">C++ class representing a positional_actuator using positional_actuator driver.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sat Sep 30 2023 15:58:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Oct 1 2023 10:38:43 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

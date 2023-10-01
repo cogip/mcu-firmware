@@ -1,5 +1,6 @@
 <map id="drivers/lx_servo/include/lx_servo.h" name="drivers/lx_servo/include/lx_servo.h">
-<area shape="rect" id="node1" title="LX servomotors interface API definition." alt="" coords="14,5,191,47"/>
-<area shape="rect" id="node2" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="5,95,200,136"/>
-<area shape="rect" id="node3" href="$pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="5,184,200,225"/>
+<area shape="rect" id="node1" title="LX servomotors interface API definition." alt="" coords="123,5,301,47"/>
+<area shape="rect" id="node2" href="$LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="5,95,200,136"/>
+<area shape="rect" id="node3" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="224,95,419,136"/>
+<area shape="rect" id="node4" href="$pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="224,184,419,225"/>
 </map>

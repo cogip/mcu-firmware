@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::SpeedFilterParameters::set_min_speed" name="cogip::motion_control::SpeedFilterParameters::set_min_speed">
+<area shape="rect" id="node1" title="Set minimum speed." alt="" coords="5,5,183,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1SpeedFilterParameters.html#aaa906280b3cc05f08190aa5e8589ff77" title="Get minimum speed return minimum speed." alt="" coords="231,5,408,61"/>
+</map>

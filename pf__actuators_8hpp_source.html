@@ -131,29 +131,54 @@ $(document).ready(function(){initNavTree('pf__actuators_8hpp_source.html',''); i
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span>cogip {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span>pf {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span>actuators {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// Firmware includes</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="UartProtobuf_8hpp.html">uartpb/UartProtobuf.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// Standard includes</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">   21</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">GroupEnum</a>: uint8_t {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    NO_GROUP = 0,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    CENTRAL_LIFT = 1</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;};</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> init();</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;} <span class="comment">// namespace actuators</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;} <span class="comment">// namespace pf</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>cogip {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span>pf {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>actuators {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="pf__actuators_8hpp.html#a42f7565719d0579a2ce2cb67bc83d69f">   25</a></span>&#160;constexpr <a class="code" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a> <a class="code" href="pf__actuators_8hpp.html#a42f7565719d0579a2ce2cb67bc83d69f">actuator_state_uuid</a> = 1674079543;</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="pf__actuators_8hpp.html#a5520e90461fc4c20b1ca5cb283248bdb">   27</a></span>&#160;constexpr <a class="code" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a> <a class="code" href="pf__actuators_8hpp.html#a5520e90461fc4c20b1ca5cb283248bdb">emergency_button_pressed_uuid</a> = 1885006827;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="pf__actuators_8hpp.html#a09ff063f41a835f583620afb3d8d11ae">   29</a></span>&#160;constexpr <a class="code" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a> <a class="code" href="pf__actuators_8hpp.html#a09ff063f41a835f583620afb3d8d11ae">emergency_button_released_uuid</a> = 1396723216;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685">   32</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685">LXServoIDs</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    LXID_SWITCHER = 1,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    LXID_RIGHT_ARM = 2,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    LXID_RIGHT_ARM_LIFT = 3,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    LXID_LEFT_ARM = 4,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    LXID_LEFT_ARM_LIFT = 5,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;};</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">   41</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">GroupEnum</a>: uint8_t {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    NO_GROUP = 0,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keywordtype">void</span> enable_all();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keywordtype">void</span> disable_all();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">void</span> init();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;} <span class="comment">// namespace actuators</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;} <span class="comment">// namespace pf</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="apf__actuators_8hpp_html_aa8f20e24a161912e217c5b49cefd07c3"><div class="ttname"><a href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">cogip::pf::actuators::GroupEnum</a></div><div class="ttdeci">GroupEnum</div><div class="ttdoc">Enum using to group actuators.</div><div class="ttdef"><b>Definition:</b> <a href="pf__actuators_8hpp_source.html#l00021">pf_actuators.hpp:21</a></div></div>
+<div class="ttc" id="apf__actuators_8hpp_html_a5520e90461fc4c20b1ca5cb283248bdb"><div class="ttname"><a href="pf__actuators_8hpp.html#a5520e90461fc4c20b1ca5cb283248bdb">cogip::pf::actuators::emergency_button_pressed_uuid</a></div><div class="ttdeci">constexpr cogip::uartpb::uuid_t emergency_button_pressed_uuid</div><div class="ttdoc">Emergency button released protobuf message id.</div><div class="ttdef"><b>Definition:</b> <a href="pf__actuators_8hpp_source.html#l00027">pf_actuators.hpp:27</a></div></div>
+<div class="ttc" id="apf__actuators_8hpp_html_ab8ffb9175feb6ddd2f6ec4049542d685"><div class="ttname"><a href="pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685">cogip::pf::actuators::LXServoIDs</a></div><div class="ttdeci">LXServoIDs</div><div class="ttdoc">LX servomotors IDs.</div><div class="ttdef"><b>Definition:</b> <a href="pf__actuators_8hpp_source.html#l00032">pf_actuators.hpp:32</a></div></div>
+<div class="ttc" id="aUartProtobuf_8hpp_html"><div class="ttname"><a href="UartProtobuf_8hpp.html">UartProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over UART module.</div></div>
+<div class="ttc" id="apf__actuators_8hpp_html_a09ff063f41a835f583620afb3d8d11ae"><div class="ttname"><a href="pf__actuators_8hpp.html#a09ff063f41a835f583620afb3d8d11ae">cogip::pf::actuators::emergency_button_released_uuid</a></div><div class="ttdeci">constexpr cogip::uartpb::uuid_t emergency_button_released_uuid</div><div class="ttdoc">Emergency button pressed protobuf message id.</div><div class="ttdef"><b>Definition:</b> <a href="pf__actuators_8hpp_source.html#l00029">pf_actuators.hpp:29</a></div></div>
+<div class="ttc" id="aUartProtobuf_8hpp_html_a0b6e009187ab278ce929e25064422178"><div class="ttname"><a href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a></div><div class="ttdeci">uint32_t uuid_t</div><div class="ttdoc">Custom type for uuids.</div><div class="ttdef"><b>Definition:</b> <a href="UartProtobuf_8hpp_source.html#l00045">UartProtobuf.hpp:45</a></div></div>
+<div class="ttc" id="apf__actuators_8hpp_html_a42f7565719d0579a2ce2cb67bc83d69f"><div class="ttname"><a href="pf__actuators_8hpp.html#a42f7565719d0579a2ce2cb67bc83d69f">cogip::pf::actuators::actuator_state_uuid</a></div><div class="ttdeci">constexpr cogip::uartpb::uuid_t actuator_state_uuid</div><div class="ttdoc">Actuator state protobuf message id.</div><div class="ttdef"><b>Definition:</b> <a href="pf__actuators_8hpp_source.html#l00025">pf_actuators.hpp:25</a></div></div>
+<div class="ttc" id="apf__actuators_8hpp_html_aa8f20e24a161912e217c5b49cefd07c3"><div class="ttname"><a href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">cogip::pf::actuators::GroupEnum</a></div><div class="ttdeci">GroupEnum</div><div class="ttdoc">Enum using to group actuators.</div><div class="ttdef"><b>Definition:</b> <a href="pf__actuators_8hpp_source.html#l00041">pf_actuators.hpp:41</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sat Sep 30 2023 15:58:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Oct 1 2023 10:38:43 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

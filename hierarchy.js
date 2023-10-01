@@ -1,7 +1,12 @@
 var hierarchy =
 [
     [ "cogip::pf::actuators::Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", [
-      [ "cogip::pf::actuators::motors::Motor", "classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html", null ],
+      [ "cogip::pf::actuators::positional_actuators::PositionalActuator", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html", [
+        [ "cogip::pf::actuators::positional_actuators::AnalogServo", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html", null ],
+        [ "cogip::pf::actuators::positional_actuators::LxMotor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html", null ],
+        [ "cogip::pf::actuators::positional_actuators::Motor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html", null ],
+        [ "cogip::pf::actuators::positional_actuators::OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", null ]
+      ] ],
       [ "cogip::pf::actuators::pumps::Pump", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html", null ],
       [ "cogip::pf::actuators::servos::LxServo", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html", null ]
     ] ],

@@ -1,7 +1,7 @@
 <map id="platforms" name="platforms">
 <area shape="rect" id="node2" href="dir_ef067004433719d6088aedd7023cdab0.html" title="pegasus" alt="" coords="174,27,250,75"/>
 <area shape="rect" id="node5" href="dir_a408b6d3a4a484720bc3ecfeac8947e3.html" title="sys" alt="" coords="273,315,345,363"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000096_000021.html" title="1" alt="" coords="258,292,267,307"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000096_000021.html" title="2" alt="" coords="258,292,267,307"/>
 <area shape="rect" id="node6" href="dir_b9b8bbce311057038c01ad4896c8ba16.html" title="motion_control" alt="" coords="251,123,371,171"/>
 <area shape="rect" id="edge2-headlabel" href="dir_000096_000004.html" title="2" alt="" coords="275,97,284,111"/>
 <area shape="rect" id="node7" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="155,123,227,171"/>

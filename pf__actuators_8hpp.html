@@ -121,7 +121,8 @@ $(document).ready(function(){initNavTree('pf__actuators_8hpp.html',''); initResi
 <div class="header">
   <div class="summary">
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">pf_actuators.hpp File Reference<div class="ingroups"><a class="el" href="group__platforms.html">Hardware platform</a> &raquo; <a class="el" href="group__platforms__pegasus.html">Test platform</a></div></div>  </div>
 </div><!--header-->
@@ -134,7 +135,8 @@ $(document).ready(function(){initNavTree('pf__actuators_8hpp.html',''); initResi
 <dl class="section author"><dt>Author</dt><dd>Eric Courtois <a href="#" onclick="location.href='mai'+'lto:'+'eri'+'c.'+'cou'+'rt'+'ois'+'@g'+'mai'+'l.'+'com'; return false;">eric.<span style="display: none;">.nosp@m.</span>cour<span style="display: none;">.nosp@m.</span>tois@<span style="display: none;">.nosp@m.</span>gmai<span style="display: none;">.nosp@m.</span>l.com</a> </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="pf__actuators_8hpp_source.html">pf_actuators.hpp</a>.</p>
-</div><div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
+</div><div class="textblock"><code>#include &quot;<a class="el" href="UartProtobuf_8hpp_source.html">uartpb/UartProtobuf.hpp</a>&quot;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for pf_actuators.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -142,8 +144,22 @@ $(document).ready(function(){initNavTree('pf__actuators_8hpp.html',''); initResi
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="pf__actuators_8hpp__incl.png" border="0" usemap="#platforms_2pegasus_2include_2pf__actuators_8hpp" alt=""/></div>
 <map name="platforms_2pegasus_2include_2pf__actuators_8hpp" id="platforms_2pegasus_2include_2pf__actuators_8hpp">
-<area shape="rect" title="Generic definitions related to actuators." alt="" coords="5,5,200,47"/>
-<area shape="rect" title=" " alt="" coords="69,95,136,121"/>
+<area shape="rect" title="Generic definitions related to actuators." alt="" coords="892,5,1087,47"/>
+<area shape="rect" href="UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="565,95,744,121"/>
+<area shape="rect" title=" " alt="" coords="1171,244,1237,271"/>
+<area shape="rect" title=" " alt="" coords="755,169,867,196"/>
+<area shape="rect" title=" " alt="" coords="891,169,967,196"/>
+<area shape="rect" title=" " alt="" coords="991,169,1097,196"/>
+<area shape="rect" title=" " alt="" coords="5,169,101,196"/>
+<area shape="rect" title=" " alt="" coords="126,169,202,196"/>
+<area shape="rect" title=" " alt="" coords="226,169,310,196"/>
+<area shape="rect" href="uartpb_8hpp.html" title=" " alt="" coords="499,244,637,271"/>
+<area shape="rect" href="ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="1121,169,1287,196"/>
+<area shape="rect" href="WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="334,169,503,196"/>
+<area shape="rect" title=" " alt="" coords="579,169,730,196"/>
+<area shape="rect" title=" " alt="" coords="1262,244,1333,271"/>
+<area shape="rect" title=" " alt="" coords="982,244,1146,271"/>
+<area shape="rect" title=" " alt="" coords="307,244,474,271"/>
 </map>
 </div>
 </div>
@@ -151,24 +167,57 @@ $(document).ready(function(){initNavTree('pf__actuators_8hpp.html',''); initResi
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:aa8f20e24a161912e217c5b49cefd07c3"><td class="memItemLeft" align="right" valign="top"><a id="aa8f20e24a161912e217c5b49cefd07c3"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">cogip::pf::actuators::GroupEnum</a> : uint8_t { <b>NO_GROUP</b> = 0, 
-<b>CENTRAL_LIFT</b> = 1
+<tr class="memitem:ab8ffb9175feb6ddd2f6ec4049542d685"><td class="memItemLeft" align="right" valign="top"><a id="ab8ffb9175feb6ddd2f6ec4049542d685"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685">cogip::pf::actuators::LXServoIDs</a> { <br />
+&#160;&#160;<b>LXID_SWITCHER</b> = 1, 
+<b>LXID_RIGHT_ARM</b> = 2, 
+<b>LXID_RIGHT_ARM_LIFT</b> = 3, 
+<b>LXID_LEFT_ARM</b> = 4, 
+<br />
+&#160;&#160;<b>LXID_LEFT_ARM_LIFT</b> = 5
+<br />
+ }</td></tr>
+<tr class="memdesc:ab8ffb9175feb6ddd2f6ec4049542d685"><td class="mdescLeft">&#160;</td><td class="mdescRight">LX servomotors IDs. <br /></td></tr>
+<tr class="separator:ab8ffb9175feb6ddd2f6ec4049542d685"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8f20e24a161912e217c5b49cefd07c3"><td class="memItemLeft" align="right" valign="top"><a id="aa8f20e24a161912e217c5b49cefd07c3"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">cogip::pf::actuators::GroupEnum</a> : uint8_t { <b>NO_GROUP</b> = 0
  }</td></tr>
 <tr class="memdesc:aa8f20e24a161912e217c5b49cefd07c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum using to group actuators. <br /></td></tr>
 <tr class="separator:aa8f20e24a161912e217c5b49cefd07c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a6a6c7fd4f5e6b5f77d02b63266bd636b"><td class="memItemLeft" align="right" valign="top"><a id="a6a6c7fd4f5e6b5f77d02b63266bd636b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#a6a6c7fd4f5e6b5f77d02b63266bd636b">cogip::pf::actuators::enable_all</a> ()</td></tr>
+<tr class="memdesc:a6a6c7fd4f5e6b5f77d02b63266bd636b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable all actuators. <br /></td></tr>
+<tr class="separator:a6a6c7fd4f5e6b5f77d02b63266bd636b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38ba35545eb0c9c3d4b896ab8ca5b89a"><td class="memItemLeft" align="right" valign="top"><a id="a38ba35545eb0c9c3d4b896ab8ca5b89a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#a38ba35545eb0c9c3d4b896ab8ca5b89a">cogip::pf::actuators::disable_all</a> ()</td></tr>
+<tr class="memdesc:a38ba35545eb0c9c3d4b896ab8ca5b89a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all actuators. <br /></td></tr>
+<tr class="separator:a38ba35545eb0c9c3d4b896ab8ca5b89a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8703a26db4165eca63c7426397b8e53"><td class="memItemLeft" align="right" valign="top"><a id="aa8703a26db4165eca63c7426397b8e53"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#aa8703a26db4165eca63c7426397b8e53">cogip::pf::actuators::init</a> ()</td></tr>
 <tr class="memdesc:aa8703a26db4165eca63c7426397b8e53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize all actuators. <br /></td></tr>
 <tr class="separator:aa8703a26db4165eca63c7426397b8e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a42f7565719d0579a2ce2cb67bc83d69f"><td class="memItemLeft" align="right" valign="top"><a id="a42f7565719d0579a2ce2cb67bc83d69f"></a>
+constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#a42f7565719d0579a2ce2cb67bc83d69f">cogip::pf::actuators::actuator_state_uuid</a> = 1674079543</td></tr>
+<tr class="memdesc:a42f7565719d0579a2ce2cb67bc83d69f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">Actuator</a> state protobuf message id. <br /></td></tr>
+<tr class="separator:a42f7565719d0579a2ce2cb67bc83d69f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5520e90461fc4c20b1ca5cb283248bdb"><td class="memItemLeft" align="right" valign="top"><a id="a5520e90461fc4c20b1ca5cb283248bdb"></a>
+constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#a5520e90461fc4c20b1ca5cb283248bdb">cogip::pf::actuators::emergency_button_pressed_uuid</a> = 1885006827</td></tr>
+<tr class="memdesc:a5520e90461fc4c20b1ca5cb283248bdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emergency button released protobuf message id. <br /></td></tr>
+<tr class="separator:a5520e90461fc4c20b1ca5cb283248bdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09ff063f41a835f583620afb3d8d11ae"><td class="memItemLeft" align="right" valign="top"><a id="a09ff063f41a835f583620afb3d8d11ae"></a>
+constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf__actuators_8hpp.html#a09ff063f41a835f583620afb3d8d11ae">cogip::pf::actuators::emergency_button_released_uuid</a> = 1396723216</td></tr>
+<tr class="memdesc:a09ff063f41a835f583620afb3d8d11ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emergency button pressed protobuf message id. <br /></td></tr>
+<tr class="separator:a09ff063f41a835f583620afb3d8d11ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sat Sep 30 2023 15:58:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Oct 1 2023 10:38:43 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

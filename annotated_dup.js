@@ -43,8 +43,12 @@ var annotated_dup =
       ] ],
       [ "pf", null, [
         [ "actuators", null, [
-          [ "motors", null, [
-            [ "Motor", "classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor.html", "classcogip_1_1pf_1_1actuators_1_1motors_1_1Motor" ]
+          [ "positional_actuators", null, [
+            [ "AnalogServo", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo" ],
+            [ "LxMotor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor" ],
+            [ "Motor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor" ],
+            [ "OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff" ],
+            [ "PositionalActuator", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator" ]
           ] ],
           [ "pumps", null, [
             [ "Command", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command" ],

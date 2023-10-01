@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sd21_5fservo_5fpos_5ft_1255',['sd21_servo_pos_t',['../group__sd21.html#ga4b0742753cf496136b49c804c4d8e9db',1,'sd21.h']]]
+  ['pca9586channels_1340',['PCA9586Channels',['../pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27e',1,'cogip::pf::actuators::positional_actuators']]]
 ];

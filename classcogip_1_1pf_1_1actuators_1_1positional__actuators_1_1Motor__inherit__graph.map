@@ -1,0 +1,5 @@
+<map id="cogip::pf::actuators::positional_actuators::Motor" name="cogip::pf::actuators::positional_actuators::Motor">
+<area shape="rect" id="node1" title="Class representing a motor using motor driver." alt="" coords="35,505,198,656"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="5,204,228,457"/>
+<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="43,5,190,156"/>
+</map>
