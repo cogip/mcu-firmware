@@ -33,16 +33,19 @@ public:
     /// Limit acceleration and speed
     void execute() override;
 
+protected:
+    /// Previous cycle speed_order
+    double previous_speed_order_;
+
     double limit_speed_order(
         double speed_order,
         double target_speed,
+        double current_speed,
+        double min_speed,
         double max_speed,
         double max_acc
     );
 
-protected:
-    /// Previous cycle speed_order
-    double previous_speed_order_;
 };
 
 } // namespace motion_control

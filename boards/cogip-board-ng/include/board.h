@@ -7,9 +7,9 @@
  */
 
 /**
- * @defgroup    boards_cogip-board COGIP 2018 Cortex board
- * @ingroup     boards_cogip-board
- * @brief       Support for the COGIP 2018 Cortex board
+ * @defgroup    boards_cogip-board-ng COGIP 2023 Pegasus board
+ * @ingroup     boards_cogip-board-ng
+ * @brief       Support for the COGIP 2023 Pegasus board
  * @{
  *
  * @file
@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "motor_driver.h"
+#include <motor_driver.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,21 +32,21 @@ extern "C" {
 /* LEDs */
 #define HEARTBEAT_LED   GPIO_PIN(PORT_A, 0)
 
+/* GPIOs expander */
+#define PCF857X_PORT_0  0
+
 /* Vacuum pumps */
-#define GPIO_VACUUM1_ENABLE GPIO_PIN(PORT_C, 13)
-#define GPIO_VACUUM1_TEST GPIO_PIN(PORT_C, 0)
-#define GPIO_VACUUM2_ENABLE GPIO_PIN(PORT_C, 14)
-#define GPIO_VACUUM2_TEST GPIO_PIN(PORT_C, 1)
-#define GPIO_VACUUM3_ENABLE GPIO_PIN(PORT_C, 15)
-#define GPIO_VACUUM3_TEST GPIO_PIN(PORT_C, 2)
 
 /* Servomotors */
 #define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
 #define LX_UART_DEV     2
 
-/* Motors */
+/* Motion motors */
 #define MOTOR_LEFT  0
 #define MOTOR_RIGHT 1
+
+/* Actuators motors */
+#define ACTUATOR_MOTOR_DRIVER_1     MOTOR_DRIVER_DEV(1)
 
 /* Quadrature decoding */
 #define QDEC_MODE           QDEC_X4
@@ -96,7 +96,7 @@ static const motor_driver_config_t motor_driver_config[] = {
         .pwm_mode = PWM_LEFT,
         .pwm_frequency = 20000U,
         .pwm_resolution = 100U,
-        .nb_motors = 3,
+        .nb_motors = 2,
         .motors = {
             /* Lift motor */
             {
@@ -108,20 +108,10 @@ static const motor_driver_config_t motor_driver_config[] = {
                 .gpio_enable_invert = 0,
                 .gpio_brake_invert = 0,
             },
-            /* Ball conveyor (no PWM, no direction) */
-            {
-                .pwm_channel = -1,
-                .gpio_enable = GPIO_PIN(PORT_B, 1),
-                .gpio_dir0 = GPIO_OUTPUT_UNUSED,
-                .gpio_dir1_or_brake = GPIO_UNDEF,
-                .gpio_dir_reverse = 0,
-                .gpio_enable_invert = 0,
-                .gpio_brake_invert = 0,
-            },
-            /* Ball launcher (no direction, no enable) */
+            /* Ball launcher (no direction, no enable, just PWM) & conveyor (no PWM, no direction, just the enable) */
             {
                 .pwm_channel = 1,
-                .gpio_enable = GPIO_OUTPUT_UNUSED,
+                .gpio_enable = GPIO_PIN(PORT_B, 1),
                 .gpio_dir0 = GPIO_OUTPUT_UNUSED,
                 .gpio_dir1_or_brake = GPIO_UNDEF,
                 .gpio_dir_reverse = 0,

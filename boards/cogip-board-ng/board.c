@@ -19,7 +19,6 @@
  */
 
 #include "board.h"
-#include "periph/gpio.h"
 
 /**
  * Start of the heap
@@ -47,4 +46,6 @@ void board_init(void)
     // Setup and set heartbit LED
     gpio_init(HEARTBEAT_LED, GPIO_OUT);
     gpio_set(HEARTBEAT_LED);
+
+    puts("Board successfully initialized.");
 }

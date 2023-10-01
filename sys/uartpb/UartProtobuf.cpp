@@ -67,6 +67,7 @@ void UartProtobuf::message_reader()
 
         // Read uuid
         ringbuffer_get(&rx_buf_, (char *)&uuid, sizeof(uuid_t));
+        std::cout << "Received message " << uuid << std::endl;
         message_length -= sizeof(uuid_t);
 
         // Check a handler corresponding to the uuid is registered

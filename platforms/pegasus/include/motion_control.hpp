@@ -23,6 +23,7 @@ enum class PidEnum: pid_id_t {
 };
 constexpr auto PID_COUNT = __LINE__ - START_LINE - 3;
 
+constexpr cogip::uartpb::uuid_t brake_uuid = 3239255374;
 constexpr cogip::uartpb::uuid_t pose_uuid = 1534060156;
 constexpr cogip::uartpb::uuid_t pose_reached_uuid = 2736246403;
 constexpr cogip::uartpb::uuid_t start_pose_uuid = 2741980922;
@@ -62,13 +63,16 @@ constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   
 /// @name Acceleration and speed profiles
 /// @{
 // Linear maximum speed and acceleration
-constexpr double platform_min_speed_m_per_s = 0.;  ///< Minimum speed (m/s)
-constexpr double platform_max_speed_m_per_s = 1;  ///< Maximum speed (m/s)
+constexpr double platform_min_speed_m_per_s = 0.1;  ///< Minimum speed (m/s)
+constexpr double platform_max_speed_m_per_s = 2;  ///< Maximum speed (m/s)
 constexpr double platform_max_acc_m_per_s2 = platform_max_speed_m_per_s / 2;   ///< Maximum acceleration (m/s²)
 constexpr double platform_max_acc_linear_mm_per_period2 = (
     (1000 * platform_max_acc_m_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
     );          ///< Maximum linear acceleration (mm/<motion_control_thread_period_ms>²)
+constexpr double platform_min_speed_linear_mm_per_period = (
+    (1000 * platform_min_speed_m_per_s * motion_control_thread_period_ms) \
+    / 1000);    ///< Minimum linear speed (mm/<motion_control_thread_period_ms>)
 constexpr double platform_max_speed_linear_mm_per_period = (
     (1000 * platform_max_speed_m_per_s * motion_control_thread_period_ms) \
     / 1000);    ///< Maximum linear speed (mm/<motion_control_thread_period_ms>)
@@ -76,18 +80,25 @@ constexpr double platform_low_speed_linear_mm_per_period = (platform_max_speed_l
 constexpr double platform_normal_speed_linear_mm_per_period = (platform_max_speed_linear_mm_per_period / 2);  ///< Normal angular speed (deg/<motion_control_thread_period_ms>)
 
 // Angular maximum speed and acceleration
-constexpr double platform_max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
-constexpr double platform_max_acc_deg_per_s2 = platform_max_speed_deg_per_s / 4 ;  ///< Maximum acceleration (deg/s²)
+constexpr double platform_min_speed_deg_per_s = 0; ///< Maximum speed (deg/s)
+constexpr double platform_max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
+constexpr double platform_max_acc_deg_per_s2 = platform_max_speed_deg_per_s / 2 ;  ///< Maximum acceleration (deg/s²)
 constexpr double platform_max_acc_angular_deg_per_period2 = (
     (platform_max_acc_deg_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
     );  ///< Maximum angular acceleration (deg/<motion_control_thread_period_ms>)
+constexpr double platform_min_speed_angular_deg_per_period = (
+    (platform_min_speed_deg_per_s * motion_control_thread_period_ms) \
+    / 1000);    ///< Minimum angular speed (deg/<motion_control_thread_period_ms>)
 constexpr double platform_max_speed_angular_deg_per_period = (
     (platform_max_speed_deg_per_s * motion_control_thread_period_ms) \
     / 1000);    ///< Maximum angular speed (deg/<motion_control_thread_period_ms>)
 constexpr double platform_low_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 4);       ///< Low angular speed (deg/<motion_control_thread_period_ms>)
 constexpr double platform_normal_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 2);    ///< Normal angular speed (deg/<motion_control_thread_period_ms>)
 /// @}
+
+/// Handle brake signal to stop the robot
+void pf_handle_brake(cogip::uartpb::ReadBuffer &buffer);
 
 /// Get pose to reach from protobuf message
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer);
@@ -106,6 +117,10 @@ void pf_disable_motion_control();
 
 /// Make motion control engine thread loop enabled
 void pf_enable_motion_control();
+
+void pf_enable_motion_control_messages();
+
+void pf_disable_motion_control_messages();
 
 /// Send current robot pose in Protobuf format over UART
 void pf_send_pb_pose(void);

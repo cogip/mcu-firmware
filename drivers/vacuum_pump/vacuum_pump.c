@@ -64,5 +64,5 @@ bool vacuum_pump_is_under_pressure(const vacuum_pump_t vacuum_pump)
 
     vacuum_pump_dev_t *vacuum_pump_dev = &vacuum_pump_devs[vacuum_pump];
 
-    return ~gpio_read(vacuum_pump_dev->params.gpio_test);
+    return gpio_read(vacuum_pump_dev->params.gpio_test);
 }

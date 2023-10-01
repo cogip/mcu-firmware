@@ -11,52 +11,84 @@
 namespace cogip {
 namespace pf {
 namespace actuators {
-namespace motors {
+namespace positional_actuators {
 
-std::ostream& operator << (std::ostream& os, Enum id) {
-    os << static_cast<std::underlying_type_t<Enum>>(id);
-    return os;
+void Motor::disable() {
+    if (motor_driver_ >= MOTOR_DRIVER_NUMOF) {
+        std::cerr << "Motor " << id_ << ": wrong motor driver" << std::endl;
+        return;
+    }
+
+    const motor_driver_config_t *config = &motor_driver_config[motor_driver_];
+
+    if (motor_id_ >= config->nb_motors) {
+        std::cerr << "Motor " << id_ << ": wrong motor id" << std::endl;
+        return;
+    }
+
+    motor_set(motor_driver_, motor_id_, 0);
+    motor_disable(motor_driver_, motor_id_);
 }
 
-Motor::Motor(Enum id, GroupEnum group, uint8_t order) : Actuator(group, order), id_(id), direction_(0), speed_(0) {
-    deactivate();
-};
+bool Motor::disable_on_check() {
+    int direction = (command_ < 0) ? -1 : 1;
 
-void Motor::move(bool direction, uint32_t speed) {
-    auto motor_id = static_cast<std::underlying_type_t<Enum>>(id_);
-    if ((speed > 100) && (motor_id < motor_driver_config[MOTOR_DRIVER_DEV(1)].nb_motors)) {
+    // Check limit switches
+    if ((direction > 0) && check_limit_switch_positive_direction_cb_ && check_limit_switch_positive_direction_cb_()) {
+        motor_disable(motor_driver_, motor_id_);
+        std::cerr << "Motor " << id_ << ": positive limit" << std::endl;
+        return true;
+    }
+    if ((direction < 0) && check_limit_switch_negative_direction_cb_ && check_limit_switch_negative_direction_cb_()) {
+        motor_disable(motor_driver_, motor_id_);
+        std::cerr << "Motor " << id_ << ": negative limit" << std::endl;
+        return true;
+    }
+
+    return false;
+}
+
+void Motor::actuate(int32_t command) {
+    command_ = command;
+    int speed = abs(command);
+
+    if (speed > 100) {
+        std::cerr << "Motor " << id_ << ": speed is not in range [-100%:100%]" << std::endl;
+        return;
+    }
+
+    if (motor_driver_ >= MOTOR_DRIVER_NUMOF) {
+        std::cerr << "Motor " << id_ << ": wrong motor driver" << std::endl;
+        return;
+    }
+
+    const motor_driver_config_t *config = &motor_driver_config[motor_driver_];
+
+    if (motor_id_ >= config->nb_motors) {
+        std::cerr << "Motor " << id_ << ": wrong motor id" << std::endl;
+        return;
+    }
+
+    if (disable_on_check()) {
         return;
     }
 
     int32_t pwm_duty_cycle =
-        (direction == 0 ? 1 : -1) * (int32_t)(motor_driver_config[MOTOR_DRIVER_DEV(1)].pwm_resolution * speed ) / 100;
+        (int32_t)(config->pwm_resolution * command) / 100;
 
-    if (motor_driver_config[MOTOR_DRIVER_DEV(1)].motors[motor_id].pwm_channel > 0) {
-        motor_set(MOTOR_DRIVER_DEV(1), motor_id, pwm_duty_cycle);
+    motor_set(motor_driver_, motor_id_, pwm_duty_cycle);
+    if (pwm_duty_cycle) {
+        motor_enable(motor_driver_, motor_id_);
     }
-    motor_enable(MOTOR_DRIVER_DEV(1), motor_id);
+    else {
+        motor_disable(motor_driver_, motor_id_);
+    }
 
-    activated_ = true;
-    direction_ = direction;
-    speed_ = speed;
+    if (!timeout_period_)
+        timeout_period_ = default_timeout_period_;
 }
 
-void Motor::deactivate() {
-    auto motor_id = static_cast<std::underlying_type_t<Enum>>(id_);
-    motor_disable(MOTOR_DRIVER_DEV(1), motor_id);
-    activated_ = false;
-}
-
-void Motor::pb_copy(PB_Motor & pb_motor) const {
-    pb_motor.set_group(static_cast<PB_ActuatorsGroupEnum>(group_));
-    pb_motor.set_order(order_);
-    pb_motor.set_id(static_cast<PB_MotorEnum>(id_));
-    pb_motor.set_activated(activated_);
-    pb_motor.set_direction(direction_);
-    pb_motor.set_speed(speed_);
-}
-
-} // namespace motors
+} // namespace positional_actuators
 } // namespace actuators
 } // namespace pf
 } // namespace cogip

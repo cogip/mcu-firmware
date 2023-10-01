@@ -1,6 +1,9 @@
 # RIOT modules
 USEMODULE += event
+USEMODULE += periph_gpio_irq
 USEMODULE += motor_driver
+USEMODULE += pca9685
+USEMODULE += pcf8575
 USEMODULE += printf_float
 USEMODULE += ps
 USEMODULE += scanf_float

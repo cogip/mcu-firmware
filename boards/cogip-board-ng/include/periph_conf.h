@@ -7,13 +7,12 @@
  */
 
 /**
- * @defgroup    boards_cogip-board COGIP 2018 Cortex board
- * @ingroup     boards_cogip-board
- * @brief       Support for the COGIP 2018 Cortex board
+ * @ingroup     boards_cogip-board-ng
+ * @brief       Support for the COGIP 2023 Pegasus board
  * @{
  *
  * @file
- * @name        Peripheral MCU configuration for the cogip-board board
+ * @name        Peripheral MCU configuration for the cogip-board-ng board
  *
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  */

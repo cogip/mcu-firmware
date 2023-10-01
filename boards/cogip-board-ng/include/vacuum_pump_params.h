@@ -19,7 +19,6 @@
 #pragma once
 
 #include "vacuum_pump.h"
-#include "board.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,20 +29,14 @@ extern "C" {
  */
 static const vacuum_pump_params_t vacuum_pump_params[] = {
     {
-        .gpio_enable = GPIO_VACUUM1_ENABLE,
-        .gpio_test = GPIO_VACUUM1_TEST,
+        .gpio_enable = GPIO_PIN(PORT_A, 4),
+        .gpio_test = GPIO_PIN(PORT_A, 15),
     },
     {
-        .gpio_enable = GPIO_VACUUM2_ENABLE,
-        .gpio_test = GPIO_VACUUM2_TEST,
-    },
-    {
-        .gpio_enable = GPIO_VACUUM3_ENABLE,
-        .gpio_test = GPIO_VACUUM2_TEST,
+        .gpio_enable = GPIO_PIN(PORT_C, 5),
+        .gpio_test = GPIO_PIN(PORT_C, 10),
     },
 };
-
-#define VACUUM_PUMP_NUMOF   ARRAY_SIZE(vacuum_pump_params)
 
 #ifdef __cplusplus
 }

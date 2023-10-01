@@ -24,7 +24,9 @@ namespace servos {
 /// Servomotors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: lx_id_t {
-    UNUSED_SERVO = 1
+    LXSERVO_BALL_SWITCH = 1,
+    LXSERVO_RIGHT_ARM = 2,
+    LXSERVO_LEFT_ARM = 4
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
@@ -46,7 +48,7 @@ public:
 };
 
 /// Initialize LX servomotors.
-void init();
+void init(uart_half_duplex_t *lx_stream);
 
 /// Get a servo by id.
 LxServo & get(
@@ -64,6 +66,12 @@ void parallel_move(
     const etl::list<Command, COUNT> & commands,  ///< [in] servo commands
     uint32_t wait = 0                            ///< [in] time to wait after move (in ms)
 );
+
+/// Disable all servomotors
+void disable_all();
+
+/// Send pump state protobuf message
+void send_state(Enum servo);
 
 /// Copy data to Protobuf message.
 void pb_copy(

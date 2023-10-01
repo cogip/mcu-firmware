@@ -3,14 +3,17 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
+// Firmware includes
+#include "board.h"
 #include "pf_servos.hpp"
 #include "pf_actuators.hpp"
-
-#include "board.h"
+#include "platform.hpp"
+#include "uartpb/UartProtobuf.hpp"
 
 #include "etl/map.h"
 #include "etl/pool.h"
 
+// RIOT includes
 #include <periph/gpio.h>
 #include <ztimer.h>
 
@@ -23,62 +26,39 @@ namespace pf {
 namespace actuators {
 namespace servos {
 
-/// Half duplex UART stream
-static uart_half_duplex_t _lx_stream;
-
-/// LX servos command buffer
-static uint8_t _lx_servos_buffer[LX_UART_BUFFER_SIZE];
-
 /// Static pool of servo objects
 static etl::pool<LxServo, COUNT> _servos_pool;
 
 /// Map from servo id to servo object pointer
 static etl::map<Enum, LxServo *, COUNT> _servos;
 
-static void _dir_init([[maybe_unused]] uart_t uart) {
-    gpio_init(LX_DIR_PIN, GPIO_OUT);
-}
+// Servo protobuf message
+static PB_Servo _pb_servo;
 
-static void _dir_enable_tx([[maybe_unused]] uart_t uart) {
-    gpio_set(LX_DIR_PIN);
-}
+void init(uart_half_duplex_t *lx_stream) {
+    // Half duplex stream that must have been initialized previously
+    LxServo::lx_stream = lx_stream;
 
-static void _dir_disable_tx([[maybe_unused]] uart_t uart) {
-    gpio_clear(LX_DIR_PIN);
-}
+    // Ball switch
+    _servos[Enum::LXSERVO_BALL_SWITCH] = _servos_pool.create(
+        Enum::LXSERVO_BALL_SWITCH,
+        GroupEnum::NO_GROUP,
+        0
+    );
 
-static void _lx_half_duplex_uart_init() {
-    uart_half_duplex_params_t params = {
-        .uart = UART_DEV(LX_UART_DEV),
-        .baudrate = 115200,
-        .dir = { _dir_init, _dir_enable_tx, _dir_disable_tx },
-    };
+    // Right arm
+    _servos[Enum::LXSERVO_RIGHT_ARM] = _servos_pool.create(
+        Enum::LXSERVO_RIGHT_ARM,
+        GroupEnum::NO_GROUP,
+        0
+    );
 
-    int ret = uart_half_duplex_init(&_lx_stream, _lx_servos_buffer, ARRAY_SIZE(_lx_servos_buffer), &params);
-
-    if (ret == UART_HALF_DUPLEX_NODEV) {
-        puts("Error: invalid UART device given");
-    }
-    else if (ret == UART_HALF_DUPLEX_NOBAUD) {
-        puts("Error: given baudrate is not applicable");
-    }
-    else if (ret == UART_HALF_DUPLEX_INTERR) {
-        puts("Error: internal error");
-    }
-    else if (ret == UART_HALF_DUPLEX_NOMODE) {
-        puts("Error: given mode is not applicable");
-    }
-    else if (ret == UART_HALF_DUPLEX_NOBUFF) {
-        puts("Error: invalid buffer given");
-    }
-    else {
-        printf("Successfully initialized LX Servos TTL bus UART_DEV(%i)\n", params.uart);
-    }
-}
-
-void init(void) {
-    _lx_half_duplex_uart_init();
-    LxServo::lx_stream = &_lx_stream;
+    // Left arm
+    _servos[Enum::LXSERVO_LEFT_ARM] = _servos_pool.create(
+        Enum::LXSERVO_LEFT_ARM,
+        GroupEnum::NO_GROUP,
+        0
+    );
 }
 
 LxServo & get(Enum id) {
@@ -101,6 +81,25 @@ void parallel_move(const etl::list<Command, COUNT> & commands, uint32_t wait) {
     }
     if (wait > 0) {
         ztimer_sleep(ZTIMER_MSEC, wait);
+    }
+}
+
+void disable_all() {
+    for (auto & iterator: _servos) {
+        LxServo *servo = iterator.second;
+        servo->move_stop();
+    }
+}
+
+void send_state(Enum servo) {
+    // Protobuf UART interface
+    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+
+    // Send protobuf message
+    _pb_servo.clear();
+    servos::get(servo).pb_copy(_pb_servo);
+    if (!uartpb.send_message(actuator_state_uuid, &_pb_servo)) {
+        std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }
 
