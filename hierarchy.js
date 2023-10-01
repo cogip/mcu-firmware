@@ -99,9 +99,6 @@ var hierarchy =
     ] ],
     [ "cogip::cogip_defs::Polar", "classcogip_1_1cogip__defs_1_1Polar.html", null ],
     [ "cogip::motion_control::PosePIDControllerParameters", "classcogip_1_1motion__control_1_1PosePIDControllerParameters.html", null ],
-    [ "Poses", null, [
-      [ "cogip::path::Path", "classcogip_1_1path_1_1Path.html", null ]
-    ] ],
     [ "cogip::motion_control::PoseStraightFilterParameters", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html", null ],
     [ "ReadBufferInterface", null, [
       [ "cogip::uartpb::ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html", null ]

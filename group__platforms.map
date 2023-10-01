@@ -1,6 +1,4 @@
 <map id="Hardware platform" name="Hardware platform">
-<area shape="rect" id="node1" href="$group__platforms__pegasus.html" title="COGIP test platform definition." alt="" coords="233,5,341,31"/>
-<area shape="rect" id="node2" href="$group__platforms__pf__test.html" title="COGIP test platform definition." alt="" coords="233,55,341,80"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,55,151,80"/>
-<area shape="rect" id="node4" href="$group__platforms__shell.html" title="Common platform shell with shell management." alt="" coords="199,104,375,129"/>
+<area shape="rect" id="node1" href="$group__platforms__pegasus.html" title="COGIP test platform definition." alt="" coords="199,5,307,31"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,151,31"/>
 </map>

@@ -1,5 +1,6 @@
 <map id="drivers/vacuum_pump/include/vacuum_pump.h" name="drivers/vacuum_pump/include/vacuum_pump.h">
-<area shape="rect" id="node1" title="Public API for COGIP vacuum pump driver." alt="" coords="10,5,195,47"/>
+<area shape="rect" id="node1" title="Public API for COGIP vacuum pump driver." alt="" coords="119,5,305,47"/>
 <area shape="rect" id="node2" href="$Pump_8hpp.html" title="C++ class representing a pump using vacuum_pump driver." alt="" coords="5,95,200,136"/>
+<area shape="rect" id="node4" href="$vacuum__pump__params_8h.html" title="Parameters for COGIP vacuum pump driver." alt="" coords="224,95,419,136"/>
 <area shape="rect" id="node3" href="$pf__pumps_8hpp.html" title="Functions and definitions related to pumps." alt="" coords="5,184,200,225"/>
 </map>

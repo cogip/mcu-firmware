@@ -1,10 +1,9 @@
 <map id="lib/pid_ng/include/pid_ng/PID.hpp" name="lib/pid_ng/include/pid_ng/PID.hpp">
-<area shape="rect" id="node1" title="PID implementation." alt="" coords="738,5,874,47"/>
+<area shape="rect" id="node1" title="PID implementation." alt="" coords="585,5,721,47"/>
 <area shape="rect" id="node2" href="$PassthroughPosePIDControllerParameters_8hpp.html" title="Pose PID controller parameters." alt="" coords="34,95,325,180"/>
 <area shape="rect" id="node4" href="$PosePIDControllerParameters_8hpp.html" title="Pose PID controller parameters." alt="" coords="362,102,637,173"/>
 <area shape="rect" id="node6" href="$SpeedPIDControllerParameters_8hpp.html" title="Speed PID controller parameters." alt="" coords="661,102,951,173"/>
-<area shape="rect" id="node8" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="975,117,1170,158"/>
-<area shape="rect" id="node9" href="$pf__test_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="1195,117,1380,158"/>
+<area shape="rect" id="node8" href="$motion__control_8hpp_source.html" title=" " alt="" coords="975,117,1170,158"/>
 <area shape="rect" id="node3" href="$PassthroughPosePIDController_8hpp.html" title="Pose PID controller." alt="" coords="5,228,324,299"/>
 <area shape="rect" id="node5" href="$PosePIDController_8hpp.html" title="Pose PID controller." alt="" coords="349,235,650,291"/>
 <area shape="rect" id="node7" href="$SpeedPIDController_8hpp.html" title="Speed PID controller." alt="" coords="675,235,993,291"/>

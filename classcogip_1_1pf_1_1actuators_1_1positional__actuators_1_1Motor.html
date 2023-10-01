@@ -161,9 +161,9 @@ $(document).ready(function(){initNavTree('classcogip_1_1pf_1_1actuators_1_1posit
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aeb69bc5c944c4a75affd0572542da92a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#aeb69bc5c944c4a75affd0572542da92a">Motor</a> (Enum id, <a class="el" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">GroupEnum</a> group, uint8_t order=0, uint32_t default_timeout_period=0, motor_driver_t motor_driver=0, uint8_t motor_id=0, check_limit_switch_cb_t check_limit_switch_positive_direction_cb=nullptr, check_limit_switch_cb_t check_limit_switch_negative_direction_cb=nullptr)</td></tr>
-<tr class="memdesc:aeb69bc5c944c4a75affd0572542da92a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#aeb69bc5c944c4a75affd0572542da92a">More...</a><br /></td></tr>
-<tr class="separator:aeb69bc5c944c4a75affd0572542da92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef9fa4f4cf2c05d8a7fc22dc9f97c3af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#aef9fa4f4cf2c05d8a7fc22dc9f97c3af">Motor</a> (Enum id, <a class="el" href="pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">GroupEnum</a> group, uint8_t order=0, uint32_t default_timeout_period=0, motor_driver_t *motor_driver=nullptr, uint8_t motor_id=0, check_limit_switch_cb_t check_limit_switch_positive_direction_cb=nullptr, check_limit_switch_cb_t check_limit_switch_negative_direction_cb=nullptr)</td></tr>
+<tr class="memdesc:aef9fa4f4cf2c05d8a7fc22dc9f97c3af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#aef9fa4f4cf2c05d8a7fc22dc9f97c3af">More...</a><br /></td></tr>
+<tr class="separator:aef9fa4f4cf2c05d8a7fc22dc9f97c3af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad74a8936f45c2610f8abb2921df35ff5"><td class="memItemLeft" align="right" valign="top"><a id="ad74a8936f45c2610f8abb2921df35ff5"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#ad74a8936f45c2610f8abb2921df35ff5">disable_on_check</a> () override</td></tr>
 <tr class="memdesc:ad74a8936f45c2610f8abb2921df35ff5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable the motor after checking direction. <br /></td></tr>
@@ -239,8 +239,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a283dc34f56dcf06ef9028de9a21ced73 inherit pro_attribs_classcogip_1_1pf_1_1actuators_1_1Actuator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aeb69bc5c944c4a75affd0572542da92a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb69bc5c944c4a75affd0572542da92a">&#9670;&nbsp;</a></span>Motor()</h2>
+<a id="aef9fa4f4cf2c05d8a7fc22dc9f97c3af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef9fa4f4cf2c05d8a7fc22dc9f97c3af">&#9670;&nbsp;</a></span>Motor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -275,8 +275,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">motor_driver_t&#160;</td>
-          <td class="paramname"><em>motor_driver</em> = <code>0</code>, </td>
+          <td class="paramtype">motor_driver_t *&#160;</td>
+          <td class="paramname"><em>motor_driver</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -316,7 +316,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
     <tr><td class="paramdir">[in]</td><td class="paramname">group</td><td>[in] actuator group </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">order</td><td>[in] order in actuator group </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">default_timeout_period</td><td>[in] default timeout </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">motor_driver</td><td>[in] motor driver id </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">motor_driver</td><td>[in] motor driver </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">motor_id</td><td>[in] motor id for the given motor driver </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">check_limit_switch_positive_direction_cb</td><td>[in] callback to check limit switch for positive direction </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">check_limit_switch_negative_direction_cb</td><td>[in] callback to check limit switch for negative direction </td></tr>
@@ -372,7 +372,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Oct 1 2023 10:38:43 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Oct 1 2023 16:52:29 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

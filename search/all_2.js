@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['camp_5fleft_60',['CAMP_LEFT',['../group__platforms__pegasus.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'CAMP_LEFT():&#160;platform.hpp'],['../group__platforms__pf__test.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'CAMP_LEFT():&#160;platform.hpp']]],
-  ['camp_5fright_61',['CAMP_RIGHT',['../group__platforms__pegasus.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'CAMP_RIGHT():&#160;platform.hpp'],['../group__platforms__pf__test.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'CAMP_RIGHT():&#160;platform.hpp']]],
+  ['camp_5fleft_60',['CAMP_LEFT',['../group__platforms__pegasus.html#gad21e7bb8b4debcf74f4acc8ad0cbc933',1,'platform.hpp']]],
+  ['camp_5fright_61',['CAMP_RIGHT',['../group__platforms__pegasus.html#gafe8dc1d20e67d4cfb47f66dd8ccae899',1,'platform.hpp']]],
   ['center_62',['center',['../classcogip_1_1obstacles_1_1Obstacle.html#a7a56e847bb3343367b87e59865bdd2a2',1,'cogip::obstacles::Obstacle']]],
   ['center_5f_63',['center_',['../classcogip_1_1obstacles_1_1Obstacle.html#a3307d0d2f744ecfa67a6be367e33d635',1,'cogip::obstacles::Obstacle']]],
   ['channel_5fnumof_64',['channel_numof',['../structpca9548__conf__t.html#ade4b83f3f9b3caa9fe2cb9a4bc7e0f03',1,'pca9548_conf_t']]],
@@ -25,7 +25,7 @@ var searchData=
   ['controller_3c_203_2c_203_2c_20posepidcontrollerparameters_20_3e_82',['Controller&lt; 3, 3, PosePIDControllerParameters &gt;',['../classcogip_1_1motion__control_1_1Controller.html',1,'cogip::motion_control']]],
   ['controller_3c_20input_5fsize_2c_20output_5fsize_2c_20metacontrollerparameters_20_3e_83',['Controller&lt; INPUT_SIZE, OUTPUT_SIZE, MetaControllerParameters &gt;',['../classcogip_1_1motion__control_1_1Controller.html',1,'cogip::motion_control']]],
   ['controller_5f_84',['controller_',['../classcogip_1_1motion__control_1_1BaseControllerEngine.html#ae23375c27605ce8d9addb8e020e064c8',1,'cogip::motion_control::BaseControllerEngine']]],
-  ['controller_5fspeed_5floop_5fperiod_5fmsec_85',['CONTROLLER_SPEED_LOOP_PERIOD_MSEC',['../group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787',1,'CONTROLLER_SPEED_LOOP_PERIOD_MSEC():&#160;platform.hpp'],['../group__platforms__pf__test.html#ga07a575aff9cc49fe868eb5ee53dbb787',1,'CONTROLLER_SPEED_LOOP_PERIOD_MSEC():&#160;platform.hpp']]],
+  ['controller_5fspeed_5floop_5fperiod_5fmsec_85',['CONTROLLER_SPEED_LOOP_PERIOD_MSEC',['../group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787',1,'platform.hpp']]],
   ['controllers_86',['Controllers',['../group__controllers.html',1,'']]],
   ['coords_87',['Coords',['../classcogip_1_1cogip__defs_1_1Coords.html',1,'cogip::cogip_defs::Coords'],['../classcogip_1_1cogip__defs_1_1Coords.html#a6cc92701a0d2ee01f3f681e380899301',1,'cogip::cogip_defs::Coords::Coords(double x=0.0, double y=0.0)'],['../classcogip_1_1cogip__defs_1_1Coords.html#ad3613369374a908fba68f5910de5a5d1',1,'cogip::cogip_defs::Coords::Coords(const PB_Coords &amp;coords)'],['../classcogip_1_1cogip__defs_1_1Pose.html#a475ce5473bfd306d352a7a45e5e439a2',1,'cogip::cogip_defs::Pose::coords()']]],
   ['coords_2ehpp_88',['Coords.hpp',['../Coords_8hpp.html',1,'']]],
@@ -86,15 +86,11 @@ var searchData=
   ['current_5fcommands_143',['current_commands',['../shell__menu__private_8hpp.html#a399fcc54bbb5150646c445839e88f60c',1,'cogip::shell']]],
   ['current_5fcycle_144',['current_cycle',['../structctrl__control__t.html#ae67bbebdf2cd7aef4885815d7981e059',1,'ctrl_control_t::current_cycle()'],['../classcogip_1_1motion__control_1_1BaseControllerEngine.html#a6f8ab3a68060a74333c61da7c2e18d88',1,'cogip::motion_control::BaseControllerEngine::current_cycle()']]],
   ['current_5fcycle_5f_145',['current_cycle_',['../classcogip_1_1motion__control_1_1BaseControllerEngine.html#a9b86c82b2e2ec84471c66d383d1b3233',1,'cogip::motion_control::BaseControllerEngine']]],
-  ['current_5fmax_5fspeed_5fangular_146',['current_max_speed_angular',['../classcogip_1_1path_1_1Path.html#a927b66292a1ec7d6497f63c3b6db4d51',1,'cogip::path::Path']]],
-  ['current_5fmax_5fspeed_5flinear_147',['current_max_speed_linear',['../classcogip_1_1path_1_1Path.html#aca708e0ee6f7a1b9d65af6b56f169e54',1,'cogip::path::Path']]],
-  ['current_5fmenu_148',['current_menu',['../shell__menu_8hpp.html#a4f4d0b0e4ef2462dcb7fe3bffb66c05b',1,'cogip::shell']]],
-  ['current_5fmode_149',['current_mode',['../structctrl__control__t.html#ab90d024b5add80decab75bd9a27ceb10',1,'ctrl_control_t']]],
-  ['current_5fpose_150',['current_pose',['../classcogip_1_1path_1_1Path.html#a124926f5a5c0655232750baff4f43729',1,'cogip::path::Path::current_pose()'],['../classcogip_1_1motion__control_1_1PlatformEngine.html#a869061c169b239e2fe6f9f32a46887bf',1,'cogip::motion_control::PlatformEngine::current_pose()']]],
-  ['current_5fpose_5findex_5f_151',['current_pose_index_',['../classcogip_1_1path_1_1Path.html#ab1af600a4756e4d52b91db548b51ce50',1,'cogip::path::Path']]],
-  ['current_5fspeed_152',['current_speed',['../classcogip_1_1motion__control_1_1PlatformEngine.html#aa1ec97015637e5be771da29cac6556ca',1,'cogip::motion_control::PlatformEngine']]],
-  ['cogip_20vacuum_20pump_20driver_153',['COGIP vacuum pump driver',['../group__driver__vacuum__pump.html',1,'']]],
-  ['cogip_20common_20definitions_154',['Cogip common definitions',['../group__lib__cogip__defs.html',1,'']]],
-  ['common_155',['Common',['../group__motion__control__common.html',1,'']]],
-  ['common_20platform_20shell_156',['Common platform shell',['../group__platforms__shell.html',1,'']]]
+  ['current_5fmenu_146',['current_menu',['../shell__menu_8hpp.html#a4f4d0b0e4ef2462dcb7fe3bffb66c05b',1,'cogip::shell']]],
+  ['current_5fmode_147',['current_mode',['../structctrl__control__t.html#ab90d024b5add80decab75bd9a27ceb10',1,'ctrl_control_t']]],
+  ['current_5fpose_148',['current_pose',['../classcogip_1_1motion__control_1_1PlatformEngine.html#a869061c169b239e2fe6f9f32a46887bf',1,'cogip::motion_control::PlatformEngine']]],
+  ['current_5fspeed_149',['current_speed',['../classcogip_1_1motion__control_1_1PlatformEngine.html#aa1ec97015637e5be771da29cac6556ca',1,'cogip::motion_control::PlatformEngine']]],
+  ['cogip_20vacuum_20pump_20driver_150',['COGIP vacuum pump driver',['../group__driver__vacuum__pump.html',1,'']]],
+  ['cogip_20common_20definitions_151',['Cogip common definitions',['../group__lib__cogip__defs.html',1,'']]],
+  ['common_152',['Common',['../group__motion__control__common.html',1,'']]]
 ];

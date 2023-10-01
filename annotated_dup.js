@@ -38,7 +38,6 @@ var annotated_dup =
         [ "Rectangle", "classcogip_1_1obstacles_1_1Rectangle.html", "classcogip_1_1obstacles_1_1Rectangle" ]
       ] ],
       [ "path", null, [
-        [ "Path", "classcogip_1_1path_1_1Path.html", "classcogip_1_1path_1_1Path" ],
         [ "Pose", "classcogip_1_1path_1_1Pose.html", "classcogip_1_1path_1_1Pose" ]
       ] ],
       [ "pf", null, [
