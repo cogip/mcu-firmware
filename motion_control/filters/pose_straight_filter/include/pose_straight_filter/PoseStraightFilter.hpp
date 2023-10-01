@@ -38,10 +38,10 @@ class PoseStraightFilter : public Controller<11, 7, PoseStraightFilterParameters
 public:
     /// Constructor
     explicit PoseStraightFilter(
-        PoseStraightFilterParameters *parameters    ///< [in]  Movements switch tresholds. See PoseStraightFilterParameters.
+        PoseStraightFilterParameters *parameters    ///< [in]  Movements switch thresholds. See PoseStraightFilterParameters.
         ) : Controller(parameters) {};
 
-    /// Breaks down a movement into a straight trajectory according to movements switch tresholds.
+    /// Breaks down a movement into a straight trajectory according to movements switch thresholds.
     void execute() override;
 };
 

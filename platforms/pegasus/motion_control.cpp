@@ -100,7 +100,7 @@ static void reset_speed_pids() {
 
 /// PoseStraightFilter parameters.
 static cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters =
-        cogip::motion_control::PoseStraightFilterParameters(angular_treshold, linear_treshold, linear_deceleration_treshold);
+        cogip::motion_control::PoseStraightFilterParameters(angular_threshold, linear_threshold, linear_deceleration_threshold);
 /// PoseStraightFilter controller to make the robot always moves in a straight line.
 static cogip::motion_control::PoseStraightFilter pose_straight_filter =
         cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);

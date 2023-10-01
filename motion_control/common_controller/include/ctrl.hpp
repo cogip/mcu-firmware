@@ -161,10 +161,10 @@ typedef struct {
     const ctrl_post_mode_cb_t \
         ctrl_post_mode_cb[CTRL_MODE_NUMOF];         /**< Modes post callbacks */
 
-    const uint16_t blocking_speed_treshold;         /**< Blocking speed
-                                                         treshold */
-    const double blocking_speed_error_treshold;   /**< Blocking speed error
-                                                         treshold */
+    const uint16_t blocking_speed_threshold;         /**< Blocking speed
+                                                         threshold */
+    const double blocking_speed_error_threshold;   /**< Blocking speed error
+                                                         threshold */
     const uint16_t blocking_cycles_max;             /**< Blocking cycles
                                                          maximum number */
 } ctrl_platform_configuration_t;
