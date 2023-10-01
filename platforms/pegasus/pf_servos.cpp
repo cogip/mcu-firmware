@@ -23,12 +23,6 @@ namespace pf {
 namespace actuators {
 namespace servos {
 
-/// Half duplex UART stream
-static uart_half_duplex_t _lx_stream;
-
-/// LX servos command buffer
-static uint8_t _lx_servos_buffer[LX_UART_BUFFER_SIZE];
-
 /// Static pool of servo objects
 static etl::pool<LxServo, COUNT> _servos_pool;
 
@@ -39,8 +33,26 @@ void init(uart_half_duplex_t *lx_stream) {
     // Half duplex stream that must have been initialized previously
     LxServo::lx_stream = lx_stream;
 
+    // Ball switch
+    _servos[Enum::LXSERVO_BALL_SWITCH] = _servos_pool.create(
+        Enum::LXSERVO_BALL_SWITCH,
+        GroupEnum::NO_GROUP,
+        0
+    );
 
+    // Right arm
+    _servos[Enum::LXSERVO_RIGHT_ARM] = _servos_pool.create(
+        Enum::LXSERVO_RIGHT_ARM,
+        GroupEnum::NO_GROUP,
+        0
+    );
 
+    // Left arm
+    _servos[Enum::LXSERVO_LEFT_ARM] = _servos_pool.create(
+        Enum::LXSERVO_LEFT_ARM,
+        GroupEnum::NO_GROUP,
+        0
+    );
 }
 
 LxServo & get(Enum id) {

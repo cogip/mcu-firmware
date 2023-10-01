@@ -6,10 +6,7 @@
 #include "pf_actuators.hpp"
 #include "pf_servos.hpp"
 #include "pf_pumps.hpp"
-#include "pf_motors.hpp"
-
-#include "pcf857x_params.h"
-#include "pca9685_params.h"
+#include "pf_positional_actuators.hpp"
 
 #include "board.h"
 #include "platform.hpp"
@@ -36,13 +33,14 @@ constexpr cogip::uartpb::uuid_t thread_stop_uuid = 3781855956;
 constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
 constexpr cogip::uartpb::uuid_t command_uuid = 2552455996;
 
-static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::motors::COUNT> _pb_state;
+static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
 
-/// PCF857X I2C GPIOs expander
-static pcf857x_t pcf857x_dev;
+/// Half duplex UART stream
+static uart_half_duplex_t _lx_stream;
 
-/// PCA9685 I2C PWM driver
-static pca9685_t pca9685_dev;
+/// LX servos command buffer
+static uint8_t _lx_servos_buffer[LX_UART_BUFFER_SIZE];
+
 
 /// Build and send Protobuf actuators state message.
 static void _send_state() {
@@ -50,7 +48,7 @@ static void _send_state() {
     _pb_state.clear();
     servos::pb_copy(_pb_state.mutable_servos());
     pumps::pb_copy(_pb_state.mutable_pumps());
-    motors::pb_copy(_pb_state.mutable_motors());
+    positional_actuators::pb_copy(_pb_state.mutable_positional_actuators());
     uartpb.send_message(state_uuid, &_pb_state);
 }
 
@@ -108,97 +106,60 @@ static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
         pumps::Enum id = pumps::Enum{(vacuum_pump_t)pb_pump_command.id()};
         pumps::get(id).activate(pb_pump_command.command());
     }
-    if (pb_command.has_motor()) {
-        const PB_MotorCommand & pb_motor_command = pb_command.get_motor();
-        motors::Enum id = motors::Enum{(uint8_t)pb_motor_command.id()};
-        if (pb_motor_command.speed())
-            motors::get(id).move(pb_motor_command.direction(), pb_motor_command.speed());
-        else {
-            motors::get(id).deactivate();
-        }
+    if (pb_command.has_positional_actuator()) {
+        const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
+        positional_actuators::Enum id = positional_actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
+        positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
     }
 }
 
-/// GPIO expander interrupt callback
-static void gpio_cb(void *arg)
-{
-    int pin = (int)arg;
-
-    switch (pin)
-    {
-    case pin_limit_switch_central_lift_bottom:
-        puts("pin_limit_switch_central_lift_bottom triggered");
-        break;
-    case pin_limit_switch_central_lift_top:
-        puts("pin_limit_switch_central_lift_top triggered");
-        break;
-    default:
-        printf("INT: external interrupt from pin %i\n", (int)arg);
-        break;
-    }
+static void _dir_init([[maybe_unused]] uart_t uart) {
+    gpio_init(LX_DIR_PIN, GPIO_OUT);
 }
 
-/// Init GPIO expander interruptable pin
-static void init_interruptable_pin(int pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
-    // Initialize the pin as input with pull-up, interrupt on falling edge
-    if (gpio_init_int(pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, gpio_cb, (void *)pin) != 0) {
-        printf("Error: init pin %02i failed\n", pin);
-        return;
-    }
+static void _dir_enable_tx([[maybe_unused]] uart_t uart) {
+    gpio_clear(LX_DIR_PIN);
 }
 
-/// Init GPIO expander interruptable pin
-static void pcf857x_init_interruptable_pin(int pin, bool pullup=true, gpio_flank_t flank=GPIO_BOTH) {
-    // Initialize the pin as input with pull-up, interrupt on falling edge
-    if (pcf857x_gpio_init_int(&pcf857x_dev, pin, pullup ? GPIO_IN_PU : GPIO_IN, flank, gpio_cb, (void *)pin) != PCF857X_OK) {
-        printf("Error: init PCF857X pin %02i failed\n", pin);
-        return;
-    }
-
-    // Enable interrupt on that pin
-    pcf857x_gpio_irq_enable(&pcf857x_dev, pin);
+static void _dir_disable_tx([[maybe_unused]] uart_t uart) {
+    gpio_set(LX_DIR_PIN);
 }
 
-/// Init GPIO expander output pin
-static void pcf857x_init_output_pin(int pin, int value) {
-    if (pcf857x_gpio_init(&pcf857x_dev, pin, GPIO_OUT) != PCF857X_OK) {
-        printf("Error: init PCF857X pin %02i failed\n", pin);
-        return;
+static void _lx_half_duplex_uart_init() {
+    uart_half_duplex_params_t params = {
+        .uart = UART_DEV(LX_UART_DEV),
+        .baudrate = 115200,
+        .dir = { _dir_init, _dir_enable_tx, _dir_disable_tx },
+    };
+
+    int ret = uart_half_duplex_init(&_lx_stream, _lx_servos_buffer, ARRAY_SIZE(_lx_servos_buffer), &params);
+
+    if (ret == UART_HALF_DUPLEX_NODEV) {
+        puts("Error: invalid UART device given");
     }
-    pcf857x_gpio_write(&pcf857x_dev, pin, value);
+    else if (ret == UART_HALF_DUPLEX_NOBAUD) {
+        puts("Error: given baudrate is not applicable");
+    }
+    else if (ret == UART_HALF_DUPLEX_INTERR) {
+        puts("Error: internal error");
+    }
+    else if (ret == UART_HALF_DUPLEX_NOMODE) {
+        puts("Error: given mode is not applicable");
+    }
+    else if (ret == UART_HALF_DUPLEX_NOBUFF) {
+        puts("Error: invalid buffer given");
+    }
+    else {
+        printf("Successfully initialized LX Servos TTL bus UART_DEV(%i)\n", params.uart);
+    }
 }
 
 void init() {
-    servos::init();
+    _lx_half_duplex_uart_init();
+    positional_actuators::init(&_lx_stream);
+    servos::init(&_lx_stream);
     pumps::init();
-    motors::init();
 
-    // Initialize GPIO expander
-    if (pcf857x_init(&pcf857x_dev, &pcf857x_params) != PCF857X_OK) {
-        puts("Error: PCF8575 init failed!");
-        return;
-    }
-
-    // Init GPIO expander pins - limit switches
-    init_interruptable_pin(pin_limit_switch_central_lift_top, false);
-    init_interruptable_pin(pin_limit_switch_central_lift_bottom, false);
-    pcf857x_init_interruptable_pin(pin_limit_switch_left_arm_top);
-    pcf857x_init_interruptable_pin(pin_limit_switch_left_arm_bottom);
-    pcf857x_init_interruptable_pin(pin_limit_switch_right_arm_top);
-    pcf857x_init_interruptable_pin(pin_limit_switch_right_arm_bottom);
-    pcf857x_init_interruptable_pin(pin_limit_switch_recal_right);
-    pcf857x_init_interruptable_pin(pin_limit_switch_recal_left);
-    pcf857x_init_output_pin(pin_led_strip, 0);
-
-    // Init PCA9685
-    if (pca9685_init(&pca9685_dev, &pca9685_params) != PCA9685_OK) {
-        puts("Error: PCA9685 init failed!");
-        return;
-    }
-    if (pca9685_pwm_init(&pca9685_dev, PWM_LEFT, 50, 2000) != 50) {
-        puts("Error: PCA9685 PWM init failed!");
-        return;
-    }
     _sender_pid = thread_create(
         _sender_stack,
         sizeof(_sender_stack),

@@ -11,32 +11,25 @@
 
 #pragma once
 
+// Standard includes
 #include <cstdint>
 
 namespace cogip {
 namespace pf {
 namespace actuators {
 
-/// Limit switches
-/// @{
-constexpr int pin_limit_switch_central_lift_top = GPIO_PIN(PORT_B, 14);
-constexpr int pin_limit_switch_central_lift_bottom = GPIO_PIN(PORT_B, 13);
-constexpr int pin_limit_switch_right_arm_top = PCF857X_GPIO_PIN(PCF857X_PORT_0, 10);
-constexpr int pin_limit_switch_right_arm_bottom = PCF857X_GPIO_PIN(PCF857X_PORT_0, 11);
-constexpr int pin_limit_switch_left_arm_top = PCF857X_GPIO_PIN(PCF857X_PORT_0, 12);
-constexpr int pin_limit_switch_left_arm_bottom = PCF857X_GPIO_PIN(PCF857X_PORT_0, 13);
-constexpr int pin_limit_switch_recal_right = PCF857X_GPIO_PIN(PCF857X_PORT_0, 14);
-constexpr int pin_limit_switch_recal_left = PCF857X_GPIO_PIN(PCF857X_PORT_0, 15);
-/// @}
-
-/// LED strip
-constexpr int pin_led_strip = PCF857X_GPIO_PIN(PCF857X_PORT_0, 7);
+/// LX servomotors IDs
+enum LXServoIDs {
+    LXID_SWITCHER = 1,
+    LXID_RIGHT_ARM = 2,
+    LXID_RIGHT_ARM_LIFT = 3,
+    LXID_LEFT_ARM = 4,
+    LXID_LEFT_ARM_LIFT = 5,
+};
 
 /// Enum using to group actuators
 enum class GroupEnum: uint8_t {
     NO_GROUP = 0,
-    CENTRAL_LIFT = 1,
-    CONVEYOR_LAUNCHER = 2
 };
 
 /// Initialize all actuators
