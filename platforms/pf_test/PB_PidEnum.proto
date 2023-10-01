@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-enum PB_PidEnum {
-    LINEAR_POSE_PID = 0;
-    ANGULAR_POSE_PID = 1;
-    LINEAR_SPEED_PID = 2;
-    ANGULAR_SPEED_PID = 3;
-}

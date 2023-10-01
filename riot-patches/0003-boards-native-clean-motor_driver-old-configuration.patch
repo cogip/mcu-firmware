@@ -1,0 +1,187 @@
+From 46846b89df5e881e879c8417dfd9657ac80e54b6 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Mon, 14 Aug 2023 03:36:30 +0200
+Subject: [PATCH 2/7] boards/native: clean motor_driver old configuration
+
+The motor_driver module has been reworked in a previous commit to be
+compliant with RIOT device driver guide.
+Thus declaration in board.h is no  more needed and should not work
+anymore.
+
+Moreover the driver test was calling a callback specific to the native
+architecture to simulte the native QDEC periph driver according to
+motors speed. This is not relevant as a test should only test the
+feature it has been develop for.
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ boards/native/Makefile.features     |  1 -
+ boards/native/drivers/native-qdec.c | 58 --------------------------
+ boards/native/include/board.h       | 63 -----------------------------
+ 3 files changed, 122 deletions(-)
+ delete mode 100644 boards/native/drivers/native-qdec.c
+
+diff --git a/boards/native/Makefile.features b/boards/native/Makefile.features
+index c3242a2fc2..9782ea1b16 100644
+--- a/boards/native/Makefile.features
++++ b/boards/native/Makefile.features
+@@ -11,4 +11,3 @@ FEATURES_PROVIDED += periph_qdec
+ 
+ # Various other features (if any)
+ FEATURES_PROVIDED += ethernet
+-FEATURES_PROVIDED += motor_driver
+diff --git a/boards/native/drivers/native-qdec.c b/boards/native/drivers/native-qdec.c
+deleted file mode 100644
+index cdab0a078d..0000000000
+--- a/boards/native/drivers/native-qdec.c
++++ /dev/null
+@@ -1,58 +0,0 @@
+-/**
+- * Native Board board implementation
+- *
+- * Copyright (C) 2018 Gilles DOFFE <g.doffe@gmail.com>
+- *
+- * This file is subject to the terms and conditions of the GNU Lesser
+- * General Public License v2.1. See the file LICENSE in the top level
+- * directory for more details.
+- *
+- * @ingroup boards_native
+- * @{
+- * @file
+- * @author  Gilles DOFFE <g.doffe@gmail.com>
+- * @}
+- */
+-#include <inttypes.h>
+-#include <stdio.h>
+-
+-/* RIOT includes */
+-#include <board.h>
+-#include <log.h>
+-
+-#ifdef MODULE_PERIPH_QDEC
+-
+-extern int32_t qdecs_value[QDEC_NUMOF];
+-
+-void native_motor_driver_qdec_simulation(
+-    const motor_driver_t motor_driver, uint8_t motor_id,
+-    int32_t pwm_duty_cycle)
+-{
+-    uint32_t id = 0;
+-
+-    for (uint32_t i = 0; i < motor_driver; i++) {
+-        const motor_driver_config_t motor_driver_conf =
+-            motor_driver_config[motor_driver];
+-        id += motor_driver_conf.nb_motors;
+-    }
+-    id += motor_id;
+-
+-    if (id < QDEC_NUMOF) {
+-        qdecs_value[id] = pwm_duty_cycle;
+-
+-        LOG_DEBUG("MOTOR-DRIVER=%u"             \
+-            "    MOTOR_ID = %u"                 \
+-            "    PWM_VALUE = %d"                \
+-            "    QDEC_ID = %"PRIu32""           \
+-            "    QDEC_VALUE = %d\n",            \
+-            motor_driver, motor_id, pwm_duty_cycle, id, pwm_duty_cycle);
+-    }
+-    else {
+-        LOG_ERROR("MOTOR-DRIVER=%u"             \
+-            "    MOTOR_ID = %u"                 \
+-            "    no QDEC device associated\n",  \
+-            motor_driver, motor_id);
+-    }
+-}
+-
+-#endif /* MODULE_PERIPH_QDEC */
+diff --git a/boards/native/include/board.h b/boards/native/include/board.h
+index 6179b75944..1963627c2e 100644
+--- a/boards/native/include/board.h
++++ b/boards/native/include/board.h
+@@ -24,9 +24,6 @@
+ 
+ #include <stdint.h>
+ 
+-/* RIOT includes */
+-#include <motor_driver.h>
+-
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+@@ -153,64 +150,6 @@ extern mtd_dev_t *mtd0;
+ /** @} */
+ #endif
+ 
+-#if MODULE_PERIPH_QDEC
+-/**
+- * @brief Simulate QDEC on motor_set() calls
+- *
+- * @param[in] motor_driver      motor driver to which motor is attached
+- * @param[in] motor_id          motor ID on driver
+- * @param[in] pwm_duty_cycle    Signed PWM duty_cycle to set motor speed and direction
+- *
+- * @return                      0 on success
+- */
+-void native_motor_driver_qdec_simulation( \
+-    const motor_driver_t motor_driver, uint8_t motor_id, \
+-    int32_t pwm_duty_cycle);
+-
+-/* C++ standard do not support designated initializers */
+-#if !(defined __cplusplus) && (defined MODULE_PERIPH_QDEC)
+-
+-/**
+- * @name Describe DC motors with PWM channel and GPIOs
+- * @{
+- */
+-static const motor_driver_config_t motor_driver_config[] = {
+-    {
+-        .pwm_dev         = 0,
+-        .mode            = MOTOR_DRIVER_1_DIR_BRAKE,
+-        .mode_brake      = MOTOR_BRAKE_LOW,
+-        .pwm_mode        = PWM_LEFT,
+-        .pwm_frequency   = 20000U,
+-        .pwm_resolution  = 1000U,
+-        .nb_motors       = 2,
+-        .motors          = {
+-            {
+-                .pwm_channel            = 0,
+-                .gpio_enable            = GPIO_PIN(0, 0),
+-                .gpio_dir0              = GPIO_PIN(0, 0),
+-                .gpio_dir1_or_brake     = GPIO_PIN(0, 0),
+-                .gpio_dir_reverse       = 0,
+-                .gpio_enable_invert     = 0,
+-                .gpio_brake_invert      = 0,
+-            },
+-            {
+-                .pwm_channel            = 1,
+-                .gpio_enable            = GPIO_PIN(0, 0),
+-                .gpio_dir0              = GPIO_PIN(0, 0),
+-                .gpio_dir1_or_brake     = GPIO_PIN(0, 0),
+-                .gpio_dir_reverse       = 1,
+-                .gpio_enable_invert     = 0,
+-                .gpio_brake_invert      = 0,
+-            },
+-        },
+-        .cb = native_motor_driver_qdec_simulation,
+-    },
+-};
+-
+-#define MOTOR_DRIVER_NUMOF           ARRAY_SIZE(motor_driver_config)
+-/** @} */
+-#endif
+-
+ /**
+  * @name    ztimer configuration
+  * @{
+@@ -221,8 +160,6 @@ static const motor_driver_config_t motor_driver_config[] = {
+ #define CONFIG_ZTIMER_USEC_MIN     (64)
+ /** @} */
+ 
+-#endif /* __cplusplus */
+-
+ #ifdef __cplusplus
+ }
+ #endif
+-- 
+2.37.0
+

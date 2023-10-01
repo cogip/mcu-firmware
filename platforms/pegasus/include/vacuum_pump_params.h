@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include "board.h"
 #include "vacuum_pump.h"
 
 #ifdef __cplusplus

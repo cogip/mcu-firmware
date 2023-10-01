@@ -16,7 +16,7 @@ USEMODULE += speed_filter
 # Shell
 USEMODULE += ps
 USEMODULE += shell
-USEMODULE += shell_commands
+USEMODULE += shell_cmds_default
 
 # Misc
 USEMODULE += utils

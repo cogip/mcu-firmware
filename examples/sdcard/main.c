@@ -219,7 +219,7 @@ int main(void)
 
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
-    res = vfs_umount(&flash_mount);
+    res = vfs_umount(&flash_mount, false);
     if (res < 0) {
         printf("Error while unmounting %s\n", flash_mount.mount_point);
         return 1;

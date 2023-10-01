@@ -29,6 +29,8 @@ typedef struct {
     void *dummy;
 } i2c_conf_t;
 
+#define I2C_NUMOF   1
+
 /** Use read reg function from periph common */
 #define PERIPH_I2C_NEED_READ_REG
 #define PERIPH_I2C_NEED_READ_REGS

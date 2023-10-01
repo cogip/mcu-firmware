@@ -33,11 +33,28 @@
 extern "C" {
 #endif
 
-/* Heartbeat LED */
-#define HEARTBEAT_LED   GPIO_PIN(1, 3)
+/* Fake GPIOs */
+enum {
+    PORT_A = 0,
+    PORT_B,
+    PORT_C,
+    PORT_D,
+    PORT_E,
+    NATIVE_GPIO_PORT_NUMOF
+};
 
-/* Starting switch */
-#define GPIO_STARTER    GPIO_PIN(1, 2)
+/* Heartbeat LED */
+#define HEARTBEAT_LED   GPIO_PIN(PORT_A, 0)
+
+/* GPIOs expander */
+#define PCF857X_PORT_0  0
+
+/* Servomotors */
+#define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
+#define LX_UART_DEV     2
+
+/* Motion motors simulation */
+#define MOTION_MOTORS_POST_CB cogip_native_motor_driver_qdec_simulation
 
 /* Motors */
 #define MOTOR_LEFT  0
@@ -47,59 +64,6 @@ extern "C" {
 #define QDEC_MODE           QDEC_X1
 #define QDEC_LEFT_POLARITY  1
 #define QDEC_RIGHT_POLARITY 1
-
-/**
- * @brief Simulate QDEC on motor_set() calls
- *
- * @param[in] motor_driver      motor driver to which motor is attached
- * @param[in] motor_id          motor ID on driver
- * @param[in] pwm_duty_cycle    Signed PWM duty_cycle to set motor speed and direction
- *
- * @return                      0 on success
- */
-void cogip_native_motor_driver_qdec_simulation( \
-    const motor_driver_t motor_driver, uint8_t motor_id, \
-    int32_t pwm_duty_cycle);
-
-/**
- * @name Describe DC motors with PWM channel and GPIOs
- * @{
- */
-static const motor_driver_config_t motor_driver_config[] = {
-    {
-        .pwm_dev = 0,
-        .mode = MOTOR_DRIVER_1_DIR_BRAKE,
-        .mode_brake = MOTOR_BRAKE_LOW,
-        .pwm_mode = PWM_LEFT,
-        .pwm_frequency = 20000U,
-        .pwm_resolution = 1000U,
-        .nb_motors = 2,
-        .motors = {
-            {
-                .pwm_channel = 0,
-                .gpio_enable = GPIO_PIN(0, 0),
-                .gpio_dir0 = GPIO_PIN(0, 0),
-                .gpio_dir1_or_brake = GPIO_PIN(0, 0),
-                .gpio_dir_reverse = 1,
-                .gpio_enable_invert = 0,
-                .gpio_brake_invert = 0,
-            },
-            {
-                .pwm_channel = 1,
-                .gpio_enable = GPIO_PIN(0, 0),
-                .gpio_dir0 = GPIO_PIN(0, 0),
-                .gpio_dir1_or_brake = GPIO_PIN(0, 0),
-                .gpio_dir_reverse = 0,
-                .gpio_enable_invert = 0,
-                .gpio_brake_invert = 0,
-            },
-        },
-        .cb = cogip_native_motor_driver_qdec_simulation,
-    },
-};
-
-#define MOTOR_DRIVER_NUMOF           ARRAY_SIZE(motor_driver_config)
-/** @} */
 
 /**
  * @name    ztimer configuration

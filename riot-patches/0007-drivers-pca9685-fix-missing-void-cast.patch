@@ -1,0 +1,34 @@
+From 6472995407709b96f64deb38905bae610d986b63 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Tue, 19 Sep 2023 01:09:47 +0200
+Subject: [PATCH] drivers: pca9685: fix missing (void *) cast
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This fixes following errors using native architecture:
+  RIOT/drivers/pca9685/pca9685.c:42:15: error: format ‘%p’ expects
+  argument of type ‘void *’, but argument 5 has type ‘const
+  pca9685_params_t *’ [-Werror=format=]
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ drivers/pca9685/pca9685.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pca9685/pca9685.c b/drivers/pca9685/pca9685.c
+index a6c3e877b9..4f2fc40fe8 100644
+--- a/drivers/pca9685/pca9685.c
++++ b/drivers/pca9685/pca9685.c
+@@ -95,7 +95,7 @@ int pca9685_init(pca9685_t *dev, const pca9685_params_t *params)
+     dev->powered_on = false;
+     dev->params = *params;
+ 
+-    DEBUG_DEV("params=%p", dev, params);
++    DEBUG_DEV("params=%p", dev, (void *)params);
+ 
+     if (gpio_is_valid(dev->params.oe_pin)) {
+         /* init the pin an disable outputs first */
+-- 
+2.37.0
+

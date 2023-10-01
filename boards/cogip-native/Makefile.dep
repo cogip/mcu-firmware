@@ -18,3 +18,5 @@ ifneq (,$(filter periph_can,$(FEATURES_USED)))
 endif
 
 USEMODULE += native_drivers
+USEMODULE += pcf8575
+USEMODULE += pcf857x_irq

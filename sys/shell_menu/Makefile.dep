@@ -1,5 +1,5 @@
 USEPKG += embedded-proto
 
 USEMODULE += shell
-USEMODULE += shell_commands
+USEMODULE += shell_cmds_default
 USEMODULE += utils

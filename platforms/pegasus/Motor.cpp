@@ -14,15 +14,13 @@ namespace actuators {
 namespace positional_actuators {
 
 void Motor::disable() {
-    if (motor_driver_ >= MOTOR_DRIVER_NUMOF) {
-        std::cerr << "Motor " << id_ << ": wrong motor driver" << std::endl;
+    if (!motor_driver_) {
+        std::cerr << __func__ << ": motor " << id_ << ": motor driver is null pointer" << std::endl;
         return;
     }
 
-    const motor_driver_config_t *config = &motor_driver_config[motor_driver_];
-
-    if (motor_id_ >= config->nb_motors) {
-        std::cerr << "Motor " << id_ << ": wrong motor id" << std::endl;
+    if (motor_id_ >= motor_driver_->params->nb_motors) {
+        std::cerr << __func__ << ": motor " << id_ << ": wrong motor id" << std::endl;
         return;
     }
 
@@ -53,19 +51,17 @@ void Motor::actuate(int32_t command) {
     int speed = abs(command);
 
     if (speed > 100) {
-        std::cerr << "Motor " << id_ << ": speed is not in range [-100%:100%]" << std::endl;
+        std::cerr << __func__ << ": motor " << id_ << ": speed is not in range [-100%:100%]" << std::endl;
         return;
     }
 
-    if (motor_driver_ >= MOTOR_DRIVER_NUMOF) {
-        std::cerr << "Motor " << id_ << ": wrong motor driver" << std::endl;
+    if (!motor_driver_) {
+        std::cerr << __func__ << ": motor " << id_ << ": motor driver is null pointer" << std::endl;
         return;
     }
 
-    const motor_driver_config_t *config = &motor_driver_config[motor_driver_];
-
-    if (motor_id_ >= config->nb_motors) {
-        std::cerr << "Motor " << id_ << ": wrong motor id" << std::endl;
+    if (motor_id_ >= motor_driver_->params->nb_motors) {
+        std::cerr << __func__ << ": motor " << id_ << ": wrong motor id" << std::endl;
         return;
     }
 
@@ -74,7 +70,7 @@ void Motor::actuate(int32_t command) {
     }
 
     int32_t pwm_duty_cycle =
-        (int32_t)(config->pwm_resolution * command) / 100;
+        (int32_t)(motor_driver_->params->pwm_resolution * command) / 100;
 
     motor_set(motor_driver_, motor_id_, pwm_duty_cycle);
     if (pwm_duty_cycle) {

@@ -23,7 +23,7 @@ both are required to generate the firwmare binaries.
 ## Cloning repositories
 
 ```bash
-$ git clone https://github.com/RIOT-OS/RIOT.git -b 2022.07
+$ git clone https://github.com/RIOT-OS/RIOT.git -b 2023.07
 $ git clone https://github.com/cogip/mcu-firmware.git
 ```
 
@@ -84,6 +84,14 @@ $ sudo apt install  python3-pip python3-venv
 $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip install -r mcu-firmware/requirements.txt
+```
+
+# Apply RIOT-OS patches
+
+Prior to any build, apply RIOT-OS patches
+
+```bash
+make riot-patches
 ```
 
 # Simulation target (x86_64 architecture)

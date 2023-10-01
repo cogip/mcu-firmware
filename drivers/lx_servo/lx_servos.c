@@ -374,10 +374,10 @@ lx_comm_error_t lx_servo_led_error_write(const lx_t *device, const lx_error_t le
         return LX_INVALID_VALUE;
     }
 
-    return lx_write(device, LX_SERVO_LED_ERROR_WRITE, &led_error, 1);
+    return lx_write(device, LX_SERVO_LED_ERROR_WRITE, (const uint8_t *)&led_error, 1);
 }
 
 lx_comm_error_t lx_servo_led_error_read(const lx_t *device, lx_error_t *led_error)
 {
-    return lx_read(device, LX_SERVO_LED_ERROR_READ, led_error, 1);
+    return lx_read(device, LX_SERVO_LED_ERROR_READ, (uint8_t *)led_error, 1);
 }

@@ -19,9 +19,10 @@
 
 #pragma once
 
-#include "cfg_timer_tim5.h"
-#include "clk_conf.h"
 #include "periph_cpu.h"
+#include "clk_conf.h"
+#include "cfg_timer_tim5.h"
+#include "cfg_i2c1_pb8_pb9.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -184,20 +185,6 @@ static const qdec_conf_t qdec_config[] = {
  * @name I2C configuration
  * @{
  */
-static const i2c_conf_t i2c_config[] = {
-    {
-        .dev = I2C1,
-        .speed = I2C_SPEED_NORMAL,
-        .scl_pin = GPIO_PIN(PORT_B, 8),
-        .sda_pin = GPIO_PIN(PORT_B, 9),
-        .scl_af = GPIO_AF4,
-        .sda_af = GPIO_AF4,
-        .bus = APB1,
-        .rcc_mask = RCC_APB1ENR_I2C1EN,
-        .clk = CLOCK_APB1,
-        .irqn = I2C1_EV_IRQn
-    },
-};
 
 #define I2C_0_ISR   isr_i2c1_ev
 
