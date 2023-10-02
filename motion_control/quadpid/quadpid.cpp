@@ -103,9 +103,9 @@ int ctrl_quadpid_speed(ctrl_quadpid_t *ctrl,
 
     if ((ctrl->control.anti_blocking_on)
         && (fabs(speed_current.distance()) <
-            ctrl->pf_conf->blocking_speed_treshold)
+            ctrl->pf_conf->blocking_speed_threshold)
         && (fabs(speed_error.distance()) >
-            ctrl->pf_conf->blocking_speed_error_treshold)) {
+            ctrl->pf_conf->blocking_speed_error_threshold)) {
         ctrl->control.blocking_cycles++;
     }
     else {

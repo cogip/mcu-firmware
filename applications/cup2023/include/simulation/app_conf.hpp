@@ -31,9 +31,9 @@ constexpr double linear_speed_pid_integral_limit = etl::numeric_limits<uint16_t>
 constexpr double angular_speed_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
 //constexpr double angular_speed_pid_integral_limit = 2000;
 
-// Linear treshold
-constexpr double linear_treshold = 5;
-// Angular treshold
-constexpr double angular_treshold = 5;
-// Linear deceleration treshold
-constexpr double linear_deceleration_treshold = 100;
+// Linear threshold
+constexpr double linear_threshold = 5;
+// Angular threshold
+constexpr double angular_threshold = 5;
+// Linear deceleration threshold
+constexpr double linear_deceleration_threshold = 100;

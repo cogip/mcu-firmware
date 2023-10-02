@@ -103,10 +103,10 @@ void PoseStraightFilter::execute() {
     //   1. The robot rotates on its center to take the direction of the pose to reach.
     //   2. The robot goes straight to that pose.
     //   3. Once arrived at this pose, it rotates again on its center to the wanted angle.
-    // The angular treshold is used to check if a rotation of the robot on itself has to be done (step 1. and 3.).
-    // The linear treshold is used to check if the robot is close to the pose to reach (step 2.).
-    if (fabs(pos_err.distance()) > parameters_->linear_treshold()) {
-        if (fabs(pos_err.angle()) > parameters_->angular_treshold()) {
+    // The angular threshold is used to check if a rotation of the robot on itself has to be done (step 1. and 3.).
+    // The linear threshold is used to check if the robot is close to the pose to reach (step 2.).
+    if (fabs(pos_err.distance()) > parameters_->linear_threshold()) {
+        if (fabs(pos_err.angle()) > parameters_->angular_threshold()) {
             // So if the robot is far from the pose to reach and if the angle to reach this pose is too important,
             // first rotate on itself to take the direction of the destination.
             // Set the linear speed to 0 in such case.
@@ -119,12 +119,12 @@ void PoseStraightFilter::execute() {
         }
     }
     else {
-        // If the linear error is below the linear treshold, the step 2. is completed.
+        // If the linear error is below the linear threshold, the step 2. is completed.
         // Thus inform the platform through target pose status variable.
         pose_reached = target_pose_status_t::intermediate_reached;
         // Start step 3. to reach the final wanted orientation.
         pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
-        if (fabs(pos_err.angle()) < parameters_->angular_treshold()) {
+        if (fabs(pos_err.angle()) < parameters_->angular_threshold()) {
             // Pose is finally reached, inform the platform through target pose status variable.
             pose_reached = target_pose_status_t::reached;
         }
