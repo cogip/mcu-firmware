@@ -14,5 +14,5 @@ riot-patches: $(patchstamps)
 
 distclean-riot-patches:
 	$(eval _patchstamps_number=`ls $(MCUFIRMWAREBASE)/riot-patches/*.patched -1 2>/dev/null | wc -l`)
-	@cd $(RIOTBASE) && git reset --hard `git branch --show-current `~$(_patchstamps_number) && git clean -dxf
+	@cd $(RIOTBASE) && git reset --hard HEAD~$(_patchstamps_number) && git clean -dxf
 	@rm -f $(patchstamps)
