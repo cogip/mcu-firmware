@@ -13,7 +13,7 @@ var searchData=
   ['allow_5freverse_874',['allow_reverse',['../classcogip_1_1path_1_1Pose.html#ac3121274467b3f8fc7a7a2f79e23eea4',1,'cogip::path::Pose']]],
   ['analogservo_875',['AnalogServo',['../classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html#a2f233d2738d2a8e93a0fd890446db64e',1,'cogip::pf::actuators::positional_actuators::AnalogServo']]],
   ['angle_876',['angle',['../classcogip_1_1cogip__defs_1_1Polar.html#ad3d524554bbb6d292dbddaadda32e982',1,'cogip::cogip_defs::Polar']]],
-  ['angular_5ftreshold_877',['angular_treshold',['../classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a726f1e959820d456454d738f11a4f396',1,'cogip::motion_control::PoseStraightFilterParameters']]],
+  ['angular_5fthreshold_877',['angular_threshold',['../classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#ad855b82ddbcfcab4f05e7ca8b6f474a9',1,'cogip::motion_control::PoseStraightFilterParameters']]],
   ['astarplanner_878',['AstarPlanner',['../classcogip_1_1planners_1_1AstarPlanner.html#a3c2615249740fa63aaf77027744b9b6f',1,'cogip::planners::AstarPlanner']]],
   ['avoidance_5fbuild_5fgraph_879',['avoidance_build_graph',['../group__lib__avoidance.html#gaf820995cd0d04c0e6b22dfa0f48345ed',1,'avoidance.hpp']]],
   ['avoidance_5fcheck_5frecompute_880',['avoidance_check_recompute',['../group__lib__avoidance.html#gab5b66d96b948baa8d2f7b27546b7f3cc',1,'avoidance.hpp']]],

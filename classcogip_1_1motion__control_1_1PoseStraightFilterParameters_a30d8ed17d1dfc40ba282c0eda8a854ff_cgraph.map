@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::PoseStraightFilterParameters::set_angular_threshold" name="cogip::motion_control::PoseStraightFilterParameters::set_angular_threshold">
+<area shape="rect" id="node1" title="Set angular threshold." alt="" coords="5,5,224,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#ad855b82ddbcfcab4f05e7ca8b6f474a9" title="Get angular threshold return angular threshold." alt="" coords="272,5,491,61"/>
+</map>

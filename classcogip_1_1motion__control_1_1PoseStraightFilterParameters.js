@@ -1,10 +1,10 @@
 var classcogip_1_1motion__control_1_1PoseStraightFilterParameters =
 [
-    [ "PoseStraightFilterParameters", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#aecae6b7e7fa7904aa924d4e2c9e01981", null ],
-    [ "angular_treshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a726f1e959820d456454d738f11a4f396", null ],
-    [ "linear_deceleration_treshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a6f03a203e3834bfebe9ad7d6b375217e", null ],
-    [ "linear_treshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a8315307b8a51e8d71293c85d476db916", null ],
-    [ "set_angular_treshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a433eb34d2423f34bc7b897d45a7bb221", null ],
-    [ "set_linear_deceleration_treshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#acd16751772d9f2c852404cc1136059f4", null ],
-    [ "set_linear_treshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a876a6328a44b41750641031a23e4ae90", null ]
+    [ "PoseStraightFilterParameters", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a3e251d872cfaaf09597a08ff806dddee", null ],
+    [ "angular_threshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#ad855b82ddbcfcab4f05e7ca8b6f474a9", null ],
+    [ "linear_deceleration_threshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#aa28c37a6c52812d9294cd07014d0b02c", null ],
+    [ "linear_threshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#aa9b2e323417117f86dddbea1a51d4d0a", null ],
+    [ "set_angular_threshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a30d8ed17d1dfc40ba282c0eda8a854ff", null ],
+    [ "set_linear_deceleration_threshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a3a3e6b11e4e30977b6ed6460eca19d23", null ],
+    [ "set_linear_threshold", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#abbb80db242507413c9575f34fb048595", null ]
 ];

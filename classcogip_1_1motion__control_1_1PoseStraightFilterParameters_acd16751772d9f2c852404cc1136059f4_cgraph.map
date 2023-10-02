@@ -1,4 +1,0 @@
-<map id="cogip::motion_control::PoseStraightFilterParameters::set_linear_deceleration_treshold" name="cogip::motion_control::PoseStraightFilterParameters::set_linear_deceleration_treshold">
-<area shape="rect" id="node1" title="Set linear deceleration treshold." alt="" coords="5,5,248,61"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a6f03a203e3834bfebe9ad7d6b375217e" title="Get linear deceleration treshold return Linear deceleration treshold." alt="" coords="296,5,515,61"/>
-</map>

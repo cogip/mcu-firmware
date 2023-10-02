@@ -25,7 +25,7 @@ var searchData=
   ['angle_22',['angle',['../classcogip_1_1cogip__defs_1_1Polar.html#ad3d524554bbb6d292dbddaadda32e982',1,'cogip::cogip_defs::Polar']]],
   ['angular_5fpose_5fpid_23',['angular_pose_pid',['../structctrl__quadpid__parameters__t.html#a59669e64165ea24647c3f108341c3e99',1,'ctrl_quadpid_parameters_t']]],
   ['angular_5fspeed_5fpid_24',['angular_speed_pid',['../structctrl__quadpid__parameters__t.html#ade825581a885aecfd669dcecaf801afe',1,'ctrl_quadpid_parameters_t']]],
-  ['angular_5ftreshold_25',['angular_treshold',['../classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#a726f1e959820d456454d738f11a4f396',1,'cogip::motion_control::PoseStraightFilterParameters']]],
+  ['angular_5fthreshold_25',['angular_threshold',['../classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#ad855b82ddbcfcab4f05e7ca8b6f474a9',1,'cogip::motion_control::PoseStraightFilterParameters']]],
   ['anti_5fblocking_5fon_26',['anti_blocking_on',['../structctrl__control__t.html#a5dae269b050cd41c5c037de1b8e2f82b',1,'ctrl_control_t']]],
   ['astarplanner_27',['AstarPlanner',['../classcogip_1_1planners_1_1AstarPlanner.html',1,'cogip::planners::AstarPlanner'],['../classcogip_1_1planners_1_1AstarPlanner.html#a3c2615249740fa63aaf77027744b9b6f',1,'cogip::planners::AstarPlanner::AstarPlanner()']]],
   ['astarplanner_2ehpp_28',['AstarPlanner.hpp',['../AstarPlanner_8hpp.html',1,'']]],

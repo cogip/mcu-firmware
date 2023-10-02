@@ -1,4 +1,4 @@
 <map id="motion_control/filters/pose_straight_filter/include/pose_straight_filter/PoseStraightFilterParameters.hpp" name="motion_control/filters/pose_straight_filter/include/pose_straight_filter/PoseStraightFilterParameters.hpp">
-<area shape="rect" id="node1" title="Movements switch tresholds." alt="" coords="5,5,285,76"/>
+<area shape="rect" id="node1" title="Movements switch thresholds." alt="" coords="5,5,285,76"/>
 <area shape="rect" id="node2" href="$PoseStraightFilter_8hpp.html" title="Breaks down a movement into a straight trajectory." alt="" coords="43,124,248,195"/>
 </map>
