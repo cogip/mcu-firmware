@@ -232,8 +232,8 @@ static void pf_quadpid_meta_controller_linear_speed_controller_test_setup(void) 
     pf_quadpid_meta_controller_restore();
 
     // Disable speed filter by setting maximum speed and acceleration to unreachable limits
-    linear_speed_filter_parameters.set_max_speed(UINT16_MAX);
-    linear_speed_filter_parameters.set_max_acceleration(UINT16_MAX);
+    linear_speed_filter_parameters.set_max_speed(std::numeric_limits<uint16_t>::max());
+    linear_speed_filter_parameters.set_max_acceleration(std::numeric_limits<uint16_t>::max());
 
     // Disable pose PID correction by using a passthrough controller
     linear_dualpid_meta_controller.replace_controller(0, &passthrough_linear_pose_controller);
@@ -251,8 +251,8 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
     pf_quadpid_meta_controller_restore();
 
     // Disable speed filter by setting maximum speed and acceleration to unreachable limits
-    angular_speed_filter_parameters.set_max_speed(UINT16_MAX);
-    angular_speed_filter_parameters.set_max_acceleration(UINT16_MAX);
+    angular_speed_filter_parameters.set_max_speed(std::numeric_limits<uint16_t>::max());
+    angular_speed_filter_parameters.set_max_acceleration(std::numeric_limits<uint16_t>::max());
 
     // Disable pose PID correction by using a passthrough controller
     angular_dualpid_meta_controller.replace_controller(0, &passthrough_angular_pose_controller);
@@ -427,8 +427,10 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
         // The PWM driver will filter the value to the max PWM resolution defined for the board.
         // Compute motor commands with Polar motion control result
-        int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
-        int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)INT16_MAX / 2), (double)INT16_MIN / 2);
+        int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
+                                                   (double)(std::numeric_limits<uint16_t>::min()) / 2);
+        int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)(std::numeric_limits<uint16_t>::max()) / 2),
+                                                  (double)(std::numeric_limits<uint16_t>::min()) / 2);
 
         // Apply motor commands
         motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
