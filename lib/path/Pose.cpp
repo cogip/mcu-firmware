@@ -13,8 +13,8 @@ Pose::Pose(
     ) : cogip_defs::Pose(x, y, O), allow_reverse_(allow_reverse), act_(act_)
 {
     // Ratios are betwen 0 and 1
-    max_speed_ratio_linear_ =  std::min(max_speed_ratio_linear, 1.);
-    max_speed_ratio_angular_ = std::min(max_speed_ratio_angular, 1.);
+    max_speed_ratio_linear_ =  std::min(max_speed_ratio_linear, 100.);
+    max_speed_ratio_angular_ = std::min(max_speed_ratio_angular, 100.);
 }
 
 void Pose::pb_read(const PB_PathPose &path_pose)
