@@ -32,9 +32,9 @@ static const motor_driver_params_t motion_motors_params =
     .mode = MOTOR_DRIVER_1_DIR_BRAKE,
     .pwm_dev = 0,
     .pwm_mode = PWM_LEFT,
-    .pwm_frequency = 20000U,
-    .pwm_resolution = 1000U,
-    .brake_level = MOTOR_BRAKE_HIGH,
+    .pwm_frequency = 100000U,
+    .pwm_resolution = 450U,
+    .brake_level = MOTOR_BRAKE_LOW,
     .enable_level = MOTOR_ENABLE_HIGH,
     .nb_motors = 2,
     .motors = {
@@ -44,7 +44,7 @@ static const motor_driver_params_t motion_motors_params =
             .gpio_enable = GPIO_PIN(PORT_B, 10),
             .gpio_dir0 = GPIO_PIN(PORT_B, 2),
             .gpio_dir1_or_brake = GPIO_PIN(PORT_B, 12),
-            .gpio_dir_reverse = 1,
+            .gpio_dir_reverse = 0,
         },
         // Right motor
         {
@@ -52,7 +52,7 @@ static const motor_driver_params_t motion_motors_params =
             .gpio_enable = GPIO_PIN(PORT_B, 10),
             .gpio_dir0 = GPIO_PIN(PORT_B, 0),
             .gpio_dir1_or_brake = GPIO_PIN(PORT_C, 4),
-            .gpio_dir_reverse = 0,
+            .gpio_dir_reverse = 1,
         },
     },
     .motor_set_post_cb = MOTION_MOTORS_POST_CB
