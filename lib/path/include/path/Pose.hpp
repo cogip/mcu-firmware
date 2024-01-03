@@ -37,10 +37,10 @@ public:
     /// Destructor
     virtual ~Pose() {};
 
-    /// Retourn max speed linear.
+    /// Return max speed linear.
     virtual double max_speed_ratio_linear() const { return max_speed_ratio_linear_; };
 
-    /// Retourn max speed angular.
+    /// Return max speed angular.
     virtual double max_speed_ratio_angular() const { return max_speed_ratio_angular_; };
 
     /// Is reverse mode allowed or not.
