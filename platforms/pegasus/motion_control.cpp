@@ -564,6 +564,8 @@ void pf_init_motion_control(void)
 {
     // Init motor driver
     motor_driver_init(&motion_motors_driver, &motion_motors_params);
+    motor_enable(&motion_motors_driver, MOTOR_LEFT);
+    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
 
     // Setup qdec periphereal
     int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
