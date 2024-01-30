@@ -1,6 +1,6 @@
 APPLICATION = sys_sysmon_example
 
-BOARD ?= cogip-nucleo-f446re
+BOARD ?= cogip-board-ng
 
 ifeq (native,$(findstring native,$(BOARD)))
 	CFLAGS += "-DUART_NUMOF=2"
