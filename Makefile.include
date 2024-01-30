@@ -100,6 +100,11 @@ CFLAGS += -DDEBUG_ASSERT_VERBOSE
 
 LINKFLAGS:=$(filter-out -nostartfiles,$(LINKFLAGS))
 
+# Link to librt for timer_* functions definitions
+ifeq ($(CPU),native)
+	LINKFLAGS += -lrt
+endif
+
 # Using libstdcpp requires a larger ISR stack by default
 ifeq (,$(findstring -DISR_STACKSIZE=,$(CFLAGS)))
 	CFLAGS += -DISR_STACKSIZE=2048

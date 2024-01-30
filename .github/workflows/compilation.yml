@@ -42,7 +42,7 @@ jobs:
         sudo apt-spy2 fix --commit
         # end of apt-spy2 workaround
         sudo apt-get update
-        sudo apt-get install -qq build-essential gcc-multilib g++-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi uncrustify protobuf-compiler quilt cppcheck
+        sudo apt-get install -qq build-essential gcc-multilib g++-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi uncrustify protobuf-compiler quilt cppcheck libc6-dev
         gcc --version
         arm-none-eabi-gcc --version
     - name: Install Python packages
@@ -77,6 +77,25 @@ jobs:
         source venv/bin/activate
         make -j
         make -j
+        deactivate
+    - name: Compile - Native board
+      run: |
+        cd mcu-firmware
+        source venv/bin/activate
+        make BOARD=cogip-native
+        deactivate
+    - name: Distclean
+      run: |
+        cd mcu-firmware
+        source venv/bin/activate
+        make distclean -j
+        deactivate
+    - name: Re-compile (check successive builds) - Native board
+      run: |
+        cd mcu-firmware
+        source venv/bin/activate
+        make -j BOARD=cogip-native
+        make -j BOARD=cogip-native
         deactivate
     - name: Clean all (distclean + git clean)
       run: |
