@@ -69,20 +69,20 @@ jobs:
       run: |
         cd mcu-firmware
         source venv/bin/activate
-        make distclean
+        make distclean -j
         deactivate
     - name: Re-compile (check successive builds)
       run: |
         cd mcu-firmware
         source venv/bin/activate
-        make
-        make
+        make -j
+        make -j
         deactivate
     - name: Clean all (distclean + git clean)
       run: |
         cd mcu-firmware
         source venv/bin/activate
-        make distclean
+        make distclean -j
         git clean -dxf
         deactivate
     - name: Check coding rules
