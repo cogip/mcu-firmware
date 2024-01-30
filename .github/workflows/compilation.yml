@@ -29,8 +29,8 @@ jobs:
     - name: Clone RIOT
       uses: actions/checkout@v3
       with:
-        repository: 'RIOT-OS/RIOT'
-        ref: '2023.07'
+        repository: 'cogip/RIOT'
+        ref: 'cogip_master'
         path: 'RIOT'
     - name: Install toolchain
       run: |
