@@ -47,12 +47,12 @@ $ pip install -r requirements.txt
 
 # Compiling and Running Example on Real Hardware
 
-Use the `cogip-nucleo-f446re` board which defines a second UART on UART4 (RX on PA1 and TX on PA0).
+Use the `cogip-board-ng` board which defines a second UART on UART4 (RX on PA1 and TX on PA0).
 
 ## Compilation and Flash STM32
 
 ```sh
-$ make -j4 BOARD=cogip-nucleo-f446re flash
+$ make -j4 BOARD=cogip-board-ng flash
 ```
 
 ## Run Software on RPi

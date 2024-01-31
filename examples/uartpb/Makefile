@@ -1,9 +1,9 @@
 APPLICATION = embedded-proto-uart
 
-# Supported boards: cogip-native cogip-nucleo-f446re
+# Supported boards: cogip-native cogip-board-ng
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= cogip-nucleo-f446re
+BOARD ?= cogip-board-ng
 
 ifeq (native,$(findstring native,$(BOARD)))
 	CFLAGS += "-DUART_NUMOF=2"
