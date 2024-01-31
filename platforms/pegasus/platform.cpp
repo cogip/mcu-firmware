@@ -13,9 +13,6 @@
 
 /* Platform includes */
 #include "trace_utils.hpp"
-#include "pf_actuators.hpp"
-#include "pf_positional_actuators.hpp"
-#include "PB_Command.hpp"
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
@@ -74,7 +71,6 @@ cogip::uartpb::UartProtobuf & pf_get_uartpb()
 /// Start game message handler
 static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
-    cogip::pf::actuators::enable_all();
     cogip::pf::motion_control::pf_enable_motion_control();
 
     cogip::pf::motion_control::pf_enable_motion_control_messages();
@@ -83,7 +79,6 @@ static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buff
 /// Reset game message handler
 static void _handle_game_reset([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
-    cogip::pf::actuators::enable_all();
     cogip::pf::motion_control::pf_enable_motion_control();
 
     cogip::pf::motion_control::pf_enable_motion_control_messages();
@@ -92,13 +87,8 @@ static void _handle_game_reset([[maybe_unused]] cogip::uartpb::ReadBuffer & buff
 /// Start threading sending actuators state.
 static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
-    cogip::pf::actuators::disable_all();
-
     cogip::pf::motion_control::pf_handle_brake(buffer);
-
     cogip::pf::motion_control::pf_disable_motion_control_messages();
-
-    cogip::pf::actuators::positional_actuators::get(cogip::pf::actuators::positional_actuators::Enum::ONOFF_LED_PANELS).actuate(1);
 }
 
 void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
@@ -173,7 +163,6 @@ void pf_init(void)
     }
 
     cogip::pf::motion_control::pf_init_motion_control();
-    cogip::pf::actuators::init();
 }
 
 void pf_init_tasks(void)
