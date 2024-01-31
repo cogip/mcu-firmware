@@ -1,0 +1,7 @@
+FEATURES_REQUIRED += periph_can
+
+USEMODULE += base64
+USEMODULE += conn_can
+USEMODULE += auto_init_can
+
+USEPKG += embedded-proto
