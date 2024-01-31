@@ -1,6 +1,6 @@
 APPLICATION = vacuum_pump_example
 
-BOARD ?= cogip-board-ng
+BOARD ?= cogip-board
 
 USEMODULE += shell
 USEMODULE += vacuum_pump

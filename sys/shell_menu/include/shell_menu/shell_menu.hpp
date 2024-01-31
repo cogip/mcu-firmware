@@ -16,17 +16,17 @@
 #include "shell_menu/Command.hpp"
 #include "shell_menu/Menu.hpp"
 
-#ifdef MODULE_UARTPB
-#include "uartpb/UartProtobuf.hpp"
+#ifdef MODULE_CANPB
+#include "canpb/CanProtobuf.hpp"
 #endif
 
 namespace cogip {
 
 namespace shell {
 
-#ifdef MODULE_UARTPB
-inline constexpr uartpb::uuid_t command_uuid = 2168120333;  ///< command uuid for uartpb
-inline constexpr uartpb::uuid_t menu_uuid = 1485239280;     ///< menu uuid for uartpb
+#ifdef MODULE_CANPB
+inline constexpr canpb::uuid_t command_uuid = 2168120333;  ///< command uuid for canpb
+inline constexpr canpb::uuid_t menu_uuid = 1485239280;     ///< menu uuid for canpb
 #endif
 
 Menu & root_menu();                                              ///< root menu
@@ -47,15 +47,15 @@ void rename_command(
     const etl::string<COMMAND_NAME_MAX_LENGTH> &new_name   ///< [in] new command name
     );
 
-#ifdef MODULE_UARTPB
+#ifdef MODULE_CANPB
 /// Register an UartProtobuf instance that will be used to send entered menus
-/// in Protobuf format over UART.
-void register_uartpb(
-    cogip::uartpb::UartProtobuf *uartpb_ptr
+/// in Protobuf format over CAN.
+void register_canpb(
+    cogip::canpb::CanProtobuf *canpb_ptr
     );
 
 /// Handle and execute a command coming from a Protobuf message
-void handle_pb_command(cogip::uartpb::ReadBuffer & buffer);
+void handle_pb_command(cogip::canpb::ReadBuffer & buffer);
 #endif
 
 } // namespace shell

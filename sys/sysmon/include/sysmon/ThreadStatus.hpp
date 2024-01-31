@@ -25,8 +25,8 @@
 // Project includes
 #include "MemoryStatus.hpp"
 #include "PB_ThreadStatus.hpp"
-#ifdef MODULE_UARTPB
-#include "uartpb/UartProtobuf.hpp"
+#ifdef MODULE_CANPB
+#include "canpb/CanProtobuf.hpp"
 #endif
 
 #pragma once
@@ -94,9 +94,9 @@ void display_threads_status();
 /// Start system monitoring thread
 void sysmon_start();
 
-#ifdef MODULE_UARTPB
-/// Register uartpb serial interface for messaging
-void register_uartpb(cogip::uartpb::UartProtobuf *);
+#ifdef MODULE_CANPB
+/// Register canpb serial interface for messaging
+void register_canpb(cogip::canpb::CanProtobuf *);
 #endif
 
 } // namespace sysmon

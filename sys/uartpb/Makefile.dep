@@ -1,5 +1,0 @@
-FEATURES_REQUIRED += periph_uart
-
-USEMODULE += base64
-
-USEPKG += embedded-proto

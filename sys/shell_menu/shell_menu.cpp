@@ -30,8 +30,8 @@ etl::set<Command *, NB_SHELL_COMMANDS * NB_SHELL_MENUS> & all_commands()
 Menu *current_menu = nullptr;
 shell_command_t current_commands[NB_SHELL_COMMANDS];
 
-#ifdef MODULE_UARTPB
-cogip::uartpb::UartProtobuf *uart_protobuf = nullptr;
+#ifdef MODULE_CANPB
+cogip::canpb::CanProtobuf *can_protobuf = nullptr;
 static Command::PB_Message pb_command;
 #endif
 
@@ -127,12 +127,12 @@ void rename_command(
     current_menu->enter();
 }
 
-#ifdef MODULE_UARTPB
+#ifdef MODULE_CANPB
 
-void register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)
+void register_canpb(cogip::canpb::CanProtobuf *canpb_ptr)
 {
-    uart_protobuf = uartpb_ptr;
-    uartpb_ptr->register_message_handler(command_uuid, uartpb::message_handler_t::create<handle_pb_command>());
+    can_protobuf = canpb_ptr;
+    canpb_ptr->register_message_handler(command_uuid, canpb::message_handler_t::create<handle_pb_command>());
 }
 
 /// Execute a shell command callback using arguments from Protobuf message.
@@ -177,7 +177,7 @@ static void run_pb_command_(Command *command, const Command::PB_Message &pb_comm
 }
 
 // Handle a Protobuf command message
-void handle_pb_command(cogip::uartpb::ReadBuffer & buffer)
+void handle_pb_command(cogip::canpb::ReadBuffer & buffer)
 {
     pb_command.deserialize(buffer);
 

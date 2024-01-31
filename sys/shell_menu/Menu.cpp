@@ -88,7 +88,7 @@ void Menu::enter(void)
 
     COGIP_DEBUG_COUT("Enter shell menu: " << current_menu->name());
 
-#ifdef MODULE_UARTPB
+#ifdef MODULE_CANPB
     send_pb_message();
 #endif
 
@@ -113,12 +113,12 @@ void Menu::update_pb_message(void)
     }
 }
 
-#ifdef MODULE_UARTPB
+#ifdef MODULE_CANPB
 void Menu::send_pb_message(void)
 {
-    if (uart_protobuf) {
+    if (can_protobuf) {
         update_pb_message();
-        uart_protobuf->send_message(menu_uuid, &pb_message_);
+        can_protobuf->send_message(menu_uuid, &pb_message_);
     }
 }
 #endif

@@ -1,6 +1,6 @@
 APPLICATION = sys_sysmon_example
 
-BOARD ?= cogip-board-ng
+BOARD ?= cogip-board
 
 ifeq (native,$(findstring native,$(BOARD)))
 	CFLAGS += "-DUART_NUMOF=2"
@@ -11,6 +11,6 @@ USEMODULE += ps
 USEMODULE += shell
 USEMODULE += shell_cmds_default
 USEMODULE += sysmon
-USEMODULE += uartpb
+USEMODULE += canpb
 
 include ../../Makefile.include

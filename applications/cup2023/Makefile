@@ -1,6 +1,6 @@
 APPLICATION = cup2023
 
-BOARD ?= cogip-board-ng
+BOARD ?= cogip-board
 #BOARD ?= cogip-native
 
 # Platform

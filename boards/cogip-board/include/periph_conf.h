@@ -12,7 +12,7 @@
  * @{
  *
  * @file
- * @name        Peripheral MCU configuration for the cogip-board-ng board
+ * @name        Peripheral MCU configuration for the cogip-board board
  *
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  */

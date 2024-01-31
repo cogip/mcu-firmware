@@ -13,7 +13,7 @@ USEMODULE += shell_cmds_default
 USEMODULE += cogip_defs
 USEMODULE += odometry
 USEMODULE += path
-USEMODULE += uartpb
+USEMODULE += canpb
 # Controllers
 USEMODULE += passthrough_pose_pid_controller
 USEMODULE += quadpid_meta_controller

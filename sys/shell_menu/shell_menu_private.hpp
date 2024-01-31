@@ -13,8 +13,8 @@
 
 #include "shell_menu/shell_menu.hpp"
 
-#ifdef MODULE_UARTPB
-#include "uartpb/UartProtobuf.hpp"
+#ifdef MODULE_CANPB
+#include "canpb/CanProtobuf.hpp"
 #endif
 
 #include <etl/map.h>
@@ -28,8 +28,8 @@ namespace shell {
 etl::map<etl::string<COMMAND_NAME_MAX_LENGTH>, Menu *, NB_SHELL_MENUS> & all_menus();  ///< map containing all menus indexed by cmd
 etl::set<Command *, NB_SHELL_COMMANDS * NB_SHELL_MENUS> & all_commands();              ///< all commands
 
-#ifdef MODULE_UARTPB
-extern cogip::uartpb::UartProtobuf *uart_protobuf;  ///< UartProtocol instance used to send new menu over UART
+#ifdef MODULE_CANPB
+extern cogip::canpb::CanProtobuf *can_protobuf;  ///< UartProtocol instance used to send new menu over CAN
 #endif
 
 /// Shell commands used by RIOT shell module.

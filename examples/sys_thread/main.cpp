@@ -3,14 +3,14 @@
 #include <iostream>
 
 // RIOT includes
-#include <periph/uart.h>
+#include <periph/can.h>
 #include <shell.h>
 
 // Project includes
 #include "sysmon/sysmon.hpp"
 #include "thread/thread.hpp"
-#ifdef MODULE_UARTPB
-#include "uartpb/UartProtobuf.hpp"
+#ifdef MODULE_CANPB
+#include "canpb/CanProtobuf.hpp"
 #endif
 
 // Periodic task
@@ -19,7 +19,7 @@
 // Thread stack
 static char _thread_buggy_stack[THREAD_STACKSIZE_SMALL];
 
-cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
+cogip::canpb::CanProtobuf canpb(0);
 
 static int cmd_display_heap_status(int argc, char **argv)
 {
@@ -81,14 +81,14 @@ int main(void)
 {
     puts("\n== System thread monitoring example ==");
 
-    bool res = uartpb.connect();
+    bool res = canpb.init();
     if (! res) {
-        std::cerr << "UART initialization status: " << res << std::endl;
+        std::cerr << "CAN initialization status: " << res << std::endl;
         exit(1);
     }
 
-#ifdef MODULE_UARTPB
-    cogip::sysmon::register_uartpb(&uartpb);
+#ifdef MODULE_CANPB
+    cogip::sysmon::register_canpb(&canpb);
 #endif
 
     // Start the monitoring thread

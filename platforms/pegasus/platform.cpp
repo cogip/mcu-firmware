@@ -8,7 +8,7 @@
 #include "motion_control.hpp"
 #include "platform.hpp"
 #include "shell_menu/shell_menu.hpp"
-#include "uartpb/ReadBuffer.hpp"
+#include "canpb/ReadBuffer.hpp"
 #include "utils.hpp"
 
 /* Platform includes */
@@ -17,8 +17,8 @@
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
 
-// uartpb UART device
-static cogip::uartpb::UartProtobuf uartpb(UART_DEV(1));
+// canpb CAN device
+static cogip::canpb::CanProtobuf canpb(0);
 
 // Thread stacks
 static char heartbeat_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -63,13 +63,13 @@ void pf_set_copilot_connected(bool connected)
     copilot_connected = connected;
 }
 
-cogip::uartpb::UartProtobuf & pf_get_uartpb()
+cogip::canpb::CanProtobuf & pf_get_canpb()
 {
-    return uartpb;
+    return canpb;
 }
 
 /// Start game message handler
-static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::motion_control::pf_enable_motion_control();
 
@@ -77,7 +77,7 @@ static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buff
 }
 
 /// Reset game message handler
-static void _handle_game_reset([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::motion_control::pf_enable_motion_control();
 
@@ -85,13 +85,13 @@ static void _handle_game_reset([[maybe_unused]] cogip::uartpb::ReadBuffer & buff
 }
 
 /// Start threading sending actuators state.
-static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::motion_control::pf_handle_brake(buffer);
     cogip::pf::motion_control::pf_disable_motion_control_messages();
 }
 
-void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
+void _handle_copilot_connected(cogip::canpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
@@ -100,7 +100,7 @@ void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
     }
 }
 
-void _handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
+void _handle_copilot_disconnected(cogip::canpb::ReadBuffer &)
 {
     pf_set_copilot_connected(false);
     std::cout << "Copilot disconnected" << std::endl;
@@ -118,48 +118,48 @@ void pf_init(void)
         "Heartbeat thread"
     );
 
-    /* Initialize UARTPB */
-    bool uartpb_res = uartpb.connect();
-    if (! uartpb_res) {
-        COGIP_DEBUG_CERR("UART initialization failed, error: " << uartpb_res);
+    /* Initialize CANPB */
+    bool canpb_res = canpb.init();
+    if (! canpb_res) {
+        COGIP_DEBUG_CERR("CAN initialization failed, error: " << canpb_res);
     }
     else {
-        cogip::shell::register_uartpb(&uartpb);
-        uartpb.register_message_handler(
+        cogip::shell::register_canpb(&canpb);
+        canpb.register_message_handler(
             game_reset_uuid,
-            cogip::uartpb::message_handler_t::create<_handle_game_reset>()
+            cogip::canpb::message_handler_t::create<_handle_game_reset>()
         );
-        uartpb.register_message_handler(
+        canpb.register_message_handler(
             game_start_uuid,
-            cogip::uartpb::message_handler_t::create<_handle_game_start>()
+            cogip::canpb::message_handler_t::create<_handle_game_start>()
         );
-        uartpb.register_message_handler(
+        canpb.register_message_handler(
             game_end_uuid,
-            cogip::uartpb::message_handler_t::create<_handle_game_end>()
+            cogip::canpb::message_handler_t::create<_handle_game_end>()
         );
-        uartpb.register_message_handler(
+        canpb.register_message_handler(
             copilot_connected_uuid,
-            cogip::uartpb::message_handler_t::create<_handle_copilot_connected>()
+            cogip::canpb::message_handler_t::create<_handle_copilot_connected>()
             );
-        uartpb.register_message_handler(
+        canpb.register_message_handler(
             copilot_disconnected_uuid,
-            cogip::uartpb::message_handler_t::create<_handle_copilot_disconnected>()
+            cogip::canpb::message_handler_t::create<_handle_copilot_disconnected>()
             );
-        uartpb.register_message_handler(
+        canpb.register_message_handler(
             cogip::pf::motion_control::brake_uuid,
-            cogip::uartpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_brake>()
+            cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_brake>()
             );
-        uartpb.register_message_handler(
+        canpb.register_message_handler(
             cogip::pf::motion_control::pose_uuid,
-            cogip::uartpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_target_pose>()
+            cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_target_pose>()
             );
-        uartpb.register_message_handler(
+        canpb.register_message_handler(
             cogip::pf::motion_control::start_pose_uuid,
-            cogip::uartpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_start_pose>()
+            cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_start_pose>()
             );
 
-        uartpb.start_reader();
-        uartpb.send_message(reset_uuid);
+        canpb.start_reader();
+        canpb.send_message(reset_uuid);
     }
 
     cogip::pf::motion_control::pf_init_motion_control();
