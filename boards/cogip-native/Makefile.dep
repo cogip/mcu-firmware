@@ -12,8 +12,10 @@ ifneq (,$(filter mtd,$(USEMODULE)))
 endif
 
 ifneq (,$(filter periph_can,$(FEATURES_USED)))
+  USEMODULE += fdcan
   ifeq ($(OS),Linux)
-    CFLAGS += -DCAN_DLL_NUMOF=2
+  	USEPKG += libsocketcan
+    CFLAGS += -DCAN_DLL_NUMOF=1
   endif
 endif
 
