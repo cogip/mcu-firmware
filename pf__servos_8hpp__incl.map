@@ -1,11 +1,12 @@
 <map id="platforms/pegasus/include/pf_servos.hpp" name="platforms/pegasus/include/pf_servos.hpp">
-<area shape="rect" id="node1" title="Functions and definitions related to servos." alt="" coords="258,5,453,47"/>
-<area shape="rect" id="node2" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="248,95,351,121"/>
-<area shape="rect" id="node9" title=" " alt="" coords="375,95,450,121"/>
-<area shape="rect" id="node3" href="$lx__servo_8h.html" title="LX servomotors interface API definition." alt="" coords="61,169,151,196"/>
-<area shape="rect" id="node6" href="$Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="175,169,279,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="303,169,439,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="463,169,527,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,244,76,271"/>
-<area shape="rect" id="node5" title=" " alt="" coords="100,244,243,271"/>
+<area shape="rect" id="node1" title="Functions and definitions related to servos." alt="" coords="300,5,495,47"/>
+<area shape="rect" id="node2" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="290,95,393,121"/>
+<area shape="rect" id="node10" title=" " alt="" coords="417,95,492,121"/>
+<area shape="rect" id="node3" href="$lx__servo_8h.html" title="LX servomotors interface API definition." alt="" coords="103,169,193,196"/>
+<area shape="rect" id="node7" href="$Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="217,169,321,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="345,169,481,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="505,169,569,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,244,88,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="113,244,183,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="207,244,350,271"/>
 </map>
