@@ -29,6 +29,7 @@
 #ifndef LX_SERVOS_H
 #define LX_SERVOS_H
 
+#include <stdbool.h>
 #include <stdlib.h>
 
 /* RIOT includes */
