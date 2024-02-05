@@ -25,8 +25,8 @@ namespace cogip {
 namespace shell {
 
 #ifdef MODULE_CANPB
-inline constexpr canpb::uuid_t command_uuid = 2168120333;  ///< command uuid for canpb
-inline constexpr canpb::uuid_t menu_uuid = 1485239280;     ///< menu uuid for canpb
+inline constexpr canpb::uuid_t command_uuid = 15;  ///< command uuid for canpb
+inline constexpr canpb::uuid_t menu_uuid = 20;     ///< menu uuid for canpb
 #endif
 
 Menu & root_menu();                                              ///< root menu
