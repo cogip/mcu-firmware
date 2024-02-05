@@ -1,5 +1,8 @@
 CPU = native
 
+FEATURES_PROVIDED += arch_64bit
+NATIVE_ARCH_BIT = 64
+
 # Put defined MCU peripherals here (in alphabetical order)
 FEATURES_PROVIDED += periph_gpio
 FEATURES_PROVIDED += periph_i2c
