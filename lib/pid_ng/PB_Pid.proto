@@ -12,6 +12,6 @@ message PB_Pid {
     double integral_term_limit = 7;
 }
 
-message PB_Pids {
-    repeated PB_Pid pids = 1;
+message PB_Pid_Id {
+    PB_PidEnum id = 1;
 }

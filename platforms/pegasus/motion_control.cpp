@@ -42,7 +42,8 @@ static motor_driver_t motion_motors_driver;
 PB_Pose pb_pose;
 PB_Controller pb_controller;
 PB_State pb_state;
-PB_Pids<PID_COUNT> pb_pids;
+PB_Pid pb_pid;
+PB_Pid_Id pb_pid_id;
 
 
 static  bool _suspend_motion_control_messages = false;
@@ -287,27 +288,27 @@ void pf_send_pb_pose(void)
     pf_get_uartpb().send_message(pose_uuid, &pb_pose);
 }
 
-void pf_send_pids(void)
+void pf_send_pid(PB_PidEnum id)
 {
-    pb_pids.clear();
+    pb_pid.clear();
+    pb_pid.set_id(id);
 
-    // Linear pose PID
-    linear_pose_pid.pb_copy(pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_POSE_PID));
-    pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_POSE_PID).set_id(PB_PidEnum::LINEAR_POSE_PID);
+    switch (id) {
+    case PB_PidEnum::LINEAR_POSE_PID:
+        linear_pose_pid.pb_copy(pb_pid);
+        break;
+    case PB_PidEnum::ANGULAR_POSE_PID:
+        angular_pose_pid.pb_copy(pb_pid);
+        break;
+    case PB_PidEnum::LINEAR_SPEED_PID:
+        linear_speed_pid.pb_copy(pb_pid);
+        break;
+    case PB_PidEnum::ANGULAR_SPEED_PID:
+        angular_speed_pid.pb_copy(pb_pid);
+        break;
+    }
 
-    // Angular pose PID
-    angular_pose_pid.pb_copy(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_POSE_PID));
-    pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_POSE_PID).set_id(PB_PidEnum::ANGULAR_POSE_PID);
-
-    // Linear speed PID
-    linear_speed_pid.pb_copy(pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_SPEED_PID));
-    pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_SPEED_PID).set_id(PB_PidEnum::LINEAR_SPEED_PID);
-
-    // Angular speed PID
-    angular_speed_pid.pb_copy(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_SPEED_PID));
-    pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_SPEED_PID).set_id(PB_PidEnum::ANGULAR_SPEED_PID);
-
-    pf_get_uartpb().send_message(pid_uuid, &pb_pids);
+    pf_get_uartpb().send_message(pid_uuid, &pb_pid);
 }
 
 void pf_send_pb_state(void)
@@ -469,32 +470,42 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
 /// Handle pid request command message.
 static void _handle_pid_request([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
-    // Send PIDs
-    pf_send_pids();
-}
-
-/// Handle new pids config message.
-static void _handle_new_pids_config(cogip::uartpb::ReadBuffer & buffer)
-{
-    pb_pids.clear();
-
-    EmbeddedProto::Error error = pb_pids.deserialize(buffer);
+    pb_pid_id.clear();
+    EmbeddedProto::Error error = pb_pid_id.deserialize(buffer);
     if (error != EmbeddedProto::Error::NO_ERRORS) {
-        std::cout << "New pids config: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        std::cout << "Pid request: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
         return;
     }
 
-    // Linear pose PID
-    linear_pose_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_POSE_PID));
+    // Send PIDs
+    pf_send_pid(pb_pid_id.id());
+}
 
-    // Angular pose PID
-    angular_pose_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_POSE_PID));
+/// Handle new pid config message.
+static void _handle_new_pid_config(cogip::uartpb::ReadBuffer & buffer)
+{
+    pb_pid.clear();
 
-    // Linear speed PID
-    linear_speed_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::LINEAR_SPEED_PID));
+    EmbeddedProto::Error error = pb_pid.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "New pid config: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
 
-    // Angular speed PID
-    angular_speed_pid.pb_read(pb_pids.mutable_pids((uint32_t)PB_PidEnum::ANGULAR_SPEED_PID));
+    switch (pb_pid.id()) {
+    case PB_PidEnum::LINEAR_POSE_PID:
+        linear_pose_pid.pb_read(pb_pid);
+        break;
+    case PB_PidEnum::ANGULAR_POSE_PID:
+        angular_pose_pid.pb_read(pb_pid);
+        break;
+    case PB_PidEnum::LINEAR_SPEED_PID:
+        linear_speed_pid.pb_read(pb_pid);
+        break;
+    case PB_PidEnum::ANGULAR_SPEED_PID:
+        angular_speed_pid.pb_read(pb_pid);
+        break;
+    }
 }
 
 /// Handle controller change request
@@ -597,7 +608,7 @@ void pf_init_motion_control(void)
     // Register new pids config
     pf_get_uartpb().register_message_handler(
         pid_uuid,
-        cogip::uartpb::message_handler_t::create<_handle_new_pids_config>()
+        cogip::uartpb::message_handler_t::create<_handle_new_pid_config>()
     );
 
     // Register new pids config
