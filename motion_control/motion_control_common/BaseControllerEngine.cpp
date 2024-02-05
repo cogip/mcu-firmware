@@ -35,7 +35,7 @@ void BaseControllerEngine::thread_loop() {
     while (true) {
         COGIP_DEBUG_COUT("Engine loop");
 
-        if (enable_) {
+        if ((enable_) && (controller_)) {
 
             // Set controller inputs
             prepare_inputs();
