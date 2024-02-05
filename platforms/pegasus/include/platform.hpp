@@ -57,12 +57,12 @@
 /** @} */
 
 // Define canpb uuids
-constexpr cogip::canpb::uuid_t game_start_uuid = 3138845474;
-constexpr cogip::canpb::uuid_t game_end_uuid = 1532296089;
-constexpr cogip::canpb::uuid_t game_reset_uuid = 1549868731;
-constexpr cogip::canpb::uuid_t reset_uuid = 3351980141;
-constexpr cogip::canpb::uuid_t copilot_connected_uuid = 1132911482;
-constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 1412808668;
+constexpr cogip::canpb::uuid_t reset_uuid = 10;
+constexpr cogip::canpb::uuid_t game_start_uuid = 90;
+constexpr cogip::canpb::uuid_t game_end_uuid = 95;
+constexpr cogip::canpb::uuid_t game_reset_uuid = 100;
+constexpr cogip::canpb::uuid_t copilot_connected_uuid = 30;
+constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 35;
 
 
 /**

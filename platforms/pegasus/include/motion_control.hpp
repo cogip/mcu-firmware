@@ -23,14 +23,14 @@ enum class PidEnum: pid_id_t {
 };
 constexpr auto PID_COUNT = __LINE__ - START_LINE - 3;
 
-constexpr cogip::canpb::uuid_t brake_uuid = 3239255374;
-constexpr cogip::canpb::uuid_t pose_uuid = 1534060156;
-constexpr cogip::canpb::uuid_t pose_reached_uuid = 2736246403;
-constexpr cogip::canpb::uuid_t start_pose_uuid = 2741980922;
-constexpr cogip::canpb::uuid_t state_uuid = 3422642571;
-constexpr cogip::canpb::uuid_t pid_uuid = 4159164681;
-constexpr cogip::canpb::uuid_t pid_request_uuid = 3438831927;
-constexpr cogip::canpb::uuid_t controller_uuid = 2750239003;
+constexpr cogip::canpb::uuid_t pose_order_uuid = 40;
+constexpr cogip::canpb::uuid_t pose_reached_uuid = 45;
+constexpr cogip::canpb::uuid_t pose_start_uuid = 50;
+constexpr cogip::canpb::uuid_t state_uuid = 25;
+constexpr cogip::canpb::uuid_t pid_uuid = 80;
+constexpr cogip::canpb::uuid_t pid_request_uuid = 75;
+constexpr cogip::canpb::uuid_t controller_uuid = 85;
+constexpr cogip::canpb::uuid_t brake_uuid = 10;
 
 constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thread loop period
 

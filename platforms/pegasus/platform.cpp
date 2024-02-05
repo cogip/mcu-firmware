@@ -150,11 +150,11 @@ void pf_init(void)
             cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_brake>()
             );
         canpb.register_message_handler(
-            cogip::pf::motion_control::pose_uuid,
+            cogip::pf::motion_control::pose_order_uuid,
             cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_target_pose>()
             );
         canpb.register_message_handler(
-            cogip::pf::motion_control::start_pose_uuid,
+            cogip::pf::motion_control::pose_start_uuid,
             cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_start_pose>()
             );
 

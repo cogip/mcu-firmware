@@ -285,7 +285,7 @@ static void pf_encoder_reset(void)
 void pf_send_pb_pose(void)
 {
     pf_motion_control_platform_engine.current_pose().pb_copy(pb_pose);
-    pf_get_canpb().send_message(pose_uuid, &pb_pose);
+    pf_get_canpb().send_message(pose_order_uuid, &pb_pose);
 }
 
 void pf_send_pid(PB_PidEnum id)
