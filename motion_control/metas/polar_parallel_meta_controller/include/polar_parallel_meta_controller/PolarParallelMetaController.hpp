@@ -32,7 +32,7 @@ inline constexpr size_t polar_parallel_meta_controller_nb_controllers = 2;
 /// Input 6:    pose reached
 /// Output 0:   linear motor command
 /// Output 1:   angular motor command
-class PolarParallelMetaController : public ParallelMetaController<7, 3, polar_parallel_meta_controller_nb_controllers> {
+class PolarParallelMetaController : public ParallelMetaController<9, 3, polar_parallel_meta_controller_nb_controllers> {
 protected:
 
     /// Set inputs for each parallel controller
@@ -46,13 +46,17 @@ protected:
         linear_ctrl->set_input(1, inputs_[1]);
         // Linear target speed
         linear_ctrl->set_input(2, inputs_[2]);
+        // Should linear speed be filtered ?
+        linear_ctrl->set_input(3, inputs_[3]);
 
         // Angular pose error
-        angular_ctrl->set_input(0, inputs_[3]);
+        angular_ctrl->set_input(0, inputs_[4]);
         // Angular current speed
-        angular_ctrl->set_input(1, inputs_[4]);
+        angular_ctrl->set_input(1, inputs_[5]);
         // Angular target speed
-        angular_ctrl->set_input(2, inputs_[5]);
+        angular_ctrl->set_input(2, inputs_[6]);
+        // Should angular speed be filtered ?
+        linear_ctrl->set_input(3, inputs_[7]);
     };
 
     /// Sort outputs from each parallel controller
@@ -65,7 +69,7 @@ protected:
         // Angular command
         outputs_[1] = angular_ctrl->output(0);
         // Pose reached has been set by previous filter
-        outputs_[2] = inputs_[6];
+        outputs_[2] = inputs_[8];
     };
 };
 
