@@ -62,6 +62,8 @@ void SpeedFilter::execute() {
     double current_speed = this->inputs_[1];
     // Target speed
     double target_speed = this->inputs_[2];
+    // Do not filter speed order ?
+    bool no_speed_filter = this->inputs_[3];
 
     // Limit speed order
     speed_order = limit_speed_order(

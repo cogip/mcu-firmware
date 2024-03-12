@@ -36,6 +36,8 @@ void PassthroughPosePIDController::execute() {
     this->outputs_[1] = this->inputs_[1];
     // Store target speed
     this->outputs_[2] = parameters_->target_speed();
+    // Store disabling speed filter (pass through)
+    this->outputs_[3] = this->inputs_[3];
 };
 
 } // namespace motion_control

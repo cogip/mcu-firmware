@@ -25,7 +25,7 @@ namespace motion_control {
 /// Input 1:    current speed
 /// Input 2:    target speed
 /// Output 0:   motor command
-class DualPIDMetaController: public MetaController <3, 1, 3> {};
+class DualPIDMetaController: public MetaController <4, 1, 3> {};
 
 } // namespace motion_control
 
