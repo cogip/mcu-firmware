@@ -37,6 +37,9 @@ public:
     /// return previous speed order
     double previous_speed_order() const { return previous_speed_order_; };
 
+    /// Reset previous speed order
+    void reset_previous_speed_order() { previous_speed_order_ = 0; };
+
 protected:
     /// Previous cycle speed_order
     double previous_speed_order_;
