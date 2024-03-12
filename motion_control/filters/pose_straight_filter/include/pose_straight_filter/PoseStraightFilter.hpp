@@ -34,7 +34,7 @@ namespace motion_control {
 /// Output 4:   angular current speed
 /// Output 5:   angular target speed
 /// Output 5:   pose reached
-class PoseStraightFilter : public Controller<11, 7, PoseStraightFilterParameters> {
+class PoseStraightFilter : public Controller<11, 9, PoseStraightFilterParameters> {
 public:
     /// Constructor
     explicit PoseStraightFilter(
