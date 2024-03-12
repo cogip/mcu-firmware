@@ -17,8 +17,8 @@ namespace cogip {
 
 namespace motion_control {
 
-double SpeedFilter::limit_speed_order(
-    double speed_order,
+void SpeedFilter::limit_speed_order(
+    double *speed_order,
     double target_speed,
     double current_speed,
     double min_speed,
@@ -26,31 +26,34 @@ double SpeedFilter::limit_speed_order(
     double max_acc
     )
 {
-    if (speed_order) {
-        speed_order = std::max(fabs(speed_order), min_speed) * speed_order/fabs(speed_order);
-    }
-
     // Limit target speed
     target_speed = std::min(target_speed, max_speed);
 
     // Limit speed command (maximum acceleration)
-    double a = speed_order - current_speed;
+    double a = *speed_order - current_speed;
 
     if (a > max_acc) {
-        speed_order = current_speed + max_acc;
+        a =  max_acc;
     }
 
     if (a < -max_acc) {
-        speed_order = current_speed - max_acc;
+        a = -max_acc;
+    }
+
+    *speed_order = current_speed + a;
+
+    if (*speed_order < min_speed && *speed_order > -min_speed) {
+        if (a > 0)
+            *speed_order = min_speed;
+        else if (a < 0)
+            *speed_order = -min_speed;
     }
 
     // Limit speed command
-    speed_order = std::min(speed_order, target_speed);
-    speed_order = std::max(speed_order, -target_speed);
+    *speed_order = std::min(*speed_order, target_speed);
+    *speed_order = std::max(*speed_order, -target_speed);
 
-    previous_speed_order_ = speed_order;
-
-    return speed_order;
+    previous_speed_order_ = *speed_order;
 }
 
 void SpeedFilter::execute() {
@@ -65,15 +68,17 @@ void SpeedFilter::execute() {
     // Do not filter speed order ?
     bool no_speed_filter = this->inputs_[3];
 
-    // Limit speed order
-    speed_order = limit_speed_order(
-        speed_order,
-        target_speed,
-        current_speed,
-        parameters_->min_speed(),
-        parameters_->max_speed(),
-        parameters_->max_acceleration()
-        );
+    if (!no_speed_filter) {
+        // Limit speed order
+        limit_speed_order(
+            &speed_order,
+            target_speed,
+            current_speed,
+            parameters_->min_speed(),
+            parameters_->max_speed(),
+            parameters_->max_acceleration()
+            );
+    }
 
     // Store speed_error
     this->outputs_[0] = speed_order - current_speed;
