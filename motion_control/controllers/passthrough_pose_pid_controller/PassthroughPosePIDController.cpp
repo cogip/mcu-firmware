@@ -27,8 +27,11 @@ void PassthroughPosePIDController::execute() {
         position_error_sign = position_error / fabs(position_error);
     }
 
-    // Compute output values
-    double speed_order = parameters_->target_speed() * position_error_sign;
+    double speed_order = parameters_->target_speed();
+    if (position_error != 0) {
+        // Compute output values
+        speed_order *= position_error_sign;
+    }
 
     // Store speed order
     this->outputs_[0] = speed_order;
