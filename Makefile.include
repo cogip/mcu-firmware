@@ -51,8 +51,7 @@ shell_module_dirs = $(wildcard $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/*/shel
 EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/) $(shell_module_dirs:%=%/..)
 
 # Use C++20 by default
-tmp_cxxexflags := $(CXXEXFLAGS)
-CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
+CXXEXFLAGS := $(filter-out -std=%, $(CXXEXFLAGS))
 CXXEXFLAGS += -std=c++20
 CXXEXFLAGS += -Wno-pedantic
 CXXEXFLAGS += -Wno-cast-align

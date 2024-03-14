@@ -3,6 +3,8 @@ FEATURES_REQUIRED += cpp
 FEATURES_REQUIRED += libstdcpp
 
 # Required modules
+USEMODULE += malloc_thread_safe
+USEMODULE += malloc_tracing
 USEMODULE += thread
 USEMODULE += ztimer_sec
 USEMODULE += ztimer_msec
