@@ -76,9 +76,9 @@ void PoseStraightFilter::execute() {
         || (target_pose.y() != previous_target_pose.y())
         || (target_pose.O() != previous_target_pose.O())) {
         force_allow_reverse = false;
-    }
 
-    previous_target_pose = target_pose;
+        previous_target_pose = target_pose;
+    }
 
     if (force_allow_reverse) {
         allow_reverse = true;
@@ -109,24 +109,28 @@ void PoseStraightFilter::execute() {
     // The angular threshold is used to check if a rotation of the robot on itself has to be done (step 1. and 3.).
     // The linear threshold is used to check if the robot is close to the pose to reach (step 2.).
     if (fabs(pos_err.distance()) > parameters_->linear_threshold()) {
-        if (fabs(pos_err.angle()) > parameters_->angular_threshold()) {
         if (fabs(pos_err.angle()) > parameters_->angular_intermediate_threshold()) {
             // So if the robot is far from the pose to reach and if the angle to reach this pose is too important,
             // first rotate on itself to take the direction of the destination.
             // Set the linear speed to 0 in such case.
-            target_speed.set_distance(0);
+            //target_speed.set_distance(0);
+            pos_err.set_distance(0);
+            //no_linear_speed_limit = true;
         }
         else {
             // Once the angular direction is good, step 1. is completed, thus inform the platform through target pose status variable.
             pose_reached = target_pose_status_t::intermediate_reached;
             force_allow_reverse = true;
+            //no_angular_speed_limit = true;
         }
     }
     else {
         // If the linear error is below the linear threshold, the step 2. is completed.
         // Thus inform the platform through target pose status variable.
         pose_reached = target_pose_status_t::intermediate_reached;
+        pos_err.set_distance(0);
         // Start step 3. to reach the final wanted orientation.
+        //no_linear_speed_limit = true;
         pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
         if (fabs(pos_err.angle()) < parameters_->angular_threshold()) {
             // Pose is finally reached, inform the platform through target pose status variable.
