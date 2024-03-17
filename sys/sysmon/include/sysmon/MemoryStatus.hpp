@@ -25,8 +25,8 @@
 
 // Project includes
 #include "PB_MemoryStatus.hpp"
-#ifdef MODULE_UARTPB
-#include "uartpb/UartProtobuf.hpp"
+#ifdef MODULE_CANPB
+#include "canpb/CanProtobuf.hpp"
 #endif
 
 #pragma once

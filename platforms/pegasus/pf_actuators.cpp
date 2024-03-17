@@ -11,8 +11,8 @@
 #include "board.h"
 #include "platform.hpp"
 
-#include "uartpb/UartProtobuf.hpp"
-#include "uartpb/ReadBuffer.hpp"
+#include "canpb/CanProtobuf.hpp"
+#include "canpb/ReadBuffer.hpp"
 #include "thread/thread.hpp"
 
 #include "PB_Actuators.hpp"
@@ -29,14 +29,9 @@ static char _sender_stack[THREAD_STACKSIZE_MEDIUM];
 static  bool _suspend_sender = false;
 static  bool _suspend_actuators = false;
 
-constexpr cogip::uartpb::uuid_t thread_start_uuid = 1525532810;
-constexpr cogip::uartpb::uuid_t thread_stop_uuid = 3781855956;
-constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
-constexpr cogip::uartpb::uuid_t command_uuid = 2552455996;
-
 static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
 
-/// Half duplex UART stream
+/// Half duplex CAN stream
 static uart_half_duplex_t _lx_stream;
 
 /// LX servos command buffer
@@ -45,12 +40,12 @@ static uint8_t _lx_servos_buffer[LX_UART_BUFFER_SIZE];
 
 /// Build and send Protobuf actuators state message.
 static void _send_state() {
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+    static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
     _pb_state.clear();
     servos::pb_copy(_pb_state.mutable_servos());
     pumps::pb_copy(_pb_state.mutable_pumps());
     positional_actuators::pb_copy(_pb_state.mutable_positional_actuators());
-    uartpb.send_message(state_uuid, &_pb_state);
+    canpb.send_message(state_uuid, &_pb_state);
 }
 
 /// Actuators state sender thread.
@@ -88,20 +83,20 @@ void disable_all() {
 }
 
 /// Start threading sending actuators state.
-static void _handle_thread_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+static void _handle_thread_start([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     _suspend_sender = false;
     thread_wakeup(_sender_pid);
 }
 
 /// Stop threading sending actuators state.
-static void _handle_thread_stop([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+static void _handle_thread_stop([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     _suspend_sender = true;
 }
 
 /// Handle Protobuf actuator command message.
-static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
+static void _handle_command(cogip::canpb::ReadBuffer & buffer)
 {
     static PB_ActuatorCommand pb_command;
     pb_command.clear();
@@ -151,7 +146,7 @@ static void _lx_half_duplex_uart_init() {
     int ret = uart_half_duplex_init(&_lx_stream, _lx_servos_buffer, ARRAY_SIZE(_lx_servos_buffer), &params);
 
     if (ret == UART_HALF_DUPLEX_NODEV) {
-        puts("Error: invalid UART device given");
+        puts("Error: invalid CAN device given");
     }
     else if (ret == UART_HALF_DUPLEX_NOBAUD) {
         puts("Error: given baudrate is not applicable");
@@ -166,7 +161,7 @@ static void _lx_half_duplex_uart_init() {
         puts("Error: invalid buffer given");
     }
     else {
-        printf("Successfully initialized LX Servos TTL bus UART_DEV(%i)\n", params.uart);
+        printf("Successfully initialized LX Servos TTL bus CAN_DEV(%i)\n", params.uart);
     }
 }
 
@@ -186,18 +181,18 @@ void init() {
         "Actuators state"
         );
 
-    cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
-    uartpb.register_message_handler(
+    cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
+    canpb.register_message_handler(
         thread_start_uuid,
-        uartpb::message_handler_t::create<_handle_thread_start>()
+        canpb::message_handler_t::create<_handle_thread_start>()
     );
-    uartpb.register_message_handler(
+    canpb.register_message_handler(
         thread_stop_uuid,
-        uartpb::message_handler_t::create<_handle_thread_stop>()
+        canpb::message_handler_t::create<_handle_thread_stop>()
     );
-    uartpb.register_message_handler(
+    canpb.register_message_handler(
         command_uuid,
-        uartpb::message_handler_t::create<_handle_command>()
+        canpb::message_handler_t::create<_handle_command>()
     );
 }
 

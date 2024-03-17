@@ -52,13 +52,13 @@ void disable_all() {
 }
 
 void send_state(Enum pump) {
-    // Protobuf UART interface
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+    // Protobuf CAN interface
+    static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
     _pb_pump.clear();
     pumps::get(pump).pb_copy(_pb_pump);
-    if (!uartpb.send_message(actuator_state_uuid, &_pb_pump)) {
+    if (!canpb.send_message(actuator_state_uuid, &_pb_pump)) {
         std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }

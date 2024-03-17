@@ -23,14 +23,15 @@ enum class PidEnum: pid_id_t {
 };
 constexpr auto PID_COUNT = __LINE__ - START_LINE - 3;
 
-constexpr cogip::uartpb::uuid_t brake_uuid = 3239255374;
-constexpr cogip::uartpb::uuid_t pose_uuid = 1534060156;
-constexpr cogip::uartpb::uuid_t pose_reached_uuid = 2736246403;
-constexpr cogip::uartpb::uuid_t start_pose_uuid = 2741980922;
-constexpr cogip::uartpb::uuid_t state_uuid = 3422642571;
-constexpr cogip::uartpb::uuid_t pid_uuid = 4159164681;
-constexpr cogip::uartpb::uuid_t pid_request_uuid = 3438831927;
-constexpr cogip::uartpb::uuid_t controller_uuid = 2750239003;
+/// Motion Control: 0x1000 - 0x1FFF
+constexpr cogip::canpb::uuid_t state_uuid = 0x1001;
+constexpr cogip::canpb::uuid_t pose_order_uuid = 0x1002;
+constexpr cogip::canpb::uuid_t pose_reached_uuid = 0x1003;
+constexpr cogip::canpb::uuid_t pose_start_uuid = 0x1004;
+constexpr cogip::canpb::uuid_t pid_request_uuid = 0x1005;
+constexpr cogip::canpb::uuid_t pid_uuid = 0x1006;
+constexpr cogip::canpb::uuid_t brake_uuid = 0x1007;
+constexpr cogip::canpb::uuid_t controller_uuid = 0x1008;
 
 constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thread loop period
 
@@ -98,13 +99,13 @@ constexpr double platform_normal_speed_angular_deg_per_period = (platform_max_sp
 /// @}
 
 /// Handle brake signal to stop the robot
-void pf_handle_brake(cogip::uartpb::ReadBuffer &buffer);
+void pf_handle_brake(cogip::canpb::ReadBuffer &buffer);
 
 /// Get pose to reach from protobuf message
-void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer);
+void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer);
 
 /// Get start pose from protobuf message
-void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer);
+void pf_handle_start_pose(cogip::canpb::ReadBuffer &buffer);
 
 /// Initialize motion control
 void pf_init_motion_control(void);
