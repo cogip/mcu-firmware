@@ -210,7 +210,6 @@ int main(void)
     uartpb.send_message(reset_uuid);
 
     // Start shell
-    cogip::shell::register_uartpb(&uartpb);
     cogip::shell::start();
 
     return 0;

@@ -1,2 +1,0 @@
-USEMODULE += pca9548
-USEMODULE += shell_menu
