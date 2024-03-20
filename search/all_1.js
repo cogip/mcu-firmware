@@ -8,7 +8,7 @@ var searchData=
   ['basecontrollerengine_2ehpp_47',['BaseControllerEngine.hpp',['../BaseControllerEngine_8hpp.html',1,'']]],
   ['basemetacontroller_48',['BaseMetaController',['../classcogip_1_1motion__control_1_1BaseMetaController.html',1,'cogip::motion_control']]],
   ['basemetacontroller_2ehpp_49',['BaseMetaController.hpp',['../BaseMetaController_8hpp.html',1,'']]],
-  ['blocked_50',['blocked',['../classcogip_1_1pf_1_1actuators_1_1Actuator.html#a490d59397a17fff968ce476b92e702ae',1,'cogip::pf::actuators::Actuator']]],
+  ['blocked_50',['blocked',['../classcogip_1_1pf_1_1actuators_1_1Actuator.html#a490d59397a17fff968ce476b92e702ae',1,'cogip::pf::actuators::Actuator::blocked()'],['../classcogip_1_1pf_1_1actuators_1_1Actuator.html#a490d59397a17fff968ce476b92e702ae',1,'cogip::pf::actuators::Actuator::blocked()']]],
   ['blocked_5f_51',['blocked_',['../classcogip_1_1pf_1_1actuators_1_1Actuator.html#a283dc34f56dcf06ef9028de9a21ced73',1,'cogip::pf::actuators::Actuator']]],
   ['blocking_5fcycles_52',['blocking_cycles',['../structctrl__control__t.html#a53e6840e25fc7839589b1a9ca1bfa976',1,'ctrl_control_t']]],
   ['blocking_5fcycles_5fmax_53',['blocking_cycles_max',['../structctrl__platform__configuration__t.html#ae31b73291c6d84a716dbea00bb156b8e',1,'ctrl_platform_configuration_t']]],

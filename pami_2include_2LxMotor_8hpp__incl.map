@@ -1,0 +1,13 @@
+<map id="platforms/pami/include/LxMotor.hpp" name="platforms/pami/include/LxMotor.hpp">
+<area shape="rect" id="node1" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="479,5,652,47"/>
+<area shape="rect" id="node2" href="$pami_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="309,95,477,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="533,169,597,196"/>
+<area shape="rect" id="node8" href="$lx__servo_8h.html" title="LX servomotors interface API definition." alt="" coords="669,95,758,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,123,196"/>
+<area shape="rect" id="node4" href="$pami_2include_2Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="147,169,251,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="275,169,411,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="435,169,509,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="621,169,704,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="729,169,799,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="823,169,966,196"/>
+</map>

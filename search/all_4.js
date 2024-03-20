@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['emergency_5fbutton_5fpressed_5fuuid_170',['emergency_button_pressed_uuid',['../pf__actuators_8hpp.html#a5520e90461fc4c20b1ca5cb283248bdb',1,'cogip::pf::actuators']]],
-  ['emergency_5fbutton_5freleased_5fuuid_171',['emergency_button_released_uuid',['../pf__actuators_8hpp.html#a09ff063f41a835f583620afb3d8d11ae',1,'cogip::pf::actuators']]],
+  ['emergency_5fbutton_5fpressed_5fuuid_170',['emergency_button_pressed_uuid',['../pami_2include_2pf__actuators_8hpp.html#a5520e90461fc4c20b1ca5cb283248bdb',1,'cogip::pf::actuators']]],
+  ['emergency_5fbutton_5freleased_5fuuid_171',['emergency_button_released_uuid',['../pami_2include_2pf__actuators_8hpp.html#a09ff063f41a835f583620afb3d8d11ae',1,'cogip::pf::actuators']]],
   ['enable_172',['enable',['../classcogip_1_1obstacles_1_1Obstacle.html#a4b66f6097546ec9f25d51ebfafdbdd88',1,'cogip::obstacles::Obstacle::enable()'],['../classcogip_1_1motion__control_1_1BaseControllerEngine.html#aa4259848b24f46faf7eb249717739803',1,'cogip::motion_control::BaseControllerEngine::enable()']]],
   ['enable_5f_173',['enable_',['../classcogip_1_1motion__control_1_1BaseControllerEngine.html#ab895a40f3be30c40a52350846dbe7d1b',1,'cogip::motion_control::BaseControllerEngine']]],
-  ['enable_5fall_174',['enable_all',['../pf__actuators_8hpp.html#a6a6c7fd4f5e6b5f77d02b63266bd636b',1,'cogip::pf::actuators']]],
+  ['enable_5fall_174',['enable_all',['../pami_2include_2pf__actuators_8hpp.html#a6a6c7fd4f5e6b5f77d02b63266bd636b',1,'cogip::pf::actuators']]],
   ['enabled_175',['enabled',['../classcogip_1_1obstacles_1_1Obstacle.html#ad2bb0846571cfecd9183d8244243eb49',1,'cogip::obstacles::Obstacle']]],
   ['enabled_5f_176',['enabled_',['../classcogip_1_1obstacles_1_1Obstacle.html#a7bdbda67cdc6ad85cafd5cc697f0576a',1,'cogip::obstacles::Obstacle']]],
   ['enabled_5fobstacles_177',['enabled_obstacles',['../classcogip_1_1obstacles_1_1List.html#aa57b5af17d619da51c9677fb654d0ae0',1,'cogip::obstacles::List']]],

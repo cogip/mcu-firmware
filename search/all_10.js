@@ -15,6 +15,6 @@ var searchData=
   ['reverse_533',['reverse',['../classcogip_1_1cogip__defs_1_1Polar.html#abee0d2b8879f1b36d4f8ce57673adfee',1,'cogip::cogip_defs::Polar']]],
   ['reverse_5fangle_534',['reverse_angle',['../classcogip_1_1cogip__defs_1_1Polar.html#ad2186ac5216495e8e4227bf51a9129c9',1,'cogip::cogip_defs::Polar']]],
   ['reverse_5fdistance_535',['reverse_distance',['../classcogip_1_1cogip__defs_1_1Polar.html#a61b160fda223d39abbdf6d4df5788355',1,'cogip::cogip_defs::Polar']]],
-  ['robot_5fid_536',['ROBOT_ID',['../group__platforms__pegasus.html#ga0bcf6895d58d71cb270a01a0427f5ae8',1,'platform.hpp']]],
+  ['robot_5fid_536',['ROBOT_ID',['../group__platforms__pami.html#ga0bcf6895d58d71cb270a01a0427f5ae8',1,'ROBOT_ID():&#160;platform.hpp'],['../group__platforms__pegasus.html#ga0bcf6895d58d71cb270a01a0427f5ae8',1,'ROBOT_ID():&#160;platform.hpp']]],
   ['root_5fmenu_537',['root_menu',['../shell__menu_8hpp.html#ab90a59f4f7d16e7f5470cea478c4e013',1,'cogip::shell']]]
 ];

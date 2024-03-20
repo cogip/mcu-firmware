@@ -1,6 +1,7 @@
 <map id="sys/thread/include/thread/thread.hpp" name="sys/thread/include/thread/thread.hpp">
-<area shape="rect" id="node1" title="Public API for thread module." alt="" coords="67,5,209,47"/>
-<area shape="rect" id="node2" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="41,95,235,165"/>
-<area shape="rect" id="node3" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="5,213,271,269"/>
-<area shape="rect" id="node4" href="$motion__control_8hpp_source.html" title=" " alt="" coords="41,317,235,359"/>
+<area shape="rect" id="node1" title="Public API for thread module." alt="" coords="125,5,267,47"/>
+<area shape="rect" id="node2" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="99,95,293,165"/>
+<area shape="rect" id="node3" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="63,213,329,269"/>
+<area shape="rect" id="node4" href="$pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,317,179,359"/>
+<area shape="rect" id="node5" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="203,317,397,359"/>
 </map>

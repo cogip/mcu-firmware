@@ -1,6 +1,9 @@
 <map id="drivers/lx_servo/include/lx_servo.h" name="drivers/lx_servo/include/lx_servo.h">
-<area shape="rect" id="node1" title="LX servomotors interface API definition." alt="" coords="123,5,301,47"/>
-<area shape="rect" id="node2" href="$LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="5,95,200,136"/>
-<area shape="rect" id="node3" href="$LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="224,95,419,136"/>
-<area shape="rect" id="node4" href="$pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="224,184,419,225"/>
+<area shape="rect" id="node1" title="LX servomotors interface API definition." alt="" coords="305,5,482,47"/>
+<area shape="rect" id="node2" href="$pami_2include_2LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="5,95,179,136"/>
+<area shape="rect" id="node3" href="$pami_2include_2LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="203,95,376,136"/>
+<area shape="rect" id="node5" href="$pegasus_2include_2LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="400,95,595,136"/>
+<area shape="rect" id="node6" href="$pegasus_2include_2LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="619,95,813,136"/>
+<area shape="rect" id="node4" href="$pami_2include_2pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="203,184,376,225"/>
+<area shape="rect" id="node7" href="$pegasus_2include_2pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="619,184,813,225"/>
 </map>

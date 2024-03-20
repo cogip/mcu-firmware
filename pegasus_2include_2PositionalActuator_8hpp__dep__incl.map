@@ -1,0 +1,8 @@
+<map id="platforms/pegasus/include/PositionalActuator.hpp" name="platforms/pegasus/include/PositionalActuator.hpp">
+<area shape="rect" id="node1" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="443,5,637,47"/>
+<area shape="rect" id="node2" href="$pegasus_2include_2AnalogServo_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="5,95,200,136"/>
+<area shape="rect" id="node3" href="$pegasus_2include_2LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="224,95,419,136"/>
+<area shape="rect" id="node4" href="$pegasus_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="443,95,637,136"/>
+<area shape="rect" id="node5" href="$pegasus_2include_2OnOff_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="661,95,856,136"/>
+<area shape="rect" id="node6" href="$pegasus_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="881,95,1087,136"/>
+</map>

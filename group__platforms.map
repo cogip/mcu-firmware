@@ -1,4 +1,5 @@
 <map id="Hardware platform" name="Hardware platform">
 <area shape="rect" id="node1" href="$group__platforms__pegasus.html" title="COGIP test platform definition." alt="" coords="199,5,307,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,151,31"/>
+<area shape="rect" id="node2" href="$group__platforms__pami.html" title="COGIP test platform definition." alt="" coords="199,55,307,80"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,31,151,56"/>
 </map>

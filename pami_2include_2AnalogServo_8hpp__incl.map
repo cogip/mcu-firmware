@@ -1,0 +1,11 @@
+<map id="platforms/pami/include/AnalogServo.hpp" name="platforms/pami/include/AnalogServo.hpp">
+<area shape="rect" id="node1" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="496,5,669,47"/>
+<area shape="rect" id="node2" href="$pami_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="309,95,477,121"/>
+<area shape="rect" id="node6" title=" " alt="" coords="533,169,597,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="578,95,673,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="697,95,786,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,123,196"/>
+<area shape="rect" id="node4" href="$pami_2include_2Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="147,169,251,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="275,169,411,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="435,169,509,196"/>
+</map>

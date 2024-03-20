@@ -1,5 +1,6 @@
 <map id="motion_control/motion_control_common/include/motion_control_common/BaseControllerEngine.hpp" name="motion_control/motion_control_common/include/motion_control_common/BaseControllerEngine.hpp">
-<area shape="rect" id="node1" title="Base class for engines." alt="" coords="41,5,235,76"/>
-<area shape="rect" id="node2" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="5,124,271,180"/>
-<area shape="rect" id="node3" href="$motion__control_8hpp_source.html" title=" " alt="" coords="41,228,235,269"/>
+<area shape="rect" id="node1" title="Base class for engines." alt="" coords="99,5,293,76"/>
+<area shape="rect" id="node2" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="63,124,329,180"/>
+<area shape="rect" id="node3" href="$pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,228,179,269"/>
+<area shape="rect" id="node4" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="203,228,397,269"/>
 </map>
