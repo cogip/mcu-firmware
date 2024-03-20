@@ -4,6 +4,7 @@ USEMODULE += periph_gpio_irq
 USEMODULE += motor_driver
 USEMODULE += pca9685
 USEMODULE += pcf8575
+USEMODULE += pcf857x_irq
 USEMODULE += printf_float
 USEMODULE += ps
 USEMODULE += scanf_float
