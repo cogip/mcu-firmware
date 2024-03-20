@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "PB_Polar.proto";
+
+message PB_State {
+    uint32 cycle = 2;
+    PB_Polar speed_current = 3;
+    PB_Polar speed_order = 4;
+}
