@@ -8,11 +8,13 @@
 
 // Project includes
 #include "sysmon/sysmon.hpp"
+
 #ifdef MODULE_CANPB
 #include "canpb/CanProtobuf.hpp"
-#endif
 
 cogip::canpb::CanProtobuf canpb(0);
+
+#endif
 
 static int cmd_display_heap_status(int argc, char **argv)
 {
@@ -44,13 +46,13 @@ int main(void)
 {
     puts("\n== System monitoring example ==");
 
+#ifdef MODULE_CANPB
     bool res = canpb.init();
-    if (! res) {
+    if (res) {
         std::cerr << "CAN initialization status: " << res << std::endl;
         exit(1);
     }
 
-#ifdef MODULE_CANPB
     cogip::sysmon::register_canpb(&canpb);
 #endif
 
