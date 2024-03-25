@@ -12,7 +12,7 @@
 #pragma once
 
 // Firmware includes
-#include "uartpb/UartProtobuf.hpp"
+#include "canpb/CanProtobuf.hpp"
 
 // Standard includes
 #include <cstdint>
@@ -21,12 +21,17 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 
-/// Actuator state protobuf message id
-constexpr cogip::uartpb::uuid_t actuator_state_uuid = 1674079543;
+// Actuators: 0x2000 - 0x2FFF
+constexpr cogip::canpb::uuid_t actuator_state_uuid = 0x2003;
+constexpr cogip::canpb::uuid_t thread_start_uuid = 0x2001;
+constexpr cogip::canpb::uuid_t thread_stop_uuid = 0x2002;
+constexpr cogip::canpb::uuid_t state_uuid = 0x2003;
+constexpr cogip::canpb::uuid_t command_uuid = 0x2004;
+
 /// Emergency button released protobuf message id
-constexpr cogip::uartpb::uuid_t emergency_button_pressed_uuid = 1885006827;
+constexpr cogip::canpb::uuid_t emergency_button_pressed_uuid = 0x1;
 /// Emergency button pressed protobuf message id
-constexpr cogip::uartpb::uuid_t emergency_button_released_uuid = 1396723216;
+constexpr cogip::canpb::uuid_t emergency_button_released_uuid = 0x2;
 
 /// LX servomotors IDs
 enum LXServoIDs {

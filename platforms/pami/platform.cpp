@@ -7,7 +7,6 @@
 #include "board.h"
 #include "motion_control.hpp"
 #include "platform.hpp"
-#include "shell_menu/shell_menu.hpp"
 #include "uartpb/ReadBuffer.hpp"
 #include "utils.hpp"
 
@@ -15,7 +14,6 @@
 #include "trace_utils.hpp"
 #include "pf_actuators.hpp"
 #include "pf_positional_actuators.hpp"
-#include "PB_Command.hpp"
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
@@ -105,9 +103,6 @@ void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
-    if (cogip::shell::current_menu) {
-        cogip::shell::current_menu->send_pb_message();
-    }
 }
 
 void _handle_copilot_disconnected(cogip::uartpb::ReadBuffer &)
@@ -134,7 +129,6 @@ void pf_init(void)
         COGIP_DEBUG_CERR("UART initialization failed, error: " << uartpb_res);
     }
     else {
-        cogip::shell::register_uartpb(&uartpb);
         uartpb.register_message_handler(
             game_reset_uuid,
             cogip::uartpb::message_handler_t::create<_handle_game_reset>()

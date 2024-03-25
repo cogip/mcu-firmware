@@ -6,9 +6,6 @@ BOARD ?= cogip-board
 # Platform
 USEMODULE += pegasus
 
-# Shell menus management
-USEMODULE += shell_menu
-
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 

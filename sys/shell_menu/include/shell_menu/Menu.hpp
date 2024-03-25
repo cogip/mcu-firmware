@@ -59,8 +59,8 @@ public:
     /// Update the Protobuf message describing this menu.
     void update_pb_message(void);
 
-#ifdef MODULE_UARTPB
-    /// Send the Protobuf message describing this menu if uartpb is registered.
+#ifdef MODULE_CANPB
+    /// Send the Protobuf message describing this menu if canpb is registered.
     void send_pb_message(void);
 #endif
 

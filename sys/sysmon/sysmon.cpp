@@ -15,15 +15,15 @@
 #include "sysmon/sysmon.hpp"
 #include "sysmon/ThreadStatus.hpp"
 #include "thread/thread.hpp"
-#ifdef MODULE_UARTPB
-#include "uartpb/UartProtobuf.hpp"
+#ifdef MODULE_CANPB
+#include "canpb/CanProtobuf.hpp"
 #endif
 
 // Periodic task
 #define TASK_PERIOD_SEC    (1)
 
-#ifdef MODULE_UARTPB
-inline constexpr cogip::uartpb::uuid_t sysmon_uuid = 1509576639;
+#ifdef MODULE_CANPB
+inline constexpr cogip::canpb::uuid_t sysmon_uuid = 0xf001;
 #endif
 
 /// Start of the heapd
@@ -41,9 +41,9 @@ using PB_Sysmon_Message = PB_Sysmon<MAXTHREADS, SYSMON_THREADSTATUS_NAME_MAX_LEN
 static PB_Sysmon_Message  pb_sysmon_message_;
 
 
-#ifdef MODULE_UARTPB
+#ifdef MODULE_CANPB
 // Protobuf serial interface
-inline static cogip::uartpb::UartProtobuf *uart_protobuf = nullptr;
+inline static cogip::canpb::CanProtobuf *can_protobuf = nullptr;
 #endif
 
 
@@ -166,22 +166,22 @@ void display_threads_status(void)
     std::cout << std::endl;
 }
 
-#ifdef MODULE_UARTPB
-void register_uartpb(cogip::uartpb::UartProtobuf *uartpb_ptr)
+#ifdef MODULE_CANPB
+void register_canpb(cogip::canpb::CanProtobuf *canpb_ptr)
 {
-    uart_protobuf = uartpb_ptr;
+    can_protobuf = canpb_ptr;
 }
 
-static void _uartpb_send_status(void)
+static void _canpb_send_status(void)
 {
-    if (uart_protobuf) {
-        uart_protobuf->send_message(sysmon_uuid, &pb_sysmon_message_);
+    if (can_protobuf) {
+        can_protobuf->send_message(sysmon_uuid, &pb_sysmon_message_);
     }
     else {
-        std::cerr << "sysmon: error, uartpb interface has not been registered." << std::endl;
+        std::cerr << "sysmon: error, canpb interface has not been registered." << std::endl;
     }
 }
-#endif // MODULE_UARTPB
+#endif // MODULE_CANPB
 
 static void *_thread_status_updater(void *data)
 {
@@ -193,8 +193,8 @@ static void *_thread_status_updater(void *data)
         pb_sysmon_message_.clear();
         _update_heap_status();
         _update_threads_status();
-#ifdef MODULE_UARTPB
-        _uartpb_send_status();
+#ifdef MODULE_CANPB
+        _canpb_send_status();
 #endif
         cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_SEC, &loop_start_time, TASK_PERIOD_SEC);
     }

@@ -285,7 +285,7 @@ static void pf_encoder_reset(void)
 void pf_send_pb_pose(void)
 {
     pf_motion_control_platform_engine.current_pose().pb_copy(pb_pose);
-    pf_get_uartpb().send_message(pose_uuid, &pb_pose);
+    pf_get_canpb().send_message(pose_order_uuid, &pb_pose);
 }
 
 void pf_send_pid(PB_PidEnum id)
@@ -308,7 +308,6 @@ void pf_send_pid(PB_PidEnum id)
         break;
     }
 
-    pf_get_uartpb().send_message(pid_uuid, &pb_pid);
 }
 
 void pf_send_pb_state(void)
@@ -318,11 +317,11 @@ void pf_send_pb_state(void)
     pf_motion_control_platform_engine.current_speed().pb_copy(pb_state.mutable_speed_current());
     pf_motion_control_platform_engine.target_speed().pb_copy(pb_state.mutable_speed_order());
 
-    pf_get_uartpb().send_message(state_uuid, &pb_state);
+    pf_get_canpb().send_message(state_uuid, &pb_state);
 }
 
 
-void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
+void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer &buffer) {
     pf_disable_motion_control();
 
     // Small wait to ensure engine is disabled
@@ -333,7 +332,7 @@ void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
     motor_brake(&motion_motors_driver, MOTOR_RIGHT);
 }
 
-void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
+void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
 {
     if (!_suspend_motion_control_messages) {
         // Retrieve new target pose from protobuf message
@@ -366,7 +365,7 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
     }
 }
 
-void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
+void pf_handle_start_pose(cogip::canpb::ReadBuffer &buffer)
 {
     PB_PathPose pb_start_pose;
     EmbeddedProto::Error error = pb_start_pose.deserialize(buffer);
@@ -441,7 +440,7 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         // Send message in case of final pose reached only.
         if ((pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached)
             &&  (previous_target_pose_status != cogip::motion_control::target_pose_status_t::reached)) {
-            pf_get_uartpb().send_message(pose_reached_uuid);
+            pf_get_canpb().send_message(pose_reached_uuid);
         }
 
         // Only useful for native architecture, to populate emulated QDEC data.
@@ -468,7 +467,7 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
 }
 
 /// Handle pid request command message.
-static void _handle_pid_request([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
+static void _handle_pid_request([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     pb_pid_id.clear();
     EmbeddedProto::Error error = pb_pid_id.deserialize(buffer);
@@ -482,7 +481,7 @@ static void _handle_pid_request([[maybe_unused]] cogip::uartpb::ReadBuffer & buf
 }
 
 /// Handle new pid config message.
-static void _handle_new_pid_config(cogip::uartpb::ReadBuffer & buffer)
+static void _handle_new_pid_config(cogip::canpb::ReadBuffer & buffer)
 {
     pb_pid.clear();
 
@@ -509,7 +508,7 @@ static void _handle_new_pid_config(cogip::uartpb::ReadBuffer & buffer)
 }
 
 /// Handle controller change request
-static void _handle_set_controller(cogip::uartpb::ReadBuffer & buffer)
+static void _handle_set_controller(cogip::canpb::ReadBuffer & buffer)
 {
     pb_controller.clear();
 
@@ -600,21 +599,21 @@ void pf_init_motion_control(void)
         motion_control_pid_tuning_period_ms/motion_control_thread_period_ms);
 
     // Register pid request command
-    pf_get_uartpb().register_message_handler(
+    pf_get_canpb().register_message_handler(
         pid_request_uuid,
-        cogip::uartpb::message_handler_t::create<_handle_pid_request>()
+        cogip::canpb::message_handler_t::create<_handle_pid_request>()
     );
 
     // Register new pids config
-    pf_get_uartpb().register_message_handler(
+    pf_get_canpb().register_message_handler(
         pid_uuid,
-        cogip::uartpb::message_handler_t::create<_handle_new_pid_config>()
+        cogip::canpb::message_handler_t::create<_handle_new_pid_config>()
     );
 
     // Register new pids config
-    pf_get_uartpb().register_message_handler(
+    pf_get_canpb().register_message_handler(
         controller_uuid,
-        cogip::uartpb::message_handler_t::create<_handle_set_controller>()
+        cogip::canpb::message_handler_t::create<_handle_set_controller>()
     );
 }
 

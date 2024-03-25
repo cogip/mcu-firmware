@@ -11,6 +11,6 @@ USEMODULE += ps
 USEMODULE += shell
 USEMODULE += shell_cmds_default
 USEMODULE += sysmon
-USEMODULE += uartpb
+USEMODULE += canpb
 
 include ../../Makefile.include

@@ -30,7 +30,7 @@
 /* Project includes */
 #include "odometry.hpp"
 #include "utils.hpp"
-#include "uartpb/UartProtobuf.hpp"
+#include "canpb/CanProtobuf.hpp"
 
 #define ROBOT_ID                            0       /**< Robot ID for logs */
 #define CONTROLLER_SPEED_LOOP_PERIOD_MSEC   20      /**< Motion controller speed loop default period */
@@ -56,13 +56,22 @@
 #define AVOIDANCE_BORDER_Y_MAX (AVOIDANCE_BORDER_Y_MIN * -1)      /**< Maximal Y axis border */
 /** @} */
 
-// Define uartpb uuids
-constexpr cogip::uartpb::uuid_t game_start_uuid = 3138845474;
-constexpr cogip::uartpb::uuid_t game_end_uuid = 1532296089;
-constexpr cogip::uartpb::uuid_t game_reset_uuid = 1549868731;
-constexpr cogip::uartpb::uuid_t reset_uuid = 3351980141;
-constexpr cogip::uartpb::uuid_t copilot_connected_uuid = 1132911482;
-constexpr cogip::uartpb::uuid_t copilot_disconnected_uuid = 1412808668;
+/**
+ * @name Messages Id
+ * @{
+ */
+// Motion Control: 0x1000 - 0x1FFF
+// Actuators: 0x2000 - 0x2FFF
+// Board: 0xF000 - 0xFFFF
+// Game: 0x4000 - 0x4FFF
+constexpr cogip::canpb::uuid_t game_start_uuid = 0x4001;
+constexpr cogip::canpb::uuid_t game_end_uuid = 0x4002;
+constexpr cogip::canpb::uuid_t game_reset_uuid = 0x4003;
+// Service: 0x3000 - 0x3FFF
+constexpr cogip::canpb::uuid_t reset_uuid = 0x3001;
+constexpr cogip::canpb::uuid_t copilot_connected_uuid = 0x3002;
+constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 0x3003;
+/** @} */
 
 
 /**
@@ -100,7 +109,7 @@ int pf_is_game_launched(void);
  *
  * return   uarpb pointer
  **/
-cogip::uartpb::UartProtobuf & pf_get_uartpb();
+cogip::canpb::CanProtobuf & pf_get_canpb();
 
 /**
  * @brief Initialize all platforms threads

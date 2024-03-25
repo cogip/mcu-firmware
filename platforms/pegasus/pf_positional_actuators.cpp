@@ -425,33 +425,33 @@ PositionalActuator & get(Enum id) {
 }
 
 void send_emergency_button_pressed() {
-    // Protobuf UART interface
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+    // Protobuf CAN interface
+    static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
-    if (!uartpb.send_message(emergency_button_pressed_uuid)) {
+    if (!canpb.send_message(emergency_button_pressed_uuid)) {
         std::cerr << "Error: emergency_button_pressed_uuid message not sent" << std::endl;
     }
 }
 
 void send_emergency_button_released() {
-    // Protobuf UART interface
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+    // Protobuf CAN interface
+    static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
-    if (!uartpb.send_message(emergency_button_released_uuid)) {
+    if (!canpb.send_message(emergency_button_released_uuid)) {
         std::cerr << "Error: emergency_button_released_uuid message not sent" << std::endl;
     }
 }
 
 void send_state(Enum positional_actuator) {
-    // Protobuf UART interface
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
+    // Protobuf CAN interface
+    static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
     _pb_positional_actuator.clear();
     positional_actuators::get(positional_actuator).pb_copy(_pb_positional_actuator);
-    if (!uartpb.send_message(actuator_state_uuid, &_pb_positional_actuator)) {
+    if (!canpb.send_message(actuator_state_uuid, &_pb_positional_actuator)) {
         std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }

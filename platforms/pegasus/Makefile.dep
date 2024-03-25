@@ -17,7 +17,7 @@ USEMODULE += cogip_defs
 USEMODULE += lx_servo
 USEMODULE += odometry
 USEMODULE += path
-USEMODULE += uartpb
+USEMODULE += canpb
 USEMODULE += vacuum_pump
 # Controllers
 USEMODULE += passthrough_pose_pid_controller
