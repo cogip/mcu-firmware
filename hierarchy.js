@@ -51,9 +51,10 @@ var hierarchy =
     [ "cogip::motion_control::BaseControllerEngine", "classcogip_1_1motion__control_1_1BaseControllerEngine.html", [
       [ "cogip::motion_control::PlatformEngine", "classcogip_1_1motion__control_1_1PlatformEngine.html", null ]
     ] ],
-    [ "cogip::pf::actuators::pumps::Command", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html", null ],
-    [ "cogip::pf::actuators::servos::Command", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command.html", null ],
+    [ "cogip::canpb::CanProtobuf", "classcogip_1_1canpb_1_1CanProtobuf.html", null ],
     [ "cogip::shell::Command", "classcogip_1_1shell_1_1Command.html", null ],
+    [ "cogip::pf::actuators::servos::Command", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command.html", null ],
+    [ "cogip::pf::actuators::pumps::Command", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html", null ],
     [ "cogip::cogip_defs::Coords", "classcogip_1_1cogip__defs_1_1Coords.html", [
       [ "cogip::cogip_defs::Pose", "classcogip_1_1cogip__defs_1_1Pose.html", [
         [ "cogip::path::Pose", "classcogip_1_1path_1_1Pose.html", null ]
@@ -101,6 +102,7 @@ var hierarchy =
     [ "cogip::motion_control::PosePIDControllerParameters", "classcogip_1_1motion__control_1_1PosePIDControllerParameters.html", null ],
     [ "cogip::motion_control::PoseStraightFilterParameters", "classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html", null ],
     [ "ReadBufferInterface", null, [
+      [ "cogip::canpb::ReadBuffer", "classcogip_1_1canpb_1_1ReadBuffer.html", null ],
       [ "cogip::uartpb::ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html", null ]
     ] ],
     [ "sd21_conf_t", "structsd21__conf__t.html", null ],
@@ -120,6 +122,7 @@ var hierarchy =
     ] ],
     [ "cogip::wizard::Wizard", "classcogip_1_1wizard_1_1Wizard.html", null ],
     [ "WriteBufferInterface", null, [
+      [ "cogip::canpb::WriteBuffer", "classcogip_1_1canpb_1_1WriteBuffer.html", null ],
       [ "cogip::uartpb::WriteBuffer", "classcogip_1_1uartpb_1_1WriteBuffer.html", null ]
     ] ]
 ];

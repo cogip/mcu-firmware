@@ -22,7 +22,7 @@ var group__platforms__pegasus =
     [ "CONTROLLER_SPEED_LOOP_PERIOD_MSEC", "group__platforms__pegasus.html#ga07a575aff9cc49fe868eb5ee53dbb787", null ],
     [ "GAME_DURATION_SEC", "group__platforms__pegasus.html#gae845e7296ce0028216d3a2be9e365058", null ],
     [ "ROBOT_ID", "group__platforms__pegasus.html#ga0bcf6895d58d71cb270a01a0427f5ae8", null ],
-    [ "pf_get_uartpb", "group__platforms__pegasus.html#ga47177f8977d43047562b0cb1c6a4aa46", null ],
+    [ "pf_get_canpb", "group__platforms__pegasus.html#ga3c336d38b35709a7bf9bd566be53d4e1", null ],
     [ "pf_init", "group__platforms__pegasus.html#gad2d77ae9a60de6fba2ff595654fb94e0", null ],
     [ "pf_init_tasks", "group__platforms__pegasus.html#gac3bbbd7ff3d70fb15bbd73b9203044f3", null ],
     [ "pf_is_game_launched", "group__platforms__pegasus.html#gae1a6aab08a0179e854ade7561e3dc079", null ],

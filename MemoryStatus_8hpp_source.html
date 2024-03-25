@@ -130,8 +130,8 @@ $(document).ready(function(){initNavTree('MemoryStatus_8hpp_source.html',''); in
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// Project includes</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;PB_MemoryStatus.hpp&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#ifdef MODULE_UARTPB</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="UartProtobuf_8hpp.html">uartpb/UartProtobuf.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#ifdef MODULE_CANPB</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="CanProtobuf_8hpp.html">canpb/CanProtobuf.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#pragma once</span></div>
@@ -168,15 +168,15 @@ $(document).ready(function(){initNavTree('MemoryStatus_8hpp_source.html',''); in
 </div><!-- doc-content -->
 <div class="ttc" id="aclasscogip_1_1sysmon_1_1MemoryStatus_html_a1aae507b42e8f5003c752ce4c62b0e3b"><div class="ttname"><a href="classcogip_1_1sysmon_1_1MemoryStatus.html#a1aae507b42e8f5003c752ce4c62b0e3b">cogip::sysmon::MemoryStatus::update_pb_message</a></div><div class="ttdeci">void update_pb_message()</div><div class="ttdoc">Update Protobuf message.</div></div>
 <div class="ttc" id="aclasscogip_1_1sysmon_1_1MemoryStatus_html_ad68cfa89edc275a0907358e5756c9dab"><div class="ttname"><a href="classcogip_1_1sysmon_1_1MemoryStatus.html#ad68cfa89edc275a0907358e5756c9dab">cogip::sysmon::MemoryStatus::pb_message</a></div><div class="ttdeci">const PB_Message &amp; pb_message() const</div><div class="ttdoc">Return the Protobuf message.</div><div class="ttdef"><b>Definition:</b> <a href="MemoryStatus_8hpp_source.html#l00054">MemoryStatus.hpp:54</a></div></div>
-<div class="ttc" id="aUartProtobuf_8hpp_html"><div class="ttname"><a href="UartProtobuf_8hpp.html">UartProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over UART module.</div></div>
 <div class="ttc" id="aclasscogip_1_1sysmon_1_1MemoryStatus_html_afd7c8edbbf5938d66c111fbd189ec330"><div class="ttname"><a href="classcogip_1_1sysmon_1_1MemoryStatus.html#afd7c8edbbf5938d66c111fbd189ec330">cogip::sysmon::MemoryStatus::set_used</a></div><div class="ttdeci">void set_used(const std::size_t used)</div><div class="ttdoc">Set memory used size in bytes.</div><div class="ttdef"><b>Definition:</b> <a href="MemoryStatus_8hpp_source.html#l00051">MemoryStatus.hpp:51</a></div></div>
 <div class="ttc" id="aclasscogip_1_1sysmon_1_1MemoryStatus_html_a4cc5cd5615d06fd3887a5a82265caaea"><div class="ttname"><a href="classcogip_1_1sysmon_1_1MemoryStatus.html#a4cc5cd5615d06fd3887a5a82265caaea">cogip::sysmon::MemoryStatus::size</a></div><div class="ttdeci">std::size_t size() const</div><div class="ttdoc">Get memory total size in bytes.</div><div class="ttdef"><b>Definition:</b> <a href="MemoryStatus_8hpp_source.html#l00045">MemoryStatus.hpp:45</a></div></div>
 <div class="ttc" id="aclasscogip_1_1sysmon_1_1MemoryStatus_html_a37a33124ae6f9812e0b7cd2f96ad0676"><div class="ttname"><a href="classcogip_1_1sysmon_1_1MemoryStatus.html#a37a33124ae6f9812e0b7cd2f96ad0676">cogip::sysmon::MemoryStatus::used</a></div><div class="ttdeci">std::size_t used() const</div><div class="ttdoc">Get memory used size in bytes.</div><div class="ttdef"><b>Definition:</b> <a href="MemoryStatus_8hpp_source.html#l00047">MemoryStatus.hpp:47</a></div></div>
+<div class="ttc" id="aCanProtobuf_8hpp_html"><div class="ttname"><a href="CanProtobuf_8hpp.html">CanProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over CAN module.</div></div>
 <div class="ttc" id="aclasscogip_1_1sysmon_1_1MemoryStatus_html_ad345eb35e66138619cd21d9d7e119a34"><div class="ttname"><a href="classcogip_1_1sysmon_1_1MemoryStatus.html#ad345eb35e66138619cd21d9d7e119a34">cogip::sysmon::MemoryStatus::set_size</a></div><div class="ttdeci">void set_size(const std::size_t size)</div><div class="ttdoc">Set memory total size in bytes.</div><div class="ttdef"><b>Definition:</b> <a href="MemoryStatus_8hpp_source.html#l00049">MemoryStatus.hpp:49</a></div></div>
 <div class="ttc" id="aclasscogip_1_1sysmon_1_1MemoryStatus_html"><div class="ttname"><a href="classcogip_1_1sysmon_1_1MemoryStatus.html">cogip::sysmon::MemoryStatus</a></div><div class="ttdef"><b>Definition:</b> <a href="MemoryStatus_8hpp_source.html#l00038">MemoryStatus.hpp:38</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Wed Mar 20 2024 12:56:06 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Mon Mar 25 2024 08:11:44 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

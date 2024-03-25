@@ -1,9 +1,9 @@
 var group__sys__uartpb =
 [
-    [ "ReadBuffer.hpp", "ReadBuffer_8hpp.html", null ],
+    [ "ReadBuffer.hpp", "uartpb_2include_2uartpb_2ReadBuffer_8hpp.html", null ],
     [ "uartpb.hpp", "uartpb_8hpp.html", null ],
     [ "UartProtobuf.hpp", "UartProtobuf_8hpp.html", null ],
-    [ "WriteBuffer.hpp", "WriteBuffer_8hpp.html", null ],
+    [ "WriteBuffer.hpp", "uartpb_2include_2uartpb_2WriteBuffer_8hpp.html", null ],
     [ "UARTPB_INPUT_MESSAGE_LENGTH_MAX", "group__sys__uartpb.html#gab220a996741b8d0f15692ea83e8aa879", null ],
     [ "UARTPB_MAX_HANDLERS", "group__sys__uartpb.html#ga363e7ccff12299b5e84d8356afd1d601", null ],
     [ "UARTPB_OUTPUT_MESSAGE_LENGTH_MAX", "group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b", null ],

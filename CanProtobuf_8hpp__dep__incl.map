@@ -1,0 +1,6 @@
+<map id="sys/canpb/include/canpb/CanProtobuf.hpp" name="sys/canpb/include/canpb/CanProtobuf.hpp">
+<area shape="rect" id="node1" title="Exchange Protobuf messages over CAN module." alt="" coords="121,5,303,47"/>
+<area shape="rect" id="node2" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="5,95,200,136"/>
+<area shape="rect" id="node4" href="$pegasus_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="224,95,419,136"/>
+<area shape="rect" id="node3" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,184,200,225"/>
+</map>

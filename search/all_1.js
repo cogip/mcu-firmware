@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['base64_5fdecode_42',['base64_decode',['../classcogip_1_1uartpb_1_1ReadBuffer.html#a92d1d35f17b7c2f4e98ee76e13d86e02',1,'cogip::uartpb::ReadBuffer']]],
-  ['base64_5fencode_43',['base64_encode',['../classcogip_1_1uartpb_1_1WriteBuffer.html#a11396f10e3687424b70a3436884080fe',1,'cogip::uartpb::WriteBuffer']]],
+  ['base64_5fdecode_42',['base64_decode',['../classcogip_1_1canpb_1_1ReadBuffer.html#a43be693d656045d86444d766300d1dc0',1,'cogip::canpb::ReadBuffer::base64_decode()'],['../classcogip_1_1uartpb_1_1ReadBuffer.html#a92d1d35f17b7c2f4e98ee76e13d86e02',1,'cogip::uartpb::ReadBuffer::base64_decode()']]],
+  ['base64_5fencode_43',['base64_encode',['../classcogip_1_1canpb_1_1WriteBuffer.html#a87157c611f6c3014f3f1b2075c58c10e',1,'cogip::canpb::WriteBuffer::base64_encode()'],['../classcogip_1_1uartpb_1_1WriteBuffer.html#a11396f10e3687424b70a3436884080fe',1,'cogip::uartpb::WriteBuffer::base64_encode()']]],
   ['basecontroller_44',['BaseController',['../classcogip_1_1motion__control_1_1BaseController.html',1,'cogip::motion_control::BaseController'],['../classcogip_1_1motion__control_1_1BaseController.html#afc7ea9eed1bf3922a51fe5a06a935d01',1,'cogip::motion_control::BaseController::BaseController()']]],
   ['basecontroller_2ehpp_45',['BaseController.hpp',['../BaseController_8hpp.html',1,'']]],
   ['basecontrollerengine_46',['BaseControllerEngine',['../classcogip_1_1motion__control_1_1BaseControllerEngine.html',1,'cogip::motion_control::BaseControllerEngine'],['../classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac79dd6fea9f77adc74a3ddf7671f7c57',1,'cogip::motion_control::BaseControllerEngine::BaseControllerEngine()']]],

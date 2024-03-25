@@ -19,7 +19,7 @@ var pami_2include_2pf__actuators_8hpp =
     [ "disable_all", "pami_2include_2pf__actuators_8hpp.html#a38ba35545eb0c9c3d4b896ab8ca5b89a", null ],
     [ "enable_all", "pami_2include_2pf__actuators_8hpp.html#a6a6c7fd4f5e6b5f77d02b63266bd636b", null ],
     [ "init", "pami_2include_2pf__actuators_8hpp.html#aa8703a26db4165eca63c7426397b8e53", null ],
-    [ "actuator_state_uuid", "pami_2include_2pf__actuators_8hpp.html#a42f7565719d0579a2ce2cb67bc83d69f", null ],
-    [ "emergency_button_pressed_uuid", "pami_2include_2pf__actuators_8hpp.html#a5520e90461fc4c20b1ca5cb283248bdb", null ],
-    [ "emergency_button_released_uuid", "pami_2include_2pf__actuators_8hpp.html#a09ff063f41a835f583620afb3d8d11ae", null ]
+    [ "actuator_state_uuid", "pami_2include_2pf__actuators_8hpp.html#a179211b0e1134575ec0e8e131a26b6c0", null ],
+    [ "emergency_button_pressed_uuid", "pami_2include_2pf__actuators_8hpp.html#a7f741e113a7f0857cf8b1f15e00275ae", null ],
+    [ "emergency_button_released_uuid", "pami_2include_2pf__actuators_8hpp.html#ac98479a1ce9789347fd7b8f330010b2a", null ]
 ];

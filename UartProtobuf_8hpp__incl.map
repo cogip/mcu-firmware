@@ -7,8 +7,8 @@
 <area shape="rect" id="node6" title=" " alt="" coords="493,95,569,121"/>
 <area shape="rect" id="node7" title=" " alt="" coords="593,95,677,121"/>
 <area shape="rect" id="node8" href="$uartpb_8hpp.html" title=" " alt="" coords="775,169,913,196"/>
-<area shape="rect" id="node9" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="946,95,1113,121"/>
-<area shape="rect" id="node13" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="701,95,870,121"/>
+<area shape="rect" id="node9" href="$uartpb_2include_2uartpb_2ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="946,95,1113,121"/>
+<area shape="rect" id="node13" href="$uartpb_2include_2uartpb_2WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="701,95,870,121"/>
 <area shape="rect" id="node15" title=" " alt="" coords="1137,95,1287,121"/>
 <area shape="rect" id="node10" title=" " alt="" coords="937,169,1004,196"/>
 <area shape="rect" id="node11" title=" " alt="" coords="1217,169,1287,196"/>

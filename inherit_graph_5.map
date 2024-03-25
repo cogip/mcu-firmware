@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classcogip_1_1motion__control_1_1MetaControllerParameters.html" title="Empty Meta Controller parameters." alt="" coords="5,5,207,47"/>
+<area shape="rect" id="node1" href="$classcogip_1_1obstacles_1_1Obstacle.html" title="An obstacle used to detect and avoid collisions." alt="" coords="138,5,330,32"/>
+<area shape="rect" id="node2" href="$classcogip_1_1obstacles_1_1Circle.html" title="Circle obstacle defined by its center and radius." alt="" coords="407,5,579,32"/>
+<area shape="rect" id="node3" href="$classcogip_1_1obstacles_1_1Polygon.html" title="A polygon obstacle defined by the list of points." alt="" coords="400,161,587,188"/>
+<area shape="rect" id="node4" href="$classcogip_1_1obstacles_1_1Rectangle.html" title="A rectangle obstacle which inherits from Polygon." alt="" coords="635,161,835,188"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,156,68,183"/>
+<area shape="rect" id="node6" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title="A polygon defined by a list of coordinates." alt="" coords="163,57,305,98"/>
+<area shape="rect" id="node7" href="$classcogip_1_1obstacles_1_1List.html" title="List of obstacles." alt="" coords="155,123,313,149"/>
+<area shape="rect" id="node8" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title=" " alt="" coords="116,173,352,229"/>
+<area shape="rect" id="node9" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title=" " alt="" coords="137,253,331,309"/>
 </map>

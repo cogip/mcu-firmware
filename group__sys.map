@@ -1,8 +1,9 @@
 <map id="System modules" name="System modules">
-<area shape="rect" id="node1" title=" " alt="" coords="5,104,136,129"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,129,136,155"/>
 <area shape="rect" id="node2" href="$group__sys__uartpb.html" title="Exchange Protobuf messages over UART module." alt="" coords="189,5,358,31"/>
 <area shape="rect" id="node3" href="$group__sys__thread.html" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="230,55,317,80"/>
-<area shape="rect" id="node4" href="$group__sys__shmem.html" title="Shared memory module." alt="" coords="184,104,363,129"/>
-<area shape="rect" id="node5" href="$group__sys__sysmon.html" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="200,153,347,179"/>
-<area shape="rect" id="node6" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="226,203,321,228"/>
+<area shape="rect" id="node4" href="$group__sys__canpb.html" title="Exchange Protobuf messages over CAN module." alt="" coords="192,104,355,129"/>
+<area shape="rect" id="node5" href="$group__sys__shmem.html" title="Shared memory module." alt="" coords="184,153,363,179"/>
+<area shape="rect" id="node6" href="$group__sys__sysmon.html" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="200,203,347,228"/>
+<area shape="rect" id="node7" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="226,252,321,277"/>
 </map>

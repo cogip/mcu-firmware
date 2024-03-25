@@ -1,6 +1,11 @@
 var annotated_dup =
 [
     [ "cogip", null, [
+      [ "canpb", null, [
+        [ "CanProtobuf", "classcogip_1_1canpb_1_1CanProtobuf.html", "classcogip_1_1canpb_1_1CanProtobuf" ],
+        [ "ReadBuffer", "classcogip_1_1canpb_1_1ReadBuffer.html", "classcogip_1_1canpb_1_1ReadBuffer" ],
+        [ "WriteBuffer", "classcogip_1_1canpb_1_1WriteBuffer.html", "classcogip_1_1canpb_1_1WriteBuffer" ]
+      ] ],
       [ "cogip_defs", null, [
         [ "Coords", "classcogip_1_1cogip__defs_1_1Coords.html", "classcogip_1_1cogip__defs_1_1Coords" ],
         [ "Polar", "classcogip_1_1cogip__defs_1_1Polar.html", "classcogip_1_1cogip__defs_1_1Polar" ],
