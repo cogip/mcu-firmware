@@ -100,7 +100,7 @@ bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfac
     if (success) {
         if (base64_size < DEFAULT_CAN_MAX_DLEN) {
             can_frame_t frame;
-            frame.can_id = uuid;
+            frame.can_id = uuid | CAN_EFF_FLAG;
             frame.len = base64_size;
             frame.flags = CANFD_FDF;
             for (uint8_t byte_index = 0; byte_index < base64_size; byte_index++) {
