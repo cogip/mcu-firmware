@@ -1,15 +1,15 @@
-APPLICATION = cup2024-actuators
+APPLICATION = cup2024-pami
 
-BOARD ?= cogip-board
+BOARD ?= cogip-board-pami
 #BOARD ?= cogip-native
 
 # Platform
-USEMODULE += pf-actuators
+USEMODULE += pf-pami
 
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
 
 # Update maximum number of motors for actuators
-CFLAGS += -DCONFIG_MOTOR_DRIVER_MAX=2
+CFLAGS += -DCONFIG_MOTOR_DRIVER_MAX=3
 
 include ../../Makefile.include
