@@ -9,5 +9,5 @@ ifdef PCA9685_OFFSET
 endif
 
 ifeq ($(CPU),native)
-	CFLAGS += -DUART_NUMOF=2
+	CFLAGS += -DUART_NUMOF=3
 endif
