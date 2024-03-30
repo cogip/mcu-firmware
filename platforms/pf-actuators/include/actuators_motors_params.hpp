@@ -1,45 +1,51 @@
 // Project includes
+#include "board.h"
 #include "motor_driver.h"
 
 namespace cogip {
 
 namespace pf {
 
-namespace actuators {
+namespace motion_control {
+
+#ifndef MOTION_MOTORS_POST_CB
+/// Motion control callback on motor_set() call
+#define MOTION_MOTORS_POST_CB nullptr
+#endif
 
 /// Motion control motors
-static const motor_driver_params_t actuators_motors_params =
+static const motor_driver_params_t motion_motors_params =
 {
-    .mode = MOTOR_DRIVER_1_DIR,
+    .mode = MOTOR_DRIVER_1_DIR_BRAKE,
     .pwm_dev = 0,
     .pwm_mode = PWM_LEFT,
     .pwm_frequency = 20000U,
-    .pwm_resolution = 100U,
-    .brake_level = MOTOR_BRAKE_LOW,
-    .enable_level = MOTOR_ENABLE_HIGH,
+    .pwm_resolution = 500U,
+    .brake_inverted = true,
+    .enable_inverted = false,
     .nb_motors = 2,
     .motors = {
-        // Lift motor
+        // Bottom lift motor
         {
-            .pwm_channel = 2,
-            .gpio_enable = GPIO_PIN(PORT_A, 8),
-            .gpio_dir0 = GPIO_PIN(PORT_A, 11),
-            .gpio_dir1_or_brake = GPIO_UNDEF,
+            .pwm_channel = 0,
+            .gpio_enable = GPIO_PIN(PORT_A, 10),
+            .gpio_dir0 = GPIO_PIN(PORT_C, 6),
+            .gpio_brake = GPIO_PIN(PORT_C, 8),
             .gpio_dir_reverse = 0,
         },
-        // Ball launcher (no direction, no enable, just PWM) & conveyor (no PWM, no direction, just the enable)
+        // Top lift motor
         {
             .pwm_channel = 1,
             .gpio_enable = GPIO_PIN(PORT_B, 1),
-            .gpio_dir0 = GPIO_UNDEF,
-            .gpio_dir1_or_brake = GPIO_UNDEF,
+            .gpio_dir0 = GPIO_PIN(PORT_B, 10),
+            .gpio_brake = GPIO_PIN(PORT_B, 2),
             .gpio_dir_reverse = 0,
         },
     },
-    .motor_set_post_cb = nullptr
+    .motor_set_post_cb = MOTION_MOTORS_POST_CB
 };
 
-} // namespace actuators
+} // namespace motion_control
 
 } // namespace pf
 

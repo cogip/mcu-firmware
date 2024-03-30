@@ -28,7 +28,7 @@ static char _sender_stack[THREAD_STACKSIZE_MEDIUM];
 static  bool _suspend_sender = false;
 static  bool _suspend_actuators = false;
 
-static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, 0, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
+static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
 
 /// Half duplex CAN stream
 static uart_half_duplex_t _lx_stream;
