@@ -95,8 +95,6 @@ static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer
     cogip::pf::motion_control::pf_handle_brake(buffer);
 
     cogip::pf::motion_control::pf_disable_motion_control_messages();
-
-    cogip::pf::actuators::positional_actuators::get(cogip::pf::actuators::positional_actuators::Enum::ONOFF_LED_PANELS).actuate(1);
 }
 
 void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
