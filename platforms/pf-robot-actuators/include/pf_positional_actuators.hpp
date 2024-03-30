@@ -53,8 +53,8 @@ enum PCA9586Channels {
 
 /// Limit switches
 /// @{
-constexpr int pin_limit_switch_bottom_lift = GPIO_PIN(PORT_B, 14);
-constexpr int pin_limit_switch_top_lift = GPIO_PIN(PORT_B, 13);
+constexpr gpio_t pin_limit_switch_bottom_lift = GPIO_PIN(PORT_B, 14);
+constexpr gpio_t pin_limit_switch_top_lift = GPIO_PIN(PORT_B, 13);
 /// @}
 
 /// Front arms servomotor positions

@@ -8,11 +8,6 @@ namespace pf {
 
 namespace motion_control {
 
-#ifndef MOTION_MOTORS_POST_CB
-/// Motion control callback on motor_set() call
-#define MOTION_MOTORS_POST_CB nullptr
-#endif
-
 /// Motion control motors
 static const motor_driver_params_t motion_motors_params =
 {
@@ -42,7 +37,7 @@ static const motor_driver_params_t motion_motors_params =
             .gpio_dir_reverse = 0,
         },
     },
-    .motor_set_post_cb = MOTION_MOTORS_POST_CB
+    .motor_set_post_cb = nullptr
 };
 
 } // namespace motion_control

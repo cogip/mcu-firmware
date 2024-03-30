@@ -66,8 +66,9 @@ static event_queue_t _new_gpio_event_queue;
 /// GPIOs interrupt callback
 static void _gpio_cb(void *arg)
 {
-    gpio_t pin = (int)arg;
-    event_post(&_new_gpio_event_queue, _gpio_events[pin]);
+    (void)arg;
+    //gpio_t pin = (gpio_t)arg;
+    //event_post(&_new_gpio_event_queue, _gpio_events[pin]);
 }
 
 /// Init interruptable pin with pullup
@@ -116,22 +117,22 @@ static void *_gpio_handling_thread(void *args)
     event_queue_init(&_new_gpio_event_queue);
 
     while ((event = event_wait(&_new_gpio_event_queue))) {
-        gpio_t pin = _gpio_pins[event];
+        //gpio_t pin = _gpio_pins[event];
 
-        switch (pin)
-        {
-        case pin_limit_switch_bottom_lift:
-            std::cout << "pin_limit_switch_bottom_lift triggered" << std::endl;
-            _positional_actuators[Enum::MOTOR_BOTTOM_LIFT]->disable_on_check();
-            break;
-        case pin_limit_switch_top_lift:
-            std::cout << "pin_limit_switch_top_lift triggered" << std::endl;
-            _positional_actuators[Enum::MOTOR_TOP_LIFT]->disable_on_check();
-            break;
-        default:
-            std::cout << "INT: external interrupt from pin " << pin << std::endl;
-            break;
-        }
+        //switch (pin)
+        //{
+        //case pin_limit_switch_bottom_lift:
+        //    std::cout << "pin_limit_switch_bottom_lift triggered" << std::endl;
+        //    _positional_actuators[Enum::MOTOR_BOTTOM_LIFT]->disable_on_check();
+        //    break;
+        //case pin_limit_switch_top_lift:
+        //    std::cout << "pin_limit_switch_top_lift triggered" << std::endl;
+        //    _positional_actuators[Enum::MOTOR_TOP_LIFT]->disable_on_check();
+        //    break;
+        //default:
+        //    std::cout << "INT: external interrupt from pin " << pin << std::endl;
+        //    break;
+        //}
     }
 
     return nullptr;
@@ -169,7 +170,6 @@ static void *_positional_actuators_timeout_thread(void *args)
 }
 
 void init(uart_half_duplex_t *lx_stream) {
-    (void)lx_stream;
     // Half duplex stream that must have been initialized previously
     LxMotor::lx_stream = lx_stream;
 
