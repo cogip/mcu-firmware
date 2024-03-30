@@ -5,7 +5,6 @@
 
 #include "pf_actuators.hpp"
 #include "pf_servos.hpp"
-#include "pf_pumps.hpp"
 #include "pf_positional_actuators.hpp"
 
 #include "board.h"
@@ -29,7 +28,7 @@ static char _sender_stack[THREAD_STACKSIZE_MEDIUM];
 static  bool _suspend_sender = false;
 static  bool _suspend_actuators = false;
 
-static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
+static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, 0, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
 
 /// Half duplex CAN stream
 static uart_half_duplex_t _lx_stream;
@@ -37,15 +36,13 @@ static uart_half_duplex_t _lx_stream;
 /// LX servos command buffer
 static uint8_t _lx_servos_buffer[LX_UART_BUFFER_SIZE];
 
-
 /// Build and send Protobuf actuators state message.
 static void _send_state() {
     static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
     _pb_state.clear();
     servos::pb_copy(_pb_state.mutable_servos());
-    pumps::pb_copy(_pb_state.mutable_pumps());
     positional_actuators::pb_copy(_pb_state.mutable_positional_actuators());
-    canpb.send_message(state_uuid, &_pb_state);
+    canpb.send_message(actuator_state_uuid, &_pb_state);
 }
 
 /// Actuators state sender thread.
@@ -77,7 +74,6 @@ void enable_all() {
 /// Disable all actuators
 void disable_all() {
     positional_actuators::disable_all();
-    pumps::disable_all();
     servos::disable_all();
     _suspend_actuators = true;
 }
@@ -110,11 +106,6 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
                     (uint16_t)pb_servo_command.command()
                 }
             );
-        }
-        else if (pb_command.has_pump()) {
-            const PB_PumpCommand & pb_pump_command = pb_command.get_pump();
-            pumps::Enum id = pumps::Enum{(vacuum_pump_t)pb_pump_command.id()};
-            pumps::get(id).activate(pb_pump_command.command());
         }
         if (pb_command.has_positional_actuator()) {
             const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
@@ -169,7 +160,6 @@ void init() {
     _lx_half_duplex_uart_init();
     positional_actuators::init(&_lx_stream);
     servos::init(&_lx_stream);
-    pumps::init();
 
     _sender_pid = thread_create(
         _sender_stack,

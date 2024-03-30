@@ -25,7 +25,6 @@ namespace actuators {
 constexpr cogip::canpb::uuid_t actuator_state_uuid = 0x2003;
 constexpr cogip::canpb::uuid_t thread_start_uuid = 0x2001;
 constexpr cogip::canpb::uuid_t thread_stop_uuid = 0x2002;
-constexpr cogip::canpb::uuid_t state_uuid = 0x2003;
 constexpr cogip::canpb::uuid_t command_uuid = 0x2004;
 
 /// Emergency button released protobuf message id

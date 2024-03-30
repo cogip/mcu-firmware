@@ -46,12 +46,9 @@ enum {
 /* Heartbeat LED */
 #define HEARTBEAT_LED   GPIO_PIN(PORT_A, 0)
 
-/* GPIOs expander */
-#define PCF857X_PORT_0  0
-
 /* Servomotors */
 #define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
-#define LX_UART_DEV     2
+#define LX_UART_DEV     1
 
 /* Motion motors simulation */
 #define MOTION_MOTORS_POST_CB cogip_native_motor_driver_qdec_simulation
