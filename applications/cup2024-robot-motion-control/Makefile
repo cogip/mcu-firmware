@@ -7,7 +7,7 @@ BOARD ?= cogip-board
 USEMODULE += pf-robot-motion-control
 
 # Main thread stack size
-CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
+CFLAGS += -DTHREAD_STACKSIZE_MAIN=8192
 
 # Update maximum number of motors for actuators
 CFLAGS += -DCONFIG_MOTOR_DRIVER_MAX=3

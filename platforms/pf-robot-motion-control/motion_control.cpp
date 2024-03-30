@@ -464,7 +464,6 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         //std::cout << "motor_drive: " << right_command << "    " << left_command << std::endl;
         right_command = (right_command < 0 ? -pwm_threshold : pwm_threshold ) + ((right_command * (500 - pwm_threshold)) / 500);
         left_command = (left_command < 0 ? -pwm_threshold : pwm_threshold) + ((left_command * (500 - pwm_threshold)) / 500);
-        std::cout << "motor_drive: " << right_command << "    " << left_command << std::endl;
         motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
         motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
     }
