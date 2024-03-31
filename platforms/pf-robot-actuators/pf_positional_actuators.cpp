@@ -189,16 +189,44 @@ void init(uart_half_duplex_t *lx_stream) {
     //    check_limit_switch_bottom_lift);
 
     // AnalogServo init
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_ARM_LEFT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_BOTTOM_ARM_LEFT,
+    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
+        Enum::ANALOGSERVO_TOP_GRIP_LEFT,
         GroupEnum::NO_GROUP,
         0,
         0,
-        PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_ARM_LEFT
+        PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_ARM_LEFT])->add_position(analog_servomotor_bottom_arm_left_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_ARM_LEFT])->add_position(analog_servomotor_bottom_arm_left_opened);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT])->add_position(analog_servomotor_top_grip_left_opened);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT])->add_position(analog_servomotor_top_grip_left_closed);
 
+    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
+        Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
+        GroupEnum::NO_GROUP,
+        0,
+        0,
+        PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT
+    );
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT])->add_position(analog_servomotor_top_grip_right_opened);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT])->add_position(analog_servomotor_top_grip_right_closed);
+    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
+        Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
+        GroupEnum::NO_GROUP,
+        0,
+        0,
+        PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT
+    );
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT])->add_position(analog_servomotor_bottom_grip_left_opened);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT])->add_position(analog_servomotor_bottom_grip_left_closed);
+
+    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
+        Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
+        GroupEnum::NO_GROUP,
+        0,
+        0,
+        PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT
+    );
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_opened);
+    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_closed);
     // Positional actuators timeout thread
     //thread_create(
     //    _gpio_handling_thread_stack,

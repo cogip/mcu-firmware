@@ -34,10 +34,10 @@ constexpr auto START_LINE = __LINE__;
 enum class Enum: uint8_t {
     MOTOR_BOTTOM_LIFT = 0,
     MOTOR_TOP_LIFT = 1,
-    ANALOGSERVO_BOTTOM_ARM_LEFT = 2,
-    ANALOGSERVO_BOTTOM_ARM_RIGHT = 3,
-    ANALOGSERVO_TOP_ARM_LEFT = 4,
-    ANALOGSERVO_TOP_ARM_RIGHT = 5,
+    ANALOGSERVO_BOTTOM_GRIP_LEFT = 2,
+    ANALOGSERVO_BOTTOM_GRIP_RIGHT = 3,
+    ANALOGSERVO_TOP_GRIP_LEFT = 4,
+    ANALOGSERVO_TOP_GRIP_RIGHT = 5,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
@@ -45,10 +45,10 @@ using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, 
 
 /// PCA9586 channels
 enum PCA9586Channels {
-    CHANNEL_ANALOGSERVO_BOTTOM_ARM_LEFT = 0,
-    CHANNEL_ANALOGSERVO_BOTTOM_ARM_RIGHT = 1,
-    CHANNEL_ANALOGSERVO_TOP_ARM_LEFT = 2,
-    CHANNEL_ANALOGSERVO_TOP_ARM_RIGHT = 3,
+    CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT = 0,
+    CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT = 1,
+    CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT = 2,
+    CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT = 3,
 };
 
 /// Limit switches
@@ -59,14 +59,14 @@ constexpr gpio_t pin_limit_switch_top_lift = GPIO_PIN(PORT_B, 13);
 
 /// Front arms servomotor positions
 /// @{
-constexpr int analog_servomotor_bottom_arm_left_closed = 55;
-constexpr int analog_servomotor_bottom_arm_left_opened = 135;
-constexpr int analog_servomotor_bottom_arm_right_closed = 55;
-constexpr int analog_servomotor_bottom_arm_right_opened = 135;
-constexpr int analog_servomotor_top_arm_left_closed = 55;
-constexpr int analog_servomotor_top_arm_left_opened = 135;
-constexpr int analog_servomotor_top_arm_right_closed = 55;
-constexpr int analog_servomotor_top_arm_right_opened = 135;
+constexpr int analog_servomotor_bottom_grip_left_closed = 100;
+constexpr int analog_servomotor_bottom_grip_left_opened = 230;
+constexpr int analog_servomotor_bottom_grip_right_closed = 230;
+constexpr int analog_servomotor_bottom_grip_right_opened = 100;
+constexpr int analog_servomotor_top_grip_left_closed = 90;
+constexpr int analog_servomotor_top_grip_left_opened = 170;
+constexpr int analog_servomotor_top_grip_right_closed = 175;
+constexpr int analog_servomotor_top_grip_right_opened = 90;
 /// @}
 
 /// Actuators timeouts
