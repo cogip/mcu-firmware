@@ -70,6 +70,7 @@ static const uart_conf_t uart_config[] = {
 };
 
 #define UART_0_ISR      (isr_lpuart1)
+#define UART_1_ISR      (isr_usart1)
 
 #define UART_NUMOF      ARRAY_SIZE(uart_config)
 /** @} */
