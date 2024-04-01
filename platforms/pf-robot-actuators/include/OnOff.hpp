@@ -32,7 +32,9 @@ public:
         bool use_gpio_expander = false,     ///< [in] false if native GPIO, true for expander
         bool active_state = true,           ///< [in] Consider On when GPIO is equal to active_state
         gpio_t pin = GPIO_UNDEF             ///< [in] On/Off GPIO
-    ) : PositionalActuator(id, group, order, default_timeout_period), use_gpio_expander_(use_gpio_expander), active_state_(active_state), pin_(pin) {};
+    ) : PositionalActuator(id, group, order, default_timeout_period), use_gpio_expander_(use_gpio_expander), active_state_(active_state), pin_(pin) {
+        gpio_init(pin_, GPIO_OUT);
+    };
 
     /// Disable the motor.
     void disable() override;
