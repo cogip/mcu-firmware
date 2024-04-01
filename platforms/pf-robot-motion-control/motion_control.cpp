@@ -440,7 +440,6 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         // The PWM driver will filter the value to the max PWM resolution defined for the board.
         // Compute motor commands with Polar motion control result
 
-        //std::cout << "motor_drive: " << command.angle() << "    " << command.distance() << std::endl;
         int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
                                                    (double)(std::numeric_limits<int16_t>::min()) / 2);
         int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
@@ -461,7 +460,6 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
             left_command = (fabs(left_command)/left_command) * 499;
         }
         int pwm_threshold = 75;
-        //std::cout << "motor_drive: " << right_command << "    " << left_command << std::endl;
         right_command = (right_command < 0 ? -pwm_threshold : pwm_threshold ) + ((right_command * (500 - pwm_threshold)) / 500);
         left_command = (left_command < 0 ? -pwm_threshold : pwm_threshold) + ((left_command * (500 - pwm_threshold)) / 500);
         motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
