@@ -34,11 +34,9 @@ constexpr cogip::canpb::uuid_t emergency_button_released_uuid = 0x2;
 
 /// LX servomotors IDs
 enum LXServoIDs {
-    LXID_SWITCHER = 1,
-    LXID_RIGHT_ARM = 2,
-    LXID_RIGHT_ARM_LIFT = 3,
-    LXID_LEFT_ARM = 4,
-    LXID_LEFT_ARM_LIFT = 5,
+    LXSERVO_LEFT_CART = 0,
+    LXSERVO_RIGHT_CART = 1,
+    LXSERVO_ARM_PANEL = 2,
 };
 
 /// Enum using to group actuators

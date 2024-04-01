@@ -227,6 +227,27 @@ void init(uart_half_duplex_t *lx_stream) {
     );
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_opened);
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_closed);
+
+    // OnOff init
+    _positional_actuators[Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
+        Enum::CART_MAGNET_LEFT,
+        GroupEnum::NO_GROUP,
+        0,
+        0,
+        false,
+        false,
+        pin_cart_magnet_left
+    );
+    _positional_actuators[Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
+        Enum::CART_MAGNET_RIGHT,
+        GroupEnum::NO_GROUP,
+        0,
+        0,
+        false,
+        false,
+        pin_cart_magnet_right
+    );
+
     // Positional actuators timeout thread
     //thread_create(
     //    _gpio_handling_thread_stack,

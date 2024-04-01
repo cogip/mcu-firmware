@@ -38,6 +38,9 @@ enum class Enum: uint8_t {
     ANALOGSERVO_BOTTOM_GRIP_RIGHT = 3,
     ANALOGSERVO_TOP_GRIP_LEFT = 4,
     ANALOGSERVO_TOP_GRIP_RIGHT = 5,
+    CART_MAGNET_LEFT = 6,
+    CART_MAGNET_RIGHT = 7,
+    /* ANALOGSERVO_PAMI8 = 8 */
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
@@ -50,6 +53,12 @@ enum PCA9586Channels {
     CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT = 2,
     CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT = 3,
 };
+
+/// Magnet command pins
+/// @{
+constexpr int pin_cart_magnet_left = GPIO_PIN(PORT_C, 7);
+constexpr int pin_cart_magnet_right = GPIO_PIN(PORT_C, 9);
+/// @}
 
 /// Limit switches
 /// @{

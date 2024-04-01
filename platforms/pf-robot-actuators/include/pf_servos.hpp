@@ -24,8 +24,9 @@ namespace servos {
 /// Servomotors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: lx_id_t {
-    LXSERVO_LEFT_ARM = 0,
-    LXSERVO_RIGHT_ARM = 1
+    LXSERVO_LEFT_CART = 0,
+    LXSERVO_RIGHT_CART = 1,
+    LXSERVO_ARM_PANEL = 2,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
