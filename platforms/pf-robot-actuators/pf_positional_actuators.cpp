@@ -169,10 +169,7 @@ static void *_positional_actuators_timeout_thread(void *args)
     return 0;
 }
 
-void init(uart_half_duplex_t *lx_stream) {
-    // Half duplex stream that must have been initialized previously
-    LxMotor::lx_stream = lx_stream;
-
+void init() {
     // Init PWM I2C driver
     _pca9685_init();
 

@@ -30,9 +30,9 @@ constexpr double linear_speed_pid_integral_limit = etl::numeric_limits<int16_t>:
 constexpr double angular_speed_pid_integral_limit = etl::numeric_limits<int16_t>::max();
 
 // Linear threshold
-constexpr double linear_threshold = 3;
+constexpr double linear_threshold = 0.25;
 // Angular threshold
-constexpr double angular_threshold = 2;
+constexpr double angular_threshold = 0.25;
 // Angular intermediate threshold (when the robot turns on itself to go straight to its destination)
-constexpr double angular_intermediate_threshold = 20;
+constexpr double angular_intermediate_threshold = 2;
 

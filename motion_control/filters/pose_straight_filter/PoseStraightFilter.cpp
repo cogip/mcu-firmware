@@ -133,7 +133,6 @@ void PoseStraightFilter::execute() {
             if (fabs(pos_err.distance()) <= parameters_->linear_threshold()) {
                 // Reached intermediate pose, move to the final step
                 pose_reached = target_pose_status_t::intermediate_reached;
-                target_speed.set_distance(0);
                 this->current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
             }
             break;

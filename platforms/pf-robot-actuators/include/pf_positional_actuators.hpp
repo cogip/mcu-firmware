@@ -90,7 +90,7 @@ constexpr uint32_t default_timeout_period_motor_top_lift = 3;
 /// @}
 
 /// Initialize positional_actuators.
-void init(uart_half_duplex_t *lx_stream);
+void init();
 
 /// GPIO expander wrapper
 void pf_pcf857x_gpio_write(gpio_t pin, int value);
