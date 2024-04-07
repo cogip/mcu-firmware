@@ -37,8 +37,8 @@ protected:
 
     /// Set inputs for each parallel controller
     void set_inputs() override {
-        BaseController *linear_ctrl = (*this)[0];
-        BaseController *angular_ctrl = (*this)[1];
+        BaseController *linear_ctrl = this->front();
+        BaseController *angular_ctrl = this->back();
 
         // Linear pose error
         linear_ctrl->set_input(0, inputs_[0]);
@@ -57,10 +57,8 @@ protected:
 
     /// Sort outputs from each parallel controller
     void sort_outputs() override {
-        auto ctrl_iterator = begin();
-
-        BaseController *linear_ctrl = *ctrl_iterator++;
-        BaseController *angular_ctrl = *ctrl_iterator++;
+        BaseController *linear_ctrl = this->front();
+        BaseController *angular_ctrl = this->back();
 
         // Linear command
         outputs_[0] = linear_ctrl->output(0);
