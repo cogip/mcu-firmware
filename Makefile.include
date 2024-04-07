@@ -49,6 +49,12 @@ MCUFW_MODULE_DIRS = " \
 shell_module_dirs = $(wildcard $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/*/shell_*/.))
 EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/) $(shell_module_dirs:%=%/..)
 
+# Use C++20 by default
+CXXEXFLAGS := $(filter-out -std=%, $(CXXEXFLAGS))
+CXXEXFLAGS += -std=c++17
+CXXEXFLAGS += -Wno-pedantic
+CXXEXFLAGS += -Wno-cast-align
+
 # Export mcu-firmware global variables
 include $(MCUFIRMWAREBASE)/makefiles/global_vars.mk.inc
 
@@ -88,17 +94,8 @@ else
 	CFLAGS += -D"MALLINFO_FUNC()=mallinfo()"
 endif
 
-# Use C++14 by default
-tmp_cxxexflags := $(CXXEXFLAGS)
-CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
-CXXEXFLAGS += -std=c++17
-CXXEXFLAGS += -Wno-pedantic
-CXXEXFLAGS += -Wno-cast-align
-
 # Activate asserts debug
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
-
-LINKFLAGS:=$(filter-out -nostartfiles,$(LINKFLAGS))
 
 # Link to librt for timer_* functions definitions
 ifeq ($(CPU),native)
