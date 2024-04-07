@@ -99,6 +99,9 @@ void PoseStraightFilter::execute() {
         pos_err.reverse();
     }
 
+    bool no_angular_speed_limit = false;
+    bool no_linear_speed_limit = false;
+
     // Each move is decomposed in three steps:
     //   1. The robot rotates on its center to take the direction of the pose to reach.
     //   2. The robot goes straight to that pose.
@@ -135,17 +138,21 @@ void PoseStraightFilter::execute() {
     // Linear current speed
     outputs_[1] = current_speed.distance();
     // Linear target speed
-    outputs_[2] = target_speed.distance();
+    outputs_[2] = fabs(target_speed.distance());
+    // Should linear speed be filtered ?
+    outputs_[3] = (double)no_linear_speed_limit;
 
     // Angular pose error
-    outputs_[3] = pos_err.angle();
+    outputs_[4] = pos_err.angle();
     // Angular current speed
-    outputs_[4] = current_speed.angle();
+    outputs_[5] = current_speed.angle();
     // Angular target speed
-    outputs_[5] = target_speed.angle();
+    outputs_[6] = fabs(target_speed.angle());
+    // Should angular speed be filtered ?
+    outputs_[7] = (double)no_angular_speed_limit;
 
     // Pose reached
-    outputs_[6] = (double)pose_reached;
+    outputs_[8] = (double)pose_reached;
 };
 
 } // namespace motion_control

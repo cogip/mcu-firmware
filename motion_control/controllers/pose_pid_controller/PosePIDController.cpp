@@ -30,6 +30,8 @@ void PosePIDController::execute() {
     this->outputs_[1] = this->inputs_[1];
     // Store target speed (pass through)
     this->outputs_[2] = this->inputs_[2];
+    // Store disabling speed filter (pass through)
+    this->outputs_[3] = this->inputs_[3];
 };
 
 } // namespace motion_control
