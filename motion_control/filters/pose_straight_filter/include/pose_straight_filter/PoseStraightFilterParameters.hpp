@@ -33,7 +33,7 @@ public:
     angular_deceleration_(angular_deceleration_),
     linear_deceleration_(linear_deceleration_) {};
 
-    ///  Get angular threshold
+    /// Get angular threshold
     /// return angular threshold
     double angular_threshold() const { return angular_threshold_; };
 
@@ -42,11 +42,11 @@ public:
         double angular_threshold                            ///< [in]   angular threshold
         ) { angular_threshold_ = angular_threshold; };
 
-    ///  Get linear threshold
+    /// Get linear threshold
     /// return Linear threshold
     double linear_threshold() const { return linear_threshold_; };
 
-    ///  Get angular intermediate threshold
+    /// Get angular intermediate threshold
     /// return angular intermediate threshold
     double angular_intermediate_threshold() const { return angular_intermediate_threshold_; };
 
@@ -55,11 +55,11 @@ public:
         double angular_intermediate_threshold                            ///< [in]   intermediate angular threshold
         ) { angular_intermediate_threshold_ = angular_intermediate_threshold; };
 
-    ///  Get angular deceleration
+    /// Get angular deceleration
     /// return Angular deceleration
     double angular_deceleration() const { return angular_deceleration_; };
 
-    ///  Get linear deceleration
+    /// Get linear deceleration
     /// return Linear deceleration
     double linear_deceleration() const { return linear_deceleration_; };
 
