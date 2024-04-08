@@ -1,10 +1,10 @@
-APPLICATION = cup2024-motion-control
+APPLICATION = cup2024-robot-motion-control
 
 BOARD ?= cogip-board
 #BOARD ?= cogip-native
 
 # Platform
-USEMODULE += pegasus
+USEMODULE += pf-robot-motion-control
 
 # Main thread stack size
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=4096
