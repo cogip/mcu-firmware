@@ -110,6 +110,7 @@ void PoseStraightFilter::execute() {
     // The linear threshold is used to check if the robot is close to the pose to reach (step 2.).
     if (fabs(pos_err.distance()) > parameters_->linear_threshold()) {
         if (fabs(pos_err.angle()) > parameters_->angular_threshold()) {
+        if (fabs(pos_err.angle()) > parameters_->angular_intermediate_threshold()) {
             // So if the robot is far from the pose to reach and if the angle to reach this pose is too important,
             // first rotate on itself to take the direction of the destination.
             // Set the linear speed to 0 in such case.
@@ -131,6 +132,14 @@ void PoseStraightFilter::execute() {
             // Pose is finally reached, inform the platform through target pose status variable.
             pose_reached = target_pose_status_t::reached;
         }
+    }
+
+    if (fabs(pos_err.distance()) <= ((current_speed.distance() * current_speed.distance()) / (2 * parameters_->linear_deceleration()))) {
+        target_speed.set_distance(sqrt(2 * parameters_->linear_deceleration() * pos_err.distance()));
+    }
+
+    if (fabs(pos_err.angle()) <= ((current_speed.angle() * current_speed.angle()) / (2 * parameters_->angular_deceleration()))) {
+        target_speed.set_angle(sqrt(2 * parameters_->angular_deceleration() * pos_err.angle()));
     }
 
     // Linear pose error
