@@ -115,8 +115,8 @@ void pf_init(void)
     );
 
     /* Initialize CANPB */
-    bool canpb_res = canpb.init();
-    if (! canpb_res) {
+    int canpb_res = canpb.init();
+    if (canpb_res) {
         COGIP_DEBUG_CERR("CAN initialization failed, error: " << canpb_res);
     }
     else {
