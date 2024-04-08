@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    platforms_pegasus Test platform
+ * @defgroup    platforms_pf-robot-motion-control Test platform
  * @ingroup     platforms
  * @brief       COGIP test platform definition
  * @{
