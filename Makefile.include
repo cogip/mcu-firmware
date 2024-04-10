@@ -108,6 +108,9 @@ ifeq (,$(findstring -DISR_STACKSIZE=,$(CFLAGS)))
 	CFLAGS += -DISR_STACKSIZE=2048
 endif
 
+# Main thread stack size
+CFLAGS += -DTHREAD_STACKSIZE_MAIN=8192
+
 # As RIOT Makefile.include is included, RAMSIZE can be computed for not native architectures
 ifneq ($(CPU),native)
 	.DEFAULT_GOAL := world
