@@ -13,6 +13,8 @@
 #include "canpb/CanProtobuf.hpp"
 
 cogip::canpb::CanProtobuf canpb(0);
+// canpb default filter
+struct can_filter canpb_filter = {0x0, 0x0};
 
 #endif
 
@@ -47,7 +49,7 @@ int main(void)
     puts("\n== System monitoring example ==");
 
 #ifdef MODULE_CANPB
-    bool res = canpb.init();
+    bool res = canpb.init(&canpb_filter);
     if (res) {
         std::cerr << "CAN initialization status: " << res << std::endl;
         exit(1);

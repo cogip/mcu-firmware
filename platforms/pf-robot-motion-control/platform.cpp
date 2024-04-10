@@ -18,6 +18,8 @@
 
 // canpb CAN device
 static cogip::canpb::CanProtobuf canpb(0);
+// canpb default filter
+struct can_filter canpb_filter = {0x0, 0x0};
 
 // Thread stacks
 static char heartbeat_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -115,7 +117,7 @@ void pf_init(void)
     );
 
     /* Initialize CANPB */
-    int canpb_res = canpb.init();
+    int canpb_res = canpb.init(&canpb_filter);
     if (canpb_res) {
         COGIP_DEBUG_CERR("CAN initialization failed, error: " << canpb_res);
     }

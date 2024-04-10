@@ -67,7 +67,7 @@ public:
 
     /// Initialize CAN connection.
     /// @return true if CAN connection is initialized, false otherwise
-    bool init();
+    bool init(struct can_filter *filter);
 
     /// Start thread waiting for incoming messages.
     void start_reader();
