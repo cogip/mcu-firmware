@@ -8,11 +8,8 @@
 
 #include "AnalogServo.hpp"
 #include "LxMotor.hpp"
-#include "Motor.hpp"
-#include "OnOff.hpp"
 #include "PositionalActuator.hpp"
 
-#include "actuators_motors_params.hpp"
 #include "pca9685_params.hpp"
 #include "platform.hpp"
 
@@ -37,10 +34,6 @@ static char _positional_actuators_timeout_thread_stack[THREAD_STACKSIZE_DEFAULT]
 /// Positional actuators timeout thread period (ms)
 constexpr uint16_t _positional_actuators_timeout_thread_period_ms = 100;
 
-/// Motors memory pool
-static etl::pool<Motor, COUNT> _motors_pool;
-/// OnOff memory pool
-static etl::pool<OnOff, COUNT> _onoff_pool;
 /// Analog servomotor pool
 static etl::pool<AnalogServo, COUNT> _analog_servo_pool;
 /// Positional actuators map
@@ -116,6 +109,10 @@ void init(uart_half_duplex_t *lx_stream) {
         NULL,
         "Positional acturators timeout thread"
     );
+}
+
+bool contains(Enum id) {
+    return _positional_actuators.contains(id);
 }
 
 PositionalActuator & get(Enum id) {

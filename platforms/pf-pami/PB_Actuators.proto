@@ -3,7 +3,6 @@ syntax = "proto3";
 enum PB_ActuatorsTypeEnum
 {
   SERVO = 0;
-  PUMP = 1;
   POSITIONAL = 2;
 }
 
@@ -18,12 +17,6 @@ enum PB_ServoEnum
     LXSERVO_BALL_SWITCH = 1;
     LXSERVO_RIGHT_ARM = 2;
     LXSERVO_LEFT_ARM = 4;
-}
-
-enum PB_PumpEnum
-{
-    PUMP_RIGHT_ARM = 0;
-    PUMP_LEFT_ARM = 1;
 }
 
 enum PB_PositionalActuatorEnum
@@ -47,15 +40,6 @@ message PB_Servo {
     uint32 command = 6;
 }
 
-message PB_Pump {
-    PB_ActuatorsGroupEnum group = 1;
-    uint32 order = 2;
-    bool is_blocked = 3;
-    PB_PumpEnum id = 4;
-    bool activated = 5;
-    bool under_pressure = 6;
-}
-
 message PB_PositionalActuator {
     PB_ActuatorsGroupEnum group = 1;
     uint32 order = 2;
@@ -67,26 +51,19 @@ message PB_PositionalActuator {
 message PB_ActuatorState {
     oneof type {
         PB_Servo servos = 1;
-        PB_Pump pumps = 2;
-        PB_PositionalActuator positional_actuators = 3;
+        PB_PositionalActuator positional_actuators = 2;
     }
 }
 
 message PB_ActuatorsState {
     repeated PB_Servo servos = 1;
-    repeated PB_Pump pumps = 2;
-    repeated PB_PositionalActuator positional_actuators = 3;
+    repeated PB_PositionalActuator positional_actuators = 2;
 }
 
 message PB_ServoCommand {
     PB_ServoEnum id = 1;
     uint32 command = 2;
     uint32 time = 3;
-}
-
-message PB_PumpCommand {
-    PB_PumpEnum id = 1;
-    bool command = 2;
 }
 
 message PB_PositionalActuatorCommand {
@@ -97,7 +74,6 @@ message PB_PositionalActuatorCommand {
 message PB_ActuatorCommand {
     oneof command {
         PB_ServoCommand servo = 1;
-        PB_PumpCommand pump = 2;
-        PB_PositionalActuatorCommand positional_actuator = 3;
+        PB_PositionalActuatorCommand positional_actuator = 2;
     }
 }

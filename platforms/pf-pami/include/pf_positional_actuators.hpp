@@ -56,6 +56,11 @@ void init(uart_half_duplex_t *lx_stream);
 /// GPIO expander wrapper
 void pf_pcf857x_gpio_write(gpio_t pin, int value);
 
+/// Check if a positional_actuator identified by id exists.
+bool contains(
+    Enum id  ///< [in] positional_actuator id
+);
+
 /// Get a positional_actuator by id.
 PositionalActuator & get(
     Enum id  ///< [in] positional_actuator id

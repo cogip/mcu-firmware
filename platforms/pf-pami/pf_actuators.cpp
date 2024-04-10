@@ -5,7 +5,6 @@
 
 #include "pf_actuators.hpp"
 #include "pf_servos.hpp"
-#include "pf_pumps.hpp"
 #include "pf_positional_actuators.hpp"
 
 #include "board.h"
@@ -34,7 +33,7 @@ constexpr cogip::uartpb::uuid_t thread_stop_uuid = 3781855956;
 constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
 constexpr cogip::uartpb::uuid_t command_uuid = 2552455996;
 
-static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::pumps::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
+static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
 
 /// Half duplex UART stream
 static uart_half_duplex_t _lx_stream;
@@ -48,7 +47,6 @@ static void _send_state() {
     static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
     _pb_state.clear();
     servos::pb_copy(_pb_state.mutable_servos());
-    pumps::pb_copy(_pb_state.mutable_pumps());
     positional_actuators::pb_copy(_pb_state.mutable_positional_actuators());
     uartpb.send_message(state_uuid, &_pb_state);
 }
@@ -82,7 +80,6 @@ void enable_all() {
 /// Disable all actuators
 void disable_all() {
     positional_actuators::disable_all();
-    pumps::disable_all();
     servos::disable_all();
     _suspend_actuators = true;
 }
@@ -116,15 +113,12 @@ static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
                 }
             );
         }
-        else if (pb_command.has_pump()) {
-            const PB_PumpCommand & pb_pump_command = pb_command.get_pump();
-            pumps::Enum id = pumps::Enum{(vacuum_pump_t)pb_pump_command.id()};
-            pumps::get(id).activate(pb_pump_command.command());
-        }
         if (pb_command.has_positional_actuator()) {
             const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
             positional_actuators::Enum id = positional_actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
-            positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
+            if (positional_actuators::contains(id)) {
+                positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
+            }
         }
     }
 }
@@ -174,7 +168,6 @@ void init() {
     _lx_half_duplex_uart_init();
     positional_actuators::init(&_lx_stream);
     servos::init(&_lx_stream);
-    pumps::init();
 
     _sender_pid = thread_create(
         _sender_stack,

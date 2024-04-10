@@ -16,7 +16,6 @@ USEMODULE += lx_servo
 USEMODULE += odometry
 USEMODULE += path
 USEMODULE += uartpb
-USEMODULE += vacuum_pump
 # Controllers
 USEMODULE += passthrough_pose_pid_controller
 USEMODULE += quadpid_meta_controller
