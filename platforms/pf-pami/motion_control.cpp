@@ -456,15 +456,18 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
     motor_enable(&motion_motors_driver, MOTOR_LEFT);
 
     // Apply motor commands
-    if (fabs(right_command) > 499) {
-        right_command = (fabs(right_command)/right_command) * 499;
+    if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
+        right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
     }
-    if (fabs(left_command) > 499) {
-        left_command = (fabs(left_command)/left_command) * 499;
+    if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
+        left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
     }
-    int pwm_threshold = 75;
-    right_command = (right_command < 0 ? -pwm_threshold : pwm_threshold ) + ((right_command * (500 - pwm_threshold)) / 500);
-    left_command = (left_command < 0 ? -pwm_threshold : pwm_threshold) + ((left_command * (500 - pwm_threshold)) / 500);
+    right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
+                    + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                        / (int16_t)motion_motors_driver.params->pwm_resolution);
+    left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
+                    + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                        / (int16_t)motion_motors_driver.params->pwm_resolution);
     motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
     motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
 

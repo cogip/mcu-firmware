@@ -13,7 +13,7 @@ namespace motion_control {
 
 typedef uint8_t pid_id_t;
 
-/// Servomotors ids
+/// PID ids
 constexpr auto START_LINE = __LINE__;
 enum class PidEnum: pid_id_t {
     LINEAR_POSE_PID = 1,
@@ -60,6 +60,9 @@ constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   
 constexpr double wheels_distance_pulse = wheels_distance_mm * pulse_per_mm;     ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
 constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   ///< WHEELS_DISTANCE_PULSE * 2 * PI / 360
 /// @}
+
+/// Minimal PWM value
+constexpr int pwm_minimal = 75;
 
 /// @name Acceleration and speed profiles
 /// @{
