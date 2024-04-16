@@ -53,15 +53,6 @@ enum {
 /* Motion motors simulation */
 #define MOTION_MOTORS_POST_CB cogip_native_motor_driver_qdec_simulation
 
-/* Motors */
-#define MOTOR_LEFT  0
-#define MOTOR_RIGHT 1
-
-/* Quadrature decoding */
-#define QDEC_MODE           QDEC_X1
-#define QDEC_LEFT_POLARITY  1
-#define QDEC_RIGHT_POLARITY 1
-
 /**
  * @name    ztimer configuration
  * @{
