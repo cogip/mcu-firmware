@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_motor_pose_filter := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_motor_pose_filter)
+
+PROTOBUF_PATH_motor_pose_filter := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_motor_pose_filter)
