@@ -374,6 +374,9 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
         linear_speed_filter.reset_previous_speed_order();
         angular_speed_filter.reset_previous_speed_order();
 
+        // Reset pose straight filter state
+        pose_straight_filter.reset_current_state();
+
         pf_enable_motion_control();
     }
 }
@@ -436,50 +439,40 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
     // Previous target pose status flag to avoid flooding protobuf serial bus.
     static cogip::motion_control::target_pose_status_t previous_target_pose_status = cogip::motion_control::target_pose_status_t::moving;
 
-    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
-        // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
-        // The PWM driver will filter the value to the max PWM resolution defined for the board.
-        // Compute motor commands with Polar motion control result
-        int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
-                                                   (double)(std::numeric_limits<int16_t>::min()) / 2);
-        int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
+    // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
+    // The PWM driver will filter the value to the max PWM resolution defined for the board.
+    // Compute motor commands with Polar motion control result
+    int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
+                                               (double)(std::numeric_limits<int16_t>::min()) / 2);
+    int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
                                                   (double)(std::numeric_limits<int16_t>::min()) / 2);
 
-        // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
-        motor_disable(&motion_motors_driver, MOTOR_RIGHT);
-        motor_disable(&motion_motors_driver, MOTOR_LEFT);
-        ztimer_sleep(ZTIMER_USEC, 1);
-        motor_enable(&motion_motors_driver, MOTOR_RIGHT);
-        motor_enable(&motion_motors_driver, MOTOR_LEFT);
+    // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
+    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
+    motor_disable(&motion_motors_driver, MOTOR_LEFT);
+    ztimer_sleep(ZTIMER_USEC, 1);
+    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
+    motor_enable(&motion_motors_driver, MOTOR_LEFT);
 
-        // Apply motor commands
-        if (fabs(right_command) > 499) {
-            right_command = (fabs(right_command)/right_command) * 499;
-        }
-        if (fabs(left_command) > 499) {
-            left_command = (fabs(left_command)/left_command) * 499;
-        }
-        int pwm_threshold = 75;
-        //std::cout << "motor_drive: " << right_command << "    " << left_command << std::endl;
-        right_command = (right_command < 0 ? -pwm_threshold : pwm_threshold ) + ((right_command * (500 - pwm_threshold)) / 500);
-        left_command = (left_command < 0 ? -pwm_threshold : pwm_threshold) + ((left_command * (500 - pwm_threshold)) / 500);
-        motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
-        motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
+    // Apply motor commands
+    if (fabs(right_command) > 499) {
+        right_command = (fabs(right_command)/right_command) * 499;
     }
-    else {
+    if (fabs(left_command) > 499) {
+        left_command = (fabs(left_command)/left_command) * 499;
+    }
+    int pwm_threshold = 75;
+    right_command = (right_command < 0 ? -pwm_threshold : pwm_threshold ) + ((right_command * (500 - pwm_threshold)) / 500);
+    left_command = (left_command < 0 ? -pwm_threshold : pwm_threshold) + ((left_command * (500 - pwm_threshold)) / 500);
+    motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
+    motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
+
+    if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
         // Send message in case of final pose reached only.
         if ((pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached)
             &&  (previous_target_pose_status != cogip::motion_control::target_pose_status_t::reached)) {
             pf_get_canpb().send_message(pose_reached_uuid);
         }
-
-        // Only useful for native architecture, to populate emulated QDEC data.
-        motor_set(&motion_motors_driver, MOTOR_LEFT, 0);
-        motor_set(&motion_motors_driver, MOTOR_RIGHT, 0);
-
-        // Brake motors as the robot should not move in this case.
-        motor_brake(&motion_motors_driver, MOTOR_LEFT);
-        motor_brake(&motion_motors_driver, MOTOR_RIGHT);
 
         // Reset previous speed orders
         linear_speed_filter.reset_previous_speed_order();
