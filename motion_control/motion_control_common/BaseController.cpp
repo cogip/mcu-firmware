@@ -17,7 +17,7 @@ bool BaseController::set_meta(BaseMetaController *meta) {
 
 bool BaseController::is_index_valid(size_t index) {
     if (index != nb_inputs()) {
-       COGIP_DEBUG_CERR("Wrong number of inputs, " << index << " given, " << nb_inputs() << " expected.");
+        std::cerr << "Wrong number of inputs, " << index << " given, " << nb_inputs() << " expected." << std::endl;
 
        return false;
     }

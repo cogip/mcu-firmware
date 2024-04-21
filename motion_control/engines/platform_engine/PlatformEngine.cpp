@@ -45,7 +45,7 @@ void PlatformEngine::prepare_inputs() {
         controller_->set_input(index++, target_pose_.allow_reverse());
 
         if (index != controller_->nb_inputs()) {
-            COGIP_DEBUG_CERR("PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.");
+            std::cerr << "PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected." << std::endl;
         }
     }
 };

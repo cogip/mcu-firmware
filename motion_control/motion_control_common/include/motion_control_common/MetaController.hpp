@@ -39,12 +39,12 @@ public:
     /// Controller core method. Meta controller executes all sub-controllers in chain.
     void execute() override {
         if (this->empty()) {
-            COGIP_DEBUG_CERR("Error: no controller added.");
+            std::cerr << "Error: no controller added." << std::endl;
             return;
         }
         if (this->back()->nb_outputs() != OUTPUT_SIZE) {
-            COGIP_DEBUG_CERR("Error: First controller must have the same number of outputs (" << this->back()->nb_inputs() << ") "
-                      << "as the last controller (" << this->back()->nb_inputs() << ").");
+            std::cerr << "Error: First controller must have the same number of outputs (" << this->back()->nb_inputs() << ") "
+                      << "as the last controller (" << this->back()->nb_inputs() << ")." << std::endl;
             return;
         }
 
@@ -83,7 +83,7 @@ public:
             return;
         }
         if (this->empty() && INPUT_SIZE != ctrl->nb_inputs()) {
-            COGIP_DEBUG_CERR("Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ").");
+            std::cerr << "Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ")." << std::endl;
             return;
         }
         this->push_back(ctrl);
@@ -99,7 +99,7 @@ public:
             return;
         }
         if (INPUT_SIZE != ctrl->nb_inputs()) {
-            COGIP_DEBUG_CERR("Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ").");
+            std::cerr << "Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ")." << std::endl;
             return;
         }
         this->push_front(ctrl);
