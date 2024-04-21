@@ -27,7 +27,7 @@ namespace motion_control {
 /// Output 0:   speed order
 /// Output 1:   current speed
 /// Output 2:   target speed
-class PosePIDController : public Controller<4, 4, PosePIDControllerParameters> {
+class PosePIDController : public Controller<5, 5, PosePIDControllerParameters> {
 public:
     /// Constructor
     explicit PosePIDController(

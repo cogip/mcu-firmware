@@ -6,7 +6,6 @@
 #include <iostream>
 
 // Project includes
-#include "cogip_defs/Pose.hpp"
 #include "cogip_defs/Polar.hpp"
 #include "etl/list.h"
 #include "etl/vector.h"
@@ -82,6 +81,8 @@ void SpeedFilter::execute() {
 
     // Store speed_error
     this->outputs_[0] = speed_order - current_speed;
+    // Pose reached
+    this->outputs_[1] = this->inputs_[4];
 };
 
 } // namespace motion_control

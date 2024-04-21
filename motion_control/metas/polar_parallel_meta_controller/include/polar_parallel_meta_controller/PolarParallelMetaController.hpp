@@ -48,6 +48,8 @@ protected:
         linear_ctrl->set_input(2, inputs_[2]);
         // Should linear speed be filtered ?
         linear_ctrl->set_input(3, inputs_[3]);
+        // Pose reached
+        linear_ctrl->set_input(4, inputs_[8]);
 
         // Angular pose error
         angular_ctrl->set_input(0, inputs_[4]);
@@ -56,7 +58,9 @@ protected:
         // Angular target speed
         angular_ctrl->set_input(2, inputs_[6]);
         // Should angular speed be filtered ?
-        linear_ctrl->set_input(3, inputs_[7]);
+        angular_ctrl->set_input(3, inputs_[7]);
+        // Pose reached
+        angular_ctrl->set_input(4, inputs_[8]);
     };
 
     /// Sort outputs from each parallel controller

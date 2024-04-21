@@ -24,7 +24,7 @@ namespace motion_control {
 /// Input 1:    current speed
 /// Input 2:    target speed
 /// Output 0:   filtered speed
-class SpeedFilter : public Controller<4, 1, SpeedFilterParameters> {
+class SpeedFilter : public Controller<5, 2, SpeedFilterParameters> {
 public:
     /// @brief
     /// @param parameters

@@ -27,6 +27,8 @@ void SpeedPIDController::execute() {
 
     // Store output values.
     this->outputs_[0] = speed_command;
+    // Pose reached
+    this->outputs_[1] = this->inputs_[1];
 };
 
 } // namespace motion_control

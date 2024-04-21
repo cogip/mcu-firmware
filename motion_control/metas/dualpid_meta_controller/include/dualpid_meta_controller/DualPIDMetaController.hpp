@@ -24,8 +24,11 @@ namespace motion_control {
 /// Input 0:    polar pose error
 /// Input 1:    current speed
 /// Input 2:    target speed
+/// Input 3:    filter speed bool
+/// Input 4:    pose reached
 /// Output 0:   motor command
-class DualPIDMetaController: public MetaController <4, 1, 3> {};
+/// Output 0:   pose reached
+class DualPIDMetaController: public MetaController <5, 2, 4> {};
 
 } // namespace motion_control
 
