@@ -20,6 +20,8 @@
 static char _thread_buggy_stack[THREAD_STACKSIZE_SMALL];
 
 cogip::canpb::CanProtobuf canpb(0);
+// canpb default filter
+struct can_filter canpb_filter = {0x0, 0x0};
 
 static int cmd_display_heap_status(int argc, char **argv)
 {
@@ -81,7 +83,7 @@ int main(void)
 {
     puts("\n== System thread monitoring example ==");
 
-    bool res = canpb.init();
+    bool res = canpb.init(&canpb_filter);
     if (! res) {
         std::cerr << "CAN initialization status: " << res << std::endl;
         exit(1);

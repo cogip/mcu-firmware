@@ -28,7 +28,7 @@
 
 #include "periph_cpu.h"
 #include "clk_conf.h"
-#include "cfg_i2c1_pb8_pb9.h"
+#include "cfg_i2c2_pa9_pa8.h"
 #include "cfg_rtt_default.h"
 #include "cfg_timer_tim2.h"
 
@@ -54,9 +54,23 @@ static const uart_conf_t uart_config[] = {
         .type = STM32_LPUART,
         .clk_src = 0,
     },
+    {
+        /* LX Servo */
+        .dev = USART1,
+        .rcc_mask = RCC_APB2ENR_USART1EN,
+        .rx_pin = GPIO_PIN(PORT_C, 5),
+        .tx_pin = GPIO_PIN(PORT_C, 4),
+        .rx_af = GPIO_AF7,
+        .tx_af = GPIO_AF7,
+        .bus = APB2,
+        .irqn = USART1_IRQn,
+        .type = STM32_USART,
+        .clk_src = 0,
+    },
 };
 
 #define UART_0_ISR      (isr_lpuart1)
+#define UART_1_ISR      (isr_usart1)
 
 #define UART_NUMOF      ARRAY_SIZE(uart_config)
 /** @} */

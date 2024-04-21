@@ -23,38 +23,60 @@ public:
     PoseStraightFilterParameters(
         double angular_threshold = 0.0,  ///< [in]  see angular_threshold_
         double linear_threshold = 0.0,   ///< [in]  see linear_threshold_
-        double linear_deceleration_threshold = 0.0    ///< [in]  see linear_deceleration_threshold_
+        double angular_intermediate_threshold = 0.0,  ///< [in]  see angular_threshold_
+        double angular_deceleration_ = 0.0,  ///< [in]  see angular_deceleration_threshold_
+        double linear_deceleration_ = 0.0    ///< [in]  see linear_deceleration_threshold_
     ) :
     angular_threshold_(angular_threshold),
     linear_threshold_(linear_threshold),
-    linear_deceleration_threshold_(linear_deceleration_threshold) {};
+    angular_intermediate_threshold_(angular_intermediate_threshold),
+    angular_deceleration_(angular_deceleration_),
+    linear_deceleration_(linear_deceleration_) {};
 
-    ///  Get angular threshold
+    /// Get angular threshold
     /// return angular threshold
     double angular_threshold() const { return angular_threshold_; };
 
     /// Set angular threshold
     void set_angular_threshold(
-        double angular_threshold                      ///< [in]   angular threshold
+        double angular_threshold                            ///< [in]   angular threshold
         ) { angular_threshold_ = angular_threshold; };
 
-    ///  Get linear threshold
+    /// Get linear threshold
     /// return Linear threshold
     double linear_threshold() const { return linear_threshold_; };
 
-    ///  Get linear deceleration threshold
-    /// return Linear deceleration threshold
-    double linear_deceleration_threshold() const { return linear_deceleration_threshold_; };
+    /// Get angular intermediate threshold
+    /// return angular intermediate threshold
+    double angular_intermediate_threshold() const { return angular_intermediate_threshold_; };
+
+    /// Set angular threshold
+    void set_intermediate_angular_threshold(
+        double angular_intermediate_threshold                            ///< [in]   intermediate angular threshold
+        ) { angular_intermediate_threshold_ = angular_intermediate_threshold; };
+
+    /// Get angular deceleration
+    /// return Angular deceleration
+    double angular_deceleration() const { return angular_deceleration_; };
+
+    /// Get linear deceleration
+    /// return Linear deceleration
+    double linear_deceleration() const { return linear_deceleration_; };
 
     /// Set linear threshold
     void set_linear_threshold(
-        double linear_threshold                      ///< [in]   linear threshold
+        double linear_threshold                             ///< [in]   linear threshold
         ) { linear_threshold_ = linear_threshold; };
 
-    /// Set linear deceleration threshold
-    void set_linear_deceleration_threshold(
-        double linear_deceleration_threshold         ///< [in]   linear deceleration threshold
-        ) { linear_deceleration_threshold_ = linear_deceleration_threshold; };
+    /// Set angular deceleration
+    void set_angular_deceleration(
+        double angular_deceleration                         ///< [in]   angular deceleration
+        ) { angular_deceleration_ = angular_deceleration; };
+
+    /// Set linear deceleration
+    void set_linear_deceleration(
+        double linear_deceleration                          ///< [in]   linear deceleration
+        ) { linear_deceleration_ = linear_deceleration; };
 
 private:
     /// the robot turns on itself until the angle error is lower than this threshold
@@ -63,8 +85,14 @@ private:
     /// the robot has reach the point when the linear error is lower than this threshold
     double linear_threshold_;
 
-    /// the robot start to force its deceleration when the linear distance to the target point is below that value
-    double linear_deceleration_threshold_;
+    /// the robot turns on itself until the angle error is lower than this threshold to reach its final destination
+    double angular_intermediate_threshold_;
+
+    /// angular deceleration
+    double angular_deceleration_;
+
+    /// linear deceleration
+    double linear_deceleration_;
 };
 
 } // namespace motion_control

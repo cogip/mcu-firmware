@@ -22,11 +22,10 @@ CanProtobuf::CanProtobuf(
 {
 }
 
-bool CanProtobuf::init()
+bool CanProtobuf::init(struct can_filter *filter)
 {
     std::cout << "Initialiaze CanProtobuf " << can_interface_number_ << std::endl;
-    struct can_filter filter = {0, 0};
-    return conn_can_raw_create(&conn_can_raw_, &filter, 1, can_interface_number_, 0);
+    return conn_can_raw_create(&conn_can_raw_, filter, 1, can_interface_number_, 0);
 }
 
 void CanProtobuf::start_reader()
@@ -55,9 +54,10 @@ void CanProtobuf::message_reader()
 
         // Check a handler corresponding to the uuid is registered
         if (message_handlers_.count(uuid) != 1) {
-            std::cout << "Unknown message uuid: " << (uint32_t)uuid << std::endl;
+            //std::cout << "Unknown message uuid: " << (uint32_t)uuid << std::endl;
             continue;
         }
+        std::cout << "receive message uuid: " << (uint32_t)uuid << std::endl;
 
         // Read Protobuf message if any
         if (frame.len > 0) {
@@ -100,7 +100,7 @@ bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfac
     if (success) {
         if (base64_size < DEFAULT_CAN_MAX_DLEN) {
             can_frame_t frame;
-            frame.can_id = uuid;
+            frame.can_id = uuid | CAN_EFF_FLAG;
             frame.len = base64_size;
             frame.flags = CANFD_FDF;
             for (uint8_t byte_index = 0; byte_index < base64_size; byte_index++) {

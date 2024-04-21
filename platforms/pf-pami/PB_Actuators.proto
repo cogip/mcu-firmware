@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+enum PB_ActuatorsTypeEnum
+{
+  SERVO = 0;
+  POSITIONAL = 2;
+}
+
+enum PB_ActuatorsGroupEnum
+{
+  NO_GROUP = 0;
+}
+
+enum PB_ServoEnum
+{
+    LXSERVO_UNUSED = 0; // The first enum value must be zero in proto3.
+    LXSERVO_BALL_SWITCH = 1;
+    LXSERVO_RIGHT_ARM = 2;
+    LXSERVO_LEFT_ARM = 4;
+}
+
+enum PB_PositionalActuatorEnum
+{
+    MOTOR_CENTRAL_LIFT = 0;
+    MOTOR_CONVEYOR_LAUNCHER = 1;
+    ONOFF_LED_PANELS = 2;
+    ANALOGSERVO_CHERRY_ARM = 3;
+    ANALOGSERVO_CHERRY_ESC = 4;
+    ANALOGSERVO_CHERRY_RELEASE = 5;
+    LXMOTOR_RIGHT_ARM_LIFT = 6;
+    LXMOTOR_LEFT_ARM_LIFT = 7;
+}
+
+message PB_Servo {
+    PB_ActuatorsGroupEnum group = 1;
+    uint32 order = 2;
+    bool is_blocked = 3;
+    PB_ServoEnum id = 4;
+    uint32 position = 5;
+    uint32 command = 6;
+}
+
+message PB_PositionalActuator {
+    PB_ActuatorsGroupEnum group = 1;
+    uint32 order = 2;
+    bool is_blocked = 3;
+    PB_PositionalActuatorEnum id = 4;
+    int32 command = 5;
+}
+
+message PB_ActuatorState {
+    oneof type {
+        PB_Servo servos = 1;
+        PB_PositionalActuator positional_actuators = 2;
+    }
+}
+
+message PB_ActuatorsState {
+    repeated PB_Servo servos = 1;
+    repeated PB_PositionalActuator positional_actuators = 2;
+}
+
+message PB_ServoCommand {
+    PB_ServoEnum id = 1;
+    uint32 command = 2;
+    uint32 time = 3;
+}
+
+message PB_PositionalActuatorCommand {
+    PB_PositionalActuatorEnum id = 1;
+    int32 command = 2;
+}
+
+message PB_ActuatorCommand {
+    oneof command {
+        PB_ServoCommand servo = 1;
+        PB_PositionalActuatorCommand positional_actuator = 2;
+    }
+}

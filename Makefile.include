@@ -20,6 +20,7 @@ QUIET ?= 1
 DEVELHELP ?= 1
 THREAD_NAMES = 1
 
+REMOTE_USER ?= root
 define remote-flash-recipe
 	scp $(BINFILE) $(REMOTE_USER)@$(REMOTE_TARGET):/tmp/fw.bin
 	$(GDB) -nx -batch -ex "target extended-remote $(REMOTE_TARGET):3333" -ex "monitor reset halt" -ex "monitor flash write_image erase /tmp/fw.bin 0x08000000" -ex "monitor reset run"
@@ -48,6 +49,12 @@ MCUFW_MODULE_DIRS = " \
 # List them to add their parent directory to EXTERNAL_MODULE_DIRS.
 shell_module_dirs = $(wildcard $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/*/shell_*/.))
 EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/) $(shell_module_dirs:%=%/..)
+
+# Use C++20 by default
+CXXEXFLAGS := $(filter-out -std=%, $(CXXEXFLAGS))
+CXXEXFLAGS += -std=c++17
+CXXEXFLAGS += -Wno-pedantic
+CXXEXFLAGS += -Wno-cast-align
 
 # Export mcu-firmware global variables
 include $(MCUFIRMWAREBASE)/makefiles/global_vars.mk.inc
@@ -88,17 +95,8 @@ else
 	CFLAGS += -D"MALLINFO_FUNC()=mallinfo()"
 endif
 
-# Use C++14 by default
-tmp_cxxexflags := $(CXXEXFLAGS)
-CXXEXFLAGS = $(filter-out -std=%, $(tmp_cxxexflags))
-CXXEXFLAGS += -std=c++17
-CXXEXFLAGS += -Wno-pedantic
-CXXEXFLAGS += -Wno-cast-align
-
 # Activate asserts debug
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
-
-LINKFLAGS:=$(filter-out -nostartfiles,$(LINKFLAGS))
 
 # Link to librt for timer_* functions definitions
 ifeq ($(CPU),native)
@@ -109,6 +107,9 @@ endif
 ifeq (,$(findstring -DISR_STACKSIZE=,$(CFLAGS)))
 	CFLAGS += -DISR_STACKSIZE=2048
 endif
+
+# Main thread stack size
+CFLAGS += -DTHREAD_STACKSIZE_MAIN=8192
 
 # As RIOT Makefile.include is included, RAMSIZE can be computed for not native architectures
 ifneq ($(CPU),native)

@@ -2,4 +2,7 @@ ifneq (,$(filter stdio_uart,$(USEMODULE)))
   FEATURES_REQUIRED += periph_lpuart
 endif
 
+# Disable automatic init of I2C as some boards have different IOs mapping
+DISABLE_MODULE += periph_init_i2c
+
 USEMODULE += mpu_stack_guard

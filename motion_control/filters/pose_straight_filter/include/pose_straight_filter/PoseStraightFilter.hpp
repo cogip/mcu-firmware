@@ -20,6 +20,14 @@ namespace cogip {
 
 namespace motion_control {
 
+// Motion states
+enum class PoseStraightFilterState {
+    ROTATE_TO_DIRECTION,
+    MOVE_TO_POSITION,
+    ROTATE_TO_FINAL_ANGLE,
+    FINISHED
+};
+
 /// Breaks down a movement into a straight trajectory.
 ///        The robot first orients itself towards the point to be reached, then goes towards this point in a straight line.
 /// Input 0-2:  current pose
@@ -34,15 +42,22 @@ namespace motion_control {
 /// Output 4:   angular current speed
 /// Output 5:   angular target speed
 /// Output 5:   pose reached
-class PoseStraightFilter : public Controller<11, 7, PoseStraightFilterParameters> {
+class PoseStraightFilter : public Controller<11, 9, PoseStraightFilterParameters> {
 public:
     /// Constructor
     explicit PoseStraightFilter(
         PoseStraightFilterParameters *parameters    ///< [in]  Movements switch thresholds. See PoseStraightFilterParameters.
-        ) : Controller(parameters) {};
+        ) : Controller(parameters) { current_state_ = PoseStraightFilterState::FINISHED; };
 
     /// Breaks down a movement into a straight trajectory according to movements switch thresholds.
     void execute() override;
+
+    /// Set angular threshold
+    void reset_current_state() { current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION; };
+
+private:
+    /// Current motion state
+    PoseStraightFilterState current_state_;
 };
 
 } // namespace motion_control

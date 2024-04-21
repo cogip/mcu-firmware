@@ -76,9 +76,9 @@ void PoseStraightFilter::execute() {
         || (target_pose.y() != previous_target_pose.y())
         || (target_pose.O() != previous_target_pose.O())) {
         force_allow_reverse = false;
-    }
 
-    previous_target_pose = target_pose;
+        previous_target_pose = target_pose;
+    }
 
     if (force_allow_reverse) {
         allow_reverse = true;
@@ -99,35 +99,67 @@ void PoseStraightFilter::execute() {
         pos_err.reverse();
     }
 
+    bool no_angular_speed_limit = false;
+    bool no_linear_speed_limit = false;
+
     // Each move is decomposed in three steps:
     //   1. The robot rotates on its center to take the direction of the pose to reach.
     //   2. The robot goes straight to that pose.
     //   3. Once arrived at this pose, it rotates again on its center to the wanted angle.
-    // The angular threshold is used to check if a rotation of the robot on itself has to be done (step 1. and 3.).
-    // The linear threshold is used to check if the robot is close to the pose to reach (step 2.).
-    if (fabs(pos_err.distance()) > parameters_->linear_threshold()) {
-        if (fabs(pos_err.angle()) > parameters_->angular_threshold()) {
-            // So if the robot is far from the pose to reach and if the angle to reach this pose is too important,
-            // first rotate on itself to take the direction of the destination.
-            // Set the linear speed to 0 in such case.
-            target_speed.set_distance(0);
-        }
-        else {
-            // Once the angular direction is good, step 1. is completed, thus inform the platform through target pose status variable.
-            pose_reached = target_pose_status_t::intermediate_reached;
-            force_allow_reverse = true;
-        }
+    // The angular threshold is used to check if a rotation of the robot on itself has to be done.
+    // The linear threshold is used to check if the robot is close to the pose to reach.
+    if ((this->current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION)
+        && (fabs((pos_err.distance())) <= parameters_->linear_threshold())) {
+        // If already on target pose, directly take orientation.
+        this->current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
     }
-    else {
-        // If the linear error is below the linear threshold, the step 2. is completed.
-        // Thus inform the platform through target pose status variable.
-        pose_reached = target_pose_status_t::intermediate_reached;
-        // Start step 3. to reach the final wanted orientation.
-        pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
-        if (fabs(pos_err.angle()) < parameters_->angular_threshold()) {
-            // Pose is finally reached, inform the platform through target pose status variable.
-            pose_reached = target_pose_status_t::reached;
-        }
+    switch (this->current_state_) {
+        case PoseStraightFilterState::ROTATE_TO_DIRECTION:
+            if (fabs(pos_err.angle()) > parameters_->angular_intermediate_threshold()) {
+                // Rotate towards the direction of the target pose
+                // Set linear speed to 0
+                target_speed.set_distance(0);
+            } else {
+                // Angular direction correct, move to the next step
+                pose_reached = target_pose_status_t::intermediate_reached;
+                force_allow_reverse = true;
+                this->current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
+            }
+            break;
+
+        case PoseStraightFilterState::MOVE_TO_POSITION:
+            // Move towards the target pose
+            // Angular speed and linear threshold unrestricted
+            if (fabs(pos_err.distance()) <= parameters_->linear_threshold()) {
+                // Reached intermediate pose, move to the final step
+                pose_reached = target_pose_status_t::intermediate_reached;
+                this->current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+            }
+            break;
+
+        case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
+            pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+            // Rotate towards the final orientation
+            if (fabs(pos_err.angle()) <= parameters_->angular_threshold()) {
+                // Reached final pose
+                pose_reached = target_pose_status_t::reached;
+                this->current_state_ = PoseStraightFilterState::FINISHED;
+            }
+            break;
+
+        case PoseStraightFilterState::FINISHED:
+            // All steps completed, nothing to do
+            target_speed.set_distance(0);
+            target_speed.set_angle(0);
+            break;
+    }
+
+    if (fabs(pos_err.distance()) <= ((current_speed.distance() * current_speed.distance()) / (2 * parameters_->linear_deceleration()))) {
+        target_speed.set_distance(sqrt(2 * parameters_->linear_deceleration() * fabs(pos_err.distance())));
+    }
+
+    if (fabs(pos_err.angle()) <= ((current_speed.angle() * current_speed.angle()) / (2 * parameters_->angular_deceleration()))) {
+        target_speed.set_angle(sqrt(2 * parameters_->angular_deceleration() * fabs(pos_err.angle())));
     }
 
     // Linear pose error
@@ -135,17 +167,21 @@ void PoseStraightFilter::execute() {
     // Linear current speed
     outputs_[1] = current_speed.distance();
     // Linear target speed
-    outputs_[2] = target_speed.distance();
+    outputs_[2] = fabs(target_speed.distance());
+    // Should linear speed be filtered?
+    outputs_[3] = (double)no_linear_speed_limit;
 
     // Angular pose error
-    outputs_[3] = pos_err.angle();
+    outputs_[4] = pos_err.angle();
     // Angular current speed
-    outputs_[4] = current_speed.angle();
+    outputs_[5] = current_speed.angle();
     // Angular target speed
-    outputs_[5] = target_speed.angle();
+    outputs_[6] = fabs(target_speed.angle());
+    // Should angular speed be filtered?
+    outputs_[7] = (double)no_angular_speed_limit;
 
     // Pose reached
-    outputs_[6] = (double)pose_reached;
+    outputs_[8] = (double)pose_reached;
 };
 
 } // namespace motion_control

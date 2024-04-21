@@ -24,7 +24,7 @@ namespace motion_control {
 /// Input 1:    current speed
 /// Input 2:    target speed
 /// Output 0:   filtered speed
-class SpeedFilter : public Controller<3, 1, SpeedFilterParameters> {
+class SpeedFilter : public Controller<4, 1, SpeedFilterParameters> {
 public:
     /// @brief
     /// @param parameters
@@ -37,12 +37,15 @@ public:
     /// return previous speed order
     double previous_speed_order() const { return previous_speed_order_; };
 
+    /// Reset previous speed order
+    void reset_previous_speed_order() { previous_speed_order_ = 0; };
+
 protected:
     /// Previous cycle speed_order
     double previous_speed_order_;
 
-    double limit_speed_order(
-        double speed_order,
+    void limit_speed_order(
+        double *speed_order,
         double target_speed,
         double current_speed,
         double min_speed,
