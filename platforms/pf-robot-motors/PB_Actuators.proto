@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+enum PB_ActuatorsTypeEnum
+{
+  SERVO = 0;
+  POSITIONAL = 1;
+}
+
+enum PB_ActuatorsGroupEnum
+{
+  NO_GROUP = 0;
+}
+
+enum PB_PositionalActuatorEnum
+{
+    MOTOR_BOTTOM_LIFT = 0;
+    MOTOR_TOP_LIFT = 1;
+    ANALOGSERVO_BOTTOM_GRIP_LEFT = 2;
+    ANALOGSERVO_BOTTOM_GRIP_RIGHT = 3;
+    ANALOGSERVO_TOP_GRIP_LEFT = 4;
+    ANALOGSERVO_TOP_GRIP_RIGHT = 5;
+    CART_MAGNET_LEFT = 6;
+    CART_MAGNET_RIGHT = 7;
+    ANALOGSERVO_PAMI = 8;
+}
+
+message PB_PositionalActuator {
+    PB_ActuatorsGroupEnum group = 1;
+    uint32 order = 2;
+    bool is_blocked = 3;
+    PB_PositionalActuatorEnum id = 4;
+    int32 command = 5;
+}
+
+message PB_ActuatorState {
+    oneof type {
+        PB_PositionalActuator positional_actuators = 2;
+    }
+}
+
+message PB_ActuatorsState {
+    repeated PB_PositionalActuator positional_actuators = 2;
+}
+
+message PB_PositionalActuatorCommand {
+    PB_PositionalActuatorEnum id = 1;
+    int32 command = 2;
+}
+
+message PB_ActuatorCommand {
+    oneof command {
+        PB_PositionalActuatorCommand positional_actuator = 2;
+    }
+}
