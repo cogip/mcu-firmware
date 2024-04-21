@@ -51,8 +51,6 @@ void SpeedFilter::limit_speed_order(
     // Limit speed command
     *speed_order = std::min(*speed_order, target_speed);
     *speed_order = std::max(*speed_order, -target_speed);
-
-    previous_speed_order_ = *speed_order;
 }
 
 void SpeedFilter::execute() {
@@ -66,6 +64,8 @@ void SpeedFilter::execute() {
     double target_speed = this->inputs_[2];
     // Do not filter speed order ?
     bool no_speed_filter = this->inputs_[3];
+    // Pose reached
+    target_pose_status_t pose_reached = (target_pose_status_t)this->inputs_[4];
 
     if (!no_speed_filter) {
         // Limit speed order
@@ -79,10 +79,38 @@ void SpeedFilter::execute() {
             );
     }
 
+    // If anti blocking is activated
+    if (parameters_->anti_blocking()) {
+        // Check if the current speed of the robot is below a speed threshold, typically set low.
+        // This is because if the robot is blocked by an obstacle, it may move slightly,
+        // so a threshold must be considered as the speed won't be zero.
+        // Additionally, ensure the robot isn't accelerating by comparing the current speed
+        // with the speed order from the previous cycle. If the difference between these two
+        // speeds exceeds a threshold, it indicates that the robot hasn't accelerated since its
+        // previous cycle.
+        if ((fabs(current_speed) < parameters_->anti_blocking_speed_threshold())
+            && (fabs(previous_speed_order_ - current_speed) > parameters_->anti_blocking_error_threshold())) {
+            // Increment a counter for cycles during which the robot is supposedly blocked.
+            // This evaluation cannot be done within a single cycle, so the counter is incremented.
+            anti_blocking_blocked_cycles_nb_++;
+        }
+        else {
+            anti_blocking_blocked_cycles_nb_= 0;
+        }
+
+        // After a certain number of cycles, the robot is considered blocked.
+        if (anti_blocking_blocked_cycles_nb_ > parameters_->anti_blocking_blocked_cycles_nb_threshold()) {
+            std::cout << "BLOCKED" << std::endl;
+            pose_reached = target_pose_status_t::blocked;
+        }
+    }
+
+    previous_speed_order_ = speed_order;
+
     // Store speed_error
     this->outputs_[0] = speed_order - current_speed;
     // Pose reached
-    this->outputs_[1] = this->inputs_[4];
+    this->outputs_[1] = pose_reached;
 };
 
 } // namespace motion_control
