@@ -1,9 +1,0 @@
-<map id="drivers/vacuum_pump/include/vacuum_pump.h" name="drivers/vacuum_pump/include/vacuum_pump.h">
-<area shape="rect" id="node1" title="Public API for COGIP vacuum pump driver." alt="" coords="314,5,499,47"/>
-<area shape="rect" id="node2" href="$pami_2include_2Pump_8hpp.html" title="C++ class representing a pump using vacuum_pump driver." alt="" coords="5,95,179,136"/>
-<area shape="rect" id="node4" href="$pami_2include_2vacuum__pump__params_8h.html" title="Parameters for COGIP vacuum pump driver." alt="" coords="203,95,394,136"/>
-<area shape="rect" id="node5" href="$pegasus_2include_2Pump_8hpp.html" title="C++ class representing a pump using vacuum_pump driver." alt="" coords="419,95,613,136"/>
-<area shape="rect" id="node7" href="$pegasus_2include_2vacuum__pump__params_8h.html" title="Parameters for COGIP vacuum pump driver." alt="" coords="637,95,832,136"/>
-<area shape="rect" id="node3" href="$pami_2include_2pf__pumps_8hpp.html" title="Functions and definitions related to pumps." alt="" coords="5,184,179,225"/>
-<area shape="rect" id="node6" href="$pegasus_2include_2pf__pumps_8hpp.html" title="Functions and definitions related to pumps." alt="" coords="419,184,613,225"/>
-</map>

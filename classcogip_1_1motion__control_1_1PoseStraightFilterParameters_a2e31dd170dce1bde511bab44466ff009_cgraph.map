@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::PoseStraightFilterParameters::set_angular_deceleration" name="cogip::motion_control::PoseStraightFilterParameters::set_angular_deceleration">
+<area shape="rect" id="node1" title="Set angular deceleration." alt="" coords="5,5,224,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#ac697882dd1a33a18d6ba9eb232e80d46" title="Get angular deceleration return Angular deceleration." alt="" coords="272,5,491,61"/>
+</map>

@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['trajectory_20planners_659',['Trajectory planners',['../group__planners.html',1,'']]],
-  ['test_20platform_660',['Test platform',['../group__platforms__pami.html',1,'']]],
-  ['test_20platform_661',['Test platform',['../group__platforms__pegasus.html',1,'']]],
+  ['trajectory_20planners_658',['Trajectory planners',['../group__planners.html',1,'']]],
+  ['test_20platform_659',['Test platform',['../group__platforms__pami.html',1,'']]],
+  ['test_20platform_660',['Test platform',['../group__platforms__pf-robot-actuators.html',1,'']]],
+  ['test_20platform_661',['Test platform',['../group__platforms__pf-robot-motion-control.html',1,'']]],
   ['threading_662',['Threading',['../group__sys__thread.html',1,'']]],
   ['target_5fpose_663',['target_pose',['../classcogip_1_1motion__control_1_1PlatformEngine.html#aa91495281ad8e98c93a7ca4f8cd94c45',1,'cogip::motion_control::PlatformEngine']]],
   ['target_5fpose_5fstatus_5ft_664',['target_pose_status_t',['../BaseController_8hpp.html#af407ee2594885fdfac0291da246d84b4',1,'cogip::motion_control']]],

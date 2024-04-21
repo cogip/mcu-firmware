@@ -1,7 +1,8 @@
 <map id="sys/canpb/include/canpb/ReadBuffer.hpp" name="sys/canpb/include/canpb/ReadBuffer.hpp">
-<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="121,5,303,47"/>
-<area shape="rect" id="node2" href="$CanProtobuf_8hpp.html" title="Exchange Protobuf messages over CAN module." alt="" coords="121,95,303,136"/>
-<area shape="rect" id="node3" href="$pegasus_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="5,184,200,225"/>
-<area shape="rect" id="node5" href="$pegasus_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="224,184,419,225"/>
-<area shape="rect" id="node4" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,273,200,315"/>
+<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="209,5,390,47"/>
+<area shape="rect" id="node2" href="$CanProtobuf_8hpp.html" title="Exchange Protobuf messages over CAN module." alt="" coords="209,95,390,136"/>
+<area shape="rect" id="node3" href="$pf-robot-actuators_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="5,184,161,240"/>
+<area shape="rect" id="node4" href="$pf-robot-actuators_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="186,191,413,233"/>
+<area shape="rect" id="node5" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="437,184,612,240"/>
+<area shape="rect" id="node6" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="437,288,612,344"/>
 </map>

@@ -1,4 +1,0 @@
-<map id="cogip::pf::actuators::pumps::Pump" name="cogip::pf::actuators::pumps::Pump">
-<area shape="rect" id="node1" title="Class representing a pump using vacuum_pump driver." alt="" coords="5,248,152,472"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="5,5,152,200"/>
-</map>

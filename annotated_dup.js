@@ -54,10 +54,6 @@ var annotated_dup =
             [ "OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff" ],
             [ "PositionalActuator", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator" ]
           ] ],
-          [ "pumps", null, [
-            [ "Command", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command" ],
-            [ "Pump", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump" ]
-          ] ],
           [ "servos", null, [
             [ "Command", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command.html", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command" ],
             [ "LxServo", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo" ]

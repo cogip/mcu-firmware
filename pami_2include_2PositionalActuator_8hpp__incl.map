@@ -1,8 +1,0 @@
-<map id="platforms/pami/include/PositionalActuator.hpp" name="platforms/pami/include/PositionalActuator.hpp">
-<area shape="rect" id="node1" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="256,5,429,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,123,121"/>
-<area shape="rect" id="node3" href="$pami_2include_2Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="147,95,251,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="275,95,411,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="435,95,499,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="523,95,597,121"/>
-</map>

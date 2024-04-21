@@ -7,7 +7,6 @@ var hierarchy =
         [ "cogip::pf::actuators::positional_actuators::Motor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html", null ],
         [ "cogip::pf::actuators::positional_actuators::OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", null ]
       ] ],
-      [ "cogip::pf::actuators::pumps::Pump", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html", null ],
       [ "cogip::pf::actuators::servos::LxServo", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html", null ]
     ] ],
     [ "cogip::motion_control::BaseController", "classcogip_1_1motion__control_1_1BaseController.html", [
@@ -17,10 +16,10 @@ var hierarchy =
         [ "cogip::motion_control::MetaController< 11, 3, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", [
           [ "cogip::motion_control::QuadPIDMetaController", "classcogip_1_1motion__control_1_1QuadPIDMetaController.html", null ]
         ] ],
-        [ "cogip::motion_control::MetaController< 3, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", [
+        [ "cogip::motion_control::MetaController< 4, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", [
           [ "cogip::motion_control::DualPIDMetaController", "classcogip_1_1motion__control_1_1DualPIDMetaController.html", null ]
         ] ],
-        [ "cogip::motion_control::ParallelMetaController< 7, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", [
+        [ "cogip::motion_control::ParallelMetaController< 9, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", [
           [ "cogip::motion_control::PolarParallelMetaController", "classcogip_1_1motion__control_1_1PolarParallelMetaController.html", null ]
         ] ]
       ] ],
@@ -28,33 +27,32 @@ var hierarchy =
       [ "cogip::motion_control::Controller< 1, 1, SpeedPIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::SpeedPIDController", "classcogip_1_1motion__control_1_1SpeedPIDController.html", null ]
       ] ],
-      [ "cogip::motion_control::Controller< 11, 7, PoseStraightFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
+      [ "cogip::motion_control::Controller< 11, 9, PoseStraightFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::PoseStraightFilter", "classcogip_1_1motion__control_1_1PoseStraightFilter.html", null ]
       ] ],
-      [ "cogip::motion_control::Controller< 3, 1, SpeedFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
+      [ "cogip::motion_control::Controller< 4, 1, SpeedFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::SpeedFilter", "classcogip_1_1motion__control_1_1SpeedFilter.html", null ]
       ] ],
-      [ "cogip::motion_control::Controller< 3, 3, PassthroughPosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
+      [ "cogip::motion_control::Controller< 4, 4, PassthroughPosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::PassthroughPosePIDController", "classcogip_1_1motion__control_1_1PassthroughPosePIDController.html", null ]
       ] ],
-      [ "cogip::motion_control::Controller< 3, 3, PosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
+      [ "cogip::motion_control::Controller< 4, 4, PosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::PosePIDController", "classcogip_1_1motion__control_1_1PosePIDController.html", null ]
       ] ],
       [ "cogip::motion_control::Controller< INPUT_SIZE, OUTPUT_SIZE, MetaControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::MetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
         [ "cogip::motion_control::ParallelMetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ],
         [ "cogip::motion_control::MetaController< 11, 3, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
-        [ "cogip::motion_control::MetaController< 3, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
-        [ "cogip::motion_control::ParallelMetaController< 7, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
+        [ "cogip::motion_control::MetaController< 4, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
+        [ "cogip::motion_control::ParallelMetaController< 9, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
       ] ]
     ] ],
     [ "cogip::motion_control::BaseControllerEngine", "classcogip_1_1motion__control_1_1BaseControllerEngine.html", [
       [ "cogip::motion_control::PlatformEngine", "classcogip_1_1motion__control_1_1PlatformEngine.html", null ]
     ] ],
     [ "cogip::canpb::CanProtobuf", "classcogip_1_1canpb_1_1CanProtobuf.html", null ],
-    [ "cogip::shell::Command", "classcogip_1_1shell_1_1Command.html", null ],
     [ "cogip::pf::actuators::servos::Command", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command.html", null ],
-    [ "cogip::pf::actuators::pumps::Command", "classcogip_1_1pf_1_1actuators_1_1pumps_1_1Command.html", null ],
+    [ "cogip::shell::Command", "classcogip_1_1shell_1_1Command.html", null ],
     [ "cogip::cogip_defs::Coords", "classcogip_1_1cogip__defs_1_1Coords.html", [
       [ "cogip::cogip_defs::Pose", "classcogip_1_1cogip__defs_1_1Pose.html", [
         [ "cogip::path::Pose", "classcogip_1_1path_1_1Pose.html", null ]
@@ -70,8 +68,8 @@ var hierarchy =
       [ "cogip::motion_control::MetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::ParallelMetaController< INPUT_SIZE, OUTPUT_SIZE, NB_CONTROLLERS >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ],
       [ "cogip::motion_control::MetaController< 11, 3, 2 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
-      [ "cogip::motion_control::MetaController< 3, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
-      [ "cogip::motion_control::ParallelMetaController< 7, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
+      [ "cogip::motion_control::MetaController< 4, 1, 3 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
+      [ "cogip::motion_control::ParallelMetaController< 9, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
     ] ],
     [ "lds01_params_t", "structlds01__params__t.html", null ],
     [ "list", null, [

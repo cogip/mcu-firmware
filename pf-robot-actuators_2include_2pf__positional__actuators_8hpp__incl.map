@@ -1,0 +1,13 @@
+<map id="platforms/pf&#45;robot&#45;actuators/include/pf_positional_actuators.hpp" name="platforms/pf&#45;robot&#45;actuators/include/pf_positional_actuators.hpp">
+<area shape="rect" id="node1" title="Functions and definitions related to positional_actuators." alt="" coords="401,5,591,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="163,109,234,136"/>
+<area shape="rect" id="node3" href="$pf-robot-actuators_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="259,109,427,136"/>
+<area shape="rect" id="node9" title=" " alt="" coords="451,109,541,136"/>
+<area shape="rect" id="node10" title=" " alt="" coords="565,109,672,136"/>
+<area shape="rect" id="node11" title=" " alt="" coords="697,109,839,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,184,123,211"/>
+<area shape="rect" id="node5" href="$pf-robot-actuators_2include_2Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="147,184,251,211"/>
+<area shape="rect" id="node6" title=" " alt="" coords="275,184,411,211"/>
+<area shape="rect" id="node7" title=" " alt="" coords="435,184,499,211"/>
+<area shape="rect" id="node8" title=" " alt="" coords="523,184,597,211"/>
+</map>

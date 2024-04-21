@@ -1,8 +1,8 @@
 <map id="sys/uartpb/include/uartpb/ReadBuffer.hpp" name="sys/uartpb/include/uartpb/ReadBuffer.hpp">
-<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="177,5,348,47"/>
-<area shape="rect" id="node2" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="171,95,354,136"/>
+<area shape="rect" id="node1" title="Read buffer for EmbeddedProto." alt="" coords="187,5,357,47"/>
+<area shape="rect" id="node2" href="$UartProtobuf_8hpp.html" title="Exchange Protobuf messages over UART module." alt="" coords="181,95,363,136"/>
 <area shape="rect" id="node3" href="$Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="5,184,152,225"/>
-<area shape="rect" id="node4" href="$pami_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="176,184,349,225"/>
-<area shape="rect" id="node6" href="$pami_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="373,184,547,225"/>
-<area shape="rect" id="node5" href="$pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="176,273,349,315"/>
+<area shape="rect" id="node4" href="$pf-pami_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="177,184,367,225"/>
+<area shape="rect" id="node6" href="$pf-pami_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="391,184,582,225"/>
+<area shape="rect" id="node5" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="177,273,367,315"/>
 </map>

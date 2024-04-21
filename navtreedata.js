@@ -52,13 +52,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcogip_1_1motion__control_1_1Controller.html#a4eef3376f4a38872f247af7fdcc5808c",
-"classcogip_1_1pid_1_1PID.html#ad00e3129707a224911e3ab15c892ffea",
-"functions_p.html",
-"group__driver__lx__servo.html#gga2cfd8212589372b19507ca3089d79a75ad91949c2d46501afa14e2e687a563747",
-"group__platforms__pegasus.html#gaf83cc53998c27d898d71f8a7e981fdc0",
-"pami_2include_2pf__positional__actuators_8hpp.html#adc3a5f44b75f95354ddc9db78284ccf5",
-"structctrl__t.html"
+"classcogip_1_1motion__control_1_1BaseMetaController.html#a0d303c4cb522a60bd8904186631ce777",
+"classcogip_1_1planners_1_1Planner.html#a3424ad3f81eb7f61d9b07bdad096c62d",
+"functions_u.html",
+"group__driver__lx__servo.html#gga5f1ea8be7405378710c5c20d8dd0356ea682a19ad98e183f233699e41281abcef",
+"group__platforms__pf-robot-motion-control.html#ga07a575aff9cc49fe868eb5ee53dbb787",
+"pf-pami_2include_2pf__servos_8hpp.html#a058c95e0ed4bd1ea73b9f464d99e7b5b",
+"uartpb_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

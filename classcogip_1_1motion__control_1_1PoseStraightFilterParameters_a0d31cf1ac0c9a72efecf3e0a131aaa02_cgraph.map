@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::PoseStraightFilterParameters::set_intermediate_angular_threshold" name="cogip::motion_control::PoseStraightFilterParameters::set_intermediate_angular_threshold">
+<area shape="rect" id="node1" title="Set angular threshold." alt="" coords="5,5,224,76"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1PoseStraightFilterParameters.html#ada66d3b9dc47e9cfeb8425cdba988b58" title="Get angular intermediate threshold return angular intermediate threshold." alt="" coords="272,13,511,69"/>
+</map>

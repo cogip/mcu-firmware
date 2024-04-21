@@ -1,9 +1,0 @@
-<map id="platforms/pami/include/Motor.hpp" name="platforms/pami/include/Motor.hpp">
-<area shape="rect" id="node1" title="C++ class representing a motor using motor driver." alt="" coords="256,5,429,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,169,123,196"/>
-<area shape="rect" id="node3" href="$pami_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="259,95,427,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="533,169,597,196"/>
-<area shape="rect" id="node4" href="$pami_2include_2Actuator_8hpp.html" title="Base actuators class definition." alt="" coords="147,169,251,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="275,169,411,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="435,169,509,196"/>
-</map>

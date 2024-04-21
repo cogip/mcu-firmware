@@ -1,8 +1,0 @@
-<map id="platforms/pegasus/include/vacuum_pump_params.h" name="platforms/pegasus/include/vacuum_pump_params.h">
-<area shape="rect" id="node1" title="Parameters for COGIP vacuum pump driver." alt="" coords="6,5,201,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,76,121"/>
-<area shape="rect" id="node3" href="$vacuum__pump_8h.html" title="Public API for COGIP vacuum pump driver." alt="" coords="101,95,231,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="29,169,100,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="125,169,207,196"/>
-<area shape="rect" id="node6" title=" " alt="" coords="231,169,338,196"/>
-</map>

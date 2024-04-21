@@ -1,0 +1,8 @@
+<map id="platforms/pf&#45;robot&#45;actuators/include/PositionalActuator.hpp" name="platforms/pf&#45;robot&#45;actuators/include/PositionalActuator.hpp">
+<area shape="rect" id="node1" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="531,5,738,61"/>
+<area shape="rect" id="node2" href="$pf-robot-actuators_2include_2AnalogServo_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="5,117,259,158"/>
+<area shape="rect" id="node3" href="$pf-robot-actuators_2include_2LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="283,117,506,158"/>
+<area shape="rect" id="node4" href="$Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="531,117,739,158"/>
+<area shape="rect" id="node5" href="$OnOff_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="763,117,971,158"/>
+<area shape="rect" id="node6" href="$pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="995,109,1184,165"/>
+</map>

@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="255,248,478,545"/>
 <area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html" title="Class representing a servomotor driven by pca9685." alt="" coords="5,593,168,832"/>
 <area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html" title="Class representing a LX Servomotor in motor mode." alt="" coords="192,608,355,817"/>
-<area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="379,608,541,817"/>
-<area shape="rect" id="node6" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html" title="Class representing a motor using motor driver." alt="" coords="565,608,728,817"/>
+<area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="379,637,541,788"/>
+<area shape="rect" id="node6" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html" title="Class representing a motor using motor driver." alt="" coords="565,637,728,788"/>
 <area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="293,5,440,200"/>
 </map>

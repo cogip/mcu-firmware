@@ -1,8 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="5,206,152,247"/>
+<area shape="rect" id="node1" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="5,170,152,211"/>
 <area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="200,125,363,181"/>
-<area shape="rect" id="node7" href="$classcogip_1_1pf_1_1actuators_1_1pumps_1_1Pump.html" title="Class representing a pump using vacuum_pump driver." alt="" coords="208,206,355,247"/>
-<area shape="rect" id="node8" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="208,271,355,313"/>
+<area shape="rect" id="node7" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="208,206,355,247"/>
 <area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html" title="Class representing a servomotor driven by pca9685." alt="" coords="411,5,573,61"/>
 <area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html" title="Class representing a LX Servomotor in motor mode." alt="" coords="411,85,573,141"/>
 <area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="411,165,573,221"/>

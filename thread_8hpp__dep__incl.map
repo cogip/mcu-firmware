@@ -1,7 +1,7 @@
 <map id="sys/thread/include/thread/thread.hpp" name="sys/thread/include/thread/thread.hpp">
-<area shape="rect" id="node1" title="Public API for thread module." alt="" coords="125,5,267,47"/>
-<area shape="rect" id="node2" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="99,95,293,165"/>
-<area shape="rect" id="node3" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="63,213,329,269"/>
-<area shape="rect" id="node4" href="$pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,317,179,359"/>
-<area shape="rect" id="node5" href="$pegasus_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="203,317,397,359"/>
+<area shape="rect" id="node1" title="Public API for thread module." alt="" coords="132,5,275,47"/>
+<area shape="rect" id="node2" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="106,95,301,165"/>
+<area shape="rect" id="node3" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="71,213,336,269"/>
+<area shape="rect" id="node4" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,325,196,366"/>
+<area shape="rect" id="node5" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="220,317,395,373"/>
 </map>

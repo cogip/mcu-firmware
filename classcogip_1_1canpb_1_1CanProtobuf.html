@@ -150,9 +150,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afcefa20eef67b7e7734264c1e4e1f22c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1canpb_1_1CanProtobuf.html#afcefa20eef67b7e7734264c1e4e1f22c">CanProtobuf</a> (uint8_t can_interface_number)</td></tr>
 <tr class="memdesc:afcefa20eef67b7e7734264c1e4e1f22c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="classcogip_1_1canpb_1_1CanProtobuf.html#afcefa20eef67b7e7734264c1e4e1f22c">More...</a><br /></td></tr>
 <tr class="separator:afcefa20eef67b7e7734264c1e4e1f22c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48cf95352d7d573957e231d44d01c44f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1canpb_1_1CanProtobuf.html#a48cf95352d7d573957e231d44d01c44f">init</a> ()</td></tr>
-<tr class="memdesc:a48cf95352d7d573957e231d44d01c44f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize CAN connection.  <a href="classcogip_1_1canpb_1_1CanProtobuf.html#a48cf95352d7d573957e231d44d01c44f">More...</a><br /></td></tr>
-<tr class="separator:a48cf95352d7d573957e231d44d01c44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2790d9984339a9dfc5e49ebfbb94c37e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1canpb_1_1CanProtobuf.html#a2790d9984339a9dfc5e49ebfbb94c37e">init</a> (struct can_filter *filter)</td></tr>
+<tr class="memdesc:a2790d9984339a9dfc5e49ebfbb94c37e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize CAN connection.  <a href="classcogip_1_1canpb_1_1CanProtobuf.html#a2790d9984339a9dfc5e49ebfbb94c37e">More...</a><br /></td></tr>
+<tr class="separator:a2790d9984339a9dfc5e49ebfbb94c37e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6114afdaf5a3016715ae2dca23feccd4"><td class="memItemLeft" align="right" valign="top"><a id="a6114afdaf5a3016715ae2dca23feccd4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1canpb_1_1CanProtobuf.html#a6114afdaf5a3016715ae2dca23feccd4">start_reader</a> ()</td></tr>
 <tr class="memdesc:a6114afdaf5a3016715ae2dca23feccd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start thread waiting for incoming messages. <br /></td></tr>
@@ -233,8 +233,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a48cf95352d7d573957e231d44d01c44f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48cf95352d7d573957e231d44d01c44f">&#9670;&nbsp;</a></span>init()</h2>
+<a id="a2790d9984339a9dfc5e49ebfbb94c37e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2790d9984339a9dfc5e49ebfbb94c37e">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -242,7 +242,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="memname">bool cogip::canpb::CanProtobuf::init </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">struct can_filter *&#160;</td>
+          <td class="paramname"><em>filter</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -335,7 +336,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Mon Mar 25 2024 08:11:44 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Apr 21 2024 07:38:53 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>
