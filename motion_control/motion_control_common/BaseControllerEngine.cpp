@@ -14,7 +14,6 @@ namespace cogip {
 
 namespace motion_control {
 
-static char controller_thread_stack[THREAD_STACKSIZE_LARGE];
 #define CONTROLLER_PRIO (THREAD_PRIORITY_MAIN - 1)
 
 static void *_start_thread(void *arg)
@@ -70,8 +69,8 @@ void BaseControllerEngine::thread_loop() {
 
 void BaseControllerEngine::start_thread() {
     thread_create(
-        controller_thread_stack,
-        sizeof(controller_thread_stack),
+        controller_thread_stack_,
+        sizeof(controller_thread_stack_),
         CONTROLLER_PRIO,
         THREAD_CREATE_STACKTEST,
         _start_thread,
