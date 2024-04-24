@@ -64,6 +64,18 @@ public:
         PB_PathPose &path_pose    ///< [out] Protobuf message to fill
         ) const;
 
+    /// Override operator ==
+    bool operator==(const Pose& other) {
+        return (
+            areDoublesEqual(x(), other.x()) &&
+            areDoublesEqual(y(), other.y()) &&
+            areDoublesEqual(O(), other.O()) &&
+            areDoublesEqual(max_speed_ratio_linear(), other.max_speed_ratio_linear()) &&
+            areDoublesEqual(max_speed_ratio_angular(), other.max_speed_ratio_angular()) &&
+            allow_reverse() == other.allow_reverse()
+        );
+    };
+
 private:
     double max_speed_ratio_linear_;     ///< max speed
     double max_speed_ratio_angular_;    ///< max speed
