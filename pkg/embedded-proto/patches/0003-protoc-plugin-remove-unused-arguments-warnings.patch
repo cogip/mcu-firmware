@@ -1,24 +1,30 @@
-From 409014b6fd0c92a7de954e53425d13507aac6880 Mon Sep 17 00:00:00 2001
-From: Eric Courtois <eric.courtois@gmail.com>
-Date: Sun, 10 Jul 2022 19:39:56 +0200
-Subject: [PATCH] protoc plugin: remove unused arguments warnings
+From d792409a960388daf8bdcb71fca2f5484c7dd060 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Wed, 24 Apr 2024 23:24:26 +0200
+Subject: [PATCH 3/5] protoc plugin: remove unused arguments warnings
 
 RIOT is compiled using -Wall -Werror, so functions with unused arguments
 generate compilation errors.
 So add dummy use of these arguments to remove warnings.
 
 Signed-off-by: Eric Courtois <eric.courtois@gmail.com>
+---
+ src/RepeatedField.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/RepeatedField.h b/src/RepeatedField.h
-index aff5e6e..a2e383f 100644
+index 3cc4b0a..aa4d482 100644
 --- a/src/RepeatedField.h
 +++ b/src/RepeatedField.h
-@@ -137,7 +137,7 @@ namespace EmbeddedProto
+@@ -145,7 +145,7 @@ namespace EmbeddedProto
        //! Remove all data in the array and set it to the default value.
        virtual void clear() override = 0;
-
+ 
 -      Error serialize(WriteBufferInterface& buffer) const final
 +      Error serialize([[maybe_unused]] WriteBufferInterface& buffer) const final
        {
          // This function should not be called on a repeated field.
          return Error::BUFFER_FULL;
+-- 
+2.37.0
+

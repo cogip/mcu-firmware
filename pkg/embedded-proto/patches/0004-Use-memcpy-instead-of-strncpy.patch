@@ -1,0 +1,32 @@
+From 24556d676d504d6f5aea9c4260c3e902b426f305 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Wed, 24 Apr 2024 23:26:40 +0200
+Subject: [PATCH 4/5] Use memcpy instead of strncpy
+
+To avoid this warning when copying same length strings [1].
+
+[1] error: 'char* strncpy(char*, const char*, size_t)' output truncated
+before terminating nul copying X bytes from a string of the same length
+[-Werror=stringop-truncation]
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ src/FieldStringBytes.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/FieldStringBytes.h b/src/FieldStringBytes.h
+index 605da20..49b5cae 100644
+--- a/src/FieldStringBytes.h
++++ b/src/FieldStringBytes.h
+@@ -342,7 +342,7 @@ namespace EmbeddedProto
+           if(MAX_LENGTH > this_length) {
+             ++this_length;
+           }
+-          strncpy(this->get(), str, this_length);
++          memcpy(this->get(), str, this_length);
+         }
+         else {
+           this->clear();
+-- 
+2.37.0
+
