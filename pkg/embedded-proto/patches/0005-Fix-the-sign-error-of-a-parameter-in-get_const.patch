@@ -1,0 +1,57 @@
+From 1b71bfbacb6c1edcb383e115b2825177f1683b88 Mon Sep 17 00:00:00 2001
+From: Gilles DOFFE <g.doffe@gmail.com>
+Date: Thu, 25 Apr 2024 00:39:10 +0200
+Subject: [PATCH 5/5] Fix the sign error of a parameter in get_const()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+RepeatedFieldFixedSize.h:128:18: error: comparison of integer
+expressions of different signedness: ‘const int32_t’ {aka ‘const int’}
+and ‘const uint32_t’ {aka ‘const unsigned int’} [-Werror=sign-compare]
+  128 |         if(index < current_length_)
+      |            ~~~~~~^~~~~~~~~~~~~~~~~
+cc1plus: all warnings being treated as errors
+
+Signed-off-by: Gilles DOFFE <g.doffe@gmail.com>
+---
+ src/RepeatedField.h          | 2 +-
+ src/RepeatedFieldFixedSize.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/RepeatedField.h b/src/RepeatedField.h
+index aa4d482..8b0543c 100644
+--- a/src/RepeatedField.h
++++ b/src/RepeatedField.h
+@@ -104,7 +104,7 @@ namespace EmbeddedProto
+         \param[out] value The value of the desired index is set in this reference.
+         \return An error incase of an index out of bound situation.
+       */
+-      virtual Error get_const(const int32_t index, DATA_TYPE& value) const = 0;
++      virtual Error get_const(const uint32_t index, DATA_TYPE& value) const = 0;
+ 
+       //! Get a reference to the value at the given index. 
+       /*!
+diff --git a/src/RepeatedFieldFixedSize.h b/src/RepeatedFieldFixedSize.h
+index 79f706c..85f4ab3 100644
+--- a/src/RepeatedFieldFixedSize.h
++++ b/src/RepeatedFieldFixedSize.h
+@@ -122,7 +122,7 @@ namespace EmbeddedProto
+         return data_[limited_index]; 
+       }
+ 
+-      Error get_const(const int32_t index, DATA_TYPE& value) const override
++      Error get_const(const uint32_t index, DATA_TYPE& value) const override
+       {
+         Error result = Error::NO_ERRORS;
+         if(index < current_length_)
+@@ -204,4 +204,4 @@ namespace EmbeddedProto
+ 
+ } // End of namespace EmbeddedProto
+ 
+-#endif // End of _REPEATED_FIELD_SIZE_H_
+\ No newline at end of file
++#endif // End of _REPEATED_FIELD_SIZE_H_
+-- 
+2.37.0
+
