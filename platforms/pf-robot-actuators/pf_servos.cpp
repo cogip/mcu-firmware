@@ -41,23 +41,17 @@ void init(uart_half_duplex_t *lx_stream) {
 
     // Left arm
     _servos[Enum::LXSERVO_LEFT_CART] = _servos_pool.create(
-        Enum::LXSERVO_LEFT_CART,
-        GroupEnum::NO_GROUP,
-        0
+        Enum::LXSERVO_LEFT_CART
     );
 
     // Right arm
     _servos[Enum::LXSERVO_RIGHT_CART] = _servos_pool.create(
-        Enum::LXSERVO_RIGHT_CART,
-        GroupEnum::NO_GROUP,
-        0
+        Enum::LXSERVO_RIGHT_CART
     );
 
     // Panel arm
     _servos[Enum::LXSERVO_ARM_PANEL] = _servos_pool.create(
-        Enum::LXSERVO_ARM_PANEL,
-        GroupEnum::NO_GROUP,
-        0
+        Enum::LXSERVO_ARM_PANEL
     );
 }
 

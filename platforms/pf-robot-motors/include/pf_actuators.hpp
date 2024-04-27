@@ -27,11 +27,6 @@ constexpr cogip::canpb::uuid_t thread_start_uuid = 0x2001;
 constexpr cogip::canpb::uuid_t thread_stop_uuid = 0x2002;
 constexpr cogip::canpb::uuid_t command_uuid = 0x2004;
 
-/// Enum using to group actuators
-enum class GroupEnum: uint8_t {
-    NO_GROUP = 0,
-};
-
 /// Enable all actuators
 void enable_all();
 
