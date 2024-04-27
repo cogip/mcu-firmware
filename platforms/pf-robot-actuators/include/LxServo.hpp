@@ -32,9 +32,7 @@ class LxServo: public Actuator {
 public:
     /// Constructor.
     LxServo(
-        Enum id,           ///< [in] servo id
-        GroupEnum group,   ///< [in] actuator group
-        uint8_t order = 0  ///< [in] order in actuator group
+        Enum id            ///< [in] servo id
     );
 
     /// Go to the position in a given time.

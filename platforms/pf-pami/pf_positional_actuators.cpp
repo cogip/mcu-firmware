@@ -94,8 +94,6 @@ void init(uart_half_duplex_t *lx_stream) {
     // AnalogServo init
     _positional_actuators[Enum::ANALOGSERVO_PAMI] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_PAMI,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_PAMI
     );
