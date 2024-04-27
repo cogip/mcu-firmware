@@ -39,11 +39,6 @@ enum LXServoIDs {
     LXSERVO_ARM_PANEL = 2,
 };
 
-/// Enum using to group actuators
-enum class GroupEnum: uint8_t {
-    NO_GROUP = 0,
-};
-
 /// Enable all actuators
 void enable_all();
 

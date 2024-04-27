@@ -27,8 +27,6 @@ public:
     /// Constructor.
     explicit LxMotor(
         Enum id,                            ///< [in] motor id
-        GroupEnum group,                    ///< [in] actuator group
-        uint8_t order = 0,                  ///< [in] order in actuator group
         uint32_t default_timeout_period = 0,///< [in] default timeout
         lx_id_t lx_id = 1,                  ///< [in] LX Servomotor ID
         check_limit_switch_cb_t check_limit_switch_positive_direction_cb = nullptr, ///< [in] callback to check limit switch for positive direction

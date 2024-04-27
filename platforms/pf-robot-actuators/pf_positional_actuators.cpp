@@ -157,8 +157,6 @@ void init() {
     // AnalogServo init
     _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_TOP_GRIP_LEFT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT
     );
@@ -167,8 +165,6 @@ void init() {
 
     _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT
     );
@@ -176,8 +172,6 @@ void init() {
     static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT])->add_position(analog_servomotor_top_grip_right_opened);
     _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT
     );
@@ -186,8 +180,6 @@ void init() {
 
     _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT
     );
@@ -203,8 +195,6 @@ void init() {
     // OnOff init
     _positional_actuators[Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
         Enum::CART_MAGNET_LEFT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         false,
         false,
@@ -212,8 +202,6 @@ void init() {
     );
     _positional_actuators[Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
         Enum::CART_MAGNET_RIGHT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         false,
         false,

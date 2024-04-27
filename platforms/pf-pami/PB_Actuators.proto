@@ -6,11 +6,6 @@ enum PB_ActuatorsTypeEnum
   POSITIONAL = 2;
 }
 
-enum PB_ActuatorsGroupEnum
-{
-  NO_GROUP = 0;
-}
-
 enum PB_ServoEnum
 {
     LXSERVO_UNUSED = 0; // The first enum value must be zero in proto3.
@@ -32,20 +27,16 @@ enum PB_PositionalActuatorEnum
 }
 
 message PB_Servo {
-    PB_ActuatorsGroupEnum group = 1;
-    uint32 order = 2;
-    bool is_blocked = 3;
-    PB_ServoEnum id = 4;
-    uint32 position = 5;
-    uint32 command = 6;
+    bool is_blocked = 1;
+    PB_ServoEnum id = 2;
+    uint32 position = 3;
+    uint32 command = 4;
 }
 
 message PB_PositionalActuator {
-    PB_ActuatorsGroupEnum group = 1;
-    uint32 order = 2;
-    bool is_blocked = 3;
-    PB_PositionalActuatorEnum id = 4;
-    int32 command = 5;
+    bool is_blocked = 1;
+    PB_PositionalActuatorEnum id = 2;
+    int32 command = 3;
 }
 
 message PB_ActuatorState {

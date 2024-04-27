@@ -43,8 +43,6 @@ public:
     /// Constructor.
     explicit Motor(
         Enum id,                                ///< [in] motor id
-        GroupEnum group,                        ///< [in] actuator group
-        uint8_t order = 0,                      ///< [in] order in actuator group
         uint32_t default_timeout_period = 0,    ///< [in] default timeout
         motor_driver_t *motor_driver = nullptr, ///< [in] motor driver
         uint8_t motor_id = 0,                   ///< [in] motor id for the given motor driver

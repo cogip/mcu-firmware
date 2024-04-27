@@ -24,8 +24,6 @@ void PositionalActuator::actuate_timeout(int32_t command, uint32_t timeout_perio
 }
 
 void PositionalActuator::pb_copy(PB_PositionalActuator & pb_positional_actuator) const {
-    pb_positional_actuator.set_group(static_cast<PB_ActuatorsGroupEnum>(group_));
-    pb_positional_actuator.set_order(order_);
     pb_positional_actuator.set_id(static_cast<PB_PositionalActuatorEnum>(id_));
     pb_positional_actuator.set_command(command_);
 }

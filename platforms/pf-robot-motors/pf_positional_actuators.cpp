@@ -299,8 +299,6 @@ void init() {
 
     _positional_actuators[Enum::MOTOR_BOTTOM_LIFT] = _motors_pool.create(
         Enum::MOTOR_BOTTOM_LIFT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         &actuators_motors_driver,
         MOTOR_BOTTOM_LIFT_ID,
@@ -315,8 +313,6 @@ void init() {
     );
     _positional_actuators[Enum::MOTOR_TOP_LIFT] = _motors_pool.create(
         Enum::MOTOR_TOP_LIFT,
-        GroupEnum::NO_GROUP,
-        0,
         0,
         &actuators_motors_driver,
         MOTOR_TOP_LIFT_ID,

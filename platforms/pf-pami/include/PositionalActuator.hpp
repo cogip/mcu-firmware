@@ -36,10 +36,8 @@ public:
     /// Constructor.
     PositionalActuator(
         Enum id,           ///< [in] positional_actuator id
-        GroupEnum group,   ///< [in] actuator group
-        uint8_t order = 0, ///< [in] order in actuator group
         uint32_t default_timeout_period = 0 ///< [in] default timeout
-    ) : Actuator(group, order), id_(id), command_(0), timeout_period_(0), default_timeout_period_(default_timeout_period) {};
+    ) : Actuator(), id_(id), command_(0), timeout_period_(0), default_timeout_period_(default_timeout_period) {};
 
     /// Get timeout
     uint32_t timeout_period() { return timeout_period_; };

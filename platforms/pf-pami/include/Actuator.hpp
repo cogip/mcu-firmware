@@ -15,15 +15,10 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 
-enum class GroupEnum: uint8_t;
-
 class Actuator {
 public:
     /// Constructor
-    explicit Actuator(
-        GroupEnum group,   /// [in] actuator group
-        uint8_t order = 0  /// [in] actuator order in group
-        ) : group_(group), order_(order), blocked_(0) {};
+    explicit Actuator() : blocked_(0) {};
 
     /// Get blocked state
     bool blocked() { return blocked_; }
@@ -32,8 +27,6 @@ public:
     void set_blocked(bool blocked) { blocked_ = blocked; }
 
 protected:
-    GroupEnum group_;   /// actuator group
-    uint8_t order_;     /// actuator order in group
     bool blocked_;      /// blocked state
 };
 

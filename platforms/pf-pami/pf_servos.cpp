@@ -44,23 +44,17 @@ void init(uart_half_duplex_t *lx_stream) {
 
     // Ball switch
     _servos[Enum::LXSERVO_BALL_SWITCH] = _servos_pool.create(
-        Enum::LXSERVO_BALL_SWITCH,
-        GroupEnum::NO_GROUP,
-        0
+        Enum::LXSERVO_BALL_SWITCH
     );
 
     // Right arm
     _servos[Enum::LXSERVO_RIGHT_ARM] = _servos_pool.create(
-        Enum::LXSERVO_RIGHT_ARM,
-        GroupEnum::NO_GROUP,
-        0
+        Enum::LXSERVO_RIGHT_ARM
     );
 
     // Left arm
     _servos[Enum::LXSERVO_LEFT_ARM] = _servos_pool.create(
-        Enum::LXSERVO_LEFT_ARM,
-        GroupEnum::NO_GROUP,
-        0
+        Enum::LXSERVO_LEFT_ARM
     );
 }
 
