@@ -6,8 +6,8 @@
 
 #define square(__x) (__x * __x)
 
-#define RAD2DEG(a) (a * 360.0 / (2.0 * M_PI))
-#define DEG2RAD(a) (a * (2.0 * M_PI) / 360.0)
+#define RAD2DEG(a) ((a * 180.0) / M_PI)
+#define DEG2RAD(a) ((a * M_PI) / 180.0)
 
 #ifdef __cplusplus
 extern "C" {
