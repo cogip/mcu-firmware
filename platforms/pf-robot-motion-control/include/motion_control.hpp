@@ -52,8 +52,8 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
 /// @{
-constexpr double wheels_diameter_mm = 46.6;
-constexpr double wheels_distance_mm = 275;
+constexpr double wheels_diameter_mm = 48.027;
+constexpr double wheels_distance_mm = 274;
 constexpr double wheels_encoder_resolution = 4096 * 4;
 constexpr double wheels_perimeter = M_PI * wheels_diameter_mm;
 constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
@@ -62,15 +62,15 @@ constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   
 /// @}
 
 /// Minimal PWM value
-constexpr int pwm_minimal = 50;
+constexpr int pwm_minimal = 70;
 
 /// @name Acceleration and speed profiles
 /// @{
 // Linear maximum speed and acceleration
 constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
-constexpr double platform_max_speed_m_per_s = 2;  ///< Maximum speed (m/s)
-constexpr double platform_max_acc_m_per_s2 = 4;   ///< Maximum acceleration (m/s²)
-constexpr double platform_max_dec_m_per_s2 = 0.5;   ///< Maximum deceleration (m/s²)
+constexpr double platform_max_speed_m_per_s = 2 ;  ///< Maximum speed (m/s)
+constexpr double platform_max_acc_m_per_s2 = 3;   ///< Maximum acceleration (m/s²)
+constexpr double platform_max_dec_m_per_s2 = 1.25;   ///< Maximum deceleration (m/s²)
 constexpr double platform_max_acc_linear_mm_per_period2 = (
     (1000 * platform_max_acc_m_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
