@@ -31,16 +31,17 @@ public:
         double max_speed_ratio_linear=0.0,    ///< [in] max speed linear
         double max_speed_ratio_angular=0.0,   ///< [in] max speed angular
         bool allow_reverse=true,        ///< [in] reverse mode
-        func_cb_t act_=nullptr          ///< [in] action callback
+        bool bypass_antiblocking=false, ///< [in] reverse mode
+        uint32_t timeout_ms=0
         );
 
     /// Destructor
     virtual ~Pose() {};
 
-    /// Retourn max speed linear.
+    /// Return max speed linear.
     virtual double max_speed_ratio_linear() const { return max_speed_ratio_linear_; };
 
-    /// Retourn max speed angular.
+    /// Return max speed angular.
     virtual double max_speed_ratio_angular() const { return max_speed_ratio_angular_; };
 
     /// Is reverse mode allowed or not.
@@ -51,8 +52,11 @@ public:
         bool enable               ///< new value for reverse mode
         ) { allow_reverse_ = enable; };
 
-    /// Execute action callback if set.
-    virtual void act() const { if (act_) act_(); }
+    /// Return true if anti blocking should be bypassed
+    virtual bool bypass_anti_blocking() const { return bypass_anti_blocking_; }
+
+    /// Return timeout to reach the pose, 0 if timeout should be disabled
+    virtual uint32_t timeout_() const { return timeout_ms_; }
 
     /// Initialize the object from a Protobuf message.
     void pb_read(
@@ -77,10 +81,11 @@ public:
     };
 
 private:
-    double max_speed_ratio_linear_;     ///< max speed
-    double max_speed_ratio_angular_;    ///< max speed
-    bool allow_reverse_;          ///< reverse mode
-    func_cb_t act_;               ///< action callback
+    double max_speed_ratio_linear_; ///< max speed
+    double max_speed_ratio_angular_;///< max speed
+    bool allow_reverse_;            ///< reverse mode
+    bool bypass_anti_blocking_;     ///< bypass anti blocking
+    uint32_t timeout_ms_;           ///< timeout(ms) to reach the path pose
 };
 
 } // namespace path

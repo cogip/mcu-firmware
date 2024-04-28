@@ -88,11 +88,16 @@ void SpeedFilter::execute() {
         // with the speed order from the previous cycle. If the difference between these two
         // speeds exceeds a threshold, it indicates that the robot hasn't accelerated since its
         // previous cycle.
+        //std::cout << "(fabs(current_speed) < parameters_->anti_blocking_speed_threshold())" << current_speed << " < " << parameters_->anti_blocking_speed_threshold() << std::endl;
+        //std::cout << "(fabs(previous_speed_order_ - current_speed) > parameters_->anti_blocking_error_threshold())" << fabs(previous_speed_order_ - current_speed) << " > " << parameters_->anti_blocking_error_threshold() << std::endl;
+        //std::cout << previous_speed_order_ << std::endl;
+        //std::cout << current_speed << std::endl;
         if ((fabs(current_speed) < parameters_->anti_blocking_speed_threshold())
             && (fabs(previous_speed_order_ - current_speed) > parameters_->anti_blocking_error_threshold())) {
             // Increment a counter for cycles during which the robot is supposedly blocked.
             // This evaluation cannot be done within a single cycle, so the counter is incremented.
             anti_blocking_blocked_cycles_nb_++;
+            //std::cout << anti_blocking_blocked_cycles_nb_ << std::endl;
         }
         else {
             anti_blocking_blocked_cycles_nb_= 0;
@@ -102,6 +107,7 @@ void SpeedFilter::execute() {
         if (anti_blocking_blocked_cycles_nb_ > parameters_->anti_blocking_blocked_cycles_nb_threshold()) {
             pose_reached = target_pose_status_t::blocked;
         }
+
     }
 
     previous_speed_order_ = speed_order;
