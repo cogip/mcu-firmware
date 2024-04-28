@@ -434,6 +434,13 @@ void pf_motion_control_reset(void)
 void pf_disable_motion_control()
 {
     pf_motion_control_platform_engine.disable();
+
+    // Small wait to ensure engine is disabled
+    ztimer_sleep(ZTIMER_MSEC, motion_control_thread_period_ms);
+
+    // Stop motors as the robot should not move in this case.
+    motor_disable(&motion_motors_driver, MOTOR_LEFT);
+    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_enable_motion_control()
