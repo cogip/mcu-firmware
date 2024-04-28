@@ -415,6 +415,22 @@ void pf_start_motion_control(void)
     pf_motion_control_platform_engine.start_thread();
 }
 
+void pf_motion_control_reset(void)
+{
+    // Reset encoders counter
+    pf_encoder_reset();
+
+    // Reset previous speed orders
+    angular_speed_filter.reset_previous_speed_order();
+    linear_speed_filter.reset_previous_speed_order();
+
+    // Reset PIDs
+    reset_speed_pids();
+
+    // Reset pose straight filter state
+    pose_straight_filter.reset_current_state();
+}
+
 void pf_disable_motion_control()
 {
     pf_motion_control_platform_engine.disable();
