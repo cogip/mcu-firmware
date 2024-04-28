@@ -82,6 +82,8 @@ static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffe
 {
     cogip::pf::motion_control::pf_disable_motion_control();
 
+    cogip::pf::motion_control::pf_motion_control_reset();
+
     cogip::pf::motion_control::pf_enable_motion_control_messages();
 }
 
