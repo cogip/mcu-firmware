@@ -77,7 +77,7 @@ constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 0x3003;
 /**
  * @brief Get trace mode status
  *
- * @return                      true if trace mode is activited, false otherwise
+ * @return                      true if trace mode is activated, false otherwise
  */
 bool pf_trace_on(void);
 
@@ -105,9 +105,9 @@ void pf_print_state(void);
 int pf_is_game_launched(void);
 
 /**
- * @brief Returns uarpb.
+ * @brief Returns canpb.
  *
- * return   uarpb pointer
+ * return   canpb pointer
  **/
 cogip::canpb::CanProtobuf & pf_get_canpb();
 
