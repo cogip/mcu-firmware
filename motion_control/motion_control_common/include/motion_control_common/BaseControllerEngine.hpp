@@ -29,7 +29,8 @@ public:
         current_cycle_(0),
         pose_reached_(moving),
         timeout_cycle_number_(0),
-        timeout_enable_(false) {};
+        timeout_enable_(false)
+        { memset(controller_thread_stack_, 0, sizeof(controller_thread_stack_)); };
 
     /// Set the controller to launch.
     void set_controller(
@@ -108,6 +109,9 @@ protected:
 
     /// Timeout enable flag
     bool timeout_enable_;
+
+    /// Controller thread stack
+    char controller_thread_stack_[THREAD_STACKSIZE_LARGE];
 };
 
 } // namespace motion_control

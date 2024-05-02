@@ -1,0 +1,13 @@
+USEMODULE_INCLUDES_pf-actuators := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_pf-actuators)
+
+PROTOBUF_PATH_pf-actuators := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_pf-actuators)
+
+ifdef PCA9685_OFFSET
+	CFLAGS += -DPCA9685_OFFSET=$(PCA9685_OFFSET)
+endif
+
+ifeq ($(CPU),native)
+	CFLAGS += -DUART_NUMOF=2
+endif

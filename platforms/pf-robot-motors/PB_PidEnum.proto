@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+enum PB_PidEnum {
+    DUMMY = 0;
+    MOTOR_BOTTOM_LIFT_POSE_PID = 4;
+    MOTOR_BOTTOM_LIFT_SPEED_PID = 5;
+    MOTOR_TOP_LIFT_POSE_PID = 6;
+    MOTOR_TOP_LIFT_SPEED_PID = 7;
+}

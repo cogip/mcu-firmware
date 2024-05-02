@@ -13,6 +13,15 @@ namespace motion_control {
 #define MOTION_MOTORS_POST_CB nullptr
 #endif
 
+/* Motion motors */
+#define MOTOR_LEFT  1
+#define MOTOR_RIGHT 0
+
+/* Quadrature decoding */
+#define QDEC_MODE           QDEC_X4
+#define QDEC_LEFT_POLARITY  1
+#define QDEC_RIGHT_POLARITY -1
+
 /**
  * @brief Simulate QDEC on motor_set() calls
  *

@@ -98,6 +98,11 @@ public:
     /// return number of outputs
     size_t nb_outputs() const override { return OUTPUT_SIZE; };
 
+    /// Get parameters
+    /// return current parameters
+    virtual const ParamsT* parameters(
+        ) { return parameters_; };
+
     /// Set new parameters
     virtual void set_parameters(
         const ParamsT *new_params   ///< [in]  new controller parameters

@@ -39,15 +39,6 @@ extern "C" {
 #define LX_DIR_PIN      GPIO_PIN(PORT_C, 15)
 #define LX_UART_DEV     1
 
-/* Motion motors */
-#define MOTOR_LEFT  1
-#define MOTOR_RIGHT 0
-
-/* Quadrature decoding */
-#define QDEC_MODE           QDEC_X4
-#define QDEC_LEFT_POLARITY  1
-#define QDEC_RIGHT_POLARITY -1
-
 /**
  * @brief   Initialize board specific hardware, including clock, LEDs and std-IO
  */

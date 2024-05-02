@@ -24,11 +24,12 @@ namespace motion_control {
 /// Input 1:    current speed
 /// Input 2:    target speed
 /// Output 0:   filtered speed
-class SpeedFilter : public Controller<4, 1, SpeedFilterParameters> {
+class SpeedFilter : public Controller<5, 2, SpeedFilterParameters> {
 public:
     /// @brief
     /// @param parameters
-    explicit SpeedFilter(SpeedFilterParameters *parameters) : Controller(parameters), previous_speed_order_(0) {};
+    explicit SpeedFilter(SpeedFilterParameters *parameters) : Controller(parameters),
+        previous_speed_order_(0), anti_blocking_blocked_cycles_nb_(0) {};
 
     /// Limit acceleration and speed
     void execute() override;
@@ -40,9 +41,15 @@ public:
     /// Reset previous speed order
     void reset_previous_speed_order() { previous_speed_order_ = 0; };
 
+    /// Reset anti blocking blocked cycle number
+    void reset_anti_blocking_blocked_cycles_nb() { anti_blocking_blocked_cycles_nb_ = 0; };
+
 protected:
     /// Previous cycle speed_order
     double previous_speed_order_;
+
+    /// Anti blocking, number of blocked cycle
+    uint32_t anti_blocking_blocked_cycles_nb_;
 
     void limit_speed_order(
         double *speed_order,

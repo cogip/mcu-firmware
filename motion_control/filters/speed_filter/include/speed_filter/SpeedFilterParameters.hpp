@@ -22,8 +22,20 @@ public:
     SpeedFilterParameters(
         double min_speed = 0.0,         ///< [in]  see max_speed_
         double max_speed = 0.0,         ///< [in]  see max_speed_
-        double max_acceleration = 0.0   ///< [in]  see max_acceleration_
-    ) :  min_speed_(min_speed), max_speed_(max_speed), max_acceleration_(max_acceleration) {};
+        double max_acceleration = 0.0,  ///< [in]  see max_acceleration_
+        bool anti_blocking = false,
+                                        ///< [in]   anti-blocking flag
+        double anti_blocking_speed_threshold = 0,
+                                        ///< [in]   new anti blocking speed threshold
+        double anti_blocking_error_threshold = 0,
+                                        ///< [in]   new anti blocking error threshold
+        double anti_blocking_blocked_cycles_nb_threshold = 0
+                                        ///< [in]   new anti blocking blocked cycles threshold
+    ) :  min_speed_(min_speed), max_speed_(max_speed), max_acceleration_(max_acceleration),
+         anti_blocking_(anti_blocking),
+         anti_blocking_speed_threshold_(anti_blocking_speed_threshold),
+         anti_blocking_error_threshold_(anti_blocking_error_threshold),
+         anti_blocking_blocked_cycles_nb_threshold_(anti_blocking_blocked_cycles_nb_threshold) {};
 
     /// Get minimum speed
     /// return minimum speed
@@ -52,6 +64,43 @@ public:
         double max_acceleration         ///< [in]   maximum acceleration
         ) { max_acceleration_ = max_acceleration; };
 
+    /// Get anti blocking activation flag
+    /// return true if activated, false otherwise
+    bool anti_blocking() const { return anti_blocking_; };
+
+    /// Set anti blocking activation flag
+    void set_anti_blocking(
+        bool anti_blocking                          ///< [in]   anti blocking on/off
+        ) { anti_blocking_ = anti_blocking; };
+
+    /// Get anti blocking speed threshold
+    /// return anti blocking speed threshold
+    double anti_blocking_speed_threshold() const { return anti_blocking_speed_threshold_; };
+
+    /// Set anti blocking speed threshold
+    void set_anti_blocking_speed_threshold(
+        double anti_blocking_speed_threshold        ///< [in]   new anti blocking speed threshold
+        ) { anti_blocking_speed_threshold_ = anti_blocking_speed_threshold; };
+
+    /// Get anti blocking error threshold
+    /// return anti blocking error threshold
+    double anti_blocking_error_threshold() const { return anti_blocking_error_threshold_; };
+
+    /// Set anti blocking error threshold
+    void set_anti_blocking_error_threshold(
+        double anti_blocking_error_threshold        ///< [in]   new anti blocking error threshold
+        ) { anti_blocking_error_threshold_ = anti_blocking_error_threshold; };
+
+    /// Get anti blocking blocked cycles number threshold
+    /// return anti blocking blocked cycles number threshold
+    double anti_blocking_blocked_cycles_nb_threshold() const { return anti_blocking_blocked_cycles_nb_threshold_; };
+
+    /// Set anti blocking blocked cycles number threshold
+    void set_anti_blocking_blocked_cycles_nb_threshold(
+        double anti_blocking_blocked_cycles_nb_threshold        ///< [in]   new anti blocking blocked cycles number threshold
+        ) { anti_blocking_blocked_cycles_nb_threshold_ = anti_blocking_blocked_cycles_nb_threshold; };
+
+
 private:
     /// maximum speed the robot can reach
     double min_speed_;
@@ -61,6 +110,18 @@ private:
 
     /// maximum robot acceleration allowed
     double max_acceleration_;
+
+    /// Anti blocking on ?
+    bool anti_blocking_;
+
+    /// anti blocking speed threshold
+    double anti_blocking_speed_threshold_;
+
+    /// anti blocking error threshold
+    double anti_blocking_error_threshold_;
+
+    /// anti blocking blocked cycles number threshold
+    uint32_t anti_blocking_blocked_cycles_nb_threshold_;
 };
 
 } // namespace motion_control

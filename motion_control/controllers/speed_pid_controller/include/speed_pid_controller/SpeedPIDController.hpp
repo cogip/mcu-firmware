@@ -25,7 +25,7 @@ namespace motion_control {
 /// Input 1:    current speed
 /// Input 2:    target speed
 /// Output 0:   speed command
-class SpeedPIDController : public Controller<1, 1, SpeedPIDControllerParameters> {
+class SpeedPIDController : public Controller<2, 2, SpeedPIDControllerParameters> {
 public:
     /// Constructor
     explicit SpeedPIDController(
