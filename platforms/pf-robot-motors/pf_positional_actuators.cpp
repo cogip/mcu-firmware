@@ -287,7 +287,7 @@ void init() {
     // Init drivers
     motor_driver_init(&actuators_motors_driver, &actuators_motors_params);
 
-    // Init qdec periphereal
+    // Init qdec peripherals
     int error = qdec_init(QDEC_DEV(MOTOR_BOTTOM_LIFT_ID), QDEC_MODE, NULL, NULL);
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_BOTTOM_LIFT_ID, error);
@@ -349,7 +349,7 @@ void init() {
         THREAD_CREATE_STACKTEST,
         _positional_actuators_timeout_thread,
         NULL,
-        "Positional acturators timeout thread"
+        "Positional actuators timeout thread"
     );
 }
 
@@ -380,7 +380,7 @@ void pb_copy(PB_Message & pb_message) {
     }
 }
 
-} // namespace actuators
+} // namespace positional_actuators
 } // namespace actuators
 } // namespace pf
 } // namespace cogip
