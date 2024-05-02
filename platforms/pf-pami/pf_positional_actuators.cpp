@@ -110,7 +110,7 @@ void init(uart_half_duplex_t *lx_stream) {
         THREAD_CREATE_STACKTEST,
         _positional_actuators_timeout_thread,
         NULL,
-        "Positional acturators timeout thread"
+        "Positional actuators timeout thread"
     );
 }
 
