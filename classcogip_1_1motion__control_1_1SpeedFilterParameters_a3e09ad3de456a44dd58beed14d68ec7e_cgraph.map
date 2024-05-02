@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::SpeedFilterParameters::set_anti_blocking" name="cogip::motion_control::SpeedFilterParameters::set_anti_blocking">
+<area shape="rect" id="node1" title="Set anti blocking activation flag." alt="" coords="5,5,183,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1SpeedFilterParameters.html#a8050f829a76c93e738e2f2af5c86b775" title="Get anti blocking activation flag return true if activated, false otherwise." alt="" coords="231,5,408,61"/>
+</map>

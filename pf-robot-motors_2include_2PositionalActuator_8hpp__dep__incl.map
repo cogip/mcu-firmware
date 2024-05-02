@@ -1,0 +1,5 @@
+<map id="platforms/pf&#45;robot&#45;motors/include/PositionalActuator.hpp" name="platforms/pf&#45;robot&#45;motors/include/PositionalActuator.hpp">
+<area shape="rect" id="node1" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="119,5,311,61"/>
+<area shape="rect" id="node2" href="$pf-robot-motors_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="5,117,199,158"/>
+<area shape="rect" id="node3" href="$pf-robot-motors_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="223,109,435,165"/>
+</map>

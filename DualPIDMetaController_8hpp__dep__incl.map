@@ -1,0 +1,4 @@
+<map id="motion_control/metas/dualpid_meta_controller/include/dualpid_meta_controller/DualPIDMetaController.hpp" name="motion_control/metas/dualpid_meta_controller/include/dualpid_meta_controller/DualPIDMetaController.hpp">
+<area shape="rect" id="node1" title="Meta controller for pose and speed PID corrections." alt="" coords="5,5,240,76"/>
+<area shape="rect" id="node2" href="$pf-robot-motors_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="26,124,219,165"/>
+</map>

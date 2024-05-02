@@ -3,7 +3,7 @@ var dir_adc6806cc8e4433a8a233e3830ab7743 =
     [ "Actuator.hpp", "pf-robot-actuators_2include_2Actuator_8hpp.html", [
       [ "Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", "classcogip_1_1pf_1_1actuators_1_1Actuator" ]
     ] ],
-    [ "actuators_motors_params.hpp", "actuators__motors__params_8hpp_source.html", null ],
+    [ "actuators_motors_params.hpp", "pf-robot-actuators_2include_2actuators__motors__params_8hpp_source.html", null ],
     [ "AnalogServo.hpp", "pf-robot-actuators_2include_2AnalogServo_8hpp.html", [
       [ "AnalogServo", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo" ]
     ] ],
@@ -11,7 +11,7 @@ var dir_adc6806cc8e4433a8a233e3830ab7743 =
       [ "LxMotor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor" ]
     ] ],
     [ "LxServo.hpp", "pf-robot-actuators_2include_2LxServo_8hpp.html", "pf-robot-actuators_2include_2LxServo_8hpp" ],
-    [ "Motor.hpp", "Motor_8hpp.html", "Motor_8hpp" ],
+    [ "Motor.hpp", "pf-robot-actuators_2include_2Motor_8hpp.html", "pf-robot-actuators_2include_2Motor_8hpp" ],
     [ "OnOff.hpp", "OnOff_8hpp.html", [
       [ "OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff" ]
     ] ],

@@ -2,6 +2,7 @@ var pf_pami_2include_2pf__actuators_8hpp =
 [
     [ "GroupEnum", "pf-pami_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3", [
       [ "NO_GROUP", "pf-pami_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3a625a0c6430fc16b47683bc7e5bad7d96", null ],
+      [ "NO_GROUP", "pf-pami_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3a625a0c6430fc16b47683bc7e5bad7d96", null ],
       [ "NO_GROUP", "pf-pami_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3a625a0c6430fc16b47683bc7e5bad7d96", null ]
     ] ],
     [ "LXServoIDs", "pf-pami_2include_2pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685", [

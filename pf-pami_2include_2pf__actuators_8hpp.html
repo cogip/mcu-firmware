@@ -175,6 +175,7 @@ Enumerations</h2></td></tr>
 <tr class="memdesc:ab8ffb9175feb6ddd2f6ec4049542d685"><td class="mdescLeft">&#160;</td><td class="mdescRight">LX servomotors IDs. <br /></td></tr>
 <tr class="separator:ab8ffb9175feb6ddd2f6ec4049542d685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8f20e24a161912e217c5b49cefd07c3"><td class="memItemLeft" align="right" valign="top"><a id="aa8f20e24a161912e217c5b49cefd07c3"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">cogip::pf::actuators::GroupEnum</a> : uint8_t { <b>NO_GROUP</b> = 0, 
+<b>NO_GROUP</b> = 0, 
 <b>NO_GROUP</b> = 0
  }</td></tr>
 <tr class="memdesc:aa8f20e24a161912e217c5b49cefd07c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum using to group actuators. <br /></td></tr>
@@ -197,9 +198,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-p
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a179211b0e1134575ec0e8e131a26b6c0"><td class="memItemLeft" align="right" valign="top"><a id="a179211b0e1134575ec0e8e131a26b6c0"></a>
-constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__actuators_8hpp.html#a179211b0e1134575ec0e8e131a26b6c0">cogip::pf::actuators::actuator_state_uuid</a> = 1674079543</td></tr>
-<tr class="memdesc:a179211b0e1134575ec0e8e131a26b6c0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">Actuator</a> state protobuf message id. <br /></td></tr>
+<tr class="memitem:a179211b0e1134575ec0e8e131a26b6c0"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__actuators_8hpp.html#a179211b0e1134575ec0e8e131a26b6c0">cogip::pf::actuators::actuator_state_uuid</a> = 1674079543</td></tr>
+<tr class="memdesc:a179211b0e1134575ec0e8e131a26b6c0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">Actuator</a> state protobuf message id.  <a href="pf-pami_2include_2pf__actuators_8hpp.html#a179211b0e1134575ec0e8e131a26b6c0">More...</a><br /></td></tr>
 <tr class="separator:a179211b0e1134575ec0e8e131a26b6c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f741e113a7f0857cf8b1f15e00275ae"><td class="memItemLeft" align="right" valign="top"><a id="a7f741e113a7f0857cf8b1f15e00275ae"></a>
 constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064422178">cogip::uartpb::uuid_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__actuators_8hpp.html#a7f741e113a7f0857cf8b1f15e00275ae">cogip::pf::actuators::emergency_button_pressed_uuid</a> = 1885006827</td></tr>
@@ -210,11 +210,39 @@ constexpr <a class="el" href="UartProtobuf_8hpp.html#a0b6e009187ab278ce929e25064
 <tr class="memdesc:ac98479a1ce9789347fd7b8f330010b2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emergency button pressed protobuf message id. <br /></td></tr>
 <tr class="separator:ac98479a1ce9789347fd7b8f330010b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a179211b0e1134575ec0e8e131a26b6c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a179211b0e1134575ec0e8e131a26b6c0">&#9670;&nbsp;</a></span>actuator_state_uuid</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="CanProtobuf_8hpp.html#a28f925c84ec75b970d9d0e07b93e844d">cogip::canpb::uuid_t</a> cogip::pf::actuators::actuator_state_uuid = 1674079543</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Actuator state protobuf message id. </p>
+<p>Actuators: 0x2000 - 0x2FFF. </p>
+
+<p class="definition">Definition at line <a class="el" href="pf-pami_2include_2pf__actuators_8hpp_source.html#l00025">25</a> of file <a class="el" href="pf-pami_2include_2pf__actuators_8hpp_source.html">pf_actuators.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Apr 21 2024 07:38:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu May 2 2024 22:51:43 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

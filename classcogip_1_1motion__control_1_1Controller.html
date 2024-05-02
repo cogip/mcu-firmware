@@ -156,7 +156,7 @@ class cogip::motion_control::Controller&lt; INPUT_SIZE, OUTPUT_SIZE, ParamsT &gt
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classcogip_1_1motion__control_1_1Controller__inherit__graph.png" border="0" usemap="#cogip_1_1motion__control_1_1Controller_3_01INPUT__SIZE_00_01OUTPUT__SIZE_00_01ParamsT_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="cogip_1_1motion__control_1_1Controller_3_01INPUT__SIZE_00_01OUTPUT__SIZE_00_01ParamsT_01_4_inherit__map" id="cogip_1_1motion__control_1_1Controller_3_01INPUT__SIZE_00_01OUTPUT__SIZE_00_01ParamsT_01_4_inherit__map">
-<area shape="rect" title="A controller transforms input data to outputs." alt="" coords="5,307,200,545"/>
+<area shape="rect" title="A controller transforms input data to outputs." alt="" coords="5,307,200,560"/>
 <area shape="rect" href="classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="21,5,184,259"/>
 </map>
 </div>
@@ -167,14 +167,14 @@ class cogip::motion_control::Controller&lt; INPUT_SIZE, OUTPUT_SIZE, ParamsT &gt
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classcogip_1_1motion__control_1_1Controller__coll__graph.png" border="0" usemap="#cogip_1_1motion__control_1_1Controller_3_01INPUT__SIZE_00_01OUTPUT__SIZE_00_01ParamsT_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="cogip_1_1motion__control_1_1Controller_3_01INPUT__SIZE_00_01OUTPUT__SIZE_00_01ParamsT_01_4_coll__map" id="cogip_1_1motion__control_1_1Controller_3_01INPUT__SIZE_00_01OUTPUT__SIZE_00_01ParamsT_01_4_coll__map">
-<area shape="rect" title="A controller transforms input data to outputs." alt="" coords="5,307,200,545"/>
+<area shape="rect" title="A controller transforms input data to outputs." alt="" coords="5,307,200,560"/>
 <area shape="rect" href="classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="21,5,184,259"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af9f819b31dbaeebba6cb38a4eee32639"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#af9f819b31dbaeebba6cb38a4eee32639">Controller</a> (ParamsT *parameters=nullptr)</td></tr>
+<tr class="memitem:af9f819b31dbaeebba6cb38a4eee32639"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#af9f819b31dbaeebba6cb38a4eee32639">Controller</a> (ParamsT *<a class="el" href="classcogip_1_1motion__control_1_1Controller.html#a4bcbd2f93c1dfc9cf362960944e31195">parameters</a>=nullptr)</td></tr>
 <tr class="memdesc:af9f819b31dbaeebba6cb38a4eee32639"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructors.  <a href="classcogip_1_1motion__control_1_1Controller.html#af9f819b31dbaeebba6cb38a4eee32639">More...</a><br /></td></tr>
 <tr class="separator:af9f819b31dbaeebba6cb38a4eee32639"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02e9b565ed201ea1969c930381c1b3dc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#a02e9b565ed201ea1969c930381c1b3dc">input</a> (size_t index) const override</td></tr>
@@ -197,6 +197,10 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#a31786f53db37d87d017a323b024f3b87">nb_outputs</a> () const override</td></tr>
 <tr class="memdesc:a31786f53db37d87d017a323b024f3b87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of outputs return number of outputs. <br /></td></tr>
 <tr class="separator:a31786f53db37d87d017a323b024f3b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bcbd2f93c1dfc9cf362960944e31195"><td class="memItemLeft" align="right" valign="top"><a id="a4bcbd2f93c1dfc9cf362960944e31195"></a>
+virtual const ParamsT *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#a4bcbd2f93c1dfc9cf362960944e31195">parameters</a> ()</td></tr>
+<tr class="memdesc:a4bcbd2f93c1dfc9cf362960944e31195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get parameters return current parameters. <br /></td></tr>
+<tr class="separator:a4bcbd2f93c1dfc9cf362960944e31195"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae320649084100d4142304263dc386b74"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#ae320649084100d4142304263dc386b74">set_parameters</a> (const ParamsT *new_params)</td></tr>
 <tr class="memdesc:ae320649084100d4142304263dc386b74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set new parameters.  <a href="classcogip_1_1motion__control_1_1Controller.html#ae320649084100d4142304263dc386b74">More...</a><br /></td></tr>
 <tr class="separator:ae320649084100d4142304263dc386b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -499,7 +503,7 @@ template&lt;size_t INPUT_SIZE, size_t OUTPUT_SIZE, typename ParamsT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Controller_8hpp_source.html#l00102">102</a> of file <a class="el" href="Controller_8hpp_source.html">Controller.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Controller_8hpp_source.html#l00107">107</a> of file <a class="el" href="Controller_8hpp_source.html">Controller.hpp</a>.</p>
 
 </div>
 </div>
@@ -510,7 +514,7 @@ template&lt;size_t INPUT_SIZE, size_t OUTPUT_SIZE, typename ParamsT &gt; </div>
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Apr 21 2024 07:38:53 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Thu May 2 2024 22:51:43 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

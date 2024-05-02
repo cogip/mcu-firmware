@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::SpeedFilterParameters::set_anti_blocking_speed_threshold" name="cogip::motion_control::SpeedFilterParameters::set_anti_blocking_speed_threshold">
+<area shape="rect" id="node1" title="Set anti blocking speed threshold." alt="" coords="5,5,196,76"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1SpeedFilterParameters.html#a76f5e5f3919bd453763cd044e00cdd6d" title="Get anti blocking speed threshold return anti blocking speed threshold." alt="" coords="244,13,475,69"/>
+</map>

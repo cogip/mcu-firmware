@@ -1,9 +1,9 @@
 <map id="cogip::motion_control::PolarParallelMetaController" name="cogip::motion_control::PolarParallelMetaController">
-<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="250,839,458,945"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title=" " alt="" coords="251,595,457,789"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,373,175,494"/>
+<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="250,853,458,960"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title=" " alt="" coords="251,609,457,804"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,380,175,501"/>
 <area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="51,5,214,259"/>
-<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,321,509,545"/>
+<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,321,509,560"/>
 <area shape="rect" id="node6" href="$classcogip_1_1motion__control_1_1MetaControllerParameters.html" title="Empty Meta Controller parameters." alt="" coords="253,86,455,178"/>
-<area shape="rect" id="node7" title=" " alt="" coords="533,387,732,479"/>
+<area shape="rect" id="node7" title=" " alt="" coords="533,395,732,487"/>
 </map>

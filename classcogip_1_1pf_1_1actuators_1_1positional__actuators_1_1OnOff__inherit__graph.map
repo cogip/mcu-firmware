@@ -1,5 +1,5 @@
 <map id="cogip::pf::actuators::positional_actuators::OnOff" name="cogip::pf::actuators::positional_actuators::OnOff">
-<area shape="rect" id="node1" title="Class representing a motor using motor driver." alt="" coords="35,593,198,744"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="5,248,228,545"/>
-<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="43,5,190,200"/>
+<area shape="rect" id="node1" title="Class representing a motor using motor driver." alt="" coords="35,637,198,788"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="5,292,228,589"/>
+<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="43,5,190,244"/>
 </map>

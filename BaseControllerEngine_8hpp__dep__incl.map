@@ -1,6 +1,8 @@
 <map id="motion_control/motion_control_common/include/motion_control_common/BaseControllerEngine.hpp" name="motion_control/motion_control_common/include/motion_control_common/BaseControllerEngine.hpp">
-<area shape="rect" id="node1" title="Base class for engines." alt="" coords="106,5,301,76"/>
-<area shape="rect" id="node2" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="71,124,336,180"/>
-<area shape="rect" id="node3" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,235,196,277"/>
-<area shape="rect" id="node4" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="220,228,395,284"/>
+<area shape="rect" id="node1" title="Base class for engines." alt="" coords="159,5,354,76"/>
+<area shape="rect" id="node2" href="$MotorEngine_8hpp.html" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="5,124,236,180"/>
+<area shape="rect" id="node4" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="260,124,525,180"/>
+<area shape="rect" id="node3" href="$pf-robot-motors_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="24,235,217,277"/>
+<area shape="rect" id="node5" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="269,235,460,277"/>
+<area shape="rect" id="node6" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="484,228,659,284"/>
 </map>

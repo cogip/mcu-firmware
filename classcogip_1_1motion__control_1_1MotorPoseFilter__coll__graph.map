@@ -1,0 +1,6 @@
+<map id="cogip::motion_control::MotorPoseFilter" name="cogip::motion_control::MotorPoseFilter">
+<area shape="rect" id="node1" title="Breaks down a movement into a straight trajectory." alt="" coords="113,609,276,716"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="89,321,300,560"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="5,5,168,259"/>
+<area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1MotorPoseFilterParameters.html" title="Movements switch thresholds." alt="" coords="193,71,415,193"/>
+</map>

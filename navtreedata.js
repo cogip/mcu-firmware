@@ -52,13 +52,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcogip_1_1motion__control_1_1BaseMetaController.html#a0d303c4cb522a60bd8904186631ce777",
-"classcogip_1_1planners_1_1Planner.html#a3424ad3f81eb7f61d9b07bdad096c62d",
-"functions_u.html",
-"group__driver__lx__servo.html#gga5f1ea8be7405378710c5c20d8dd0356ea682a19ad98e183f233699e41281abcef",
-"group__platforms__pf-robot-motion-control.html#ga07a575aff9cc49fe868eb5ee53dbb787",
-"pf-pami_2include_2pf__servos_8hpp.html#a058c95e0ed4bd1ea73b9f464d99e7b5b",
-"uartpb_8hpp.html"
+"classcogip_1_1motion__control_1_1BaseControllerEngine.html#accfe7bd003d796d33fead0069b088d11",
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#acb7bb210e9af7d2c6e9ea6beee3fc858",
+"dir_e5c1b1d8bab0718c16d961f31ff6f438.html",
+"group__driver__lx__servo.html#ga4d7fd5fd1a3905580bfab95ee11e4b71",
+"group__platforms__pami.html#ga9913d7c0d202417eecb4661db31e4522",
+"obstacles_2include_2obstacles_2Polygon_8hpp.html",
+"pf-robot-motors_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

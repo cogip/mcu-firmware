@@ -1,8 +1,8 @@
 <map id="cogip::motion_control::PolarParallelMetaController" name="cogip::motion_control::PolarParallelMetaController">
-<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="250,836,458,943"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title=" " alt="" coords="251,593,457,788"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,365,175,487"/>
+<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="250,851,458,957"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1ParallelMetaController.html" title=" " alt="" coords="251,608,457,803"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,373,175,494"/>
 <area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="141,5,303,259"/>
-<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,307,509,545"/>
-<area shape="rect" id="node6" title=" " alt="" coords="533,380,732,472"/>
+<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,307,509,560"/>
+<area shape="rect" id="node6" title=" " alt="" coords="533,387,732,479"/>
 </map>

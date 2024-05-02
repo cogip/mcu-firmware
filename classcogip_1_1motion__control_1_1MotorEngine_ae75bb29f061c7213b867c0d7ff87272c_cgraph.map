@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::MotorEngine::set_target_speed" name="cogip::motion_control::MotorEngine::set_target_speed">
+<area shape="rect" id="node1" title="Set target speed." alt="" coords="5,5,237,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MotorEngine.html#ad002dd3094c7dd98f86f0287e0bfed26" title="Get target speed return target speed." alt="" coords="285,5,491,47"/>
+</map>

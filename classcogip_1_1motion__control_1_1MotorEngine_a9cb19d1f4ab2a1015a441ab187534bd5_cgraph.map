@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::MotorEngine::set_target_pose" name="cogip::motion_control::MotorEngine::set_target_pose">
+<area shape="rect" id="node1" title="Set target pose." alt="" coords="5,5,229,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MotorEngine.html#a0fa25e4d10013377dee3cfb3c6f52d00" title="Get target pose return target pose." alt="" coords="277,5,475,47"/>
+</map>

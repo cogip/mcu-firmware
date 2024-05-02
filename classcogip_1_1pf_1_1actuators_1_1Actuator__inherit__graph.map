@@ -1,9 +1,9 @@
 <map id="cogip::pf::actuators::Actuator" name="cogip::pf::actuators::Actuator">
-<area shape="rect" id="node1" title=" " alt="" coords="397,5,544,200"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="255,248,478,545"/>
-<area shape="rect" id="node7" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="503,255,649,538"/>
-<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html" title="Class representing a servomotor driven by pca9685." alt="" coords="5,593,168,832"/>
-<area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html" title="Class representing a LX Servomotor in motor mode." alt="" coords="192,608,355,817"/>
-<area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="379,637,541,788"/>
-<area shape="rect" id="node6" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html" title="Class representing a motor using motor driver." alt="" coords="565,637,728,788"/>
+<area shape="rect" id="node1" title=" " alt="" coords="397,5,544,244"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="255,292,478,589"/>
+<area shape="rect" id="node7" href="$classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html" title="Class representing a servomotor using lx_servo driver." alt="" coords="503,299,649,582"/>
+<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html" title="Class representing a servomotor driven by pca9685." alt="" coords="5,645,168,883"/>
+<area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html" title="Class representing a LX Servomotor in motor mode." alt="" coords="192,659,355,869"/>
+<area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="379,637,541,891"/>
+<area shape="rect" id="node6" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html" title="Class representing a motor using motor driver." alt="" coords="565,689,728,839"/>
 </map>

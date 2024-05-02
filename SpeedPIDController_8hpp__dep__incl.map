@@ -1,0 +1,4 @@
+<map id="motion_control/controllers/speed_pid_controller/include/speed_pid_controller/SpeedPIDController.hpp" name="motion_control/controllers/speed_pid_controller/include/speed_pid_controller/SpeedPIDController.hpp">
+<area shape="rect" id="node1" title="Speed PID controller." alt="" coords="5,5,324,61"/>
+<area shape="rect" id="node2" href="$pf-robot-motors_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="68,109,261,151"/>
+</map>

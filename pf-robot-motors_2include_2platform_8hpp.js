@@ -1,0 +1,25 @@
+var pf_robot_motors_2include_2platform_8hpp =
+[
+    [ "AVOIDANCE_BORDER_X_MAX", "group__platforms__pf-robot-motors.html#ga5cd8534245dd8c7715965af083bd13c2", null ],
+    [ "AVOIDANCE_BORDER_X_MIN", "group__platforms__pf-robot-motors.html#ga74d22d5c450365dc5f4ae75b8b6ff432", null ],
+    [ "AVOIDANCE_BORDER_Y_MAX", "group__platforms__pf-robot-motors.html#ga128c544be070e5eb2e766506e28d9d91", null ],
+    [ "AVOIDANCE_BORDER_Y_MIN", "group__platforms__pf-robot-motors.html#ga9913d7c0d202417eecb4661db31e4522", null ],
+    [ "CAMP_LEFT", "group__platforms__pf-robot-motors.html#gad21e7bb8b4debcf74f4acc8ad0cbc933", null ],
+    [ "CAMP_RIGHT", "group__platforms__pf-robot-motors.html#gafe8dc1d20e67d4cfb47f66dd8ccae899", null ],
+    [ "CONTROLLER_SPEED_LOOP_PERIOD_MSEC", "group__platforms__pf-robot-motors.html#ga07a575aff9cc49fe868eb5ee53dbb787", null ],
+    [ "GAME_DURATION_SEC", "group__platforms__pf-robot-motors.html#gae845e7296ce0028216d3a2be9e365058", null ],
+    [ "ROBOT_ID", "group__platforms__pf-robot-motors.html#ga0bcf6895d58d71cb270a01a0427f5ae8", null ],
+    [ "pf_get_canpb", "group__platforms__pf-robot-motors.html#ga3c336d38b35709a7bf9bd566be53d4e1", null ],
+    [ "pf_init", "group__platforms__pf-robot-motors.html#gad2d77ae9a60de6fba2ff595654fb94e0", null ],
+    [ "pf_init_tasks", "group__platforms__pf-robot-motors.html#gac3bbbd7ff3d70fb15bbd73b9203044f3", null ],
+    [ "pf_is_game_launched", "group__platforms__pf-robot-motors.html#gae1a6aab08a0179e854ade7561e3dc079", null ],
+    [ "pf_print_state", "group__platforms__pf-robot-motors.html#gaaed945ac04303eef4f08d257f0a3c944", null ],
+    [ "pf_set_copilot_connected", "group__platforms__pf-robot-motors.html#gaf83cc53998c27d898d71f8a7e981fdc0", null ],
+    [ "pf_trace_on", "group__platforms__pf-robot-motors.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],
+    [ "copilot_connected_uuid", "group__platforms__pf-robot-motors.html#ga3ba5df5dc429c23d59b5de895082ac2c", null ],
+    [ "copilot_disconnected_uuid", "group__platforms__pf-robot-motors.html#ga7e9d30ba46d7cb7182e9538fc77c7597", null ],
+    [ "game_end_uuid", "group__platforms__pf-robot-motors.html#gaf210a55ed575441b9a624c62c044d8ba", null ],
+    [ "game_reset_uuid", "group__platforms__pf-robot-motors.html#ga73136461923ab6ba71b1b611c75d6aa1", null ],
+    [ "game_start_uuid", "group__platforms__pf-robot-motors.html#gaed4e99a3892833984f3d9cafc9e85c8d", null ],
+    [ "reset_uuid", "group__platforms__pf-robot-motors.html#ga56ff04153728c2fba935d5303b46aaa1", null ]
+];

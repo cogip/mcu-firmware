@@ -1,22 +1,25 @@
 <map id="platforms" name="platforms">
 <area shape="rect" id="node2" href="dir_3d588b682f925048dedc2da839350085.html" title="pf&#45;pami" alt="" coords="27,27,99,75"/>
-<area shape="rect" id="node5" href="dir_a408b6d3a4a484720bc3ecfeac8947e3.html" title="sys" alt="" coords="207,315,279,363"/>
-<area shape="rect" id="edge8-headlabel" href="dir_000088_000021.html" title="2" alt="" coords="190,295,200,310"/>
-<area shape="rect" id="node6" href="dir_b9b8bbce311057038c01ad4896c8ba16.html" title="motion_control" alt="" coords="229,123,349,171"/>
-<area shape="rect" id="edge9-headlabel" href="dir_000088_000004.html" title="2" alt="" coords="210,109,219,124"/>
-<area shape="rect" id="node7" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="83,123,155,171"/>
-<area shape="rect" id="edge10-headlabel" href="dir_000088_000000.html" title="2" alt="" coords="98,95,108,110"/>
-<area shape="rect" id="node8" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html" title="lib" alt="" coords="280,219,352,267"/>
-<area shape="rect" id="edge11-headlabel" href="dir_000088_000001.html" title="1" alt="" coords="259,217,268,232"/>
+<area shape="rect" id="node6" href="dir_a408b6d3a4a484720bc3ecfeac8947e3.html" title="sys" alt="" coords="300,315,372,363"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000094_000023.html" title="2" alt="" coords="281,305,290,320"/>
+<area shape="rect" id="node7" href="dir_b9b8bbce311057038c01ad4896c8ba16.html" title="motion_control" alt="" coords="313,123,433,171"/>
+<area shape="rect" id="edge9-headlabel" href="dir_000094_000004.html" title="2" alt="" coords="292,120,301,134"/>
+<area shape="rect" id="node8" href="dir_14bc92f4b96c8519b376567118ac28b3.html" title="drivers" alt="" coords="116,123,188,171"/>
+<area shape="rect" id="edge10-headlabel" href="dir_000094_000000.html" title="2" alt="" coords="119,96,128,111"/>
+<area shape="rect" id="node9" href="dir_97aefd0d527b934f1d99a682da8fe6a9.html" title="lib" alt="" coords="263,219,335,267"/>
+<area shape="rect" id="edge11-headlabel" href="dir_000094_000001.html" title="1" alt="" coords="241,219,251,234"/>
 <area shape="rect" id="node3" href="dir_4b4e1d30bdd4843cfd49b3467698cc7b.html" title="pf&#45;robot&#45;actuators" alt="" coords="123,27,261,75"/>
-<area shape="rect" id="edge6-headlabel" href="dir_000090_000021.html" title="2" alt="" coords="239,288,248,302"/>
-<area shape="rect" id="edge7-headlabel" href="dir_000090_000000.html" title="2" alt="" coords="150,106,159,121"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000096_000023.html" title="2" alt="" coords="286,290,295,305"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000096_000000.html" title="2" alt="" coords="172,102,181,117"/>
 <area shape="rect" id="node4" href="dir_67e71ca2d85d05493b46cbf09defe561.html" title="pf&#45;robot&#45;motion&#45;control" alt="" coords="286,27,461,75"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000092_000021.html" title="1" alt="" coords="294,319,304,333"/>
-<area shape="rect" id="edge2-headlabel" href="dir_000092_000004.html" title="2" alt="" coords="324,107,333,122"/>
-<area shape="rect" id="edge3-headlabel" href="dir_000092_000001.html" title="1" alt="" coords="347,201,356,216"/>
-<area shape="rect" id="edge4-headlabel" href="dir_000004_000021.html" title="1" alt="" coords="254,291,263,306"/>
-<area shape="rect" id="edge5-headlabel" href="dir_000004_000001.html" title="5" alt="" coords="308,191,317,206"/>
-<area shape="rect" id="edge12-headlabel" href="dir_000001_000021.html" title="1" alt="" coords="274,298,283,313"/>
-<area shape="rect" id="clust1" href="dir_c2729ddf18bab012de856b523eb05d8f.html" alt="" coords="16,16,581,85"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000100_000023.html" title="1" alt="" coords="371,299,381,313"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000100_000004.html" title="2" alt="" coords="377,97,386,112"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000100_000001.html" title="1" alt="" coords="296,192,305,207"/>
+<area shape="rect" id="node5" href="dir_9e199d87769281310211bbe728c0aae1.html" title="pf&#45;robot&#45;motors" alt="" coords="485,27,609,75"/>
+<area shape="rect" id="edge13-headlabel" href="dir_000098_000023.html" title="2" alt="" coords="387,304,396,319"/>
+<area shape="rect" id="edge14-headlabel" href="dir_000098_000004.html" title="10" alt="" coords="427,114,445,129"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000004_000023.html" title="1" alt="" coords="348,291,357,306"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000004_000001.html" title="5" alt="" coords="330,202,340,217"/>
+<area shape="rect" id="edge12-headlabel" href="dir_000001_000023.html" title="1" alt="" coords="323,287,333,302"/>
+<area shape="rect" id="clust1" href="dir_c2729ddf18bab012de856b523eb05d8f.html" alt="" coords="16,16,729,85"/>
 </map>

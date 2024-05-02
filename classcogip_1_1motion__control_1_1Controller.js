@@ -5,6 +5,7 @@ var classcogip_1_1motion__control_1_1Controller =
     [ "nb_inputs", "classcogip_1_1motion__control_1_1Controller.html#a5b47087d4761df9a702b49d4ca83e678", null ],
     [ "nb_outputs", "classcogip_1_1motion__control_1_1Controller.html#a31786f53db37d87d017a323b024f3b87", null ],
     [ "output", "classcogip_1_1motion__control_1_1Controller.html#a4b061eed44a7b13bb321396aab5cf0d7", null ],
+    [ "parameters", "classcogip_1_1motion__control_1_1Controller.html#a4bcbd2f93c1dfc9cf362960944e31195", null ],
     [ "set_input", "classcogip_1_1motion__control_1_1Controller.html#a4eef3376f4a38872f247af7fdcc5808c", null ],
     [ "set_output", "classcogip_1_1motion__control_1_1Controller.html#a2305fbc7ab70f098d807aa06bc9e0c9f", null ],
     [ "set_parameters", "classcogip_1_1motion__control_1_1Controller.html#ae320649084100d4142304263dc386b74", null ],

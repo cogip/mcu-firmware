@@ -1,0 +1,4 @@
+<map id="cogip::motion_control::MotorEngine::set_current_pose" name="cogip::motion_control::MotorEngine::set_current_pose">
+<area shape="rect" id="node1" title="Set current pose." alt="" coords="5,5,236,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MotorEngine.html#a24ab9ecc64861f9ebebcf823daf7df63" title="Get current pose return current pose." alt="" coords="284,5,488,47"/>
+</map>

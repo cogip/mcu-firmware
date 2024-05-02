@@ -1,8 +1,8 @@
 <map id="cogip::motion_control::DualPIDMetaController" name="cogip::motion_control::DualPIDMetaController">
-<area shape="rect" id="node1" title="Meta controller for at least one PID controller for position and one PID controller for speed in chai..." alt="" coords="265,792,443,884"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="269,593,439,744"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,365,175,487"/>
+<area shape="rect" id="node1" title="Meta controller for at least one PID controller for position and one PID controller for speed in chai..." alt="" coords="265,807,443,899"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MetaController.html" title=" " alt="" coords="269,608,439,759"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseMetaController.html" title="Base class for meta controllers. Meta controllers are controllers containers to execute them in chain..." alt="" coords="5,373,175,494"/>
 <area shape="rect" id="node4" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="141,5,303,259"/>
-<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,307,509,545"/>
-<area shape="rect" id="node6" title=" " alt="" coords="533,380,732,472"/>
+<area shape="rect" id="node5" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="199,307,509,560"/>
+<area shape="rect" id="node6" title=" " alt="" coords="533,387,732,479"/>
 </map>

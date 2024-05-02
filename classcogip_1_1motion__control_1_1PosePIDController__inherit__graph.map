@@ -1,5 +1,5 @@
 <map id="cogip::motion_control::PosePIDController" name="cogip::motion_control::PosePIDController">
-<area shape="rect" id="node1" title="Pose PID controller." alt="" coords="53,593,217,700"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="5,307,264,545"/>
+<area shape="rect" id="node1" title="Pose PID controller." alt="" coords="53,608,217,715"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="5,307,264,560"/>
 <area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="53,5,216,259"/>
 </map>

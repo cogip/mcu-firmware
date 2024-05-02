@@ -1,4 +1,5 @@
 <map id="motion_control/filters/speed_filter/include/speed_filter/SpeedFilterParameters.hpp" name="motion_control/filters/speed_filter/include/speed_filter/SpeedFilterParameters.hpp">
-<area shape="rect" id="node1" title="Speed and acceleration limits." alt="" coords="5,5,287,61"/>
-<area shape="rect" id="node2" href="$SpeedFilter_8hpp.html" title="Filter maximum speed and acceleration." alt="" coords="43,109,249,165"/>
+<area shape="rect" id="node1" title="Speed and acceleration limits." alt="" coords="39,5,320,61"/>
+<area shape="rect" id="node2" href="$SpeedFilter_8hpp.html" title="Filter maximum speed and acceleration." alt="" coords="5,109,212,165"/>
+<area shape="rect" id="node3" href="$pf-robot-motors_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="83,213,276,255"/>
 </map>
