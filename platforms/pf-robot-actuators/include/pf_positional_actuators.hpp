@@ -44,8 +44,6 @@ enum class Enum: uint8_t {
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
-using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, COUNT>;
-
 /// PCA9586 channels
 enum PCA9586Channels {
     CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT = 0,
@@ -117,10 +115,8 @@ void send_emergency_button_released();
 /// Send positional actuator state protobuf message
 void send_state(Enum positional_actuator);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
 
 } // namespace positional_actuators
 } // namespace actuators
