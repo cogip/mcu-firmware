@@ -44,8 +44,6 @@ enum class Enum: uint8_t {
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
-using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, COUNT>;
-
 /// PCA9586 channels
 enum PCA9586Channels {
     CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT = 0,
@@ -71,7 +69,7 @@ constexpr gpio_t pin_limit_switch_top_lift = GPIO_PIN(PORT_B, 13);
 constexpr int analog_servomotor_bottom_grip_left_opened = 110;
 constexpr int analog_servomotor_bottom_grip_left_closed = 195;
 constexpr int analog_servomotor_bottom_grip_right_opened = 180;
-constexpr int analog_servomotor_bottom_grip_right_closed = 95;
+constexpr int analog_servomotor_bottom_grip_right_closed = 115;
 constexpr int analog_servomotor_top_grip_left_opened = 90;
 constexpr int analog_servomotor_top_grip_left_closed = 165;
 constexpr int analog_servomotor_top_grip_right_opened = 185;
@@ -117,10 +115,8 @@ void send_emergency_button_released();
 /// Send positional actuator state protobuf message
 void send_state(Enum positional_actuator);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
 
 } // namespace positional_actuators
 } // namespace actuators
