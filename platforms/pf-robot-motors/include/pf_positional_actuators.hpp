@@ -90,8 +90,6 @@ enum class Enum: uint8_t {
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
-using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, COUNT>;
-
 /// Actuators timeouts
 /// @{
 constexpr uint32_t default_timeout_period_motor_bottom_lift = 30;
@@ -127,10 +125,8 @@ void disable_all();
 /// Send positional actuator state protobuf message
 void send_state(Enum positional_actuator);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
 
 /// Initialize motors at their origin
 void pf_init_motors_sequence(void);
