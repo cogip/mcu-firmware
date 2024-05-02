@@ -27,16 +27,6 @@ static char _sender_stack[THREAD_STACKSIZE_MEDIUM];
 static  bool _suspend_sender = false;
 static  bool _suspend_actuators = false;
 
-static PB_ActuatorsState<cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
-
-/// Build and send Protobuf actuators state message.
-static void _send_state() {
-    static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
-    _pb_state.clear();
-    positional_actuators::pb_copy(_pb_state.mutable_positional_actuators());
-    canpb.send_message(actuator_state_uuid, &_pb_state);
-}
-
 /// Actuators state sender thread.
 static void *_thread_sender([[maybe_unused]] void *arg)
 {
@@ -49,7 +39,7 @@ static void *_thread_sender([[maybe_unused]] void *arg)
             thread_sleep();
         }
 
-        _send_state();
+        positional_actuators::send_states();
 
         // Wait thread period to end
         cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, SENDER_PERIOD_MSEC);

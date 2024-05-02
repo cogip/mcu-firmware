@@ -36,8 +36,8 @@ extern int32_t qdecs_value[QDEC_NUMOF];
 // Motion control motor driver
 static motor_driver_t actuators_motors_driver;
 
-// Positional actuator protobuf message
-static PB_PositionalActuator _pb_positional_actuator;
+// Actuator state protobuf message
+static PB_ActuatorState _pb_actuator_state;
 
 /// Positional actuator timeout thread stack
 static char _positional_actuators_timeout_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -362,17 +362,16 @@ void send_state(Enum positional_actuator) {
     static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
-    _pb_positional_actuator.clear();
-    positional_actuators::get(positional_actuator).pb_copy(_pb_positional_actuator);
-    if (!canpb.send_message(actuator_state_uuid, &_pb_positional_actuator)) {
+    _pb_actuator_state.clear();
+    positional_actuators::get(positional_actuator).pb_copy(_pb_actuator_state.mutable_positional_actuator());
+    if (!canpb.send_message(actuator_state_uuid, &_pb_actuator_state)) {
         std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }
 
-void pb_copy(PB_Message & pb_message) {
-    // cppcheck-suppress unusedVariable
+void send_states() {
     for (auto const & [id, actuator] : _positional_actuators) {
-        actuator->pb_copy(pb_message.get(pb_message.get_length()));
+        send_state(id);
     }
 }
 

@@ -32,8 +32,8 @@ static etl::pool<LxServo, COUNT> _servos_pool;
 /// Map from servo id to servo object pointer
 static etl::map<Enum, LxServo *, COUNT> _servos;
 
-// Servo protobuf message
-static PB_Servo _pb_servo;
+// Actuator state protobuf message
+static PB_ActuatorState _pb_actuator_state;
 
 void init(uart_half_duplex_t *lx_stream) {
     // Half duplex stream that must have been initialized previously
@@ -90,17 +90,16 @@ void send_state(Enum servo) {
     static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
-    _pb_servo.clear();
-    servos::get(servo).pb_copy(_pb_servo);
-    if (!canpb.send_message(actuator_state_uuid, &_pb_servo)) {
+    _pb_actuator_state.clear();
+    servos::get(servo).pb_copy(_pb_actuator_state.mutable_servo());
+    if (!canpb.send_message(actuator_state_uuid, &_pb_actuator_state)) {
         std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }
 
-void pb_copy(PB_Message & pb_message) {
-    // cppcheck-suppress unusedVariable
+void send_states() {
     for (auto const & [id, servo] : _servos) {
-        servo->pb_copy(pb_message.get(pb_message.get_length()));
+        send_state(id);
     }
 }
 

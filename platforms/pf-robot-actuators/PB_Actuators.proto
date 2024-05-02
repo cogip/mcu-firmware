@@ -41,14 +41,9 @@ message PB_PositionalActuator {
 
 message PB_ActuatorState {
     oneof type {
-        PB_Servo servos = 1;
-        PB_PositionalActuator positional_actuators = 2;
+        PB_Servo servo = 1;
+        PB_PositionalActuator positional_actuator = 2;
     }
-}
-
-message PB_ActuatorsState {
-    repeated PB_Servo servos = 1;
-    repeated PB_PositionalActuator positional_actuators = 2;
 }
 
 message PB_ServoCommand {

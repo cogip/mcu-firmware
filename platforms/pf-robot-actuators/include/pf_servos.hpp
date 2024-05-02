@@ -73,10 +73,8 @@ void disable_all();
 /// Send pump state protobuf message
 void send_state(Enum servo);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
 
 } // namespace servos
 } // namespace actuators
