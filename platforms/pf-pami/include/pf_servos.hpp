@@ -32,7 +32,7 @@ constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
 using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_Servo, COUNT>;
 
-/// Serco command class.
+/// Servo command class.
 class Command {
 public:
     /// Constructor.
@@ -61,7 +61,7 @@ void move(
     uint32_t wait = 0         ///< [in] time to wait after move (in ms)
 );
 
-/// Move mutliple servos in parallel according to the given commands
+/// Move multiple servos in parallel according to the given commands
 void parallel_move(
     const etl::list<Command, COUNT> & commands,  ///< [in] servo commands
     uint32_t wait = 0                            ///< [in] time to wait after move (in ms)

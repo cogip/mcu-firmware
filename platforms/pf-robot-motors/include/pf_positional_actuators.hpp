@@ -55,7 +55,7 @@ constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter_mm;
 ///< controller thread loop period
 constexpr uint16_t motor_lift_control_thread_period_ms = 20;
 
-/// Lift motors speed filter paramaeters
+/// Lift motors speed filter parameters
 constexpr double motor_lift_anti_blocking_speed_threshold_per_period = 0.3;
 constexpr double motor_lift_anti_blocking_error_threshold_per_period = 0.02;
 constexpr double motor_lift_anti_blocking_blocked_cycles_nb_threshold = 10;

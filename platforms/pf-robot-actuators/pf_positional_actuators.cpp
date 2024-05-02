@@ -239,7 +239,7 @@ void init() {
         THREAD_CREATE_STACKTEST,
         _positional_actuators_timeout_thread,
         NULL,
-        "Positional acturators timeout thread"
+        "Positional actuators timeout thread"
     );
 }
 
@@ -270,7 +270,7 @@ void pb_copy(PB_Message & pb_message) {
     }
 }
 
-} // namespace actuators
+} // namespace positional_actuators
 } // namespace actuators
 } // namespace pf
 } // namespace cogip
