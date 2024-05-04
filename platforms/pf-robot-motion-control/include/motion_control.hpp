@@ -67,6 +67,9 @@ constexpr int pwm_minimal = 70;
 /// @name Acceleration and speed profiles
 /// @{
 // Linear maximum speed and acceleration
+constexpr double platform_anti_blocking_speed_threshold_per_period = 0.25;
+constexpr double platform_anti_blocking_error_threshold_per_period = 1;
+constexpr double platform_anti_blocking_blocked_cycles_nb_threshold = 15;
 constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
 constexpr double platform_max_speed_m_per_s = 2 ;  ///< Maximum speed (m/s)
 constexpr double platform_max_acc_m_per_s2 = 3;   ///< Maximum acceleration (m/s²)
