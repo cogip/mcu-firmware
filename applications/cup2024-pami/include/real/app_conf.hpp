@@ -4,20 +4,20 @@
 #include "etl/numeric.h"
 
 // Linear pose PID
-constexpr double linear_pose_pid_kp = 0.1;
+constexpr double linear_pose_pid_kp = 1;
 constexpr double linear_pose_pid_ki = 0;
 constexpr double linear_pose_pid_kd = 0;
 // Angular pose PID
-constexpr double angular_pose_pid_kp = 0.2;
+constexpr double angular_pose_pid_kp = 1;
 constexpr double angular_pose_pid_ki = 0;
 constexpr double angular_pose_pid_kd = 0;
 // Linear speed PID
-constexpr double linear_speed_pid_kp = 12;
-constexpr double linear_speed_pid_ki = 1.5;
+constexpr double linear_speed_pid_kp = 100;
+constexpr double linear_speed_pid_ki = 10;
 constexpr double linear_speed_pid_kd = 0;
 // Angular speed PID
-constexpr double angular_speed_pid_kp = 50;
-constexpr double angular_speed_pid_ki = 3;
+constexpr double angular_speed_pid_kp = 100;
+constexpr double angular_speed_pid_ki = 10;
 constexpr double angular_speed_pid_kd = 0;
 
 // Linear pose PID integral limit
