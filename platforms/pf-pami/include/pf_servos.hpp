@@ -24,9 +24,7 @@ namespace servos {
 /// Servomotors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: lx_id_t {
-    LXSERVO_BALL_SWITCH = 1,
-    LXSERVO_RIGHT_ARM = 2,
-    LXSERVO_LEFT_ARM = 4
+    NO_LXSERVO = 0
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
@@ -73,10 +71,8 @@ void disable_all();
 /// Send pump state protobuf message
 void send_state(Enum servo);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
 
 } // namespace servos
 } // namespace actuators

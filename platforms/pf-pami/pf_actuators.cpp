@@ -33,23 +33,12 @@ constexpr cogip::uartpb::uuid_t thread_stop_uuid = 3781855956;
 constexpr cogip::uartpb::uuid_t state_uuid = 1538397045;
 constexpr cogip::uartpb::uuid_t command_uuid = 2552455996;
 
-static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
 
 /// Half duplex UART stream
 static uart_half_duplex_t _lx_stream;
 
 /// LX servos command buffer
 static uint8_t _lx_servos_buffer[LX_UART_BUFFER_SIZE];
-
-
-/// Build and send Protobuf actuators state message.
-static void _send_state() {
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
-    _pb_state.clear();
-    servos::pb_copy(_pb_state.mutable_servos());
-    positional_actuators::pb_copy(_pb_state.mutable_positional_actuators());
-    uartpb.send_message(state_uuid, &_pb_state);
-}
 
 /// Actuators state sender thread.
 static void *_thread_sender([[maybe_unused]] void *arg)
@@ -63,7 +52,8 @@ static void *_thread_sender([[maybe_unused]] void *arg)
             thread_sleep();
         }
 
-        _send_state();
+        positional_actuators::send_states();
+        servos::send_states();
 
         // Wait thread period to end
         cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, SENDER_PERIOD_MSEC);

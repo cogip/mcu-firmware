@@ -33,18 +33,16 @@ namespace positional_actuators {
 // Motors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: uint8_t {
-    ANALOGSERVO_PAMI = 6,
+    ANALOGSERVO_PAMI = 8,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
-
-using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, COUNT>;
 
 /// PCA9586 channels
 enum PCA9586Channels {
     CHANNEL_ANALOGSERVO_PAMI = 0,
 };
 
-/// Cherry arm servomotor positions
+/// Servomotor positions
 /// @{
 constexpr int analog_servomotor_pami_closed = 55;
 constexpr int analog_servomotor_pami_deployed = 235;
@@ -78,10 +76,8 @@ void send_emergency_button_released();
 /// Send positional actuator state protobuf message
 void send_state(Enum positional_actuator);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
 
 } // namespace positional_actuators
 } // namespace actuators
