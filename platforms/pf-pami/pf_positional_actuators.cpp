@@ -29,8 +29,8 @@ namespace pf {
 namespace actuators {
 namespace positional_actuators {
 
-// Positional actuator protobuf message
-static PB_PositionalActuator _pb_positional_actuator;
+// Actuator state protobuf message
+static PB_ActuatorState _pb_actuator_state;
 
 /// Positional actuator timeout thread stack
 static char _positional_actuators_timeout_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -120,42 +120,21 @@ PositionalActuator & get(Enum id) {
     return *_positional_actuators[id];
 }
 
-void send_emergency_button_pressed() {
-    // Protobuf UART interface
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
-
-    // Send protobuf message
-    if (!uartpb.send_message(emergency_button_pressed_uuid)) {
-        std::cerr << "Error: emergency_button_pressed_uuid message not sent" << std::endl;
-    }
-}
-
-void send_emergency_button_released() {
-    // Protobuf UART interface
-    static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
-
-    // Send protobuf message
-    if (!uartpb.send_message(emergency_button_released_uuid)) {
-        std::cerr << "Error: emergency_button_released_uuid message not sent" << std::endl;
-    }
-}
-
 void send_state(Enum positional_actuator) {
     // Protobuf UART interface
     static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
 
     // Send protobuf message
-    _pb_positional_actuator.clear();
-    positional_actuators::get(positional_actuator).pb_copy(_pb_positional_actuator);
-    if (!uartpb.send_message(actuator_state_uuid, &_pb_positional_actuator)) {
+    _pb_actuator_state.clear();
+    positional_actuators::get(positional_actuator).pb_copy(_pb_actuator_state.mutable_positional_actuator());
+    if (!uartpb.send_message(actuator_state_uuid, &_pb_actuator_state)) {
         std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }
 
-void pb_copy(PB_Message & pb_message) {
-    // cppcheck-suppress unusedVariable
+void send_states() {
     for (auto const & [id, actuator] : _positional_actuators) {
-        actuator->pb_copy(pb_message.get(pb_message.get_length()));
+        send_state(id);
     }
 }
 
