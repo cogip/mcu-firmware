@@ -126,7 +126,11 @@ static cogip::motion_control::PosePIDController linear_pose_controller(&linear_p
 static cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
     platform_min_speed_linear_mm_per_period,
     platform_max_speed_linear_mm_per_period,
-    platform_max_acc_linear_mm_per_period2
+    platform_max_acc_linear_mm_per_period2,
+    platform_linear_antiblocking,
+    platform_linear_anti_blocking_speed_threshold_per_period,
+    platform_linear_anti_blocking_error_threshold_per_period,
+    platform_linear_anti_blocking_blocked_cycles_nb_threshold
     );
 /// Linear SpeedFilter to limit speed and acceleration for linear SpeedPIDController.
 static cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters);
@@ -363,8 +367,8 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
         }
 
         // Target speed
-        target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()));
-        target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()));
+        target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
+        target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);
         pf_motion_control_platform_engine.set_target_speed(target_speed);
 
         // Set target speed for passthrough controllers
@@ -377,12 +381,7 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
         // New target pose, the robot is moving
         pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
 
-        // Reset previous speed orders
-        linear_speed_filter.reset_previous_speed_order();
-        angular_speed_filter.reset_previous_speed_order();
-
-        // Reset pose straight filter state
-        pose_straight_filter.reset_current_state();
+        pf_motion_control_reset();
 
         pf_enable_motion_control();
     }
@@ -417,12 +416,12 @@ void pf_start_motion_control(void)
 
 void pf_motion_control_reset(void)
 {
-    // Reset encoders counter
-    pf_encoder_reset();
-
     // Reset previous speed orders
     angular_speed_filter.reset_previous_speed_order();
     linear_speed_filter.reset_previous_speed_order();
+    // Reset anti-blocking
+    angular_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+    linear_speed_filter.reset_anti_blocking_blocked_cycles_nb();
 
     // Reset PIDs
     reset_speed_pids();
@@ -477,6 +476,26 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
     int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
                                                   (double)(std::numeric_limits<int16_t>::min()) / 2);
 
+    if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::blocked) {
+        if (pf_motion_control_platform_engine.target_pose().bypass_anti_blocking()) {
+            target_pose.set_x(pf_motion_control_platform_engine.current_pose().x());
+            target_pose.set_y(pf_motion_control_platform_engine.current_pose().y());
+            target_pose.set_O(pf_motion_control_platform_engine.current_pose().O());
+            pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+            // Consider pose_reached as anti blocking is bypassed
+            pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
+
+            std::cout << "BLOCKED bypasssed" << std::endl;
+        }
+        else {
+            right_command = 0;
+            left_command = 0;
+
+            std::cout << "BLOCKED" << std::endl;
+        }
+    }
+
     // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
     motor_disable(&motion_motors_driver, MOTOR_RIGHT);
     motor_disable(&motion_motors_driver, MOTOR_LEFT);
@@ -510,6 +529,9 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         // Reset previous speed orders
         linear_speed_filter.reset_previous_speed_order();
         angular_speed_filter.reset_previous_speed_order();
+        // Reset anti-blocking
+        linear_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+        angular_speed_filter.reset_anti_blocking_blocked_cycles_nb();
     }
 
     if ((pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::moving)
@@ -519,13 +541,8 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         reset_speed_pids();
     }
 
-    // Send robot state only on calibration (when timeout is enabled).
-    if (pf_motion_control_platform_engine.timeout_enable())
-        pf_send_pb_state();
-
-    // Backup target pose status flag to avoid flooding protobuf serial bus.
+    // Backup target pose status flag to avoid flooding protobuf serial bus on next cycle.
     previous_target_pose_status = pf_motion_control_platform_engine.pose_reached();
-
 }
 
 /// Handle pid request command message.
@@ -640,8 +657,6 @@ void pf_init_motion_control(void)
 {
     // Init motor driver
     motor_driver_init(&motion_motors_driver, &motion_motors_params);
-    motor_enable(&motion_motors_driver, MOTOR_LEFT);
-    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
 
     // Setup qdec periphereal
     int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
@@ -652,9 +667,6 @@ void pf_init_motion_control(void)
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
-
-    //TODO: update
-    //ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
 
     // Init controllers
     pf_quadpid_meta_controller = pf_quadpid_meta_controller_init();
