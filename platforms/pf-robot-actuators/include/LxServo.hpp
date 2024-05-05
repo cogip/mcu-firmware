@@ -23,8 +23,6 @@ namespace pf {
 namespace actuators {
 namespace servos {
 
-enum class Enum: lx_id_t;
-
 std::ostream& operator << (std::ostream& os, Enum id);
 
 /// Class representing a servomotor using lx_servo driver.
@@ -32,7 +30,7 @@ class LxServo: public Actuator {
 public:
     /// Constructor.
     LxServo(
-        Enum id            ///< [in] servo id
+        cogip::pf::actuators::Enum id            ///< [in] servo id
     );
 
     /// Go to the position in a given time.
@@ -66,10 +64,12 @@ public:
         PB_Servo & pb_servo  ///< [out] Protobuf message to fill
     ) const;
 
+    /// Send actuator state on communication bus
+    void send_state(void);
+
     static uart_half_duplex_t *lx_stream;
 
 private:
-    Enum id_;
     lx_t lx_;
     uint16_t command_;
 };

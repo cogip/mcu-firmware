@@ -31,7 +31,7 @@ class Motor: public PositionalActuator {
 public:
     /// Constructor.
     explicit Motor(
-        Enum id,                            ///< [in] motor id
+        cogip::pf::actuators::Enum id,          ///< [in] actuator id
         uint32_t default_timeout_period = 0,///< [in] default timeout
         send_state_cb_t send_state_cb = nullptr,///< [in] send state callback
         motor_driver_t *motor_driver = nullptr, ///< [in] motor driver
@@ -41,7 +41,7 @@ public:
         motor_id_(motor_id) { Motor::disable(); };
 
     /// Disable the motor after checking direction.
-    bool disable_on_check() override;
+    bool disable_on_check() override { disable(); return true; };
 
     /// Disable the motor.
     void disable() override;

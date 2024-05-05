@@ -28,7 +28,7 @@ class AnalogServo: public PositionalActuator {
 public:
     /// Constructor.
     AnalogServo(
-        Enum id,                            ///< [in] motor id
+        cogip::pf::actuators::Enum id,      ///< [in] actuator id
         uint32_t default_timeout_period = 0,///< [in] default timeout
         send_state_cb_t send_state_cb = nullptr, ///< [in] send state callback
         int servo_id = 0                    ///< [in] Servomotor ID on PCA9685
