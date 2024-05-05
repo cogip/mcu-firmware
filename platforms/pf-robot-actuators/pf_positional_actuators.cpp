@@ -7,7 +7,6 @@
 #include "pf_positional_actuators.hpp"
 
 #include "AnalogServo.hpp"
-#include "LxMotor.hpp"
 #include "Motor.hpp"
 #include "OnOff.hpp"
 #include "PositionalActuator.hpp"
@@ -45,8 +44,6 @@ static etl::pool<Motor, COUNT> _motors_pool;
 static etl::pool<OnOff, COUNT> _onoff_pool;
 /// Analog servomotor pool
 static etl::pool<AnalogServo, COUNT> _analog_servo_pool;
-/// Numerical servomotor pool
-static etl::pool<LxMotor, COUNT> _lxmotor_pool;
 /// Positional actuators map
 static etl::map<Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
 
