@@ -81,16 +81,6 @@ static void init_interruptable_pin(gpio_t pin, gpio_mode_t mode, gpio_flank_t fl
     _gpio_pins[_gpio_events[pin]] = pin;
 }
 
-/// Check central lift bottom limit switch
-static int check_limit_switch_bottom_lift() {
-    return gpio_read(pin_limit_switch_bottom_lift);
-}
-
-/// Check central lift top limit switch
-static int check_limit_switch_top_lift() {
-    return gpio_read(pin_limit_switch_top_lift);
-}
-
 /// Init I2C PWM driver
 static void _pca9685_init() {
     // Init PCA9685

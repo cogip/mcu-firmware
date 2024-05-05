@@ -58,28 +58,8 @@ constexpr gpio_t pin_cart_magnet_left = GPIO_PIN(PORT_C, 7);
 constexpr gpio_t pin_cart_magnet_right = GPIO_PIN(PORT_C, 9);
 /// @}
 
-/// Limit switches
-/// @{
-constexpr gpio_t pin_limit_switch_bottom_lift = GPIO_PIN(PORT_B, 14);
-constexpr gpio_t pin_limit_switch_top_lift = GPIO_PIN(PORT_B, 13);
-/// @}
-
-/// Actuators timeouts
-/// @{
-constexpr uint32_t default_timeout_period_motor_bottom_lift = 3;
-constexpr uint32_t default_timeout_period_motor_top_lift = 3;
-/// @}
-
-
-/// Actuators DC motors IDs
-/// @{
-/// @}
-
 /// Initialize positional_actuators.
 void init();
-
-/// GPIO expander wrapper
-void pf_pcf857x_gpio_write(gpio_t pin, int value);
 
 /// Check if a positional_actuator identified by id exists.
 bool contains(
@@ -93,12 +73,6 @@ PositionalActuator & get(
 
 /// Disable all positional actuators
 void disable_all();
-
-/// Send emergency button pressed protobuf message
-void send_emergency_button_pressed();
-
-/// Send emergency button released protobuf message
-void send_emergency_button_released();
 
 /// Send positional actuator state protobuf message
 void send_state(Enum positional_actuator);
