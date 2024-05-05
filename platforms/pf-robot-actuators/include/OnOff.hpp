@@ -27,10 +27,12 @@ public:
     OnOff(
         Enum id,                            ///< [in] motor id
         uint32_t default_timeout_period = 0,///< [in] default timeout
+        send_state_cb_t send_state_cb = nullptr, ///< [in] send state callback
         bool use_gpio_expander = false,     ///< [in] false if native GPIO, true for expander
         bool active_state = true,           ///< [in] Consider On when GPIO is equal to active_state
         gpio_t pin = GPIO_UNDEF             ///< [in] On/Off GPIO
-    ) : PositionalActuator(id, default_timeout_period), use_gpio_expander_(use_gpio_expander), active_state_(active_state), pin_(pin) {
+    ) : PositionalActuator(id, default_timeout_period, send_state_cb),
+        use_gpio_expander_(use_gpio_expander), active_state_(active_state), pin_(pin) {
         gpio_init(pin_, GPIO_OUT);
     };
 
