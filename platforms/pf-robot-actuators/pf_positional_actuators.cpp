@@ -126,6 +126,7 @@ static void *_positional_actuators_timeout_thread(void *args)
             if (positional_actuator->timeout_period()) {
                 if (!positional_actuator->decrement_timeout_period()) {
                     positional_actuator->disable();
+                    positional_actuator->send_state();
                 }
             }
         }
