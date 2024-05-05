@@ -138,6 +138,18 @@ static void *_positional_actuators_timeout_thread(void *args)
     return 0;
 }
 
+void reset_positional_actuators(void) {
+    // Grips
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT]->actuate(analogservo_grip_bottom_left_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT]->actuate(analogservo_grip_bottom_right_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT]->actuate(analogservo_grip_top_left_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT]->actuate(analogservo_grip_top_right_init_value);
+
+    // Magnets
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT]->actuate(false);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT]->actuate(false);
+}
+
 void init() {
     // Init PWM I2C driver
     _pca9685_init();
@@ -175,7 +187,7 @@ void init() {
         0,
         send_state,
         false,
-        false,
+        true,
         pin_cart_magnet_left
     );
     _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
@@ -183,7 +195,7 @@ void init() {
         0,
         send_state,
         false,
-        false,
+        true,
         pin_cart_magnet_right
     );
 

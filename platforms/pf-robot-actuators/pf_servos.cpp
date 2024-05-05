@@ -104,6 +104,13 @@ void send_states() {
     }
 }
 
+/// Reset LX servos
+void reset_lx_servos(void) {
+    _servos[Enum::LXSERVO_LEFT_CART]->move(lxservo_cart_left_init_value);
+    _servos[Enum::LXSERVO_RIGHT_CART]->move(lxservo_cart_right_init_value);
+    _servos[Enum::LXSERVO_ARM_PANEL]->move(lxservo_arm_panel_init_value);
+}
+
 } // namespace servos
 } // namespace actuators
 } // namespace pf

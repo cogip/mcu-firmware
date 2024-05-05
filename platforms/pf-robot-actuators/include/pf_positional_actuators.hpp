@@ -58,6 +58,14 @@ constexpr gpio_t pin_cart_magnet_left = GPIO_PIN(PORT_C, 7);
 constexpr gpio_t pin_cart_magnet_right = GPIO_PIN(PORT_C, 9);
 /// @}
 
+/// Analog servomotors initialization position
+/// @{
+constexpr int32_t analogservo_grip_bottom_left_init_value = 250;
+constexpr int32_t analogservo_grip_bottom_right_init_value = 147;
+constexpr int32_t analogservo_grip_top_left_init_value = 222;
+constexpr int32_t analogservo_grip_top_right_init_value = 137;
+/// @}
+
 /// Initialize positional_actuators.
 void init();
 
@@ -79,6 +87,9 @@ void send_state(cogip::pf::actuators::Enum positional_actuator);
 
 /// Send all positional actuator states
 void send_states();
+
+/// Reset positional actuators
+void reset_positional_actuators(void);
 
 } // namespace positional_actuators
 } // namespace actuators

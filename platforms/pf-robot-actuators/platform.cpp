@@ -83,6 +83,8 @@ static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer & buffe
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::enable_all();
+    cogip::pf::actuators::positional_actuators::reset_positional_actuators();
+    cogip::pf::actuators::servos::reset_lx_servos();
 }
 
 /// Start threading sending actuators state.
