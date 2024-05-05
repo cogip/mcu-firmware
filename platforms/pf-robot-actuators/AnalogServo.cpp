@@ -34,12 +34,14 @@ void AnalogServo::actuate(int32_t command) {
     if (command > 0) {
         pca9685_pwm_set(&AnalogServo::pca9685_dev, channel_, command);
         std::cout << "INFO: Servomotor " << channel_ << " at position " << command << std::endl;
+        command_ = command;
     }
     else {
         std::cerr << "ERROR: Servomotor " << channel_ << " command out of range!" << std::endl;
+        return;
     }
 
-    command_ = command;
+    send_state();
 }
 
 } // namespace positional_actuators
