@@ -11,7 +11,6 @@
 #include "OnOff.hpp"
 #include "PositionalActuator.hpp"
 
-#include "actuators_motors_params.hpp"
 #include "pca9685_params.hpp"
 #include "platform.hpp"
 
