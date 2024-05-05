@@ -23,6 +23,12 @@ void PositionalActuator::actuate_timeout(int32_t command, uint32_t timeout_perio
     actuate(command);
 }
 
+void PositionalActuator::send_state(void) {
+    if (send_state_cb_) {
+        send_state_cb_(id_);
+    }
+}
+
 void PositionalActuator::pb_copy(PB_PositionalActuator & pb_positional_actuator) const {
     pb_positional_actuator.set_id(static_cast<PB_PositionalActuatorEnum>(id_));
     pb_positional_actuator.set_command(command_);
