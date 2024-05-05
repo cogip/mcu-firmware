@@ -42,8 +42,9 @@ class Motor: public PositionalActuator {
 public:
     /// Constructor.
     explicit Motor(
-        Enum id,                                ///< [in] motor id
+        cogip::pf::actuators::Enum id,          ///< [in] motor id
         uint32_t default_timeout_period = 0,    ///< [in] default timeout
+        send_state_cb_t send_state_cb = nullptr,///< [in] send state callback
         motor_driver_t *motor_driver = nullptr, ///< [in] motor driver
         uint8_t motor_id = 0,                   ///< [in] motor id for the given motor driver
         gpio_t clear_overload_pin = GPIO_UNDEF, ///< [in] clear motor overload flag
@@ -66,6 +67,9 @@ public:
 
     /// Disable the motor.
     void disable() override;
+
+    /// Disable the positional actuator after conditions.
+    bool disable_on_check() override { disable(); return true; };
 
     /// Activate the motor.
     void actuate(
