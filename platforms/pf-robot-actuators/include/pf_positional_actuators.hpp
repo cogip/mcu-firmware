@@ -64,18 +64,6 @@ constexpr gpio_t pin_limit_switch_bottom_lift = GPIO_PIN(PORT_B, 14);
 constexpr gpio_t pin_limit_switch_top_lift = GPIO_PIN(PORT_B, 13);
 /// @}
 
-/// Front arms servomotor positions
-/// @{
-constexpr int analog_servomotor_bottom_grip_left_opened = 110;
-constexpr int analog_servomotor_bottom_grip_left_closed = 195;
-constexpr int analog_servomotor_bottom_grip_right_opened = 180;
-constexpr int analog_servomotor_bottom_grip_right_closed = 95;
-constexpr int analog_servomotor_top_grip_left_opened = 90;
-constexpr int analog_servomotor_top_grip_left_closed = 165;
-constexpr int analog_servomotor_top_grip_right_opened = 185;
-constexpr int analog_servomotor_top_grip_right_closed = 110;
-/// @}
-
 /// Actuators timeouts
 /// @{
 constexpr uint32_t default_timeout_period_motor_bottom_lift = 3;
