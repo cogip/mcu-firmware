@@ -8,6 +8,6 @@ ifdef PCA9685_OFFSET
 	CFLAGS += -DPCA9685_OFFSET=$(PCA9685_OFFSET)
 endif
 
-ifeq ($(CPU),native)
+ifeq ($(CPU), native64)
 	CFLAGS += -DUART_NUMOF=3
 endif
