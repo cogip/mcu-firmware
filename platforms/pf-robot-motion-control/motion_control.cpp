@@ -482,6 +482,8 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
 
             // Consider pose_reached as anti blocking is bypassed
             pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
+            // As pose is reached, pose straight filter state machine is in finished state
+            pose_straight_filter.force_finished_state();
 
             std::cout << "BLOCKED bypasssed" << std::endl;
         }
