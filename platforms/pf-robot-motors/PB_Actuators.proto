@@ -4,6 +4,7 @@ enum PB_ActuatorsTypeEnum
 {
   SERVO = 0;
   POSITIONAL = 1;
+  BOOL_SENSOR = 2;
 }
 
 enum PB_ServoEnum
@@ -26,6 +27,16 @@ enum PB_PositionalActuatorEnum
     ANALOGSERVO_PAMI = 8;
 }
 
+enum PB_BoolSensorEnum
+{
+    BOTTOM_GRIP_LEFT = 0;
+    BOTTOM_GRIP_RIGHT = 1;
+    TOP_GRIP_LEFT = 2;
+    TOP_GRIP_RIGHT = 3;
+    MAGNET_LEFT = 4;
+    MAGNET_RIGHT = 5;
+}
+
 message PB_Servo {
     bool is_blocked = 1;
     PB_ServoEnum id = 2;
@@ -39,10 +50,15 @@ message PB_PositionalActuator {
     int32 command = 3;
 }
 
+message PB_BoolSensor {
+    bool state = 1;
+}
+
 message PB_ActuatorState {
     oneof type {
         PB_Servo servo = 1;
         PB_PositionalActuator positional_actuator = 2;
+        PB_BoolSensor bool_sensor = 3;
     }
 }
 
