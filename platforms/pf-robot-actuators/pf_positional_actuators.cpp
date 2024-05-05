@@ -145,22 +145,26 @@ void init() {
     _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_TOP_GRIP_LEFT,
         0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT
     );
 
     _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
         0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT
     );
     _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
         0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT
     );
     _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
         0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT
     );
 
@@ -168,6 +172,7 @@ void init() {
     _positional_actuators[Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
         Enum::CART_MAGNET_LEFT,
         0,
+        send_state,
         false,
         false,
         pin_cart_magnet_left
@@ -175,6 +180,7 @@ void init() {
     _positional_actuators[Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
         Enum::CART_MAGNET_RIGHT,
         0,
+        send_state,
         false,
         false,
         pin_cart_magnet_right
