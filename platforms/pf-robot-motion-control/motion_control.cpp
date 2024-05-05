@@ -694,6 +694,7 @@ void pf_init_motion_control(void)
     );
 
     pf_encoder_reset();
+    pf_disable_motion_control();
 }
 
 } // namespace actuators
