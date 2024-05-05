@@ -138,6 +138,18 @@ static void *_positional_actuators_timeout_thread(void *args)
     return 0;
 }
 
+void reset_positional_actuators(void) {
+    // Grips
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT]->actuate(analogservo_grip_bottom_left_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT]->actuate(analogservo_grip_bottom_right_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT]->actuate(analogservo_grip_top_left_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT]->actuate(analogservo_grip_top_right_init_value);
+
+    // Magnets
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT]->actuate(0);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT]->actuate(0);
+}
+
 void init() {
     // Init PWM I2C driver
     _pca9685_init();
