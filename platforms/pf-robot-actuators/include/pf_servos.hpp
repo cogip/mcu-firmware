@@ -76,6 +76,16 @@ void send_state(Enum servo);
 /// Send all positional actuator states
 void send_states();
 
+/// Reset LX servos
+void reset_lx_servos(void);
+
+/// Analog servomotors initialization position
+/// @{
+constexpr int32_t lxservo_arm_panel_init_value = 350;
+constexpr int32_t lxservo_cart_left_init_value = 950;
+constexpr int32_t lxservo_cart_right_init_value = 50;
+/// @}
+
 } // namespace servos
 } // namespace actuators
 } // namespace pf
