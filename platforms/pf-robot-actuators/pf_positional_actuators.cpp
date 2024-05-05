@@ -160,37 +160,22 @@ void init() {
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT])->add_position(analog_servomotor_top_grip_left_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT])->add_position(analog_servomotor_top_grip_left_opened);
 
     _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT])->add_position(analog_servomotor_top_grip_right_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT])->add_position(analog_servomotor_top_grip_right_opened);
     _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT])->add_position(analog_servomotor_bottom_grip_left_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT])->add_position(analog_servomotor_bottom_grip_left_opened);
-
     _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
         Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
         0,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_opened);
-
-    // Close all arms in 1 second
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT]->actuate_timeout(0, 1000);
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT]->actuate_timeout(0, 1000);
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT]->actuate_timeout(0, 1000);
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT]->actuate_timeout(0, 1000);
 
     // OnOff init
     _positional_actuators[Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
