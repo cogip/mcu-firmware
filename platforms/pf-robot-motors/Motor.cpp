@@ -15,8 +15,9 @@ namespace positional_actuators {
 
 /// Constructor
 Motor::Motor(
-        Enum id,
+        cogip::pf::actuators::Enum id,
         uint32_t default_timeout_period,
+        send_state_cb_t send_state_cb,
         motor_driver_t *motor_driver,
         uint8_t motor_id,
         gpio_t clear_overload_pin,
@@ -27,7 +28,7 @@ Motor::Motor(
         cogip::motion_control::SpeedFilterParameters *speed_filter_parameters,
         cogip::motion_control::motor_get_speed_and_pose_cb_t motor_get_speed_and_pose_cb,
         cogip::motion_control::motor_process_commands_cb_t motor_process_commands_cb
-    ) : PositionalActuator(id, default_timeout_period),
+    ) : PositionalActuator(id, default_timeout_period, send_state_cb),
         motor_driver_(motor_driver),
         motor_id_(motor_id),
         clear_overload_pin_(clear_overload_pin),
