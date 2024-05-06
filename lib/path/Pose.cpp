@@ -9,9 +9,11 @@ namespace path {
 Pose::Pose(
     double x, double y, double O,
     double max_speed_ratio_linear, double max_speed_ratio_angular,
-    bool allow_reverse, bool bypass_anti_blocking, uint32_t timeout_ms
+    bool allow_reverse, bool bypass_anti_blocking, uint32_t timeout_ms,
+    bool bypass_final_orientation
     ) : cogip_defs::Pose(x, y, O), allow_reverse_(allow_reverse),
-    bypass_anti_blocking_(bypass_anti_blocking), timeout_ms_(timeout_ms)
+    bypass_anti_blocking_(bypass_anti_blocking), timeout_ms_(timeout_ms),
+    bypass_final_orientation_(bypass_final_orientation)
 {
     // Ratios are betwen 0 and 1
     max_speed_ratio_linear_ =  std::min(max_speed_ratio_linear, 1.);
@@ -29,6 +31,7 @@ void Pose::pb_read(const PB_PathPose &path_pose)
     max_speed_ratio_angular_ = path_pose.max_speed_ratio_angular();
     bypass_anti_blocking_ = path_pose.bypass_anti_blocking();
     timeout_ms_ = path_pose.timeout_ms();
+    bypass_final_orientation_ = path_pose.bypass_final_orientation();
 }
 
 void Pose::pb_copy(PB_PathPose &path_pose) const {
@@ -41,6 +44,7 @@ void Pose::pb_copy(PB_PathPose &path_pose) const {
     path_pose.set_max_speed_ratio_angular(max_speed_ratio_angular_);
     path_pose.set_bypass_anti_blocking(bypass_anti_blocking_);
     path_pose.set_timeout_ms(timeout_ms_);
+    path_pose.set_bypass_final_orientation(bypass_final_orientation_);
 }
 
 } // namespace path
