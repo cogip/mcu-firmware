@@ -14,6 +14,7 @@
 #include "pf_actuators.hpp"
 #include "pf_positional_actuators.hpp"
 #include "pf_servos.hpp"
+#include "pf_sensors.hpp"
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
@@ -155,6 +156,7 @@ void pf_init(void)
     }
 
     cogip::pf::actuators::init();
+    cogip::pf::sensors::init();
 
     shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
 }

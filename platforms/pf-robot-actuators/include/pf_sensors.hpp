@@ -3,41 +3,29 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-/// @ingroup     platforms_pf-robot-actuators
+/// @ingroup     platforms_pf-robot-sensors
 /// @{
 /// @file
-/// @brief       Generic definitions related to actuators.
-/// @author      Eric Courtois <eric.courtois@gmail.com>
+/// @brief       Generic definitions related to sensors.
+/// @author      Gilles DOFFE <g.doffe@gmail.com>
 
 #pragma once
 
 // Firmware includes
 #include "canpb/CanProtobuf.hpp"
+#include "pf_sensors.hpp"
 
 // Standard includes
 #include <cstdint>
 
 namespace cogip {
 namespace pf {
-namespace actuators {
+namespace sensors {
 
-/// LX servomotors IDs
-enum LXServoIDs {
-    LXSERVO_LEFT_CART = 0,
-    LXSERVO_RIGHT_CART = 1,
-    LXSERVO_ARM_PANEL = 2,
-};
-
-/// Enable all actuators
-void enable_all();
-
-/// Disable all actuators
-void disable_all();
-
-/// Initialize all actuators
+/// Initialize all sensors
 void init();
 
-} // namespace actuators
+} // namespace sensors
 } // namespace pf
 } // namespace cogip
 
