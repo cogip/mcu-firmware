@@ -138,7 +138,13 @@ void PoseStraightFilter::execute() {
             break;
 
         case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
-            pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+            // Check if final orientation should be bypassed
+            if (!parameters_->bypass_final_orientation()) {
+                pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+            }
+            else {
+                pos_err.set_angle(0);
+            }
             // Rotate towards the final orientation
             if (fabs(pos_err.angle()) <= parameters_->angular_threshold()) {
                 // Reached final pose

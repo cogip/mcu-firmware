@@ -24,14 +24,16 @@ public:
         double angular_threshold = 0.0,  ///< [in]  see angular_threshold_
         double linear_threshold = 0.0,   ///< [in]  see linear_threshold_
         double angular_intermediate_threshold = 0.0,  ///< [in]  see angular_threshold_
-        double angular_deceleration_ = 0.0,  ///< [in]  see angular_deceleration_threshold_
-        double linear_deceleration_ = 0.0    ///< [in]  see linear_deceleration_threshold_
+        double angular_deceleration = 0.0,  ///< [in]  see angular_deceleration_threshold_
+        double linear_deceleration = 0.0,   ///< [in]  see linear_deceleration_threshold_
+        bool bypass_final_orientation = false  ///< [in] bypass final orientation
     ) :
     angular_threshold_(angular_threshold),
     linear_threshold_(linear_threshold),
     angular_intermediate_threshold_(angular_intermediate_threshold),
-    angular_deceleration_(angular_deceleration_),
-    linear_deceleration_(linear_deceleration_) {};
+    angular_deceleration_(angular_deceleration),
+    linear_deceleration_(linear_deceleration),
+    bypass_final_orientation_(bypass_final_orientation) {};
 
     /// Get angular threshold
     /// return angular threshold
@@ -78,6 +80,15 @@ public:
         double linear_deceleration                          ///< [in]   linear deceleration
         ) { linear_deceleration_ = linear_deceleration; };
 
+    /// Return final orientation bypass
+    bool bypass_final_orientation() const { return bypass_final_orientation_; };
+
+    /// Activate final orientation bypass
+    void bypass_final_orientation_on() { bypass_final_orientation_ = true; };
+
+    /// Activate final orientation bypass
+    void bypass_final_orientation_off() { bypass_final_orientation_ = false; };
+
 private:
     /// the robot turns on itself until the angle error is lower than this threshold
     double angular_threshold_;
@@ -93,6 +104,9 @@ private:
 
     /// linear deceleration
     double linear_deceleration_;
+
+    /// bypass final orientation
+    bool bypass_final_orientation_;
 };
 
 } // namespace motion_control
