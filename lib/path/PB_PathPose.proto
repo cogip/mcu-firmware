@@ -9,4 +9,5 @@ message PB_PathPose {
     bool allow_reverse = 4;
     bool bypass_anti_blocking = 5;
     uint32 timeout_ms = 6;
+    bool bypass_final_orientation = 7;
 }
