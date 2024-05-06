@@ -198,7 +198,7 @@ void init() {
         pin_cart_magnet_right
     );
 
-    // Positional actuators timeout thread
+    // Positional actuators gpio handling
     thread_create(
         _gpio_handling_thread_stack,
         sizeof(_gpio_handling_thread_stack),
