@@ -18,7 +18,9 @@ namespace motion_control {
 #define MOTOR_RIGHT 0
 
 /* Quadrature decoding */
+#ifndef QDEC_MODE
 #define QDEC_MODE           QDEC_X4
+#endif
 #define QDEC_LEFT_POLARITY  1
 #define QDEC_RIGHT_POLARITY -1
 

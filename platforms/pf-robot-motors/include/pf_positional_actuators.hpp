@@ -25,7 +25,9 @@ namespace actuators {
 namespace positional_actuators {
 
 /// Quadrature decoding
+#ifndef QDEC_MODE
 #define QDEC_MODE                   QDEC_X4
+#endif
 #define QDEC_BOTTOM_LIFT_POLARITY   -1
 #define QDEC_TOP_LIFT_POLARITY      1
 
