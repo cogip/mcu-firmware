@@ -82,7 +82,7 @@ static void *_gpio_handling_thread(void *args)
 
         BoolSensor* bool_sensor = _bool_sensors_events[event];
         if (bool_sensor) {
-            bool_sensor->set_state(gpio_read(pin));
+            bool_sensor->set_state(!gpio_read(pin));
             bool_sensor->send_state();
         }
     }
@@ -96,15 +96,15 @@ void init() {
     _bool_sensors[(cogip::pf::sensors::Enum)Enum::BOTTOM_GRIP_RIGHT] = _bool_sensors_pool.create((cogip::pf::sensors::Enum)Enum::BOTTOM_GRIP_RIGHT, false, send_state);
     _bool_sensors[(cogip::pf::sensors::Enum)Enum::TOP_GRIP_LEFT] = _bool_sensors_pool.create((cogip::pf::sensors::Enum)Enum::TOP_GRIP_LEFT, false, send_state);
     _bool_sensors[(cogip::pf::sensors::Enum)Enum::TOP_GRIP_RIGHT] = _bool_sensors_pool.create((cogip::pf::sensors::Enum)Enum::TOP_GRIP_RIGHT, false, send_state);
-    _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_LEFT] = _bool_sensors_pool.create((cogip::pf::sensors::Enum)Enum::TOP_GRIP_LEFT, false, send_state);
-    _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_RIGHT] = _bool_sensors_pool.create((cogip::pf::sensors::Enum)Enum::TOP_GRIP_RIGHT, false, send_state);
+    _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_LEFT] = _bool_sensors_pool.create((cogip::pf::sensors::Enum)Enum::MAGNET_LEFT, false, send_state);
+    _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_RIGHT] = _bool_sensors_pool.create((cogip::pf::sensors::Enum)Enum::MAGNET_RIGHT, false, send_state);
 
-    init_interruptable_pin(GPIO_PIN(PORT_B, 9), GPIO_IN, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::BOTTOM_GRIP_LEFT]);
-    init_interruptable_pin(GPIO_PIN(PORT_C, 14), GPIO_IN, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::BOTTOM_GRIP_RIGHT]);
-    init_interruptable_pin(GPIO_PIN(PORT_C, 0), GPIO_IN, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::TOP_GRIP_LEFT]);
-    init_interruptable_pin(GPIO_PIN(PORT_C, 13), GPIO_IN, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::TOP_GRIP_RIGHT]);
-    init_interruptable_pin(GPIO_PIN(PORT_C, 15), GPIO_IN, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_LEFT]);
-    init_interruptable_pin(GPIO_PIN(PORT_B, 7), GPIO_IN, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_RIGHT]);
+    init_interruptable_pin(GPIO_PIN(PORT_B, 9), GPIO_IN_PU, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::BOTTOM_GRIP_LEFT]);
+    init_interruptable_pin(GPIO_PIN(PORT_C, 14), GPIO_IN_PU, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::BOTTOM_GRIP_RIGHT]);
+    init_interruptable_pin(GPIO_PIN(PORT_C, 0), GPIO_IN_PU, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::TOP_GRIP_LEFT]);
+    init_interruptable_pin(GPIO_PIN(PORT_C, 13), GPIO_IN_PU, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::TOP_GRIP_RIGHT]);
+    init_interruptable_pin(GPIO_PIN(PORT_C, 15), GPIO_IN_PU, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_LEFT]);
+    init_interruptable_pin(GPIO_PIN(PORT_B, 7), GPIO_IN_PU, GPIO_BOTH, _bool_sensors[(cogip::pf::sensors::Enum)Enum::MAGNET_RIGHT]);
 
     // BoolSensor GPIO handling thread
     thread_create(
@@ -131,7 +131,7 @@ void send_state(cogip::pf::sensors::Enum id) {
     // Protobuf CAN interface
     static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
-    std::cout << "send state for ID " << id << std::endl;
+    std::cout << "send state for ID " << static_cast<int>(id) << std::endl;
 
     // Send protobuf message
     _pb_sensor_state.clear();

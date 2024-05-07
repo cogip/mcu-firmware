@@ -13,12 +13,6 @@ namespace pf {
 namespace sensors {
 namespace bool_sensors {
 
-std::ostream& operator << (std::ostream& os, cogip::pf::sensors::Enum id)
-{
-    os << static_cast<std::underlying_type_t<Enum>>(id);
-    return os;
-}
-
 void BoolSensor::pb_copy(PB_BoolSensor & pb_bool_sensor) const
 {
     pb_bool_sensor.set_id(static_cast<PB_BoolSensorEnum>(id_));

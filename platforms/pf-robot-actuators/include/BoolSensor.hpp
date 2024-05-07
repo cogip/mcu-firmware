@@ -19,8 +19,6 @@ namespace pf {
 namespace sensors {
 namespace bool_sensors {
 
-std::ostream& operator << (std::ostream& os, Enum id);
-
 class BoolSensor : public Sensor {
 public:
     /// Constructor
