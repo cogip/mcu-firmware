@@ -95,6 +95,9 @@ else
 	CFLAGS += -D"MALLINFO_FUNC()=mallinfo()"
 endif
 
+# Display only errors
+CFLAGS += -DLOG_LEVEL=LOG_ERROR
+
 # Activate asserts debug
 CFLAGS += -DDEBUG_ASSERT_VERBOSE
 
