@@ -50,6 +50,11 @@ public:
 /// Initialize LX servomotors.
 void init(uart_half_duplex_t *lx_stream);
 
+/// Check if a given LX servomotor exists
+bool contains(
+    Enum id ///< [in] servo id
+);
+
 /// Get a servo by id.
 LxServo & get(
     cogip::pf::actuators::Enum id  ///< servo id

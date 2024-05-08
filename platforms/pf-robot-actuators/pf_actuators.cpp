@@ -89,12 +89,15 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
     if (!_suspend_actuators) {
         if (pb_command.has_servo()) {
             const PB_ServoCommand & pb_servo_command = pb_command.get_servo();
-            servos::move(
-                {
-                    servos::Enum{(lx_id_t)pb_servo_command.id()},
-                    (uint16_t)pb_servo_command.command()
-                }
-            );
+            servos::Enum id = servos::Enum{(lx_id_t)pb_servo_command.id()};
+            if (servos::contains(id)) {
+                servos::move(
+                    {
+                        id,
+                        (uint16_t)pb_servo_command.command()
+                    }
+                );
+            }
         }
         if (pb_command.has_positional_actuator()) {
             const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
