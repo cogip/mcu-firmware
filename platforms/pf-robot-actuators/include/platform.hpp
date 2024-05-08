@@ -28,6 +28,7 @@
 #pragma once
 
 /* Project includes */
+#include "board.h"
 #include "canpb/CanProtobuf.hpp"
 
 #include <iostream>
