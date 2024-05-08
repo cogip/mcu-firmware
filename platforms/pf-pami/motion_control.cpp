@@ -422,10 +422,8 @@ void pf_disable_motion_control()
     ztimer_sleep(ZTIMER_MSEC, motion_control_thread_period_ms);
 
     // Stop motors as the robot should not move in this case.
-    motor_set(&motion_motors_driver, MOTOR_LEFT, 0);
-    motor_set(&motion_motors_driver, MOTOR_RIGHT, 0);
-    //motor_brake(&motion_motors_driver, MOTOR_LEFT);
-    //motor_brake(&motion_motors_driver, MOTOR_RIGHT);
+    motor_brake(&motion_motors_driver, MOTOR_LEFT);
+    motor_brake(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_enable_motion_control()
