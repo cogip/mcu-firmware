@@ -73,8 +73,6 @@ cogip::canpb::CanProtobuf & pf_get_canpb()
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::motion_control::pf_enable_motion_control();
-
-    cogip::pf::motion_control::pf_enable_motion_control_messages();
 }
 
 /// Reset game message handler
@@ -83,15 +81,12 @@ static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffe
     cogip::pf::motion_control::pf_disable_motion_control();
 
     cogip::pf::motion_control::pf_motion_control_reset();
-
-    cogip::pf::motion_control::pf_enable_motion_control_messages();
 }
 
 /// Start threading sending actuators state.
 static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::motion_control::pf_handle_brake(buffer);
-    cogip::pf::motion_control::pf_disable_motion_control_messages();
 }
 
 void _handle_copilot_connected(cogip::canpb::ReadBuffer &)
