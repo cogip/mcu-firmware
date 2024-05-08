@@ -49,8 +49,6 @@ PB_Pid pb_pid;
 PB_Pid_Id pb_pid_id;
 
 
-static  bool _suspend_motion_control_messages = false;
-
 // PID tuning period
 constexpr uint16_t motion_control_pid_tuning_period_ms = 3000;
 
@@ -332,56 +330,44 @@ void pf_send_pb_state(void)
 
 
 void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
+    // Already does a brake
     pf_disable_motion_control();
-
-    // Small wait to ensure engine is disabled
-    ztimer_sleep(ZTIMER_MSEC, 100);
-
-    // Brake motors as the robot should not move in this case.
-    motor_brake(&motion_motors_driver, MOTOR_LEFT);
-    motor_brake(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 {
-    if (!_suspend_motion_control_messages) {
-        // Retrieve new target pose from protobuf message
-        PB_PathPose pb_path_target_pose;
-        EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
-        if (error != EmbeddedProto::Error::NO_ERRORS) {
-            std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
-            return;
-        }
-
-        cogip::path::Pose previous_target_pose = target_pose;
-
-        // Target pose
-        target_pose.pb_read(pb_path_target_pose);
-
-        // If target pose has not changed, just do nothing
-        if (target_pose == previous_target_pose) {
-            return;
-        }
-
-        // Target speed
-        target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
-        target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);
-        pf_motion_control_platform_engine.set_target_speed(target_speed);
-
-        // Set target speed for passthrough controllers
-        passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
-        passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
-
-        // Deal with the first pose in the list
-        pf_motion_control_platform_engine.set_target_pose(target_pose);
-
-        // New target pose, the robot is moving
-        pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
-
-        pf_motion_control_reset();
-
-        pf_enable_motion_control();
+    // Retrieve new target pose from protobuf message
+    PB_PathPose pb_path_target_pose;
+    EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
     }
+
+    cogip::path::Pose previous_target_pose = target_pose;
+
+    // Target pose
+    target_pose.pb_read(pb_path_target_pose);
+
+    // Target speed
+    target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
+    target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);
+    pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+    // Set target speed for passthrough controllers
+    passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
+    passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
+
+    // Deal with the first pose in the list
+    pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+    // New target pose, the robot is moving
+    pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
+
+    pf_motion_control_reset();
+
+    std::cout << "HERE" << std::endl;
+    pf_enable_motion_control();
 }
 
 void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
@@ -429,29 +415,23 @@ void pf_motion_control_reset(void)
 
 void pf_disable_motion_control()
 {
+    std::cout << "DISABLE" << std::endl;
     pf_motion_control_platform_engine.disable();
 
     // Small wait to ensure engine is disabled
     ztimer_sleep(ZTIMER_MSEC, motion_control_thread_period_ms);
 
     // Stop motors as the robot should not move in this case.
-    motor_disable(&motion_motors_driver, MOTOR_LEFT);
-    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
+    motor_set(&motion_motors_driver, MOTOR_LEFT, 0);
+    motor_set(&motion_motors_driver, MOTOR_RIGHT, 0);
+    //motor_brake(&motion_motors_driver, MOTOR_LEFT);
+    //motor_brake(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_enable_motion_control()
 {
+    std::cout << "ENABLE" << std::endl;
     pf_motion_control_platform_engine.enable();
-}
-
-void pf_enable_motion_control_messages()
-{
-    _suspend_motion_control_messages = false;
-}
-
-void pf_disable_motion_control_messages()
-{
-    _suspend_motion_control_messages = true;
 }
 
 void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cogip::cogip_defs::Pose &current_pose)

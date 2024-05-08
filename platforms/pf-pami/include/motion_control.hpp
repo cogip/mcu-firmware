@@ -54,6 +54,7 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 constexpr double wheels_diameter_mm = 49;
 constexpr double wheels_distance_mm = 120;
 constexpr double wheels_encoder_resolution = 37.35 * 11 *4;
+//constexpr double wheels_encoder_resolution = 42.5 * 11 * 4;
 constexpr double wheels_perimeter = M_PI * wheels_diameter_mm;
 constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
 constexpr double wheels_distance_pulse = wheels_distance_mm * pulse_per_mm;     ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
@@ -61,7 +62,7 @@ constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   
 /// @}
 
 /// Minimal PWM value
-constexpr int pwm_minimal = 120;
+constexpr int pwm_minimal = 100;
 
 /// @name Acceleration and speed profiles
 /// @{
@@ -133,10 +134,6 @@ void pf_disable_motion_control();
 
 /// Make motion control engine thread loop enabled
 void pf_enable_motion_control();
-
-void pf_enable_motion_control_messages();
-
-void pf_disable_motion_control_messages();
 
 /// Send current robot pose in Protobuf format over UART
 void pf_send_pb_pose(void);
