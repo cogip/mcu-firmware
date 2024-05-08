@@ -53,6 +53,11 @@ LxServo & get(
     Enum id  ///< servo id
 );
 
+/// Check if a given LX servomotor exists
+bool contains(
+    Enum id ///< [in] servo id
+);
+
 /// Move servo according to the given command.
 void move(
     const Command & command,  ///< [in] servo command
