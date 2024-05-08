@@ -43,6 +43,10 @@ void init(uart_half_duplex_t *lx_stream) {
     LxServo::lx_stream = lx_stream;
 }
 
+bool contains(Enum id) {
+    return _servos.contains(id);
+}
+
 LxServo & get(Enum id) {
     return *_servos[id];
 }
