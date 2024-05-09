@@ -330,8 +330,9 @@ void pf_send_pb_state(void)
 
 
 void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
-    // Already does a brake
-    pf_disable_motion_control();
+    pf_motion_control_platform_engine.set_target_speed({0, 0});
+    reset_speed_pids();
+    pose_straight_filter.force_finished_state();
 }
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
@@ -353,6 +354,10 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
     target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
     target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);
     pf_motion_control_platform_engine.set_target_speed(target_speed);
+    // Set final orientation bypassing
+    target_pose.bypass_final_orientation()
+        ? pose_straight_filter_parameters.bypass_final_orientation_on()
+        : pose_straight_filter_parameters.bypass_final_orientation_off();
 
     // Set target speed for passthrough controllers
     passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
@@ -366,7 +371,6 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 
     pf_motion_control_reset();
 
-    std::cout << "HERE" << std::endl;
     pf_enable_motion_control();
 }
 
@@ -415,20 +419,18 @@ void pf_motion_control_reset(void)
 
 void pf_disable_motion_control()
 {
-    std::cout << "DISABLE" << std::endl;
     pf_motion_control_platform_engine.disable();
 
     // Small wait to ensure engine is disabled
     ztimer_sleep(ZTIMER_MSEC, motion_control_thread_period_ms);
 
     // Stop motors as the robot should not move in this case.
-    motor_brake(&motion_motors_driver, MOTOR_LEFT);
-    motor_brake(&motion_motors_driver, MOTOR_RIGHT);
+    motor_disable(&motion_motors_driver, MOTOR_LEFT);
+    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_enable_motion_control()
 {
-    std::cout << "ENABLE" << std::endl;
     pf_motion_control_platform_engine.enable();
 }
 
@@ -469,23 +471,26 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
             right_command = 0;
             left_command = 0;
 
+            pose_straight_filter.force_finished_state();
+
             std::cout << "BLOCKED" << std::endl;
         }
     }
-
-    // Apply motor commands
-    if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
-        right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
+    else {
+        // Apply motor commands
+        if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
+            right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
+        }
+        if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
+            left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
+        }
+        right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
+                        + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                            / (int16_t)motion_motors_driver.params->pwm_resolution);
+        left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
+                        + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                            / (int16_t)motion_motors_driver.params->pwm_resolution);
     }
-    if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
-        left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
-    }
-    right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
-                    + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                        / (int16_t)motion_motors_driver.params->pwm_resolution);
-    left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
-                    + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                        / (int16_t)motion_motors_driver.params->pwm_resolution);
 
     motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
     motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);

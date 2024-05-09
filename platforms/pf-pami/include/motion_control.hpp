@@ -53,8 +53,8 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 /// @{
 constexpr double wheels_diameter_mm = 49;
 constexpr double wheels_distance_mm = 120;
-constexpr double wheels_encoder_resolution = 37.35 * 11 *4;
-//constexpr double wheels_encoder_resolution = 42.5 * 11 * 4;
+//constexpr double wheels_encoder_resolution = 37.35 * 11 *4;
+constexpr double wheels_encoder_resolution = 42.5 * 11 * 4;
 constexpr double wheels_perimeter = M_PI * wheels_diameter_mm;
 constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
 constexpr double wheels_distance_pulse = wheels_distance_mm * pulse_per_mm;     ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
@@ -62,7 +62,7 @@ constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   
 /// @}
 
 /// Minimal PWM value
-constexpr int pwm_minimal = 100;
+constexpr int pwm_minimal = 0;
 
 /// @name Acceleration and speed profiles
 /// @{
