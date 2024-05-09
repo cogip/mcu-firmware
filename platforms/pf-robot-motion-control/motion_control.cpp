@@ -333,14 +333,9 @@ void pf_send_pb_state(void)
 
 
 void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer &buffer) {
-    pf_disable_motion_control();
-
-    // Small wait to ensure engine is disabled
-    ztimer_sleep(ZTIMER_MSEC, 100);
-
-    // Brake motors as the robot should not move in this case.
-    motor_brake(&motion_motors_driver, MOTOR_LEFT);
-    motor_brake(&motion_motors_driver, MOTOR_RIGHT);
+    pf_motion_control_platform_engine.set_target_speed({0, 0});
+    reset_speed_pids();
+    pose_straight_filter.force_finished_state();
 }
 
 void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
@@ -357,11 +352,6 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
 
     // Target pose
     target_pose.pb_read(pb_path_target_pose);
-
-    // If target pose has not changed, just do nothing
-    if (target_pose == previous_target_pose) {
-        return;
-    }
 
     // Target speed
     target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
@@ -485,30 +475,34 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
             right_command = 0;
             left_command = 0;
 
+            pose_straight_filter.force_finished_state();
+
             std::cout << "BLOCKED" << std::endl;
         }
     }
+    else {
+        // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
+        motor_disable(&motion_motors_driver, MOTOR_RIGHT);
+        motor_disable(&motion_motors_driver, MOTOR_LEFT);
+        ztimer_sleep(ZTIMER_USEC, 1);
+        motor_enable(&motion_motors_driver, MOTOR_RIGHT);
+        motor_enable(&motion_motors_driver, MOTOR_LEFT);
 
-    // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
-    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
-    motor_disable(&motion_motors_driver, MOTOR_LEFT);
-    ztimer_sleep(ZTIMER_USEC, 1);
-    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
-    motor_enable(&motion_motors_driver, MOTOR_LEFT);
+        // Apply motor commands
+        if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
+            right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
+        }
+        if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
+            left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
+        }
+        right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
+                        + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                            / (int16_t)motion_motors_driver.params->pwm_resolution);
+        left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
+                        + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                            / (int16_t)motion_motors_driver.params->pwm_resolution);
+    }
 
-    // Apply motor commands
-    if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
-        right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
-    }
-    if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
-        left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
-    }
-    right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
-                    + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                        / (int16_t)motion_motors_driver.params->pwm_resolution);
-    left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
-                    + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                        / (int16_t)motion_motors_driver.params->pwm_resolution);
     motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
     motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
 
