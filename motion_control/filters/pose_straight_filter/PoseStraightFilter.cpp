@@ -122,7 +122,7 @@ void PoseStraightFilter::execute() {
             } else {
                 // Angular direction correct, move to the next step
                 pose_reached = target_pose_status_t::intermediate_reached;
-                //force_allow_reverse = true;
+                force_allow_reverse = true;
                 this->current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
             }
             break;
