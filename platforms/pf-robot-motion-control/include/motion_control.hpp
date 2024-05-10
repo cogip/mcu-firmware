@@ -52,8 +52,8 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
 /// @{
-constexpr double wheels_diameter_mm = 47.9;
-constexpr double wheels_distance_mm = 275;
+constexpr double wheels_diameter_mm = 48.027;
+constexpr double wheels_distance_mm = 274;
 constexpr double wheels_encoder_resolution = 4096 * 4;
 constexpr double wheels_perimeter = M_PI * wheels_diameter_mm;
 constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
