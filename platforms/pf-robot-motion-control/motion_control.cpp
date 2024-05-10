@@ -367,6 +367,14 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
     passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
     passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
 
+    if (target_pose.timeout()) {
+        pf_motion_control_platform_engine.set_timeout_enable(true);
+        pf_motion_control_platform_engine.set_timeout_cycle_number(target_pose.timeout() / motion_control_thread_period_ms);
+    }
+    else {
+        pf_motion_control_platform_engine.set_timeout_enable(false);
+    }
+
     // Deal with the first pose in the list
     pf_motion_control_platform_engine.set_target_pose(target_pose);
 
@@ -481,13 +489,6 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         }
     }
     else {
-        // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
-        motor_disable(&motion_motors_driver, MOTOR_RIGHT);
-        motor_disable(&motion_motors_driver, MOTOR_LEFT);
-        ztimer_sleep(ZTIMER_USEC, 1);
-        motor_enable(&motion_motors_driver, MOTOR_RIGHT);
-        motor_enable(&motion_motors_driver, MOTOR_LEFT);
-
         // Apply motor commands
         if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
             right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
@@ -503,6 +504,13 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
                             / (int16_t)motion_motors_driver.params->pwm_resolution);
     }
 
+    // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
+    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
+    motor_disable(&motion_motors_driver, MOTOR_LEFT);
+    ztimer_sleep(ZTIMER_USEC, 1);
+    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
+    motor_enable(&motion_motors_driver, MOTOR_LEFT);
+
     motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
     motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
 
@@ -516,9 +524,6 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         // Reset previous speed orders
         linear_speed_filter.reset_previous_speed_order();
         angular_speed_filter.reset_previous_speed_order();
-        // Reset anti-blocking
-        linear_speed_filter.reset_anti_blocking_blocked_cycles_nb();
-        angular_speed_filter.reset_anti_blocking_blocked_cycles_nb();
     }
 
     if ((pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::moving)

@@ -391,7 +391,6 @@ void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
     // New start pose, the robot is not moving
     pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
 
-    pf_encoder_reset();
     pf_motion_control_platform_engine.set_current_cycle(0);
 }
 

@@ -60,10 +60,10 @@ constexpr gpio_t pin_cart_magnet_right = GPIO_PIN(PORT_C, 9);
 
 /// Analog servomotors initialization position
 /// @{
-constexpr int32_t analogservo_grip_bottom_left_init_value = 235;
+constexpr int32_t analogservo_grip_bottom_left_init_value = 250;
 constexpr int32_t analogservo_grip_bottom_right_init_value = 147;
-constexpr int32_t analogservo_grip_top_left_init_value = 228;
-constexpr int32_t analogservo_grip_top_right_init_value = 142;
+constexpr int32_t analogservo_grip_top_left_init_value = 222;
+constexpr int32_t analogservo_grip_top_right_init_value = 137;
 /// @}
 
 /// Initialize positional_actuators.

@@ -73,7 +73,7 @@ constexpr double platform_anti_blocking_blocked_cycles_nb_threshold = 15;
 constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
 constexpr double platform_max_speed_m_per_s = 2 ;  ///< Maximum speed (m/s)
 constexpr double platform_max_acc_m_per_s2 = 3;   ///< Maximum acceleration (m/s²)
-constexpr double platform_max_dec_m_per_s2 = 0.5;   ///< Maximum deceleration (m/s²)
+constexpr double platform_max_dec_m_per_s2 = 1.25;   ///< Maximum deceleration (m/s²)
 constexpr double platform_max_acc_linear_mm_per_period2 = (
     (1000 * platform_max_acc_m_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
