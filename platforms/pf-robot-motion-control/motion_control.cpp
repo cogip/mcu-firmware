@@ -408,7 +408,6 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer &buffer)
     // New start pose, the robot is not moving
     pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
 
-    pf_encoder_reset();
     pf_motion_control_platform_engine.set_current_cycle(0);
 }
 
@@ -432,6 +431,8 @@ void pf_motion_control_reset(void)
 
     // Reset pose straight filter state
     pose_straight_filter.reset_current_state();
+
+    pf_encoder_reset();
 }
 
 void pf_disable_motion_control()
