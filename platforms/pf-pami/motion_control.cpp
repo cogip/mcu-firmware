@@ -354,6 +354,7 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
     target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
     target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);
     pf_motion_control_platform_engine.set_target_speed(target_speed);
+
     // Set final orientation bypassing
     target_pose.bypass_final_orientation()
         ? pose_straight_filter_parameters.bypass_final_orientation_on()
@@ -362,6 +363,14 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
     // Set target speed for passthrough controllers
     passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
     passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
+
+    if (target_pose.timeout()) {
+        pf_motion_control_platform_engine.set_timeout_enable(true);
+        pf_motion_control_platform_engine.set_timeout_cycle_number(target_pose.timeout() / motion_control_thread_period_ms);
+    }
+    else {
+        pf_motion_control_platform_engine.set_timeout_enable(false);
+    }
 
     // Deal with the first pose in the list
     pf_motion_control_platform_engine.set_target_pose(target_pose);
