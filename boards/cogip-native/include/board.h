@@ -50,6 +50,9 @@ enum {
 #define LX_DIR_PIN      GPIO_PIN(PORT_B, 3)
 #define LX_UART_DEV     2
 
+/* QDEC on native architecture only support X1 mode, so force it here */
+#define QDEC_MODE   QDEC_X1
+
 /* Motion motors simulation */
 #define MOTION_MOTORS_POST_CB cogip_native_motor_driver_qdec_simulation
 
