@@ -41,17 +41,17 @@ void init(uart_half_duplex_t *lx_stream) {
 
     // Left arm
     _servos[Enum::LXSERVO_LEFT_CART] = _servos_pool.create(
-        Enum::LXSERVO_LEFT_CART
+        (cogip::pf::actuators::Enum)Enum::LXSERVO_LEFT_CART
     );
 
     // Right arm
     _servos[Enum::LXSERVO_RIGHT_CART] = _servos_pool.create(
-        Enum::LXSERVO_RIGHT_CART
+        (cogip::pf::actuators::Enum)Enum::LXSERVO_RIGHT_CART
     );
 
     // Panel arm
     _servos[Enum::LXSERVO_ARM_PANEL] = _servos_pool.create(
-        Enum::LXSERVO_ARM_PANEL
+        (cogip::pf::actuators::Enum)Enum::LXSERVO_ARM_PANEL
     );
 }
 
@@ -98,8 +98,9 @@ void send_state(Enum servo) {
 }
 
 void send_states() {
-    for (auto const & [id, servo] : _servos) {
-        send_state(id);
+    for (auto const & iterator : _servos) {
+        LxServo *servo = iterator.second;
+        servo->send_state();
     }
 }
 

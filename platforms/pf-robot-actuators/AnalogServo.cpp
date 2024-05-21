@@ -19,7 +19,7 @@ namespace positional_actuators {
 pca9685_t AnalogServo::pca9685_dev;
 
 AnalogServo::AnalogServo(
-    Enum id,
+    cogip::pf::actuators::Enum id,
     uint32_t default_timeout_period,
     send_state_cb_t send_state_cb,
     int channel

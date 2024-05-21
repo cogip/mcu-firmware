@@ -28,10 +28,6 @@ void Motor::disable() {
     motor_disable(motor_driver_, motor_id_);
 }
 
-bool Motor::disable_on_check() {
-    return true;
-}
-
 void Motor::actuate(int32_t command) {
     command_ = command;
     int speed = abs(command);

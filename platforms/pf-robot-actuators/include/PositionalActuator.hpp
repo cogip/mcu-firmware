@@ -23,9 +23,6 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 namespace positional_actuators {
-enum class Enum: uint8_t;
-
-typedef void (*send_state_cb_t)(Enum id);
 
 std::ostream& operator << (std::ostream& os, Enum id);
 
@@ -34,11 +31,11 @@ class PositionalActuator: public Actuator {
 public:
     /// Constructor.
     PositionalActuator(
-        Enum id,                                ///< [in] positional_actuator id
+        cogip::pf::actuators::Enum id,          ///< [in] actuator id
         uint32_t default_timeout_period = 0,    ///< [in] default timeout
         send_state_cb_t send_state_cb = nullptr ///< [in] send state callback
-    ) : Actuator(), id_(id), command_(0), timeout_period_(0),
-        default_timeout_period_(default_timeout_period), send_state_cb_(send_state_cb) {};
+    ) : Actuator(id, send_state_cb), command_(0), timeout_period_(0),
+        default_timeout_period_(default_timeout_period) {};
 
     /// Get timeout
     uint32_t timeout_period() { return timeout_period_; };
@@ -53,9 +50,6 @@ public:
     virtual void actuate(
         const int32_t command   ///< [in] positional_actuator speed as a duty_cycle in percent
     ) = 0;
-
-    /// Send actuator state on communication bus
-    void send_state(void);
 
     /// Activate the motor, for the given amount of time
     void actuate_timeout(
@@ -75,15 +69,11 @@ public:
     ) const;
 
 protected:
-    Enum id_;                   ///< positional_actuator id
-
     int32_t command_;           ///< positional_actuator speed as a duty_cycle in percent
 
     uint32_t timeout_period_;   ///< timeout to decrease, unit is the actuator thread period
 
     uint32_t default_timeout_period_;  ///< if not 0, default timeout is applied in case of no timeout set
-
-    send_state_cb_t send_state_cb_; ///< send actuator current state on communication bus
 };
 
 } // namespace positional_actuators

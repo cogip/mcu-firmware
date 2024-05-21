@@ -13,6 +13,7 @@
 /* Platform includes */
 #include "pf_actuators.hpp"
 #include "pf_positional_actuators.hpp"
+#include "pf_servos.hpp"
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
@@ -94,6 +95,8 @@ void _handle_copilot_connected(cogip::canpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
+    cogip::pf::actuators::servos::send_states();
+    cogip::pf::actuators::positional_actuators::send_states();
 }
 
 void _handle_copilot_disconnected(cogip::canpb::ReadBuffer &)

@@ -63,19 +63,19 @@ void init();
 
 /// Check if a positional_actuator identified by id exists.
 bool contains(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Get a positional_actuator by id.
 PositionalActuator & get(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Disable all positional actuators
 void disable_all();
 
 /// Send positional actuator state protobuf message
-void send_state(Enum positional_actuator);
+void send_state(cogip::pf::actuators::Enum positional_actuator);
 
 /// Send all positional actuator states
 void send_states();
