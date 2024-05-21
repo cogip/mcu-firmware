@@ -14,7 +14,7 @@ std::ostream& operator << (std::ostream& os, Enum id) {
 
 LxServo::LxServo(
     Enum id
-) : Actuator(), id_(id) {
+) : Actuator(id) {
     lx_init(&lx_, lx_stream, static_cast<lx_id_t>(id));
 }
 
@@ -56,6 +56,18 @@ void LxServo::pb_copy(PB_Servo & pb_servo) const {
     pb_servo.set_id(static_cast<PB_ServoEnum>(id_));
     pb_servo.set_position(pos_read());
     pb_servo.set_command(command_);
+}
+
+void LxServo::send_state(void) {
+    static int16_t _previous_position = pos_read();
+
+    int16_t current_position = pos_read();
+
+    if ((send_state_cb_) && (_previous_position != current_position)) {
+        send_state_cb_(id_);
+    }
+
+    _previous_position = current_position;
 }
 
 uart_half_duplex_t * LxServo::lx_stream = nullptr;

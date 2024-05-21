@@ -52,7 +52,7 @@ void init(uart_half_duplex_t *lx_stream);
 
 /// Get a servo by id.
 LxServo & get(
-    Enum id  ///< servo id
+    cogip::pf::actuators::Enum id  ///< servo id
 );
 
 /// Move servo according to the given command.
