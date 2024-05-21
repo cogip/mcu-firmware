@@ -46,7 +46,6 @@ static void *_thread_sender([[maybe_unused]] void *arg)
             thread_sleep();
         }
 
-        positional_actuators::send_states();
         servos::send_states();
 
         // Wait thread period to end
@@ -99,7 +98,7 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
         }
         if (pb_command.has_positional_actuator()) {
             const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
-            positional_actuators::Enum id = positional_actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
+            Enum id = Enum{(uint8_t)pb_positional_actuator_command.id()};
             if (positional_actuators::contains(id)) {
                 positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
             }

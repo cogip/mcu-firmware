@@ -45,7 +45,7 @@ static etl::pool<OnOff, COUNT> _onoff_pool;
 /// Analog servomotor pool
 static etl::pool<AnalogServo, COUNT> _analog_servo_pool;
 /// Positional actuators map
-static etl::map<Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
+static etl::map<cogip::pf::actuators::Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
 
 /// GPIOs event pool
 static etl::pool<event_t, 20> _gpio_event_pool;
@@ -143,43 +143,43 @@ void init() {
     _pca9685_init();
 
     // AnalogServo init
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_TOP_GRIP_LEFT,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT,
         0,
         send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT
     );
 
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
         0,
         send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT
     );
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
         0,
         send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT
     );
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
         0,
         send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT
     );
 
     // OnOff init
-    _positional_actuators[Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
-        Enum::CART_MAGNET_LEFT,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
+        (cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT,
         0,
         send_state,
         false,
         false,
         pin_cart_magnet_left
     );
-    _positional_actuators[Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
-        Enum::CART_MAGNET_RIGHT,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
+        (cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT,
         0,
         send_state,
         false,
@@ -210,15 +210,15 @@ void init() {
     );
 }
 
-bool contains(Enum id) {
+bool contains(cogip::pf::actuators::Enum id) {
     return _positional_actuators.contains(id);
 }
 
-PositionalActuator & get(Enum id) {
+PositionalActuator & get(cogip::pf::actuators::Enum id) {
     return *_positional_actuators[id];
 }
 
-void send_state(Enum positional_actuator) {
+void send_state(cogip::pf::actuators::Enum positional_actuator) {
     // Protobuf CAN interface
     static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
