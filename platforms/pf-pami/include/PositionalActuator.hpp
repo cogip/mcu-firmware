@@ -24,10 +24,6 @@ namespace pf {
 namespace actuators {
 namespace positional_actuators {
 
-typedef int (*check_limit_switch_cb_t)();
-
-enum class Enum: uint8_t;
-
 std::ostream& operator << (std::ostream& os, Enum id);
 
 /// Class representing a positional_actuator using positional_actuator driver.
@@ -35,9 +31,11 @@ class PositionalActuator: public Actuator {
 public:
     /// Constructor.
     PositionalActuator(
-        Enum id,           ///< [in] positional_actuator id
-        uint32_t default_timeout_period = 0 ///< [in] default timeout
-    ) : Actuator(), id_(id), command_(0), timeout_period_(0), default_timeout_period_(default_timeout_period) {};
+        cogip::pf::actuators::Enum id,          ///< [in] actuator id
+        uint32_t default_timeout_period = 0,    ///< [in] default timeout
+        send_state_cb_t send_state_cb = nullptr ///< [in] send state callback
+    ) : Actuator(id, send_state_cb), command_(0), timeout_period_(0),
+        default_timeout_period_(default_timeout_period) {};
 
     /// Get timeout
     uint32_t timeout_period() { return timeout_period_; };
@@ -71,8 +69,6 @@ public:
     ) const;
 
 protected:
-    Enum id_;                   ///< positional_actuator id
-
     int32_t command_;           ///< positional_actuator speed as a duty_cycle in percent
 
     uint32_t timeout_period_;   ///< timeout to decrease, unit is the actuator thread period

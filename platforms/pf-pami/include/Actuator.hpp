@@ -15,10 +15,17 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 
+enum class GroupEnum: uint8_t;
+enum class Enum: uint8_t;
+
+typedef void (*send_state_cb_t)(Enum id);
 class Actuator {
 public:
     /// Constructor
-    explicit Actuator() : blocked_(0) {};
+    explicit Actuator(
+        Enum id,                                ///< [in] actuator id
+        send_state_cb_t send_state_cb = nullptr ///< [in] send state callback
+    ) : id_(id), blocked_(0), send_state_cb_(send_state_cb) {};
 
     /// Get blocked state
     bool blocked() { return blocked_; }
@@ -26,8 +33,15 @@ public:
     /// Set blocked state
     void set_blocked(bool blocked) { blocked_ = blocked; }
 
+    /// Send actuator state on communication bus
+    virtual void send_state(void) { if (send_state_cb_) send_state_cb_(id_); }
+
 protected:
+    Enum id_;           /// Actuator ID
+
     bool blocked_;      /// blocked state
+
+    send_state_cb_t send_state_cb_; ///< send actuator current state on communication bus
 };
 
 } // namespace actuators
