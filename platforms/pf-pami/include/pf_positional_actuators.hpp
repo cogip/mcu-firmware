@@ -49,19 +49,19 @@ constexpr int analog_servomotor_pami_deployed = 235;
 /// @}
 
 /// Initialize positional_actuators.
-void init(uart_half_duplex_t *lx_stream);
+void init();
 
 /// GPIO expander wrapper
 void pf_pcf857x_gpio_write(gpio_t pin, int value);
 
 /// Check if a positional_actuator identified by id exists.
 bool contains(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Get a positional_actuator by id.
 PositionalActuator & get(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Disable all positional actuators
@@ -74,7 +74,7 @@ void send_emergency_button_pressed();
 void send_emergency_button_released();
 
 /// Send positional actuator state protobuf message
-void send_state(Enum positional_actuator);
+void send_state(cogip::pf::actuators::Enum positional_actuator);
 
 /// Send all positional actuator states
 void send_states();

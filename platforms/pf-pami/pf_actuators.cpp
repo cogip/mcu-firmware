@@ -108,7 +108,7 @@ static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
         }
         if (pb_command.has_positional_actuator()) {
             const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
-            positional_actuators::Enum id = positional_actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
+            Enum id = Enum{(uint8_t)pb_positional_actuator_command.id()};
             if (positional_actuators::contains(id)) {
                 positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
             }
@@ -159,7 +159,7 @@ static void _lx_half_duplex_uart_init() {
 
 void init() {
     _lx_half_duplex_uart_init();
-    positional_actuators::init(&_lx_stream);
+    positional_actuators::init();
     servos::init(&_lx_stream);
 
     _sender_pid = thread_create(

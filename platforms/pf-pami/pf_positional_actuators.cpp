@@ -7,7 +7,6 @@
 #include "pf_positional_actuators.hpp"
 
 #include "AnalogServo.hpp"
-#include "LxMotor.hpp"
 #include "PositionalActuator.hpp"
 
 #include "pca9685_params.hpp"
@@ -40,7 +39,7 @@ constexpr uint16_t _positional_actuators_timeout_thread_period_ms = 100;
 /// Analog servomotor pool
 static etl::pool<AnalogServo, COUNT> _analog_servo_pool;
 /// Positional actuators map
-static etl::map<Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
+static etl::map<cogip::pf::actuators::Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
 
 
 /// Init I2C PWM driver
@@ -75,6 +74,7 @@ static void *_positional_actuators_timeout_thread(void *args)
             if (positional_actuator->timeout_period()) {
                 if (!positional_actuator->decrement_timeout_period()) {
                     positional_actuator->disable();
+                    positional_actuator->send_state();
                 }
             }
         }
@@ -86,19 +86,17 @@ static void *_positional_actuators_timeout_thread(void *args)
     return 0;
 }
 
-void init(uart_half_duplex_t *lx_stream) {
-    (void) lx_stream;
+void init() {
     // Init PWM I2C driver
     _pca9685_init();
 
     // AnalogServo init
-    _positional_actuators[Enum::ANALOGSERVO_PAMI] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_PAMI,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_PAMI] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_PAMI,
         0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_PAMI
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_PAMI])->add_position(analog_servomotor_pami_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_PAMI])->add_position(analog_servomotor_pami_deployed);
 
     // Positional actuators timeout thread
     thread_create(
@@ -112,15 +110,15 @@ void init(uart_half_duplex_t *lx_stream) {
     );
 }
 
-bool contains(Enum id) {
+bool contains(cogip::pf::actuators::Enum id) {
     return _positional_actuators.contains(id);
 }
 
-PositionalActuator & get(Enum id) {
+PositionalActuator & get(cogip::pf::actuators::Enum id) {
     return *_positional_actuators[id];
 }
 
-void send_state(Enum positional_actuator) {
+void send_state(cogip::pf::actuators::Enum positional_actuator) {
     // Protobuf UART interface
     static cogip::uartpb::UartProtobuf & uartpb = pf_get_uartpb();
 
