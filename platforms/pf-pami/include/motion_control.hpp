@@ -62,7 +62,7 @@ constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   
 /// @}
 
 /// Minimal PWM value
-constexpr int pwm_minimal = 120;
+constexpr int pwm_minimal = 100;
 
 /// @name Acceleration and speed profiles
 /// @{
