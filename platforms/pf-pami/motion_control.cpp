@@ -470,6 +470,8 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
             right_command = 0;
             left_command = 0;
 
+            pose_straight_filter.force_finished_state();
+
             std::cout << "BLOCKED" << std::endl;
         }
     }
