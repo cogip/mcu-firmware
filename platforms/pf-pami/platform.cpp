@@ -74,17 +74,14 @@ static void _handle_game_start([[maybe_unused]] cogip::uartpb::ReadBuffer & buff
 {
     cogip::pf::actuators::enable_all();
     cogip::pf::motion_control::pf_enable_motion_control();
-
-    cogip::pf::motion_control::pf_enable_motion_control_messages();
 }
 
 /// Reset game message handler
 static void _handle_game_reset([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::enable_all();
-    cogip::pf::motion_control::pf_enable_motion_control();
 
-    cogip::pf::motion_control::pf_enable_motion_control_messages();
+    cogip::pf::motion_control::pf_disable_motion_control();
 }
 
 /// Start threading sending actuators state.
@@ -92,9 +89,9 @@ static void _handle_game_end([[maybe_unused]] cogip::uartpb::ReadBuffer & buffer
 {
     cogip::pf::actuators::disable_all();
 
-    cogip::pf::motion_control::pf_handle_brake(buffer);
+    cogip::pf::motion_control::pf_disable_motion_control();
 
-    cogip::pf::motion_control::pf_disable_motion_control_messages();
+    cogip::pf::motion_control::pf_handle_brake(buffer);
 }
 
 void _handle_copilot_connected(cogip::uartpb::ReadBuffer &)
