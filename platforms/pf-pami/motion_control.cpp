@@ -330,8 +330,9 @@ void pf_send_pb_state(void)
 
 
 void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
-    // Already does a brake
-    pf_disable_motion_control();
+    pf_motion_control_platform_engine.set_target_speed({0, 0});
+    reset_speed_pids();
+    pose_straight_filter.force_finished_state();
 }
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
