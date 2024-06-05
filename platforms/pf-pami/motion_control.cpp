@@ -514,9 +514,6 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         // Reset previous speed orders
         linear_speed_filter.reset_previous_speed_order();
         angular_speed_filter.reset_previous_speed_order();
-        // Reset anti-blocking
-        linear_speed_filter.reset_anti_blocking_blocked_cycles_nb();
-        angular_speed_filter.reset_anti_blocking_blocked_cycles_nb();
     }
 
     if ((pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::moving)
