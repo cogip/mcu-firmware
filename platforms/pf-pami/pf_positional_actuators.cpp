@@ -98,6 +98,9 @@ void init() {
         PCA9586Channels::CHANNEL_ANALOGSERVO_PAMI
     );
 
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_PAMI]->actuate(75);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_PAMI]->send_state();
+
     // Positional actuators timeout thread
     thread_create(
         _positional_actuators_timeout_thread_stack,
