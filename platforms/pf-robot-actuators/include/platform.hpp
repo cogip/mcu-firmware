@@ -63,6 +63,10 @@
  */
 // Motion Control: 0x1000 - 0x1FFF
 // Actuators: 0x2000 - 0x2FFF
+constexpr cogip::canpb::uuid_t actuator_state_uuid = 0x2003;
+constexpr cogip::canpb::uuid_t thread_start_uuid = 0x2001;
+constexpr cogip::canpb::uuid_t thread_stop_uuid = 0x2002;
+constexpr cogip::canpb::uuid_t command_uuid = 0x2004;
 // Board: 0xF000 - 0xFFFF
 // Game: 0x4000 - 0x4FFF
 constexpr cogip::canpb::uuid_t game_start_uuid = 0x4001;
