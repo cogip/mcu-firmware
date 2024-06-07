@@ -21,17 +21,6 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 
-// Actuators: 0x2000 - 0x2FFF
-constexpr cogip::canpb::uuid_t actuator_state_uuid = 0x2003;
-constexpr cogip::canpb::uuid_t thread_start_uuid = 0x2001;
-constexpr cogip::canpb::uuid_t thread_stop_uuid = 0x2002;
-constexpr cogip::canpb::uuid_t command_uuid = 0x2004;
-
-/// Emergency button released protobuf message id
-constexpr cogip::canpb::uuid_t emergency_button_pressed_uuid = 0x1;
-/// Emergency button pressed protobuf message id
-constexpr cogip::canpb::uuid_t emergency_button_released_uuid = 0x2;
-
 /// LX servomotors IDs
 enum LXServoIDs {
     LXSERVO_LEFT_CART = 0,
