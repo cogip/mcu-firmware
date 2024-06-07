@@ -167,14 +167,6 @@ void init() {
 
     cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
     canpb.register_message_handler(
-        thread_start_uuid,
-        canpb::message_handler_t::create<_handle_thread_start>()
-    );
-    canpb.register_message_handler(
-        thread_stop_uuid,
-        canpb::message_handler_t::create<_handle_thread_stop>()
-    );
-    canpb.register_message_handler(
         command_uuid,
         canpb::message_handler_t::create<_handle_command>()
     );
