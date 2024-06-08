@@ -51,7 +51,8 @@ message PB_PositionalActuator {
 }
 
 message PB_BoolSensor {
-    bool state = 1;
+    PB_BoolSensorEnum id = 1;
+    bool state = 2;
 }
 
 message PB_ActuatorState {
