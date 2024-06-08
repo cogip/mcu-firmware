@@ -17,10 +17,6 @@
 #include <periph/gpio.h>
 #include <ztimer.h>
 
-#ifndef LX_DIR_PIN
-#define LX_DIR_PIN  GPIO_UNDEF
-#endif
-
 namespace cogip {
 namespace pf {
 namespace actuators {

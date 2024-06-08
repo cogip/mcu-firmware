@@ -36,7 +36,6 @@ extern "C" {
 #define PCF857X_PORT_0  0
 
 /* Servomotors */
-#define LX_DIR_PIN      GPIO_PIN(PORT_C, 15)
 #define LX_UART_DEV     1
 
 /**
