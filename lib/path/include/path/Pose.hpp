@@ -80,7 +80,10 @@ public:
             this->O() == other.O() &&
             this->max_speed_ratio_linear() == other.max_speed_ratio_linear() &&
             this->max_speed_ratio_angular() == other.max_speed_ratio_angular() &&
-            this->allow_reverse() == other.allow_reverse()
+            this->allow_reverse() == other.allow_reverse() &&
+            this->bypass_anti_blocking() == other.bypass_anti_blocking() &&
+            this->timeout_ms() == other.timeout_ms() &&
+            this->bypass_final_orientation() == other.bypass_final_orientation() 
         );
     };
 
