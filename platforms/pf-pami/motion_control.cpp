@@ -364,9 +364,9 @@ void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
     passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
     passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
 
-    if (target_pose.timeout()) {
+    if (target_pose.timeout_ms()) {
         pf_motion_control_platform_engine.set_timeout_enable(true);
-        pf_motion_control_platform_engine.set_timeout_cycle_number(target_pose.timeout() / motion_control_thread_period_ms);
+        pf_motion_control_platform_engine.set_timeout_cycle_number(target_pose.timeout_ms() / motion_control_thread_period_ms);
     }
     else {
         pf_motion_control_platform_engine.set_timeout_enable(false);

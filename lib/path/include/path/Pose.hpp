@@ -57,7 +57,7 @@ public:
     virtual bool bypass_anti_blocking() const { return bypass_anti_blocking_; }
 
     /// Return timeout to reach the pose, 0 if timeout should be disabled
-    virtual uint32_t timeout_() const { return timeout_ms_; }
+    virtual uint32_t timeout_ms() const { return timeout_ms_; }
 
     /// Return true if final orientation should be bypassed
     virtual bool bypass_final_orientation() const { return bypass_final_orientation_; }
