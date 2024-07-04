@@ -1,0 +1,9 @@
+USEMODULE_INCLUDES_pf-power-supply := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_pf-power-supply)
+
+PROTOBUF_PATH_pf-power-supply := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_pf-power-supply)
+
+ifeq ($(CPU),native)
+	CFLAGS += -DUART_NUMOF=2
+endif
