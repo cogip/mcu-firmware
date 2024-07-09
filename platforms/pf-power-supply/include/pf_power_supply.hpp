@@ -38,6 +38,13 @@ namespace power_supply
 #define EN_HIGH_POWER_PIN     GPIO_PIN(PORT_B, 3)
 #define BATTERY_VALID_N_PIN   GPIO_PIN(PORT_B, 10)
 #define DC_SUPPLY_VALID_N_PIN GPIO_PIN(PORT_B, 12)
+
+enum class PGood_id : uint8_t {
+	P3V3_PGOOD = 0,
+	P5V0_PGOOD = 1,
+	P7V5_PGOOD = 2,
+	PxVx_PGOOD = 3,
+};
 /// @}
 
 } // namespace power_supply

@@ -27,17 +27,17 @@ extern "C" {
 #endif
 
 /* Not connected GPIO for fake use */
-#define GPIO_OUTPUT_UNUSED     GPIO_PIN(PORT_B, 15)
+#define GPIO_OUTPUT_UNUSED GPIO_PIN(PORT_B, 15)
 
 /* LEDs */
-#define HEARTBEAT_LED   GPIO_PIN(PORT_A, 5)
+#define HEARTBEAT_LED GPIO_PIN(PORT_A, 5)
 
 /* GPIOs expander */
-#define PCF857X_PORT_0  0
+#define PCF857X_PORT_0 0
 
 /* Servomotors */
-#define LX_DIR_PIN      GPIO_PIN(PORT_C, 15)
-#define LX_UART_DEV     1
+#define LX_DIR_PIN  GPIO_PIN(PORT_C, 15)
+#define LX_UART_DEV 1
 
 /**
  * @brief   Initialize board specific hardware, including clock, LEDs and std-IO
