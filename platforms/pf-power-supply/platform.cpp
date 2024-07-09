@@ -9,9 +9,17 @@
 #include "canpb/ReadBuffer.hpp"
 #include "platform.hpp"
 #include "utils.hpp"
+#include "gpio.hpp"
+
+/* Embedded Template Library includes */
+#include "etl/pool.h"
+#include "etl/map.h"
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"
+
+#include "pf_power_supply.hpp"
+#include "PB_Power_supply.hpp"
 
 // canpb CAN device
 static cogip::canpb::CanProtobuf canpb(0);
@@ -29,6 +37,10 @@ char line_buf[SHELL_DEFAULT_BUFSIZE];
 constexpr uint16_t heartbeat_leds_interval = 200;
 // Heartbeat thread period
 constexpr uint16_t heartbeat_period = 1800;
+
+static etl::pool<cogip::gpio::GPIO, 4> _gpio_pool;
+
+static etl::map<PB_PGoodTypeEnum, cogip::gpio::GPIO *, 4> _pgood_gpios;
 
 static void *_heartbeat_thread(void *args)
 {
@@ -92,29 +104,33 @@ void _handle_copilot_disconnected(cogip::canpb::ReadBuffer &)
 
 void pf_init(void)
 {
-	thread_create(heartbeat_thread_stack, sizeof(heartbeat_thread_stack),
-		      THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_STACKTEST, _heartbeat_thread, NULL,
-		      "Heartbeat thread");
+	thread_create(heartbeat_thread_stack, sizeof(heartbeat_thread_stack), THREAD_PRIORITY_MAIN - 1,
+		      THREAD_CREATE_STACKTEST, _heartbeat_thread, NULL, "Heartbeat thread");
 
-	/* Initialize CANPB */
-	int canpb_res = canpb.init(&canpb_filter);
+	/* Create and map gpios with PB enum id */
+	_pgood_gpios[PB_PGoodTypeEnum::P3V3_PGOOD] = _gpio_pool.create(P3V3_PGOOD_PIN, GPIO_IN);
+	_pgood_gpios[PB_PGoodTypeEnum::P5V0_PGOOD] = _gpio_pool.create(P5V0_PGOOD_PIN, GPIO_IN);
+	_pgood_gpios[PB_PGoodTypeEnum::P7V5_PGOOD] = _gpio_pool.create(P7V5_PGOOD_PIN, GPIO_IN);
+	_pgood_gpios[PB_PGoodTypeEnum::PxVx_PGOOD] = _gpio_pool.create(PxVx_PGOOD_PIN, GPIO_IN);
+
+	for (aut) {
+
+		/* Initialize CANPB */
+		int canpb_res = canpb.init(&canpb_filter);
+	}
 	if (canpb_res) {
 		COGIP_DEBUG_CERR("CAN initialization failed, error: " << canpb_res);
 	} else {
-		canpb.register_message_handler(
-			game_reset_uuid,
-			cogip::canpb::message_handler_t::create<_handle_game_reset>());
-		canpb.register_message_handler(
-			game_start_uuid,
-			cogip::canpb::message_handler_t::create<_handle_game_start>());
-		canpb.register_message_handler(
-			game_end_uuid, cogip::canpb::message_handler_t::create<_handle_game_end>());
-		canpb.register_message_handler(
-			copilot_connected_uuid,
-			cogip::canpb::message_handler_t::create<_handle_copilot_connected>());
-		canpb.register_message_handler(
-			copilot_disconnected_uuid,
-			cogip::canpb::message_handler_t::create<_handle_copilot_disconnected>());
+		canpb.register_message_handler(game_reset_uuid,
+					       cogip::canpb::message_handler_t::create<_handle_game_reset>());
+		canpb.register_message_handler(game_start_uuid,
+					       cogip::canpb::message_handler_t::create<_handle_game_start>());
+		canpb.register_message_handler(game_end_uuid,
+					       cogip::canpb::message_handler_t::create<_handle_game_end>());
+		canpb.register_message_handler(copilot_connected_uuid,
+					       cogip::canpb::message_handler_t::create<_handle_copilot_connected>());
+		canpb.register_message_handler(copilot_disconnected_uuid,
+					       cogip::canpb::message_handler_t::create<_handle_copilot_disconnected>());
 
 		canpb.start_reader();
 	}
