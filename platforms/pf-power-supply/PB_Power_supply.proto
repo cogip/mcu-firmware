@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+enum PB_PGoodTypeEnum {
+	P3V3_PGOOD = 0;
+	P5V0_PGOOD = 1;
+	P7V5_PGOOD = 2;
+	PxVx_PGOOD = 3;
+}
