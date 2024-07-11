@@ -15,6 +15,9 @@
 #include "Controller.hpp"
 #include "thread/thread.hpp"
 
+// RIOT includes
+#include <mutex.h>
+
 namespace cogip {
 
 namespace motion_control {
@@ -30,7 +33,10 @@ public:
         pose_reached_(moving),
         timeout_cycle_number_(0),
         timeout_enable_(false)
-        { memset(controller_thread_stack_, 0, sizeof(controller_thread_stack_)); };
+        {
+            memset(controller_thread_stack_, 0, sizeof(controller_thread_stack_));
+            mutex_init(&mutex);
+        };
 
     /// Set the controller to launch.
     void set_controller(
@@ -44,10 +50,10 @@ public:
     virtual void thread_loop();
 
     /// Enable thread loop
-    void enable() { enable_ = true; };
+    void enable() { mutex_lock(&mutex); enable_ = true; mutex_unlock(&mutex); };
 
     /// Disable thread loop
-    void disable() { enable_ = false; };
+    void disable() { mutex_lock(&mutex); enable_ = false; mutex_unlock(&mutex); };
 
     /// Get controller
     BaseController* controller() const { return controller_; };
@@ -112,6 +118,9 @@ protected:
 
     /// Controller thread stack
     char controller_thread_stack_[THREAD_STACKSIZE_LARGE];
+
+    /// Mutex protecting engine loop
+    mutex_t mutex;
 };
 
 } // namespace motion_control
