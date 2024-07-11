@@ -1,11 +1,5 @@
 #pragma once
 
-// RIOT includes
-#include <timex.h>
-
-// System includes
-#include <iostream>
-
 typedef void (*func_cb_t)(void);
 
 /**

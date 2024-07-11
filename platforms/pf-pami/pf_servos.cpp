@@ -17,6 +17,9 @@
 #include <periph/gpio.h>
 #include <ztimer.h>
 
+// System includes
+#include <iostream>
+
 #ifndef LX_DIR_PIN
 #define LX_DIR_PIN  GPIO_UNDEF
 #endif
