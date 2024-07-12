@@ -117,15 +117,21 @@ static void _handle_command(cogip::uartpb::ReadBuffer & buffer)
 }
 
 static void _dir_init([[maybe_unused]] uart_t uart) {
+#ifdef LX_DIR_PIN
     gpio_init(LX_DIR_PIN, GPIO_OUT);
+#endif
 }
 
 static void _dir_enable_tx([[maybe_unused]] uart_t uart) {
+#ifdef LX_DIR_PIN
     gpio_clear(LX_DIR_PIN);
+#endif
 }
 
 static void _dir_disable_tx([[maybe_unused]] uart_t uart) {
+#ifdef LX_DIR_PIN
     gpio_set(LX_DIR_PIN);
+#endif
 }
 
 static void _lx_half_duplex_uart_init() {
