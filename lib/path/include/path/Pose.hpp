@@ -80,7 +80,10 @@ public:
             areDoublesEqual(O(), other.O()) &&
             areDoublesEqual(max_speed_ratio_linear(), other.max_speed_ratio_linear()) &&
             areDoublesEqual(max_speed_ratio_angular(), other.max_speed_ratio_angular()) &&
-            allow_reverse() == other.allow_reverse()
+            allow_reverse() == other.allow_reverse() &&
+	    bypass_anti_blocking() == other.bypass_anti_blocking() &&
+            timeout_ms() == other.timeout_ms() &&
+            bypass_final_orientation() == other.bypass_final_orientation()
         );
     };
 
