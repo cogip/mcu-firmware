@@ -1,12 +1,13 @@
 <map id="sys/canpb/include/canpb/canpb.hpp" name="sys/canpb/include/canpb/canpb.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="434,5,615,47"/>
-<area shape="rect" id="node2" href="$CanProtobuf_8hpp.html" title="Exchange Protobuf messages over CAN module." alt="" coords="434,184,615,225"/>
-<area shape="rect" id="node9" href="$canpb_2include_2canpb_2ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="434,95,615,136"/>
-<area shape="rect" id="node10" href="$canpb_2include_2canpb_2WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="639,95,821,136"/>
-<area shape="rect" id="node3" href="$pf-robot-actuators_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="5,273,161,329"/>
-<area shape="rect" id="node4" href="$pf-robot-actuators_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="186,281,413,322"/>
-<area shape="rect" id="node5" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="437,273,612,329"/>
-<area shape="rect" id="node7" href="$pf-robot-motors_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="637,281,874,322"/>
-<area shape="rect" id="node8" href="$pf-robot-motors_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="897,281,1109,322"/>
-<area shape="rect" id="node6" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="437,377,612,433"/>
+<area shape="rect" id="node1" title=" " alt="" coords="554,5,735,47"/>
+<area shape="rect" id="node2" href="$CanProtobuf_8hpp.html" title="Exchange Protobuf messages over CAN module." alt="" coords="554,184,735,225"/>
+<area shape="rect" id="node10" href="$canpb_2include_2canpb_2ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="554,95,735,136"/>
+<area shape="rect" id="node11" href="$canpb_2include_2canpb_2WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="759,95,941,136"/>
+<area shape="rect" id="node3" href="$pf-power-supply_2include_2platform_8hpp_source.html" title=" " alt="" coords="5,281,215,322"/>
+<area shape="rect" id="node4" href="$pf-robot-actuators_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="239,273,395,329"/>
+<area shape="rect" id="node5" href="$pf-robot-actuators_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="419,281,646,322"/>
+<area shape="rect" id="node6" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="671,273,845,329"/>
+<area shape="rect" id="node8" href="$pf-robot-motors_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="870,281,1107,322"/>
+<area shape="rect" id="node9" href="$pf-robot-motors_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="1131,281,1343,322"/>
+<area shape="rect" id="node7" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="671,377,845,433"/>
 </map>

@@ -54,11 +54,11 @@ var NAVTREEINDEX =
 ".html",
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac79dd6fea9f77adc74a3ddf7671f7c57",
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284",
-"dir_d5e7f95fea70e87c66f831dd1231098e.html",
-"group__driver__lx__servo.html#ga24f646ddde9a08a589bfecb2bc2ae611",
-"group__platforms__pami.html#ga74d22d5c450365dc5f4ae75b8b6ff432",
-"lx__writer_8h.html#ac883fa80e720c1416abdd40d77a67d2b",
-"pf-robot-motors_2include_2pf__actuators_8hpp.html#a38ba35545eb0c9c3d4b896ab8ca5b89a"
+"dir_cf09650fddc28e8508ce5e59f082adc5.html",
+"group__driver__lx__servo.html#ga1ddb016245e1d790ac99d84ad0a6bc15",
+"group__platforms__pami.html#ga5cd8534245dd8c7715965af083bd13c2",
+"lx__writer_8h.html#a3d9fa9832dd3fe3514582d02abd7c0e2",
+"pf-robot-motors_2include_2PositionalActuator_8hpp.html#a70db0d093857dc65679100f3c7c8e77e"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

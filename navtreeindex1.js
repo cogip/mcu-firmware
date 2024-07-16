@@ -188,8 +188,8 @@ var NAVTREEINDEX1 =
 "classcogip_1_1pf_1_1actuators_1_1Actuator.html#a5c2e704bd95081509473d6bfc3d47984":[1,0,0,5,0,2,7],
 "classcogip_1_1pf_1_1actuators_1_1Actuator.html#a5c2e704bd95081509473d6bfc3d47984":[1,0,0,5,0,2,8],
 "classcogip_1_1pf_1_1actuators_1_1Actuator.html#ac74c9489918d2ccf8c11206d9e912caf":[1,0,0,5,0,2,11],
-"classcogip_1_1pf_1_1actuators_1_1Actuator.html#ad3034a7017511e90867b7c5c9e28a4f4":[1,0,0,5,0,2,1],
 "classcogip_1_1pf_1_1actuators_1_1Actuator.html#ad3034a7017511e90867b7c5c9e28a4f4":[1,0,0,5,0,2,2],
+"classcogip_1_1pf_1_1actuators_1_1Actuator.html#ad3034a7017511e90867b7c5c9e28a4f4":[1,0,0,5,0,2,1],
 "classcogip_1_1pf_1_1actuators_1_1Actuator.html#ad3034a7017511e90867b7c5c9e28a4f4":[1,0,0,5,0,2,0],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html":[1,0,0,5,0,0,0],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html#a21e6020ff4de0284ebb1820aa649eb3d":[1,0,0,5,0,0,0,10],
@@ -211,8 +211,8 @@ var NAVTREEINDEX1 =
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html#aabf64d2214144bc609bdc39fc1dd0d57":[1,0,0,5,0,0,1,6],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html#aabf64d2214144bc609bdc39fc1dd0d57":[1,0,0,5,0,0,1,7],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html#acbffd97f32436b2478eddafc0f0ab5e6":[1,0,0,5,0,0,1,8],
-"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html#aee2d95b024ca9e1690d5f887ea5d1f7a":[1,0,0,5,0,0,1,3],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html#aee2d95b024ca9e1690d5f887ea5d1f7a":[1,0,0,5,0,0,1,2],
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html#aee2d95b024ca9e1690d5f887ea5d1f7a":[1,0,0,5,0,0,1,3],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html":[1,0,0,5,0,0,2],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a0207f0c76952e51f7deb50773d7a300c":[1,0,0,5,0,0,2,2],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a0207f0c76952e51f7deb50773d7a300c":[1,0,0,5,0,0,2,3],
@@ -245,9 +245,9 @@ var NAVTREEINDEX1 =
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a88e49fc524af1a581cda45811592abb3":[1,0,0,5,0,0,4,1],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a88e49fc524af1a581cda45811592abb3":[1,0,0,5,0,0,4,2],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a930e9c602cbfb6adf30c787422bbb2d4":[1,0,0,5,0,0,4,3],
-"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a930e9c602cbfb6adf30c787422bbb2d4":[1,0,0,5,0,0,4,4],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a930e9c602cbfb6adf30c787422bbb2d4":[1,0,0,5,0,0,4,5],
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a930e9c602cbfb6adf30c787422bbb2d4":[1,0,0,5,0,0,4,4],
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859":[1,0,0,5,0,0,4,20],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859":[1,0,0,5,0,0,4,21],
-"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859":[1,0,0,5,0,0,4,22],
-"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859":[1,0,0,5,0,0,4,20]
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859":[1,0,0,5,0,0,4,22]
 };
