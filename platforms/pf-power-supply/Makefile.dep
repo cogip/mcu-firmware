@@ -1,0 +1,11 @@
+# RIOT modules
+USEMODULE += event
+USEMODULE += printf_float
+USEMODULE += schedstatistics
+USEMODULE += shell
+USEMODULE += shell_cmds_default
+
+# mcu-firmware modules
+USEMODULE += cogip_defs
+USEMODULE += canpb
+USEMODULE += utils
