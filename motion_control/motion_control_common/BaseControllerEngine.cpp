@@ -32,6 +32,9 @@ void BaseControllerEngine::thread_loop() {
     ztimer_now_t loop_start_time = ztimer_now(ZTIMER_USEC);
 
     while (true) {
+        // Protect engine loop
+        mutex_lock(&mutex);
+
         COGIP_DEBUG_COUT("Engine loop");
 
         if ((enable_) && (controller_)) {
@@ -61,6 +64,9 @@ void BaseControllerEngine::thread_loop() {
             // Process controller outputs
             process_outputs();
         }
+
+        // End of engine loop
+        mutex_unlock(&mutex);
 
         // Wait thread period to end
         thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, CONTROLLER_PERIOD_USEC);

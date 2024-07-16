@@ -100,7 +100,6 @@ void SpeedFilter::execute() {
 
         // After a certain number of cycles, the robot is considered blocked.
         if (anti_blocking_blocked_cycles_nb_ > parameters_->anti_blocking_blocked_cycles_nb_threshold()) {
-            std::cout << "BLOCKED" << std::endl;
             pose_reached = target_pose_status_t::blocked;
         }
     }

@@ -3,6 +3,7 @@
 
 // System includes
 #include <cassert>
+#include <iostream>
 
 #include "PB_Menu.hpp"
 

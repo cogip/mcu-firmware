@@ -21,6 +21,9 @@
 #include <ztimer.h>
 #include <motor_driver.h>
 
+// System includes
+#include <iostream>
+
 namespace cogip {
 namespace pf {
 namespace actuators {

@@ -7,4 +7,6 @@ message PB_PathPose {
     uint32 max_speed_ratio_linear = 2;
     uint32 max_speed_ratio_angular = 3;
     bool allow_reverse = 4;
+    bool bypass_anti_blocking = 5;
+    uint32 timeout_ms = 6;
 }

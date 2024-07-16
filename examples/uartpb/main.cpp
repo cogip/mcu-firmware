@@ -4,6 +4,9 @@
 #include "thread.h"
 #include "ztimer.h"
 
+// System includes
+#include <iostream>
+
 // Projet includes
 #include "shell_menu/shell_menu.hpp"
 

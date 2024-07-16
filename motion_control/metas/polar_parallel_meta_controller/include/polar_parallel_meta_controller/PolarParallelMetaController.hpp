@@ -72,8 +72,14 @@ protected:
         outputs_[0] = linear_ctrl->output(0);
         // Angular command
         outputs_[1] = angular_ctrl->output(0);
-        // Pose reached has been set by previous filter
-        outputs_[2] = inputs_[8];
+        // Pose reached has been set by previous filter except if blocked
+        if ((linear_ctrl->output(1) == (double)target_pose_status_t::blocked)
+            || (angular_ctrl->output(1) == (double)target_pose_status_t::blocked)) {
+            outputs_[2] = (double)target_pose_status_t::blocked;
+        }
+        else {
+            outputs_[2] = inputs_[8];
+        }
     };
 };
 

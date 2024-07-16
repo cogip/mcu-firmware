@@ -4,6 +4,9 @@
 // Project includes
 #include "utils.hpp"
 
+// System includes
+#include <iostream>
+
 namespace cogip {
 
 namespace shell {
