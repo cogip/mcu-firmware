@@ -178,15 +178,21 @@ $(document).ready(function(){initNavTree('PolarParallelMetaController_8hpp_sourc
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classcogip_1_1motion__control_1_1Controller.html#ad2c4d5d95ff8aaa87060c31ce1fcf678">outputs_</a>[0] = linear_ctrl-&gt;<a class="code" href="classcogip_1_1motion__control_1_1BaseController.html#af18636e267dd2e83aefaba203a8c38d4">output</a>(0);</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="comment">// Angular command</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="code" href="classcogip_1_1motion__control_1_1Controller.html#ad2c4d5d95ff8aaa87060c31ce1fcf678">outputs_</a>[1] = angular_ctrl-&gt;<a class="code" href="classcogip_1_1motion__control_1_1BaseController.html#af18636e267dd2e83aefaba203a8c38d4">output</a>(0);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="comment">// Pose reached has been set by previous filter</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="code" href="classcogip_1_1motion__control_1_1Controller.html#ad2c4d5d95ff8aaa87060c31ce1fcf678">outputs_</a>[2] = <a class="code" href="classcogip_1_1motion__control_1_1Controller.html#a049f12c8a06be860045e1d5ed1e12a46">inputs_</a>[8];</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    };</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;};</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace motion_control</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="comment">// Pose reached has been set by previous filter except if blocked</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">if</span> ((linear_ctrl-&gt;<a class="code" href="classcogip_1_1motion__control_1_1BaseController.html#af18636e267dd2e83aefaba203a8c38d4">output</a>(1) == (<span class="keywordtype">double</span>)target_pose_status_t::blocked)</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            || (angular_ctrl-&gt;<a class="code" href="classcogip_1_1motion__control_1_1BaseController.html#af18636e267dd2e83aefaba203a8c38d4">output</a>(1) == (<span class="keywordtype">double</span>)target_pose_status_t::blocked)) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <a class="code" href="classcogip_1_1motion__control_1_1Controller.html#ad2c4d5d95ff8aaa87060c31ce1fcf678">outputs_</a>[2] = (double)target_pose_status_t::blocked;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <a class="code" href="classcogip_1_1motion__control_1_1Controller.html#ad2c4d5d95ff8aaa87060c31ce1fcf678">outputs_</a>[2] = <a class="code" href="classcogip_1_1motion__control_1_1Controller.html#a049f12c8a06be860045e1d5ed1e12a46">inputs_</a>[8];</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    };</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;} <span class="comment">// namespace motion_control</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasscogip_1_1motion__control_1_1BaseController_html_af18636e267dd2e83aefaba203a8c38d4"><div class="ttname"><a href="classcogip_1_1motion__control_1_1BaseController.html#af18636e267dd2e83aefaba203a8c38d4">cogip::motion_control::BaseController::output</a></div><div class="ttdeci">virtual double output(size_t index) const =0</div><div class="ttdoc">Get output at given index return output.</div></div>
@@ -202,7 +208,7 @@ $(document).ready(function(){initNavTree('PolarParallelMetaController_8hpp_sourc
 <div class="ttc" id="aclasscogip_1_1motion__control_1_1BaseController_html"><div class="ttname"><a href="classcogip_1_1motion__control_1_1BaseController.html">cogip::motion_control::BaseController</a></div><div class="ttdoc">All controllers, filters and metas inherit from this class.</div><div class="ttdef"><b>Definition:</b> <a href="BaseController_8hpp_source.html#l00036">BaseController.hpp:36</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu May 2 2024 22:51:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jul 16 2024 12:30:16 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dualpidmetacontroller_787',['DualPIDMetaController',['../classcogip_1_1motion__control_1_1DualPIDMetaController.html',1,'cogip::motion_control']]]
+  ['dualpidmetacontroller_789',['DualPIDMetaController',['../classcogip_1_1motion__control_1_1DualPIDMetaController.html',1,'cogip::motion_control']]]
 ];

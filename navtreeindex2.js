@@ -1,5 +1,8 @@
 var NAVTREEINDEX2 =
 {
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284":[1,0,0,5,0,0,4,26],
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#acb7bb210e9af7d2c6e9ea6beee3fc858":[1,0,0,5,0,0,4,6],
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#acb7bb210e9af7d2c6e9ea6beee3fc858":[1,0,0,5,0,0,4,8],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#acb7bb210e9af7d2c6e9ea6beee3fc858":[1,0,0,5,0,0,4,7],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ad04d0bfcd2fb704d0e5cc0a816f061f9":[1,0,0,5,0,0,4,12],
 "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ad04d0bfcd2fb704d0e5cc0a816f061f9":[1,0,0,5,0,0,4,13],
@@ -16,17 +19,17 @@ var NAVTREEINDEX2 =
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a0400f871759d1c9ffa169d3f1c906563":[1,0,0,5,0,1,1,1],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a0a660ed8af351839cf24ff7224673f50":[1,0,0,5,0,1,1,4],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a0a660ed8af351839cf24ff7224673f50":[1,0,0,5,0,1,1,5],
-"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a1591170b08ab7a87ac1186352227976f":[1,0,0,5,0,1,1,10],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a1591170b08ab7a87ac1186352227976f":[1,0,0,5,0,1,1,11],
-"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a29b953b3eacb20360af38c6800dc8ac9":[1,0,0,5,0,1,1,12],
+"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a1591170b08ab7a87ac1186352227976f":[1,0,0,5,0,1,1,10],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a29b953b3eacb20360af38c6800dc8ac9":[1,0,0,5,0,1,1,13],
+"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a29b953b3eacb20360af38c6800dc8ac9":[1,0,0,5,0,1,1,12],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a40ef3bb5ccaa396bc9a8aa95d1412c1e":[1,0,0,5,0,1,1,8],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a40ef3bb5ccaa396bc9a8aa95d1412c1e":[1,0,0,5,0,1,1,9],
-"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a935801c223586d1e470806260dca3205":[1,0,0,5,0,1,1,7],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a935801c223586d1e470806260dca3205":[1,0,0,5,0,1,1,6],
+"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a935801c223586d1e470806260dca3205":[1,0,0,5,0,1,1,7],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a9c9bc1c730d22e10e0ddc380dfde4dfc":[1,0,0,5,0,1,1,14],
-"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ab3849b1cabc5b0f3d52fe8d6b47b0329":[1,0,0,5,0,1,1,2],
 "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ab3849b1cabc5b0f3d52fe8d6b47b0329":[1,0,0,5,0,1,1,3],
+"classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ab3849b1cabc5b0f3d52fe8d6b47b0329":[1,0,0,5,0,1,1,2],
 "classcogip_1_1pid_1_1PID.html":[1,0,0,6,0],
 "classcogip_1_1pid_1_1PID.html#a0b68a14454a214b2c560f205bfb0f736":[1,0,0,6,0,4],
 "classcogip_1_1pid_1_1PID.html#a126df76810d5613966b1e5a9880b4f09":[1,0,0,6,0,13],
@@ -246,8 +249,5 @@ var NAVTREEINDEX2 =
 "dir_c512c93b25ea024149421de6ccab62ec.html":[2,0,2,3,0],
 "dir_c57a220242775ba21adbe2cb486ab59e.html":[2,0,2,1,1],
 "dir_ce4e3626dba75e748a88f2d2a55f6fcc.html":[2,0,2,6,0],
-"dir_cf09650fddc28e8508ce5e59f082adc5.html":[2,0,2,1],
-"dir_d5e7f95fea70e87c66f831dd1231098e.html":[2,0,3,1,0],
-"dir_d63c9906be41e90f6d291cee489dbd42.html":[2,0,2,1,0,0,0],
-"dir_da7720d374a03ee631a9b5a0a632d065.html":[2,0,1,0,0]
+"dir_cf09650fddc28e8508ce5e59f082adc5.html":[2,0,2,1]
 };

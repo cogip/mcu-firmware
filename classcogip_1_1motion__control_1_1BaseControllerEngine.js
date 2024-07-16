@@ -21,6 +21,7 @@ var classcogip_1_1motion__control_1_1BaseControllerEngine =
     [ "controller_thread_stack_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a7dfd0f171cffb0fdb22921caa8cfafc9", null ],
     [ "current_cycle_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a9b86c82b2e2ec84471c66d383d1b3233", null ],
     [ "enable_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ab895a40f3be30c40a52350846dbe7d1b", null ],
+    [ "mutex", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a730d467e9a31b2dcdd49405da5605ba0", null ],
     [ "pose_reached_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#af83609958b49ab2becbf489963bf5395", null ],
     [ "timeout_cycle_number_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a44e317f0c809da2ec8ce8e9a663fd4b5", null ],
     [ "timeout_enable_", "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a3b612497f17016f2e68c7373e6ed4e21", null ]

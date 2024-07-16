@@ -52,13 +52,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcogip_1_1motion__control_1_1BaseControllerEngine.html#accfe7bd003d796d33fead0069b088d11",
-"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#acb7bb210e9af7d2c6e9ea6beee3fc858",
-"dir_e5c1b1d8bab0718c16d961f31ff6f438.html",
-"group__driver__lx__servo.html#ga4d7fd5fd1a3905580bfab95ee11e4b71",
-"group__platforms__pami.html#ga9913d7c0d202417eecb4661db31e4522",
-"obstacles_2include_2obstacles_2Polygon_8hpp.html",
-"pf-robot-motors_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3"
+"classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac79dd6fea9f77adc74a3ddf7671f7c57",
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284",
+"dir_d5e7f95fea70e87c66f831dd1231098e.html",
+"group__driver__lx__servo.html#ga24f646ddde9a08a589bfecb2bc2ae611",
+"group__platforms__pami.html#ga74d22d5c450365dc5f4ae75b8b6ff432",
+"lx__writer_8h.html#ac883fa80e720c1416abdd40d77a67d2b",
+"pf-robot-motors_2include_2pf__actuators_8hpp.html#a38ba35545eb0c9c3d4b896ab8ca5b89a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

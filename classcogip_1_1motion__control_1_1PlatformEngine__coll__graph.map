@@ -1,5 +1,5 @@
 <map id="cogip::motion_control::PlatformEngine" name="cogip::motion_control::PlatformEngine">
-<area shape="rect" id="node1" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="35,771,198,965"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseControllerEngine.html" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,321,228,721"/>
+<area shape="rect" id="node1" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="35,785,198,980"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1BaseControllerEngine.html" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,321,228,736"/>
 <area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="35,5,198,259"/>
 </map>

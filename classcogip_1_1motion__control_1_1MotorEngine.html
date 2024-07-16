@@ -141,8 +141,8 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1Motor
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classcogip_1_1motion__control_1_1MotorEngine__inherit__graph.png" border="0" usemap="#cogip_1_1motion__control_1_1MotorEngine_inherit__map" alt="Inheritance graph"/></div>
 <map name="cogip_1_1motion__control_1_1MotorEngine_inherit__map" id="cogip_1_1motion__control_1_1MotorEngine_inherit__map">
-<area shape="rect" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="35,468,198,663"/>
-<area shape="rect" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,5,228,420"/>
+<area shape="rect" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="35,483,198,677"/>
+<area shape="rect" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,5,228,435"/>
 </map>
 </div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -152,8 +152,8 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1Motor
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classcogip_1_1motion__control_1_1MotorEngine__coll__graph.png" border="0" usemap="#cogip_1_1motion__control_1_1MotorEngine_coll__map" alt="Collaboration graph"/></div>
 <map name="cogip_1_1motion__control_1_1MotorEngine_coll__map" id="cogip_1_1motion__control_1_1MotorEngine_coll__map">
-<area shape="rect" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="35,771,198,965"/>
-<area shape="rect" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,321,228,721"/>
+<area shape="rect" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="35,785,198,980"/>
+<area shape="rect" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,321,228,736"/>
 <area shape="rect" href="classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="35,5,198,259"/>
 </map>
 </div>
@@ -276,6 +276,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html#a7dfd0f171cffb0fdb22921caa8cfafc9">controller_thread_stack_</a> [THREAD_STACKSIZE_LARGE]</td></tr>
 <tr class="memdesc:a7dfd0f171cffb0fdb22921caa8cfafc9 inherit pro_attribs_classcogip_1_1motion__control_1_1BaseControllerEngine"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html" title="A controller transforms input data to outputs.">Controller</a> thread stack. <br /></td></tr>
 <tr class="separator:a7dfd0f171cffb0fdb22921caa8cfafc9 inherit pro_attribs_classcogip_1_1motion__control_1_1BaseControllerEngine"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a730d467e9a31b2dcdd49405da5605ba0 inherit pro_attribs_classcogip_1_1motion__control_1_1BaseControllerEngine"><td class="memItemLeft" align="right" valign="top"><a id="a730d467e9a31b2dcdd49405da5605ba0"></a>
+mutex_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html#a730d467e9a31b2dcdd49405da5605ba0">mutex</a></td></tr>
+<tr class="memdesc:a730d467e9a31b2dcdd49405da5605ba0 inherit pro_attribs_classcogip_1_1motion__control_1_1BaseControllerEngine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting engine loop. <br /></td></tr>
+<tr class="separator:a730d467e9a31b2dcdd49405da5605ba0 inherit pro_attribs_classcogip_1_1motion__control_1_1BaseControllerEngine"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aad0c32292e8d38cfb406e251514fe2de"></a>
@@ -474,7 +478,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu May 2 2024 22:51:43 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jul 16 2024 12:30:16 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

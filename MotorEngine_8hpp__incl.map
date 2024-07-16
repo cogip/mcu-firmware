@@ -1,13 +1,13 @@
 <map id="motion_control/engines/motor_engine/include/motor_engine/MotorEngine.hpp" name="motion_control/engines/motor_engine/include/motor_engine/MotorEngine.hpp">
-<area shape="rect" id="node1" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="79,5,309,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="50,117,162,143"/>
-<area shape="rect" id="node3" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="186,109,381,151"/>
-<area shape="rect" id="node4" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="140,199,253,225"/>
-<area shape="rect" id="node10" href="$thread_8hpp.html" title="Public API for thread module." alt="" coords="299,199,438,225"/>
-<area shape="rect" id="node5" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="81,273,227,300"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,348,100,375"/>
-<area shape="rect" id="node8" href="$utils_8hpp_source.html" title=" " alt="" coords="251,273,329,300"/>
-<area shape="rect" id="node6" title=" " alt="" coords="142,348,222,375"/>
-<area shape="rect" id="node9" title=" " alt="" coords="254,348,326,375"/>
-<area shape="rect" id="node11" title=" " alt="" coords="354,273,429,300"/>
+<area shape="rect" id="node1" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="155,5,385,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="126,117,238,143"/>
+<area shape="rect" id="node3" href="$BaseControllerEngine_8hpp.html" title="Base class for engines." alt="" coords="262,109,457,151"/>
+<area shape="rect" id="node4" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="145,199,259,225"/>
+<area shape="rect" id="node9" href="$thread_8hpp.html" title="Public API for thread module." alt="" coords="290,199,429,225"/>
+<area shape="rect" id="node11" title=" " alt="" coords="453,199,529,225"/>
+<area shape="rect" id="node5" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="5,273,151,300"/>
+<area shape="rect" id="node7" title=" " alt="" coords="141,348,236,375"/>
+<area shape="rect" id="node8" href="$utils_8hpp_source.html" title=" " alt="" coords="227,273,305,300"/>
+<area shape="rect" id="node6" title=" " alt="" coords="37,348,117,375"/>
+<area shape="rect" id="node10" title=" " alt="" coords="330,273,405,300"/>
 </map>

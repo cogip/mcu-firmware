@@ -4,10 +4,9 @@
 <area shape="rect" id="node3" title=" " alt="" coords="5,213,100,240"/>
 <area shape="rect" id="node4" href="$BaseMetaController_8hpp.html" title="Base class for meta controllers." alt="" coords="125,213,303,240"/>
 <area shape="rect" id="node5" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="220,288,333,315"/>
-<area shape="rect" id="node11" href="$MetaControllerParameters_8hpp.html" title="Meta Controller parameters." alt="" coords="378,213,599,240"/>
-<area shape="rect" id="node6" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="204,363,349,389"/>
-<area shape="rect" id="node8" title=" " alt="" coords="128,437,223,464"/>
-<area shape="rect" id="node9" href="$utils_8hpp_source.html" title=" " alt="" coords="373,363,452,389"/>
-<area shape="rect" id="node7" title=" " alt="" coords="265,437,345,464"/>
-<area shape="rect" id="node10" title=" " alt="" coords="377,437,449,464"/>
+<area shape="rect" id="node10" href="$MetaControllerParameters_8hpp.html" title="Meta Controller parameters." alt="" coords="378,213,599,240"/>
+<area shape="rect" id="node6" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="93,363,239,389"/>
+<area shape="rect" id="node8" title=" " alt="" coords="229,437,324,464"/>
+<area shape="rect" id="node9" href="$utils_8hpp_source.html" title=" " alt="" coords="315,363,393,389"/>
+<area shape="rect" id="node7" title=" " alt="" coords="125,437,205,464"/>
 </map>

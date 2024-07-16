@@ -131,8 +131,8 @@ $(document).ready(function(){initNavTree('trigonometry_8h_source.html',''); init
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#define square(__x) (__x * __x)</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define RAD2DEG(a) (a * 360.0 / (2.0 * M_PI))</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define DEG2RAD(a) (a * (2.0 * M_PI) / 360.0)</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define RAD2DEG(a) ((a * 180.0) / M_PI)</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define DEG2RAD(a) ((a * M_PI) / 180.0)</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
@@ -172,7 +172,7 @@ $(document).ready(function(){initNavTree('trigonometry_8h_source.html',''); init
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu May 2 2024 22:51:42 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jul 16 2024 12:30:16 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

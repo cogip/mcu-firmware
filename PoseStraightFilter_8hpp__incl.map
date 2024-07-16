@@ -1,10 +1,9 @@
 <map id="motion_control/filters/pose_straight_filter/include/pose_straight_filter/PoseStraightFilter.hpp" name="motion_control/filters/pose_straight_filter/include/pose_straight_filter/PoseStraightFilter.hpp">
-<area shape="rect" id="node1" title="Breaks down a movement into a straight trajectory." alt="" coords="169,5,374,76"/>
-<area shape="rect" id="node2" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="62,124,246,165"/>
-<area shape="rect" id="node8" href="$PoseStraightFilterParameters_8hpp.html" title="Movements switch thresholds." alt="" coords="271,131,509,158"/>
-<area shape="rect" id="node3" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="81,213,227,240"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,288,100,315"/>
-<area shape="rect" id="node6" href="$utils_8hpp_source.html" title=" " alt="" coords="251,213,329,240"/>
-<area shape="rect" id="node4" title=" " alt="" coords="142,288,222,315"/>
-<area shape="rect" id="node7" title=" " alt="" coords="254,288,326,315"/>
+<area shape="rect" id="node1" title="Breaks down a movement into a straight trajectory." alt="" coords="203,5,409,76"/>
+<area shape="rect" id="node2" href="$Controller_8hpp.html" title="A simple controller." alt="" coords="97,124,281,165"/>
+<area shape="rect" id="node7" href="$PoseStraightFilterParameters_8hpp.html" title="Movements switch thresholds." alt="" coords="305,131,544,158"/>
+<area shape="rect" id="node3" href="$BaseController_8hpp.html" title="Base class for all controllers, meta&#45;controllers and engines." alt="" coords="5,213,151,240"/>
+<area shape="rect" id="node5" title=" " alt="" coords="141,288,236,315"/>
+<area shape="rect" id="node6" href="$utils_8hpp_source.html" title=" " alt="" coords="227,213,305,240"/>
+<area shape="rect" id="node4" title=" " alt="" coords="37,288,117,315"/>
 </map>

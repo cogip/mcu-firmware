@@ -234,13 +234,14 @@ var NAVTREEINDEX0 =
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a00841a9d590c1837a9f246b7ae33cffe":[1,0,0,2,1,13],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a13ae4a799c3cf36d48994012c1e31d89":[1,0,0,2,1,9],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a39a0bb3efd6f1ac6d0fef215f8dc4fc9":[1,0,0,2,1,15],
-"classcogip_1_1motion__control_1_1BaseControllerEngine.html#a3b612497f17016f2e68c7373e6ed4e21":[1,0,0,2,1,23],
-"classcogip_1_1motion__control_1_1BaseControllerEngine.html#a44e317f0c809da2ec8ce8e9a663fd4b5":[1,0,0,2,1,22],
+"classcogip_1_1motion__control_1_1BaseControllerEngine.html#a3b612497f17016f2e68c7373e6ed4e21":[1,0,0,2,1,24],
+"classcogip_1_1motion__control_1_1BaseControllerEngine.html#a44e317f0c809da2ec8ce8e9a663fd4b5":[1,0,0,2,1,23],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a4a682cb9385107c95d715907d1644fd3":[1,0,0,2,1,11],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a56897ad0ad7d4ceb5233a6a2b84360c2":[1,0,0,2,1,10],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a5694ed1bd5e5d113e84adb355f234f72":[1,0,0,2,1,6],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a6bbd2c60a3b1e0988b7b4f7bc2f8bd41":[1,0,0,2,1,5],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a6f8ab3a68060a74333c61da7c2e18d88":[1,0,0,2,1,2],
+"classcogip_1_1motion__control_1_1BaseControllerEngine.html#a730d467e9a31b2dcdd49405da5605ba0":[1,0,0,2,1,21],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a76083da85542be47a74af9560acf6bca":[1,0,0,2,1,7],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a7dfd0f171cffb0fdb22921caa8cfafc9":[1,0,0,2,1,18],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a8531509f494e436671ffc342d437fc7b":[1,0,0,2,1,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#a9b86c82b2e2ec84471c66d383d1b3233":[1,0,0,2,1,19],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#aa4259848b24f46faf7eb249717739803":[1,0,0,2,1,4],
 "classcogip_1_1motion__control_1_1BaseControllerEngine.html#ab895a40f3be30c40a52350846dbe7d1b":[1,0,0,2,1,20],
-"classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac5f48b4b2e4264ed7a7d06365621f64e":[1,0,0,2,1,1],
-"classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac79dd6fea9f77adc74a3ddf7671f7c57":[1,0,0,2,1,0]
+"classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac5f48b4b2e4264ed7a7d06365621f64e":[1,0,0,2,1,1]
 };

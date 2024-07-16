@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1BaseC
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for controllers engine. The engine is responsible of launching the controllers chain. </p>
 
-<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00023">23</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00026">26</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -143,9 +143,9 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1BaseC
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classcogip_1_1motion__control_1_1BaseControllerEngine__inherit__graph.png" border="0" usemap="#cogip_1_1motion__control_1_1BaseControllerEngine_inherit__map" alt="Inheritance graph"/></div>
 <map name="cogip_1_1motion__control_1_1BaseControllerEngine_inherit__map" id="cogip_1_1motion__control_1_1BaseControllerEngine_inherit__map">
-<area shape="rect" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="69,5,291,420"/>
-<area shape="rect" href="classcogip_1_1motion__control_1_1MotorEngine.html" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="5,468,168,663"/>
-<area shape="rect" href="classcogip_1_1motion__control_1_1PlatformEngine.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="192,468,355,663"/>
+<area shape="rect" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="69,5,291,435"/>
+<area shape="rect" href="classcogip_1_1motion__control_1_1MotorEngine.html" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="5,483,168,677"/>
+<area shape="rect" href="classcogip_1_1motion__control_1_1PlatformEngine.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="192,483,355,677"/>
 </map>
 </div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -155,7 +155,7 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1BaseC
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classcogip_1_1motion__control_1_1BaseControllerEngine__coll__graph.png" border="0" usemap="#cogip_1_1motion__control_1_1BaseControllerEngine_coll__map" alt="Collaboration graph"/></div>
 <map name="cogip_1_1motion__control_1_1BaseControllerEngine_coll__map" id="cogip_1_1motion__control_1_1BaseControllerEngine_coll__map">
-<area shape="rect" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,321,228,721"/>
+<area shape="rect" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,321,228,736"/>
 <area shape="rect" href="classcogip_1_1motion__control_1_1BaseController.html" title="All controllers, filters and metas inherit from this class." alt="" coords="35,5,198,259"/>
 </map>
 </div>
@@ -259,6 +259,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html#a7dfd0f171cffb0fdb22921caa8cfafc9">controller_thread_stack_</a> [THREAD_STACKSIZE_LARGE]</td></tr>
 <tr class="memdesc:a7dfd0f171cffb0fdb22921caa8cfafc9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html" title="A controller transforms input data to outputs.">Controller</a> thread stack. <br /></td></tr>
 <tr class="separator:a7dfd0f171cffb0fdb22921caa8cfafc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a730d467e9a31b2dcdd49405da5605ba0"><td class="memItemLeft" align="right" valign="top"><a id="a730d467e9a31b2dcdd49405da5605ba0"></a>
+mutex_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1BaseControllerEngine.html#a730d467e9a31b2dcdd49405da5605ba0">mutex</a></td></tr>
+<tr class="memdesc:a730d467e9a31b2dcdd49405da5605ba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mutex protecting engine loop. <br /></td></tr>
+<tr class="separator:a730d467e9a31b2dcdd49405da5605ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a8531509f494e436671ffc342d437fc7b"></a>
@@ -319,7 +323,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00074">74</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00080">80</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -366,7 +370,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00069">69</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00075">75</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-3-summary" class="dynsummary" style="display:block;">
@@ -413,7 +417,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00079">79</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00085">85</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary" style="display:block;">
@@ -460,7 +464,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00084">84</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BaseControllerEngine_8hpp_source.html#l00090">90</a> of file <a class="el" href="BaseControllerEngine_8hpp_source.html">BaseControllerEngine.hpp</a>.</p>
 <div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-5-summary" class="dynsummary" style="display:block;">
@@ -482,7 +486,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Thu May 2 2024 22:51:43 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Tue Jul 16 2024 12:30:16 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

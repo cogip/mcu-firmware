@@ -1,5 +1,5 @@
 <map id="cogip::path::Pose" name="cogip::path::Pose">
-<area shape="rect" id="node1" title="Position class as used in Path." alt="" coords="5,535,220,729"/>
+<area shape="rect" id="node1" title="Position class as used in Path." alt="" coords="5,535,220,759"/>
 <area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Pose.html" title="A robot position." alt="" coords="25,292,200,487"/>
 <area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="41,5,184,244"/>
 </map>
