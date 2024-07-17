@@ -29,7 +29,7 @@ std::ostream& operator << (std::ostream& os, Enum id);
 class LxServo: public Actuator {
 public:
     /// Constructor.
-    LxServo(
+    explicit LxServo(
         cogip::pf::actuators::Enum id            ///< [in] servo id
     );
 
