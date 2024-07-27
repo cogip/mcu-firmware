@@ -16,10 +16,14 @@ var pf_robot_actuators_2include_2platform_8hpp =
     [ "pf_print_state", "group__platforms__pf-robot-actuators.html#gaaed945ac04303eef4f08d257f0a3c944", null ],
     [ "pf_set_copilot_connected", "group__platforms__pf-robot-actuators.html#gaf83cc53998c27d898d71f8a7e981fdc0", null ],
     [ "pf_trace_on", "group__platforms__pf-robot-actuators.html#ga1dc63a69bc06342aca5ca9cb42e784fa", null ],
+    [ "actuator_state_uuid", "group__platforms__pf-robot-actuators.html#gaf611c8c3e49c04143000f4923fcbaa12", null ],
+    [ "command_uuid", "group__platforms__pf-robot-actuators.html#ga6ae10c2e49e83beee7ddd754a170bc71", null ],
     [ "copilot_connected_uuid", "group__platforms__pf-robot-actuators.html#ga3ba5df5dc429c23d59b5de895082ac2c", null ],
     [ "copilot_disconnected_uuid", "group__platforms__pf-robot-actuators.html#ga7e9d30ba46d7cb7182e9538fc77c7597", null ],
     [ "game_end_uuid", "group__platforms__pf-robot-actuators.html#gaf210a55ed575441b9a624c62c044d8ba", null ],
     [ "game_reset_uuid", "group__platforms__pf-robot-actuators.html#ga73136461923ab6ba71b1b611c75d6aa1", null ],
     [ "game_start_uuid", "group__platforms__pf-robot-actuators.html#gaed4e99a3892833984f3d9cafc9e85c8d", null ],
-    [ "reset_uuid", "group__platforms__pf-robot-actuators.html#ga56ff04153728c2fba935d5303b46aaa1", null ]
+    [ "reset_uuid", "group__platforms__pf-robot-actuators.html#ga56ff04153728c2fba935d5303b46aaa1", null ],
+    [ "thread_start_uuid", "group__platforms__pf-robot-actuators.html#ga489fb59d3eb01d047253cdd95e62b629", null ],
+    [ "thread_stop_uuid", "group__platforms__pf-robot-actuators.html#ga7d243a02919488ba6b9b85e220b908c3", null ]
 ];

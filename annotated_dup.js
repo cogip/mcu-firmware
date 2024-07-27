@@ -52,7 +52,6 @@ var annotated_dup =
         [ "actuators", null, [
           [ "positional_actuators", null, [
             [ "AnalogServo", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo" ],
-            [ "LxMotor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor" ],
             [ "Motor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor" ],
             [ "OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff" ],
             [ "PositionalActuator", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator" ]
@@ -62,6 +61,12 @@ var annotated_dup =
             [ "LxServo", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo" ]
           ] ],
           [ "Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", "classcogip_1_1pf_1_1actuators_1_1Actuator" ]
+        ] ],
+        [ "sensors", null, [
+          [ "bool_sensors", null, [
+            [ "BoolSensor", "classcogip_1_1pf_1_1sensors_1_1bool__sensors_1_1BoolSensor.html", "classcogip_1_1pf_1_1sensors_1_1bool__sensors_1_1BoolSensor" ]
+          ] ],
+          [ "Sensor", "classcogip_1_1pf_1_1sensors_1_1Sensor.html", "classcogip_1_1pf_1_1sensors_1_1Sensor" ]
         ] ]
       ] ],
       [ "pid", null, [

@@ -1,9 +1,8 @@
 <map id="platforms/pf&#45;pami/include/Actuator.hpp" name="platforms/pf&#45;pami/include/Actuator.hpp">
-<area shape="rect" id="node1" title="Base actuators class definition." alt="" coords="441,5,632,47"/>
-<area shape="rect" id="node2" href="$pf-pami_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="277,95,468,136"/>
-<area shape="rect" id="node6" href="$pf-pami_2include_2LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="607,95,797,136"/>
+<area shape="rect" id="node1" title="Base actuators class definition." alt="" coords="337,5,528,47"/>
+<area shape="rect" id="node2" href="$pf-pami_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="228,95,419,136"/>
+<area shape="rect" id="node5" href="$pf-pami_2include_2LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="447,95,637,136"/>
 <area shape="rect" id="node3" href="$pf-pami_2include_2AnalogServo_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="5,184,196,225"/>
-<area shape="rect" id="node4" href="$pf-pami_2include_2LxMotor_8hpp.html" title="C++ class representing a servomotor in continuous mode using lx_servo driver." alt="" coords="220,184,411,225"/>
-<area shape="rect" id="node5" href="$pf-pami_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="435,184,641,225"/>
-<area shape="rect" id="node7" href="$pf-pami_2include_2pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="665,184,856,225"/>
+<area shape="rect" id="node4" href="$pf-pami_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="220,184,427,225"/>
+<area shape="rect" id="node6" href="$pf-pami_2include_2pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="451,184,641,225"/>
 </map>

@@ -1,0 +1,5 @@
+<map id="platforms/pf&#45;robot&#45;actuators/include/Sensor.hpp" name="platforms/pf&#45;robot&#45;actuators/include/Sensor.hpp">
+<area shape="rect" id="node1" title="Base sensor class definition." alt="" coords="19,5,234,47"/>
+<area shape="rect" id="node2" href="$BoolSensor_8hpp.html" title="Boolean sensor class definition inheriting from base Sensor class." alt="" coords="5,95,248,136"/>
+<area shape="rect" id="node3" href="$pf__bool__sensors_8hpp.html" title="Generic definitions related to sensors." alt="" coords="49,184,205,240"/>
+</map>

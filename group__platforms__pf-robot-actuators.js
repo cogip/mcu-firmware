@@ -2,7 +2,6 @@ var group__platforms__pf_robot_actuators =
 [
     [ "Actuator.hpp", "pf-robot-actuators_2include_2Actuator_8hpp.html", null ],
     [ "AnalogServo.hpp", "pf-robot-actuators_2include_2AnalogServo_8hpp.html", null ],
-    [ "LxMotor.hpp", "pf-robot-actuators_2include_2LxMotor_8hpp.html", null ],
     [ "LxServo.hpp", "pf-robot-actuators_2include_2LxServo_8hpp.html", null ],
     [ "Motor.hpp", "pf-robot-actuators_2include_2Motor_8hpp.html", null ],
     [ "OnOff.hpp", "OnOff_8hpp.html", null ],
@@ -11,6 +10,7 @@ var group__platforms__pf_robot_actuators =
     [ "pf_servos.hpp", "pf-robot-actuators_2include_2pf__servos_8hpp.html", null ],
     [ "platform.hpp", "pf-robot-actuators_2include_2platform_8hpp.html", null ],
     [ "PositionalActuator.hpp", "pf-robot-actuators_2include_2PositionalActuator_8hpp.html", null ],
+    [ "Sensor.hpp", "Sensor_8hpp.html", null ],
     [ "pf_positional_actuators.hpp", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html", null ],
     [ "PositionalActuator.hpp", "pf-robot-motors_2include_2PositionalActuator_8hpp.html", null ],
     [ "AVOIDANCE_BORDER_X_MAX", "group__platforms__pf-robot-actuators.html#ga5cd8534245dd8c7715965af083bd13c2", null ],

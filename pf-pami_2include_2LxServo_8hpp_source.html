@@ -143,59 +143,67 @@ $(document).ready(function(){initNavTree('pf-pami_2include_2LxServo_8hpp_source.
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>actuators {</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>servos {</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">enum class</span> Enum: <a class="code" href="group__driver__lx-servo.html#ga42631c7208ac426abd31e35e868e7544">lx_id_t</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;std::ostream&amp; operator &lt;&lt; (std::ostream&amp; os, Enum <span class="keywordtype">id</span>);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;std::ostream&amp; operator &lt;&lt; (std::ostream&amp; os, Enum id);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html">   31</a></span>&#160;class LxServo: public Actuator {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;public:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    LxServo(</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        Enum id,           </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        GroupEnum group,   </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        uint8_t order = 0  </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    );</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    lx_comm_error_t move(</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        const uint16_t position, </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        const uint16_t time = 0  </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    );</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    lx_comm_error_t move_wait(</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        const uint16_t position, </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        const uint16_t time = 0  </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    );</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html">   29</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html">LxServo</a>: <span class="keyword">public</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">Actuator</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a82dd9be7242b94b45a1daa0a0c28485c">LxServo</a>(</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        cogip::pf::actuators::Enum <span class="keywordtype">id</span>            </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    );</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca">lx_comm_error_t</a> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ab3849b1cabc5b0f3d52fe8d6b47b0329">move</a>(</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">const</span> uint16_t position, </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">const</span> uint16_t time = 0  </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    );</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca">lx_comm_error_t</a> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a40ef3bb5ccaa396bc9a8aa95d1412c1e">move_wait</a>(</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">const</span> uint16_t position, </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">const</span> uint16_t time = 0  </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    );</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca">lx_comm_error_t</a> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a0a660ed8af351839cf24ff7224673f50">move_start</a>();</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    lx_comm_error_t move_start();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca">lx_comm_error_t</a> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a935801c223586d1e470806260dca3205">move_stop</a>();</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    lx_comm_error_t move_stop();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    int16_t <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a29b953b3eacb20360af38c6800dc8ac9">pos_read</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    int16_t pos_read() const;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    void pb_copy(</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        PB_Servo &amp; pb_servo  </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    ) const;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    static uart_half_duplex_t *lx_stream;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;private:</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    Enum id_;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    lx_t lx_;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    uint16_t command_;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;};</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <span class="comment">// namespace servos</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace actuators</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// namespace pf</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a1591170b08ab7a87ac1186352227976f">pb_copy</a>(</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        PB_Servo &amp; pb_servo  </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ac86fb7f9393e360f5d1dd9e271c4231e">send_state</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">static</span> uart_half_duplex_t *lx_stream;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="structlx__t.html">lx_t</a> lx_;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    uint16_t command_;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;};</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="comment">// namespace servos</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;} <span class="comment">// namespace actuators</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <span class="comment">// namespace pf</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_a935801c223586d1e470806260dca3205"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a935801c223586d1e470806260dca3205">cogip::pf::actuators::servos::LxServo::move_stop</a></div><div class="ttdeci">lx_comm_error_t move_stop()</div><div class="ttdoc">Stop current movement.</div></div>
 <div class="ttc" id="apf-pami_2include_2Actuator_8hpp_html"><div class="ttname"><a href="pf-pami_2include_2Actuator_8hpp.html">Actuator.hpp</a></div><div class="ttdoc">Base actuators class definition.</div></div>
-<div class="ttc" id="agroup__driver__lx-servo_html_ga42631c7208ac426abd31e35e868e7544"><div class="ttname"><a href="group__driver__lx-servo.html#ga42631c7208ac426abd31e35e868e7544">lx_id_t</a></div><div class="ttdeci">uint8_t lx_id_t</div><div class="ttdoc">device id type</div><div class="ttdef"><b>Definition:</b> <a href="lx__servo_8h_source.html#l00042">lx_servo.h:42</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">cogip::pf::actuators::Actuator</a></div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2Actuator_8hpp_source.html#l00022">Actuator.hpp:22</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_a29b953b3eacb20360af38c6800dc8ac9"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a29b953b3eacb20360af38c6800dc8ac9">cogip::pf::actuators::servos::LxServo::pos_read</a></div><div class="ttdeci">int16_t pos_read() const</div><div class="ttdoc">Read current position.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_ab3849b1cabc5b0f3d52fe8d6b47b0329"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ab3849b1cabc5b0f3d52fe8d6b47b0329">cogip::pf::actuators::servos::LxServo::move</a></div><div class="ttdeci">lx_comm_error_t move(const uint16_t position, const uint16_t time=0)</div><div class="ttdoc">Go to the position in a given time.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_a40ef3bb5ccaa396bc9a8aa95d1412c1e"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a40ef3bb5ccaa396bc9a8aa95d1412c1e">cogip::pf::actuators::servos::LxServo::move_wait</a></div><div class="ttdeci">lx_comm_error_t move_wait(const uint16_t position, const uint16_t time=0)</div><div class="ttdoc">Register position and moving time.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html">cogip::pf::actuators::servos::LxServo</a></div><div class="ttdoc">Class representing a servomotor using lx_servo driver.</div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2LxServo_8hpp_source.html#l00029">LxServo.hpp:29</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_a82dd9be7242b94b45a1daa0a0c28485c"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a82dd9be7242b94b45a1daa0a0c28485c">cogip::pf::actuators::servos::LxServo::LxServo</a></div><div class="ttdeci">LxServo(cogip::pf::actuators::Enum id)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="agroup__driver__lx-servo_html_ga0cfccd74c85ef456907b71eb398ae3ca"><div class="ttname"><a href="group__driver__lx-servo.html#ga0cfccd74c85ef456907b71eb398ae3ca">lx_comm_error_t</a></div><div class="ttdeci">lx_comm_error_t</div><div class="ttdoc">Serial communication errors.</div><div class="ttdef"><b>Definition:</b> <a href="lx__servo_8h_source.html#l00057">lx_servo.h:57</a></div></div>
 <div class="ttc" id="alx__servo_8h_html"><div class="ttname"><a href="lx__servo_8h.html">lx_servo.h</a></div><div class="ttdoc">LX servomotors interface API definition.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_ac86fb7f9393e360f5d1dd9e271c4231e"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#ac86fb7f9393e360f5d1dd9e271c4231e">cogip::pf::actuators::servos::LxServo::send_state</a></div><div class="ttdeci">void send_state(void)</div><div class="ttdoc">Send actuator state on communication bus.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_a1591170b08ab7a87ac1186352227976f"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a1591170b08ab7a87ac1186352227976f">cogip::pf::actuators::servos::LxServo::pb_copy</a></div><div class="ttdeci">void pb_copy(PB_Servo &amp;pb_servo) const</div><div class="ttdoc">Copy data to Protobuf message.</div></div>
+<div class="ttc" id="astructlx__t_html"><div class="ttname"><a href="structlx__t.html">lx_t</a></div><div class="ttdoc">Descriptor struct for a lx-servos device.</div><div class="ttdef"><b>Definition:</b> <a href="lx__servo_8h_source.html#l00049">lx_servo.h:49</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1servos_1_1LxServo_html_a0a660ed8af351839cf24ff7224673f50"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html#a0a660ed8af351839cf24ff7224673f50">cogip::pf::actuators::servos::LxServo::move_start</a></div><div class="ttdeci">lx_comm_error_t move_start()</div><div class="ttdoc">Go to registered position.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jul 16 2024 15:55:05 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat Jul 27 2024 09:02:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

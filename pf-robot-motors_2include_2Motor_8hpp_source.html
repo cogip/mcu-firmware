@@ -160,67 +160,68 @@ $(document).ready(function(){initNavTree('pf-robot-motors_2include_2Motor_8hpp_s
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;class Motor: public PositionalActuator {</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;public:</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    explicit Motor(</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        Enum id,                                </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        GroupEnum group,                        </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        uint8_t order = 0,                      </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        uint32_t default_timeout_period = 0,    </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        motor_driver_t *motor_driver = nullptr, </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        uint8_t motor_id = 0,                   </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        gpio_t clear_overload_pin = GPIO_UNDEF, </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        double target_speed = 0,                </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        cogip::motion_control::PosePIDControllerParameters *pose_controller_parameters = nullptr,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        cogip::motion_control::SpeedPIDControllerParameters *speed_controller_parameters = nullptr,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        cogip::motion_control::MotorPoseFilterParameters *motor_pose_filter_parameters = nullptr,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        cogip::motion_control::SpeedFilterParameters *speed_filter_parameters = nullptr,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        cogip::motion_control::motor_get_speed_and_pose_cb_t motor_get_speed_and_pose_cb =</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            cogip::motion_control::motor_get_speed_and_pose_cb_t::create&lt;nullptr&gt;(),</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        cogip::motion_control::motor_process_commands_cb_t motor_process_commands_cb =</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            cogip::motion_control::motor_process_commands_cb_t::create&lt;nullptr&gt;()</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    );</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    void disable() override;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    void actuate(</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        const int32_t command               </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    ) override;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a52e81b7dc1c924f3c7e313da1b7d27bc">   79</a></span>&#160;    double target_speed() const { return motor_engine_.target_speed(); };</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#ac582f57d260af421ce0b7f097643afb4">   82</a></span>&#160;    void set_target_speed(</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        double target_speed         </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        ) { motor_engine_.set_target_speed(target_speed); };</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a176bb0846035ec571c6acb7c6ae8463e">   88</a></span>&#160;    double current_pose() const { return motor_engine_.current_pose(); };</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a3ff441bb4316781659f2d63f32b666c4">   91</a></span>&#160;    void set_current_pose(</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        double current_pose     </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        ) { motor_engine_.set_current_pose(current_pose); };</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;private:</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    motor_driver_t  *motor_driver_;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    uint8_t motor_id_;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    gpio_t clear_overload_pin_;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    cogip::motion_control::DualPIDMetaController dualpid_meta_controller_;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    cogip::motion_control::PosePIDController pose_controller_;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    cogip::motion_control::SpeedPIDController speed_controller_;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    cogip::motion_control::MotorPoseFilter motor_pose_filter_;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    cogip::motion_control::SpeedFilter speed_filter_;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    cogip::motion_control::MotorEngine motor_engine_;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;};</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;} <span class="comment">// namespace motors</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;} <span class="comment">// namespace actuators</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;} <span class="comment">// namespace app</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        cogip::pf::actuators::Enum id,          </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        uint32_t default_timeout_period = 0,    </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        send_state_cb_t send_state_cb = nullptr,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        motor_driver_t *motor_driver = nullptr, </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        uint8_t motor_id = 0,                   </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        gpio_t clear_overload_pin = GPIO_UNDEF, </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        double target_speed = 0,                </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        cogip::motion_control::PosePIDControllerParameters *pose_controller_parameters = nullptr,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        cogip::motion_control::SpeedPIDControllerParameters *speed_controller_parameters = nullptr,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        cogip::motion_control::MotorPoseFilterParameters *motor_pose_filter_parameters = nullptr,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        cogip::motion_control::SpeedFilterParameters *speed_filter_parameters = nullptr,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        cogip::motion_control::motor_get_speed_and_pose_cb_t motor_get_speed_and_pose_cb =</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            cogip::motion_control::motor_get_speed_and_pose_cb_t::create&lt;nullptr&gt;(),</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        cogip::motion_control::motor_process_commands_cb_t motor_process_commands_cb =</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            cogip::motion_control::motor_process_commands_cb_t::create&lt;nullptr&gt;()</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    );</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    void disable() override;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#ad74a8936f45c2610f8abb2921df35ff5">   72</a></span>&#160;    bool disable_on_check() override { disable(); return true; };</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    void actuate(</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        const int32_t command               </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    ) override;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a52e81b7dc1c924f3c7e313da1b7d27bc">   81</a></span>&#160;    double target_speed() const { return motor_engine_.target_speed(); };</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#ac582f57d260af421ce0b7f097643afb4">   84</a></span>&#160;    void set_target_speed(</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        double target_speed         </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        ) { motor_engine_.set_target_speed(target_speed); };</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a176bb0846035ec571c6acb7c6ae8463e">   90</a></span>&#160;    double current_pose() const { return motor_engine_.current_pose(); };</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html#a3ff441bb4316781659f2d63f32b666c4">   93</a></span>&#160;    void set_current_pose(</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        double current_pose     </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        ) { motor_engine_.set_current_pose(current_pose); };</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;private:</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    motor_driver_t  *motor_driver_;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    uint8_t motor_id_;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    gpio_t clear_overload_pin_;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    cogip::motion_control::DualPIDMetaController dualpid_meta_controller_;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    cogip::motion_control::PosePIDController pose_controller_;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    cogip::motion_control::SpeedPIDController speed_controller_;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    cogip::motion_control::MotorPoseFilter motor_pose_filter_;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    cogip::motion_control::SpeedFilter speed_filter_;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    cogip::motion_control::MotorEngine motor_engine_;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;};</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;} <span class="comment">// namespace motors</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;} <span class="comment">// namespace actuators</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;} <span class="comment">// namespace app</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aSpeedFilterParameters_8hpp_html"><div class="ttname"><a href="SpeedFilterParameters_8hpp.html">SpeedFilterParameters.hpp</a></div><div class="ttdoc">Speed and acceleration limits.</div></div>
@@ -236,7 +237,7 @@ $(document).ready(function(){initNavTree('pf-robot-motors_2include_2Motor_8hpp_s
 <div class="ttc" id="aSpeedFilter_8hpp_html"><div class="ttname"><a href="SpeedFilter_8hpp.html">SpeedFilter.hpp</a></div><div class="ttdoc">Filter maximum speed and acceleration.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jul 16 2024 15:55:05 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat Jul 27 2024 09:02:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

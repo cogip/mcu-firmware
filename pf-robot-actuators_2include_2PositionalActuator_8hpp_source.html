@@ -144,66 +144,72 @@ $(document).ready(function(){initNavTree('pf-robot-actuators_2include_2Positiona
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>actuators {</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span>positional_actuators {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">typedef</span> int (*check_limit_switch_cb_t)();</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;std::ostream&amp; operator &lt;&lt; (std::ostream&amp; os, Enum <span class="keywordtype">id</span>);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">enum class</span> Enum: uint8_t;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;std::ostream&amp; operator &lt;&lt; (std::ostream&amp; os, Enum id);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;class PositionalActuator: public Actuator {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;public:</div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a88e49fc524af1a581cda45811592abb3">   37</a></span>&#160;    PositionalActuator(</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        Enum id,           </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        GroupEnum group,   </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        uint8_t order = 0, </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        uint32_t default_timeout_period = 0 </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    ) : Actuator(group, order), id_(id), command_(0), timeout_period_(0), default_timeout_period_(default_timeout_period) {};</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859">   45</a></span>&#160;    uint32_t timeout_period() { return timeout_period_; };</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a32024b6693743d37603101deff029ceb">   48</a></span>&#160;    uint32_t decrement_timeout_period() {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        if (timeout_period_) timeout_period_--;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        return timeout_period_;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    };</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    virtual void actuate(</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        const int32_t command   </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    ) = 0;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    void actuate_timeout(</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        const int32_t command,              </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        const uint32_t timeout_period       </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    );</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    virtual void disable() = 0;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    virtual bool disable_on_check() = 0;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    void pb_copy(</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        PB_PositionalActuator &amp; pb_positional_actuator  </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    ) const;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;protected:</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    Enum id_;                   </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    int32_t command_;           </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    uint32_t timeout_period_;   </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    uint32_t default_timeout_period_;  </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;};</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;} <span class="comment">// namespace positional_actuators</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;} <span class="comment">// namespace actuators</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;} <span class="comment">// namespace app</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span>PositionalActuator: <span class="keyword">public</span> Actuator {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a3b7740d7001549da687fecebb80828f2">   33</a></span>&#160;    <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a3b7740d7001549da687fecebb80828f2">PositionalActuator</a>(</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        cogip::pf::actuators::Enum <span class="keywordtype">id</span>,          </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        uint32_t default_timeout_period = 0,    </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        send_state_cb_t send_state_cb = <span class="keyword">nullptr</span> </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    ) : <a class="code" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">Actuator</a>(id, send_state_cb), <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a83c021ee009bc3291dee02cb05a32d95">command_</a>(0), <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284">timeout_period_</a>(0),</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a183a2d3d6a8315c68420f29e471d2db4">default_timeout_period_</a>(default_timeout_period) {};</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859">   41</a></span>&#160;    uint32_t <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859">timeout_period</a>() { <span class="keywordflow">return</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284">timeout_period_</a>; };</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a32024b6693743d37603101deff029ceb">   44</a></span>&#160;    uint32_t <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a32024b6693743d37603101deff029ceb">decrement_timeout_period</a>() {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284">timeout_period_</a>) <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284">timeout_period_</a>--;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284">timeout_period_</a>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    };</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a930e9c602cbfb6adf30c787422bbb2d4">actuate</a>(</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">const</span> int32_t command   </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    ) = 0;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#acb7bb210e9af7d2c6e9ea6beee3fc858">actuate_timeout</a>(</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">const</span> int32_t command,              </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">const</span> uint32_t <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859">timeout_period</a>       </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    );</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ad04d0bfcd2fb704d0e5cc0a816f061f9">disable</a>() = 0;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a52dfc5700c29306fef9eae40a929a1c4">disable_on_check</a>() = 0;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a67bed681997f2fbb8f06e9f0607daa48">pb_copy</a>(</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        PB_PositionalActuator &amp; pb_positional_actuator  </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    int32_t <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a83c021ee009bc3291dee02cb05a32d95">command_</a>;           </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    uint32_t <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284">timeout_period_</a>;   </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    uint32_t <a class="code" href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a183a2d3d6a8315c68420f29e471d2db4">default_timeout_period_</a>;  </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;};</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <span class="comment">// namespace positional_actuators</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace actuators</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// namespace app</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">cogip::pf::actuators::Actuator</a></div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2Actuator_8hpp_source.html#l00022">Actuator.hpp:22</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a183a2d3d6a8315c68420f29e471d2db4"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a183a2d3d6a8315c68420f29e471d2db4">cogip::pf::actuators::positional_actuators::PositionalActuator::default_timeout_period_</a></div><div class="ttdeci">uint32_t default_timeout_period_</div><div class="ttdoc">if not 0, default timeout is applied in case of no timeout set</div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2PositionalActuator_8hpp_source.html#l00076">PositionalActuator.hpp:76</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a32024b6693743d37603101deff029ceb"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a32024b6693743d37603101deff029ceb">cogip::pf::actuators::positional_actuators::PositionalActuator::decrement_timeout_period</a></div><div class="ttdeci">uint32_t decrement_timeout_period()</div><div class="ttdoc">Decrement timeout.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2PositionalActuator_8hpp_source.html#l00044">PositionalActuator.hpp:44</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a3b7740d7001549da687fecebb80828f2"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a3b7740d7001549da687fecebb80828f2">cogip::pf::actuators::positional_actuators::PositionalActuator::PositionalActuator</a></div><div class="ttdeci">PositionalActuator(cogip::pf::actuators::Enum id, uint32_t default_timeout_period=0, send_state_cb_t send_state_cb=nullptr)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2PositionalActuator_8hpp_source.html#l00033">PositionalActuator.hpp:33</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a930e9c602cbfb6adf30c787422bbb2d4"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a930e9c602cbfb6adf30c787422bbb2d4">cogip::pf::actuators::positional_actuators::PositionalActuator::actuate</a></div><div class="ttdeci">virtual void actuate(const int32_t command)=0</div><div class="ttdoc">Activate the positional_actuator.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_acb7bb210e9af7d2c6e9ea6beee3fc858"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#acb7bb210e9af7d2c6e9ea6beee3fc858">cogip::pf::actuators::positional_actuators::PositionalActuator::actuate_timeout</a></div><div class="ttdeci">void actuate_timeout(const int32_t command, const uint32_t timeout_period)</div><div class="ttdoc">Activate the motor, for the given amount of time.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_ad04d0bfcd2fb704d0e5cc0a816f061f9"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ad04d0bfcd2fb704d0e5cc0a816f061f9">cogip::pf::actuators::positional_actuators::PositionalActuator::disable</a></div><div class="ttdeci">virtual void disable()=0</div><div class="ttdoc">Stop the positional_actuator.</div></div>
 <div class="ttc" id="apf-robot-actuators_2include_2Actuator_8hpp_html"><div class="ttname"><a href="pf-robot-actuators_2include_2Actuator_8hpp.html">Actuator.hpp</a></div><div class="ttdoc">Base actuators class definition.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a83c021ee009bc3291dee02cb05a32d95"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a83c021ee009bc3291dee02cb05a32d95">cogip::pf::actuators::positional_actuators::PositionalActuator::command_</a></div><div class="ttdeci">int32_t command_</div><div class="ttdoc">positional_actuator speed as a duty_cycle in percent</div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2PositionalActuator_8hpp_source.html#l00072">PositionalActuator.hpp:72</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_ab4982eb79a91e3a52f7c4e15eeb00284"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284">cogip::pf::actuators::positional_actuators::PositionalActuator::timeout_period_</a></div><div class="ttdeci">uint32_t timeout_period_</div><div class="ttdoc">timeout to decrease, unit is the actuator thread period</div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2PositionalActuator_8hpp_source.html#l00074">PositionalActuator.hpp:74</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a67bed681997f2fbb8f06e9f0607daa48"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a67bed681997f2fbb8f06e9f0607daa48">cogip::pf::actuators::positional_actuators::PositionalActuator::pb_copy</a></div><div class="ttdeci">void pb_copy(PB_PositionalActuator &amp;pb_positional_actuator) const</div><div class="ttdoc">Copy data to Protobuf message.</div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a9d30624e6a0b3466571532d69870f859"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a9d30624e6a0b3466571532d69870f859">cogip::pf::actuators::positional_actuators::PositionalActuator::timeout_period</a></div><div class="ttdeci">uint32_t timeout_period()</div><div class="ttdoc">Get timeout.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2PositionalActuator_8hpp_source.html#l00041">PositionalActuator.hpp:41</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator_html_a52dfc5700c29306fef9eae40a929a1c4"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a52dfc5700c29306fef9eae40a929a1c4">cogip::pf::actuators::positional_actuators::PositionalActuator::disable_on_check</a></div><div class="ttdeci">virtual bool disable_on_check()=0</div><div class="ttdoc">Disable the positional actuator after conditions.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jul 16 2024 15:55:05 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat Jul 27 2024 09:02:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

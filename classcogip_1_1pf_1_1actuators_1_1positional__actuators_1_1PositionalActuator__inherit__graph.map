@@ -1,8 +1,7 @@
 <map id="cogip::pf::actuators::positional_actuators::PositionalActuator" name="cogip::pf::actuators::positional_actuators::PositionalActuator">
-<area shape="rect" id="node1" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="255,292,478,589"/>
-<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html" title="Class representing a servomotor driven by pca9685." alt="" coords="5,645,168,883"/>
-<area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html" title="Class representing a LX Servomotor in motor mode." alt="" coords="192,659,355,869"/>
-<area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="379,637,541,891"/>
-<area shape="rect" id="node6" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html" title="Class representing a motor using motor driver." alt="" coords="565,689,728,839"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="293,5,440,244"/>
+<area shape="rect" id="node1" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="162,336,385,619"/>
+<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html" title="Class representing a servomotor driven by pca9685." alt="" coords="5,696,168,905"/>
+<area shape="rect" id="node4" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html" title="Class representing a motor using motor driver." alt="" coords="192,667,355,935"/>
+<area shape="rect" id="node5" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html" title="Class representing a motor using motor driver." alt="" coords="379,725,541,876"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="200,5,347,288"/>
 </map>

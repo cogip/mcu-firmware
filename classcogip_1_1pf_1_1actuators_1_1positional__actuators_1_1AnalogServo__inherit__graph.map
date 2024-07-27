@@ -1,5 +1,5 @@
 <map id="cogip::pf::actuators::positional_actuators::AnalogServo" name="cogip::pf::actuators::positional_actuators::AnalogServo">
-<area shape="rect" id="node1" title="Class representing a servomotor driven by pca9685." alt="" coords="35,637,198,876"/>
-<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="5,292,228,589"/>
-<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="43,5,190,244"/>
+<area shape="rect" id="node1" title="Class representing a servomotor driven by pca9685." alt="" coords="35,667,198,876"/>
+<area shape="rect" id="node2" href="$classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html" title="Class representing a positional_actuator using positional_actuator driver." alt="" coords="5,336,228,619"/>
+<area shape="rect" id="node3" href="$classcogip_1_1pf_1_1actuators_1_1Actuator.html" title=" " alt="" coords="43,5,190,288"/>
 </map>

@@ -120,7 +120,6 @@ $(document).ready(function(){initNavTree('pf-pami_2include_2pf__positional__actu
 
 <div class="header">
   <div class="summary">
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
@@ -168,16 +167,10 @@ Gilles DOFFE <a href="#" onclick="location.href='mai'+'lto:'+'g.d'+'of'+'fe@'+'g
 </div>
 <p><a href="pf-pami_2include_2pf__positional__actuators_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:ab62bbe6ba587be3d6aa9d8efb6fe34ea"><td class="memItemLeft" align="right" valign="top"><a id="ab62bbe6ba587be3d6aa9d8efb6fe34ea"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::actuators::positional_actuators::PB_Message</b> = EmbeddedProto::RepeatedFieldFixedSize&lt; PB_PositionalActuator, COUNT &gt;</td></tr>
-<tr class="separator:ab62bbe6ba587be3d6aa9d8efb6fe34ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a233cc3444d447f733c2f4ddcccc75424"><td class="memItemLeft" align="right" valign="top"><a id="a233cc3444d447f733c2f4ddcccc75424"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Enum</b> : uint8_t { <br />
-&#160;&#160;<b>ANALOGSERVO_PAMI</b> = 6, 
+&#160;&#160;<b>ANALOGSERVO_PAMI</b> = 8, 
 <b>MOTOR_BOTTOM_LIFT</b> = 0, 
 <b>MOTOR_TOP_LIFT</b> = 1, 
 <b>ANALOGSERVO_BOTTOM_GRIP_LEFT</b> = 2, 
@@ -207,20 +200,19 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6a7d0032fb46223b37d1735a6e669cb2"><td class="memItemLeft" align="right" valign="top"><a id="a6a7d0032fb46223b37d1735a6e669cb2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a6a7d0032fb46223b37d1735a6e669cb2">cogip::pf::actuators::positional_actuators::init</a> (uart_half_duplex_t *lx_stream)</td></tr>
-<tr class="memdesc:a6a7d0032fb46223b37d1735a6e669cb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize positional_actuators. <br /></td></tr>
-<tr class="separator:a6a7d0032fb46223b37d1735a6e669cb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a603d068a832b352adffc2d67d3a1661d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a603d068a832b352adffc2d67d3a1661d">cogip::pf::actuators::positional_actuators::init</a> ()</td></tr>
+<tr class="memdesc:a603d068a832b352adffc2d67d3a1661d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize positional_actuators.  <a href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a603d068a832b352adffc2d67d3a1661d">More...</a><br /></td></tr>
+<tr class="separator:a603d068a832b352adffc2d67d3a1661d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf0cf5308be129eb2b9c751f24911d40"><td class="memItemLeft" align="right" valign="top"><a id="adf0cf5308be129eb2b9c751f24911d40"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#adf0cf5308be129eb2b9c751f24911d40">cogip::pf::actuators::positional_actuators::pf_pcf857x_gpio_write</a> (gpio_t pin, int value)</td></tr>
 <tr class="memdesc:adf0cf5308be129eb2b9c751f24911d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO expander wrapper. <br /></td></tr>
 <tr class="separator:adf0cf5308be129eb2b9c751f24911d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26676acd2d56a2358bc9c6f637dba622"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a26676acd2d56a2358bc9c6f637dba622">cogip::pf::actuators::positional_actuators::contains</a> (Enum id)</td></tr>
-<tr class="memdesc:a26676acd2d56a2358bc9c6f637dba622"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a positional_actuator identified by id exists.  <a href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a26676acd2d56a2358bc9c6f637dba622">More...</a><br /></td></tr>
-<tr class="separator:a26676acd2d56a2358bc9c6f637dba622"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3724b136ea1d573580ba49fa4f59a766"><td class="memItemLeft" align="right" valign="top">PositionalActuator &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a3724b136ea1d573580ba49fa4f59a766">cogip::pf::actuators::positional_actuators::get</a> (Enum id)</td></tr>
-<tr class="memdesc:a3724b136ea1d573580ba49fa4f59a766"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a positional_actuator by id.  <a href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a3724b136ea1d573580ba49fa4f59a766">More...</a><br /></td></tr>
-<tr class="separator:a3724b136ea1d573580ba49fa4f59a766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a539467b402c45129643c86998b28ce26"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a539467b402c45129643c86998b28ce26">cogip::pf::actuators::positional_actuators::contains</a> (cogip::pf::actuators::Enum id)</td></tr>
+<tr class="memdesc:a539467b402c45129643c86998b28ce26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a positional_actuator identified by id exists.  <a href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a539467b402c45129643c86998b28ce26">More...</a><br /></td></tr>
+<tr class="separator:a539467b402c45129643c86998b28ce26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a154155743ff561a95844f7f7e15ea21f"><td class="memItemLeft" align="right" valign="top">PositionalActuator &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a154155743ff561a95844f7f7e15ea21f">cogip::pf::actuators::positional_actuators::get</a> (cogip::pf::actuators::Enum id)</td></tr>
+<tr class="memdesc:a154155743ff561a95844f7f7e15ea21f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a positional_actuator by id.  <a href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a154155743ff561a95844f7f7e15ea21f">More...</a><br /></td></tr>
+<tr class="separator:a154155743ff561a95844f7f7e15ea21f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a134a9805238e1bf59769b56c0402394c"><td class="memItemLeft" align="right" valign="top"><a id="a134a9805238e1bf59769b56c0402394c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a134a9805238e1bf59769b56c0402394c">cogip::pf::actuators::positional_actuators::disable_all</a> ()</td></tr>
 <tr class="memdesc:a134a9805238e1bf59769b56c0402394c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all positional actuators. <br /></td></tr>
@@ -233,13 +225,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-p
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a0794ca669392e82115b767df99782b6c">cogip::pf::actuators::positional_actuators::send_emergency_button_released</a> ()</td></tr>
 <tr class="memdesc:a0794ca669392e82115b767df99782b6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send emergency button released protobuf message. <br /></td></tr>
 <tr class="separator:a0794ca669392e82115b767df99782b6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75adfb16523b46d8b2e88e9d974ac0cd"><td class="memItemLeft" align="right" valign="top"><a id="a75adfb16523b46d8b2e88e9d974ac0cd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a75adfb16523b46d8b2e88e9d974ac0cd">cogip::pf::actuators::positional_actuators::send_state</a> (Enum positional_actuator)</td></tr>
-<tr class="memdesc:a75adfb16523b46d8b2e88e9d974ac0cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send positional actuator state protobuf message. <br /></td></tr>
-<tr class="separator:a75adfb16523b46d8b2e88e9d974ac0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5bff27631d8a4fb838b2aa2e5c466a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#ad5bff27631d8a4fb838b2aa2e5c466a4">cogip::pf::actuators::positional_actuators::pb_copy</a> (PB_Message &amp;pb_message)</td></tr>
-<tr class="memdesc:ad5bff27631d8a4fb838b2aa2e5c466a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data to Protobuf message.  <a href="pf-pami_2include_2pf__positional__actuators_8hpp.html#ad5bff27631d8a4fb838b2aa2e5c466a4">More...</a><br /></td></tr>
-<tr class="separator:ad5bff27631d8a4fb838b2aa2e5c466a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64a6203c5b9ab4e85a6a0e77f7780a9c"><td class="memItemLeft" align="right" valign="top"><a id="a64a6203c5b9ab4e85a6a0e77f7780a9c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a64a6203c5b9ab4e85a6a0e77f7780a9c">cogip::pf::actuators::positional_actuators::send_state</a> (cogip::pf::actuators::Enum positional_actuator)</td></tr>
+<tr class="memdesc:a64a6203c5b9ab4e85a6a0e77f7780a9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send positional actuator state protobuf message. <br /></td></tr>
+<tr class="separator:a64a6203c5b9ab4e85a6a0e77f7780a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22277d9b9c0d0a4141450d89a5e86300"><td class="memItemLeft" align="right" valign="top"><a id="a22277d9b9c0d0a4141450d89a5e86300"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#a22277d9b9c0d0a4141450d89a5e86300">cogip::pf::actuators::positional_actuators::send_states</a> ()</td></tr>
+<tr class="memdesc:a22277d9b9c0d0a4141450d89a5e86300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send all positional actuator states. <br /></td></tr>
+<tr class="separator:a22277d9b9c0d0a4141450d89a5e86300"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -254,15 +247,15 @@ constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::
 <tr class="separator:a4a18a216b01bf023770eead58a9f9cde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd947d1815d5d363ae0b44bfa6af7809"><td class="memItemLeft" align="right" valign="top"><a id="acd947d1815d5d363ae0b44bfa6af7809"></a>
 constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pf-pami_2include_2pf__positional__actuators_8hpp.html#acd947d1815d5d363ae0b44bfa6af7809">cogip::pf::actuators::positional_actuators::analog_servomotor_pami_closed</a> = 55</td></tr>
-<tr class="memdesc:acd947d1815d5d363ae0b44bfa6af7809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cherry arm servomotor positions. <br /></td></tr>
+<tr class="memdesc:acd947d1815d5d363ae0b44bfa6af7809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Servomotor positions. <br /></td></tr>
 <tr class="separator:acd947d1815d5d363ae0b44bfa6af7809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abadfbce0d45cc7e9f35e0b203ec74dea"><td class="memItemLeft" align="right" valign="top"><a id="abadfbce0d45cc7e9f35e0b203ec74dea"></a>
 constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::actuators::positional_actuators::analog_servomotor_pami_deployed</b> = 235</td></tr>
 <tr class="separator:abadfbce0d45cc7e9f35e0b203ec74dea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a26676acd2d56a2358bc9c6f637dba622"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26676acd2d56a2358bc9c6f637dba622">&#9670;&nbsp;</a></span>contains()</h2>
+<a id="a539467b402c45129643c86998b28ce26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a539467b402c45129643c86998b28ce26">&#9670;&nbsp;</a></span>contains()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -270,7 +263,7 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::a
         <tr>
           <td class="memname">bool cogip::pf::actuators::positional_actuators::contains </td>
           <td>(</td>
-          <td class="paramtype">Enum&#160;</td>
+          <td class="paramtype">cogip::pf::actuators::Enum&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td></td>
         </tr>
@@ -287,8 +280,8 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::a
 
 </div>
 </div>
-<a id="a3724b136ea1d573580ba49fa4f59a766"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3724b136ea1d573580ba49fa4f59a766">&#9670;&nbsp;</a></span>get()</h2>
+<a id="a154155743ff561a95844f7f7e15ea21f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a154155743ff561a95844f7f7e15ea21f">&#9670;&nbsp;</a></span>get()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -296,7 +289,7 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::a
         <tr>
           <td class="memname">PositionalActuator &amp; cogip::pf::actuators::positional_actuators::get </td>
           <td>(</td>
-          <td class="paramtype">Enum&#160;</td>
+          <td class="paramtype">cogip::pf::actuators::Enum&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td></td>
         </tr>
@@ -313,29 +306,24 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::a
 
 </div>
 </div>
-<a id="ad5bff27631d8a4fb838b2aa2e5c466a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5bff27631d8a4fb838b2aa2e5c466a4">&#9670;&nbsp;</a></span>pb_copy()</h2>
+<a id="a603d068a832b352adffc2d67d3a1661d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a603d068a832b352adffc2d67d3a1661d">&#9670;&nbsp;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cogip::pf::actuators::positional_actuators::pb_copy </td>
+          <td class="memname">void cogip::pf::actuators::positional_actuators::init </td>
           <td>(</td>
-          <td class="paramtype">PB_Message &amp;&#160;</td>
-          <td class="paramname"><em>pb_message</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Copy data to Protobuf message. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">pb_message</td><td>[out] Protobuf message to fill </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Initialize positional_actuators. </p>
+<p>Actuators DC motors IDs.</p>
+<p>Initialize positional_actuators. </p>
 
 </div>
 </div>
@@ -343,7 +331,7 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>cogip::pf::a
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jul 16 2024 15:55:05 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat Jul 27 2024 09:02:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

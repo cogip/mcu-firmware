@@ -1,11 +1,8 @@
 var dir_bd2dcc9c4192dc7a80ff911c8fb7ae9a =
 [
-    [ "Actuator.hpp", "pf-pami_2include_2Actuator_8hpp.html", [
-      [ "Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", "classcogip_1_1pf_1_1actuators_1_1Actuator" ]
-    ] ],
-    [ "AnalogServo.hpp", "pf-pami_2include_2AnalogServo_8hpp.html", "pf-pami_2include_2AnalogServo_8hpp" ],
-    [ "LxMotor.hpp", "pf-pami_2include_2LxMotor_8hpp.html", [
-      [ "LxMotor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor" ]
+    [ "Actuator.hpp", "pf-pami_2include_2Actuator_8hpp.html", "pf-pami_2include_2Actuator_8hpp" ],
+    [ "AnalogServo.hpp", "pf-pami_2include_2AnalogServo_8hpp.html", [
+      [ "AnalogServo", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo" ]
     ] ],
     [ "LxServo.hpp", "pf-pami_2include_2LxServo_8hpp.html", "pf-pami_2include_2LxServo_8hpp" ],
     [ "motion_control.hpp", "pf-pami_2include_2motion__control_8hpp_source.html", null ],

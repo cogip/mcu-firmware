@@ -2,7 +2,6 @@ var group__platforms__pami =
 [
     [ "Actuator.hpp", "pf-pami_2include_2Actuator_8hpp.html", null ],
     [ "AnalogServo.hpp", "pf-pami_2include_2AnalogServo_8hpp.html", null ],
-    [ "LxMotor.hpp", "pf-pami_2include_2LxMotor_8hpp.html", null ],
     [ "LxServo.hpp", "pf-pami_2include_2LxServo_8hpp.html", null ],
     [ "pf_actuators.hpp", "pf-pami_2include_2pf__actuators_8hpp.html", null ],
     [ "pf_positional_actuators.hpp", "pf-pami_2include_2pf__positional__actuators_8hpp.html", null ],

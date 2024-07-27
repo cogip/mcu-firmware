@@ -52,13 +52,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcogip_1_1motion__control_1_1BaseControllerEngine.html#ac79dd6fea9f77adc74a3ddf7671f7c57",
-"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#ab4982eb79a91e3a52f7c4e15eeb00284",
-"dir_cf09650fddc28e8508ce5e59f082adc5.html",
-"group__driver__lx__servo.html#ga1ddb016245e1d790ac99d84ad0a6bc15",
-"group__platforms__pami.html#ga5cd8534245dd8c7715965af083bd13c2",
-"lx__writer_8h.html#a3d9fa9832dd3fe3514582d02abd7c0e2",
-"pf-robot-motors_2include_2PositionalActuator_8hpp.html#a70db0d093857dc65679100f3c7c8e77e"
+"classcogip_1_1motion__control_1_1BaseControllerEngine.html#a76083da85542be47a74af9560acf6bca",
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html#a930e9c602cbfb6adf30c787422bbb2d4",
+"dir_a27885517f8467a6210e2956ed69323d.html",
+"group__driver__lx-servo.html#gga0cfccd74c85ef456907b71eb398ae3caad101f7919f5bdd9a6f5f1dc53252cc97",
+"group__lib__wizard.html#ga4b40753fd51245b8b150805686135e12",
+"group__sys__uartpb.html#gafb04dcb448f82d1d09b69b316f9cc62b",
+"pf-robot-motors_2include_2PositionalActuator_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

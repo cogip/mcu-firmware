@@ -146,29 +146,27 @@ $(document).ready(function(){initNavTree('pf-robot-motors_2include_2pf__actuator
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;constexpr <a class="code" href="CanProtobuf_8hpp.html#a28f925c84ec75b970d9d0e07b93e844d">cogip::canpb::uuid_t</a> thread_stop_uuid = 0x2002;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;constexpr <a class="code" href="CanProtobuf_8hpp.html#a28f925c84ec75b970d9d0e07b93e844d">cogip::canpb::uuid_t</a> command_uuid = 0x2004;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="pf-robot-motors_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">   31</a></span>&#160;<span class="keyword">enum class</span> <a class="code" href="pf-pami_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">GroupEnum</a>: uint8_t {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    NO_GROUP = 0,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;};</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> enable_all();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">void</span> disable_all();</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">void</span> init();</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// namespace actuators</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace pf</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;} <span class="comment">// namespace cogip</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pf-pami_2include_2pf__actuators_8hpp.html#a6a6c7fd4f5e6b5f77d02b63266bd636b">enable_all</a>();</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pf-pami_2include_2pf__actuators_8hpp.html#a38ba35545eb0c9c3d4b896ab8ca5b89a">disable_all</a>();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pf-pami_2include_2pf__actuators_8hpp.html#aa8703a26db4165eca63c7426397b8e53">init</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;} <span class="comment">// namespace actuators</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;} <span class="comment">// namespace pf</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;} <span class="comment">// namespace cogip</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aCanProtobuf_8hpp_html_a28f925c84ec75b970d9d0e07b93e844d"><div class="ttname"><a href="CanProtobuf_8hpp.html#a28f925c84ec75b970d9d0e07b93e844d">cogip::canpb::uuid_t</a></div><div class="ttdeci">uint32_t uuid_t</div><div class="ttdoc">Custom type for uuids.</div><div class="ttdef"><b>Definition:</b> <a href="CanProtobuf_8hpp_source.html#l00047">CanProtobuf.hpp:47</a></div></div>
+<div class="ttc" id="apf-pami_2include_2pf__actuators_8hpp_html_aa8703a26db4165eca63c7426397b8e53"><div class="ttname"><a href="pf-pami_2include_2pf__actuators_8hpp.html#aa8703a26db4165eca63c7426397b8e53">cogip::pf::actuators::init</a></div><div class="ttdeci">void init()</div><div class="ttdoc">Initialize all actuators.</div></div>
 <div class="ttc" id="aCanProtobuf_8hpp_html"><div class="ttname"><a href="CanProtobuf_8hpp.html">CanProtobuf.hpp</a></div><div class="ttdoc">Exchange Protobuf messages over CAN module.</div></div>
 <div class="ttc" id="apf-pami_2include_2pf__actuators_8hpp_html_a179211b0e1134575ec0e8e131a26b6c0"><div class="ttname"><a href="pf-pami_2include_2pf__actuators_8hpp.html#a179211b0e1134575ec0e8e131a26b6c0">cogip::pf::actuators::actuator_state_uuid</a></div><div class="ttdeci">constexpr cogip::uartpb::uuid_t actuator_state_uuid</div><div class="ttdoc">Actuator state protobuf message id.</div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2pf__actuators_8hpp_source.html#l00025">pf_actuators.hpp:25</a></div></div>
-<div class="ttc" id="apf-pami_2include_2pf__actuators_8hpp_html_aa8f20e24a161912e217c5b49cefd07c3"><div class="ttname"><a href="pf-pami_2include_2pf__actuators_8hpp.html#aa8f20e24a161912e217c5b49cefd07c3">cogip::pf::actuators::GroupEnum</a></div><div class="ttdeci">GroupEnum</div><div class="ttdoc">Enum using to group actuators.</div><div class="ttdef"><b>Definition:</b> <a href="pf-pami_2include_2pf__actuators_8hpp_source.html#l00037">pf_actuators.hpp:37</a></div></div>
+<div class="ttc" id="apf-pami_2include_2pf__actuators_8hpp_html_a38ba35545eb0c9c3d4b896ab8ca5b89a"><div class="ttname"><a href="pf-pami_2include_2pf__actuators_8hpp.html#a38ba35545eb0c9c3d4b896ab8ca5b89a">cogip::pf::actuators::disable_all</a></div><div class="ttdeci">void disable_all()</div><div class="ttdoc">Disable all actuators.</div></div>
+<div class="ttc" id="apf-pami_2include_2pf__actuators_8hpp_html_a6a6c7fd4f5e6b5f77d02b63266bd636b"><div class="ttname"><a href="pf-pami_2include_2pf__actuators_8hpp.html#a6a6c7fd4f5e6b5f77d02b63266bd636b">cogip::pf::actuators::enable_all</a></div><div class="ttdeci">void enable_all()</div><div class="ttdoc">Enable all actuators.</div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Tue Jul 16 2024 15:55:05 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sat Jul 27 2024 09:02:30 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

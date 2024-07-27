@@ -3,7 +3,6 @@ var hierarchy =
     [ "cogip::pf::actuators::Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", [
       [ "cogip::pf::actuators::positional_actuators::PositionalActuator", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html", [
         [ "cogip::pf::actuators::positional_actuators::AnalogServo", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html", null ],
-        [ "cogip::pf::actuators::positional_actuators::LxMotor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1LxMotor.html", null ],
         [ "cogip::pf::actuators::positional_actuators::Motor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html", null ],
         [ "cogip::pf::actuators::positional_actuators::OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", null ]
       ] ],
@@ -110,6 +109,9 @@ var hierarchy =
     ] ],
     [ "sd21_conf_t", "structsd21__conf__t.html", null ],
     [ "sd21_servo_t", "structsd21__servo__t.html", null ],
+    [ "cogip::pf::sensors::Sensor", "classcogip_1_1pf_1_1sensors_1_1Sensor.html", [
+      [ "cogip::pf::sensors::bool_sensors::BoolSensor", "classcogip_1_1pf_1_1sensors_1_1bool__sensors_1_1BoolSensor.html", null ]
+    ] ],
     [ "cogip::motion_control::SpeedFilterParameters", "classcogip_1_1motion__control_1_1SpeedFilterParameters.html", null ],
     [ "cogip::motion_control::SpeedPIDControllerParameters", "classcogip_1_1motion__control_1_1SpeedPIDControllerParameters.html", null ],
     [ "sysmon_heap_t", "structsysmon__heap__t.html", null ],
