@@ -14,11 +14,13 @@ namespace motion_control {
 #endif
 
 /* Motion motors */
-#define MOTOR_LEFT  1
-#define MOTOR_RIGHT 0
+#define MOTOR_LEFT  0
+#define MOTOR_RIGHT 1
 
 /* Quadrature decoding */
+#ifndef QDEC_MODE
 #define QDEC_MODE           QDEC_X4
+#endif
 #define QDEC_LEFT_POLARITY  1
 #define QDEC_RIGHT_POLARITY -1
 
@@ -38,11 +40,11 @@ void cogip_native_motor_driver_qdec_simulation(
 /// Motion control motors
 static const motor_driver_params_t motion_motors_params =
 {
-    .mode = MOTOR_DRIVER_1_DIR_BRAKE,
+    .mode = MOTOR_DRIVER_2_DIRS,
     .pwm_dev = 0,
     .pwm_mode = PWM_LEFT,
     .pwm_frequency = 20000U,
-    .pwm_resolution = 1000U,
+    .pwm_resolution = 500U,
     .brake_inverted = false,
     .enable_inverted = false,
     .nb_motors = 2,
@@ -50,18 +52,18 @@ static const motor_driver_params_t motion_motors_params =
         // Left motor
         {
             .pwm_channel = 0,
-            .gpio_enable = GPIO_PIN(PORT_B, 10),
-            .gpio_dir0 = GPIO_PIN(PORT_B, 2),
-            .gpio_brake = GPIO_PIN(PORT_B, 12),
+            .gpio_enable = GPIO_UNDEF,
+            .gpio_dir0 = GPIO_PIN(PORT_B, 12),
+            .gpio_dir1 = GPIO_PIN(PORT_B, 2),
             .gpio_dir_reverse = 1,
         },
         // Right motor
         {
             .pwm_channel = 1,
-            .gpio_enable = GPIO_PIN(PORT_B, 10),
-            .gpio_dir0 = GPIO_PIN(PORT_B, 0),
-            .gpio_brake = GPIO_PIN(PORT_C, 4),
-            .gpio_dir_reverse = 0,
+            .gpio_enable = GPIO_UNDEF,
+            .gpio_dir0 = GPIO_PIN(PORT_C, 4),
+            .gpio_dir1 = GPIO_PIN(PORT_B, 0),
+            .gpio_dir_reverse = 1,
         },
     },
     .motor_set_post_cb = MOTION_MOTORS_POST_CB

@@ -28,24 +28,6 @@ void Motor::disable() {
     motor_disable(motor_driver_, motor_id_);
 }
 
-bool Motor::disable_on_check() {
-    int direction = (command_ < 0) ? -1 : 1;
-
-    // Check limit switches
-    if ((direction > 0) && check_limit_switch_positive_direction_cb_ && check_limit_switch_positive_direction_cb_()) {
-        motor_disable(motor_driver_, motor_id_);
-        std::cerr << "Motor " << id_ << ": positive limit" << std::endl;
-        return true;
-    }
-    if ((direction < 0) && check_limit_switch_negative_direction_cb_ && check_limit_switch_negative_direction_cb_()) {
-        motor_disable(motor_driver_, motor_id_);
-        std::cerr << "Motor " << id_ << ": negative limit" << std::endl;
-        return true;
-    }
-
-    return false;
-}
-
 void Motor::actuate(int32_t command) {
     command_ = command;
     int speed = abs(command);

@@ -51,9 +51,10 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
 /// @{
-constexpr double wheels_diameter_mm = 54.85;
-constexpr double wheels_distance_mm = 194;
-constexpr double wheels_encoder_resolution = 4096 * 4;
+constexpr double wheels_diameter_mm = 49;
+constexpr double wheels_distance_mm = 120;
+constexpr double wheels_encoder_resolution = 37.35 * 11 *4;
+//constexpr double wheels_encoder_resolution = 42.5 * 11 * 4;
 constexpr double wheels_perimeter = M_PI * wheels_diameter_mm;
 constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
 constexpr double wheels_distance_pulse = wheels_distance_mm * pulse_per_mm;     ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
@@ -61,15 +62,15 @@ constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   
 /// @}
 
 /// Minimal PWM value
-constexpr int pwm_minimal = 0;
+constexpr int pwm_minimal = 100;
 
 /// @name Acceleration and speed profiles
 /// @{
 // Linear maximum speed and acceleration
 constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
-constexpr double platform_max_speed_m_per_s = 2;  ///< Maximum speed (m/s)
-constexpr double platform_max_acc_m_per_s2 = platform_max_speed_m_per_s / 2;   ///< Maximum acceleration (m/s²)
-constexpr double platform_max_dec_m_per_s2 = platform_max_acc_m_per_s2;   ///< Maximum deceleration (m/s²)
+constexpr double platform_max_speed_m_per_s = 0.5 ;  ///< Maximum speed (m/s)
+constexpr double platform_max_acc_m_per_s2 = 0.5;   ///< Maximum acceleration (m/s²)
+constexpr double platform_max_dec_m_per_s2 = 0.5;   ///< Maximum deceleration (m/s²)
 constexpr double platform_max_acc_linear_mm_per_period2 = (
     (1000 * platform_max_acc_m_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
@@ -89,9 +90,9 @@ constexpr double platform_normal_speed_linear_mm_per_period = (platform_max_spee
 
 // Angular maximum speed and acceleration
 constexpr double platform_min_speed_deg_per_s = 0; ///< Maximum speed (deg/s)
-constexpr double platform_max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
-constexpr double platform_max_acc_deg_per_s2 = platform_max_speed_deg_per_s / 2 ;  ///< Maximum acceleration (deg/s²)
-constexpr double platform_max_dec_deg_per_s2 = platform_max_acc_deg_per_s2;  ///< Maximum deceleration (deg/s²)
+constexpr double platform_max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
+constexpr double platform_max_acc_deg_per_s2 =  360*4;  ///< Maximum acceleration (deg/s²)
+constexpr double platform_max_dec_deg_per_s2 =  360/2;  ///< Maximum deceleration (deg/s²)
 constexpr double platform_max_acc_angular_deg_per_period2 = (
     (platform_max_acc_deg_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
@@ -125,15 +126,14 @@ void pf_init_motion_control(void);
 /// Start motion control
 void pf_start_motion_control(void);
 
+/// Reset all motion control components
+void pf_motion_control_reset(void);
+
 /// Make motion control engine thread loop disabled
 void pf_disable_motion_control();
 
 /// Make motion control engine thread loop enabled
 void pf_enable_motion_control();
-
-void pf_enable_motion_control_messages();
-
-void pf_disable_motion_control_messages();
 
 /// Send current robot pose in Protobuf format over UART
 void pf_send_pb_pose(void);

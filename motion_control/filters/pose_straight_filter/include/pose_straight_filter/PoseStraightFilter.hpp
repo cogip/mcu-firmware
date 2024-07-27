@@ -52,8 +52,11 @@ public:
     /// Breaks down a movement into a straight trajectory according to movements switch thresholds.
     void execute() override;
 
-    /// Set angular threshold
+    /// Reset state machine current state
     void reset_current_state() { current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION; };
+
+    /// Force state machine to finished state
+    void force_finished_state() { current_state_ = PoseStraightFilterState::FINISHED; };
 
 private:
     /// Current motion state

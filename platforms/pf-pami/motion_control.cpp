@@ -49,8 +49,6 @@ PB_Pid pb_pid;
 PB_Pid_Id pb_pid_id;
 
 
-static  bool _suspend_motion_control_messages = false;
-
 // PID tuning period
 constexpr uint16_t motion_control_pid_tuning_period_ms = 3000;
 
@@ -126,7 +124,8 @@ static cogip::motion_control::PosePIDController linear_pose_controller(&linear_p
 static cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
     platform_min_speed_linear_mm_per_period,
     platform_max_speed_linear_mm_per_period,
-    platform_max_acc_linear_mm_per_period2
+    platform_max_acc_linear_mm_per_period2,
+    false
     );
 /// Linear SpeedFilter to limit speed and acceleration for linear SpeedPIDController.
 static cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters);
@@ -331,54 +330,57 @@ void pf_send_pb_state(void)
 
 
 void pf_handle_brake([[maybe_unused]] cogip::uartpb::ReadBuffer &buffer) {
-    pf_disable_motion_control();
-
-    // Small wait to ensure engine is disabled
-    ztimer_sleep(ZTIMER_MSEC, 100);
-
-    // Brake motors as the robot should not move in this case.
-    motor_brake(&motion_motors_driver, MOTOR_LEFT);
-    motor_brake(&motion_motors_driver, MOTOR_RIGHT);
+    pf_motion_control_platform_engine.set_target_speed({0, 0});
+    reset_speed_pids();
+    pose_straight_filter.force_finished_state();
 }
 
 void pf_handle_target_pose(cogip::uartpb::ReadBuffer &buffer)
 {
-    if (!_suspend_motion_control_messages) {
-        // Retrieve new target pose from protobuf message
-        PB_PathPose pb_path_target_pose;
-        EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
-        if (error != EmbeddedProto::Error::NO_ERRORS) {
-            std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
-            return;
-        }
-
-        // Target pose
-        target_pose.pb_read(pb_path_target_pose);
-
-        // Target speed
-        target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()));
-        target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()));
-        pf_motion_control_platform_engine.set_target_speed(target_speed);
-
-        // Set target speed for passthrough controllers
-        passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
-        passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
-
-        // Deal with the first pose in the list
-        pf_motion_control_platform_engine.set_target_pose(target_pose);
-
-        // New target pose, the robot is moving
-        pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
-
-        // Reset previous speed orders
-        linear_speed_filter.reset_previous_speed_order();
-        angular_speed_filter.reset_previous_speed_order();
-
-        // Reset pose straight filter state
-        pose_straight_filter.reset_current_state();
-
-        pf_enable_motion_control();
+    // Retrieve new target pose from protobuf message
+    PB_PathPose pb_path_target_pose;
+    EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Pose to reach: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
     }
+
+    cogip::path::Pose previous_target_pose = target_pose;
+
+    // Target pose
+    target_pose.pb_read(pb_path_target_pose);
+
+    // Target speed
+    target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
+    target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);
+    pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+    // Set final orientation bypassing
+    target_pose.bypass_final_orientation()
+        ? pose_straight_filter_parameters.bypass_final_orientation_on()
+        : pose_straight_filter_parameters.bypass_final_orientation_off();
+
+    // Set target speed for passthrough controllers
+    passthrough_linear_pose_controller_parameters.set_target_speed(target_speed.distance());
+    passthrough_angular_pose_controller_parameters.set_target_speed(target_speed.angle());
+
+    if (target_pose.timeout_ms()) {
+        pf_motion_control_platform_engine.set_timeout_enable(true);
+        pf_motion_control_platform_engine.set_timeout_cycle_number(target_pose.timeout_ms() / motion_control_thread_period_ms);
+    }
+    else {
+        pf_motion_control_platform_engine.set_timeout_enable(false);
+    }
+
+    // Deal with the first pose in the list
+    pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+    // New target pose, the robot is moving
+    pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::moving);
+
+    pf_motion_control_reset();
+
+    pf_enable_motion_control();
 }
 
 void pf_handle_start_pose(cogip::uartpb::ReadBuffer &buffer)
@@ -408,24 +410,39 @@ void pf_start_motion_control(void)
     pf_motion_control_platform_engine.start_thread();
 }
 
+void pf_motion_control_reset(void)
+{
+    // Reset previous speed orders
+    angular_speed_filter.reset_previous_speed_order();
+    linear_speed_filter.reset_previous_speed_order();
+    // Reset anti-blocking
+    angular_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+    linear_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+
+    // Reset PIDs
+    reset_speed_pids();
+
+    // Reset pose straight filter state
+    pose_straight_filter.reset_current_state();
+
+    pf_encoder_reset();
+}
+
 void pf_disable_motion_control()
 {
     pf_motion_control_platform_engine.disable();
+
+    // Small wait to ensure engine is disabled
+    ztimer_sleep(ZTIMER_MSEC, motion_control_thread_period_ms);
+
+    // Stop motors as the robot should not move in this case.
+    motor_disable(&motion_motors_driver, MOTOR_LEFT);
+    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
 }
 
 void pf_enable_motion_control()
 {
     pf_motion_control_platform_engine.enable();
-}
-
-void pf_enable_motion_control_messages()
-{
-    _suspend_motion_control_messages = false;
-}
-
-void pf_disable_motion_control_messages()
-{
-    _suspend_motion_control_messages = true;
 }
 
 void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cogip::cogip_defs::Pose &current_pose)
@@ -442,32 +459,50 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
     // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
     // The PWM driver will filter the value to the max PWM resolution defined for the board.
     // Compute motor commands with Polar motion control result
-
     int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
                                                (double)(std::numeric_limits<int16_t>::min()) / 2);
     int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
                                                   (double)(std::numeric_limits<int16_t>::min()) / 2);
 
-    // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
-    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
-    motor_disable(&motion_motors_driver, MOTOR_LEFT);
-    ztimer_sleep(ZTIMER_USEC, 1);
-    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
-    motor_enable(&motion_motors_driver, MOTOR_LEFT);
+    if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::blocked) {
+        if (pf_motion_control_platform_engine.target_pose().bypass_anti_blocking()) {
+            target_pose.set_x(pf_motion_control_platform_engine.current_pose().x());
+            target_pose.set_y(pf_motion_control_platform_engine.current_pose().y());
+            target_pose.set_O(pf_motion_control_platform_engine.current_pose().O());
+            pf_motion_control_platform_engine.set_target_pose(target_pose);
 
-    // Apply motor commands
-    if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
-        right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
+            // Consider pose_reached as anti blocking is bypassed
+            pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
+            // As pose is reached, pose straight filter state machine is in finished state
+            pose_straight_filter.force_finished_state();
+
+            std::cout << "BLOCKED bypasssed" << std::endl;
+        }
+        else {
+            right_command = 0;
+            left_command = 0;
+
+            pose_straight_filter.force_finished_state();
+
+            std::cout << "BLOCKED" << std::endl;
+        }
     }
-    if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
-        left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
+    else {
+        // Apply motor commands
+        if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
+            right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
+        }
+        if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
+            left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
+        }
+        right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
+                        + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                            / (int16_t)motion_motors_driver.params->pwm_resolution);
+        left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
+                        + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
+                            / (int16_t)motion_motors_driver.params->pwm_resolution);
     }
-    right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
-                    + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                        / (int16_t)motion_motors_driver.params->pwm_resolution);
-    left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
-                    + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                        / (int16_t)motion_motors_driver.params->pwm_resolution);
+
     motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
     motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
 
@@ -490,13 +525,8 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         reset_speed_pids();
     }
 
-    // Send robot state only on calibration (when timeout is enabled).
-    if (pf_motion_control_platform_engine.timeout_enable())
-        pf_send_pb_state();
-
     // Backup target pose status flag to avoid flooding protobuf serial bus.
     previous_target_pose_status = pf_motion_control_platform_engine.pose_reached();
-
 }
 
 /// Handle pid request command message.
@@ -611,8 +641,6 @@ void pf_init_motion_control(void)
 {
     // Init motor driver
     motor_driver_init(&motion_motors_driver, &motion_motors_params);
-    motor_enable(&motion_motors_driver, MOTOR_LEFT);
-    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
 
     // Setup qdec periphereal
     int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
@@ -623,9 +651,6 @@ void pf_init_motion_control(void)
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
-
-    //TODO: update
-    //ctrl_set_anti_blocking_on(pf_get_ctrl(), TRUE);
 
     // Init controllers
     pf_quadpid_meta_controller = pf_quadpid_meta_controller_init();
@@ -656,6 +681,7 @@ void pf_init_motion_control(void)
     );
 
     pf_encoder_reset();
+    pf_disable_motion_control();
 }
 
 } // namespace actuators

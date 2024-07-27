@@ -3,61 +3,64 @@ syntax = "proto3";
 enum PB_ActuatorsTypeEnum
 {
   SERVO = 0;
-  POSITIONAL = 2;
-}
-
-enum PB_ActuatorsGroupEnum
-{
-  NO_GROUP = 0;
+  POSITIONAL = 1;
+  BOOL_SENSOR = 2;
 }
 
 enum PB_ServoEnum
 {
-    LXSERVO_UNUSED = 0; // The first enum value must be zero in proto3.
-    LXSERVO_BALL_SWITCH = 1;
-    LXSERVO_RIGHT_ARM = 2;
-    LXSERVO_LEFT_ARM = 4;
+    LXSERVO_LEFT_CART = 0;
+    LXSERVO_RIGHT_CART = 1;
+    LXSERVO_ARM_PANEL = 2;
 }
 
 enum PB_PositionalActuatorEnum
 {
-    MOTOR_CENTRAL_LIFT = 0;
-    MOTOR_CONVEYOR_LAUNCHER = 1;
-    ONOFF_LED_PANELS = 2;
-    ANALOGSERVO_CHERRY_ARM = 3;
-    ANALOGSERVO_CHERRY_ESC = 4;
-    ANALOGSERVO_CHERRY_RELEASE = 5;
-    LXMOTOR_RIGHT_ARM_LIFT = 6;
-    LXMOTOR_LEFT_ARM_LIFT = 7;
+    MOTOR_BOTTOM_LIFT = 0;
+    MOTOR_TOP_LIFT = 1;
+    ANALOGSERVO_BOTTOM_GRIP_LEFT = 2;
+    ANALOGSERVO_BOTTOM_GRIP_RIGHT = 3;
+    ANALOGSERVO_TOP_GRIP_LEFT = 4;
+    ANALOGSERVO_TOP_GRIP_RIGHT = 5;
+    CART_MAGNET_LEFT = 6;
+    CART_MAGNET_RIGHT = 7;
+    ANALOGSERVO_PAMI = 8;
+}
+
+enum PB_BoolSensorEnum
+{
+    BOTTOM_GRIP_LEFT = 0;
+    BOTTOM_GRIP_RIGHT = 1;
+    TOP_GRIP_LEFT = 2;
+    TOP_GRIP_RIGHT = 3;
+    MAGNET_LEFT = 4;
+    MAGNET_RIGHT = 5;
 }
 
 message PB_Servo {
-    PB_ActuatorsGroupEnum group = 1;
-    uint32 order = 2;
-    bool is_blocked = 3;
-    PB_ServoEnum id = 4;
-    uint32 position = 5;
-    uint32 command = 6;
+    bool is_blocked = 1;
+    PB_ServoEnum id = 2;
+    uint32 position = 3;
+    uint32 command = 4;
 }
 
 message PB_PositionalActuator {
-    PB_ActuatorsGroupEnum group = 1;
-    uint32 order = 2;
-    bool is_blocked = 3;
-    PB_PositionalActuatorEnum id = 4;
-    int32 command = 5;
+    bool is_blocked = 1;
+    PB_PositionalActuatorEnum id = 2;
+    int32 command = 3;
+}
+
+message PB_BoolSensor {
+    PB_BoolSensorEnum id = 1;
+    bool state = 2;
 }
 
 message PB_ActuatorState {
     oneof type {
-        PB_Servo servos = 1;
-        PB_PositionalActuator positional_actuators = 2;
+        PB_Servo servo = 1;
+        PB_PositionalActuator positional_actuator = 2;
+        PB_BoolSensor bool_sensor = 3;
     }
-}
-
-message PB_ActuatorsState {
-    repeated PB_Servo servos = 1;
-    repeated PB_PositionalActuator positional_actuators = 2;
 }
 
 message PB_ServoCommand {

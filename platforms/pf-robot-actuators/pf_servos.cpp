@@ -17,10 +17,6 @@
 #include <periph/gpio.h>
 #include <ztimer.h>
 
-#ifndef LX_DIR_PIN
-#define LX_DIR_PIN  GPIO_UNDEF
-#endif
-
 namespace cogip {
 namespace pf {
 namespace actuators {
@@ -32,8 +28,8 @@ static etl::pool<LxServo, COUNT> _servos_pool;
 /// Map from servo id to servo object pointer
 static etl::map<Enum, LxServo *, COUNT> _servos;
 
-// Servo protobuf message
-static PB_Servo _pb_servo;
+// Actuator state protobuf message
+static PB_ActuatorState _pb_actuator_state;
 
 void init(uart_half_duplex_t *lx_stream) {
     // Half duplex stream that must have been initialized previously
@@ -41,24 +37,22 @@ void init(uart_half_duplex_t *lx_stream) {
 
     // Left arm
     _servos[Enum::LXSERVO_LEFT_CART] = _servos_pool.create(
-        Enum::LXSERVO_LEFT_CART,
-        GroupEnum::NO_GROUP,
-        0
+        (cogip::pf::actuators::Enum)Enum::LXSERVO_LEFT_CART
     );
 
     // Right arm
     _servos[Enum::LXSERVO_RIGHT_CART] = _servos_pool.create(
-        Enum::LXSERVO_RIGHT_CART,
-        GroupEnum::NO_GROUP,
-        0
+        (cogip::pf::actuators::Enum)Enum::LXSERVO_RIGHT_CART
     );
 
     // Panel arm
     _servos[Enum::LXSERVO_ARM_PANEL] = _servos_pool.create(
-        Enum::LXSERVO_ARM_PANEL,
-        GroupEnum::NO_GROUP,
-        0
+        (cogip::pf::actuators::Enum)Enum::LXSERVO_ARM_PANEL
     );
+}
+
+bool contains(Enum id) {
+    return _servos.contains(id);
 }
 
 LxServo & get(Enum id) {
@@ -96,18 +90,25 @@ void send_state(Enum servo) {
     static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
-    _pb_servo.clear();
-    servos::get(servo).pb_copy(_pb_servo);
-    if (!canpb.send_message(actuator_state_uuid, &_pb_servo)) {
+    _pb_actuator_state.clear();
+    servos::get(servo).pb_copy(_pb_actuator_state.mutable_servo());
+    if (!canpb.send_message(actuator_state_uuid, &_pb_actuator_state)) {
         std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }
 
-void pb_copy(PB_Message & pb_message) {
-    // cppcheck-suppress unusedVariable
-    for (auto const & [id, servo] : _servos) {
-        servo->pb_copy(pb_message.get(pb_message.get_length()));
+void send_states() {
+    for (auto const & iterator : _servos) {
+        LxServo *servo = iterator.second;
+        servo->send_state();
     }
+}
+
+/// Reset LX servos
+void reset_lx_servos(void) {
+    _servos[Enum::LXSERVO_LEFT_CART]->move(lxservo_cart_left_init_value);
+    _servos[Enum::LXSERVO_RIGHT_CART]->move(lxservo_cart_right_init_value);
+    _servos[Enum::LXSERVO_ARM_PANEL]->move(lxservo_arm_panel_init_value);
 }
 
 } // namespace servos

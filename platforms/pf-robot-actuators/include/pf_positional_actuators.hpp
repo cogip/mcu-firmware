@@ -44,8 +44,6 @@ enum class Enum: uint8_t {
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
-using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, COUNT>;
-
 /// PCA9586 channels
 enum PCA9586Channels {
     CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT = 0,
@@ -60,67 +58,38 @@ constexpr gpio_t pin_cart_magnet_left = GPIO_PIN(PORT_C, 7);
 constexpr gpio_t pin_cart_magnet_right = GPIO_PIN(PORT_C, 9);
 /// @}
 
-/// Limit switches
+/// Analog servomotors initialization position
 /// @{
-constexpr gpio_t pin_limit_switch_bottom_lift = GPIO_PIN(PORT_B, 14);
-constexpr gpio_t pin_limit_switch_top_lift = GPIO_PIN(PORT_B, 13);
-/// @}
-
-/// Front arms servomotor positions
-/// @{
-constexpr int analog_servomotor_bottom_grip_left_opened = 110;
-constexpr int analog_servomotor_bottom_grip_left_closed = 195;
-constexpr int analog_servomotor_bottom_grip_right_opened = 180;
-constexpr int analog_servomotor_bottom_grip_right_closed = 95;
-constexpr int analog_servomotor_top_grip_left_opened = 90;
-constexpr int analog_servomotor_top_grip_left_closed = 165;
-constexpr int analog_servomotor_top_grip_right_opened = 185;
-constexpr int analog_servomotor_top_grip_right_closed = 110;
-/// @}
-
-/// Actuators timeouts
-/// @{
-constexpr uint32_t default_timeout_period_motor_bottom_lift = 3;
-constexpr uint32_t default_timeout_period_motor_top_lift = 3;
-/// @}
-
-
-/// Actuators DC motors IDs
-/// @{
+constexpr int32_t analogservo_grip_bottom_left_init_value = 250;
+constexpr int32_t analogservo_grip_bottom_right_init_value = 147;
+constexpr int32_t analogservo_grip_top_left_init_value = 222;
+constexpr int32_t analogservo_grip_top_right_init_value = 137;
 /// @}
 
 /// Initialize positional_actuators.
 void init();
 
-/// GPIO expander wrapper
-void pf_pcf857x_gpio_write(gpio_t pin, int value);
-
 /// Check if a positional_actuator identified by id exists.
 bool contains(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Get a positional_actuator by id.
 PositionalActuator & get(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Disable all positional actuators
 void disable_all();
 
-/// Send emergency button pressed protobuf message
-void send_emergency_button_pressed();
-
-/// Send emergency button released protobuf message
-void send_emergency_button_released();
-
 /// Send positional actuator state protobuf message
-void send_state(Enum positional_actuator);
+void send_state(cogip::pf::actuators::Enum positional_actuator);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
+
+/// Reset positional actuators
+void reset_positional_actuators(void);
 
 } // namespace positional_actuators
 } // namespace actuators

@@ -28,11 +28,12 @@ public:
         double x=0.0,                   ///< [in] X coordinate
         double y=0.0,                   ///< [in] Y coodinate
         double O=0.0,                   ///< [in] 0-orientation
-        double max_speed_ratio_linear=0.0,    ///< [in] max speed linear
-        double max_speed_ratio_angular=0.0,   ///< [in] max speed angular
+        double max_speed_ratio_linear=0.0,  ///< [in] max speed linear
+        double max_speed_ratio_angular=0.0, ///< [in] max speed angular
         bool allow_reverse=true,        ///< [in] reverse mode
-        bool bypass_antiblocking=false, ///< [in] reverse mode
-        uint32_t timeout_ms=0
+        bool bypass_antiblocking=false, ///< [in] bypass anti blocking
+        uint32_t timeout_ms=0,          ///< [in] move timeout
+        bool bypass_final_orientation=false ///< [in] bypass final orientation
         );
 
     /// Destructor
@@ -56,7 +57,10 @@ public:
     virtual bool bypass_anti_blocking() const { return bypass_anti_blocking_; }
 
     /// Return timeout to reach the pose, 0 if timeout should be disabled
-    virtual uint32_t timeout_() const { return timeout_ms_; }
+    virtual uint32_t timeout_ms() const { return timeout_ms_; }
+
+    /// Return true if final orientation should be bypassed
+    virtual bool bypass_final_orientation() const { return bypass_final_orientation_; }
 
     /// Initialize the object from a Protobuf message.
     void pb_read(
@@ -76,7 +80,10 @@ public:
             areDoublesEqual(O(), other.O()) &&
             areDoublesEqual(max_speed_ratio_linear(), other.max_speed_ratio_linear()) &&
             areDoublesEqual(max_speed_ratio_angular(), other.max_speed_ratio_angular()) &&
-            allow_reverse() == other.allow_reverse()
+            allow_reverse() == other.allow_reverse() &&
+	    bypass_anti_blocking() == other.bypass_anti_blocking() &&
+            timeout_ms() == other.timeout_ms() &&
+            bypass_final_orientation() == other.bypass_final_orientation()
         );
     };
 
@@ -86,6 +93,7 @@ private:
     bool allow_reverse_;            ///< reverse mode
     bool bypass_anti_blocking_;     ///< bypass anti blocking
     uint32_t timeout_ms_;           ///< timeout(ms) to reach the path pose
+    bool bypass_final_orientation_; ///< bypass anti blocking
 };
 
 } // namespace path

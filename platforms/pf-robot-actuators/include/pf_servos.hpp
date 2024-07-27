@@ -32,7 +32,7 @@ constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
 using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_Servo, COUNT>;
 
-/// Serco command class.
+/// Servo command class.
 class Command {
 public:
     /// Constructor.
@@ -50,9 +50,14 @@ public:
 /// Initialize LX servomotors.
 void init(uart_half_duplex_t *lx_stream);
 
+/// Check if a given LX servomotor exists
+bool contains(
+    Enum id ///< [in] servo id
+);
+
 /// Get a servo by id.
 LxServo & get(
-    Enum id  ///< servo id
+    cogip::pf::actuators::Enum id  ///< servo id
 );
 
 /// Move servo according to the given command.
@@ -61,7 +66,7 @@ void move(
     uint32_t wait = 0         ///< [in] time to wait after move (in ms)
 );
 
-/// Move mutliple servos in parallel according to the given commands
+/// Move multiple servos in parallel according to the given commands
 void parallel_move(
     const etl::list<Command, COUNT> & commands,  ///< [in] servo commands
     uint32_t wait = 0                            ///< [in] time to wait after move (in ms)
@@ -73,10 +78,18 @@ void disable_all();
 /// Send pump state protobuf message
 void send_state(Enum servo);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
+
+/// Reset LX servos
+void reset_lx_servos(void);
+
+/// Analog servomotors initialization position
+/// @{
+constexpr int32_t lxservo_arm_panel_init_value = 350;
+constexpr int32_t lxservo_cart_left_init_value = 950;
+constexpr int32_t lxservo_cart_right_init_value = 50;
+/// @}
 
 } // namespace servos
 } // namespace actuators

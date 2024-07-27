@@ -7,12 +7,10 @@
 #include "pf_positional_actuators.hpp"
 
 #include "AnalogServo.hpp"
-#include "LxMotor.hpp"
 #include "Motor.hpp"
 #include "OnOff.hpp"
 #include "PositionalActuator.hpp"
 
-#include "actuators_motors_params.hpp"
 #include "pca9685_params.hpp"
 #include "platform.hpp"
 
@@ -29,8 +27,8 @@ namespace pf {
 namespace actuators {
 namespace positional_actuators {
 
-// Positional actuator protobuf message
-static PB_PositionalActuator _pb_positional_actuator;
+// Actuator state protobuf message
+static PB_ActuatorState _pb_actuator_state;
 
 /// Positional actuator timeout thread stack
 static char _positional_actuators_timeout_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -45,10 +43,8 @@ static etl::pool<Motor, COUNT> _motors_pool;
 static etl::pool<OnOff, COUNT> _onoff_pool;
 /// Analog servomotor pool
 static etl::pool<AnalogServo, COUNT> _analog_servo_pool;
-/// Numerical servomotor pool
-static etl::pool<LxMotor, COUNT> _lxmotor_pool;
 /// Positional actuators map
-static etl::map<Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
+static etl::map<cogip::pf::actuators::Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
 
 /// GPIOs event pool
 static etl::pool<event_t, 20> _gpio_event_pool;
@@ -79,16 +75,6 @@ static void init_interruptable_pin(gpio_t pin, gpio_mode_t mode, gpio_flank_t fl
     _gpio_events[pin] = _gpio_event_pool.create();
     _gpio_events[pin]->list_node.next = nullptr;
     _gpio_pins[_gpio_events[pin]] = pin;
-}
-
-/// Check central lift bottom limit switch
-static int check_limit_switch_bottom_lift() {
-    return gpio_read(pin_limit_switch_bottom_lift);
-}
-
-/// Check central lift top limit switch
-static int check_limit_switch_top_lift() {
-    return gpio_read(pin_limit_switch_top_lift);
 }
 
 /// Init I2C PWM driver
@@ -139,6 +125,7 @@ static void *_positional_actuators_timeout_thread(void *args)
             if (positional_actuator->timeout_period()) {
                 if (!positional_actuator->decrement_timeout_period()) {
                     positional_actuator->disable();
+                    positional_actuator->send_state();
                 }
             }
         }
@@ -150,77 +137,68 @@ static void *_positional_actuators_timeout_thread(void *args)
     return 0;
 }
 
+void reset_positional_actuators(void) {
+    // Grips
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT]->actuate(analogservo_grip_bottom_left_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT]->actuate(analogservo_grip_bottom_right_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT]->actuate(analogservo_grip_top_left_init_value);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT]->actuate(analogservo_grip_top_right_init_value);
+
+    // Magnets
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT]->actuate(false);
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT]->actuate(false);
+}
+
 void init() {
     // Init PWM I2C driver
     _pca9685_init();
 
     // AnalogServo init
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_TOP_GRIP_LEFT,
-        GroupEnum::NO_GROUP,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT,
         0,
-        0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT])->add_position(analog_servomotor_top_grip_left_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT])->add_position(analog_servomotor_top_grip_left_opened);
 
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
-        GroupEnum::NO_GROUP,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
         0,
-        0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT])->add_position(analog_servomotor_top_grip_right_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT])->add_position(analog_servomotor_top_grip_right_opened);
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
-        GroupEnum::NO_GROUP,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
         0,
-        0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT])->add_position(analog_servomotor_bottom_grip_left_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT])->add_position(analog_servomotor_bottom_grip_left_opened);
-
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
-        Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
-        GroupEnum::NO_GROUP,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
+        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
         0,
-        0,
+        send_state,
         PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT
     );
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_closed);
-    static_cast<AnalogServo*>(_positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT])->add_position(analog_servomotor_bottom_grip_right_opened);
-
-    // Close all arms in 1 second
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT]->actuate_timeout(0, 1000);
-    _positional_actuators[Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT]->actuate_timeout(0, 1000);
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_LEFT]->actuate_timeout(0, 1000);
-    _positional_actuators[Enum::ANALOGSERVO_TOP_GRIP_RIGHT]->actuate_timeout(0, 1000);
 
     // OnOff init
-    _positional_actuators[Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
-        Enum::CART_MAGNET_LEFT,
-        GroupEnum::NO_GROUP,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
+        (cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT,
         0,
-        0,
+        send_state,
         false,
-        false,
+        true,
         pin_cart_magnet_left
     );
-    _positional_actuators[Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
-        Enum::CART_MAGNET_RIGHT,
-        GroupEnum::NO_GROUP,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT] = _onoff_pool.create(
+        (cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT,
         0,
-        0,
+        send_state,
         false,
-        false,
+        true,
         pin_cart_magnet_right
     );
 
-    // Positional actuators timeout thread
+    // Positional actuators gpio handling
     thread_create(
         _gpio_handling_thread_stack,
         sizeof(_gpio_handling_thread_stack),
@@ -239,38 +217,37 @@ void init() {
         THREAD_CREATE_STACKTEST,
         _positional_actuators_timeout_thread,
         NULL,
-        "Positional acturators timeout thread"
+        "Positional actuators timeout thread"
     );
 }
 
-bool contains(Enum id) {
+bool contains(cogip::pf::actuators::Enum id) {
     return _positional_actuators.contains(id);
 }
 
-PositionalActuator & get(Enum id) {
+PositionalActuator & get(cogip::pf::actuators::Enum id) {
     return *_positional_actuators[id];
 }
 
-void send_state(Enum positional_actuator) {
+void send_state(cogip::pf::actuators::Enum positional_actuator) {
     // Protobuf CAN interface
     static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
 
     // Send protobuf message
-    _pb_positional_actuator.clear();
-    positional_actuators::get(positional_actuator).pb_copy(_pb_positional_actuator);
-    if (!canpb.send_message(actuator_state_uuid, &_pb_positional_actuator)) {
+    _pb_actuator_state.clear();
+    positional_actuators::get(positional_actuator).pb_copy(_pb_actuator_state.mutable_positional_actuator());
+    if (!canpb.send_message(actuator_state_uuid, &_pb_actuator_state)) {
         std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
     }
 }
 
-void pb_copy(PB_Message & pb_message) {
-    // cppcheck-suppress unusedVariable
+void send_states() {
     for (auto const & [id, actuator] : _positional_actuators) {
-        actuator->pb_copy(pb_message.get(pb_message.get_length()));
+        send_state(id);
     }
 }
 
-} // namespace actuators
+} // namespace positional_actuators
 } // namespace actuators
 } // namespace pf
 } // namespace cogip

@@ -24,15 +24,13 @@ namespace servos {
 /// Servomotors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: lx_id_t {
-    LXSERVO_BALL_SWITCH = 1,
-    LXSERVO_RIGHT_ARM = 2,
-    LXSERVO_LEFT_ARM = 4
+    NO_LXSERVO = 0
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
 using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_Servo, COUNT>;
 
-/// Serco command class.
+/// Servo command class.
 class Command {
 public:
     /// Constructor.
@@ -55,13 +53,18 @@ LxServo & get(
     Enum id  ///< servo id
 );
 
+/// Check if a given LX servomotor exists
+bool contains(
+    Enum id ///< [in] servo id
+);
+
 /// Move servo according to the given command.
 void move(
     const Command & command,  ///< [in] servo command
     uint32_t wait = 0         ///< [in] time to wait after move (in ms)
 );
 
-/// Move mutliple servos in parallel according to the given commands
+/// Move multiple servos in parallel according to the given commands
 void parallel_move(
     const etl::list<Command, COUNT> & commands,  ///< [in] servo commands
     uint32_t wait = 0                            ///< [in] time to wait after move (in ms)
@@ -73,10 +76,8 @@ void disable_all();
 /// Send pump state protobuf message
 void send_state(Enum servo);
 
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+/// Send all positional actuator states
+void send_states();
 
 } // namespace servos
 } // namespace actuators

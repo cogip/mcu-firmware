@@ -23,22 +23,16 @@ namespace pf {
 namespace actuators {
 namespace positional_actuators {
 
-constexpr uint8_t max_positions = 10;
-
 /// Class representing a servomotor driven by pca9685.
 class AnalogServo: public PositionalActuator {
 public:
     /// Constructor.
     AnalogServo(
-        Enum id,                            ///< [in] motor id
-        GroupEnum group,                    ///< [in] actuator group
-        uint8_t order = 0,                  ///< [in] order in actuator group
+        cogip::pf::actuators::Enum id,      ///< [in] actuator id
         uint32_t default_timeout_period = 0,///< [in] default timeout
+        send_state_cb_t send_state_cb = nullptr, ///< [in] send state callback
         int servo_id = 0                    ///< [in] Servomotor ID on PCA9685
     );
-
-    /// Add new position
-    void add_position(uint16_t);
 
     /// Disable the motor.
     void disable() override;
@@ -55,8 +49,6 @@ public:
 
 private:
     int channel_ = 0;                       ///< Servomotor ID on PCA9685
-
-    etl::vector<uint16_t, max_positions> positions_;    ///< List of servomotor positions
 };
 
 } // namespace motors

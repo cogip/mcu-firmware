@@ -13,6 +13,8 @@
 /* Platform includes */
 #include "pf_actuators.hpp"
 #include "pf_positional_actuators.hpp"
+#include "pf_servos.hpp"
+#include "pf_sensors.hpp"
 
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
@@ -82,6 +84,8 @@ static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer & buffe
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::enable_all();
+    cogip::pf::actuators::positional_actuators::reset_positional_actuators();
+    cogip::pf::actuators::servos::reset_lx_servos();
 }
 
 /// Start threading sending actuators state.
@@ -94,6 +98,8 @@ void _handle_copilot_connected(cogip::canpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
+    cogip::pf::actuators::servos::send_states();
+    cogip::pf::actuators::positional_actuators::send_states();
 }
 
 void _handle_copilot_disconnected(cogip::canpb::ReadBuffer &)
@@ -150,6 +156,7 @@ void pf_init(void)
     }
 
     cogip::pf::actuators::init();
+    cogip::pf::sensors::init();
 
     shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
 }

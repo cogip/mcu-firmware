@@ -19,21 +19,11 @@ namespace positional_actuators {
 pca9685_t AnalogServo::pca9685_dev;
 
 AnalogServo::AnalogServo(
-    Enum id,
-    GroupEnum group,
-    uint8_t order,
+    cogip::pf::actuators::Enum id,
     uint32_t default_timeout_period,
+    send_state_cb_t send_state_cb,
     int channel
-) : PositionalActuator(id, group, order, default_timeout_period), channel_(channel) {
-}
-
-void AnalogServo::add_position(uint16_t position) {
-    if (!positions_.full()) {
-        positions_.push_back(position);
-    }
-    else {
-        std::cerr << "ERROR: Servomotor " << channel_ << " positions list is full!" << std::endl;
-    }
+) : PositionalActuator(id, default_timeout_period, send_state_cb), channel_(channel) {
 }
 
 void AnalogServo::disable() {
@@ -41,15 +31,17 @@ void AnalogServo::disable() {
 }
 
 void AnalogServo::actuate(int32_t command) {
-    if ((command >= 0) && (static_cast<unsigned int>(command) < positions_.size())) {
-        pca9685_pwm_set(&AnalogServo::pca9685_dev, channel_, positions_.at(command));
-        std::cout << "INFO: Servomotor " << channel_ << " at position " << positions_.at(command) << std::endl;
+    if (command > 0) {
+        pca9685_pwm_set(&AnalogServo::pca9685_dev, channel_, command);
+        std::cout << "INFO: Servomotor " << channel_ << " at position " << command << std::endl;
+        command_ = command;
     }
     else {
         std::cerr << "ERROR: Servomotor " << channel_ << " command out of range!" << std::endl;
+        return;
     }
 
-    command_ = command;
+    send_state();
 }
 
 } // namespace positional_actuators

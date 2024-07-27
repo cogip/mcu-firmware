@@ -31,22 +31,17 @@ class Motor: public PositionalActuator {
 public:
     /// Constructor.
     explicit Motor(
-        Enum id,                            ///< [in] motor id
-        GroupEnum group,                    ///< [in] actuator group
-        uint8_t order = 0,                  ///< [in] order in actuator group
+        cogip::pf::actuators::Enum id,          ///< [in] actuator id
         uint32_t default_timeout_period = 0,///< [in] default timeout
+        send_state_cb_t send_state_cb = nullptr,///< [in] send state callback
         motor_driver_t *motor_driver = nullptr, ///< [in] motor driver
-        uint8_t motor_id = 0,               ///< [in] motor id for the given motor driver
-        check_limit_switch_cb_t check_limit_switch_positive_direction_cb = nullptr, ///< [in] callback to check limit switch for positive direction
-        check_limit_switch_cb_t check_limit_switch_negative_direction_cb = nullptr  ///< [in] callback to check limit switch for negative direction
-    ) : PositionalActuator(id, group, order, default_timeout_period),
+        uint8_t motor_id = 0               ///< [in] motor id for the given motor driver
+    ) : PositionalActuator(id, default_timeout_period, send_state_cb),
         motor_driver_(motor_driver),
-        motor_id_(motor_id),
-        check_limit_switch_positive_direction_cb_(check_limit_switch_positive_direction_cb),
-        check_limit_switch_negative_direction_cb_(check_limit_switch_negative_direction_cb) { Motor::disable(); };
+        motor_id_(motor_id) { Motor::disable(); };
 
     /// Disable the motor after checking direction.
-    bool disable_on_check() override;
+    bool disable_on_check() override { disable(); return true; };
 
     /// Disable the motor.
     void disable() override;
@@ -60,10 +55,6 @@ private:
     motor_driver_t  *motor_driver_;         ///< hardware motor driver id
 
     uint8_t motor_id_;                      ///< motor id for the given motor driver
-
-    check_limit_switch_cb_t check_limit_switch_positive_direction_cb_;  ///< callback to check limit switch for positive direction
-
-    check_limit_switch_cb_t check_limit_switch_negative_direction_cb_;  ///< callback to check limit switch for negative direction
 };
 
 } // namespace motors

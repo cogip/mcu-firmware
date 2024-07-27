@@ -25,7 +25,9 @@ namespace actuators {
 namespace positional_actuators {
 
 /// Quadrature decoding
+#ifndef QDEC_MODE
 #define QDEC_MODE                   QDEC_X4
+#endif
 #define QDEC_BOTTOM_LIFT_POLARITY   -1
 #define QDEC_TOP_LIFT_POLARITY      1
 
@@ -55,7 +57,7 @@ constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter_mm;
 ///< controller thread loop period
 constexpr uint16_t motor_lift_control_thread_period_ms = 20;
 
-/// Lift motors speed filter paramaeters
+/// Lift motors speed filter parameters
 constexpr double motor_lift_anti_blocking_speed_threshold_per_period = 0.3;
 constexpr double motor_lift_anti_blocking_error_threshold_per_period = 0.02;
 constexpr double motor_lift_anti_blocking_blocked_cycles_nb_threshold = 10;
@@ -90,8 +92,6 @@ enum class Enum: uint8_t {
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
-using PB_Message = EmbeddedProto::RepeatedFieldFixedSize<PB_PositionalActuator, COUNT>;
-
 /// Actuators timeouts
 /// @{
 constexpr uint32_t default_timeout_period_motor_bottom_lift = 30;
@@ -113,24 +113,19 @@ void init();
 
 /// Check if a positional_actuator identified by id exists.
 bool contains(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Get a positional_actuator by id.
 PositionalActuator & get(
-    Enum id  ///< [in] positional_actuator id
+    cogip::pf::actuators::Enum id  ///< [in] positional_actuator id
 );
 
 /// Disable all positional actuators
 void disable_all();
 
 /// Send positional actuator state protobuf message
-void send_state(Enum positional_actuator);
-
-/// Copy data to Protobuf message.
-void pb_copy(
-    PB_Message & pb_message  ///< [out] Protobuf message to fill
-);
+void send_state(cogip::pf::actuators::Enum positional_actuator);
 
 /// Initialize motors at their origin
 void pf_init_motors_sequence(void);

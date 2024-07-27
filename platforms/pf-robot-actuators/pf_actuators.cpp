@@ -28,22 +28,11 @@ static char _sender_stack[THREAD_STACKSIZE_MEDIUM];
 static  bool _suspend_sender = false;
 static  bool _suspend_actuators = false;
 
-static PB_ActuatorsState<cogip::pf::actuators::servos::COUNT, cogip::pf::actuators::positional_actuators::COUNT> _pb_state;
-
 /// Half duplex CAN stream
 static uart_half_duplex_t _lx_stream;
 
 /// LX servos command buffer
 static uint8_t _lx_servos_buffer[LX_UART_BUFFER_SIZE];
-
-/// Build and send Protobuf actuators state message.
-static void _send_state() {
-    static cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
-    _pb_state.clear();
-    servos::pb_copy(_pb_state.mutable_servos());
-    positional_actuators::pb_copy(_pb_state.mutable_positional_actuators());
-    canpb.send_message(actuator_state_uuid, &_pb_state);
-}
 
 /// Actuators state sender thread.
 static void *_thread_sender([[maybe_unused]] void *arg)
@@ -57,7 +46,7 @@ static void *_thread_sender([[maybe_unused]] void *arg)
             thread_sleep();
         }
 
-        _send_state();
+        servos::send_states();
 
         // Wait thread period to end
         cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, SENDER_PERIOD_MSEC);
@@ -100,16 +89,19 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
     if (!_suspend_actuators) {
         if (pb_command.has_servo()) {
             const PB_ServoCommand & pb_servo_command = pb_command.get_servo();
-            servos::move(
-                {
-                    servos::Enum{(lx_id_t)pb_servo_command.id()},
-                    (uint16_t)pb_servo_command.command()
-                }
-            );
+            servos::Enum id = servos::Enum{(lx_id_t)pb_servo_command.id()};
+            if (servos::contains(id)) {
+                servos::move(
+                    {
+                        id,
+                        (uint16_t)pb_servo_command.command()
+                    }
+                );
+            }
         }
         if (pb_command.has_positional_actuator()) {
             const PB_PositionalActuatorCommand & pb_positional_actuator_command = pb_command.get_positional_actuator();
-            positional_actuators::Enum id = positional_actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
+            Enum id = Enum{(uint8_t)pb_positional_actuator_command.id()};
             if (positional_actuators::contains(id)) {
                 positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
             }
@@ -118,15 +110,21 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
 }
 
 static void _dir_init([[maybe_unused]] uart_t uart) {
+#ifdef LX_DIR_PIN
     gpio_init(LX_DIR_PIN, GPIO_OUT);
+#endif
 }
 
 static void _dir_enable_tx([[maybe_unused]] uart_t uart) {
+#ifdef LX_DIR_PIN
     gpio_clear(LX_DIR_PIN);
+#endif
 }
 
 static void _dir_disable_tx([[maybe_unused]] uart_t uart) {
+#ifdef LX_DIR_PIN
     gpio_set(LX_DIR_PIN);
+#endif
 }
 
 static void _lx_half_duplex_uart_init() {
@@ -174,14 +172,6 @@ void init() {
         );
 
     cogip::canpb::CanProtobuf & canpb = pf_get_canpb();
-    canpb.register_message_handler(
-        thread_start_uuid,
-        canpb::message_handler_t::create<_handle_thread_start>()
-    );
-    canpb.register_message_handler(
-        thread_stop_uuid,
-        canpb::message_handler_t::create<_handle_thread_stop>()
-    );
     canpb.register_message_handler(
         command_uuid,
         canpb::message_handler_t::create<_handle_command>()

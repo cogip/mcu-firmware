@@ -16,14 +16,16 @@ namespace pf {
 namespace actuators {
 
 enum class GroupEnum: uint8_t;
+enum class Enum: uint8_t;
 
+typedef void (*send_state_cb_t)(Enum id);
 class Actuator {
 public:
     /// Constructor
     explicit Actuator(
-        GroupEnum group,   /// [in] actuator group
-        uint8_t order = 0  /// [in] actuator order in group
-        ) : group_(group), order_(order), blocked_(0) {};
+        Enum id,                                ///< [in] actuator id
+        send_state_cb_t send_state_cb = nullptr ///< [in] send state callback
+    ) : id_(id), blocked_(0), send_state_cb_(send_state_cb) {};
 
     /// Get blocked state
     bool blocked() { return blocked_; }
@@ -31,10 +33,15 @@ public:
     /// Set blocked state
     void set_blocked(bool blocked) { blocked_ = blocked; }
 
+    /// Send actuator state on communication bus
+    virtual void send_state(void) { if (send_state_cb_) send_state_cb_(id_); }
+
 protected:
-    GroupEnum group_;   /// actuator group
-    uint8_t order_;     /// actuator order in group
+    Enum id_;           /// Actuator ID
+
     bool blocked_;      /// blocked state
+
+    send_state_cb_t send_state_cb_; ///< send actuator current state on communication bus
 };
 
 } // namespace actuators
