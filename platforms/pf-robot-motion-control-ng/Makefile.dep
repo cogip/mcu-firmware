@@ -1,0 +1,26 @@
+# RIOT modules
+USEMODULE += event
+USEMODULE += periph_gpio_irq
+USEMODULE += motor_driver
+USEMODULE += printf_float
+USEMODULE += ps
+USEMODULE += scanf_float
+USEMODULE += schedstatistics
+USEMODULE += shell
+USEMODULE += shell_cmds_default
+
+# mcu-firmware modules
+USEMODULE += cogip_defs
+USEMODULE += odometry
+USEMODULE += path
+USEMODULE += canpb
+# Controllers
+USEMODULE += passthrough_pose_pid_controller
+USEMODULE += quadpid_meta_controller
+USEMODULE += platform_engine
+USEMODULE += pose_straight_filter
+USEMODULE += speed_filter
+
+# Board features required
+FEATURES_REQUIRED += periph_qdec
+FEATURES_REQUIRED += periph_pwm
