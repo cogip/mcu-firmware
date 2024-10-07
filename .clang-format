@@ -1,0 +1,163 @@
+# @file      .clang-format
+# @brief     clang-format configuration.
+#
+#            When using -style=file, clang-format for each input file will try to find the 
+#            .clang-format file located in the closest parent directory of the input file.
+#            When the standard input is used, the search is started from the current directory.
+#
+#            Only the .clang-format is required inside your project. 
+#            clang-format symlink is only for example purpose.
+
+---
+Language: Cpp
+
+# Use 100 columns.
+ColumnLimit: 100
+
+# Indentation must be done using whitespaces
+UseTab: Never
+UseCRLF: false
+
+# Regex denoting the diff #include categories used for ordering them.
+IncludeCategories:
+  # Headers in <> with extension.
+  - Regex:           '<([A-Za-z0-9.\/_-])+>'
+    Priority:        -1
+    SortPriority:    0
+  # Headers in "" with extension.
+  - Regex:           '"([A-Za-z0-9.\/_-])+"'
+    Priority:        1
+    SortPriority:    0
+
+# Regroup multiple #include blocks together.
+IncludeBlocks: Regroup
+
+# If true, clang-format will sort #includes.
+SortIncludes: true
+
+# Tabulation.
+IndentWidth: 4
+TabWidth: 4
+ContinuationIndentWidth: 4
+AccessModifierOffset: -4
+
+# Make no braces {} on new line, except for functions.
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+# Pointer and reference alignment style
+PointerAlignment: Right
+
+# Add space before assignment operators.
+SpaceBeforeAssignmentOperators: true
+
+# Break before operators.
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: false
+BreakBeforeInheritanceComma: false
+
+# Break long strings.
+BreakStringLiterals: true
+
+# Spaces will not be inserted after ( and before ).
+SpacesInParentheses: false
+
+# Spaces may not be inserted into C style casts.
+SpacesInCStyleCastParentheses: false
+
+# Spaces may not be inserted into ().
+SpaceInEmptyParentheses: false
+
+# Indent case labels one level from the switch statement.
+IndentCaseLabels: false
+
+# Indent the name of wrapped functions.
+IndentWrappedFunctionNames: false
+
+# Horizontally aligns arguments and parameters after an open bracket.
+AlignAfterOpenBracket: Align
+BinPackParameters: false
+BinPackArguments: false
+
+# Indents directives after the hash.
+IndentPPDirectives: None
+
+# A space will be inserted before a C++11 braced list used to init an obj.
+SpaceBeforeCpp11BracedList: false
+
+# Put a space before opening parentheses only after control statement keywords.
+SpaceBeforeParens: ControlStatements
+
+# Spaces will not be inserted after < and before > in template argument lists.
+SpacesInAngles: false
+
+# The maximum number of consecutive empty lines to keep.
+MaxEmptyLinesToKeep: 1
+
+# Dependent on the value, int f() { return 0; } can be put on a single line.
+AllowShortFunctionsOnASingleLine: Inline
+
+# The function declaration return type breaking style to use.
+AlwaysBreakAfterReturnType: None
+AlwaysBreakAfterDefinitionReturnType: None
+
+# If true, always break before multiline string literals.
+AlwaysBreakBeforeMultilineStrings: true
+
+# Align escaped newlines as far left as possible.
+AlignEscapedNewlines: Left
+
+# Align all operands.
+AlignOperands: true
+
+# Align trailing comments.
+AlignTrailingComments: true
+
+# Align consecutive things.
+AlignConsecutiveMacros: true
+AlignConsecutiveBitFields: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: false
+
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: true
+AllowShortLambdasOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# Prevent comment formatting.
+CommentPragmas:  '^\* .*'
+
+# If true, the empty line at the start of blocks is kept.
+KeepEmptyLinesAtTheStartOfBlocks: true
+
+PenaltyBreakAssignment: 1000000
+PenaltyBreakBeforeFirstCallParameter: 25
+PenaltyBreakComment: 0
+PenaltyBreakFirstLessLess: 0
+PenaltyBreakString: 0
+PenaltyBreakTemplateDeclaration: 0
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 1000000
+---
