@@ -28,7 +28,6 @@
 #pragma once
 
 /* Project includes */
-#include "odometry.hpp"
 #include "utils.hpp"
 #include "canpb/CanProtobuf.hpp"
 

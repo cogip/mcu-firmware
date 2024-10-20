@@ -3,6 +3,7 @@
 
 // Project includes
 #include "Encoder.hpp"
+#include "Odometry.hpp"
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
 #include "PB_Pid.hpp"
@@ -181,6 +182,10 @@ static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
 static cogip::encoder::Encoder left_encoder(MOTOR_LEFT, cogip::encoder::EncoderMode::ENCODER_MODE_X4, wheels_encoder_resolution);
 static cogip::encoder::Encoder right_encoder(MOTOR_RIGHT, cogip::encoder::EncoderMode::ENCODER_MODE_X4, wheels_encoder_resolution);
 
+/// Odometry 
+static cogip::odometry::OdometryParams odometry_params(wheels_diameter_mm, wheels_distance_mm);
+static cogip::odometry::Odometry odometry(odometry_params);
+
 /// Initialize platform QuadPID meta controller
 /// Return initialized QuadPID meta controller
 static cogip::motion_control::QuadPIDMetaController *pf_quadpid_meta_controller_init(void)
@@ -287,32 +292,10 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
     passthrough_angular_pose_controller_parameters.set_signed_target_speed(false);
 }
 
-/// Update current speed from quadrature encoders measure.
-void pf_encoder_read(cogip::cogip_defs::Polar &current_speed)
-{
-
-#if 0 
-    int32_t left_speed  = qdec_read_and_reset(MOTOR_LEFT) * QDEC_LEFT_POLARITY;
-    int32_t right_speed = qdec_read_and_reset(MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
-#else
-    int32_t left_speed  = left_encoder.read_and_reset() * QDEC_LEFT_POLARITY;
-    int32_t right_speed = right_encoder.read_and_reset() * QDEC_RIGHT_POLARITY;
-#endif
-
-    // update speed
-    current_speed.set_distance(((right_speed + left_speed) / 2.0) / pulse_per_mm);
-    current_speed.set_angle((right_speed - left_speed) / pulse_per_degree);
-}
-
 static void pf_encoder_reset(void)
 {
-#if 0
-    qdec_read_and_reset(MOTOR_LEFT);
-    qdec_read_and_reset(MOTOR_RIGHT);
-#else
     left_encoder.reset();
     right_encoder.reset();
-#endif
 }
 
 void pf_send_pb_pose(void)
@@ -481,8 +464,14 @@ void pf_enable_motion_control()
 void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed,
                                     cogip::cogip_defs::Pose &current_pose)
 {
-    pf_encoder_read(current_speed);
-    odometry_update(current_pose, current_speed, SEGMENT);
+    if(odometry.update() < 0)
+    {
+        std::cout << "Odometry update failure" << std::endl;
+        return;
+    }
+    
+    current_pose = odometry.position();
+    current_speed = odometry.velocities();
 }
 
 void pf_motor_drive(const cogip::cogip_defs::Polar &command)
@@ -702,17 +691,7 @@ void pf_init_motion_control(void)
     // Init motor driver
     motor_driver_init(&motion_motors_driver, &motion_motors_params);
 
-    // Setup qdec periphereal
-#if 0
-    int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
-    if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LEFT, error);
-    }
-    error = qdec_init(QDEC_DEV(MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
-    if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
-    }
-#else
+    // Setup encoders
     int error = left_encoder.setup();
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LEFT, error);
@@ -721,7 +700,9 @@ void pf_init_motion_control(void)
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
-#endif
+    
+    // Setup odometry
+    odometry.setup(left_encoder, right_encoder);
 
     // Init controllers
     pf_quadpid_meta_controller = pf_quadpid_meta_controller_init();
