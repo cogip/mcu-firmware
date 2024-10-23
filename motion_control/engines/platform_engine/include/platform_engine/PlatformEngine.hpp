@@ -33,8 +33,8 @@ class PlatformEngine : public BaseControllerEngine {
 public:
     /// Constructor
     PlatformEngine(
-        const OdometerInterface &odometer,               ///< [in] Robot odometer reference
-        const DriveControllerInterface &drive_contoller, ///< [in] Robot drive controller
+        odometer::OdometerInterface &odometer,               ///< [in] Robot odometer reference
+        drive_controller::DriveControllerInterface &drive_contoller, ///< [in] Robot drive controller
         pose_reached_cb_t pose_reached_cb                ///< [in] Callback to send pose reached state from last controller
     ) : BaseControllerEngine(),
         odometer_(odometer),
@@ -43,7 +43,7 @@ public:
 
     /// Get current speed
     /// return     current speed
-    const cogip_defs::Polar& current_speed() const { return current_speed_; };
+    const cogip_defs::Polar& current_speed() const { return odometer_.delta_polar_pose(); };
 
     /// Get target speed
     /// return     target speed
@@ -51,7 +51,7 @@ public:
 
     /// Get current pose
     /// return     current pose
-    const cogip_defs::Pose& current_pose() const { return current_pose_; };
+    const cogip_defs::Pose& current_pose() const { return odometer_.pose(); };
 
     /// Get target pose
     /// return     target pose
@@ -65,7 +65,7 @@ public:
     /// Set current pose
     void set_current_pose(
         const cogip_defs::Pose& current_pose    ///< [in]   new current pose
-        ) { current_pose_ = current_pose; };
+        ) { odometer_.set_pose(current_pose); };
 
     /// Set target pose
     void set_target_pose(
@@ -79,23 +79,17 @@ private:
     /// Process controller output for platform restitution.
     void process_outputs();
 
-    /// Robot polar current speed
-    cogip_defs::Polar current_speed_;
-
     /// Robot polar target speed
     cogip_defs::Polar target_speed_;
-
-    /// Robot current pose
-    cogip_defs::Pose current_pose_;
 
     /// Robot target pose
     path::Pose target_pose_;
     
     /// Robot odometer
-    const OdometerInterface &odometer_;
+    odometer::OdometerInterface &odometer_;
     
     /// Robot drive controller
-    const DriveControllerInterface &drive_contoller_;
+    drive_controller::DriveControllerInterface &drive_contoller_;
     
     /// Pose reached callback
     pose_reached_cb_t pose_reached_cb_;

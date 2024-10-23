@@ -1,4 +1,5 @@
 USEMODULE += motion_control_common
+USEMODULE += drive_controller
 USEMODULE += cogip_defs
 USEMODULE += path
 USEMODULE += thread

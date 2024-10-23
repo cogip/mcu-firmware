@@ -156,6 +156,8 @@ void compute_current_speed_and_pose(
     cogip::cogip_defs::Polar &current_speed,    ///< [out]  robot current speed
     cogip::cogip_defs::Pose &current_pose       ///< [out]  robot current pose
     );
+    
+void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state);
 
 /// Apply the given command to the motors
 void pf_motor_drive(

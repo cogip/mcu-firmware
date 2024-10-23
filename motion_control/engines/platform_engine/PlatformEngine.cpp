@@ -19,16 +19,14 @@ namespace motion_control {
 void PlatformEngine::prepare_inputs() {
     // Update current pose and speed
     odometer_.update();
-    odometer_.copy_pose(current_pose_);
-    odometer_.copy_velocity(current_speed_);
 
     if (controller_) {
         size_t index = 0;
 
         // Current pose
-        controller_->set_input(index++, current_pose_.x());
-        controller_->set_input(index++, current_pose_.y());
-        controller_->set_input(index++, current_pose_.O());
+        controller_->set_input(index++, odometer_.pose().x());
+        controller_->set_input(index++, odometer_.pose().y());
+        controller_->set_input(index++, odometer_.pose().O());
 
         // Target pose
         controller_->set_input(index++, target_pose_.x());
@@ -36,8 +34,8 @@ void PlatformEngine::prepare_inputs() {
         controller_->set_input(index++, target_pose_.O());
 
         // Current speed
-        controller_->set_input(index++, current_speed_.distance());
-        controller_->set_input(index++, current_speed_.angle());
+        controller_->set_input(index++, odometer_.delta_polar_pose().distance());
+        controller_->set_input(index++, odometer_.delta_polar_pose().angle());
 
         // Target speed
         controller_->set_input(index++, target_speed_.distance());
@@ -66,7 +64,7 @@ void PlatformEngine::process_outputs() {
     drive_contoller_.set_polar_velocity(command);
     
     // Dispatch pose reached state
-    pose_reached_cb(pose_reached_);
+    pose_reached_cb_(pose_reached_);
 };
 
 } // namespace motion_control

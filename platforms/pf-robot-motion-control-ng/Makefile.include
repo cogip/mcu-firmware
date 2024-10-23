@@ -1,8 +1,8 @@
-USEMODULE_INCLUDES_pf-robot-motion-control := $(LAST_MAKEFILEDIR)/include
-USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_pf-robot-motion-control)
+USEMODULE_INCLUDES_pf-robot-motion-control-ng := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_pf-robot-motion-control-ng)
 
-PROTOBUF_PATH_pf-robot-motion-control := $(LAST_MAKEFILEDIR)
-PROTOBUF_PATH += $(PROTOBUF_PATH_pf-robot-motion-control)
+PROTOBUF_PATH_pf-robot-motion-control-ng := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_pf-robot-motion-control-ng)
 
 ifdef PCA9685_OFFSET
 	CFLAGS += -DPCA9685_OFFSET=$(PCA9685_OFFSET)
