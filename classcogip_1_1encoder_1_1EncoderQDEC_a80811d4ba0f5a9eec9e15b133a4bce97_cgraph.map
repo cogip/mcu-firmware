@@ -1,0 +1,4 @@
+<map id="cogip::encoder::EncoderQDEC::reset" name="cogip::encoder::EncoderQDEC::reset">
+<area shape="rect" id="node1" title="Reset encoder counter." alt="" coords="5,5,220,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1encoder_1_1EncoderQDEC.html#afa9fd4ce117b4b7f659aabeb83c331bb" title="Get the pulses counted by the encoder since the last call." alt="" coords="268,5,483,47"/>
+</map>

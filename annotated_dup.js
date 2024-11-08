@@ -12,6 +12,10 @@ var annotated_dup =
         [ "Polygon", "classcogip_1_1cogip__defs_1_1Polygon.html", "classcogip_1_1cogip__defs_1_1Polygon" ],
         [ "Pose", "classcogip_1_1cogip__defs_1_1Pose.html", "classcogip_1_1cogip__defs_1_1Pose" ]
       ] ],
+      [ "encoder", null, [
+        [ "EncoderInterface", "classcogip_1_1encoder_1_1EncoderInterface.html", "classcogip_1_1encoder_1_1EncoderInterface" ],
+        [ "EncoderQDEC", "classcogip_1_1encoder_1_1EncoderQDEC.html", "classcogip_1_1encoder_1_1EncoderQDEC" ]
+      ] ],
       [ "motion_control", null, [
         [ "BaseController", "classcogip_1_1motion__control_1_1BaseController.html", "classcogip_1_1motion__control_1_1BaseController" ],
         [ "BaseControllerEngine", "classcogip_1_1motion__control_1_1BaseControllerEngine.html", "classcogip_1_1motion__control_1_1BaseControllerEngine" ],

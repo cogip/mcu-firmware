@@ -1,0 +1,4 @@
+<map id="cogip::encoder::EncoderInterface::get_angle_and_reset" name="cogip::encoder::EncoderInterface::get_angle_and_reset">
+<area shape="rect" id="node1" title="Get the angle measured by the encoder since the last call." alt="" coords="5,5,240,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1encoder_1_1EncoderInterface.html#ab861467079c4d2ac2e6ad370a63a303e" title="Get the pulses counted by the encoder since the last call." alt="" coords="288,5,523,47"/>
+</map>

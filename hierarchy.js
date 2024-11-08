@@ -74,6 +74,9 @@ var hierarchy =
       [ "cogip::motion_control::MetaController< 5, 2, 4 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::ParallelMetaController< 9, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
     ] ],
+    [ "cogip::encoder::EncoderInterface", "classcogip_1_1encoder_1_1EncoderInterface.html", [
+      [ "cogip::encoder::EncoderQDEC", "classcogip_1_1encoder_1_1EncoderQDEC.html", null ]
+    ] ],
     [ "lds01_params_t", "structlds01__params__t.html", null ],
     [ "list", null, [
       [ "cogip::shell::Menu", "classcogip_1_1shell_1_1Menu.html", null ]

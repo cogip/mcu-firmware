@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vacuum_5fpump_5fparams_5ft_854',['vacuum_pump_params_t',['../structvacuum__pump__params__t.html',1,'']]]
+  ['uartprotobuf_860',['UartProtobuf',['../classcogip_1_1uartpb_1_1UartProtobuf.html',1,'cogip::uartpb']]]
 ];

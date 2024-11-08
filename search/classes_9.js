@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['readbuffer_842',['ReadBuffer',['../classcogip_1_1canpb_1_1ReadBuffer.html',1,'cogip::canpb::ReadBuffer'],['../classcogip_1_1uartpb_1_1ReadBuffer.html',1,'cogip::uartpb::ReadBuffer']]],
-  ['rectangle_843',['Rectangle',['../classcogip_1_1obstacles_1_1Rectangle.html',1,'cogip::obstacles']]]
+  ['quadpidmetacontroller_848',['QuadPIDMetaController',['../classcogip_1_1motion__control_1_1QuadPIDMetaController.html',1,'cogip::motion_control']]]
 ];
