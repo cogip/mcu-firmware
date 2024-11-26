@@ -18,7 +18,9 @@ namespace motion_control {
 
 void PlatformEngine::prepare_inputs() {
     // Update current pose and speed
-    platform_get_speed_and_pose_cb_(current_speed_, current_pose_);
+    odometer_.update();
+    odometer_.copy_pose(current_pose_);
+    odometer_.copy_velocity(current_speed_);
 
     if (controller_) {
         size_t index = 0;
@@ -60,7 +62,11 @@ void PlatformEngine::process_outputs() {
         controller_->output(1)
     );
 
-    platform_process_commands_cb_(command);
+    // Set robot polar velocity order
+    drive_contoller_.set_polar_velocity(command);
+    
+    // Dispatch pose reached state
+    pose_reached_cb(pose_reached_);
 };
 
 } // namespace motion_control
