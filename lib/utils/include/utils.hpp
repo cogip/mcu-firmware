@@ -30,3 +30,21 @@ bool areDoublesEqual(double a, double b, double epsilon = 1e-3);
     #define COGIP_DEBUG_COUT(x)
     #define COGIP_DEBUG_CERR(x)
 #endif
+
+/// @brief Saturate a value between min and max
+/// @param x Value to saturate
+/// @param min minimun interval
+/// @param max maxium insterval
+/// @return satured value
+inline double saturate(double x, double min, double max)
+{
+    if (x < min) {
+        return min;
+    }
+    else if (x > max) {
+        return max;
+    }
+    else {
+        return x;
+    }
+}
