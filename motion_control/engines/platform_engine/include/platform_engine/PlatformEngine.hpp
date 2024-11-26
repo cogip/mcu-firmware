@@ -9,6 +9,7 @@
 /// @brief      Engine getting inputs from platform and setting outputs for the platform
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
+/// @author     Mathis LECRIVAIN <lecrivain.mathis@gmail.com>
 
 #pragma once
 
@@ -16,32 +17,33 @@
 #include "path/Pose.hpp"
 #include "cogip_defs/Polar.hpp"
 #include "etl/delegate.h"
+#include "odometer/OdometerInterface.hpp"
+#include "drive_controller/DriveControllerInterface.hpp"
 #include "motion_control_common/BaseControllerEngine.hpp"
 
 namespace cogip {
 
 namespace motion_control {
 
-/// Get current speed and pose from platform
-using platform_get_speed_and_pose_cb_t = etl::delegate<void(cogip_defs::Polar&, cogip_defs::Pose&)>;
-
-/// Process motion control commands
-using platform_process_commands_cb_t = etl::delegate<void(const cogip_defs::Polar&)>;
+/// Pose reached state callback
+using pose_reached_cb_t = etl::delegate<void(const target_pose_status_t)>;
 
 /// Engine getting inputs from platform and setting outputs for the platform
 class PlatformEngine : public BaseControllerEngine {
 public:
     /// Constructor
     PlatformEngine(
-        platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb,    ///< [in]  Platform callback to get robot current speed and pose
-        platform_process_commands_cb_t platform_process_commands_cb         ///< [in]  Platform callback to process commands output from last controller
+        odometer::OdometerInterface &odometer,               ///< [in] Robot odometer reference
+        drive_controller::DriveControllerInterface &drive_contoller, ///< [in] Robot drive controller
+        pose_reached_cb_t pose_reached_cb                ///< [in] Callback to send pose reached state from last controller
     ) : BaseControllerEngine(),
-        platform_get_speed_and_pose_cb_(platform_get_speed_and_pose_cb),
-        platform_process_commands_cb_(platform_process_commands_cb) {};
+        odometer_(odometer),
+        drive_contoller_(drive_contoller),
+        pose_reached_cb_(pose_reached_cb) {};
 
     /// Get current speed
     /// return     current speed
-    const cogip_defs::Polar& current_speed() const { return current_speed_; };
+    const cogip_defs::Polar& current_speed() const { return odometer_.delta_polar_pose(); };
 
     /// Get target speed
     /// return     target speed
@@ -49,7 +51,7 @@ public:
 
     /// Get current pose
     /// return     current pose
-    const cogip_defs::Pose& current_pose() const { return current_pose_; };
+    const cogip_defs::Pose& current_pose() const { return odometer_.pose(); };
 
     /// Get target pose
     /// return     target pose
@@ -63,7 +65,7 @@ public:
     /// Set current pose
     void set_current_pose(
         const cogip_defs::Pose& current_pose    ///< [in]   new current pose
-        ) { current_pose_ = current_pose; };
+        ) { odometer_.set_pose(current_pose); };
 
     /// Set target pose
     void set_target_pose(
@@ -77,23 +79,21 @@ private:
     /// Process controller output for platform restitution.
     void process_outputs();
 
-    /// Robot polar current speed
-    cogip_defs::Polar current_speed_;
-
     /// Robot polar target speed
     cogip_defs::Polar target_speed_;
-
-    /// Robot current pose
-    cogip_defs::Pose current_pose_;
 
     /// Robot target pose
     path::Pose target_pose_;
 
-    /// Platform callback to get target and current poses from platforms
-    platform_get_speed_and_pose_cb_t platform_get_speed_and_pose_cb_;
+    /// Robot odometer
+    odometer::OdometerInterface &odometer_;
 
-    /// Platform calback to drive motors according to commands
-    platform_process_commands_cb_t platform_process_commands_cb_;
+    /// Robot drive controller
+    drive_controller::DriveControllerInterface &drive_contoller_;
+
+    /// Pose reached callback
+    pose_reached_cb_t pose_reached_cb_;
+
 };
 
 } // namespace motion_control
