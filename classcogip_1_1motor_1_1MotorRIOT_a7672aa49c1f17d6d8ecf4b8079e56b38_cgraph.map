@@ -1,0 +1,4 @@
+<map id="cogip::motor::MotorRIOT::brake" name="cogip::motor::MotorRIOT::brake">
+<area shape="rect" id="node1" title="break the motor" alt="" coords="5,5,187,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motor_1_1MotorDriverRIOT.html#aa351becfd999bfe4c6550a3f9a2e08b8" title="break the motor" alt="" coords="235,5,425,47"/>
+</map>

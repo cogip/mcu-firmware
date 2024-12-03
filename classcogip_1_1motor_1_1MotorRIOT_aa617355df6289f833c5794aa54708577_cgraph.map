@@ -1,0 +1,4 @@
+<map id="cogip::motor::MotorRIOT::disable" name="cogip::motor::MotorRIOT::disable">
+<area shape="rect" id="node1" title="Enable the motor." alt="" coords="5,5,187,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motor_1_1MotorDriverRIOT.html#a00ee6fb090e4881246039029f597b693" title="Disable the motor." alt="" coords="235,5,425,47"/>
+</map>

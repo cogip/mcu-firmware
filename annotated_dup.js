@@ -42,6 +42,13 @@ var annotated_dup =
         [ "SpeedPIDController", "classcogip_1_1motion__control_1_1SpeedPIDController.html", "classcogip_1_1motion__control_1_1SpeedPIDController" ],
         [ "SpeedPIDControllerParameters", "classcogip_1_1motion__control_1_1SpeedPIDControllerParameters.html", "classcogip_1_1motion__control_1_1SpeedPIDControllerParameters" ]
       ] ],
+      [ "motor", null, [
+        [ "MotorDriverDRV8873", "classcogip_1_1motor_1_1MotorDriverDRV8873.html", "classcogip_1_1motor_1_1MotorDriverDRV8873" ],
+        [ "MotorDriverInterface", "classcogip_1_1motor_1_1MotorDriverInterface.html", "classcogip_1_1motor_1_1MotorDriverInterface" ],
+        [ "MotorDriverRIOT", "classcogip_1_1motor_1_1MotorDriverRIOT.html", "classcogip_1_1motor_1_1MotorDriverRIOT" ],
+        [ "MotorInterface", "classcogip_1_1motor_1_1MotorInterface.html", "classcogip_1_1motor_1_1MotorInterface" ],
+        [ "MotorRIOT", "classcogip_1_1motor_1_1MotorRIOT.html", "classcogip_1_1motor_1_1MotorRIOT" ]
+      ] ],
       [ "obstacles", null, [
         [ "Circle", "classcogip_1_1obstacles_1_1Circle.html", "classcogip_1_1obstacles_1_1Circle" ],
         [ "List", "classcogip_1_1obstacles_1_1List.html", "classcogip_1_1obstacles_1_1List" ],

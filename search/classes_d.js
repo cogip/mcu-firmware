@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uartprotobuf_879',['UartProtobuf',['../classcogip_1_1uartpb_1_1UartProtobuf.html',1,'cogip::uartpb']]]
+  ['uartprotobuf_893',['UartProtobuf',['../classcogip_1_1uartpb_1_1UartProtobuf.html',1,'cogip::uartpb']]]
 ];

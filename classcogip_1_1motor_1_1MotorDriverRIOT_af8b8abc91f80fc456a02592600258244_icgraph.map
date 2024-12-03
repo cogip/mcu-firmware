@@ -1,0 +1,5 @@
+<map id="cogip::motor::MotorDriverRIOT::enable" name="cogip::motor::MotorDriverRIOT::enable">
+<area shape="rect" id="node1" title="Enable the motor." alt="" coords="244,39,435,80"/>
+<area shape="rect" id="node2" href="$classcogip_1_1motor_1_1MotorRIOT.html#a032aaa94c9f24f2bed54117beb79a63b" title="Enable the motor." alt="" coords="10,5,191,47"/>
+<area shape="rect" id="node3" href="$classcogip_1_1motor_1_1MotorDriverDRV8873.html#a55788ea568021e68a572cb41ae37969d" title="Set motor speed." alt="" coords="5,71,196,112"/>
+</map>
