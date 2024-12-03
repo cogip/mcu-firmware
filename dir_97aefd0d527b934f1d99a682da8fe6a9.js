@@ -5,6 +5,7 @@ var dir_97aefd0d527b934f1d99a682da8fe6a9 =
     [ "encoder", "dir_346d63a2cfbaa01f6a009f32f6baf3e8.html", "dir_346d63a2cfbaa01f6a009f32f6baf3e8" ],
     [ "obstacles", "dir_3a1b00efe16e6df3097111601d3773bb.html", "dir_3a1b00efe16e6df3097111601d3773bb" ],
     [ "odometry", "dir_9645f51eb984537e57d07eebe980b6a7.html", "dir_9645f51eb984537e57d07eebe980b6a7" ],
+    [ "odometry-ng", "dir_0b82a20d2e4af65fe88996f5bcf266f4.html", "dir_0b82a20d2e4af65fe88996f5bcf266f4" ],
     [ "path", "dir_62e21b677e903da2ff4213ed72525065.html", "dir_62e21b677e903da2ff4213ed72525065" ],
     [ "pid", "dir_8a2dd44fd4fe510e36367f0b48502073.html", "dir_8a2dd44fd4fe510e36367f0b48502073" ],
     [ "pid_ng", "dir_1f7b7c583dfe4c8d144aa5020ae365f7.html", "dir_1f7b7c583dfe4c8d144aa5020ae365f7" ],

@@ -1,0 +1,4 @@
+<map id="cogip::odometer::OdometerDifferential::pose" name="cogip::odometer::OdometerDifferential::pose">
+<area shape="rect" id="node1" title="Get current pose using cogip def format." alt="" coords="255,5,456,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1odometer_1_1OdometerDifferential.html#acc16a751adbff4b323e9982efacb48c6" title="Set the default odometry pose." alt="" coords="5,5,207,47"/>
+</map>

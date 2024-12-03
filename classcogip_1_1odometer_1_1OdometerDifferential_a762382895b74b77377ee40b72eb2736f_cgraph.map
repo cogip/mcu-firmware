@@ -1,0 +1,9 @@
+<map id="cogip::odometer::OdometerDifferential::set_pose" name="cogip::odometer::OdometerDifferential::set_pose">
+<area shape="rect" id="node1" title="Set the default odometry pose." alt="" coords="5,71,207,112"/>
+<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Pose.html#aab52dffae18a83dfd659f3a96061af98" title="Set 0&#45;orientation." alt="" coords="255,5,397,47"/>
+<area shape="rect" id="node4" href="$classcogip_1_1cogip__defs_1_1Coords.html#af51d7d709ff426c4066482ee2a1b58d8" title="Set X coordinate." alt="" coords="255,71,397,112"/>
+<area shape="rect" id="node6" href="$classcogip_1_1cogip__defs_1_1Coords.html#a52613ded39ecbea27193c8832e4b40e5" title="Set Y coordinate." alt="" coords="255,136,397,177"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Pose.html#a2479715ce1f6d9e9ade8fab8aad3f161" title="Return 0&#45;orientation." alt="" coords="445,5,588,47"/>
+<area shape="rect" id="node5" href="$classcogip_1_1cogip__defs_1_1Coords.html#ae6736852dc2d28c35bfdebbc3e8f24b5" title="Return X coordinate." alt="" coords="445,71,588,112"/>
+<area shape="rect" id="node7" href="$classcogip_1_1cogip__defs_1_1Coords.html#a6ab61e358c49f66805cca1957c20b2e2" title="Return Y coordinate." alt="" coords="445,136,588,177"/>
+</map>

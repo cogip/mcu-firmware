@@ -1,0 +1,4 @@
+<map id="cogip::cogip_defs::Coords::set_y" name="cogip::cogip_defs::Coords::set_y">
+<area shape="rect" id="node1" title="Set Y coordinate." alt="" coords="255,5,397,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1odometer_1_1OdometerDifferential.html#a762382895b74b77377ee40b72eb2736f" title="Set the default odometry pose." alt="" coords="5,5,207,47"/>
+</map>

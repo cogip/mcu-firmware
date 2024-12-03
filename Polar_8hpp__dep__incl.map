@@ -1,15 +1,17 @@
 <map id="lib/cogip_defs/include/cogip_defs/Polar.hpp" name="lib/cogip_defs/include/cogip_defs/Polar.hpp">
-<area shape="rect" id="node1" title="Polar class declaration." alt="" coords="665,5,827,47"/>
-<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="665,95,827,136"/>
-<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="459,184,615,225"/>
-<area shape="rect" id="node13" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="777,273,1043,329"/>
-<area shape="rect" id="node12" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="678,184,833,225"/>
-<area shape="rect" id="node4" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="94,281,289,322"/>
-<area shape="rect" id="node5" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="238,385,414,426"/>
-<area shape="rect" id="node8" href="$pf-pami_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="364,281,555,322"/>
-<area shape="rect" id="node10" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="579,273,753,329"/>
-<area shape="rect" id="node6" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="31,385,213,426"/>
-<area shape="rect" id="node7" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="5,481,239,523"/>
-<area shape="rect" id="node9" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="523,385,713,426"/>
-<area shape="rect" id="node11" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="780,377,955,433"/>
+<area shape="rect" id="node1" title="Polar class declaration." alt="" coords="498,5,661,47"/>
+<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="439,95,602,136"/>
+<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="519,184,675,225"/>
+<area shape="rect" id="node12" href="$OdometerInterface_8hpp_source.html" title=" " alt="" coords="699,184,943,225"/>
+<area shape="rect" id="node15" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="5,273,271,329"/>
+<area shape="rect" id="node14" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="298,184,453,225"/>
+<area shape="rect" id="node4" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="759,281,954,322"/>
+<area shape="rect" id="node5" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="634,385,810,426"/>
+<area shape="rect" id="node8" href="$pf-pami_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="295,281,485,322"/>
+<area shape="rect" id="node10" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="509,273,684,329"/>
+<area shape="rect" id="node6" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="835,385,1017,426"/>
+<area shape="rect" id="node7" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="809,481,1043,523"/>
+<area shape="rect" id="node9" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="88,385,279,426"/>
+<area shape="rect" id="node11" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="391,377,565,433"/>
+<area shape="rect" id="node13" href="$OdometerDifferential_8hpp_source.html" title=" " alt="" coords="978,281,1237,322"/>
 </map>

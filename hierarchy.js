@@ -95,6 +95,10 @@ var hierarchy =
         [ "cogip::obstacles::Rectangle", "classcogip_1_1obstacles_1_1Rectangle.html", null ]
       ] ]
     ] ],
+    [ "cogip::odometer::OdometerDifferentialParameters", "classcogip_1_1odometer_1_1OdometerDifferentialParameters.html", null ],
+    [ "cogip::odometer::OdometerInterface", "classcogip_1_1odometer_1_1OdometerInterface.html", [
+      [ "cogip::odometer::OdometerDifferential", "classcogip_1_1odometer_1_1OdometerDifferential.html", null ]
+    ] ],
     [ "cogip::motion_control::PassthroughPosePIDControllerParameters", "classcogip_1_1motion__control_1_1PassthroughPosePIDControllerParameters.html", null ],
     [ "pca9548_conf_t", "structpca9548__conf__t.html", null ],
     [ "PID", "structPID.html", null ],

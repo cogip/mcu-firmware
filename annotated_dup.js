@@ -49,6 +49,11 @@ var annotated_dup =
         [ "Polygon", "classcogip_1_1obstacles_1_1Polygon.html", "classcogip_1_1obstacles_1_1Polygon" ],
         [ "Rectangle", "classcogip_1_1obstacles_1_1Rectangle.html", "classcogip_1_1obstacles_1_1Rectangle" ]
       ] ],
+      [ "odometer", null, [
+        [ "OdometerDifferential", "classcogip_1_1odometer_1_1OdometerDifferential.html", "classcogip_1_1odometer_1_1OdometerDifferential" ],
+        [ "OdometerDifferentialParameters", "classcogip_1_1odometer_1_1OdometerDifferentialParameters.html", "classcogip_1_1odometer_1_1OdometerDifferentialParameters" ],
+        [ "OdometerInterface", "classcogip_1_1odometer_1_1OdometerInterface.html", "classcogip_1_1odometer_1_1OdometerInterface" ]
+      ] ],
       [ "path", null, [
         [ "Pose", "classcogip_1_1path_1_1Pose.html", "classcogip_1_1path_1_1Pose" ]
       ] ],
