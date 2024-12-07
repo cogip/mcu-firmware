@@ -9,21 +9,19 @@ namespace pf {
 namespace motion_control {
 
 /* Motion motors */
-#define MOTOR_LEFT  1
-#define MOTOR_RIGHT 0
+#define MOTOR_LEFT  0
+#define MOTOR_RIGHT 1
 
 /* Quadrature decoding */
-#ifndef QDEC_MODE
-#define QDEC_MODE           QDEC_X4
-#endif
-#define QDEC_LEFT_POLARITY  1
-#define QDEC_RIGHT_POLARITY -1
+#define QDEC_LEFT_POLARITY  -1
+#define QDEC_RIGHT_POLARITY 1
 
 #ifndef MOTION_MOTORS_POST_CB
 /// Motion control callback on motor_set() call
 #define MOTION_MOTORS_POST_CB nullptr
 #endif
 
+#ifdef CPU_NATIVE
 /**
  * @brief Simulate QDEC on motor_set() calls
  *
@@ -36,6 +34,7 @@ namespace motion_control {
 void cogip_native_motor_driver_qdec_simulation(
     const motor_driver_t *motor_driver, uint8_t motor_id,
     int32_t pwm_duty_cycle);
+#endif
 
 /// Motion control motors
 static const motor_driver_params_t motion_motors_params =

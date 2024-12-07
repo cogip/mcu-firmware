@@ -19,49 +19,71 @@
 #include "DifferentialDriveControllerParameters.hpp"
 #include "motor/MotorInterface.hpp"
 
-namespace cogip {
+namespace cogip
+{
 
-namespace drive_controller {
+namespace drive_controller
+{
 
-class DifferentialDriveController: public DriveControllerInterface {
-public:
-    DifferentialDriveController(DifferentialDriveControllerParameters &parameters,
-                                cogip::motor::MotorInterface &left_motor, 
-                                cogip::motor::MotorInterface &right_motor) :
-                                parameters_(parameters), left_motor_(left_motor), right_motor_(right_motor)
-    {
-    }
+class DifferentialDriveController : public DriveControllerInterface
+{
+      public:
+	DifferentialDriveController(DifferentialDriveControllerParameters &parameters,
+				    cogip::motor::MotorInterface &left_motor, cogip::motor::MotorInterface &right_motor)
+		: parameters_(parameters), left_motor_(left_motor), right_motor_(right_motor)
+	{
+	}
 
-    /// @brief Set polar velocity command
-    /// @param command polar velocity command reference
-    /// @return  0 on success, negative on error
-    int set_polar_velocity(cogip_defs::Polar &command) override
-    {
-        // Compute wheel speed in mm/period from polar speed
-        const double left_wheel_speed_mm_per_period = command.distance() - (command.angle() * parameters_.track_width_mm() / 2);
-        const double right_wheel_speed_mm_per_period = command.distance() + (command.angle() * parameters_.track_width_mm() / 2);
+	/// @brief Set polar velocity command
+	/// @param command polar velocity command reference
+	/// @return  0 on success, negative on error
+	int set_polar_velocity(cogip_defs::Polar &command) override
+	{
+		// Compute wheel speed in mm/period from polar speed
+		const double left_wheel_speed_mm_per_period =
+			command.distance() - (command.angle() * parameters_.track_width_mm() / 2);
+		const double right_wheel_speed_mm_per_period =
+			command.distance() + (command.angle() * parameters_.track_width_mm() / 2);
 
-        // Compute wheel speed in mm/s and rad/s from mm/period and rad/period speeds
-        const double left_wheel_speed_mm_s = left_wheel_speed_mm_per_period * 1000 / parameters_.loop_period_ms();
-        const double right_wheel_speed_mm_s = right_wheel_speed_mm_per_period * 1000/ parameters_.loop_period_ms();
+		// Compute wheel speed in mm/s and rad/s from mm/period and rad/period speeds
+		const double left_wheel_speed_mm_s =
+			left_wheel_speed_mm_per_period * 1000 / parameters_.loop_period_ms();
+		const double right_wheel_speed_mm_s =
+			right_wheel_speed_mm_per_period * 1000 / parameters_.loop_period_ms();
 
-        // Compute motor speed in percent using the motor constant.
-        // The motor constant allow convert a speed in mm/s into a speed ratio (% of nominal motor voltage).
-        const double left_motor_speed_percent = left_wheel_speed_mm_s / (etl::math::pi * parameters_.left_wheel_diameter_mm()) * parameters_.left_motor_constant();
-        const double right_motor_speed_percent = right_wheel_speed_mm_s / (etl::math::pi * parameters_.right_wheel_diameter_mm()) * parameters_.right_motor_constant();
+		// Compute motor speed in percent using the motor constant.
+		// The motor constant allow convert a speed in mm/s into a speed ratio (% of nominal motor voltage).
+		double left_motor_speed_percent =
+			(left_wheel_speed_mm_s / (etl::math::pi * parameters_.left_wheel_diameter_mm())) *
+			parameters_.left_motor_constant();
+		double right_motor_speed_percent =
+			(right_wheel_speed_mm_s / (etl::math::pi * parameters_.right_wheel_diameter_mm())) *
+			parameters_.right_motor_constant();
 
-        // Apply motor speed
-        left_motor_.speed((int)etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));
-        right_motor_.speed((int)etl::clamp(right_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));
+		left_motor_speed_percent =
+			(left_motor_speed_percent < 0 ? -parameters_.min_speed_percentage()
+						      : parameters_.min_speed_percentage()) +
+			(left_motor_speed_percent * (100.0 - parameters_.min_speed_percentage()) / 100.0);
 
-        return 0;
-    }
+		right_motor_speed_percent =
+			(right_motor_speed_percent < 0 ? -parameters_.min_speed_percentage()
+						       : parameters_.min_speed_percentage()) +
+			(right_motor_speed_percent * (100.0 - parameters_.min_speed_percentage()) / 100.0);
 
-private:
-    DifferentialDriveControllerParameters &parameters_;
+		// Apply motor speed
+		left_motor_.speed((int)etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(),
+						  parameters_.max_speed_percentage()));
+		right_motor_.speed((int)etl::clamp(right_motor_speed_percent, -parameters_.max_speed_percentage(),
+						   parameters_.max_speed_percentage()));
 
-    cogip::motor::MotorInterface &left_motor_;
-    cogip::motor::MotorInterface &right_motor_;
+		return 0;
+	}
+
+      private:
+	DifferentialDriveControllerParameters &parameters_;
+
+	cogip::motor::MotorInterface &left_motor_;
+	cogip::motor::MotorInterface &right_motor_;
 };
 
 } // namespace drive_controller

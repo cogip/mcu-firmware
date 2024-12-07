@@ -11,9 +11,11 @@ USEMODULE += shell_cmds_default
 
 # mcu-firmware modules
 USEMODULE += cogip_defs
-USEMODULE += odometry
+USEMODULE += odometry-ng
 USEMODULE += path
 USEMODULE += canpb
+USEMODULE += encoder
+USEMODULE += motor
 # Controllers
 USEMODULE += passthrough_pose_pid_controller
 USEMODULE += quadpid_meta_controller
