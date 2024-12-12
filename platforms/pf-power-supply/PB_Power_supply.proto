@@ -1,8 +1,19 @@
 syntax = "proto3";
 
 enum PB_PGoodTypeEnum {
-	P3V3_PGOOD = 0;
-	P5V0_PGOOD = 1;
-	P7V5_PGOOD = 2;
-	PxVx_PGOOD = 3;
+	POWER_GOOD = 0;
+	POWER_ERROR = 1;
+}
+
+enum PB_EmergencyStopEnum {
+	EMERGENCY_PRESSED = 0;
+	EMERGENCY_RELEASED = 1;
+}
+
+message PB_Controller {
+    PB_EmergencyStopEnum emergency_state = 0;
+	PB_PGoodTypeEnum p3v3_state = 1;
+	PB_PGoodTypeEnum p5v0_state = 2;
+	PB_PGoodTypeEnum p7v5_state = 3;
+	PB_PGoodTypeEnum pXvX_state = 4;
 }
