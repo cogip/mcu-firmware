@@ -48,8 +48,8 @@ public:
 #endif
 
     /// @brief Get the current value of the given pin
-    /// @return 0 when pin is LOW. 1 when pin is HIGH
-    int read(void) const
+    /// @return 0 when pin is LOW. >0 when pin is HIGH
+    bool read(void) const
     {
         return gpio_read(_pin);
     }
@@ -83,7 +83,7 @@ public:
     /// @return True when valid. False when invalid
     int is_valid(void)
     {
-        return (_pin != GPIO_UNDEF);
+        return gpio_is_valid(_pin);
     }
 
 private:
