@@ -1,17 +1,13 @@
-/*
- * Copyright (C) 2024 COGIP Robotics association
- *
- * This file is subject to the terms and conditions of the GNU Lesser
- * General Public License v2.1. See the file LICENSE in the top level
- * directory for more details.
- */
+///  Copyright (C) 2024 COGIP Robotics association
+///
+///  This file is subject to the terms and conditions of the GNU Lesser
+///  General Public License v2.1. See the file LICENSE in the top level
+///  directory for more details.
 
-/**
- * @ingroup     platforms
- * @brief       Generic power supply definition
- *
- * @author      Mathis LECRIVAIN <lecrivain.mathis@gmail.com>
- */
+///  @ingroup     platforms
+///  @brief       Generic power supply definition
+///
+///  @author      Mathis LECRIVAIN <lecrivain.mathis@gmail.com>
 
 #pragma once
 
@@ -28,24 +24,30 @@ namespace power_supply
 
 /// Power supply input pins
 /// @{
-// constexpr gpio_t pin_p3v3_pgood = GPIO_PIN(PORT_B, 1);
-// constexpr gpio_t pin_cart_magnet_right = GPIO_PIN(PORT_C, 9);
-#define P3V3_PGOOD_PIN GPIO_PIN(PORT_B, 1)
-#define P5V0_PGOOD_PIN GPIO_PIN(PORT_C, 5)
-#define P7V5_PGOOD_PIN GPIO_PIN(PORT_A, 7)
-#define PxVx_PGOOD_PIN GPIO_PIN(PORT_A, 4)
 
-#define EN_HIGH_POWER_PIN     GPIO_PIN(PORT_B, 3)
-#define BATTERY_VALID_N_PIN   GPIO_PIN(PORT_B, 10)
-#define DC_SUPPLY_VALID_N_PIN GPIO_PIN(PORT_B, 12)
+// PGood pins
+constexpr gpio_t P3V3_PGOOD_PIN = GPIO_PIN(PORT_B, 1);
+constexpr gpio_t P5V0_PGOOD_PIN = GPIO_PIN(PORT_C, 5);
+constexpr gpio_t P7V5_PGOOD_PIN = GPIO_PIN(PORT_A, 7);
+constexpr gpio_t PxVx_PGOOD_PIN = GPIO_PIN(PORT_A, 4);
 
-enum class PGood_id : uint8_t {
-	P3V3_PGOOD = 0,
-	P5V0_PGOOD = 1,
-	P7V5_PGOOD = 2,
-	PxVx_PGOOD = 3,
-};
+// PGood pin number
+constexpr int PGOOD_PIN_NUMBER = 4;
+
+constexpr gpio_t EN_HIGH_POWER_PIN     = GPIO_PIN(PORT_B, 3);
+
+constexpr gpio_t BATTERY_VALID_N_PIN   = GPIO_PIN(PORT_B, 10);
+constexpr gpio_t DC_SUPPLY_VALID_N_PIN = GPIO_PIN(PORT_B, 12);
+
 /// @}
+
+/// @brief 
+/// @param  
+void pf_init_power_supply(void);
+
+/// @brief 
+/// @param  
+void pf_init_power_supply_tasks(void);
 
 } // namespace power_supply
 } // namespace pf
