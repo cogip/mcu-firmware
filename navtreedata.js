@@ -24,6 +24,9 @@ var NAVTREE =
 [
   [ "My Project", "index.html", [
     [ "Modules", "modules.html", "modules" ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
+    ] ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
@@ -52,14 +55,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcogip_1_1motion__control_1_1BaseController.html",
-"classcogip_1_1odometer_1_1OdometerDifferentialParameters.html#a71d06f1740c5ddc7797253348ee4a8f0",
-"dir_061ffe92663db998cca7e3b126a8d22b.html",
-"group__driver__lds01__dma.html#ga1a44f6faf4a286031da459d4a1d10319",
-"group__legacy__controller.html#ga99c88a5ef5cd36e37bbe9957331b9530",
-"group__platforms__pf-robot-motors.html#gae1a6aab08a0179e854ade7561e3dc079",
-"pf-robot-actuators_2include_2PositionalActuator_8hpp.html#ab0a0b91f0d10564144fa5637bacacfef",
-"structlx__writer__t.html#a68d68f493ac85b4bf8c1a1efcdbd8a3b"
+"classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#a44ac1801c264ea88daaa4744633d6c4e",
+"classcogip_1_1obstacles_1_1Obstacle.html#afbbc35013fe5ee189740fda641ed4621",
+"classcogip_1_1uartpb_1_1WriteBuffer.html",
+"group__driver__lds01.html#ga10742eb5bfd08afdefedda949bcfd437",
+"group__legacy__controller.html#ga180894284b940092b53725eaf050822c",
+"group__platforms__pf-robot-motors.html#ga07a575aff9cc49fe868eb5ee53dbb787",
+"pf-pami_2include_2pf__servos_8hpp.html#a26f9a280a8ca655926d0b145e1493d60",
+"structctrl__quadpid__parameters__t.html#a59669e64165ea24647c3f108341c3e99"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

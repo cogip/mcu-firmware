@@ -1,0 +1,13 @@
+<map id="cogip::drive_controller::DifferentialDriveController::set_polar_velocity" name="cogip::drive_controller::DifferentialDriveController::set_polar_velocity">
+<area shape="rect" id="node1" title="Set polar velocity command." alt="" coords="5,337,208,393"/>
+<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Polar.html#ad3d524554bbb6d292dbddaadda32e982" title="Return angle." alt="" coords="324,5,467,47"/>
+<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Polar.html#a5dda2e70e8fab3e159a34079f300d3a3" title="Return distance." alt="" coords="324,71,467,112"/>
+<area shape="rect" id="node4" href="$classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#a1359ff9ecffd77ea02a662ec3d1962fe" title="Return left motor constant value." alt="" coords="278,137,513,193"/>
+<area shape="rect" id="node5" href="$classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#aa1ca623f13fdb667e2b6be24c9306105" title="Return left motor wheel diameter value in mm." alt="" coords="260,217,531,273"/>
+<area shape="rect" id="node6" href="$classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#acfa388ae1e7c4c5aedb1173a852feb6c" title="Get the axle track value." alt="" coords="292,297,499,353"/>
+<area shape="rect" id="node7" href="$classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#a9236a9329f2253d8a8160db19844347a" title="get the max speed ratio in percent" alt="" coords="266,377,525,433"/>
+<area shape="rect" id="node8" href="$classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#af14942c4fca873d222c445ea6c54b569" title="Return right motor constant value." alt="" coords="274,457,517,513"/>
+<area shape="rect" id="node9" href="$classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#a3f7e8b54a208409bd2732607e7538ce4" title="Return right motor wheel diameter value in mm." alt="" coords="256,537,535,593"/>
+<area shape="rect" id="node10" href="$classcogip_1_1motor_1_1MotorInterface.html#adbffbcf0bc7f7becd0b5d1b5a4ae4715" title="Set motor speed." alt="" coords="291,617,499,659"/>
+<area shape="rect" id="node11" href="$classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#a39e3683703497f75e24123ee0515fa87" title="Get the axle track value." alt="" coords="289,683,502,739"/>
+</map>

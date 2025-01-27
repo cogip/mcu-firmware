@@ -1,17 +1,19 @@
 <map id="lib/cogip_defs/include/cogip_defs/Polar.hpp" name="lib/cogip_defs/include/cogip_defs/Polar.hpp">
-<area shape="rect" id="node1" title="Polar class declaration." alt="" coords="498,5,661,47"/>
-<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="439,95,602,136"/>
-<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="519,184,675,225"/>
-<area shape="rect" id="node12" href="$OdometerInterface_8hpp_source.html" title=" " alt="" coords="699,184,943,225"/>
-<area shape="rect" id="node15" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="5,273,271,329"/>
-<area shape="rect" id="node14" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="298,184,453,225"/>
-<area shape="rect" id="node4" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="759,281,954,322"/>
-<area shape="rect" id="node5" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="634,385,810,426"/>
-<area shape="rect" id="node8" href="$pf-pami_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="295,281,485,322"/>
-<area shape="rect" id="node10" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="509,273,684,329"/>
-<area shape="rect" id="node6" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="835,385,1017,426"/>
-<area shape="rect" id="node7" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="809,481,1043,523"/>
-<area shape="rect" id="node9" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="88,385,279,426"/>
-<area shape="rect" id="node11" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="391,377,565,433"/>
-<area shape="rect" id="node13" href="$OdometerDifferential_8hpp_source.html" title=" " alt="" coords="978,281,1237,322"/>
+<area shape="rect" id="node1" title="Polar class declaration." alt="" coords="686,5,849,47"/>
+<area shape="rect" id="node2" href="$cogip__defs_2include_2cogip__defs_2Pose_8hpp.html" title="Pose class declaration." alt="" coords="627,102,790,143"/>
+<area shape="rect" id="node3" href="$odometry_8hpp_source.html" title=" " alt="" coords="519,206,675,247"/>
+<area shape="rect" id="node12" href="$OdometerInterface_8hpp_source.html" title=" " alt="" coords="699,206,943,247"/>
+<area shape="rect" id="node15" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="5,303,271,359"/>
+<area shape="rect" id="node16" href="$DifferentialDriveController_8hpp_source.html" title=" " alt="" coords="967,199,1261,255"/>
+<area shape="rect" id="node17" href="$DriveControllerInterface_8hpp_source.html" title=" " alt="" coords="963,95,1243,151"/>
+<area shape="rect" id="node14" href="$path_2include_2path_2Pose_8hpp.html" title="Path Pose declaration." alt="" coords="298,206,453,247"/>
+<area shape="rect" id="node4" href="$ctrl_8hpp.html" title="Common controllers API and datas." alt="" coords="759,310,954,351"/>
+<area shape="rect" id="node5" href="$quadpid_8hpp.html" title="QuadPID controllers API and datas." alt="" coords="634,414,810,455"/>
+<area shape="rect" id="node8" href="$pf-pami_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="295,310,485,351"/>
+<area shape="rect" id="node10" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="509,303,684,359"/>
+<area shape="rect" id="node6" href="$Planner_8hpp.html" title="Virtual class defining common API for all planner implementations." alt="" coords="835,414,1017,455"/>
+<area shape="rect" id="node7" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="809,511,1043,552"/>
+<area shape="rect" id="node9" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="88,414,279,455"/>
+<area shape="rect" id="node11" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="391,407,565,463"/>
+<area shape="rect" id="node13" href="$OdometerDifferential_8hpp_source.html" title=" " alt="" coords="978,310,1237,351"/>
 </map>

@@ -74,6 +74,10 @@ var hierarchy =
       [ "cogip::motion_control::MetaController< 5, 2, 4 >", "classcogip_1_1motion__control_1_1MetaController.html", null ],
       [ "cogip::motion_control::ParallelMetaController< 9, 3, polar_parallel_meta_controller_nb_controllers >", "classcogip_1_1motion__control_1_1ParallelMetaController.html", null ]
     ] ],
+    [ "cogip::drive_controller::DifferentialDriveControllerParameters", "classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html", null ],
+    [ "cogip::drive_controller::DriveControllerInterface", "classcogip_1_1drive__controller_1_1DriveControllerInterface.html", [
+      [ "cogip::drive_controller::DifferentialDriveController", "classcogip_1_1drive__controller_1_1DifferentialDriveController.html", null ]
+    ] ],
     [ "cogip::encoder::EncoderInterface", "classcogip_1_1encoder_1_1EncoderInterface.html", [
       [ "cogip::encoder::EncoderQDEC", "classcogip_1_1encoder_1_1EncoderQDEC.html", null ]
     ] ],

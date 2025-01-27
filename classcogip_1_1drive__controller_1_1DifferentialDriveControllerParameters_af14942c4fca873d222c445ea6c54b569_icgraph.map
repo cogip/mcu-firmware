@@ -1,0 +1,4 @@
+<map id="cogip::drive_controller::DifferentialDriveControllerParameters::right_motor_constant" name="cogip::drive_controller::DifferentialDriveControllerParameters::right_motor_constant">
+<area shape="rect" id="node1" title="Return right motor constant value." alt="" coords="256,5,499,61"/>
+<area shape="rect" id="node2" href="$classcogip_1_1drive__controller_1_1DifferentialDriveController.html#a8d071690324e4b74ab36cdd718c7c68c" title="Set polar velocity command." alt="" coords="5,5,208,61"/>
+</map>

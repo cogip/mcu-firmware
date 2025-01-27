@@ -1,5 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classcogip_1_1motion__control_1_1BaseControllerEngine.html" title="Base class for controllers engine. The engine is responsible of launching the controllers chain." alt="" coords="5,39,176,80"/>
-<area shape="rect" id="node2" href="$classcogip_1_1motion__control_1_1MotorEngine.html" title="Engine getting inputs from motor and setting outputs for the motor." alt="" coords="224,5,387,47"/>
-<area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1PlatformEngine.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="224,71,387,112"/>
+<area shape="rect" id="node1" href="$classcogip_1_1drive__controller_1_1DriveControllerInterface.html" title=" " alt="" coords="5,5,192,47"/>
+<area shape="rect" id="node2" href="$classcogip_1_1drive__controller_1_1DifferentialDriveController.html" title=" " alt="" coords="240,5,443,47"/>
 </map>
