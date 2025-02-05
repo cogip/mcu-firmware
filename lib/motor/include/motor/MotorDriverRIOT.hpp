@@ -42,14 +42,12 @@ public:
         return 0;
     }
 
-    /// @brief Disable the motor
-    /// @param id id of the motor
-    /// @return 0 on success, negative on error
-    int disable(int id) override
-    {
-        motor_disable(&driver_, id);
-        return 0;
-    }
+	/// @brief Intialize the motor driver
+	/// @return 0 on success, negative on error
+	int init() override
+	{
+		return motor_driver_init(&driver_, &parameters_);
+	}
 
     /// @brief Set motor speed
     /// @param speed speed in % [-100; 100]
