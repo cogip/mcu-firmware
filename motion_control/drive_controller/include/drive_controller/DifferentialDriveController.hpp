@@ -51,8 +51,8 @@ public:
         const double right_motor_speed_percent = right_wheel_speed_mm_per_s / (etl::math::pi * parameters_.right_wheel_diameter_mm()) * parameters_.right_motor_constant();
 
         // Apply motor speed
-        left_motor_.speed((int)etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));
-        right_motor_.speed((int)etl::clamp(right_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));
+        left_motor_.set_speed(etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));
+        right_motor_.set_speed(etl::clamp(right_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));
 
         return 0;
     }

@@ -22,8 +22,8 @@ public:
     /// @brief Set motor speed
     /// @param speed speed in % [-100; 100]
     /// @return  0 on success, negative on error
-    virtual int speed(int speed) = 0;
-    
+    virtual int set_speed(double speed) = 0;
+
     /// @brief break the motor
     /// @return 0 on success, negative on error
     virtual int brake() = 0;
