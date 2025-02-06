@@ -95,7 +95,7 @@ void PoseStraightFilter::execute() {
     cogip_defs::Polar pos_err = target_pose - current_pose;
 
     // If the robot is allowed to go backward, reverse the error if it shorten the move.
-    if (allow_reverse && (fabs(pos_err.angle()) > 90)) {
+    if (allow_reverse && (fabs(pos_err.angle()) > (etl::math::pi / 2))) {
         pos_err.reverse();
     }
 
@@ -140,7 +140,7 @@ void PoseStraightFilter::execute() {
         case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
             // Check if final orientation should be bypassed
             if (!parameters_->bypass_final_orientation()) {
-                pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+                pos_err.set_angle(limit_angle_rad(target_pose.O() - current_pose.O()));
             }
             else {
                 pos_err.set_angle(0);
