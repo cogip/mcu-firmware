@@ -24,10 +24,14 @@ namespace motion_control {
 /// Input 0:    polar pose error
 /// Input 1:    current speed
 /// Input 2:    target speed
+/// Input 3:    filter speed bool
+/// Input 4:    pose reached
 /// Output 0:   speed order
 /// Output 1:   current speed
 /// Output 2:   target speed
-class PassthroughPosePIDController : public Controller<4, 4, PassthroughPosePIDControllerParameters> {
+/// Output 3:   filter speed bool
+/// Output 4:   pose reached
+class PassthroughPosePIDController : public Controller<5, 5, PassthroughPosePIDControllerParameters> {
 public:
     /// Constructor
     explicit PassthroughPosePIDController(
