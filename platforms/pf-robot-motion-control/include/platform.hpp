@@ -9,58 +9,35 @@
 /**
  * @defgroup    platforms_pf-robot-motion-control Test platform
  * @ingroup     platforms
- * @brief       COGIP test platform definition
+ * @brief       COGIP motion control platform definition
  * @{
  *
  * @file
- * @brief       Define hardware properties of test platform.
- *              Units:
- *              * time:         s
- *              * distance:     mm
- *              * speed:        mm/s
- *              * acceleration: mm/s²
- *
  *
  * @author      Gilles DOFFE <g.doffe@gmail.com>
  * @author      Eric Courtois <eric.courtois@gmail.com>
+ * @author      Mathis Lécrivain <lecrivain.mathis@gmail.com>
  */
 
 #pragma once
 
 /* Project includes */
-#include "odometry.hpp"
 #include "utils.hpp"
 #include "canpb/CanProtobuf.hpp"
-
-#define ROBOT_ID                            0       /**< Robot ID for logs */
-#define CONTROLLER_SPEED_LOOP_PERIOD_MSEC   20      /**< Motion controller speed loop default period */
-
-/**
- * @name Eurobot general properties
- *
- * @{
- */
-#define GAME_DURATION_SEC   100 /**< Timeout before completely stop the robot once started */
-#define CAMP_LEFT 1             /**< Camp left selection for path mirroring */
-#define CAMP_RIGHT 0            /**< Camp left selection for path mirroring */
-/** @} */
-
-/**
- * @name Avoidance borders
- * Borders in which the robot can move (mm)
- * @{
- */
-#define AVOIDANCE_BORDER_X_MIN (ROBOT_MARGIN + 10)                /**< Minimal X axis border */
-#define AVOIDANCE_BORDER_X_MAX (3000 - ROBOT_MARGIN - 10)         /**< Maximal X axis border */
-#define AVOIDANCE_BORDER_Y_MIN (-1000 + ROBOT_MARGIN + 10)        /**< Minimal Y axis border */
-#define AVOIDANCE_BORDER_Y_MAX (AVOIDANCE_BORDER_Y_MIN * -1)      /**< Maximal Y axis border */
-/** @} */
 
 /**
  * @name Messages Id
  * @{
  */
 // Motion Control: 0x1000 - 0x1FFF
+constexpr cogip::canpb::uuid_t state_uuid = 0x1001;
+constexpr cogip::canpb::uuid_t pose_order_uuid = 0x1002;
+constexpr cogip::canpb::uuid_t pose_reached_uuid = 0x1003;
+constexpr cogip::canpb::uuid_t pose_start_uuid = 0x1004;
+constexpr cogip::canpb::uuid_t pid_request_uuid = 0x1005;
+constexpr cogip::canpb::uuid_t pid_uuid = 0x1006;
+constexpr cogip::canpb::uuid_t brake_uuid = 0x1007;
+constexpr cogip::canpb::uuid_t controller_uuid = 0x1008;
 // Actuators: 0x2000 - 0x2FFF
 // Board: 0xF000 - 0xFFFF
 // Game: 0x4000 - 0x4FFF
@@ -72,7 +49,6 @@ constexpr cogip::canpb::uuid_t reset_uuid = 0x3001;
 constexpr cogip::canpb::uuid_t copilot_connected_uuid = 0x3002;
 constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 0x3003;
 /** @} */
-
 
 /**
  * @brief Get trace mode status
