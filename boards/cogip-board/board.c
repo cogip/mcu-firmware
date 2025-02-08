@@ -19,6 +19,7 @@
  */
 
 #include "board.h"
+#include <stdio.h>
 
 /**
  * Start of the heap
