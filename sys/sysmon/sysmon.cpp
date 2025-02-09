@@ -115,7 +115,7 @@ static void _update_threads_status(void)
             // Thread used stack size
             _sysmon_threads_status[i]->set_used(
                 _sysmon_threads_status[i]->size()
-                - thread_measure_stack_free((const char*)thread_get_stackstart(thread))
+                - thread_measure_stack_free(thread)
                 );
 
             // Update thread status Protobuf message
