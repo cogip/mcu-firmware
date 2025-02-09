@@ -130,9 +130,9 @@ $(document).ready(function(){initNavTree('classcogip_1_1motion__control_1_1Passt
  <a href="classcogip_1_1motion__control_1_1PassthroughPosePIDController.html#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pose <a class="el" href="structPID.html">PID</a> controller. </p>
-<p>Input 0: polar pose error Input 1: current speed Input 2: target speed Output 0: speed order Output 1: current speed Output 2: target speed </p>
+<p>Input 0: polar pose error Input 1: current speed Input 2: target speed Input 3: filter speed bool Input 4: pose reached Output 0: speed order Output 1: current speed Output 2: target speed Output 3: filter speed bool Output 4: pose reached </p>
 
-<p class="definition">Definition at line <a class="el" href="PassthroughPosePIDController_8hpp_source.html#l00030">30</a> of file <a class="el" href="PassthroughPosePIDController_8hpp_source.html">PassthroughPosePIDController.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PassthroughPosePIDController_8hpp_source.html#l00034">34</a> of file <a class="el" href="PassthroughPosePIDController_8hpp_source.html">PassthroughPosePIDController.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="PassthroughPosePIDController_8hpp_source.html">PassthroughPosePIDController.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -170,7 +170,7 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1PassthroughPosePIDController.html#a14d79ab44183aa4dc94da690b1efbf1d">execute</a> () override</td></tr>
 <tr class="memdesc:a14d79ab44183aa4dc94da690b1efbf1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute <a class="el" href="structPID.html">PID</a> to correct given error according to <a class="el" href="structPID.html">PID</a> parameters and inputs. <br /></td></tr>
 <tr class="separator:a14d79ab44183aa4dc94da690b1efbf1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classcogip_1_1motion__control_1_1Controller"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcogip_1_1motion__control_1_1Controller')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcogip_1_1motion__control_1_1Controller.html">cogip::motion_control::Controller&lt; 4, 4, PassthroughPosePIDControllerParameters &gt;</a></td></tr>
+<tr class="inherit_header pub_methods_classcogip_1_1motion__control_1_1Controller"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcogip_1_1motion__control_1_1Controller')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcogip_1_1motion__control_1_1Controller.html">cogip::motion_control::Controller&lt; 5, 5, PassthroughPosePIDControllerParameters &gt;</a></td></tr>
 <tr class="memitem:af9f819b31dbaeebba6cb38a4eee32639 inherit pub_methods_classcogip_1_1motion__control_1_1Controller"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#af9f819b31dbaeebba6cb38a4eee32639">Controller</a> (<a class="el" href="classcogip_1_1motion__control_1_1PassthroughPosePIDControllerParameters.html">PassthroughPosePIDControllerParameters</a> *<a class="el" href="classcogip_1_1motion__control_1_1Controller.html#a4bcbd2f93c1dfc9cf362960944e31195">parameters</a>=nullptr)</td></tr>
 <tr class="memdesc:af9f819b31dbaeebba6cb38a4eee32639 inherit pub_methods_classcogip_1_1motion__control_1_1Controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructors.  <a href="classcogip_1_1motion__control_1_1Controller.html#af9f819b31dbaeebba6cb38a4eee32639">More...</a><br /></td></tr>
 <tr class="separator:af9f819b31dbaeebba6cb38a4eee32639 inherit pub_methods_classcogip_1_1motion__control_1_1Controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -232,7 +232,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:affb8d1dfa1bcfb4ec729989f3f49257d inherit pro_methods_classcogip_1_1motion__control_1_1BaseController"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1BaseController.html#affb8d1dfa1bcfb4ec729989f3f49257d">is_index_valid</a> (size_t index)</td></tr>
 <tr class="memdesc:affb8d1dfa1bcfb4ec729989f3f49257d inherit pro_methods_classcogip_1_1motion__control_1_1BaseController"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if given index is valid regarding number of inputs return true if index is valid, false otherwise.  <a href="classcogip_1_1motion__control_1_1BaseController.html#affb8d1dfa1bcfb4ec729989f3f49257d">More...</a><br /></td></tr>
 <tr class="separator:affb8d1dfa1bcfb4ec729989f3f49257d inherit pro_methods_classcogip_1_1motion__control_1_1BaseController"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classcogip_1_1motion__control_1_1Controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcogip_1_1motion__control_1_1Controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcogip_1_1motion__control_1_1Controller.html">cogip::motion_control::Controller&lt; 4, 4, PassthroughPosePIDControllerParameters &gt;</a></td></tr>
+<tr class="inherit_header pro_attribs_classcogip_1_1motion__control_1_1Controller"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcogip_1_1motion__control_1_1Controller')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcogip_1_1motion__control_1_1Controller.html">cogip::motion_control::Controller&lt; 5, 5, PassthroughPosePIDControllerParameters &gt;</a></td></tr>
 <tr class="memitem:a049f12c8a06be860045e1d5ed1e12a46 inherit pro_attribs_classcogip_1_1motion__control_1_1Controller"><td class="memItemLeft" align="right" valign="top"><a id="a049f12c8a06be860045e1d5ed1e12a46"></a>
 etl::vector&lt; double, INPUT_SIZE &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcogip_1_1motion__control_1_1Controller.html#a049f12c8a06be860045e1d5ed1e12a46">inputs_</a></td></tr>
 <tr class="memdesc:a049f12c8a06be860045e1d5ed1e12a46 inherit pro_attribs_classcogip_1_1motion__control_1_1Controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inputs vector. <br /></td></tr>
@@ -279,7 +279,7 @@ const <a class="el" href="classcogip_1_1motion__control_1_1PassthroughPosePIDCon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PassthroughPosePIDController_8hpp_source.html#l00033">33</a> of file <a class="el" href="PassthroughPosePIDController_8hpp_source.html">PassthroughPosePIDController.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PassthroughPosePIDController_8hpp_source.html#l00037">37</a> of file <a class="el" href="PassthroughPosePIDController_8hpp_source.html">PassthroughPosePIDController.hpp</a>.</p>
 
 </div>
 </div>
@@ -290,7 +290,7 @@ const <a class="el" href="classcogip_1_1motion__control_1_1PassthroughPosePIDCon
 </div><!-- doc-content -->
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Mon Jan 27 2025 21:07:15 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Sun Feb 9 2025 09:59:46 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

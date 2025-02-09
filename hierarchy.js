@@ -29,14 +29,14 @@ var hierarchy =
       [ "cogip::motion_control::Controller< 2, 2, SpeedPIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::SpeedPIDController", "classcogip_1_1motion__control_1_1SpeedPIDController.html", null ]
       ] ],
-      [ "cogip::motion_control::Controller< 4, 4, PassthroughPosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
-        [ "cogip::motion_control::PassthroughPosePIDController", "classcogip_1_1motion__control_1_1PassthroughPosePIDController.html", null ]
-      ] ],
       [ "cogip::motion_control::Controller< 5, 2, SpeedFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::SpeedFilter", "classcogip_1_1motion__control_1_1SpeedFilter.html", null ]
       ] ],
       [ "cogip::motion_control::Controller< 5, 5, MotorPoseFilterParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::MotorPoseFilter", "classcogip_1_1motion__control_1_1MotorPoseFilter.html", null ]
+      ] ],
+      [ "cogip::motion_control::Controller< 5, 5, PassthroughPosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
+        [ "cogip::motion_control::PassthroughPosePIDController", "classcogip_1_1motion__control_1_1PassthroughPosePIDController.html", null ]
       ] ],
       [ "cogip::motion_control::Controller< 5, 5, PosePIDControllerParameters >", "classcogip_1_1motion__control_1_1Controller.html", [
         [ "cogip::motion_control::PosePIDController", "classcogip_1_1motion__control_1_1PosePIDController.html", null ]

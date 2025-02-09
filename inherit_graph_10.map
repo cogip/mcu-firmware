@@ -4,9 +4,9 @@
 <area shape="rect" id="node11" href="$classcogip_1_1motion__control_1_1Controller.html" title="A controller transforms input data to outputs." alt="" coords="274,534,469,590"/>
 <area shape="rect" id="node12" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="256,614,487,670"/>
 <area shape="rect" id="node14" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="238,694,505,750"/>
-<area shape="rect" id="node16" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="257,774,485,830"/>
-<area shape="rect" id="node18" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="264,13,479,69"/>
-<area shape="rect" id="node20" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="266,105,477,161"/>
+<area shape="rect" id="node16" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="264,774,479,830"/>
+<area shape="rect" id="node18" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="266,13,477,69"/>
+<area shape="rect" id="node20" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="257,105,485,161"/>
 <area shape="rect" id="node22" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="242,209,501,265"/>
 <area shape="rect" id="node24" href="$classcogip_1_1motion__control_1_1Controller.html" title=" " alt="" coords="216,454,527,510"/>
 <area shape="rect" id="node3" href="$classcogip_1_1motion__control_1_1MetaController.html" title="Meta controllers are controllers containers to execute them in chain." alt="" coords="597,283,779,353"/>
@@ -19,9 +19,9 @@
 <area shape="rect" id="node10" href="$classcogip_1_1motion__control_1_1PolarParallelMetaController.html" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control Input 0: linear pose error ..." alt="" coords="849,568,1057,609"/>
 <area shape="rect" id="node13" href="$classcogip_1_1motion__control_1_1PoseStraightFilter.html" title="Breaks down a movement into a straight trajectory." alt="" coords="607,648,769,689"/>
 <area shape="rect" id="node15" href="$classcogip_1_1motion__control_1_1SpeedPIDController.html" title="PID speed controller." alt="" coords="607,713,769,755"/>
-<area shape="rect" id="node17" href="$classcogip_1_1motion__control_1_1PassthroughPosePIDController.html" title="Pose PID controller." alt="" coords="575,781,801,823"/>
-<area shape="rect" id="node19" href="$classcogip_1_1motion__control_1_1SpeedFilter.html" title="Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe..." alt="" coords="607,5,769,47"/>
-<area shape="rect" id="node21" href="$classcogip_1_1motion__control_1_1MotorPoseFilter.html" title="Breaks down a movement into a straight trajectory." alt="" coords="607,71,769,112"/>
+<area shape="rect" id="node17" href="$classcogip_1_1motion__control_1_1SpeedFilter.html" title="Filter maximum speed and acceleration Input 0: speed order Input 1: current speed Input 2: target spe..." alt="" coords="607,781,769,823"/>
+<area shape="rect" id="node19" href="$classcogip_1_1motion__control_1_1MotorPoseFilter.html" title="Breaks down a movement into a straight trajectory." alt="" coords="607,5,769,47"/>
+<area shape="rect" id="node21" href="$classcogip_1_1motion__control_1_1PassthroughPosePIDController.html" title="Pose PID controller." alt="" coords="575,71,801,112"/>
 <area shape="rect" id="node23" href="$classcogip_1_1motion__control_1_1PosePIDController.html" title="Pose PID controller." alt="" coords="607,136,769,177"/>
 <area shape="rect" id="node25" title=" " alt="" coords="340,337,403,363"/>
 </map>
