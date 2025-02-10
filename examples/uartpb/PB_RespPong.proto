@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-import "PB_Pose.proto";
-
-message PB_RespPong {
-    PB_Pose new_pose = 1;
-}

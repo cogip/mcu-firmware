@@ -1,5 +1,0 @@
-syntax = "proto3";
-
-message PB_RespHello {
-    int32 number = 1;
-}
