@@ -1,5 +1,5 @@
 // Project includes
-#include "pid_ng/PID.hpp"
+#include "pid/PID.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 #include "quadpid_meta_controller/QuadPIDMetaController.hpp"
 
