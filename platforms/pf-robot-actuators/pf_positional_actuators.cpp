@@ -6,12 +6,10 @@
 #include "pf_actuators.hpp"
 #include "pf_positional_actuators.hpp"
 
-#include "AnalogServo.hpp"
 #include "Motor.hpp"
 #include "OnOff.hpp"
 #include "PositionalActuator.hpp"
 
-#include "pca9685_params.hpp"
 #include "platform.hpp"
 
 #include "etl/map.h"
@@ -41,8 +39,6 @@ static char _gpio_handling_thread_stack[THREAD_STACKSIZE_DEFAULT];
 static etl::pool<Motor, COUNT> _motors_pool;
 /// OnOff memory pool
 static etl::pool<OnOff, COUNT> _onoff_pool;
-/// Analog servomotor pool
-static etl::pool<AnalogServo, COUNT> _analog_servo_pool;
 /// Positional actuators map
 static etl::map<cogip::pf::actuators::Enum, PositionalActuator *, 4*COUNT> _positional_actuators;
 
@@ -75,19 +71,6 @@ static void init_interruptable_pin(gpio_t pin, gpio_mode_t mode, gpio_flank_t fl
     _gpio_events[pin] = _gpio_event_pool.create();
     _gpio_events[pin]->list_node.next = nullptr;
     _gpio_pins[_gpio_events[pin]] = pin;
-}
-
-/// Init I2C PWM driver
-static void _pca9685_init() {
-    // Init PCA9685
-    if (pca9685_init(&AnalogServo::pca9685_dev, &pca9685_params) != PCA9685_OK) {
-        puts("Error: PCA9685 init failed!");
-        return;
-    }
-    if (pca9685_pwm_init(&AnalogServo::pca9685_dev, pca9685_params.mode, pca9685_params.freq, pca9685_params.res) != pca9685_params.freq) {
-        puts("Error: PCA9685 PWM init failed!");
-        return;
-    }
 }
 
 /// GPIOs handling thread
@@ -138,48 +121,12 @@ static void *_positional_actuators_timeout_thread(void *args)
 }
 
 void reset_positional_actuators(void) {
-    // Grips
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT]->actuate(analogservo_grip_bottom_left_init_value);
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT]->actuate(analogservo_grip_bottom_right_init_value);
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT]->actuate(analogservo_grip_top_left_init_value);
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT]->actuate(analogservo_grip_top_right_init_value);
-
     // Magnets
     _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT]->actuate(false);
     _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_RIGHT]->actuate(false);
 }
 
 void init() {
-    // Init PWM I2C driver
-    _pca9685_init();
-
-    // AnalogServo init
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT] = _analog_servo_pool.create(
-        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_LEFT,
-        0,
-        send_state,
-        PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT
-    );
-
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT] = _analog_servo_pool.create(
-        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_TOP_GRIP_RIGHT,
-        0,
-        send_state,
-        PCA9586Channels::CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT
-    );
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT] = _analog_servo_pool.create(
-        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_LEFT,
-        0,
-        send_state,
-        PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_LEFT
-    );
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT] = _analog_servo_pool.create(
-        (cogip::pf::actuators::Enum)Enum::ANALOGSERVO_BOTTOM_GRIP_RIGHT,
-        0,
-        send_state,
-        PCA9586Channels::CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT
-    );
-
     // OnOff init
     _positional_actuators[(cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT] = _onoff_pool.create(
         (cogip::pf::actuators::Enum)Enum::CART_MAGNET_LEFT,

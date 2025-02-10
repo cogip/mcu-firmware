@@ -13,7 +13,6 @@ USEMODULE += shell_cmd_i2c_scan
 
 # mcu-firmware modules
 USEMODULE += cogip_defs
-USEMODULE += lx_servo
 USEMODULE += canpb
 USEMODULE += utils
 

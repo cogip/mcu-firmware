@@ -13,7 +13,6 @@
 /* Platform includes */
 #include "pf_actuators.hpp"
 #include "pf_positional_actuators.hpp"
-#include "pf_servos.hpp"
 #include "pf_sensors.hpp"
 
 #define ENABLE_DEBUG        (0)
@@ -85,7 +84,6 @@ static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffe
 {
     cogip::pf::actuators::enable_all();
     cogip::pf::actuators::positional_actuators::reset_positional_actuators();
-    cogip::pf::actuators::servos::reset_lx_servos();
 }
 
 /// Start threading sending actuators state.
@@ -98,7 +96,6 @@ void _handle_copilot_connected(cogip::canpb::ReadBuffer &)
 {
     pf_set_copilot_connected(true);
     std::cout << "Copilot connected" << std::endl;
-    cogip::pf::actuators::servos::send_states();
     cogip::pf::actuators::positional_actuators::send_states();
 }
 
@@ -119,11 +116,6 @@ void pf_init(void)
         NULL,
         "Heartbeat thread"
     );
-
-    /* Initialize I2C */
-    for (unsigned i = 0; i < I2C_NUMOF; i++) {
-        i2c_init(I2C_DEV(i));
-    }
 
     /* Initialize CANPB */
     int canpb_res = canpb.init(&canpb_filter);
