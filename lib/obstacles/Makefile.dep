@@ -1,4 +1,0 @@
-USEPKG += embedded-proto
-
-USEMODULE += cogip_defs
-USEMODULE += trigonometry
