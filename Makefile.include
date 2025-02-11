@@ -38,9 +38,7 @@ MCUFW_MODULE_DIRS = " \
 					motion_control/engines \
 					motion_control/filters \
 					motion_control/metas \
-					drivers \
 					lib \
-					planners \
 					platforms \
 					sys \
 					"
