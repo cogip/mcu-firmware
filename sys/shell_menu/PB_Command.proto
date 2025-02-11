@@ -1,6 +1,0 @@
-syntax = "proto3";
-
-message PB_Command {
-    string cmd = 1;
-    string desc = 2;
-}
