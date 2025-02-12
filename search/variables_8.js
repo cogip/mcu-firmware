@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['linear_5fpose_5fpid_1455',['linear_pose_pid',['../structctrl__quadpid__parameters__t.html#ac36f2653dcdfccbb730325690e45e0ac',1,'ctrl_quadpid_parameters_t']]],
-  ['linear_5fspeed_5fpid_1456',['linear_speed_pid',['../structctrl__quadpid__parameters__t.html#a0d901244472c20e4e3667209980204c8',1,'ctrl_quadpid_parameters_t']]],
-  ['lxservo_5farm_5fpanel_5finit_5fvalue_1457',['lxservo_arm_panel_init_value',['../pf-robot-actuators_2include_2pf__servos_8hpp.html#a4b45bd3750669f6d50fe82c501069fff',1,'cogip::pf::actuators::servos']]]
+  ['o_5f_804',['O_',['../classcogip_1_1cogip__defs_1_1Pose.html#abc22593c1974c32a5c56e977f592290e',1,'cogip::cogip_defs::Pose']]],
+  ['outputs_5f_805',['outputs_',['../classcogip_1_1motion__control_1_1Controller.html#ad2c4d5d95ff8aaa87060c31ce1fcf678',1,'cogip::motion_control::Controller']]]
 ];

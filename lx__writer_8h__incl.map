@@ -1,7 +1,0 @@
-<map id="drivers/lx_servo/lx_writer.h" name="drivers/lx_servo/lx_writer.h">
-<area shape="rect" id="node1" title="Interface definition for LX&#45;Servos packet writer." alt="" coords="151,5,294,47"/>
-<area shape="rect" id="node2" href="$lx__protocol_8h.html" title="LX servomotors private protocol API." alt="" coords="5,95,112,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="137,95,207,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="232,95,315,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="339,95,410,121"/>
-</map>

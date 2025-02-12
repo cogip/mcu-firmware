@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['lds01_5fnew_5fframe_5fcb_5ft_1524',['lds01_new_frame_cb_t',['../group__driver__lds01.html#ga8d95cfcfd2972d2183ea09def8330860',1,'lds01_new_frame_cb_t():&#160;lds01.h'],['../group__driver__lds01__dma.html#ga8d95cfcfd2972d2183ea09def8330860',1,'lds01_new_frame_cb_t():&#160;lds01.h']]],
-  ['lds01_5ft_1525',['lds01_t',['../group__driver__lds01.html#ga10742eb5bfd08afdefedda949bcfd437',1,'lds01_t():&#160;lds01.h'],['../group__driver__lds01__dma.html#ga10742eb5bfd08afdefedda949bcfd437',1,'lds01_t():&#160;lds01.h']]],
-  ['lx_5fid_5ft_1526',['lx_id_t',['../group__driver__lx-servo.html#ga42631c7208ac426abd31e35e868e7544',1,'lx_servo.h']]]
+  ['pb_5fmessage_824',['PB_Message',['../classcogip_1_1wizard_1_1Wizard.html#a8704bf110f276b293ea96d38ccf0f908',1,'cogip::wizard::Wizard']]],
+  ['platform_5fget_5fspeed_5fand_5fpose_5fcb_5ft_825',['platform_get_speed_and_pose_cb_t',['../PlatformEngine_8hpp.html#a12c1c7ecbca7c7c5b68afee64cb058bb',1,'cogip::motion_control']]],
+  ['platform_5fprocess_5fcommands_5fcb_5ft_826',['platform_process_commands_cb_t',['../PlatformEngine_8hpp.html#a809fdabfd06812dfe093544ccf52aa21',1,'cogip::motion_control']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pca9586channels_1548',['PCA9586Channels',['../pf-pami_2include_2pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27e',1,'cogip::pf::actuators::positional_actuators::PCA9586Channels()'],['../pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27e',1,'cogip::pf::actuators::positional_actuators::PCA9586Channels()']]]
+  ['target_5fpose_5fstatus_5ft_830',['target_pose_status_t',['../BaseController_8hpp.html#af407ee2594885fdfac0291da246d84b4',1,'cogip::motion_control']]]
 ];

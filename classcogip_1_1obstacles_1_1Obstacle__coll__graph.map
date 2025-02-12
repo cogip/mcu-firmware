@@ -1,6 +1,0 @@
-<map id="cogip::obstacles::Obstacle" name="cogip::obstacles::Obstacle">
-<area shape="rect" id="node1" title="An obstacle used to detect and avoid collisions." alt="" coords="57,433,249,687"/>
-<area shape="rect" id="node2" href="$classcogip_1_1cogip__defs_1_1Coords.html" title="Absolute coordinates along X and Y axis." alt="" coords="5,132,148,371"/>
-<area shape="rect" id="node3" href="$classcogip_1_1cogip__defs_1_1Polygon.html" title=" " alt="" coords="172,198,408,305"/>
-<area shape="rect" id="node4" title=" " alt="" coords="199,5,381,83"/>
-</map>

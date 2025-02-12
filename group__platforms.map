@@ -2,7 +2,6 @@
 <area shape="rect" id="node1" href="$group__platforms__pf-robot-motion-control.html" title="COGIP test platform definition." alt="" coords="224,5,332,31"/>
 <area shape="rect" id="node2" href="$group__platforms__pf-power-supply.html" title="COGIP power supply platform definition." alt="" coords="199,55,357,95"/>
 <area shape="rect" id="node3" href="$group__platforms__pf-robot-motors.html" title="COGIP test platform definition." alt="" coords="224,120,332,145"/>
-<area shape="rect" id="node4" href="$group__platforms__pami.html" title="COGIP test platform definition." alt="" coords="224,169,332,195"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,120,151,145"/>
-<area shape="rect" id="node6" href="$group__platforms__pf-robot-actuators.html" title="COGIP test platform definition." alt="" coords="224,219,332,244"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,92,151,117"/>
+<area shape="rect" id="node5" href="$group__platforms__pf-robot-actuators.html" title="COGIP test platform definition." alt="" coords="224,169,332,195"/>
 </map>

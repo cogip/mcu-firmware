@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('pf-robot-actuators_2include_2Actuator_
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;enum class Enum: uint8_t;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;typedef void (*send_state_cb_t)(Enum id);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;class Actuator {</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">   22</a></span>&#160;class <a class="code" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">Actuator</a> {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a8003cbd53780b188032ded7d29cf2e03">   25</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a8003cbd53780b188032ded7d29cf2e03">Actuator</a>(</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        Enum <span class="keywordtype">id</span>,                                </div>
@@ -155,9 +155,9 @@ $(document).ready(function(){initNavTree('pf-robot-actuators_2include_2Actuator_
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    Enum id_;           </div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">bool</span> blocked_;      </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a283dc34f56dcf06ef9028de9a21ced73">   42</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a283dc34f56dcf06ef9028de9a21ced73">blocked_</a>;      </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    send_state_cb_t send_state_cb_; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#afa65bede794b16cb2fdad5c6801bd25f">   44</a></span>&#160;    send_state_cb_t send_state_cb_; </div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;};</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// namespace actuators</span></div>
@@ -166,14 +166,16 @@ $(document).ready(function(){initNavTree('pf-robot-actuators_2include_2Actuator_
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html">cogip::pf::actuators::Actuator</a></div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2Actuator_8hpp_source.html#l00022">Actuator.hpp:22</a></div></div>
 <div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html_a8003cbd53780b188032ded7d29cf2e03"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a8003cbd53780b188032ded7d29cf2e03">cogip::pf::actuators::Actuator::Actuator</a></div><div class="ttdeci">Actuator(Enum id, send_state_cb_t send_state_cb=nullptr)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2Actuator_8hpp_source.html#l00025">Actuator.hpp:25</a></div></div>
 <div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html_a5401d3a865db87e8d6b3ab61e351d226"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a5401d3a865db87e8d6b3ab61e351d226">cogip::pf::actuators::Actuator::send_state</a></div><div class="ttdeci">virtual void send_state(void)</div><div class="ttdoc">Send actuator state on communication bus.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2Actuator_8hpp_source.html#l00037">Actuator.hpp:37</a></div></div>
 <div class="ttc" id="anamespacecogip_html"><div class="ttname"><a href="namespacecogip.html">cogip</a></div><div class="ttdoc">Differential drive controller.</div><div class="ttdef"><b>Definition:</b> <a href="Coords_8hpp_source.html#l00016">Coords.hpp:16</a></div></div>
 <div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html_a490d59397a17fff968ce476b92e702ae"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a490d59397a17fff968ce476b92e702ae">cogip::pf::actuators::Actuator::blocked</a></div><div class="ttdeci">bool blocked()</div><div class="ttdoc">Get blocked state.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2Actuator_8hpp_source.html#l00031">Actuator.hpp:31</a></div></div>
+<div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html_a283dc34f56dcf06ef9028de9a21ced73"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a283dc34f56dcf06ef9028de9a21ced73">cogip::pf::actuators::Actuator::blocked_</a></div><div class="ttdeci">bool blocked_</div><div class="ttdoc">Actuator ID.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2Actuator_8hpp_source.html#l00042">Actuator.hpp:42</a></div></div>
 <div class="ttc" id="aclasscogip_1_1pf_1_1actuators_1_1Actuator_html_a5c2e704bd95081509473d6bfc3d47984"><div class="ttname"><a href="classcogip_1_1pf_1_1actuators_1_1Actuator.html#a5c2e704bd95081509473d6bfc3d47984">cogip::pf::actuators::Actuator::set_blocked</a></div><div class="ttdeci">void set_blocked(bool blocked)</div><div class="ttdoc">Set blocked state.</div><div class="ttdef"><b>Definition:</b> <a href="pf-robot-actuators_2include_2Actuator_8hpp_source.html#l00034">Actuator.hpp:34</a></div></div>
     <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
         <ul>
-            <li class="footer">Generated on Sun Feb 9 2025 09:59:46 by <a href="http://www.doxygen.org/index.html">
+            <li class="footer">Generated on Wed Feb 12 2025 12:00:35 by <a href="http://www.doxygen.org/index.html">
                        <img class="footer" src="doxygen.png" alt="doxygen"></a> 1.8.17</li>
         </ul>
     </div>

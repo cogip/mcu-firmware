@@ -1,8 +1,6 @@
 <map id="Lib" name="Lib">
 <area shape="rect" id="node1" href="$group__lib__wizard.html" title="Wizard module This module is used to communicate with the Copilot at the beginning of a game to confi..." alt="" coords="131,5,251,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,104,47,129"/>
-<area shape="rect" id="node3" href="$group__lib__avoidance.html" title="Avoidance module." alt="" coords="119,55,262,80"/>
-<area shape="rect" id="node4" href="$group__lib__path.html" title=" " alt="" coords="139,104,242,129"/>
-<area shape="rect" id="node5" href="$group__lib__obstacles.html" title="Obstacles module." alt="" coords="121,153,260,179"/>
-<area shape="rect" id="node6" href="$group__lib__cogip__defs.html" title=" " alt="" coords="95,203,287,228"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,55,47,80"/>
+<area shape="rect" id="node3" href="$group__lib__path.html" title=" " alt="" coords="139,55,242,80"/>
+<area shape="rect" id="node4" href="$group__lib__cogip__defs.html" title=" " alt="" coords="95,104,287,129"/>
 </map>

@@ -53,13 +53,6 @@ var namespacecogip =
       [ "MotorInterface", "classcogip_1_1motor_1_1MotorInterface.html", "classcogip_1_1motor_1_1MotorInterface" ],
       [ "MotorRIOT", "classcogip_1_1motor_1_1MotorRIOT.html", "classcogip_1_1motor_1_1MotorRIOT" ]
     ] ],
-    [ "obstacles", null, [
-      [ "Circle", "classcogip_1_1obstacles_1_1Circle.html", "classcogip_1_1obstacles_1_1Circle" ],
-      [ "List", "classcogip_1_1obstacles_1_1List.html", "classcogip_1_1obstacles_1_1List" ],
-      [ "Obstacle", "classcogip_1_1obstacles_1_1Obstacle.html", "classcogip_1_1obstacles_1_1Obstacle" ],
-      [ "Polygon", "classcogip_1_1obstacles_1_1Polygon.html", "classcogip_1_1obstacles_1_1Polygon" ],
-      [ "Rectangle", "classcogip_1_1obstacles_1_1Rectangle.html", "classcogip_1_1obstacles_1_1Rectangle" ]
-    ] ],
     [ "odometer", null, [
       [ "OdometerDifferential", "classcogip_1_1odometer_1_1OdometerDifferential.html", "classcogip_1_1odometer_1_1OdometerDifferential" ],
       [ "OdometerDifferentialParameters", "classcogip_1_1odometer_1_1OdometerDifferentialParameters.html", "classcogip_1_1odometer_1_1OdometerDifferentialParameters" ],
@@ -71,14 +64,9 @@ var namespacecogip =
     [ "pf", null, [
       [ "actuators", null, [
         [ "positional_actuators", null, [
-          [ "AnalogServo", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1AnalogServo" ],
           [ "Motor", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1Motor" ],
           [ "OnOff", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff" ],
           [ "PositionalActuator", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator.html", "classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1PositionalActuator" ]
-        ] ],
-        [ "servos", null, [
-          [ "Command", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command.html", "classcogip_1_1pf_1_1actuators_1_1servos_1_1Command" ],
-          [ "LxServo", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo.html", "classcogip_1_1pf_1_1actuators_1_1servos_1_1LxServo" ]
         ] ],
         [ "Actuator", "classcogip_1_1pf_1_1actuators_1_1Actuator.html", "classcogip_1_1pf_1_1actuators_1_1Actuator" ]
       ] ],
@@ -92,22 +80,9 @@ var namespacecogip =
     [ "pid", null, [
       [ "PID", "classcogip_1_1pid_1_1PID.html", "classcogip_1_1pid_1_1PID" ]
     ] ],
-    [ "planners", null, [
-      [ "AstarPlanner", "classcogip_1_1planners_1_1AstarPlanner.html", "classcogip_1_1planners_1_1AstarPlanner" ],
-      [ "Planner", "classcogip_1_1planners_1_1Planner.html", "classcogip_1_1planners_1_1Planner" ]
-    ] ],
-    [ "shell", null, [
-      [ "Command", "classcogip_1_1shell_1_1Command.html", "classcogip_1_1shell_1_1Command" ],
-      [ "Menu", "classcogip_1_1shell_1_1Menu.html", "classcogip_1_1shell_1_1Menu" ]
-    ] ],
     [ "sysmon", null, [
       [ "MemoryStatus", "classcogip_1_1sysmon_1_1MemoryStatus.html", "classcogip_1_1sysmon_1_1MemoryStatus" ],
       [ "ThreadStatus", "classcogip_1_1sysmon_1_1ThreadStatus.html", "classcogip_1_1sysmon_1_1ThreadStatus" ]
-    ] ],
-    [ "uartpb", null, [
-      [ "ReadBuffer", "classcogip_1_1uartpb_1_1ReadBuffer.html", "classcogip_1_1uartpb_1_1ReadBuffer" ],
-      [ "UartProtobuf", "classcogip_1_1uartpb_1_1UartProtobuf.html", "classcogip_1_1uartpb_1_1UartProtobuf" ],
-      [ "WriteBuffer", "classcogip_1_1uartpb_1_1WriteBuffer.html", "classcogip_1_1uartpb_1_1WriteBuffer" ]
     ] ],
     [ "wizard", null, [
       [ "Wizard", "classcogip_1_1wizard_1_1Wizard.html", "classcogip_1_1wizard_1_1Wizard" ]

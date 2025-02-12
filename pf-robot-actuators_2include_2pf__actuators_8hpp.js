@@ -1,7 +1,6 @@
 var pf_robot_actuators_2include_2pf__actuators_8hpp =
 [
     [ "LXServoIDs", "pf-robot-actuators_2include_2pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685", [
-      [ "NO_LXSERVO", "pf-robot-actuators_2include_2pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685a6149d15c008a82c2830198b09a62d8a7", null ],
       [ "LXSERVO_LEFT_CART", "pf-robot-actuators_2include_2pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685aa9f9603a446e7725b2eb81b27d1577fe", null ],
       [ "LXSERVO_RIGHT_CART", "pf-robot-actuators_2include_2pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685a2737696b25d633be47ab5037aaa0c0ba", null ],
       [ "LXSERVO_ARM_PANEL", "pf-robot-actuators_2include_2pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685a34adafa6373edb883fcc47bb0d9f3f4b", null ]

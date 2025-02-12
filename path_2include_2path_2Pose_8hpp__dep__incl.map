@@ -1,6 +1,5 @@
 <map id="lib/path/include/path/Pose.hpp" name="lib/path/include/path/Pose.hpp">
-<area shape="rect" id="node1" title="Path Pose declaration." alt="" coords="126,5,281,47"/>
-<area shape="rect" id="node2" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="71,95,336,151"/>
-<area shape="rect" id="node3" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,206,196,247"/>
-<area shape="rect" id="node4" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="220,199,395,255"/>
+<area shape="rect" id="node1" title="Path Pose declaration." alt="" coords="61,5,215,47"/>
+<area shape="rect" id="node2" href="$PlatformEngine_8hpp.html" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="5,95,271,151"/>
+<area shape="rect" id="node3" href="$motion__control_8hpp_source.html" title=" " alt="" coords="51,199,225,255"/>
 </map>

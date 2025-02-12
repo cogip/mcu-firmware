@@ -1,10 +1,7 @@
 <map id="platforms/pf&#45;robot&#45;actuators/include/Actuator.hpp" name="platforms/pf&#45;robot&#45;actuators/include/Actuator.hpp">
-<area shape="rect" id="node1" title="Base actuators class definition." alt="" coords="625,5,850,47"/>
-<area shape="rect" id="node2" href="$pf-robot-actuators_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="515,95,722,151"/>
-<area shape="rect" id="node7" href="$pf-robot-actuators_2include_2LxServo_8hpp.html" title="C++ class representing a servomotor using lx_servo driver." alt="" coords="837,102,1059,143"/>
-<area shape="rect" id="node3" href="$pf-robot-actuators_2include_2AnalogServo_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="5,206,259,247"/>
-<area shape="rect" id="node4" href="$pf-robot-actuators_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="283,206,491,247"/>
-<area shape="rect" id="node5" href="$OnOff_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="515,206,723,247"/>
-<area shape="rect" id="node6" href="$pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="747,199,936,255"/>
-<area shape="rect" id="node8" href="$pf-robot-actuators_2include_2pf__servos_8hpp.html" title="Functions and definitions related to servos." alt="" coords="961,199,1117,255"/>
+<area shape="rect" id="node1" title="Base actuators class definition." alt="" coords="229,5,454,47"/>
+<area shape="rect" id="node2" href="$pf-robot-actuators_2include_2PositionalActuator_8hpp.html" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="238,95,445,151"/>
+<area shape="rect" id="node3" href="$pf-robot-actuators_2include_2Motor_8hpp.html" title="C++ class representing a motor using motor driver." alt="" coords="5,206,213,247"/>
+<area shape="rect" id="node4" href="$OnOff_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="237,206,445,247"/>
+<area shape="rect" id="node5" href="$pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="469,199,659,255"/>
 </map>

@@ -1,9 +1,0 @@
-<map id="lib/cogip_defs/include/cogip_defs/Polygon.hpp" name="lib/cogip_defs/include/cogip_defs/Polygon.hpp">
-<area shape="rect" id="node1" title="Polygon class declaration." alt="" coords="231,5,411,47"/>
-<area shape="rect" id="node2" href="$Obstacle_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="233,95,410,136"/>
-<area shape="rect" id="node3" href="$Circle_8hpp.html" title="Circle obstacle class declaration." alt="" coords="5,184,163,225"/>
-<area shape="rect" id="node4" href="$List_8hpp.html" title="List obstacles class declaration." alt="" coords="187,184,341,225"/>
-<area shape="rect" id="node5" href="$obstacles_8hpp.html" title="Public API for obstacles module." alt="" coords="189,273,371,315"/>
-<area shape="rect" id="node6" href="$obstacles_2include_2obstacles_2Polygon_8hpp.html" title="Polygon obstacle class declaration." alt="" coords="417,184,589,225"/>
-<area shape="rect" id="node7" href="$Rectangle_8hpp.html" title="Rectangle obstacle class declaration." alt="" coords="410,273,595,315"/>
-</map>

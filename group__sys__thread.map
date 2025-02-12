@@ -1,8 +1,6 @@
 <map id="Threading" name="Threading">
 <area shape="rect" id="node1" href="$group__lib__wizard.html" title="Wizard module This module is used to communicate with the Copilot at the beginning of a game to confi..." alt="" coords="369,5,489,31"/>
-<area shape="rect" id="node2" href="$group__sys.html" title=" " alt="" coords="5,80,136,105"/>
-<area shape="rect" id="node3" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="185,80,272,105"/>
-<area shape="rect" id="node4" href="$group__lib__obstacles.html" title="Obstacles module." alt="" coords="360,55,499,80"/>
-<area shape="rect" id="node5" href="$group__sys__sysmon.html" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="356,104,503,129"/>
-<area shape="rect" id="node6" href="$group__sys__shell__menu.html" title="Menus for shell." alt="" coords="382,153,477,179"/>
+<area shape="rect" id="node2" href="$group__sys.html" title=" " alt="" coords="5,31,136,56"/>
+<area shape="rect" id="node3" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="185,31,272,56"/>
+<area shape="rect" id="node4" href="$group__sys__sysmon.html" title="Copyright (C) 2022 COGIP Robotics association cogip35@gmail.com" alt="" coords="356,55,503,80"/>
 </map>

@@ -1,4 +1,0 @@
-<map id="planners/planner/include/planners/Planner.hpp" name="planners/planner/include/planners/Planner.hpp">
-<area shape="rect" id="node1" title="Virtual class defining common API for all planner implementations." alt="" coords="31,5,213,47"/>
-<area shape="rect" id="node2" href="$AstarPlanner_8hpp.html" title="Astar planner." alt="" coords="5,95,239,136"/>
-</map>

@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['quadruple_20pid_20actuator_20motion_20controller_1659',['Quadruple PID actuator motion controller',['../group__legacy__quadpid.html',1,'']]],
-  ['quad_20pid_20meta_2dcontroller_1660',['Quad PID meta-controller',['../group__quadpid__meta__controller.html',1,'']]]
+  ['test_20platform_859',['Test platform',['../group__platforms__pf-robot-actuators.html',1,'']]],
+  ['test_20platform_860',['Test platform',['../group__platforms__pf-robot-motion-control.html',1,'']]],
+  ['test_20platform_861',['Test platform',['../group__platforms__pf-robot-motors.html',1,'']]],
+  ['threading_862',['Threading',['../group__sys__thread.html',1,'']]]
 ];

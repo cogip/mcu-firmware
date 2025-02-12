@@ -4,7 +4,6 @@ var pf_robot_motors_2include_2pf__positional__actuators_8hpp =
     [ "QDEC_MODE", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a3f63e4c76a7bc2b76e682c64238a98a3", null ],
     [ "QDEC_TOP_LIFT_POLARITY", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a5a9eda0c5e690808d0192f967ca9232f", null ],
     [ "Enum", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424", [
-      [ "ANALOGSERVO_PAMI", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424a4468bc5cbb71d96d3490451ab84d53d9", null ],
       [ "MOTOR_BOTTOM_LIFT", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424a365e712ea6d82936c5d6206dc692ebbc", null ],
       [ "MOTOR_TOP_LIFT", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424ad458645e6e81ed2a0e0ad09db305f512", null ],
       [ "ANALOGSERVO_BOTTOM_GRIP_LEFT", "pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424aeeb79b7d945ee38cea06ed5066a0d479", null ],

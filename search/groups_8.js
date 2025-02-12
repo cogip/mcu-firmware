@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['obstacles_20module_1652',['Obstacles module',['../group__lib__obstacles.html',1,'']]]
+  ['quad_20pid_20meta_2dcontroller_852',['Quad PID meta-controller',['../group__quadpid__meta__controller.html',1,'']]]
 ];

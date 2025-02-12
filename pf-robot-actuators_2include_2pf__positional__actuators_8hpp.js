@@ -2,7 +2,6 @@ var pf_robot_actuators_2include_2pf__positional__actuators_8hpp =
 [
     [ "PCA9685_OFFSET", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a4a18a216b01bf023770eead58a9f9cde", null ],
     [ "Enum", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424", [
-      [ "ANALOGSERVO_PAMI", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424a4468bc5cbb71d96d3490451ab84d53d9", null ],
       [ "MOTOR_BOTTOM_LIFT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424a365e712ea6d82936c5d6206dc692ebbc", null ],
       [ "MOTOR_TOP_LIFT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424ad458645e6e81ed2a0e0ad09db305f512", null ],
       [ "ANALOGSERVO_BOTTOM_GRIP_LEFT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424aeeb79b7d945ee38cea06ed5066a0d479", null ],
@@ -15,7 +14,6 @@ var pf_robot_actuators_2include_2pf__positional__actuators_8hpp =
       [ "MOTOR_TOP_LIFT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a233cc3444d447f733c2f4ddcccc75424ad458645e6e81ed2a0e0ad09db305f512", null ]
     ] ],
     [ "PCA9586Channels", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27e", [
-      [ "CHANNEL_ANALOGSERVO_PAMI", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27ea42d234153fd0a94d4f7e860869bbf5a9", null ],
       [ "CHANNEL_ANALOGSERVO_TOP_GRIP_RIGHT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27ea898df36b9d829e4655f27a546776bc1e", null ],
       [ "CHANNEL_ANALOGSERVO_TOP_GRIP_LEFT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27eaf98a552aff5083d964a444f26c569ede", null ],
       [ "CHANNEL_ANALOGSERVO_BOTTOM_GRIP_RIGHT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a5eaa1d44ad18530f37ecd23bc975d27ea4ed7a226b57761a7d302cd69fad155ee", null ],
@@ -32,6 +30,8 @@ var pf_robot_actuators_2include_2pf__positional__actuators_8hpp =
     [ "analogservo_grip_bottom_right_init_value", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a317967041ff5b91ad7c64cc10b8b1da7", null ],
     [ "analogservo_grip_top_left_init_value", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a41f1bc9e30501b7359fe5f3bcd0b1513", null ],
     [ "analogservo_grip_top_right_init_value", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a90f887d3763ff4d89888de4da76509a8", null ],
+    [ "COUNT", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#aa054b6bd987055f3f176678a306b3284", null ],
     [ "pin_cart_magnet_left", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a7552b43d169a02f09aec808d2d3dd661", null ],
-    [ "pin_cart_magnet_right", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a2e46aa0547cf2d7bc576e1d571637785", null ]
+    [ "pin_cart_magnet_right", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a2e46aa0547cf2d7bc576e1d571637785", null ],
+    [ "START_LINE", "pf-robot-actuators_2include_2pf__positional__actuators_8hpp.html#a76a3c16c66c3c196ec47c804ecc884c2", null ]
 ];

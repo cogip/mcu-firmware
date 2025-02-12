@@ -40,12 +40,8 @@ var NAVTREE =
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "Globals", "globals.html", [
-        [ "All", "globals.html", "globals_dup" ],
+        [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
-        [ "Variables", "globals_vars.html", null ],
-        [ "Typedefs", "globals_type.html", null ],
-        [ "Enumerations", "globals_enum.html", null ],
-        [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -55,14 +51,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classcogip_1_1drive__controller_1_1DifferentialDriveControllerParameters.html#a44ac1801c264ea88daaa4744633d6c4e",
-"classcogip_1_1obstacles_1_1Obstacle.html#afbbc35013fe5ee189740fda641ed4621",
-"classcogip_1_1uartpb_1_1WriteBuffer.html",
-"group__driver__lds01.html#ga10742eb5bfd08afdefedda949bcfd437",
-"group__legacy__controller.html#ga180894284b940092b53725eaf050822c",
-"group__platforms__pf-robot-motors.html#ga07a575aff9cc49fe868eb5ee53dbb787",
-"pf-pami_2include_2pf__servos_8hpp.html#a26f9a280a8ca655926d0b145e1493d60",
-"structctrl__quadpid__parameters__t.html#a59669e64165ea24647c3f108341c3e99"
+"classcogip_1_1motion__control_1_1BaseController.html#affb8d1dfa1bcfb4ec729989f3f49257d",
+"classcogip_1_1pf_1_1actuators_1_1positional__actuators_1_1OnOff.html#a12d580d21d485f47f23cc9a66aa61417",
+"group__platforms__pf-robot-actuators.html#ga07a575aff9cc49fe868eb5ee53dbb787",
+"pf-robot-motors_2include_2pf__positional__actuators_8hpp.html#a4531f25d570d6eece6163b9812a6e510"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

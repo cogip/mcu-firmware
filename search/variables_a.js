@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['name_1470',['name',['../structsd21__servo__t.html#ae5447ac63ef4cfb969afbdcef864dac9',1,'sd21_servo_t']]],
-  ['nb_5fcontrollers_5f_1471',['nb_controllers_',['../classcogip_1_1motion__control_1_1BaseMetaController.html#a0f720066e1468396478f669e67337ec6',1,'cogip::motion_control::BaseMetaController']]],
-  ['new_5fframe_5fcb_1472',['new_frame_cb',['../structlds01__params__t.html#ab224958e163ac59609ff88899debf9e7',1,'lds01_params_t']]]
+  ['send_5fstate_5fcb_5f_813',['send_state_cb_',['../classcogip_1_1pf_1_1actuators_1_1Actuator.html#afa65bede794b16cb2fdad5c6801bd25f',1,'cogip::pf::actuators::Actuator::send_state_cb_()'],['../classcogip_1_1pf_1_1sensors_1_1Sensor.html#a80ebd89adc84ea1ea8b4991810589653',1,'cogip::pf::sensors::Sensor::send_state_cb_()']]],
+  ['start_814',['start',['../structsysmon__heap__t.html#a8683a064e4024b2049625a87fca0d1c4',1,'sysmon_heap_t']]],
+  ['state_5f_815',['state_',['../classcogip_1_1pf_1_1sensors_1_1Sensor.html#ab650d7bb86516ac28059afd4dc8cb10f',1,'cogip::pf::sensors::Sensor']]]
 ];

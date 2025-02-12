@@ -1,7 +1,0 @@
-<map id="sys/uartpb/include/uartpb/UartProtobuf.hpp" name="sys/uartpb/include/uartpb/UartProtobuf.hpp">
-<area shape="rect" id="node1" title="Exchange Protobuf messages over UART module." alt="" coords="181,5,363,47"/>
-<area shape="rect" id="node2" href="$Wizard_8hpp.html" title="Public API for wizard module." alt="" coords="5,95,152,136"/>
-<area shape="rect" id="node3" href="$pf-pami_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="177,95,367,136"/>
-<area shape="rect" id="node5" href="$pf-pami_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="391,95,582,136"/>
-<area shape="rect" id="node4" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="177,184,367,225"/>
-</map>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['ctrl_5fmode_5ft_1538',['ctrl_mode_t',['../group__legacy__controller.html#ga83512a82ac70fd30e2ba0512c79d1001',1,'ctrl.hpp']]],
-  ['ctrl_5fregul_5ft_1539',['ctrl_regul_t',['../group__legacy__quadpid.html#ga3fde4952c6a108b241aeea054e68638d',1,'quadpid.hpp']]]
+  ['lxservoids_828',['LXServoIDs',['../pf-robot-actuators_2include_2pf__actuators_8hpp.html#ab8ffb9175feb6ddd2f6ec4049542d685',1,'cogip::pf::actuators']]]
 ];

@@ -1,6 +1,6 @@
 <map id="motion_control/controllers/speed_pid_controller/include/speed_pid_controller/SpeedPIDControllerParameters.hpp" name="motion_control/controllers/speed_pid_controller/include/speed_pid_controller/SpeedPIDControllerParameters.hpp">
 <area shape="rect" id="node1" title="Speed PID controller parameters." alt="" coords="5,5,296,76"/>
-<area shape="rect" id="node2" href="$PID_8hpp.html" title="PID implementation." alt="" coords="91,124,210,151"/>
+<area shape="rect" id="node2" href="$PID_8hpp.html" title="PID implementation." alt="" coords="103,124,199,151"/>
 <area shape="rect" id="node3" title=" " alt="" coords="46,199,138,225"/>
 <area shape="rect" id="node4" title=" " alt="" coords="162,199,257,225"/>
 </map>

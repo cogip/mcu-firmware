@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['vacuum_5fpump_2eh_795',['vacuum_pump.h',['../vacuum__pump_8h.html',1,'']]],
-  ['vacuum_5fpump_5finit_796',['vacuum_pump_init',['../group__driver__vacuum__pump.html#gac125820d976df6d6f630732411b32145',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5fis_5funder_5fpressure_797',['vacuum_pump_is_under_pressure',['../group__driver__vacuum__pump.html#gad7fc52108572dd504e22ecdbaadafa3c',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5fparams_5ft_798',['vacuum_pump_params_t',['../structvacuum__pump__params__t.html',1,'']]],
-  ['vacuum_5fpump_5fstart_799',['vacuum_pump_start',['../group__driver__vacuum__pump.html#gac06fe9bdd82b72bf75ad78f62af8d975',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5fstop_800',['vacuum_pump_stop',['../group__driver__vacuum__pump.html#gadd86e5b7ab43dcd6484c62f7be6cd81e',1,'vacuum_pump.h']]],
-  ['vacuum_5fpump_5ft_801',['vacuum_pump_t',['../group__driver__vacuum__pump.html#gad99ecfeec89c500f08fb83686865bb7a',1,'vacuum_pump.h']]]
+  ['wizard_20module_404',['Wizard module',['../group__lib__wizard.html',1,'']]],
+  ['wizard_405',['Wizard',['../classcogip_1_1wizard_1_1Wizard.html',1,'cogip::wizard::Wizard'],['../classcogip_1_1wizard_1_1Wizard.html#ad3ca773af8e8be47cf23e850c7725ec9',1,'cogip::wizard::Wizard::Wizard()']]],
+  ['wizard_2ehpp_406',['Wizard.hpp',['../Wizard_8hpp.html',1,'']]],
+  ['wizard_5fname_5fmax_5flength_407',['WIZARD_NAME_MAX_LENGTH',['../group__lib__wizard.html#ga4b40753fd51245b8b150805686135e12',1,'Wizard.hpp']]],
+  ['wizard_5frep_5fmax_408',['WIZARD_REP_MAX',['../group__lib__wizard.html#ga3f0252a2b7d4f6acfe2eccdf79352e9a',1,'Wizard.hpp']]],
+  ['writebuffer_409',['WriteBuffer',['../classcogip_1_1canpb_1_1WriteBuffer.html',1,'cogip::canpb::WriteBuffer'],['../classcogip_1_1canpb_1_1WriteBuffer.html#a0c440e4dfabdd410d3d8b6e92941aafd',1,'cogip::canpb::WriteBuffer::WriteBuffer()']]],
+  ['writebuffer_2ehpp_410',['WriteBuffer.hpp',['../WriteBuffer_8hpp.html',1,'']]]
 ];

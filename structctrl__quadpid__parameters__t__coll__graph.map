@@ -1,4 +1,0 @@
-<map id="ctrl_quadpid_parameters_t" name="ctrl_quadpid_parameters_t">
-<area shape="rect" id="node1" title="QuadPID controller specific configuration." alt="" coords="5,248,211,413"/>
-<area shape="rect" id="node2" href="$structPID__t.html" title=" " alt="" coords="43,5,173,141"/>
-</map>

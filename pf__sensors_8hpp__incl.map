@@ -10,8 +10,8 @@
 <area shape="rect" id="node8" title=" " alt="" coords="253,184,329,211"/>
 <area shape="rect" id="node9" title=" " alt="" coords="353,184,437,211"/>
 <area shape="rect" id="node10" href="$canpb_8hpp.html" title=" " alt="" coords="625,259,757,285"/>
-<area shape="rect" id="node11" href="$canpb_2include_2canpb_2ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="1259,184,1423,211"/>
-<area shape="rect" id="node15" href="$canpb_2include_2canpb_2WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="461,184,628,211"/>
+<area shape="rect" id="node11" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="1259,184,1423,211"/>
+<area shape="rect" id="node15" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="461,184,628,211"/>
 <area shape="rect" id="node17" title=" " alt="" coords="704,184,855,211"/>
 <area shape="rect" id="node13" title=" " alt="" coords="1399,259,1469,285"/>
 <area shape="rect" id="node14" title=" " alt="" coords="1119,259,1283,285"/>

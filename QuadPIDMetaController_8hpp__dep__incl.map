@@ -1,5 +1,4 @@
 <map id="motion_control/metas/quadpid_meta_controller/include/quadpid_meta_controller/QuadPIDMetaController.hpp" name="motion_control/metas/quadpid_meta_controller/include/quadpid_meta_controller/QuadPIDMetaController.hpp">
-<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="84,5,323,76"/>
-<area shape="rect" id="node2" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,131,196,173"/>
-<area shape="rect" id="node3" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="220,124,395,180"/>
+<area shape="rect" id="node1" title="Run 2 (meta&#45;)controllers, one for linear control, one for angular control." alt="" coords="5,5,244,76"/>
+<area shape="rect" id="node2" href="$motion__control_8hpp_source.html" title=" " alt="" coords="37,124,212,180"/>
 </map>

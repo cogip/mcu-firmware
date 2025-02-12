@@ -1,5 +1,0 @@
-<map id="platforms/pf&#45;pami/include/PositionalActuator.hpp" name="platforms/pf&#45;pami/include/PositionalActuator.hpp">
-<area shape="rect" id="node1" title="C++ class representing a positional_actuator using positional_actuator driver." alt="" coords="116,5,307,47"/>
-<area shape="rect" id="node2" href="$pf-pami_2include_2AnalogServo_8hpp.html" title="C++ class representing a on/off actuator using GPIOs." alt="" coords="5,95,196,136"/>
-<area shape="rect" id="node3" href="$pf-pami_2include_2pf__positional__actuators_8hpp.html" title="Functions and definitions related to positional_actuators." alt="" coords="220,95,427,136"/>
-</map>

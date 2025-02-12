@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quadpidmetacontroller_898',['QuadPIDMetaController',['../classcogip_1_1motion__control_1_1QuadPIDMetaController.html',1,'cogip::motion_control']]]
+  ['readbuffer_475',['ReadBuffer',['../classcogip_1_1canpb_1_1ReadBuffer.html',1,'cogip::canpb']]]
 ];

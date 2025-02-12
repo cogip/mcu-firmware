@@ -1,5 +1,4 @@
 <map id="motion_control/engines/platform_engine/include/platform_engine/PlatformEngine.hpp" name="motion_control/engines/platform_engine/include/platform_engine/PlatformEngine.hpp">
-<area shape="rect" id="node1" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="71,5,336,61"/>
-<area shape="rect" id="node2" href="$pf-pami_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="5,117,196,158"/>
-<area shape="rect" id="node3" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="220,109,395,165"/>
+<area shape="rect" id="node1" title="Engine getting inputs from platform and setting outputs for the platform." alt="" coords="5,5,271,61"/>
+<area shape="rect" id="node2" href="$motion__control_8hpp_source.html" title=" " alt="" coords="51,109,225,165"/>
 </map>

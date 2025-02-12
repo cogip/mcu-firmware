@@ -1,8 +1,8 @@
 <map id="sys/canpb/include/canpb/canpb.hpp" name="sys/canpb/include/canpb/canpb.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="578,5,759,47"/>
 <area shape="rect" id="node2" href="$CanProtobuf_8hpp.html" title="Exchange Protobuf messages over CAN module." alt="" coords="578,184,759,225"/>
-<area shape="rect" id="node12" href="$canpb_2include_2canpb_2ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="578,95,759,136"/>
-<area shape="rect" id="node13" href="$canpb_2include_2canpb_2WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="783,95,965,136"/>
+<area shape="rect" id="node12" href="$ReadBuffer_8hpp.html" title="Read buffer for EmbeddedProto." alt="" coords="578,95,759,136"/>
+<area shape="rect" id="node13" href="$WriteBuffer_8hpp.html" title="Write buffer for EmbeddedProto." alt="" coords="783,95,965,136"/>
 <area shape="rect" id="node3" href="$pf-power-supply_2include_2platform_8hpp_source.html" title=" " alt="" coords="5,281,215,322"/>
 <area shape="rect" id="node4" href="$pf-robot-actuators_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="239,273,395,329"/>
 <area shape="rect" id="node5" href="$pf__bool__sensors_8hpp.html" title="Generic definitions related to sensors." alt="" coords="413,377,569,433"/>
@@ -11,5 +11,5 @@
 <area shape="rect" id="node8" href="$pf-robot-motion-control_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="927,273,1101,329"/>
 <area shape="rect" id="node10" href="$pf-robot-motors_2include_2pf__actuators_8hpp.html" title="Generic definitions related to actuators." alt="" coords="1126,281,1363,322"/>
 <area shape="rect" id="node11" href="$pf-robot-motors_2include_2platform_8hpp.html" title="Define hardware properties of test platform. Units:" alt="" coords="1387,281,1599,322"/>
-<area shape="rect" id="node9" href="$pf-robot-motion-control_2include_2motion__control_8hpp_source.html" title=" " alt="" coords="927,377,1101,433"/>
+<area shape="rect" id="node9" href="$motion__control_8hpp_source.html" title=" " alt="" coords="927,377,1101,433"/>
 </map>
