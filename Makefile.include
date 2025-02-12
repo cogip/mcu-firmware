@@ -38,17 +38,12 @@ MCUFW_MODULE_DIRS = " \
 					motion_control/engines \
 					motion_control/filters \
 					motion_control/metas \
-					drivers \
 					lib \
-					planners \
 					platforms \
 					sys \
 					"
 
-# All directories starting with 'shell_' are shell modules.
-# List them to add their parent directory to EXTERNAL_MODULE_DIRS.
-shell_module_dirs = $(wildcard $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/*/shell_*/.))
-EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/) $(shell_module_dirs:%=%/..)
+EXTERNAL_MODULE_DIRS += $(MCUFW_MODULE_DIRS:%=$(MCUFIRMWAREBASE)/%/)
 
 # Use C++20 by default
 CXXEXFLAGS := $(filter-out -std=%, $(CXXEXFLAGS))

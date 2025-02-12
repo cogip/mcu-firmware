@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-// All message type names are prefixed with "PB_" to avoid collisions
-// C++ classes already defined in code and Protobuf generated types.
-
-message PB_ReqHello {
-    int32 number = 1;
-    string message = 2;
-}

@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-message PB_Circle {
-    sint32 x = 1;
-    sint32 y = 2;
-    uint32 radius = 3;
-}

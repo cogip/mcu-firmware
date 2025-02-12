@@ -13,7 +13,7 @@
 #pragma once
 
 // Project includes
-#include "pid_ng/PID.hpp"
+#include "pid/PID.hpp"
 
 namespace cogip {
 

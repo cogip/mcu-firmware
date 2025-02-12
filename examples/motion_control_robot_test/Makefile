@@ -4,7 +4,7 @@ BOARD ?= cogip-native
 
 # Motion control
 USEMODULE += dualpid_meta_controller
-USEMODULE += pid_ng
+USEMODULE += pid
 USEMODULE += platform_engine
 USEMODULE += polar_parallel_meta_controller
 USEMODULE += pose_pid_controller

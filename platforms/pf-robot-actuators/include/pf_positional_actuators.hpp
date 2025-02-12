@@ -17,9 +17,7 @@
 #include "PositionalActuator.hpp"
 
 // RIOT includes
-#include <pca9685.h>
 #include <periph/gpio.h>
-#include <uart_half_duplex.h>
 
 #ifndef PCA9685_OFFSET
     #define PCA9685_OFFSET 0

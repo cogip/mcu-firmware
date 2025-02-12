@@ -1,2 +1,0 @@
-USEMODULE += planner
-USEMODULE += avoidance

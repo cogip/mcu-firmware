@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-import "PB_Color.proto";
-
-message PB_RespPing {
-    PB_Color color = 1;
-}

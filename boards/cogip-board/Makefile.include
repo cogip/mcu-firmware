@@ -6,3 +6,6 @@ PORT = "/dev/ttyUSB0"
 
 # Setup of programmer and serial is shared between STM32 based boards
 include $(RIOTMAKE)/boards/stm32.inc.mk
+
+# Set onboard transceiver loop delay
+CFLAGS += -DCONFIG_FDCAN_DEVICE_TRANSCEIVER_LOOP_DELAY=130

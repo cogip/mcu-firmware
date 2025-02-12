@@ -9,7 +9,7 @@
 #include "etl/list.h"
 #include "etl/vector.h"
 
-#include "pid_ng/PID.hpp"
+#include "pid/PID.hpp"
 
 #include "motion_control_common/Controller.hpp"
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
