@@ -49,17 +49,11 @@ public:
             qdec_mode = QDEC_X4;
             break;
         default:
-            printf("Invalid QDEC mode (%u)\n", id_);
             return -1;
         }
 
         /* Setup QDEC peripheral */
-        int error = qdec_init(qdec, qdec_mode, NULL, NULL);
-        if (error) {
-            printf("QDEC %u not initialized, error=%d !!!\n", id_, error);
-        }
-
-        return error;
+        return qdec_init(qdec, qdec_mode, NULL, NULL);;
     }
 
     /// 
