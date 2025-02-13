@@ -31,7 +31,7 @@ int OdometerDifferential::update()
     
     // Save polar pose delta since last call
     polar_.set_distance(delta_linear_pose);
-    polar_.set_angle(delta_angular_pose);
+    polar_.set_angle(RAD2DEG(delta_angular_pose));
 
     return 0;
 }
