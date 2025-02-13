@@ -3,6 +3,14 @@
 // Project includes
 #include "etl/numeric.h"
 
+/* Motion motors */
+#define MOTOR_LEFT  1
+#define MOTOR_RIGHT 0
+
+/* Quadrature decoding polarity */
+#define QDEC_LEFT_POLARITY  1
+#define QDEC_RIGHT_POLARITY -1
+
 /// Motors properties
 constexpr double motor_wheels_diameter_mm = 60.0;
 constexpr double motor_wheels_distance_mm = 88.0;
