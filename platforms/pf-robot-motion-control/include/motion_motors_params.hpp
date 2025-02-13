@@ -8,14 +8,6 @@ namespace pf {
 
 namespace motion_control {
 
-/* Motion motors */
-#define MOTOR_LEFT  0
-#define MOTOR_RIGHT 1
-
-/* Quadrature decoding polarity */
-#define QDEC_LEFT_POLARITY  -1
-#define QDEC_RIGHT_POLARITY 1
-
 #ifndef MOTION_MOTORS_POST_CB
 /// Motion control callback on motor_set() call
 #define MOTION_MOTORS_POST_CB nullptr
