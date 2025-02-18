@@ -10,7 +10,13 @@
 #include "etl/vector.h"
 
 #include "pid/PID.hpp"
-
+#include "board.h"
+#include "drive_controller/DifferentialDriveControllerParameters.hpp"
+#include "drive_controller/DifferentialDriveController.hpp"
+#include "encoder/EncoderQDEC.hpp"
+#include "odometer/OdometerDifferential.hpp"
+#include "motor/MotorDriverDRV8873.hpp"
+#include "motor/MotorRIOT.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
 #include "quadpid_meta_controller/QuadPIDMetaController.hpp"
@@ -21,29 +27,75 @@
 #include "speed_filter/SpeedFilter.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 
+/// Encoders
+static cogip::encoder::EncoderQDEC left_encoder(0, cogip::encoder::EncoderMode::ENCODER_MODE_X1, 1024);
+static cogip::encoder::EncoderQDEC right_encoder(1, cogip::encoder::EncoderMode::ENCODER_MODE_X1, 1024);
 
-void compute_current_speed_and_pose(cogip::cogip_defs::Polar& speed_current,
-    cogip::cogip_defs::Pose& pose_current)
+
+/// Odometry
+static cogip::odometer::OdometerDifferentialParameters odometry_params(
+    50.00,
+    50.00,
+    100.00, 
+    -1,
+    1);
+static cogip::odometer::OdometerDifferential odometry(odometry_params, left_encoder, right_encoder);
+
+/// Motor driver
+static const motor_driver_params_t motion_motors_params = {
+    .mode = MOTOR_DRIVER_1_DIR_BRAKE,
+    .pwm_dev = 0,
+    .pwm_mode = PWM_LEFT,
+    .pwm_frequency = 20000U,
+    .pwm_resolution = 500U,
+    .brake_inverted = true,
+    .enable_inverted = false,
+    .nb_motors = 2,
+    .motors = {
+        // Left motor
+        {
+            .pwm_channel = 0,
+            .gpio_enable = GPIO_PIN(PORT_A, 10),
+            .gpio_dir0 = GPIO_PIN(PORT_C, 6),
+            .gpio_brake = GPIO_PIN(PORT_C, 8),
+            .gpio_dir_reverse = 1,
+        },
+        // Right motor
+        {
+            .pwm_channel = 1,
+            .gpio_enable = GPIO_PIN(PORT_B, 1),
+            .gpio_dir0 = GPIO_PIN(PORT_B, 10),
+            .gpio_brake = GPIO_PIN(PORT_B, 2),
+            .gpio_dir_reverse = 0,
+        },
+    },
+};
+
+static cogip::motor::MotorDriverDRV8873 motor_driver(motion_motors_params);
+
+/// Motors
+static cogip::motor::MotorRIOT left_motor(motor_driver, 0);
+static cogip::motor::MotorRIOT right_motor(motor_driver, 1);
+
+static cogip::drive_controller::DifferentialDriveControllerParameters drive_controller_params(
+    50.00,
+    50.00,
+    100.0,
+    1.0,
+    1.0,
+    0.0,
+    100.0,
+    20);
+
+static cogip::drive_controller::DifferentialDriveController drive_controller(drive_controller_params, left_motor, right_motor);
+
+static void pf_pose_reached_cb([[maybe_unused]] const cogip::motion_control::target_pose_status_t state)
 {
-    static uint32_t i = 0;
 
-    speed_current.set_distance(i++);
-    speed_current.set_angle(i++);
-    pose_current.set_x(i++);
-    pose_current.set_y(i++);
-    pose_current.set_O(i++);
-}
-
-void process_commands(const cogip::cogip_defs::Polar& output)
-{
-    (void)output;
 }
 
 // Motion control engine
-static cogip::motion_control::PlatformEngine motion_control_platform_engine(
-        cogip::motion_control::platform_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose>(),
-        cogip::motion_control::platform_process_commands_cb_t::create<process_commands>()
-);
+static cogip::motion_control::PlatformEngine motion_control_platform_engine(odometry, drive_controller, cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>());
 
 
 int main(void)
