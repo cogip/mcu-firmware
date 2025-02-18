@@ -2,6 +2,10 @@
 #include "periph/qdec.h"
 
 // Project includes
+#include "encoder/EncoderQDEC.hpp"
+#include "odometer/OdometerDifferential.hpp"
+#include "motor/MotorDriverDRV8873.hpp"
+#include "motor/MotorRIOT.hpp"
 #include "app.hpp"
 #include "app_conf.hpp"
 #include "board.h"
@@ -23,6 +27,8 @@
 #include "speed_filter/SpeedFilterParameters.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
+#include "drive_controller/DifferentialDriveControllerParameters.hpp"
+#include "drive_controller/DifferentialDriveController.hpp"
 
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
@@ -35,8 +41,6 @@ namespace pf {
 
 namespace motion_control {
 
-// Motion control motor driver
-static motor_driver_t motion_motors_driver;
 
 // Current controller
 static uint32_t current_controller_id = 0;
@@ -54,11 +58,6 @@ constexpr uint16_t motion_control_pid_tuning_period_ms = 1500;
 
 // Motion controllers
 static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller;
-// Motion control engine
-static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
-        cogip::motion_control::platform_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose>(),
-        cogip::motion_control::platform_process_commands_cb_t::create<pf_motor_drive>()
-);
 // Target pose
 static cogip::path::Pose target_pose;
 // Target speed
@@ -174,6 +173,45 @@ static cogip::motion_control::PassthroughPosePIDController passthrough_angular_p
 /// Quad PID meta controller.
 static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
 
+/// Encoders
+static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, static_cast<cogip::encoder::EncoderMode>(QDEC_MODE),
+                        encoder_wheels_resolution_pulses);
+static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, static_cast<cogip::encoder::EncoderMode>(QDEC_MODE),
+                         encoder_wheels_resolution_pulses);
+
+/// Odometry
+static cogip::odometer::OdometerDifferentialParameters odometry_params(left_encoder_wheels_diameter_mm,
+                                                                       right_encoder_wheels_diameter_mm,
+                                                                       encoder_wheels_distance_mm, 
+                                                                       QDEC_LEFT_POLARITY,
+                                                                       QDEC_RIGHT_POLARITY);
+static cogip::odometer::OdometerDifferential odometry(odometry_params, left_encoder, right_encoder);
+
+/// Motor driver
+static cogip::motor::MotorDriverDRV8873 motor_driver(motion_motors_params);
+
+/// Motors
+static cogip::motor::MotorRIOT left_motor(motor_driver, MOTOR_LEFT);
+static cogip::motor::MotorRIOT right_motor(motor_driver, MOTOR_RIGHT);
+
+static cogip::drive_controller::DifferentialDriveControllerParameters drive_controller_params(motor_wheels_diameter_mm,
+                                                                     motor_wheels_diameter_mm,
+                                                                     motor_wheels_distance_mm,
+                                                                     left_motor_constant,
+                                                                     right_motor_constant,
+                                                                     min_motor_speed_percent,
+                                                                     max_motor_speed_percent,
+                                                                     motion_control_thread_period_ms);
+
+static cogip::drive_controller::DifferentialDriveController drive_controller(drive_controller_params,
+                                                    left_motor,
+                                                    right_motor);
+static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state);
+// Motion control engine
+static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(odometry, 
+                                                        drive_controller,
+                                                        cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>());
+
 /// Initialize platform QuadPID meta controller
 /// Return initialized QuadPID meta controller
 static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_init(void) {
@@ -276,29 +314,13 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
 }
 
 /// Update current speed from quadrature encoders measure.
-void pf_encoder_read(cogip::cogip_defs::Polar &current_speed)
-{
-    int32_t left_speed = qdec_read_and_reset(MOTOR_LEFT) * QDEC_LEFT_POLARITY;
-    int32_t right_speed = qdec_read_and_reset(MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
-
-    // update speed
-    current_speed.set_distance(((right_speed + left_speed) / 2.0) / pulse_per_mm);
-    current_speed.set_angle((right_speed - left_speed) / pulse_per_degree);
-}
-
 static void pf_encoder_reset(void)
 {
-    qdec_read_and_reset(MOTOR_LEFT);
-    qdec_read_and_reset(MOTOR_RIGHT);
+    left_encoder.reset();
+    right_encoder.reset();
 }
 
-void pf_send_pb_pose(void)
-{
-    pf_motion_control_platform_engine.current_pose().pb_copy(pb_pose);
-    pf_get_canpb().send_message(pose_order_uuid, &pb_pose);
-}
-
-void pf_send_pid(PB_PidEnum id)
+static void pf_send_pid(PB_PidEnum id)
 {
     pb_pid.clear();
     pb_pid.set_id(id);
@@ -319,6 +341,201 @@ void pf_send_pid(PB_PidEnum id)
     }
 
     pf_get_canpb().send_message(pid_uuid, &pb_pid);
+}
+
+/// Handle pid request command message.
+static void _handle_pid_request(cogip::canpb::ReadBuffer &buffer)
+{
+    pb_pid_id.clear();
+    EmbeddedProto::Error error = pb_pid_id.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Pid request: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    } else {
+        std::cout << "Pid request: " << static_cast<uint32_t>(pb_pid_id.id()) << std::endl;
+    }
+
+    // Send PIDs
+    pf_send_pid(pb_pid_id.id());
+}
+
+/// Handle new pid config message.
+static void _handle_new_pid_config(cogip::canpb::ReadBuffer &buffer)
+{
+    pb_pid.clear();
+
+    EmbeddedProto::Error error = pb_pid.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "New pid config: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
+        return;
+    }
+
+    switch (pb_pid.id()) {
+    case PB_PidEnum::LINEAR_POSE_PID:
+        linear_pose_pid.pb_read(pb_pid);
+        break;
+    case PB_PidEnum::ANGULAR_POSE_PID:
+        angular_pose_pid.pb_read(pb_pid);
+        break;
+    case PB_PidEnum::LINEAR_SPEED_PID:
+        linear_speed_pid.pb_read(pb_pid);
+        break;
+    case PB_PidEnum::ANGULAR_SPEED_PID:
+        angular_speed_pid.pb_read(pb_pid);
+        break;
+    }
+}
+
+/// Handle controller change request
+static void _handle_set_controller(cogip::canpb::ReadBuffer &buffer)
+{
+    pb_controller.clear();
+
+    EmbeddedProto::Error error = pb_controller.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        std::cout << "Controller change request: Protobuf deserialization error: " << static_cast<int>(error)
+              << std::endl;
+        return;
+    }
+
+    // Change controller
+    std::cout << "Change to controller " << static_cast<uint32_t>(pb_controller.id()) << std::endl;
+    current_controller_id = static_cast<uint32_t>(pb_controller.id());
+    switch (static_cast<uint32_t>(pb_controller.id())) {
+    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TEST):
+        pf_quadpid_meta_controller_linear_speed_controller_test_setup();
+        pf_motion_control_platform_engine.set_timeout_enable(true);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TEST):
+        pf_quadpid_meta_controller_angular_speed_controller_test_setup();
+        pf_motion_control_platform_engine.set_timeout_enable(true);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_POSE_DISABLED):
+        pf_quadpid_meta_controller_linear_pose_controller_disabled();
+        pf_motion_control_platform_engine.set_timeout_enable(false);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
+    default:
+        pf_quadpid_meta_controller_restore();
+        pf_motion_control_platform_engine.set_timeout_enable(false);
+        break;
+    }
+
+    pf_motion_control_platform_engine.set_current_cycle(0);
+}
+
+static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state)
+{
+    // Previous target pose status flag to avoid flooding protobuf can bus.
+    static cogip::motion_control::target_pose_status_t previous_target_pose_status = cogip::motion_control::target_pose_status_t::moving;
+
+    switch (state) {
+    case cogip::motion_control::target_pose_status_t::moving:
+        // Do nothing when robot is moving
+        break;
+
+    case cogip::motion_control::target_pose_status_t::reached:
+        // Send message in case of final pose reached only.
+        if (previous_target_pose_status != state) {
+            pf_get_canpb().send_message(pose_reached_uuid);
+
+            // Reset previous speed orders
+            linear_speed_filter.reset_previous_speed_order();
+            angular_speed_filter.reset_previous_speed_order();
+        }
+
+        break;
+
+    case cogip::motion_control::target_pose_status_t::intermediate_reached:
+        // Do nothing on intermediate pose
+        break;
+
+    case cogip::motion_control::target_pose_status_t::blocked:
+        if (pf_motion_control_platform_engine.target_pose().bypass_anti_blocking()) {
+            // Set current robot pose as target pose to avoid robot moving
+            target_pose.set_x(pf_motion_control_platform_engine.current_pose().x());
+            target_pose.set_y(pf_motion_control_platform_engine.current_pose().y());
+            target_pose.set_O(pf_motion_control_platform_engine.current_pose().O());
+            pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+            // Consider pose_reached as anti blocking is bypassed
+            pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
+
+            // As pose is reached, pose straight filter state machine is in finished state
+            pose_straight_filter.force_finished_state();
+
+            // Reset previous speed orders
+            linear_speed_filter.reset_previous_speed_order();
+            angular_speed_filter.reset_previous_speed_order();
+
+            std::cout << "BLOCKED bypasssed" << std::endl;
+        } else {
+            // Stop motors
+            left_motor.set_speed(0);
+            right_motor.set_speed(0);
+
+            // As motors are stopped, pose straight filter state machine is in finished state
+            pose_straight_filter.force_finished_state();
+
+            // Reset previous speed orders
+            linear_speed_filter.reset_previous_speed_order();
+            angular_speed_filter.reset_previous_speed_order();
+
+            std::cout << "BLOCKED" << std::endl;
+        }
+
+        break;
+
+    default:
+        break;
+    }
+
+    // Reset speed PIDs if a pose has been reached (intermediate, blocked or final).
+    // Pose PIDs do not need to be reset as they only have Kp (no sum of error).
+    if (previous_target_pose_status != state && state != cogip::motion_control::target_pose_status_t::moving) {
+        reset_speed_pids();
+    }
+
+    // Backup target pose status flag to avoid flooding protobuf serial bus on next cycle.
+    previous_target_pose_status = state;
+}
+
+#ifdef CPU_NATIVE
+extern "C" {
+extern int32_t qdecs_value[QDEC_NUMOF];
+}
+
+void cogip_native_motor_driver_qdec_simulation(const motor_driver_t *motor_driver, uint8_t motor_id,
+                           int32_t pwm_duty_cycle)
+{
+    // Unused variables
+    (void)motor_driver;
+    (void)motor_id;
+    (void)pwm_duty_cycle;
+
+    // On native architecture set speeds at their theorical value, no error.
+    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
+        qdecs_value[MOTOR_RIGHT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm +
+                        angular_speed_filter.previous_speed_order() * pulse_per_degree / 2) *
+                       QDEC_RIGHT_POLARITY;
+        qdecs_value[MOTOR_LEFT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm -
+                       angular_speed_filter.previous_speed_order() * pulse_per_degree / 2) *
+                      QDEC_LEFT_POLARITY;
+    }
+}
+#endif
+
+void pf_send_pb_pose(void)
+{
+    cogip_defs::Pose current_pose = pf_motion_control_platform_engine.current_pose();
+
+    // Copy current pose
+    current_pose.pb_copy(pb_pose);
+
+    pf_get_canpb().send_message(pose_order_uuid, &pb_pose);
 }
 
 void pf_send_pb_state(void)
@@ -439,9 +656,9 @@ void pf_disable_motion_control()
 {
     pf_motion_control_platform_engine.disable();
 
-    // Stop motors as the robot should not move in this case.
-    motor_disable(&motion_motors_driver, MOTOR_LEFT);
-    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
+    // Disable motors
+    left_motor.disable();
+    right_motor.disable();
 }
 
 void pf_enable_motion_control()
@@ -449,216 +666,17 @@ void pf_enable_motion_control()
     pf_motion_control_platform_engine.enable();
 }
 
-void compute_current_speed_and_pose(cogip::cogip_defs::Polar &current_speed, cogip::cogip_defs::Pose &current_pose)
-{
-    pf_encoder_read(current_speed);
-    odometry_update(current_pose, current_speed, SEGMENT);
-}
-
-void pf_motor_drive(const cogip::cogip_defs::Polar &command)
-{
-    // Previous target pose status flag to avoid flooding protobuf serial bus.
-    static cogip::motion_control::target_pose_status_t previous_target_pose_status = cogip::motion_control::target_pose_status_t::moving;
-
-    // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
-    // The PWM driver will filter the value to the max PWM resolution defined for the board.
-    // Compute motor commands with Polar motion control result
-    int16_t right_command = (int16_t) std::max(std::min(command.distance() + command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
-                                               (double)(std::numeric_limits<int16_t>::min()) / 2);
-    int16_t left_command = (int16_t) std::max(std::min(command.distance() - command.angle(), (double)(std::numeric_limits<int16_t>::max()) / 2),
-                                                  (double)(std::numeric_limits<int16_t>::min()) / 2);
-
-    if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::blocked) {
-        if (pf_motion_control_platform_engine.target_pose().bypass_anti_blocking()) {
-            target_pose.set_x(pf_motion_control_platform_engine.current_pose().x());
-            target_pose.set_y(pf_motion_control_platform_engine.current_pose().y());
-            target_pose.set_O(pf_motion_control_platform_engine.current_pose().O());
-            pf_motion_control_platform_engine.set_target_pose(target_pose);
-
-            // Consider pose_reached as anti blocking is bypassed
-            pf_motion_control_platform_engine.set_pose_reached(cogip::motion_control::target_pose_status_t::reached);
-            // As pose is reached, pose straight filter state machine is in finished state
-            pose_straight_filter.force_finished_state();
-
-            std::cout << "BLOCKED bypasssed" << std::endl;
-        }
-        else {
-            right_command = 0;
-            left_command = 0;
-
-            pose_straight_filter.force_finished_state();
-
-            std::cout << "BLOCKED" << std::endl;
-        }
-    }
-    else {
-        // Apply motor commands
-        if (fabs(right_command) > motion_motors_driver.params->pwm_resolution) {
-            right_command = (fabs(right_command)/right_command) * motion_motors_driver.params->pwm_resolution - 1;
-        }
-        if (fabs(left_command) > motion_motors_driver.params->pwm_resolution) {
-            left_command = (fabs(left_command)/left_command) * motion_motors_driver.params->pwm_resolution - 1;
-        }
-        right_command = (right_command < 0 ? -pwm_minimal : pwm_minimal )
-                        + ((right_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                            / (int16_t)motion_motors_driver.params->pwm_resolution);
-        left_command = (left_command < 0 ? -pwm_minimal : pwm_minimal)
-                        + ((left_command * (int16_t)(motion_motors_driver.params->pwm_resolution - pwm_minimal))
-                            / (int16_t)motion_motors_driver.params->pwm_resolution);
-    }
-
-    // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
-    motor_disable(&motion_motors_driver, MOTOR_RIGHT);
-    motor_disable(&motion_motors_driver, MOTOR_LEFT);
-    ztimer_sleep(ZTIMER_USEC, 1);
-    motor_enable(&motion_motors_driver, MOTOR_RIGHT);
-    motor_enable(&motion_motors_driver, MOTOR_LEFT);
-
-    motor_set(&motion_motors_driver, MOTOR_RIGHT, right_command);
-    motor_set(&motion_motors_driver, MOTOR_LEFT, left_command);
-
-    if (pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
-        // Send message in case of final pose reached only.
-        if ((pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached)
-            &&  (previous_target_pose_status != cogip::motion_control::target_pose_status_t::reached)) {
-            pf_get_canpb().send_message(pose_reached_uuid);
-        }
-
-        // Reset previous speed orders
-        linear_speed_filter.reset_previous_speed_order();
-        angular_speed_filter.reset_previous_speed_order();
-    }
-
-    if ((pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::moving)
-        && (pf_motion_control_platform_engine.pose_reached() != previous_target_pose_status)) {
-        // Reset speed PIDs if a pose has been reached (intermediate or final).
-        // Pose PIDs do not need to be reset as they only have Kp (no sum of error).
-        reset_speed_pids();
-    }
-
-    // Backup target pose status flag to avoid flooding protobuf serial bus on next cycle.
-    previous_target_pose_status = pf_motion_control_platform_engine.pose_reached();
-}
-
-/// Handle pid request command message.
-static void _handle_pid_request([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
-{
-    pb_pid_id.clear();
-    EmbeddedProto::Error error = pb_pid_id.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        std::cout << "Pid request: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
-        return;
-    }
-    else {
-        std::cout << "Pid request: " << static_cast<uint32_t>(pb_pid_id.id()) << std::endl;
-    }
-
-    // Send PIDs
-    pf_send_pid(pb_pid_id.id());
-}
-
-/// Handle new pid config message.
-static void _handle_new_pid_config(cogip::canpb::ReadBuffer & buffer)
-{
-    pb_pid.clear();
-
-    EmbeddedProto::Error error = pb_pid.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        std::cout << "New pid config: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
-        return;
-    }
-
-    switch (pb_pid.id()) {
-    case PB_PidEnum::LINEAR_POSE_PID:
-        linear_pose_pid.pb_read(pb_pid);
-        break;
-    case PB_PidEnum::ANGULAR_POSE_PID:
-        angular_pose_pid.pb_read(pb_pid);
-        break;
-    case PB_PidEnum::LINEAR_SPEED_PID:
-        linear_speed_pid.pb_read(pb_pid);
-        break;
-    case PB_PidEnum::ANGULAR_SPEED_PID:
-        angular_speed_pid.pb_read(pb_pid);
-        break;
-    }
-}
-
-/// Handle controller change request
-static void _handle_set_controller(cogip::canpb::ReadBuffer & buffer)
-{
-    pb_controller.clear();
-
-    EmbeddedProto::Error error = pb_controller.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        std::cout << "Controller change request: Protobuf deserialization error: " << static_cast<int>(error) << std::endl;
-        return;
-    }
-
-    // Change controller
-    std::cout << "Change to controller " << static_cast<uint32_t>(pb_controller.id()) << std::endl;
-    current_controller_id = static_cast<uint32_t>(pb_controller.id());
-    switch (static_cast<uint32_t>(pb_controller.id())) {
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TEST):
-        pf_quadpid_meta_controller_linear_speed_controller_test_setup();
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TEST):
-        pf_quadpid_meta_controller_angular_speed_controller_test_setup();
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_POSE_DISABLED):
-        pf_quadpid_meta_controller_linear_pose_controller_disabled();
-        pf_motion_control_platform_engine.set_timeout_enable(false);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
-    default:
-        pf_quadpid_meta_controller_restore();
-        pf_motion_control_platform_engine.set_timeout_enable(false);
-        break;
-    }
-
-    pf_motion_control_platform_engine.set_current_cycle(0);
-}
-
-extern "C" {
-extern int32_t qdecs_value[QDEC_NUMOF];
-}
-
-void cogip_native_motor_driver_qdec_simulation(
-    const motor_driver_t *motor_driver, uint8_t motor_id,
-    int32_t pwm_duty_cycle)
-{
-    // Unused variables
-    (void) motor_driver;
-    (void) motor_id;
-    (void) pwm_duty_cycle;
-
-    // On native architecture set speeds at their theorical value, no error.
-    if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
-        qdecs_value[MOTOR_RIGHT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm
-                                   + angular_speed_filter.previous_speed_order() * pulse_per_degree / 2)
-                                   * QDEC_RIGHT_POLARITY;
-        qdecs_value[MOTOR_LEFT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm
-                                  - angular_speed_filter.previous_speed_order() * pulse_per_degree / 2)
-                                  * QDEC_LEFT_POLARITY;
-    }
-}
-
 void pf_init_motion_control(void)
 {
     // Init motor driver
-    motor_driver_init(&motion_motors_driver, &motion_motors_params);
+    motor_driver.init();
 
-    // Setup qdec periphereal
-    int error = qdec_init(QDEC_DEV(MOTOR_LEFT), QDEC_MODE, NULL, NULL);
+    // Setup encoders
+    int error = left_encoder.setup();
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LEFT, error);
     }
-    error = qdec_init(QDEC_DEV(MOTOR_RIGHT), QDEC_MODE, NULL, NULL);
+    error = right_encoder.setup();
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
@@ -670,32 +688,26 @@ void pf_init_motion_control(void)
     pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
 
     // Set timeout for speed only loops as no pose has to be reached
-    pf_motion_control_platform_engine.set_timeout_cycle_number(
-        motion_control_pid_tuning_period_ms/motion_control_thread_period_ms);
+    pf_motion_control_platform_engine.set_timeout_cycle_number(motion_control_pid_tuning_period_ms /
+                                   motion_control_thread_period_ms);
 
-    // Register pid request command
-    pf_get_canpb().register_message_handler(
-        pid_request_uuid,
-        cogip::canpb::message_handler_t::create<_handle_pid_request>()
-    );
+    //// Register pid request command
+    pf_get_canpb().register_message_handler(pid_request_uuid,
+                        cogip::canpb::message_handler_t::create<_handle_pid_request>());
 
     // Register new pids config
-    pf_get_canpb().register_message_handler(
-        pid_uuid,
-        cogip::canpb::message_handler_t::create<_handle_new_pid_config>()
-    );
+    pf_get_canpb().register_message_handler(pid_uuid,
+                        cogip::canpb::message_handler_t::create<_handle_new_pid_config>());
 
     // Register new pids config
-    pf_get_canpb().register_message_handler(
-        controller_uuid,
-        cogip::canpb::message_handler_t::create<_handle_set_controller>()
-    );
+    pf_get_canpb().register_message_handler(controller_uuid,
+                        cogip::canpb::message_handler_t::create<_handle_set_controller>());
 
     pf_encoder_reset();
     pf_disable_motion_control();
 }
 
-} // namespace actuators
+} // namespace motion_control
 
 } // namespace pf
 

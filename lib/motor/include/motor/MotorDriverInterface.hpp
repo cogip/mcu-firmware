@@ -14,11 +14,11 @@ public:
     /// @brief Intialize the motor driver
     /// @return 0 on success, negative on error
     virtual int init() = 0;
-    
+
     /// @brief Reset the motor driver
     /// @return 0 on success, negative on error
     virtual int reset() = 0;
-    
+
     /// @brief Enable the motor
     /// @param id id of the motor
     /// @return 0 on success, negative on error
@@ -33,8 +33,8 @@ public:
     /// @param speed speed in % [-100; 100]
     /// @param id id of the motor
     /// @return  0 on success, negative on error
-    virtual int speed(int speed, int id) = 0;
-    
+    virtual int set_speed(double speed, int id) = 0;
+
     /// @brief break the motor
     /// @param id id of the motor
     /// @return 0 on success, negative on error

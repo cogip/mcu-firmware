@@ -4,6 +4,10 @@ BOARD ?= cogip-native
 
 # Motion control
 USEMODULE += dualpid_meta_controller
+USEMODULE += encoder
+USEMODULE += motor
+USEMODULE += motor_driver
+USEMODULE += odometry-ng
 USEMODULE += pid
 USEMODULE += platform_engine
 USEMODULE += polar_parallel_meta_controller
