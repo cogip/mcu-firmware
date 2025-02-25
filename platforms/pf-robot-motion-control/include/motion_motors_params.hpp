@@ -13,11 +13,6 @@ namespace motion_control {
 #define MOTION_MOTORS_POST_CB nullptr
 #endif
 
-/// Quadrature decoding
-#ifndef QDEC_MODE
-#define QDEC_MODE QDEC_X4
-#endif
-
 /**
  * @brief Simulate QDEC on motor_set() calls
  *

@@ -174,15 +174,15 @@ static cogip::motion_control::PassthroughPosePIDController passthrough_angular_p
 static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
 
 /// Encoders
-static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, static_cast<cogip::encoder::EncoderMode>(QDEC_MODE),
+static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
                         encoder_wheels_resolution_pulses);
-static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, static_cast<cogip::encoder::EncoderMode>(QDEC_MODE),
+static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
                          encoder_wheels_resolution_pulses);
 
 /// Odometry
 static cogip::odometer::OdometerDifferentialParameters odometry_params(left_encoder_wheels_diameter_mm,
                                                                        right_encoder_wheels_diameter_mm,
-                                                                       encoder_wheels_distance_mm, 
+                                                                       encoder_wheels_distance_mm,
                                                                        QDEC_LEFT_POLARITY,
                                                                        QDEC_RIGHT_POLARITY);
 static cogip::odometer::OdometerDifferential odometry(odometry_params, left_encoder, right_encoder);
@@ -208,7 +208,7 @@ static cogip::drive_controller::DifferentialDriveController drive_controller(dri
                                                     right_motor);
 static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state);
 // Motion control engine
-static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(odometry, 
+static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(odometry,
                                                         drive_controller,
                                                         cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>());
 

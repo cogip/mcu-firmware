@@ -49,8 +49,9 @@ enum {
 /* Servomotors */
 #define LX_UART_DEV     2
 
+/* Encoder mode */
 /* QDEC on native architecture only support X1 mode, so force it here */
-#define QDEC_MODE   QDEC_X1
+#define COGIP_BOARD_ENCODER_MODE cogip::encoder::EncoderMode::ENCODER_MODE_X1
 
 /* Motion motors simulation */
 #define MOTION_MOTORS_POST_CB cogip_native_motor_driver_qdec_simulation
