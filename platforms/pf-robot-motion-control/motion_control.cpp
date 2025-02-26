@@ -503,7 +503,11 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
     previous_target_pose_status = state;
 }
 
-#ifdef CPU_NATIVE
+/*
+ * Used for simulation in motion_motors_params.hpp only if MOTION_MOTORS_POST_CB
+ * is defined in board.h this way:
+ * #define MOTION_MOTORS_POST_CB cogip_native_motor_driver_qdec_simulation
+ */
 extern "C" {
 extern int32_t qdecs_value[QDEC_NUMOF];
 }
@@ -516,6 +520,11 @@ void cogip_native_motor_driver_qdec_simulation(const motor_driver_t *motor_drive
     (void)motor_id;
     (void)pwm_duty_cycle;
 
+    static double wheels_perimeter = M_PI * left_encoder_wheels_diameter_mm;
+    static double pulse_per_mm = encoder_wheels_resolution_pulses / wheels_perimeter;
+    static double wheels_distance_pulse = encoder_wheels_distance_mm * pulse_per_mm;
+    static double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;
+
     // On native architecture set speeds at their theorical value, no error.
     if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
         qdecs_value[MOTOR_RIGHT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm +
@@ -526,7 +535,6 @@ void cogip_native_motor_driver_qdec_simulation(const motor_driver_t *motor_drive
                       QDEC_LEFT_POLARITY;
     }
 }
-#endif
 
 void pf_send_pb_pose(void)
 {
