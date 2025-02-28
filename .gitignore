@@ -56,6 +56,7 @@ Makefile.local
 
 # Python virtualenv
 venv/
+.venv/
 
 # Ignore download cache
 .dlcache
