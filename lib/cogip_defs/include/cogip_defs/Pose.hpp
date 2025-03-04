@@ -25,9 +25,9 @@ class Pose : public Coords {
 public:
     /// Constructor.
     Pose(
-        double x=0.0,         ///< [in] X coordinate
-        double y=0.0,         ///< [in] Y coordinate
-        double O=0.0          ///< [in] 0-orientation
+        float x=0.0,         ///< [in] X coordinate
+        float y=0.0,         ///< [in] Y coordinate
+        float O=0.0          ///< [in] 0-orientation
         ) : Coords(x, y), O_(O) {};
 
     /// Constructor from Protobuf class
@@ -42,11 +42,11 @@ public:
         ) { x_ = coords.x(); y_ = coords.y();};
 
     /// Return 0-orientation.
-    double O(void) const { return O_; };
+    float O(void) const { return O_; };
 
     /// Set 0-orientation.
     void set_O(
-        double O              ///< [in] new 0-orientation
+        float O              ///< [in] new 0-orientation
         ) { O_ = O; };
 
     /// Check if this pose is equal to another.
@@ -65,10 +65,10 @@ public:
     };
 
     Polar operator-(const Pose& p) {
-        double error_x = x_ - p.x();
-        double error_y = y_ - p.y();
+        float error_x = x_ - p.x();
+        float error_y = y_ - p.y();
 
-        double error_O = limit_angle_rad(atan2(error_y, error_x) - DEG2RAD(p.O()));
+        float error_O = limit_angle_rad(atan2(error_y, error_x) - DEG2RAD(p.O()));
 
         return Polar(
             sqrt(square(error_x) + square(error_y)),
@@ -77,7 +77,7 @@ public:
     };
 
 protected:
-    double O_;                ///< 0-orientation
+    float O_;                ///< 0-orientation
 };
 
 } // namespace cogip_defs

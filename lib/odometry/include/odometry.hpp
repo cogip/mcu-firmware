@@ -13,7 +13,7 @@
  * \brief odometry wheels_distance setup
  * \param d : distance between wheels [pulse]
  */
-void odometry_setup(double d);
+void odometry_setup(float d);
 
 /**
  * \fn odometry_update

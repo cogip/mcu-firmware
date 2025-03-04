@@ -3,7 +3,7 @@
 typedef void (*func_cb_t)(void);
 
 /**
- * @brief Compare two floating-point numbers (double) with a specified tolerance.
+ * @brief Compare two floating-point numbers (float) with a specified tolerance.
  *
  * This function checks if the absolute difference between two doubles is less than a given tolerance (epsilon),
  * which helps to address the imprecision of floating-point calculations.
@@ -14,7 +14,7 @@ typedef void (*func_cb_t)(void);
  * @return true         If the absolute difference between a and b is less than epsilon.
  * @return false        Otherwise.
  */
-bool areDoublesEqual(double a, double b, double epsilon = 1e-3);
+bool areDoublesEqual(float a, float b, float epsilon = 1e-3);
 
 #define FALSE   (0)
 #define TRUE    (!FALSE)

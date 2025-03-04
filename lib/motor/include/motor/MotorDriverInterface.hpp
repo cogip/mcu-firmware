@@ -33,7 +33,7 @@ public:
     /// @param speed speed in % [-100; 100]
     /// @param id id of the motor
     /// @return  0 on success, negative on error
-    virtual int set_speed(double speed, int id) = 0;
+    virtual int set_speed(float speed, int id) = 0;
 
     /// @brief break the motor
     /// @param id id of the motor

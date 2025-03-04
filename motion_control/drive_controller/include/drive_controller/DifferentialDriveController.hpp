@@ -39,17 +39,17 @@ public:
     int set_polar_velocity(cogip_defs::Polar &command) override
     {
         // Compute wheel speed in mm/period from polar speed
-        const double left_wheel_speed_mm_per_period = command.distance() - (DEG2RAD(command.angle()) * parameters_.track_width_mm() / 2);
-        const double right_wheel_speed_mm_per_period = command.distance() + (DEG2RAD(command.angle()) * parameters_.track_width_mm() / 2);
+        const float left_wheel_speed_mm_per_period = command.distance() - (DEG2RAD(command.angle()) * parameters_.track_width_mm() / 2);
+        const float right_wheel_speed_mm_per_period = command.distance() + (DEG2RAD(command.angle()) * parameters_.track_width_mm() / 2);
 
         // Compute wheel speed in mm/s and rad/s from mm/period and rad/period speeds
-        const double left_wheel_speed_mm_per_s = left_wheel_speed_mm_per_period * 1000 / parameters_.loop_period_ms();
-        const double right_wheel_speed_mm_per_s = right_wheel_speed_mm_per_period * 1000 / parameters_.loop_period_ms();
+        const float left_wheel_speed_mm_per_s = left_wheel_speed_mm_per_period * 1000 / parameters_.loop_period_ms();
+        const float right_wheel_speed_mm_per_s = right_wheel_speed_mm_per_period * 1000 / parameters_.loop_period_ms();
 
         // Compute motor speed in percent using the motor constant.
         // The motor constant allow convert a speed in mm/s into a speed ratio (% of nominal motor voltage).
-        double left_motor_speed_percent = (left_wheel_speed_mm_per_s / (etl::math::pi * parameters_.left_wheel_diameter_mm())) * parameters_.left_motor_constant();
-        double right_motor_speed_percent = (right_wheel_speed_mm_per_s / (etl::math::pi * parameters_.right_wheel_diameter_mm())) * parameters_.right_motor_constant();
+        float left_motor_speed_percent = (left_wheel_speed_mm_per_s / (etl::math::pi * parameters_.left_wheel_diameter_mm())) * parameters_.left_motor_constant();
+        float right_motor_speed_percent = (right_wheel_speed_mm_per_s / (etl::math::pi * parameters_.right_wheel_diameter_mm())) * parameters_.right_motor_constant();
 
         left_motor_speed_percent =
             (left_motor_speed_percent < 0 ? -parameters_.min_speed_percentage()

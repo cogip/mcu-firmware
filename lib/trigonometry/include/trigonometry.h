@@ -23,7 +23,7 @@ extern "C" {
 /// @param x
 /// @param y
 /// @return
-inline double periodicmod(double x, double y)
+inline float periodicmod(float x, float y)
 {
     return fmod(fmod(x, y) + y, y);  // ((x % y) + y) % y
 }
@@ -39,24 +39,24 @@ inline double periodicmod(double x, double y)
 /// @param x Value to map
 /// @param min min interval
 /// @param max max interval
-/// @return double the mapped value
-inline double inrange(double x, double min, double max)
+/// @return float the mapped value
+inline float inrange(float x, float min, float max)
 {
     return periodicmod(x - min, max - min) + min;
 }
 
 /// @brief limit angle in radians
 /// @param O The value to map between -pi and pi
-/// @return double the mapped value
-inline double limit_angle_rad(double O)
+/// @return float the mapped value
+inline float limit_angle_rad(float O)
 {
     return inrange(O, -etl::math::pi, etl::math::pi);
 }
 
 /// @brief limit angle in degrees
 /// @param O The value to map between -180 and 180
-/// @return double the mapped value
-inline double limit_angle_deg(double O)
+/// @return float the mapped value
+inline float limit_angle_deg(float O)
 {
     return inrange(O, -180, 180);
 }

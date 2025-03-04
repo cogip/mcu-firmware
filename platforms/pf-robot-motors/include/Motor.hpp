@@ -48,7 +48,7 @@ public:
         motor_driver_t *motor_driver = nullptr, ///< [in] motor driver
         uint8_t motor_id = 0,                   ///< [in] motor id for the given motor driver
         gpio_t clear_overload_pin = GPIO_UNDEF, ///< [in] clear motor overload flag
-        double target_speed = 0,                ///< [in] motor engine default target speed
+        float target_speed = 0,                ///< [in] motor engine default target speed
         cogip::motion_control::PosePIDControllerParameters *pose_controller_parameters = nullptr,
                                                 ///< [in] motor pose controller parameters
         cogip::motion_control::SpeedPIDControllerParameters *speed_controller_parameters = nullptr,
@@ -78,20 +78,20 @@ public:
 
     /// Get target speed
     /// return target speed
-    double target_speed() const { return motor_engine_.target_speed(); };
+    float target_speed() const { return motor_engine_.target_speed(); };
 
     /// Set target speed
     void set_target_speed(
-        double target_speed         ///< [in]   target speed (mm/period)
+        float target_speed         ///< [in]   target speed (mm/period)
         ) { motor_engine_.set_target_speed(target_speed); };
 
     /// Get current pose
     /// return current pose
-    double current_pose() const { return motor_engine_.current_pose(); };
+    float current_pose() const { return motor_engine_.current_pose(); };
 
     /// Set current pose
     void set_current_pose(
-        double current_pose     ///< [in]   current pose (mm)
+        float current_pose     ///< [in]   current pose (mm)
         ) { motor_engine_.set_current_pose(current_pose); };
 
 private:

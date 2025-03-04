@@ -7,7 +7,7 @@ namespace cogip {
 
 namespace cogip_defs {
 
-double Coords::distance(const Coords &dest) const
+float Coords::distance(const Coords &dest) const
 {
     return sqrt((dest.x_ - x_) * (dest.x_ - x_)
                 + (dest.y_ - y_) * (dest.y_ - y_));

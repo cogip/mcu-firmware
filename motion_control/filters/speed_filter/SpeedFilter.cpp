@@ -17,19 +17,19 @@ namespace cogip {
 namespace motion_control {
 
 void SpeedFilter::limit_speed_order(
-    double *speed_order,
-    double target_speed,
-    double current_speed,
-    double min_speed,
-    double max_speed,
-    double max_acc
+    float *speed_order,
+    float target_speed,
+    float current_speed,
+    float min_speed,
+    float max_speed,
+    float max_acc
     )
 {
     // Limit target speed
     target_speed = std::min(target_speed, max_speed);
 
     // Limit speed command (maximum acceleration)
-    double a = *speed_order - current_speed;
+    float a = *speed_order - current_speed;
 
     if (a > max_acc) {
         a =  max_acc;
@@ -57,11 +57,11 @@ void SpeedFilter::execute() {
     COGIP_DEBUG_COUT("Execute SpeedFilter");
 
     // Speed order
-    double speed_order = this->inputs_[0];
+    float speed_order = this->inputs_[0];
     // Current speed
-    double current_speed = this->inputs_[1];
+    float current_speed = this->inputs_[1];
     // Target speed
-    double target_speed = this->inputs_[2];
+    float target_speed = this->inputs_[2];
     // Do not filter speed order ?
     bool no_speed_filter = this->inputs_[3];
     // Pose reached

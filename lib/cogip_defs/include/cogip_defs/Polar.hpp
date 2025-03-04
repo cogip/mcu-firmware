@@ -22,8 +22,8 @@ class Polar {
 public:
     /// Constructor.
     Polar(
-        double distance = 0.0, ///< [in] distance
-        double angle = 0.0     ///< [in] angle
+        float distance = 0.0, ///< [in] distance
+        float angle = 0.0     ///< [in] angle
         ) : distance_(distance), angle_(angle) {};
 
     /// Constructor from Protobuf class
@@ -32,19 +32,19 @@ public:
         angle_(polar.get_angle()) {};
 
     /// Return distance.
-    double distance(void) const { return distance_; };
+    float distance(void) const { return distance_; };
 
     /// Return angle.
-    double angle(void) const { return angle_; };
+    float angle(void) const { return angle_; };
 
     /// Set distance.
     void set_distance(
-        double distance        ///< [in] new distance
+        float distance        ///< [in] new distance
         ) { distance_ = distance; };
 
     /// Set angle.
     void set_angle(
-        double angle           ///< [in] new angle
+        float angle           ///< [in] new angle
         ) { angle_ = angle; };
 
     /// Copy data to Protobuf message.
@@ -77,8 +77,8 @@ public:
     };
 
 private:
-    double distance_;          ///< distance
-    double angle_;             ///< angle
+    float distance_;          ///< distance
+    float angle_;             ///< angle
 };
 
 } // namespace cogip_defs

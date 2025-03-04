@@ -25,11 +25,11 @@ class Pose : public cogip_defs::Pose {
 public:
     /// Constuctor.
     Pose(
-        double x=0.0,                   ///< [in] X coordinate
-        double y=0.0,                   ///< [in] Y coodinate
-        double O=0.0,                   ///< [in] 0-orientation
-        double max_speed_ratio_linear=0.0,  ///< [in] max speed linear
-        double max_speed_ratio_angular=0.0, ///< [in] max speed angular
+        float x=0.0,                   ///< [in] X coordinate
+        float y=0.0,                   ///< [in] Y coodinate
+        float O=0.0,                   ///< [in] 0-orientation
+        float max_speed_ratio_linear=0.0,  ///< [in] max speed linear
+        float max_speed_ratio_angular=0.0, ///< [in] max speed angular
         bool allow_reverse=true,        ///< [in] reverse mode
         bool bypass_antiblocking=false, ///< [in] bypass anti blocking
         uint32_t timeout_ms=0,          ///< [in] move timeout
@@ -40,10 +40,10 @@ public:
     virtual ~Pose() {};
 
     /// Return max speed linear.
-    virtual double max_speed_ratio_linear() const { return max_speed_ratio_linear_; };
+    virtual float max_speed_ratio_linear() const { return max_speed_ratio_linear_; };
 
     /// Return max speed angular.
-    virtual double max_speed_ratio_angular() const { return max_speed_ratio_angular_; };
+    virtual float max_speed_ratio_angular() const { return max_speed_ratio_angular_; };
 
     /// Is reverse mode allowed or not.
     virtual bool allow_reverse() const { return allow_reverse_; };
@@ -88,8 +88,8 @@ public:
     };
 
 private:
-    double max_speed_ratio_linear_; ///< max speed
-    double max_speed_ratio_angular_;///< max speed
+    float max_speed_ratio_linear_; ///< max speed
+    float max_speed_ratio_angular_;///< max speed
     bool allow_reverse_;            ///< reverse mode
     bool bypass_anti_blocking_;     ///< bypass anti blocking
     uint32_t timeout_ms_;           ///< timeout(ms) to reach the path pose

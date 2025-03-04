@@ -33,30 +33,30 @@ constexpr uint16_t motion_control_thread_period_ms = 20; ///< controller thread 
 /// @name Acceleration and speed profiles
 /// @{
 /// Maximum linear acceleration/deceleration (mm/<motion_control_thread_period_ms>²)
-constexpr double platform_max_acc_linear_mm_per_period2 = X_SEC2_TO_X_PERIOD2(max_acc_mm_per_s2, motion_control_thread_period_ms);
-constexpr double platform_max_dec_linear_mm_per_period2 = X_SEC2_TO_X_PERIOD2(max_dec_mm_per_s2, motion_control_thread_period_ms);
+constexpr float platform_max_acc_linear_mm_per_period2 = X_SEC2_TO_X_PERIOD2(max_acc_mm_per_s2, motion_control_thread_period_ms);
+constexpr float platform_max_dec_linear_mm_per_period2 = X_SEC2_TO_X_PERIOD2(max_dec_mm_per_s2, motion_control_thread_period_ms);
 
 /// Minimum/Maximum linear speed (mm/<motion_control_thread_period_ms>)
-constexpr double platform_min_speed_linear_mm_per_period = X_SEC_TO_X_PERIOD(min_speed_mm_per_s, motion_control_thread_period_ms);
-constexpr double platform_max_speed_linear_mm_per_period = X_SEC_TO_X_PERIOD(max_speed_mm_per_s, motion_control_thread_period_ms);
+constexpr float platform_min_speed_linear_mm_per_period = X_SEC_TO_X_PERIOD(min_speed_mm_per_s, motion_control_thread_period_ms);
+constexpr float platform_max_speed_linear_mm_per_period = X_SEC_TO_X_PERIOD(max_speed_mm_per_s, motion_control_thread_period_ms);
 
 /// Low angular speed (mm/<motion_control_thread_period_ms>)
-constexpr double platform_low_speed_linear_mm_per_period = (platform_max_speed_linear_mm_per_period / 4);
+constexpr float platform_low_speed_linear_mm_per_period = (platform_max_speed_linear_mm_per_period / 4);
 /// Normal angular speed (mm/<motion_control_thread_period_ms>)
-constexpr double platform_normal_speed_linear_mm_per_period = (platform_max_speed_linear_mm_per_period / 2);
+constexpr float platform_normal_speed_linear_mm_per_period = (platform_max_speed_linear_mm_per_period / 2);
 
 /// Maximum angular acceleration/deceleration (rad/<motion_control_thread_period_ms>²)
-constexpr double platform_max_acc_angular_deg_per_period2 = X_SEC2_TO_X_PERIOD2(max_acc_deg_per_s2, motion_control_thread_period_ms);
-constexpr double platform_max_dec_angular_deg_per_period2 = X_SEC2_TO_X_PERIOD2(max_dec_deg_per_s2, motion_control_thread_period_ms);
+constexpr float platform_max_acc_angular_deg_per_period2 = X_SEC2_TO_X_PERIOD2(max_acc_deg_per_s2, motion_control_thread_period_ms);
+constexpr float platform_max_dec_angular_deg_per_period2 = X_SEC2_TO_X_PERIOD2(max_dec_deg_per_s2, motion_control_thread_period_ms);
 
 /// Minimum/Maximum angular speed (rad/<motion_control_thread_period_ms>)
-constexpr double platform_min_speed_angular_deg_per_period = X_SEC_TO_X_PERIOD(min_speed_deg_per_s, motion_control_thread_period_ms);
-constexpr double platform_max_speed_angular_deg_per_period = X_SEC_TO_X_PERIOD(max_speed_deg_per_s, motion_control_thread_period_ms);
+constexpr float platform_min_speed_angular_deg_per_period = X_SEC_TO_X_PERIOD(min_speed_deg_per_s, motion_control_thread_period_ms);
+constexpr float platform_max_speed_angular_deg_per_period = X_SEC_TO_X_PERIOD(max_speed_deg_per_s, motion_control_thread_period_ms);
 
 /// Low angular speed (rad/<motion_control_thread_period_ms>)
-constexpr double platform_low_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 4);
+constexpr float platform_low_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 4);
 ///< Normal angular speed (deg/<motion_control_thread_period_ms>)
-constexpr double platform_normal_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 2);
+constexpr float platform_normal_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 2);
 /// @}
 
 /// Handle brake signal to stop the robot

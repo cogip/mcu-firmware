@@ -22,31 +22,31 @@ class Coords {
 public:
     /// Constructor.
     Coords(
-        double x=0.0,       ///< [in] X coordinate
-        double y=0.0        ///< [in] Y coordinate
+        float x=0.0,       ///< [in] X coordinate
+        float y=0.0        ///< [in] Y coordinate
         ) : x_(x), y_(y) {};
 
     /// Constructor from Protobuf class
     explicit Coords(const PB_Coords &coords) : x_(coords.get_x()), y_(coords.get_y()) {};
 
     /// Return X coordinate.
-    double x(void) const { return x_; };
+    float x(void) const { return x_; };
 
     /// Return Y coordinate.
-    double y(void) const { return y_; };
+    float y(void) const { return y_; };
 
     /// Set X coordinate.
     void set_x(
-        double x            ///< [in] new X coordinate
+        float x            ///< [in] new X coordinate
         ) { x_ = x; };
 
     /// Set Y coordinate.
     void set_y(
-        double y            ///< [in] new Y coordinate
+        float y            ///< [in] new Y coordinate
         ) { y_ = y; };
 
     /// Compute the distance the destination point.
-    double distance(
+    float distance(
         const Coords &dest  ///< [in] destination
         ) const;
 
@@ -72,8 +72,8 @@ public:
     };
 
 protected:
-    double x_;              ///< x-position
-    double y_;              ///< y-position
+    float x_;              ///< x-position
+    float y_;              ///< y-position
 };
 
 } // namespace cogip_defs

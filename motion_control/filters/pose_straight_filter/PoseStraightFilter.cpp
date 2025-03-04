@@ -23,9 +23,9 @@ void PoseStraightFilter::execute() {
     size_t input_index = 0;
 
     // Current pose
-    double current_pose_x = inputs_[input_index++];
-    double current_pose_y = inputs_[input_index++];
-    double current_pose_O = inputs_[input_index++];
+    float current_pose_x = inputs_[input_index++];
+    float current_pose_y = inputs_[input_index++];
+    float current_pose_O = inputs_[input_index++];
     cogip_defs::Pose current_pose(
         current_pose_x,
         current_pose_y,
@@ -33,9 +33,9 @@ void PoseStraightFilter::execute() {
     );
 
     // Target pose
-    double target_pose_x = this->inputs_[input_index++];
-    double target_pose_y = this->inputs_[input_index++];
-    double target_pose_O = this->inputs_[input_index++];
+    float target_pose_x = this->inputs_[input_index++];
+    float target_pose_y = this->inputs_[input_index++];
+    float target_pose_O = this->inputs_[input_index++];
     cogip_defs::Pose target_pose(
         target_pose_x,
         target_pose_y,
@@ -43,16 +43,16 @@ void PoseStraightFilter::execute() {
     );
 
     // Current speed
-    double current_linear_speed = this->inputs_[input_index++];
-    double current_angular_speed = this->inputs_[input_index++];
+    float current_linear_speed = this->inputs_[input_index++];
+    float current_angular_speed = this->inputs_[input_index++];
     cogip_defs::Polar current_speed(
         current_linear_speed,
         current_angular_speed
     );
 
     // Target speed
-    double target_linear_speed = this->inputs_[input_index++];
-    double target_angular_speed = this->inputs_[input_index++];
+    float target_linear_speed = this->inputs_[input_index++];
+    float target_angular_speed = this->inputs_[input_index++];
     cogip_defs::Polar target_speed(
         target_linear_speed,
         target_angular_speed
@@ -175,7 +175,7 @@ void PoseStraightFilter::execute() {
     // Linear target speed
     outputs_[2] = fabs(target_speed.distance());
     // Should linear speed be filtered?
-    outputs_[3] = (double)no_linear_speed_limit;
+    outputs_[3] = (float)no_linear_speed_limit;
 
     // Angular pose error
     outputs_[4] = pos_err.angle();
@@ -184,10 +184,10 @@ void PoseStraightFilter::execute() {
     // Angular target speed
     outputs_[6] = fabs(target_speed.angle());
     // Should angular speed be filtered?
-    outputs_[7] = (double)no_angular_speed_limit;
+    outputs_[7] = (float)no_angular_speed_limit;
 
     // Pose reached
-    outputs_[8] = (double)pose_reached;
+    outputs_[8] = (float)pose_reached;
 };
 
 } // namespace motion_control

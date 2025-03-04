@@ -18,7 +18,7 @@ public:
     /// @param x X coordinate (mm)
     /// @param y Y coordinate (mm)
     /// @param O angle (deg)
-    virtual void set_pose(double x, double y, double O) = 0;
+    virtual void set_pose(float x, float y, float O) = 0;
 
     /// @brief Set the default odometry pose
     ///

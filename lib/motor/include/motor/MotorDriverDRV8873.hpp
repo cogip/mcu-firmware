@@ -21,7 +21,7 @@ public:
     /// @brief Set motor speed
     /// @param speed speed in % [-100; 100]
     /// @return  0 on success, negative on error
-    int set_speed(double speed, int id) override
+    int set_speed(float speed, int id) override
     {
         // WORKAROUND for H-Bridge TI DRV8873HPWPRQ1, need to reset fault in case of undervoltage
         disable(id);

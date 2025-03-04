@@ -55,9 +55,9 @@ public:
     /// 
     /// @brief Get the angle measured by the encoder since the last call.
     ///
-    /// @return double traveled angle since last call (rad).
+    /// @return float traveled angle since last call (rad).
     ///
-    double get_angle_and_reset() { return ((double)read_and_reset() / (double)pulse_per_rev_) * etl::math::pi; }
+    float get_angle_and_reset() { return ((float)read_and_reset() / (float)pulse_per_rev_) * etl::math::pi; }
 
 protected:
     const EncoderMode mode_;

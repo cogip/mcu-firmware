@@ -24,16 +24,16 @@ class PassthroughPosePIDControllerParameters {
 public:
     /// Constructor
     PassthroughPosePIDControllerParameters(
-        double target_speed = 0.0,          ///< [in] PID parameters
+        float target_speed = 0.0,          ///< [in] PID parameters
         bool signed_target_speed = true     ///< [in] target speed signed flag
     ) : target_speed_(target_speed), signed_target_speed_(signed_target_speed) {};
 
     /// Get target speed parameter
     /// return     target speed
-    double target_speed() const { return target_speed_; };
+    float target_speed() const { return target_speed_; };
 
     void set_target_speed(
-        double target_speed
+        float target_speed
         ) { target_speed_ = target_speed; }
 
     /// Get force target speed flag
@@ -46,7 +46,7 @@ public:
 
 private:
     /// Target speed
-    double target_speed_;
+    float target_speed_;
 
     /// Force target speed flag. If set, speed_order is forced to target_speed
     bool signed_target_speed_;

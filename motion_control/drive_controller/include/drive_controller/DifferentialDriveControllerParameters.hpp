@@ -23,14 +23,14 @@ public:
     /// @param min_speed_percentage min speed ratio to send to motors (%) in range [0;100]
     /// @param max_speed_percentage max speed ratio to send to motors (%) in range [0;100]
     /// @param loop_period regulation loop period (ms)
-    DifferentialDriveControllerParameters(double left_wheel_diameter,
-                                          double right_wheel_diameter,
-                                          double track_width,
-                                          double left_motor_constant,
-                                          double right_motor_constant,
-                                          double min_speed_percentage,
-                                          double max_speed_percentage,
-                                          double loop_period)
+    DifferentialDriveControllerParameters(float left_wheel_diameter,
+                                          float right_wheel_diameter,
+                                          float track_width,
+                                          float left_motor_constant,
+                                          float right_motor_constant,
+                                          float min_speed_percentage,
+                                          float max_speed_percentage,
+                                          float loop_period)
                                           : left_wheel_diameter_(left_wheel_diameter),
                                             right_wheel_diameter_(right_wheel_diameter),
                                             track_width_(track_width),
@@ -42,19 +42,19 @@ public:
 
     /// @brief Set the left motor wheel diameter dimension
     /// @param wheel_diameter Wheel diameter value (mm)
-    void set_left_wheel_diameter(double wheel_diameter) { left_wheel_diameter_ = wheel_diameter; }
+    void set_left_wheel_diameter(float wheel_diameter) { left_wheel_diameter_ = wheel_diameter; }
 
     /// @brief Return left motor wheel diameter value in mm.
-    /// @return double Wheel diameter value (mm)
-    double left_wheel_diameter_mm() const { return left_wheel_diameter_; }
+    /// @return float Wheel diameter value (mm)
+    float left_wheel_diameter_mm() const { return left_wheel_diameter_; }
 
     /// @brief Set the right wheel motor diameter dimension
     /// @param wheel_diameter Wheel diameter value (mm)
-    void set_right_wheel_diameter(double wheel_diameter) { right_wheel_diameter_ = wheel_diameter; }
+    void set_right_wheel_diameter(float wheel_diameter) { right_wheel_diameter_ = wheel_diameter; }
 
     /// @brief Return right motor wheel diameter value in mm.
-    /// @return double Wheel diameter value (mm)
-    double right_wheel_diameter_mm() const { return right_wheel_diameter_; }
+    /// @return float Wheel diameter value (mm)
+    float right_wheel_diameter_mm() const { return right_wheel_diameter_; }
 
     /// @brief Set the left motor constant value.
     ///        This value needs to be defined by using the motors characteristics from the datasheet.
@@ -64,11 +64,11 @@ public:
     ///
     /// @note motor_constant = ((60 * Reduction Ratio / velocity Constant (RPM/V)) / Motor Voltage (V)) * 100
     /// @param motor_constant motor constant (no unit)
-    void set_left_motor_constant(double motor_constant) { left_motor_constant_ = motor_constant; }
+    void set_left_motor_constant(float motor_constant) { left_motor_constant_ = motor_constant; }
 
     /// @brief Return left motor constant value
-    /// @return double motor constant (no unit)
-    double left_motor_constant() const { return left_motor_constant_; }
+    /// @return float motor constant (no unit)
+    float left_motor_constant() const { return left_motor_constant_; }
 
     /// @brief Set the right wheel motor constant value.
     ///        This value needs to be defined by using the motors characteristics from the datasheet.
@@ -78,53 +78,53 @@ public:
     ///
     /// @note motor_constant = ((60 * Reduction Ratio / velocity Constant (RPM/V)) / Motor Voltage (V)) * 100
     /// @param motor_constant motor constant (no unit)
-    void set_right_motor_constant(double motor_constant) { right_motor_constant_ = motor_constant; }
+    void set_right_motor_constant(float motor_constant) { right_motor_constant_ = motor_constant; }
 
     /// @brief Return right motor constant value
-    /// @return double Wheel motor constant (no unit)
-    double right_motor_constant() const { return right_motor_constant_; }
+    /// @return float Wheel motor constant (no unit)
+    float right_motor_constant() const { return right_motor_constant_; }
 
     /// @brief Set the axle track dimension
     /// @param track_width Track width value (mm)
-    void set_track_width(double track_width) { track_width_ = track_width; }
+    void set_track_width(float track_width) { track_width_ = track_width; }
 
     /// @brief Get the axle track value
-    /// @return double Track width value (mm)
-    double track_width_mm() const { return track_width_; }
+    /// @return float Track width value (mm)
+    float track_width_mm() const { return track_width_; }
 
     /// @brief Set the min speed ratio in percent
     /// @param min speed ratio (%)
-    void set_min_speed_percentage(double min) { min_speed_percentage_ = min; }
+    void set_min_speed_percentage(float min) { min_speed_percentage_ = min; }
 
     /// @brief get the min speed ratio in percent
-    /// @return double speed ratio (%)
-    double min_speed_percentage() { return min_speed_percentage_; }
+    /// @return float speed ratio (%)
+    float min_speed_percentage() { return min_speed_percentage_; }
 
     /// @brief Set the max speed ratio in percent
     /// @param max speed ratio (%)
-    void set_max_speed_percentage(double max) { max_speed_percentage_ = max; }
+    void set_max_speed_percentage(float max) { max_speed_percentage_ = max; }
 
     /// @brief get the max speed ratio in percent
-    /// @return double speed ratio (%)
-    double max_speed_percentage() const { return max_speed_percentage_; }
+    /// @return float speed ratio (%)
+    float max_speed_percentage() const { return max_speed_percentage_; }
 
     /// @brief Set the loop period in milliseconds
     /// @param period loop period (ms)
-    void set_loop_period(double period) { loop_period_ = period; }
+    void set_loop_period(float period) { loop_period_ = period; }
 
     /// @brief Get the axle track value
-    /// @return double Track width value (mm)
-    double loop_period_ms() const { return loop_period_; }
+    /// @return float Track width value (mm)
+    float loop_period_ms() const { return loop_period_; }
 
 private:
-    double left_wheel_diameter_;
-    double right_wheel_diameter_;
-    double track_width_;
-    double left_motor_constant_;
-    double right_motor_constant_;
-    double min_speed_percentage_;
-    double max_speed_percentage_;
-    double loop_period_;
+    float left_wheel_diameter_;
+    float right_wheel_diameter_;
+    float track_width_;
+    float left_motor_constant_;
+    float right_motor_constant_;
+    float min_speed_percentage_;
+    float max_speed_percentage_;
+    float loop_period_;
 };
 
 } // namespace odometer
