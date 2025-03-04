@@ -20,10 +20,10 @@ void SpeedPIDController::execute() {
     COGIP_DEBUG_COUT("Execute SpeedPIDController");
 
     // Speed error
-    double speed_error = this->inputs_[0];
+    float speed_error = this->inputs_[0];
 
     // Compute output values.
-    double speed_command = parameters_->pid()->compute(speed_error);
+    float speed_command = parameters_->pid()->compute(speed_error);
 
     // Store output values.
     this->outputs_[0] = speed_command;

@@ -6,16 +6,16 @@
 #include "utils.hpp"
 
 /**
- * \fn void odometry_by_segment (const double distance, const double angle)
+ * \fn void odometry_by_segment (const float distance, const float angle)
  * \brief update new robot pose (x, y, O) approximated by straight line
  *		segments
  * \param distance : delta value for distance [pulse]
  * \param angle : delta value for angle [pulse]
  */
 static void
-odometry_by_segment(cogip::cogip_defs::Pose &p, const double distance, const double angle)
+odometry_by_segment(cogip::cogip_defs::Pose &p, const float distance, const float angle)
 {
-    double O_rad;
+    float O_rad;
 
     O_rad = DEG2RAD(p.O());
 
@@ -25,15 +25,15 @@ odometry_by_segment(cogip::cogip_defs::Pose &p, const double distance, const dou
 }
 
 /**
- * \fn void odometry_by_arc (const double distance, const double angle)
+ * \fn void odometry_by_arc (const float distance, const float angle)
  * \brief update new robot pose (x, y, O) approximated by an arc
  * \param distance : delta value for distance [pulse]
  * \param angle : delta value for angle [pulse]
  */
 static void
-odometry_by_arc(cogip::cogip_defs::Pose &p, const double distance, const double angle)
+odometry_by_arc(cogip::cogip_defs::Pose &p, const float distance, const float angle)
 {
-    double O_rad;
+    float O_rad;
 
     O_rad = DEG2RAD(p.O());
 
@@ -44,12 +44,12 @@ odometry_by_arc(cogip::cogip_defs::Pose &p, const double distance, const double 
     }
     else {
         /* radius and angle of the arc */
-        double a = DEG2RAD(angle);
-        double r = distance / a;
+        float a = DEG2RAD(angle);
+        float r = distance / a;
 
         /* coordinates of the center of the arc */
-        double xo = p.x() - r * sin(O_rad);
-        double yo = p.y() + r * cos(O_rad);
+        float xo = p.x() - r * sin(O_rad);
+        float yo = p.y() + r * cos(O_rad);
 
         /* robot pose */
         p.set_O(limit_angle_deg(p.O() + angle));

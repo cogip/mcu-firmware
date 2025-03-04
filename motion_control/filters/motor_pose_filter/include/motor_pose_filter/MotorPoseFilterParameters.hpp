@@ -21,26 +21,26 @@ class MotorPoseFilterParameters {
 public:
     /// Constructor
     MotorPoseFilterParameters(
-        double threshold = 0.0,   ///< [in]  see linear_threshold_
-        double deceleration = 0.0    ///< [in]  see linear_deceleration_threshold_
+        float threshold = 0.0,   ///< [in]  see linear_threshold_
+        float deceleration = 0.0    ///< [in]  see linear_deceleration_threshold_
     ) :
     threshold_(threshold),
     deceleration_(deceleration) {};
 
     /// Get threshold
     /// return threshold
-    double threshold() const { return threshold_; };
+    float threshold() const { return threshold_; };
 
     /// Get deceleration
     /// return deceleration
-    double deceleration() const { return deceleration_; };
+    float deceleration() const { return deceleration_; };
 
 private:
     /// the motor has reach the pose when the error is lower than this threshold
-    double threshold_;
+    float threshold_;
 
     /// deceleration
-    double deceleration_;
+    float deceleration_;
 };
 
 } // namespace motion_control

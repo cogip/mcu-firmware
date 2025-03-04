@@ -43,26 +43,26 @@ public:
 
     /// Get input at given index
     /// return input
-    virtual double input (
+    virtual float input (
         size_t index    ///< [in]  index
         ) const = 0;
 
     /// Set input at given index
     virtual void set_input(
         size_t index,   ///< [in]  index
-        double value    ///< [in]  value
+        float value    ///< [in]  value
         ) = 0;
 
     /// Get output at given index
     /// return output
-    virtual double output (
+    virtual float output (
         size_t index    ///< [in]  index
         ) const = 0;
 
     /// Set output at given index
     virtual void set_output(
         size_t index,   ///< [in]  index
-        double value    ///< [in]  value
+        float value    ///< [in]  value
         ) = 0;
 
     /// Get numer of inputs

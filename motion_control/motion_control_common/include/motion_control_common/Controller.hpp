@@ -43,13 +43,13 @@ public:
     ) : BaseController(), parameters_(parameters) {};
 
     /// Get input at given index
-    /// return         input at given index, max double value if error
-    double input(
+    /// return         input at given index, max float value if error
+    float input(
         size_t index    ///< [in]  input index
         ) const override {
         if (index >= INPUT_SIZE) {
             COGIP_DEBUG_COUT("Error: not enough values.");
-            return std::numeric_limits<double>::max();
+            return std::numeric_limits<float>::max();
         }
         return this->inputs_[index];
     };
@@ -57,7 +57,7 @@ public:
     /// Set input at given index
     void set_input(
         size_t index,   ///< [in]  input index
-        double value    ///< [in]  value to set at given index
+        float value    ///< [in]  value to set at given index
         ) override {
         if (index >= INPUT_SIZE) {
             COGIP_DEBUG_COUT("Error: not enough input values.");
@@ -67,13 +67,13 @@ public:
     };
 
     /// Get output at given index
-    /// return         output at given index, max double value if error
-    double output(
+    /// return         output at given index, max float value if error
+    float output(
         size_t index    ///< [in]  output index
         ) const override {
         if (index >= OUTPUT_SIZE) {
             COGIP_DEBUG_COUT("Error: cannot get output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ").");
-            return std::numeric_limits<double>::max();
+            return std::numeric_limits<float>::max();
         }
         return this->outputs_[index];
     };
@@ -81,7 +81,7 @@ public:
     /// Set output at given index
     void set_output(
         size_t index,   ///< [in]  output index
-        double value    ///< [in]  value to set at given index
+        float value    ///< [in]  value to set at given index
         ) override {
         if (index >= OUTPUT_SIZE) {
             COGIP_DEBUG_COUT("Error: cannot set output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ").");
@@ -110,10 +110,10 @@ public:
 
 protected:
     /// Inputs vector
-    etl::vector<double, INPUT_SIZE> inputs_;
+    etl::vector<float, INPUT_SIZE> inputs_;
 
     /// outputs vector
-    etl::vector<double, OUTPUT_SIZE> outputs_;
+    etl::vector<float, OUTPUT_SIZE> outputs_;
 
     /// Controller parameters
     const ParamsT *parameters_;

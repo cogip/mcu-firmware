@@ -21,7 +21,7 @@ Motor::Motor(
         motor_driver_t *motor_driver,
         uint8_t motor_id,
         gpio_t clear_overload_pin,
-        double target_speed,
+        float target_speed,
         cogip::motion_control::PosePIDControllerParameters *pose_controller_parameters,
         cogip::motion_control::SpeedPIDControllerParameters *speed_controller_parameters,
         cogip::motion_control::MotorPoseFilterParameters *motor_pose_filter_parameters,

@@ -21,7 +21,7 @@ namespace cogip {
 namespace motion_control {
 
 /// Get current speed and pose from motor
-using motor_get_speed_and_pose_cb_t = etl::delegate<void(double&, double&)>;
+using motor_get_speed_and_pose_cb_t = etl::delegate<void(float&, float&)>;
 
 /// Process motion control commands
 using motor_process_commands_cb_t = etl::delegate<void(const int, BaseControllerEngine&)>;
@@ -41,33 +41,33 @@ public:
 
     /// Get current speed
     /// return     current speed
-    const double& current_speed() const { return current_speed_; };
+    const float& current_speed() const { return current_speed_; };
 
     /// Get target speed
     /// return     target speed
-    const double& target_speed() const { return target_speed_; };
+    const float& target_speed() const { return target_speed_; };
 
     /// Get current pose
     /// return     current pose
-    const double& current_pose() const { return current_pose_; };
+    const float& current_pose() const { return current_pose_; };
 
     /// Get target pose
     /// return     target pose
-    const double& target_pose() const { return target_pose_; };
+    const float& target_pose() const { return target_pose_; };
 
     /// Set target speed
     void set_target_speed(
-        const double target_speed   ///< [in]   new target speed
+        const float target_speed   ///< [in]   new target speed
         ) { target_speed_ = target_speed; };
 
     /// Set current pose
     void set_current_pose(
-        const double current_pose    ///< [in]   new current pose
+        const float current_pose    ///< [in]   new current pose
         ) { current_pose_ = current_pose; };
 
     /// Set target pose
     void set_target_pose(
-        const double target_pose     ///< [in]   new target pose
+        const float target_pose     ///< [in]   new target pose
         ) { target_pose_ = target_pose; };
 
 private:
@@ -78,16 +78,16 @@ private:
     void process_outputs();
 
     /// Robot polar current speed
-    double current_speed_;
+    float current_speed_;
 
     /// Robot polar target speed
-    double target_speed_;
+    float target_speed_;
 
     /// Robot current pose
-    double current_pose_;
+    float current_pose_;
 
     /// Robot target pose
-    double target_pose_;
+    float target_pose_;
 
     /// Motor callback to get target and current poses from motors
     motor_get_speed_and_pose_cb_t motor_get_speed_and_pose_cb_;

@@ -36,7 +36,7 @@ public:
 
     /// Get previous speed order
     /// return previous speed order
-    double previous_speed_order() const { return previous_speed_order_; };
+    float previous_speed_order() const { return previous_speed_order_; };
 
     /// Reset previous speed order
     void reset_previous_speed_order() { previous_speed_order_ = 0; };
@@ -46,18 +46,18 @@ public:
 
 protected:
     /// Previous cycle speed_order
-    double previous_speed_order_;
+    float previous_speed_order_;
 
     /// Anti blocking, number of blocked cycle
     uint32_t anti_blocking_blocked_cycles_nb_;
 
     void limit_speed_order(
-        double *speed_order,
-        double target_speed,
-        double current_speed,
-        double min_speed,
-        double max_speed,
-        double max_acc
+        float *speed_order,
+        float target_speed,
+        float current_speed,
+        float min_speed,
+        float max_speed,
+        float max_acc
     );
 
 };

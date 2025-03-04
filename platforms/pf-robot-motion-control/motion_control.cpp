@@ -520,10 +520,10 @@ void cogip_native_motor_driver_qdec_simulation(const motor_driver_t *motor_drive
     (void)motor_id;
     (void)pwm_duty_cycle;
 
-    static double wheels_perimeter = M_PI * left_encoder_wheels_diameter_mm;
-    static double pulse_per_mm = encoder_wheels_resolution_pulses / wheels_perimeter;
-    static double wheels_distance_pulse = encoder_wheels_distance_mm * pulse_per_mm;
-    static double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;
+    static float wheels_perimeter = M_PI * left_encoder_wheels_diameter_mm;
+    static float pulse_per_mm = encoder_wheels_resolution_pulses / wheels_perimeter;
+    static float wheels_distance_pulse = encoder_wheels_distance_mm * pulse_per_mm;
+    static float pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;
 
     // On native architecture set speeds at their theorical value, no error.
     if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {

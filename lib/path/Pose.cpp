@@ -7,8 +7,8 @@ namespace cogip {
 namespace path {
 
 Pose::Pose(
-    double x, double y, double O,
-    double max_speed_ratio_linear, double max_speed_ratio_angular,
+    float x, float y, float O,
+    float max_speed_ratio_linear, float max_speed_ratio_angular,
     bool allow_reverse, bool bypass_anti_blocking, uint32_t timeout_ms,
     bool bypass_final_orientation
     ) : cogip_defs::Pose(x, y, O), allow_reverse_(allow_reverse),
@@ -16,8 +16,8 @@ Pose::Pose(
     bypass_final_orientation_(bypass_final_orientation)
 {
     // Ratios are betwen 0 and 1
-    max_speed_ratio_linear_ =  std::min(max_speed_ratio_linear, 1.);
-    max_speed_ratio_angular_ = std::min(max_speed_ratio_angular, 1.);
+    max_speed_ratio_linear_ =  std::min(max_speed_ratio_linear, 1.0f);
+    max_speed_ratio_angular_ = std::min(max_speed_ratio_angular, 1.0f);
 }
 
 void Pose::pb_read(const PB_PathPose &path_pose)

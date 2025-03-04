@@ -194,24 +194,24 @@ static void *_positional_actuators_timeout_thread(void *args)
 }
 
 /// Update current speed from quadrature encoders measure.
-static void pf_motor_encoder_read_bottom_lift(double &current_speed)
+static void pf_motor_encoder_read_bottom_lift(float &current_speed)
 {
     current_speed = (qdec_read_and_reset(MOTOR_BOTTOM_LIFT_ID) * QDEC_BOTTOM_LIFT_POLARITY) / pulse_per_mm;
 }
 
 /// Update current speed from quadrature encoders measure.
-static void pf_motor_encoder_read_top_lift(double &current_speed)
+static void pf_motor_encoder_read_top_lift(float &current_speed)
 {
     current_speed = (qdec_read_and_reset(MOTOR_TOP_LIFT_ID) * QDEC_TOP_LIFT_POLARITY) / pulse_per_mm;
 }
 
-static void compute_current_speed_and_pose_bottom_lift(double &current_speed, double &current_pose)
+static void compute_current_speed_and_pose_bottom_lift(float &current_speed, float &current_pose)
 {
     pf_motor_encoder_read_bottom_lift(current_speed);
     current_pose += current_speed;
 }
 
-static void compute_current_speed_and_pose_top_lift(double &current_speed, double &current_pose)
+static void compute_current_speed_and_pose_top_lift(float &current_speed, float &current_pose)
 {
     pf_motor_encoder_read_top_lift(current_speed);
     current_pose += current_speed;

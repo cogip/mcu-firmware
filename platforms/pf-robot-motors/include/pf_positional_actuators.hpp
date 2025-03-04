@@ -48,39 +48,39 @@ constexpr int pwm_minimal = 70;
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
 /// @{
-constexpr double wheels_diameter_mm = 12.03;
-constexpr double wheels_encoder_resolution = 37.35 * 11 * 4;
-constexpr double wheels_perimeter_mm = M_PI * wheels_diameter_mm;
-constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter_mm;///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
+constexpr float wheels_diameter_mm = 12.03;
+constexpr float wheels_encoder_resolution = 37.35 * 11 * 4;
+constexpr float wheels_perimeter_mm = M_PI * wheels_diameter_mm;
+constexpr float pulse_per_mm = wheels_encoder_resolution / wheels_perimeter_mm;///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
 /// @}
 
 ///< controller thread loop period
 constexpr uint16_t motor_lift_control_thread_period_ms = 20;
 
 /// Lift motors speed filter parameters
-constexpr double motor_lift_anti_blocking_speed_threshold_per_period = 0.3;
-constexpr double motor_lift_anti_blocking_error_threshold_per_period = 0.02;
-constexpr double motor_lift_anti_blocking_blocked_cycles_nb_threshold = 10;
-constexpr double motor_lift_min_speed_motor_lift_m_per_s = 0;
-constexpr double motor_lift_max_init_speed_motor_lift_m_per_s = 0.02;
-constexpr double motor_lift_max_speed_motor_lift_m_per_s = 0.17;
-constexpr double motor_lift_max_acc_motor_lift_m_per_s2 = motor_lift_max_speed_motor_lift_m_per_s * 10;
-constexpr double motor_lift_max_dec_motor_lift_m_per_s2 = motor_lift_max_speed_motor_lift_m_per_s * 2;
-constexpr double motor_lift_max_acc_motor_lift_mm_per_period2 = (
+constexpr float motor_lift_anti_blocking_speed_threshold_per_period = 0.3;
+constexpr float motor_lift_anti_blocking_error_threshold_per_period = 0.02;
+constexpr float motor_lift_anti_blocking_blocked_cycles_nb_threshold = 10;
+constexpr float motor_lift_min_speed_motor_lift_m_per_s = 0;
+constexpr float motor_lift_max_init_speed_motor_lift_m_per_s = 0.02;
+constexpr float motor_lift_max_speed_motor_lift_m_per_s = 0.17;
+constexpr float motor_lift_max_acc_motor_lift_m_per_s2 = motor_lift_max_speed_motor_lift_m_per_s * 10;
+constexpr float motor_lift_max_dec_motor_lift_m_per_s2 = motor_lift_max_speed_motor_lift_m_per_s * 2;
+constexpr float motor_lift_max_acc_motor_lift_mm_per_period2 = (
     (1000 * motor_lift_max_acc_motor_lift_m_per_s2 * motor_lift_control_thread_period_ms * motor_lift_control_thread_period_ms) \
     / (1000 * 1000)
     );          ///< Maximum motor_lift acceleration (mm/<motor_lift_control_thread_period_ms>²)
-constexpr double motor_lift_max_dec_motor_lift_mm_per_period2 = (
+constexpr float motor_lift_max_dec_motor_lift_mm_per_period2 = (
     (1000 * motor_lift_max_dec_motor_lift_m_per_s2 * motor_lift_control_thread_period_ms * motor_lift_control_thread_period_ms) \
     / (1000 * 1000)
     );          ///< Maximum motor_lift deceleration (mm/<motor_lift_control_thread_period_ms>²)
-constexpr double motor_lift_min_speed_motor_lift_mm_per_period = (
+constexpr float motor_lift_min_speed_motor_lift_mm_per_period = (
     (1000 * motor_lift_min_speed_motor_lift_m_per_s * motor_lift_control_thread_period_ms) \
     / 1000);    ///< Minimum motor_lift speed (mm/<motor_lift_control_thread_period_ms>)
-constexpr double motor_lift_max_speed_motor_lift_mm_per_period = (
+constexpr float motor_lift_max_speed_motor_lift_mm_per_period = (
     (1000 * motor_lift_max_speed_motor_lift_m_per_s * motor_lift_control_thread_period_ms) \
     / 1000);    ///< Maximum motor_lift speed (mm/<motor_lift_control_thread_period_ms>)
-constexpr double motor_lift_max_init_speed_motor_lift_mm_per_period = (
+constexpr float motor_lift_max_init_speed_motor_lift_mm_per_period = (
     (1000 * motor_lift_max_init_speed_motor_lift_m_per_s * motor_lift_control_thread_period_ms) \
     / 1000);    ///< Maximum motor_lift init speed (mm/<motor_lift_control_thread_period_ms>)
 

@@ -19,10 +19,10 @@ void PosePIDController::execute() {
     COGIP_DEBUG_COUT("Execute PosePIDController");
 
     // Read position error.
-    double position_error = this->inputs_[0];
+    float position_error = this->inputs_[0];
 
     // Compute output values.
-    double speed_order = parameters_->pid()->compute(position_error);
+    float speed_order = parameters_->pid()->compute(position_error);
 
     // Store speed order
     this->outputs_[0] = speed_order;

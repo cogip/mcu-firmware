@@ -55,14 +55,14 @@ public:
     /// @param speed speed in % [-100; 100]
     /// @param id id of the motor
     /// @return  0 on success, negative on error
-    int set_speed(double speed, int id) override
+    int set_speed(float speed, int id) override
     {
         // Convert speed in percent to pwm value
-        double pwm_value = (speed * (double)parameters_.pwm_resolution) / 100.0;
+        float pwm_value = (speed * (float)parameters_.pwm_resolution) / 100.0;
 
         // limit pwm value in order to ensure range between [-parameters_.pwm_resolution;parameters_.pwm_resolution]
-        if (fabs(pwm_value) > (double)parameters_.pwm_resolution) {
-            pwm_value = (speed < 0.0 ? -1.0 : 1.0) * (double)parameters_.pwm_resolution;
+        if (fabs(pwm_value) > (float)parameters_.pwm_resolution) {
+            pwm_value = (speed < 0.0 ? -1.0 : 1.0) * (float)parameters_.pwm_resolution;
         }
 
         return motor_set(&driver_, id, (int32_t)pwm_value);

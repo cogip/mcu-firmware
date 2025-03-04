@@ -5,9 +5,9 @@ namespace cogip {
 
 namespace pid {
 
-double PID::compute(double error)
+float PID::compute(float error)
 {
-    double p, i, d;
+    float p, i, d;
 
     // Integral term is the error sum
     integral_term_ += error;

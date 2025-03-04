@@ -2,6 +2,6 @@
 
 #include <cmath>
 
-bool areDoublesEqual(double a, double b, double epsilon) {
+bool areDoublesEqual(float a, float b, float epsilon) {
     return std::fabs(a - b) < epsilon;
 }

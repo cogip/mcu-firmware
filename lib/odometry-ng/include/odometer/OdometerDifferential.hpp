@@ -27,7 +27,7 @@ public:
     /// @param x X coordinate (mm)
     /// @param y Y coordinate (mm)
     /// @param O angle (deg)
-    void set_pose(double x, double y, double O) override
+    void set_pose(float x, float y, float O) override
     {
         pose_.set_x(x);
         pose_.set_y(y);

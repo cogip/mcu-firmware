@@ -19,15 +19,15 @@ void PassthroughPosePIDController::execute() {
     COGIP_DEBUG_COUT("Execute PassthroughPosePIDController");
 
     // Read position error
-    double position_error = this->inputs_[0];
+    float position_error = this->inputs_[0];
 
-    double position_error_sign = 1;
+    float position_error_sign = 1;
 
     if (parameters_->signed_target_speed() && (position_error != 0)) {
         position_error_sign = position_error / fabs(position_error);
     }
 
-    double speed_order = parameters_->target_speed();
+    float speed_order = parameters_->target_speed();
     if (position_error != 0) {
         // Compute output values
         speed_order *= position_error_sign;

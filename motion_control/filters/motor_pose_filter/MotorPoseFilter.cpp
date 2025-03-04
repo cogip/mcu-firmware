@@ -21,16 +21,16 @@ void MotorPoseFilter::execute() {
     size_t input_index = 0;
 
     // Current pose
-    double current_pose = this->inputs_[input_index++];
+    float current_pose = this->inputs_[input_index++];
 
     // Target pose
-    double target_pose = this->inputs_[input_index++];
+    float target_pose = this->inputs_[input_index++];
 
     // Current speed
-    double current_speed = this->inputs_[input_index++];
+    float current_speed = this->inputs_[input_index++];
 
     // Target speed
-    double target_speed = this->inputs_[input_index++];
+    float target_speed = this->inputs_[input_index++];
 
     // Position reached flag
     target_pose_status_t pose_reached = (target_pose_status_t)this->inputs_[input_index++];
@@ -41,7 +41,7 @@ void MotorPoseFilter::execute() {
     }
 
     // compute position error
-    double pos_err = target_pose - current_pose;
+    float pos_err = target_pose - current_pose;
 
     // Do not disable speed limitation
     bool no_speed_limit = false;
@@ -62,10 +62,10 @@ void MotorPoseFilter::execute() {
     // Target speed
     outputs_[2] = fabs(target_speed);
     // Should speed be filtered ?
-    outputs_[3] = (double)no_speed_limit;
+    outputs_[3] = (float)no_speed_limit;
 
     // Pose reached
-    outputs_[4] = (double)pose_reached;
+    outputs_[4] = (float)pose_reached;
 };
 
 } // namespace motion_control
