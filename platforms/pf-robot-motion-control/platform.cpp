@@ -140,15 +140,15 @@ void pf_init(void)
             cogip::canpb::message_handler_t::create<_handle_copilot_disconnected>()
             );
         canpb.register_message_handler(
-            cogip::pf::motion_control::brake_uuid,
+            brake_uuid,
             cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_brake>()
             );
         canpb.register_message_handler(
-            cogip::pf::motion_control::pose_order_uuid,
+            pose_order_uuid,
             cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_target_pose>()
             );
         canpb.register_message_handler(
-            cogip::pf::motion_control::pose_start_uuid,
+            pose_start_uuid,
             cogip::canpb::message_handler_t::create<cogip::pf::motion_control::pf_handle_start_pose>()
             );
 

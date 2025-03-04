@@ -20,6 +20,7 @@ public:
     /// @param track_width Track width value (mm)
     /// @param left_motor_constant left motor constant (no unit)
     /// @param right_motor_constant right motor constant (no unit)
+    /// @param min_speed_percentage min speed ratio to send to motors (%) in range [0;100]
     /// @param max_speed_percentage max speed ratio to send to motors (%) in range [0;100]
     /// @param loop_period regulation loop period (ms)
     DifferentialDriveControllerParameters(double left_wheel_diameter,
@@ -27,6 +28,7 @@ public:
                                           double track_width,
                                           double left_motor_constant,
                                           double right_motor_constant,
+                                          double min_speed_percentage,
                                           double max_speed_percentage,
                                           double loop_period)
                                           : left_wheel_diameter_(left_wheel_diameter),
@@ -34,6 +36,7 @@ public:
                                             track_width_(track_width),
                                             left_motor_constant_(left_motor_constant),
                                             right_motor_constant_(right_motor_constant),
+                                            min_speed_percentage_(min_speed_percentage),
                                             max_speed_percentage_(max_speed_percentage),
                                             loop_period_(loop_period) {};
 
@@ -89,6 +92,14 @@ public:
     /// @return double Track width value (mm)
     double track_width_mm() const { return track_width_; }
 
+    /// @brief Set the min speed ratio in percent
+    /// @param min speed ratio (%)
+    void set_min_speed_percentage(double min) { min_speed_percentage_ = min; }
+
+    /// @brief get the min speed ratio in percent
+    /// @return double speed ratio (%)
+    double min_speed_percentage() { return min_speed_percentage_; }
+
     /// @brief Set the max speed ratio in percent
     /// @param max speed ratio (%)
     void set_max_speed_percentage(double max) { max_speed_percentage_ = max; }
@@ -111,6 +122,7 @@ private:
     double track_width_;
     double left_motor_constant_;
     double right_motor_constant_;
+    double min_speed_percentage_;
     double max_speed_percentage_;
     double loop_period_;
 };

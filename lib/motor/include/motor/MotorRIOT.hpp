@@ -30,11 +30,11 @@ public:
     /// @brief Set motor speed
     /// @param speed speed in % [-100; 100]
     /// @return  0 on success, negative on error
-    int speed(int speed)
+    int set_speed(double speed)
     {
-        return driver_.speed(speed, id_);
+        return driver_.set_speed(speed, id_);
     }
-    
+
     /// @brief break the motor
     /// @return 0 on success, negative on error
     int brake()

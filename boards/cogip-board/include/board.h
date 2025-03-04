@@ -32,6 +32,9 @@ extern "C" {
 /* LEDs */
 #define HEARTBEAT_LED   GPIO_PIN(PORT_A, 5)
 
+/* Encoder mode */
+#define COGIP_BOARD_ENCODER_MODE cogip::encoder::EncoderMode::ENCODER_MODE_X4
+
 /* GPIOs expander */
 #define PCF857X_PORT_0  0
 
