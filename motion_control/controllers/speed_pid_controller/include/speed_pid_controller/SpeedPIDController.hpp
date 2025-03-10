@@ -29,11 +29,13 @@ class SpeedPIDController : public Controller<2, 2, SpeedPIDControllerParameters>
 public:
     /// Constructor
     explicit SpeedPIDController(
-        SpeedPIDControllerParameters *parameters    ///< [in]  PID parameters. See SpeedPIDControllerParameters.
-        ) : BaseController(), Controller(parameters) {};
+        SpeedPIDControllerParameters *parameters,    ///< [in]  PID parameters. See SpeedPIDControllerParameters.
+        const char* controller_name) : BaseController(), Controller(parameters), controller_name_(controller_name) {};
 
     /// Compute PID to correct given error according to PID parameters and inputs.
     void execute() override;
+private:
+    const char* controller_name_;
 };
 
 } // namespace motion_control

@@ -130,11 +130,11 @@ static cogip::motion_control::SpeedFilterParameters linear_speed_filter_paramete
     platform_linear_anti_blocking_blocked_cycles_nb_threshold
     );
 /// Linear SpeedFilter to limit speed and acceleration for linear SpeedPIDController.
-static cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters);
+static cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters, "linear");
 /// Linear SpeedPIDControllerParameters.
 static cogip::motion_control::SpeedPIDControllerParameters linear_speed_controller_parameters(&linear_speed_pid);
 /// Linear SpeedPIDController to compute linear command to send to motors.
-static cogip::motion_control::SpeedPIDController linear_speed_controller(&linear_speed_controller_parameters);
+static cogip::motion_control::SpeedPIDController linear_speed_controller(&linear_speed_controller_parameters, "linear");
 
 /// Angular DualPIDMetaController for pose and speed control in cascade.
 static cogip::motion_control::DualPIDMetaController angular_dualpid_meta_controller;
@@ -149,11 +149,11 @@ static cogip::motion_control::SpeedFilterParameters angular_speed_filter_paramet
     platform_max_acc_angular_deg_per_period2
     );
 /// Angular SpeedFilter to limit speed and acceleration for angular SpeedPIDController.
-static cogip::motion_control::SpeedFilter angular_speed_filter(&angular_speed_filter_parameters);
+static cogip::motion_control::SpeedFilter angular_speed_filter(&angular_speed_filter_parameters, "angular");
 /// Angular SpeedPIDControllerParameters.
 static cogip::motion_control::SpeedPIDControllerParameters angular_speed_controller_parameters(&angular_speed_pid);
 /// Angular SpeedPIDController to compute angular command to send to motors.
-static cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters);
+static cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters, "angular");
 
 /// Linear PassthroughPosePIDControllerParameters.
 static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_linear_pose_controller_parameters(

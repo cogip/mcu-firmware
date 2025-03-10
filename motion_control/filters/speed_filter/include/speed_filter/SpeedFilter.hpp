@@ -28,8 +28,8 @@ class SpeedFilter : public Controller<5, 2, SpeedFilterParameters> {
 public:
     /// @brief
     /// @param parameters
-    explicit SpeedFilter(SpeedFilterParameters *parameters) : Controller(parameters),
-        previous_speed_order_(0), anti_blocking_blocked_cycles_nb_(0) {};
+    explicit SpeedFilter(SpeedFilterParameters *parameters, const char *filter_name) : Controller(parameters),
+        previous_speed_order_(0), anti_blocking_blocked_cycles_nb_(0), filter_name_(filter_name) {};
 
     /// Limit acceleration and speed
     void execute() override;
@@ -50,6 +50,8 @@ protected:
 
     /// Anti blocking, number of blocked cycle
     uint32_t anti_blocking_blocked_cycles_nb_;
+    
+    const char* filter_name_;
 
     void limit_speed_order(
         float *speed_order,

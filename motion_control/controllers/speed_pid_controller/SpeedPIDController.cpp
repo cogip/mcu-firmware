@@ -24,6 +24,10 @@ void SpeedPIDController::execute() {
 
     // Compute output values.
     float speed_command = parameters_->pid()->compute(speed_error);
+    
+    ztimer_now_t current_time = ztimer_now(ZTIMER_MSEC);
+
+    std::cout << controller_name_ << "SpeedCommand:" << std::dec << current_time << ":" << speed_command << std::endl;
 
     // Store output values.
     this->outputs_[0] = speed_command;

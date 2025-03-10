@@ -105,6 +105,11 @@ void SpeedFilter::execute() {
     }
 
     previous_speed_order_ = speed_order;
+    
+    ztimer_now_t current_time = ztimer_now(ZTIMER_MSEC);
+
+    std::cout << filter_name_ << "SpeedOrder:" << std::dec << current_time << ":" << speed_order << std::endl;
+    std::cout << filter_name_ << "SpeedCurrent:" << std::dec << current_time << ":" << current_speed << std::endl;
 
     // Store speed_error
     this->outputs_[0] = speed_order - current_speed;
