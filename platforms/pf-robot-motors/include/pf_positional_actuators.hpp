@@ -29,7 +29,6 @@ namespace positional_actuators {
 #define QDEC_MODE                   QDEC_X4
 #endif
 #define QDEC_BOTTOM_LIFT_POLARITY   -1
-#define QDEC_TOP_LIFT_POLARITY      1
 
 /// Motor minimal PWM
 constexpr int pwm_minimal = 70;
@@ -87,21 +86,18 @@ constexpr float motor_lift_max_init_speed_motor_lift_mm_per_period = (
 // Motors ids
 constexpr auto START_LINE = __LINE__;
 enum class Enum: uint8_t {
-    MOTOR_BOTTOM_LIFT = 0,
-    MOTOR_TOP_LIFT = 1,
+    MOTOR_LIFT = 0,
 };
 constexpr auto COUNT = __LINE__ - START_LINE - 3;
 
 /// Actuators timeouts
 /// @{
-constexpr uint32_t default_timeout_period_motor_bottom_lift = 30;
-constexpr uint32_t default_timeout_period_motor_top_lift = 40;
+constexpr uint32_t default_timeout_period_motor_lift = 30;
 /// @}
 
 /// Motors initial pose
 /// @{
-constexpr int32_t motor_bottom_lift_initial_pose = 5;
-constexpr int32_t motor_top_lift_initial_pose = 20;
+constexpr int32_t motor_lift_initial_pose = 5;
 /// @}
 
 /// Actuators DC motors IDs

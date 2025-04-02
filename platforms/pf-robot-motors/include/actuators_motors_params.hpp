@@ -11,8 +11,7 @@ namespace actuators {
 #define CLEAR_OVERLOAD_PIN  GPIO_PIN(PORT_C, 13)
 
 enum MotorsIDs {
-    MOTOR_BOTTOM_LIFT_ID = 0,
-    MOTOR_TOP_LIFT_ID
+    MOTOR_LIFT_ID = 0,
 };
 
 /// Motion control motors
@@ -25,7 +24,7 @@ static const motor_driver_params_t actuators_motors_params =
     .pwm_resolution = 500U,
     .brake_inverted = true,
     .enable_inverted = false,
-    .nb_motors = 2,
+    .nb_motors = 1,
     .motors = {
         // Bottom lift motor
         {
@@ -34,14 +33,6 @@ static const motor_driver_params_t actuators_motors_params =
             .gpio_dir0 = GPIO_PIN(PORT_C, 6),
             .gpio_brake = GPIO_PIN(PORT_C, 8),
             .gpio_dir_reverse = 0,
-        },
-        // Top lift motor
-        {
-            .pwm_channel = 1,
-            .gpio_enable = GPIO_PIN(PORT_B, 1),
-            .gpio_dir0 = GPIO_PIN(PORT_B, 10),
-            .gpio_brake = GPIO_PIN(PORT_B, 2),
-            .gpio_dir_reverse = 1,
         },
     },
     .motor_set_post_cb = nullptr

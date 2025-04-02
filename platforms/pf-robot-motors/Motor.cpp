@@ -51,7 +51,9 @@ Motor::Motor(
 
     motor_engine_.start_thread();
 
-    gpio_init(clear_overload_pin, GPIO_OUT);
+    // Disable overload protection
+    gpio_init(clear_overload_pin_, GPIO_OUT);
+    gpio_clear(clear_overload_pin_);
 
     motor_enable(motor_driver_, motor_id_);
 
@@ -96,11 +98,6 @@ void Motor::actuate(int32_t command) {
 
     if (!timeout_period_)
         timeout_period_ = default_timeout_period_;
-
-    // Reset overload in case motor would be disabled
-    gpio_clear(clear_overload_pin_);
-    ztimer_sleep(ZTIMER_USEC, 1);
-    gpio_set(clear_overload_pin_);
 }
 
 } // namespace positional_actuators

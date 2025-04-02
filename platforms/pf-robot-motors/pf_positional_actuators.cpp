@@ -196,24 +196,12 @@ static void *_positional_actuators_timeout_thread(void *args)
 /// Update current speed from quadrature encoders measure.
 static void pf_motor_encoder_read_bottom_lift(float &current_speed)
 {
-    current_speed = (qdec_read_and_reset(MOTOR_BOTTOM_LIFT_ID) * QDEC_BOTTOM_LIFT_POLARITY) / pulse_per_mm;
-}
-
-/// Update current speed from quadrature encoders measure.
-static void pf_motor_encoder_read_top_lift(float &current_speed)
-{
-    current_speed = (qdec_read_and_reset(MOTOR_TOP_LIFT_ID) * QDEC_TOP_LIFT_POLARITY) / pulse_per_mm;
+    current_speed = (qdec_read_and_reset(MOTOR_LIFT_ID) * QDEC_BOTTOM_LIFT_POLARITY) / pulse_per_mm;
 }
 
 static void compute_current_speed_and_pose_bottom_lift(float &current_speed, float &current_pose)
 {
     pf_motor_encoder_read_bottom_lift(current_speed);
-    current_pose += current_speed;
-}
-
-static void compute_current_speed_and_pose_top_lift(float &current_speed, float &current_pose)
-{
-    pf_motor_encoder_read_top_lift(current_speed);
     current_pose += current_speed;
 }
 
@@ -242,51 +230,19 @@ static void pf_motor_drive(const int command, cogip::motion_control::BaseControl
     motor_set(&actuators_motors_driver, motor_id, filtered_command);
 }
 
-static void pf_motor_drive_bottom_lift(const int command, cogip::motion_control::BaseControllerEngine &motor_engine) {
-    pf_motor_drive(command, motor_engine, MOTOR_BOTTOM_LIFT_ID);
+static void pf_motor_drive_lift(const int command, cogip::motion_control::BaseControllerEngine &motor_engine) {
+    pf_motor_drive(command, motor_engine, MOTOR_LIFT_ID);
     if (motor_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
-        send_state((cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT);
-    }
-}
-
-static void pf_motor_drive_top_lift(const int command, cogip::motion_control::BaseControllerEngine &motor_engine) {
-    pf_motor_drive(command, motor_engine, MOTOR_TOP_LIFT_ID);
-    if (motor_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
-        send_state((cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT);
+        send_state((cogip::pf::actuators::Enum)Enum::MOTOR_LIFT);
     }
 }
 
 void pf_init_motors_sequence(void) {
-    // Move motors until blocked to initialize them.
-    // WARNING: This implies to configure Rsense on motor board correctly.
-    //          Wrong Rsense configuration could damage the motor if software anti blocking fails.
-
-    // 1. Slow down motors speed
-    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT])->set_target_speed(motor_lift_max_init_speed_motor_lift_mm_per_period);
-    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT])->set_target_speed(motor_lift_max_init_speed_motor_lift_mm_per_period);
-
-    // 2. Down motors until hardware/software anti-blocking or timeout stops the motor
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT]->actuate_timeout(INT16_MIN, default_timeout_period_motor_bottom_lift*3);
-    ztimer_sleep(ZTIMER_MSEC, 200);
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT]->actuate_timeout(INT16_MIN, default_timeout_period_motor_top_lift*3);
-    ztimer_sleep(ZTIMER_MSEC, default_timeout_period_motor_top_lift * _positional_actuators_timeout_thread_period_ms*3);
-
-    // 3. Restore maximum speed
-    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT])->set_target_speed(motor_lift_max_speed_motor_lift_mm_per_period);
-    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT])->set_target_speed(motor_lift_max_speed_motor_lift_mm_per_period);
-
-    // 4. Reset motors origin
-    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT])->set_current_pose(0);
-    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT])->set_current_pose(0);
+    // Reset motors origin
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_current_pose(0);
 
     // 5. Reach initial pose
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT]->actuate_timeout(motor_top_lift_initial_pose, default_timeout_period_motor_top_lift);
-    ztimer_sleep(ZTIMER_MSEC, 200);
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT]->actuate_timeout(motor_bottom_lift_initial_pose, default_timeout_period_motor_bottom_lift);
-    ztimer_sleep(ZTIMER_MSEC, default_timeout_period_motor_bottom_lift * _positional_actuators_timeout_thread_period_ms);
-
-    send_state((cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT);
-    send_state((cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT);
+    send_state((cogip::pf::actuators::Enum)Enum::MOTOR_LIFT);
 }
 
 void init() {
@@ -294,21 +250,17 @@ void init() {
     motor_driver_init(&actuators_motors_driver, &actuators_motors_params);
 
     // Init qdec peripherals
-    int error = qdec_init(QDEC_DEV(MOTOR_BOTTOM_LIFT_ID), QDEC_MODE, NULL, NULL);
+    int error = qdec_init(QDEC_DEV(MOTOR_LIFT_ID), QDEC_MODE, NULL, NULL);
     if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_BOTTOM_LIFT_ID, error);
-    }
-    error = qdec_init(QDEC_DEV(MOTOR_TOP_LIFT_ID), QDEC_MODE, NULL, NULL);
-    if (error) {
-        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_TOP_LIFT_ID, error);
+        printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LIFT_ID, error);
     }
 
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT] = _motors_pool.create(
-        (cogip::pf::actuators::Enum)Enum::MOTOR_BOTTOM_LIFT,
+    _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT] = _motors_pool.create(
+        (cogip::pf::actuators::Enum)Enum::MOTOR_LIFT,
         0,
         send_state,
         &actuators_motors_driver,
-        MOTOR_BOTTOM_LIFT_ID,
+        MOTOR_LIFT_ID,
         CLEAR_OVERLOAD_PIN,
         motor_lift_max_speed_motor_lift_mm_per_period,
         &motor_bottom_lift_pose_pid_parameters,
@@ -316,22 +268,7 @@ void init() {
         &motor_bottom_lift_pose_filter_parameters,
         &motor_bottom_lift_speed_filter_parameters,
         cogip::motion_control::motor_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose_bottom_lift>(),
-        cogip::motion_control::motor_process_commands_cb_t::create<pf_motor_drive_bottom_lift>()
-    );
-    _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT] = _motors_pool.create(
-        (cogip::pf::actuators::Enum)Enum::MOTOR_TOP_LIFT,
-        0,
-        send_state,
-        &actuators_motors_driver,
-        MOTOR_TOP_LIFT_ID,
-        CLEAR_OVERLOAD_PIN,
-        motor_lift_max_speed_motor_lift_mm_per_period,
-        &motor_top_lift_pose_pid_parameters,
-        &motor_top_lift_speed_pid_parameters,
-        &motor_top_lift_pose_filter_parameters,
-        &motor_top_lift_speed_filter_parameters,
-        cogip::motion_control::motor_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose_top_lift>(),
-        cogip::motion_control::motor_process_commands_cb_t::create<pf_motor_drive_top_lift>()
+        cogip::motion_control::motor_process_commands_cb_t::create<pf_motor_drive_lift>()
     );
 
     // Positional actuators timeout thread
