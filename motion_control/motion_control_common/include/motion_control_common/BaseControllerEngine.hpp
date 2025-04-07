@@ -35,7 +35,7 @@ public:
         timeout_enable_(false)
         {
             memset(controller_thread_stack_, 0, sizeof(controller_thread_stack_));
-            mutex_init(&mutex);
+            mutex_init(&mutex_);
         };
 
     /// Set the controller to launch.
@@ -50,10 +50,12 @@ public:
     virtual void thread_loop();
 
     /// Enable thread loop
-    void enable() { mutex_lock(&mutex); enable_ = true; mutex_unlock(&mutex); };
+    void enable() { mutex_lock(&mutex_); enable_ = true; mutex_unlock(&mutex_); };
 
     /// Disable thread loop
-    void disable() { mutex_lock(&mutex); enable_ = false; mutex_unlock(&mutex); };
+    void disable() {
+        mutex_lock(&mutex_); enable_ = false; mutex_unlock(&mutex_);
+    };
 
     /// Get controller
     BaseController* controller() const { return controller_; };
@@ -120,7 +122,7 @@ protected:
     char controller_thread_stack_[THREAD_STACKSIZE_LARGE];
 
     /// Mutex protecting engine loop
-    mutex_t mutex;
+    mutex_t mutex_;
 };
 
 } // namespace motion_control

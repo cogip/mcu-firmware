@@ -48,6 +48,10 @@ public:
         motor_driver_t *motor_driver = nullptr, ///< [in] motor driver
         uint8_t motor_id = 0,                   ///< [in] motor id for the given motor driver
         gpio_t clear_overload_pin = GPIO_UNDEF, ///< [in] clear motor overload flag
+        gpio_t lower_limit_switch_pin
+            = GPIO_UNDEF,
+        gpio_t upper_limit_switch_pin
+            = GPIO_UNDEF,
         float target_speed = 0,                ///< [in] motor engine default target speed
         cogip::motion_control::PosePIDControllerParameters *pose_controller_parameters = nullptr,
                                                 ///< [in] motor pose controller parameters
@@ -103,6 +107,12 @@ private:
 
     /// Motor overload clearance gpio
     gpio_t clear_overload_pin_;
+
+    /// Motor lower limit switch
+    gpio_t lower_limit_switch_pin_;
+
+    /// Motor upper limit switch
+    gpio_t upper_limit_switch_pin_;
 
     /// DualPIDMetaController for pose and speed control in cascade.
     cogip::motion_control::DualPIDMetaController dualpid_meta_controller_;

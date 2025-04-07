@@ -45,17 +45,6 @@
 /** @} */
 
 /**
- * @name Avoidance borders
- * Borders in which the robot can move (mm)
- * @{
- */
-#define AVOIDANCE_BORDER_X_MIN (ROBOT_MARGIN + 10)                /**< Minimal X axis border */
-#define AVOIDANCE_BORDER_X_MAX (3000 - ROBOT_MARGIN - 10)         /**< Maximal X axis border */
-#define AVOIDANCE_BORDER_Y_MIN (-1000 + ROBOT_MARGIN + 10)        /**< Minimal Y axis border */
-#define AVOIDANCE_BORDER_Y_MAX (AVOIDANCE_BORDER_Y_MIN * -1)      /**< Maximal Y axis border */
-/** @} */
-
-/**
  * @name Messages Id
  * @{
  */

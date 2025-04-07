@@ -1,4 +1,6 @@
 # RIOT modules
+#USEMODULE += core_mutex_debug
+#USEMODULE += core_mutex_mitigate_priority_inversion
 USEMODULE += event
 USEMODULE += periph_gpio_irq
 USEMODULE += periph_qdec

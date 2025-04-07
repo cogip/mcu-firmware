@@ -49,6 +49,12 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
     }
 }
 
+/// Actuators initialization message handler
+static void _handle_actuators_init([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
+{
+    cogip::pf::actuators::positional_actuators::pf_init_motors_sequence();
+}
+
 void init() {
     positional_actuators::init();
 
@@ -56,6 +62,10 @@ void init() {
     canpb.register_message_handler(
         command_uuid,
         canpb::message_handler_t::create<_handle_command>()
+    );
+    canpb.register_message_handler(
+        init_uuid,
+        canpb::message_handler_t::create<_handle_actuators_init>()
     );
 }
 

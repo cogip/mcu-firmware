@@ -24,14 +24,18 @@ namespace pf {
 namespace actuators {
 namespace positional_actuators {
 
+/// Limit switches
+constexpr int pin_top_limit_switch_lift = GPIO_PIN(PORT_A, 4);
+constexpr int pin_bottom_limit_switch_lift = GPIO_PIN(PORT_A, 6);
+
 /// Quadrature decoding
 #ifndef QDEC_MODE
 #define QDEC_MODE                   QDEC_X4
 #endif
-#define QDEC_BOTTOM_LIFT_POLARITY   -1
+#define QDEC_LIFT_POLARITY   -1
 
 /// Motor minimal PWM
-constexpr int pwm_minimal = 70;
+constexpr int pwm_minimal = 0;
 
 /// @name Lift motor application properties
 ///
@@ -47,13 +51,13 @@ constexpr int pwm_minimal = 70;
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
 /// @{
-constexpr float wheels_diameter_mm = 12.03;
-constexpr float wheels_encoder_resolution = 37.35 * 11 * 4;
+constexpr float wheels_diameter_mm = 26;
+constexpr float wheels_encoder_resolution = 19 * 16 * 4; // Ratio * Encoders resolution * QDEC mode
 constexpr float wheels_perimeter_mm = M_PI * wheels_diameter_mm;
 constexpr float pulse_per_mm = wheels_encoder_resolution / wheels_perimeter_mm;///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
 /// @}
 
-///< controller thread loop period
+/// controller thread loop period
 constexpr uint16_t motor_lift_control_thread_period_ms = 20;
 
 /// Lift motors speed filter parameters
@@ -61,10 +65,10 @@ constexpr float motor_lift_anti_blocking_speed_threshold_per_period = 0.3;
 constexpr float motor_lift_anti_blocking_error_threshold_per_period = 0.02;
 constexpr float motor_lift_anti_blocking_blocked_cycles_nb_threshold = 10;
 constexpr float motor_lift_min_speed_motor_lift_m_per_s = 0;
-constexpr float motor_lift_max_init_speed_motor_lift_m_per_s = 0.02;
-constexpr float motor_lift_max_speed_motor_lift_m_per_s = 0.17;
-constexpr float motor_lift_max_acc_motor_lift_m_per_s2 = motor_lift_max_speed_motor_lift_m_per_s * 10;
-constexpr float motor_lift_max_dec_motor_lift_m_per_s2 = motor_lift_max_speed_motor_lift_m_per_s * 2;
+constexpr float motor_lift_max_init_speed_motor_lift_m_per_s = 0.1;
+constexpr float motor_lift_max_speed_motor_lift_m_per_s = 0.3;
+constexpr float motor_lift_max_acc_motor_lift_m_per_s2 = 0.75;
+constexpr float motor_lift_max_dec_motor_lift_m_per_s2 = 0.5;
 constexpr float motor_lift_max_acc_motor_lift_mm_per_period2 = (
     (1000 * motor_lift_max_acc_motor_lift_m_per_s2 * motor_lift_control_thread_period_ms * motor_lift_control_thread_period_ms) \
     / (1000 * 1000)
@@ -97,7 +101,7 @@ constexpr uint32_t default_timeout_period_motor_lift = 30;
 
 /// Motors initial pose
 /// @{
-constexpr int32_t motor_lift_initial_pose = 5;
+constexpr int32_t motor_lift_initial_pose = 0;
 /// @}
 
 /// Actuators DC motors IDs

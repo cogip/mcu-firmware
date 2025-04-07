@@ -44,7 +44,7 @@ static char _positional_actuators_timeout_thread_stack[THREAD_STACKSIZE_DEFAULT]
 /// Positional actuators timeout thread period (ms)
 constexpr uint16_t _positional_actuators_timeout_thread_period_ms = 100;
 /// GPIOs handler thread stack
-static char _gpio_handling_thread_stack[THREAD_STACKSIZE_DEFAULT];
+static char _gpio_event_handling_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 /// Motors memory pool
 static etl::pool<Motor, COUNT> _motors_pool;
@@ -53,79 +53,48 @@ static etl::map<cogip::pf::actuators::Enum, PositionalActuator *, 4*COUNT> _posi
 
 /// GPIOs event pool
 static etl::pool<event_t, 20> _gpio_event_pool;
+/// GPIOs pin map
+static etl::map<event_t *, gpio_t, 20> _gpio_pins;
 /// GPIOs event map
 static etl::map<gpio_t, event_t *, 20> _gpio_events;
 
 /// GPIO event queue
 static event_queue_t _new_gpio_event_queue;
 
-// Motor bottom lift pose PID controller
-static cogip::pid::PID motor_bottom_lift_pose_pid(
+// Motor Lift pose PID controller
+static cogip::pid::PID motor_lift_pose_pid(
     motor_lift_pose_pid_kp,
     motor_lift_pose_pid_ki,
     motor_lift_pose_pid_kd,
     motor_lift_pose_pid_integral_limit
     );
-// Motor bottom lift speed PID controller
-static cogip::pid::PID motor_bottom_lift_speed_pid(
-    motor_lift_speed_pid_kp,
-    motor_lift_speed_pid_ki,
-    motor_lift_speed_pid_kd,
-    motor_lift_speed_pid_integral_limit
-    );
-// Motor top lift pose PID controller
-static cogip::pid::PID motor_top_lift_pose_pid(
-    motor_lift_pose_pid_kp,
-    motor_lift_pose_pid_ki,
-    motor_lift_pose_pid_kd,
-    motor_lift_pose_pid_integral_limit
-    );
-// Motor top lift speed PID controller
-static cogip::pid::PID motor_top_lift_speed_pid(
+// Motor Lift speed PID controller
+static cogip::pid::PID motor_lift_speed_pid(
     motor_lift_speed_pid_kp,
     motor_lift_speed_pid_ki,
     motor_lift_speed_pid_kd,
     motor_lift_speed_pid_integral_limit
     );
 
-/// Motor Bottom lift MotorPoseFilterParameters
-static cogip::motion_control::MotorPoseFilterParameters motor_bottom_lift_pose_filter_parameters(
+/// Motor Lift MotorPoseFilterParameters
+static cogip::motion_control::MotorPoseFilterParameters motor_lift_pose_filter_parameters(
     motor_lift_threshold,
     motor_lift_max_dec_motor_lift_mm_per_period2
     );
-/// Motor Top lift MotorPoseFilterParameters
-static cogip::motion_control::MotorPoseFilterParameters motor_top_lift_pose_filter_parameters(
-    motor_lift_threshold,
-    motor_lift_max_dec_motor_lift_mm_per_period2
-    );
-/// Motor Bottom Lift PosePIDControllerParameters.
-static cogip::motion_control::PosePIDControllerParameters motor_bottom_lift_pose_pid_parameters(&motor_bottom_lift_pose_pid);
-/// Motor Top Lift PosePIDControllerParameters.
-static cogip::motion_control::PosePIDControllerParameters motor_top_lift_pose_pid_parameters(&motor_top_lift_pose_pid);
-/// Motor Bottom Lift SpeedFilterParameters.
-static cogip::motion_control::SpeedFilterParameters motor_bottom_lift_speed_filter_parameters(
+/// Motor Lift PosePIDControllerParameters.
+static cogip::motion_control::PosePIDControllerParameters motor_lift_pose_pid_parameters(&motor_lift_pose_pid);
+/// Motor Lift SpeedFilterParameters.
+static cogip::motion_control::SpeedFilterParameters motor_lift_speed_filter_parameters(
     motor_lift_min_speed_motor_lift_mm_per_period,
     motor_lift_max_speed_motor_lift_mm_per_period,
     motor_lift_max_acc_motor_lift_mm_per_period2,
-    true,
+    false,
     motor_lift_anti_blocking_speed_threshold_per_period,
     motor_lift_anti_blocking_error_threshold_per_period,
     motor_lift_anti_blocking_blocked_cycles_nb_threshold
     );
-/// Motor Top Lift SpeedFilterParameters.
-static cogip::motion_control::SpeedFilterParameters motor_top_lift_speed_filter_parameters(
-    motor_lift_min_speed_motor_lift_mm_per_period,
-    motor_lift_max_speed_motor_lift_mm_per_period,
-    motor_lift_max_acc_motor_lift_mm_per_period2,
-    true,
-    motor_lift_anti_blocking_speed_threshold_per_period,
-    motor_lift_anti_blocking_error_threshold_per_period,
-    motor_lift_anti_blocking_blocked_cycles_nb_threshold
-    );
-/// Motor Bottom Lift SpeedPIDControllerParameters.
-static cogip::motion_control::SpeedPIDControllerParameters motor_bottom_lift_speed_pid_parameters(&motor_bottom_lift_speed_pid);
-/// Motor Top Lift SpeedPIDControllerParameters.
-static cogip::motion_control::SpeedPIDControllerParameters motor_top_lift_speed_pid_parameters(&motor_top_lift_speed_pid);
+/// Motor Lift SpeedPIDControllerParameters.
+static cogip::motion_control::SpeedPIDControllerParameters motor_lift_speed_pid_parameters(&motor_lift_speed_pid);
 
 /// GPIOs interrupt callback
 static void _gpio_cb(void *arg)
@@ -133,6 +102,33 @@ static void _gpio_cb(void *arg)
     (void)arg;
     gpio_t pin = (gpio_t)arg;
     event_post(&_new_gpio_event_queue, _gpio_events[pin]);
+}
+
+/// GPIO event handler
+static void _gpio_event_handler(event_t *event)
+{
+    gpio_t pin = _gpio_pins[event];
+
+    switch (pin)
+    {
+        case pin_top_limit_switch_lift:
+            std::cout << "pin_top_limit_switch_lift triggered" << std::endl;
+            if (gpio_read(pin_bottom_limit_switch_lift)) {
+                ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_current_pose(178);
+                ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->actuate_timeout(178, 5);
+            }
+            break;
+        case pin_bottom_limit_switch_lift:
+            std::cout << "pin_bottom_limit_switch_lift triggered" << std::endl;
+            if (gpio_read(pin_top_limit_switch_lift)) {
+                ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_current_pose(0);
+                ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->actuate_timeout(0, 5);
+            }
+            break;
+        default:
+            std::cout << "INT: external interrupt from pin " << pin << std::endl;
+            break;
+    }
 }
 
 /// Init interruptable pin with pullup
@@ -145,19 +141,20 @@ static void init_interruptable_pin(gpio_t pin, gpio_mode_t mode, gpio_flank_t fl
 
     _gpio_events[pin] = _gpio_event_pool.create();
     _gpio_events[pin]->list_node.next = nullptr;
+    _gpio_events[pin]->handler = _gpio_event_handler;
+    _gpio_pins[_gpio_events[pin]] = pin;
 }
 
 /// GPIOs handling thread
-static void *_gpio_handling_thread(void *args)
+static void *_gpio_event_handling_thread(void *args)
 {
     (void)args;
-    event_t *event;
 
     // Initialize GPIOs event queue
     event_queue_init(&_new_gpio_event_queue);
 
-    while ((event = event_wait(&_new_gpio_event_queue))) {
-    }
+    // Wait for events
+    event_loop(&_new_gpio_event_queue);
 
     return nullptr;
 }
@@ -181,7 +178,9 @@ static void *_positional_actuators_timeout_thread(void *args)
             PositionalActuator *positional_actuator = iterator.second;
             if (positional_actuator->timeout_period()) {
                 if (!positional_actuator->decrement_timeout_period()) {
-                    positional_actuator->disable();
+                    ((Motor*)positional_actuator)->actuate(
+                        ((Motor*)positional_actuator)->current_pose()
+                    );
                 }
             }
         }
@@ -194,26 +193,19 @@ static void *_positional_actuators_timeout_thread(void *args)
 }
 
 /// Update current speed from quadrature encoders measure.
-static void pf_motor_encoder_read_bottom_lift(float &current_speed)
+static void pf_motor_encoder_read_lift(float &current_speed)
 {
-    current_speed = (qdec_read_and_reset(MOTOR_LIFT_ID) * QDEC_BOTTOM_LIFT_POLARITY) / pulse_per_mm;
+    current_speed = (qdec_read_and_reset(MOTOR_LIFT_ID) * QDEC_LIFT_POLARITY) / pulse_per_mm;
 }
 
-static void compute_current_speed_and_pose_bottom_lift(float &current_speed, float &current_pose)
+static void compute_current_speed_and_pose_lift(float &current_speed, float &current_pose)
 {
-    pf_motor_encoder_read_bottom_lift(current_speed);
+    pf_motor_encoder_read_lift(current_speed);
     current_pose += current_speed;
 }
 
 static void pf_motor_drive(const int command, cogip::motion_control::BaseControllerEngine &motor_engine, uint8_t motor_id)
 {
-    if ((motor_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached)
-        || (motor_engine.pose_reached() == cogip::motion_control::target_pose_status_t::blocked)) {
-        motor_brake(&actuators_motors_driver, motor_id);
-        motor_engine.disable();
-        return;
-    }
-
     // Limit commands to what the PWM driver can accept as input in the range [INT16_MIN:INT16_MAX].
     // The PWM driver will filter the value to the max PWM resolution defined for the board.
     int16_t filtered_command = (int16_t) std::max(std::min(command, std::numeric_limits<int16_t>::max() / 2),
@@ -239,9 +231,13 @@ static void pf_motor_drive_lift(const int command, cogip::motion_control::BaseCo
 
 void pf_init_motors_sequence(void) {
     // Reset motors origin
-    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_current_pose(0);
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_target_speed(motor_lift_max_init_speed_motor_lift_mm_per_period);
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->actuate_timeout(200, 25);
+    ztimer_sleep(ZTIMER_MSEC, 2500);
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_target_speed(motor_lift_max_speed_motor_lift_mm_per_period);
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->actuate_timeout(0, 15);
 
-    // 5. Reach initial pose
+    // Send state
     send_state((cogip::pf::actuators::Enum)Enum::MOTOR_LIFT);
 }
 
@@ -255,6 +251,10 @@ void init() {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LIFT_ID, error);
     }
 
+    // Init limit switches
+    init_interruptable_pin(pin_top_limit_switch_lift, GPIO_IN, GPIO_FALLING);
+    init_interruptable_pin(pin_bottom_limit_switch_lift, GPIO_IN, GPIO_FALLING);
+
     _positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT] = _motors_pool.create(
         (cogip::pf::actuators::Enum)Enum::MOTOR_LIFT,
         0,
@@ -262,22 +262,34 @@ void init() {
         &actuators_motors_driver,
         MOTOR_LIFT_ID,
         CLEAR_OVERLOAD_PIN,
+        pin_bottom_limit_switch_lift,
+        pin_top_limit_switch_lift,
         motor_lift_max_speed_motor_lift_mm_per_period,
-        &motor_bottom_lift_pose_pid_parameters,
-        &motor_bottom_lift_speed_pid_parameters,
-        &motor_bottom_lift_pose_filter_parameters,
-        &motor_bottom_lift_speed_filter_parameters,
-        cogip::motion_control::motor_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose_bottom_lift>(),
+        &motor_lift_pose_pid_parameters,
+        &motor_lift_speed_pid_parameters,
+        &motor_lift_pose_filter_parameters,
+        &motor_lift_speed_filter_parameters,
+        cogip::motion_control::motor_get_speed_and_pose_cb_t::create<compute_current_speed_and_pose_lift>(),
         cogip::motion_control::motor_process_commands_cb_t::create<pf_motor_drive_lift>()
     );
 
+    // Init motor to maximum speed and consider its current position as the reference.
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_current_pose(0);
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_target_speed(motor_lift_max_speed_motor_lift_mm_per_period);
+    ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->actuate_timeout(0,20);
+
+    if (!gpio_read(pin_top_limit_switch_lift)) {
+        ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->set_current_pose(0);
+        ((Motor*)_positional_actuators[(cogip::pf::actuators::Enum)Enum::MOTOR_LIFT])->actuate_timeout(0, 20);
+    }
+
     // Positional actuators timeout thread
     thread_create(
-        _gpio_handling_thread_stack,
-        sizeof(_gpio_handling_thread_stack),
+        _gpio_event_handling_thread_stack,
+        sizeof(_gpio_event_handling_thread_stack),
         THREAD_PRIORITY_MAIN - 1,
         THREAD_CREATE_STACKTEST,
-        _gpio_handling_thread,
+        _gpio_event_handling_thread,
         NULL,
         "GPIO handling thread"
     );

@@ -33,7 +33,7 @@ void BaseControllerEngine::thread_loop() {
 
     while (true) {
         // Protect engine loop
-        mutex_lock(&mutex);
+        mutex_lock(&mutex_);
 
         COGIP_DEBUG_COUT("Engine loop");
 
@@ -66,7 +66,7 @@ void BaseControllerEngine::thread_loop() {
         }
 
         // End of engine loop
-        mutex_unlock(&mutex);
+        mutex_unlock(&mutex_);
 
         // Wait thread period to end
         thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, CONTROLLER_PERIOD_USEC);

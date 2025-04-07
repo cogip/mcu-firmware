@@ -49,9 +49,9 @@ void MotorPoseFilter::execute() {
     if (fabs(pos_err) <= parameters_->threshold()) {
         // Reached final pose
         pose_reached = target_pose_status_t::reached;
+        target_speed = 0;
     }
-
-    if (fabs(pos_err) <= ((current_speed * current_speed) / (2 * parameters_->deceleration()))) {
+    else if (fabs(pos_err) <= ((current_speed * current_speed) / (2 * parameters_->deceleration()))) {
         target_speed = sqrt(2 * parameters_->deceleration() * fabs(pos_err));
     }
 

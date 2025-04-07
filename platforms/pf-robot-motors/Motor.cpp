@@ -21,6 +21,8 @@ Motor::Motor(
         motor_driver_t *motor_driver,
         uint8_t motor_id,
         gpio_t clear_overload_pin,
+        gpio_t lower_limit_switch_pin,
+        gpio_t upper_limit_switch_pin,
         float target_speed,
         cogip::motion_control::PosePIDControllerParameters *pose_controller_parameters,
         cogip::motion_control::SpeedPIDControllerParameters *speed_controller_parameters,
@@ -32,6 +34,8 @@ Motor::Motor(
         motor_driver_(motor_driver),
         motor_id_(motor_id),
         clear_overload_pin_(clear_overload_pin),
+        lower_limit_switch_pin_(lower_limit_switch_pin),
+        upper_limit_switch_pin_(upper_limit_switch_pin),
         pose_controller_(pose_controller_parameters),
         speed_controller_(speed_controller_parameters),
         motor_pose_filter_(motor_pose_filter_parameters),
@@ -49,8 +53,6 @@ Motor::Motor(
 
     motor_engine_.set_target_speed(target_speed);
 
-    motor_engine_.start_thread();
-
     // Disable overload protection
     gpio_init(clear_overload_pin_, GPIO_OUT);
     gpio_clear(clear_overload_pin_);
@@ -58,6 +60,7 @@ Motor::Motor(
     motor_enable(motor_driver_, motor_id_);
 
     disable();
+    motor_engine_.start_thread();
 }
 
 void Motor::disable() {
@@ -75,13 +78,18 @@ void Motor::disable() {
     motor_engine_.disable();
 }
 
-void Motor::actuate(int32_t command) {
-    command_ = command;
+void Motor::actuate(const int32_t command) {
+    if (command == command_) {
+        return;
+    }
+
     // reset PIDs on new command
     this->pose_controller_.parameters()->pid()->reset();
     this->speed_controller_.parameters()->pid()->reset();
     this->speed_filter_.reset_previous_speed_order();
     this->speed_filter_.reset_anti_blocking_blocked_cycles_nb();
+
+    std::cout << "ACTUATE " << command << std::endl;
 
     if (!motor_driver_) {
         std::cerr << __func__ << ": motor " << id_ << ": motor driver is null pointer" << std::endl;
@@ -93,6 +101,13 @@ void Motor::actuate(int32_t command) {
         return;
     }
 
+    if ((command > current_pose()) && (!gpio_read(upper_limit_switch_pin_))) {
+        return;
+    }
+    if ((command < current_pose()) && (!gpio_read(lower_limit_switch_pin_))) {
+        return;
+    }
+    command_ = command;
     motor_engine_.set_target_pose(command_);
     motor_engine_.enable();
 

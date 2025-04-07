@@ -83,6 +83,17 @@ static void *_gpio_handling_thread(void *args)
     event_queue_init(&_new_gpio_event_queue);
 
     while ((event = event_wait(&_new_gpio_event_queue))) {
+        gpio_t pin = _gpio_pins[event];
+
+        switch (pin)
+        {
+            case pin_limit_switch_central_lift_bottom:
+                std::cout << "pin_limit_switch_central_lift_bottom triggered" << std::endl;
+                _positional_actuators[Enum::MOTOR_CENTRAL_LIFT]->disable_on_check();
+                break;
+            default:
+                std::cout << "INT: external interrupt from pin " << pin << std::endl;
+                break;
     }
 
     return nullptr;
