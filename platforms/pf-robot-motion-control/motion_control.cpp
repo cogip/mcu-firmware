@@ -578,11 +578,6 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
     // Target pose
     target_pose.pb_read(pb_path_target_pose);
 
-    // If target pose has not changed, just do nothing
-    if (target_pose == previous_target_pose) {
-        return;
-    }
-
     // Target speed
     target_speed.set_distance((platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
     target_speed.set_angle((platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) / 100);

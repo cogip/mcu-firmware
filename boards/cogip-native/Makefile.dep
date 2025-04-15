@@ -1,14 +1,7 @@
-# vl53l0x-api is emulated, thus remove it from packages list
-USEPKG := $(filter-out vl53l0x-api,$(USEPKG))
-
 USEMODULE += periph_common
 
 ifneq (,$(filter periph_gpio,$(USEMODULE)))
   USEMODULE += periph_gpio_mock
-endif
-
-ifneq (,$(filter mtd,$(USEMODULE)))
-  USEMODULE += mtd_native
 endif
 
 ifneq (,$(filter periph_can,$(FEATURES_USED)))
@@ -20,5 +13,3 @@ ifneq (,$(filter periph_can,$(FEATURES_USED)))
 endif
 
 USEMODULE += native_drivers
-USEMODULE += pcf8575
-USEMODULE += pcf857x_irq
