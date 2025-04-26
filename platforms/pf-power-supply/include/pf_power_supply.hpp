@@ -40,6 +40,12 @@ constexpr gpio_t DC_SUPPLY_VALID_N_PIN = GPIO_PIN(PORT_B, 12);
 
 /// @}
 
+enum PowerSupplyEvent {
+    POWER_SUPPLY_EVENT_EMERGENCY_STOP = 0,
+    // Add more event here
+    POWER_SUPPLY_EVENT_MAX = 1,
+};
+
 /// @brief Initialize power supply platform layer
 void pf_init_power_supply(void);
 
