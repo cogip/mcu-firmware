@@ -36,6 +36,8 @@ constexpr cogip::canpb::uuid_t game_reset_uuid = 0x4003;
 constexpr cogip::canpb::uuid_t reset_uuid = 0x3001;
 constexpr cogip::canpb::uuid_t copilot_connected_uuid = 0x3002;
 constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 0x3003;
+// Power Supply: 0x5000 - 0x5FFF
+constexpr cogip::canpb::uuid_t emergency_stop_state = 0x5001;
 /** @} */
 
 /**
