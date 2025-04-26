@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message PB_EmergencyStopState {
+   bool pressed = 1;
+}
