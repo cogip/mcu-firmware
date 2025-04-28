@@ -1,3 +1,8 @@
+// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
 #pragma once
 
 #include <cstdint>
@@ -7,11 +12,11 @@
 
 namespace cogip {
 
-namespace odometer {
+namespace localization {
 
-class OdometerInterface {
+class LocalizationInterface {
 public:
-    /// @brief Set the default odometry pose
+    /// @brief Set the default localization pose
     ///
     /// @note this function should be called to reset robot pose and defined a new default one
     ///
@@ -20,7 +25,7 @@ public:
     /// @param O angle (deg)
     virtual void set_pose(float x, float y, float O) = 0;
 
-    /// @brief Set the default odometry pose
+    /// @brief Set the default localization pose
     ///
     /// @note this function should be called to reset robot pose and defined a new default one
     ///
@@ -46,6 +51,6 @@ public:
     virtual int update() = 0;
 };
 
-} /// namespace odometer
+} /// namespace localization
 
 } ///namespace cogip

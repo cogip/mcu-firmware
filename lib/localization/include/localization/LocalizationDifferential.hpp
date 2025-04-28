@@ -1,26 +1,31 @@
+// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
 #pragma once
 
 #include <cstdint>
 
 #include "encoder/EncoderInterface.hpp"
-#include "OdometerInterface.hpp"
-#include "OdometerDifferentialParameters.hpp"
+#include "LocalizationInterface.hpp"
+#include "LocalizationDifferentialParameters.hpp"
 
 namespace cogip {
 
-namespace odometer {
+namespace localization {
 
-class OdometerDifferential: public OdometerInterface {
+class LocalizationDifferential: public LocalizationInterface {
 
 public:
-    /// @brief Construct a new differential odometer object
-    /// @param parameters Odometer parameters
-    explicit OdometerDifferential(OdometerDifferentialParameters &parameters, 
+    /// @brief Construct a new differential localization object
+    /// @param parameters Localization parameters
+    explicit LocalizationDifferential(LocalizationDifferentialParameters &parameters,
                                   cogip::encoder::EncoderInterface &left_encoder,
-                                  cogip::encoder::EncoderInterface &right_encoder) : 
+                                  cogip::encoder::EncoderInterface &right_encoder) :
                                   parameters_(parameters), left_encoder_(left_encoder), right_encoder_(right_encoder) {}
 
-    /// @brief Set the default odometry pose
+    /// @brief Set the default localization pose
     ///
     /// @note this function should be called to reset robot pose and defined a new default one
     ///
@@ -34,7 +39,7 @@ public:
         pose_.set_O(O);
     }
 
-    /// @brief Set the default odometry pose
+    /// @brief Set the default localization pose
     ///
     /// @note this function should be called to reset robot pose and defined a new default one
     ///
@@ -65,13 +70,13 @@ public:
     {
         return polar_;
     }
-    
+
     /// @brief update new robot pose (x, y, O)
     /// @return int 0 on success, negative on failure.
     int update() override;
 
 private:
-    OdometerDifferentialParameters &parameters_;
+    LocalizationDifferentialParameters &parameters_;
 
     cogip::encoder::EncoderInterface &left_encoder_;
     cogip::encoder::EncoderInterface &right_encoder_;
@@ -80,6 +85,6 @@ private:
     cogip::cogip_defs::Polar polar_;
 };
 
-} // namespace odometer
+} // namespace localization
 
 } // namespace cogip

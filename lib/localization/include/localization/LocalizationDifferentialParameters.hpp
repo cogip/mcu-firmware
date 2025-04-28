@@ -1,10 +1,15 @@
+// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
 #pragma once
 
 namespace cogip {
 
-namespace odometer {
+namespace localization {
 
-class OdometerDifferentialParameters {
+class LocalizationDifferentialParameters {
 public:
     /// @brief Construct a new Odometry Params object
     /// @param left_wheel_diameter left wheel diameter value (mm)
@@ -12,7 +17,7 @@ public:
     /// @param track_width Track width value (mm)
     /// @param left_polarity left wheel polarity no unit, 1 or -1
     /// @param right_polarity riht wheel polarity no unit, 1 or -1
-    OdometerDifferentialParameters(float left_wheel_diameter, 
+    LocalizationDifferentialParameters(float left_wheel_diameter,
     float right_wheel_diameter, float track_width, float left_polarity, float right_polarity) : left_wheel_diameter_(left_wheel_diameter), right_wheel_diameter_(right_wheel_diameter), track_width_(track_width), left_polarity_(left_polarity), right_polarity_(right_polarity) {};
 
     /// @brief Set the left encoder wheel diameter dimension
@@ -63,6 +68,6 @@ private:
     float right_polarity_;
 };
 
-} // namespace odometer
+} // namespace localization
 
 } // namespace cogip

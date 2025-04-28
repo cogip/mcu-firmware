@@ -17,7 +17,7 @@
 #include "path/Pose.hpp"
 #include "cogip_defs/Polar.hpp"
 #include "etl/delegate.h"
-#include "odometer/OdometerInterface.hpp"
+#include "localization/LocalizationInterface.hpp"
 #include "drive_controller/DriveControllerInterface.hpp"
 #include "motion_control_common/BaseControllerEngine.hpp"
 
@@ -33,17 +33,18 @@ class PlatformEngine : public BaseControllerEngine {
 public:
     /// Constructor
     PlatformEngine(
-        odometer::OdometerInterface &odometer,               ///< [in] Robot odometer reference
-        drive_controller::DriveControllerInterface &drive_contoller, ///< [in] Robot drive controller
-        pose_reached_cb_t pose_reached_cb                ///< [in] Callback to send pose reached state from last controller
-    ) : BaseControllerEngine(),
-        odometer_(odometer),
+        localization::LocalizationInterface &localization,          ///< [in] Robot localization reference
+        drive_controller::DriveControllerInterface &drive_contoller,///< [in] Robot drive controller
+        pose_reached_cb_t pose_reached_cb,                          ///< [in] Callback to send pose reached state from last controller
+        uint32_t engine_thread_period_ms                            ///< [in] Motion control enginethread period
+    ) : BaseControllerEngine(engine_thread_period_ms),
+        localization_(localization),
         drive_contoller_(drive_contoller),
         pose_reached_cb_(pose_reached_cb) {};
 
     /// Get current speed
     /// return     current speed
-    const cogip_defs::Polar& current_speed() const { return odometer_.delta_polar_pose(); };
+    const cogip_defs::Polar& current_speed() const { return localization_.delta_polar_pose(); };
 
     /// Get target speed
     /// return     target speed
@@ -51,7 +52,7 @@ public:
 
     /// Get current pose
     /// return     current pose
-    const cogip_defs::Pose& current_pose() const { return odometer_.pose(); };
+    const cogip_defs::Pose& current_pose() const { return localization_.pose(); };
 
     /// Get target pose
     /// return     target pose
@@ -65,7 +66,7 @@ public:
     /// Set current pose
     void set_current_pose(
         const cogip_defs::Pose& current_pose    ///< [in]   new current pose
-        ) { odometer_.set_pose(current_pose); };
+        ) { localization_.set_pose(current_pose); };
 
     /// Set target pose
     void set_target_pose(
@@ -85,8 +86,8 @@ private:
     /// Robot target pose
     path::Pose target_pose_;
 
-    /// Robot odometer
-    odometer::OdometerInterface &odometer_;
+    /// Robot localization
+    localization::LocalizationInterface & localization_;
 
     /// Robot drive controller
     drive_controller::DriveControllerInterface &drive_contoller_;

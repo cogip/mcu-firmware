@@ -127,6 +127,6 @@ private:
     float loop_period_;
 };
 
-} // namespace odometer
+} // namespace localization
 
 } // namespace cogip
