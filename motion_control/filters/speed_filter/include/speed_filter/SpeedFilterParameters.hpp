@@ -102,7 +102,7 @@ public:
 
 
 private:
-    /// maximum speed the robot can reach
+    /// minimum speed the robot should reach
     float min_speed_;
 
     /// maximum speed the robot can reach
