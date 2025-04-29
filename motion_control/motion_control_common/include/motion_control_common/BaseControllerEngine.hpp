@@ -26,13 +26,14 @@ namespace motion_control {
 class BaseControllerEngine {
 public:
     /// Constructor
-    BaseControllerEngine() :
+    BaseControllerEngine(uint32_t engine_thread_period_ms) :
         enable_(true),
         controller_(nullptr),
         current_cycle_(0),
         pose_reached_(moving),
         timeout_cycle_number_(0),
         timeout_enable_(false)
+        engine_thread_period_ms_(engine_thread_period_ms)
         {
             memset(controller_thread_stack_, 0, sizeof(controller_thread_stack_));
             mutex_init(&mutex_);
@@ -120,6 +121,9 @@ protected:
 
     /// Controller thread stack
     char controller_thread_stack_[THREAD_STACKSIZE_LARGE];
+
+    /// Engine thread period
+    uint32_t engine_thread_period_ms_;
 
     /// Mutex protecting engine loop
     mutex_t mutex_;

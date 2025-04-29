@@ -6,10 +6,6 @@
 #include <time_units.h>
 #include <ztimer.h>
 
-#ifndef CONTROLLER_PERIOD_USEC
-    #define CONTROLLER_PERIOD_USEC (20 * US_PER_MS)
-#endif
-
 namespace cogip {
 
 namespace motion_control {
@@ -69,7 +65,7 @@ void BaseControllerEngine::thread_loop() {
         mutex_unlock(&mutex_);
 
         // Wait thread period to end
-        thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, CONTROLLER_PERIOD_USEC);
+        thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, engine_thread_period_ms_ * US_PER_MS);
     }
 }
 

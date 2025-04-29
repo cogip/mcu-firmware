@@ -210,7 +210,8 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
 // Motion control engine
 static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(localization,
                                                         drive_controller,
-                                                        cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>());
+                                                        cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
+                                                        motion_control_thread_period_ms);
 
 /// Initialize platform QuadPID meta controller
 /// Return initialized QuadPID meta controller
@@ -594,7 +595,7 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
 
     if (target_pose.timeout_ms()) {
         pf_motion_control_platform_engine.set_timeout_enable(true);
-        pf_motion_control_platform_engine.set_timeout_cycle_number(target_pose.timeout_ms() / motion_control_thread_period_ms);
+        pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms() / motion_control_thread_period_ms);
     }
     else {
         pf_motion_control_platform_engine.set_timeout_enable(false);
@@ -691,7 +692,7 @@ void pf_init_motion_control(void)
     pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
 
     // Set timeout for speed only loops as no pose has to be reached
-    pf_motion_control_platform_engine.set_timeout_cycle_number(motion_control_pid_tuning_period_ms /
+    pf_motion_control_platform_engine.set_timeout_ms(motion_control_pid_tuning_period_ms /
                                    motion_control_thread_period_ms);
 
     //// Register pid request command
