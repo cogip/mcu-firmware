@@ -35,7 +35,7 @@ public:
         timeout_enable_(false)
         engine_thread_period_ms_(engine_thread_period_ms)
         {
-            memset(controller_thread_stack_, 0, sizeof(controller_thread_stack_));
+            memset(engine_thread_stack_, 0, sizeof(engine_thread_stack_));
             mutex_init(&mutex_);
         };
 
@@ -119,8 +119,8 @@ protected:
     /// Timeout enable flag
     bool timeout_enable_;
 
-    /// Controller thread stack
-    char controller_thread_stack_[THREAD_STACKSIZE_LARGE];
+    /// Engine thread stack
+    char engine_thread_stack_[THREAD_STACKSIZE_LARGE];
 
     /// Engine thread period
     uint32_t engine_thread_period_ms_;

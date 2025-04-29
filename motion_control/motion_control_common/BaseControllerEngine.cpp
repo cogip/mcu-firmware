@@ -71,8 +71,8 @@ void BaseControllerEngine::thread_loop() {
 
 void BaseControllerEngine::start_thread() {
     thread_create(
-        controller_thread_stack_,
-        sizeof(controller_thread_stack_),
+        engine_thread_stack_,
+        sizeof(engine_thread_stack_),
         CONTROLLER_PRIO,
         THREAD_CREATE_STACKTEST,
         _start_thread,
