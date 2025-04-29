@@ -1,3 +1,4 @@
 USEMODULE += motion_control_common
+USEMODULE += localization
 USEMODULE += cogip_defs
 USEMODULE += thread
