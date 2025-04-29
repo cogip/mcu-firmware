@@ -674,12 +674,12 @@ void pf_init_motion_control(void)
     // Init motor driver
     motor_driver.init();
 
-    // Setup encoders
-    int error = left_encoder.setup();
+    // Init encoders
+    int error = left_encoder.init();
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LEFT, error);
     }
-    error = right_encoder.setup();
+    error = right_encoder.init();
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }

@@ -7,7 +7,7 @@
 namespace cogip {
 
 namespace encoder {
-    
+
 enum class EncoderMode : uint8_t {
     /// With X1 encoding, either the rising (aka leading) or the falling (aka following) edge of
     /// channel A is counted. If channel A leads channel B, the rising edge is counted, and the
@@ -35,11 +35,18 @@ public:
     ///              - ENCODER_MODE_X1 -> pulse_per_rev = 2500
     ///              - ENCODER_MODE_X2 -> pulse_per_rev = 5000
     ///              - ENCODER_MODE_X4 -> pulse_per_rev = 10000
-    /// @param mode 
-    /// @param pulse_per_rev 
+    /// @param mode
+    /// @param pulse_per_rev
     ///
     EncoderInterface(EncoderMode mode, int32_t pulse_per_rev): mode_(mode), pulse_per_rev_(pulse_per_rev) {}
-    
+
+    ///
+    /// @brief Init low level encoder driver.
+    ///
+    /// @return 0 on success, negative value on failure.
+    ///
+    virtual int init() = 0;
+
     ///
     /// @brief Get the pulses counted by the encoder since the last call.
     ///
@@ -51,8 +58,8 @@ public:
     /// @brief Reset encoder counter
     ///
     virtual void reset() = 0;
-    
-    /// 
+
+    ///
     /// @brief Get the angle measured by the encoder since the last call.
     ///
     /// @return float traveled angle since last call (rad).
