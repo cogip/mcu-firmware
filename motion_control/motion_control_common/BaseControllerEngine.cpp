@@ -38,9 +38,6 @@ void BaseControllerEngine::thread_loop() {
             // Set controller inputs
             prepare_inputs();
 
-            // Cycles decrementing counter
-            static uint32_t timeout_cycle_counter = timeout_cycle_number_;
-
             // Execute controller
             if (controller_) {
                 controller_->execute();
@@ -50,11 +47,15 @@ void BaseControllerEngine::thread_loop() {
             current_cycle_++;
 
             // Consider pose reached on timeout
-            if ((timeout_enable_) && (!--timeout_cycle_counter)) {
+            if ((timeout_enable_) && (--timeout_cycle_counter_ <= 0)) {
                 // Reset timeout cycles counter
-                timeout_cycle_counter = timeout_cycle_number_;
+                timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
                 // Force target pose status to notify the platform the timeout is over
-                pose_reached_ = target_pose_status_t::reached;
+                pose_reached_ = target_pose_status_t::timeout;
+
+                std::cerr << "Motor engine timed out" << std::endl;
+
+                enable_ = false;
             }
 
             // Process controller outputs

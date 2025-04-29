@@ -27,7 +27,8 @@ namespace motion_control {
 /// - reached:              the position has been reached
 /// - intermediate_reached: a transient position has been reached
 /// - blocked:              motion is blocked by an abnormal event
-typedef enum {moving = 0, reached, intermediate_reached, blocked} target_pose_status_t;
+/// - timeout:              motion time has reached the timeout
+typedef enum {moving = 0, reached, intermediate_reached, blocked, timeout} target_pose_status_t;
 
 // Forward declarations
 class BaseMetaController;

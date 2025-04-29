@@ -46,12 +46,28 @@ void MotorEngine::prepare_inputs() {
 
 void MotorEngine::process_outputs() {
     // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
-    if (!timeout_enable_)
+    if (pose_reached_ != target_pose_status_t::timeout) {
         pose_reached_ = (target_pose_status_t)controller_->output(1);
+    }
+    else {
+        std::cerr << "MotorEngine timed out, brake." << std::endl;
+
+        // Disable motor
+        motor_.disable();
+
+        return;
+    }
+
+    // Disable the timeout as we want to hold the position
+    if ((pose_reached_ == target_pose_status_t::reached)
+        && (timeout_enable_ == true)) {
+        // Reset timeout cycles counter
+        timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+    }
 
     int command = (int)controller_->output(0);
 
-    motor_process_commands_cb_(command, *this);
+    motor_.set_speed(command);
 };
 
 } // namespace motion_control
