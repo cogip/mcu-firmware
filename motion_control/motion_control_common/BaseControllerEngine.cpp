@@ -10,7 +10,7 @@ namespace cogip {
 
 namespace motion_control {
 
-#define CONTROLLER_PRIO (THREAD_PRIORITY_MAIN - 1)
+#define CONTROLLER_PRIO (THREAD_PRIORITY_MAIN - 2)
 
 static void *_start_thread(void *arg)
 {
