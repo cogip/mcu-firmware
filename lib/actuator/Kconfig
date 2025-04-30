@@ -1,0 +1,9 @@
+menu "Actuators Configuration"
+
+config ACTUATOR_LIFT_NUMBER
+    int "Number of lift actuators"
+    default 1
+    help
+      Number of lift actuators used in the system.
+
+endmenu

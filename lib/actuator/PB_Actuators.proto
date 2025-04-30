@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+enum PB_ActuatorsTypeEnum
+{
+  POSITIONAL = 0;
+  BOOL_SENSOR = 2;
+}
+
+enum PB_PositionalActuatorEnum
+{
+    MOTOR_LIFT = 0;
+}
+
+enum PB_BoolSensorEnum
+{
+    NONE = 0;
+}
+
+enum PB_PositionalActuatorStateEnum
+{
+    REACHED = 0;
+    INTERMEDIATE_REACHED = 1;
+    TIMEOUT = 2;
+    BLOCKED = 3;
+}
+
+message PB_PositionalActuator {
+    PB_PositionalActuatorEnum id = 1;
+    PB_PositionalActuatorStateEnum state = 2;
+    int32 position = 3;
+}
+
+message PB_BoolSensor {
+    PB_BoolSensorEnum id = 1;
+    bool state = 2;
+}
+
+message PB_ActuatorState {
+    oneof type {
+        PB_PositionalActuator positional_actuator = 1;
+        PB_BoolSensor bool_sensor = 2;
+    }
+}
+
+message PB_PositionalActuatorCommand {
+    PB_PositionalActuatorEnum id = 1;
+    int32 command = 2;
+    int32 speed = 3;
+    int32 timeout = 4;
+}
+
+message PB_ActuatorCommand {
+    oneof command {
+        PB_PositionalActuatorCommand positional_actuator = 1;
+    }
+}
