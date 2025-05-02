@@ -4,7 +4,7 @@
 int main(void)
 {
     pf_init();
-    app_init();
+    cogip::app::app_init();
 
     pf_init_tasks();
 
