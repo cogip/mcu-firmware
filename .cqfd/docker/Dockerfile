@@ -1,8 +1,10 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
+    build-essential \
+    cppcheck \
     doxygen \
     g++ \
     g++-multilib \
@@ -10,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     gcc-multilib \
     gdb-multiarch \
     git \
+    libc6-dev \
+    libnewlib-arm-none-eabi \
     libstdc++-arm-none-eabi-newlib \
     make \
     openocd \
@@ -18,8 +22,9 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-serial \
     quilt \
+    uncrustify \
     unzip \
     wget
 
-ADD requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt
+RUN apt-get install -y \
+    python3-venv
