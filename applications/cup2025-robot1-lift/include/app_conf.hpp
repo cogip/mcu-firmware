@@ -76,7 +76,8 @@ namespace lift_motor_configuration {
 ///   - control_period_ms: loop period in milliseconds
 ///   - period_s: same period in seconds
 namespace lift_control {
-    constexpr uint16_t control_period_ms = 20u;                                 ///< Thread loop period (ms)
+    constexpr uint16_t control_period_ms = 20u;         ///< Thread loop period (ms)
+    constexpr uint32_t default_timeout_lift_ms = 2000u; ///< Default lift timeout before stop (ms)
 }
 
 /// @brief Conversion factors to controller units.
@@ -112,6 +113,11 @@ namespace lift_limits {
                                                    * lift_conversion::period2_div_1000;
     constexpr float max_deceleration_mm_per_period2       = max_deceleration_m_s2
                                                    * lift_conversion::period2_div_1000;
+
+    // Mechanical travel limits (mm).
+    constexpr int32_t lift_lower_limit_mm = 0;
+    constexpr int32_t lift_upper_limit_mm = 160.0;
+
 }
 
 /// @brief Anti-blocking filter thresholds (in controller units).
@@ -120,10 +126,6 @@ namespace lift_anti_blocking {
     constexpr float error_threshold            = 0.02f;     ///< Position error threshold (mm)
     constexpr float blocked_cycles_threshold   = 10.0f;     ///< Max consecutive cycles below speed_threshold
 }
-
-/// @brief Mechanical travel limits (mm).
-constexpr float motor_lift_min_pose_mm = 0.0f;              ///< Lower travel limit (mm)
-constexpr float motor_lift_max_pose_mm = 200.0f;            ///< Upper travel limit (mm)
 
 /// @brief Limit switch GPIO pins.
 constexpr gpio_t lower_limit_switch_pin = GPIO_PIN(PORT_A, 6);  ///< Lower end-stop pin
@@ -194,13 +196,13 @@ static cogip::localization::OdometerEncoder lift_motor_odometer(lift_motor_odome
 // 1) Prepare generic motor parameters for the front lift actuator
 static const cogip::actuators::positional_actuators::MotorParameters lift_motor_params{
     /* id                           */ cogip::actuators::Enum::MOTOR_LIFT,
-    /* default_timeout_ms           */ 2000u,
+    /* default_timeout_ms           */ lift_control::default_timeout_lift_ms,
     /* send_state_cb                */ cogip::pf::actuators::positional_actuators::send_state,
     /* clear_overload_pin           */ CLEAR_OVERLOAD_PIN,
-    /* pose_controller_params       */ &motor_lift_pose_pid_parameters,
-    /* speed_controller_params      */ &motor_lift_speed_pid_parameters,
-    /* pose_filter_params           */ &motor_lift_pose_filter_parameters,
-    /* speed_filter_params          */ &motor_lift_speed_filter_parameters,
+    /* pose_controller_params       */ motor_lift_pose_pid_parameters,
+    /* speed_controller_params      */ motor_lift_speed_pid_parameters,
+    /* pose_filter_params           */ motor_lift_pose_filter_parameters,
+    /* speed_filter_params          */ motor_lift_speed_filter_parameters,
     /* engine_thread_timeout_ms_    */ lift_control::control_period_ms,
     /* motor                        */ lift_motor,
     /* odometer                     */ lift_motor_odometer
@@ -213,22 +215,12 @@ static const cogip::actuators::positional_actuators::LiftParameters lift_params{
                                    * lift_limits::max_init_speed_mm_per_period
                                    / lift_limits::max_speed_mm_per_period,
                                                             ///< Init sequence speed
-    /* lower_limit              */ 0,                       ///< Lower lift limit
-    /* upper_limit              */ 160,                     ///< Upper lift limit
+    /* lower_limit_mm           */ lift_limits::lift_lower_limit_mm,    ///< Lower lift limit
+    /* upper_limit_mm           */ lift_limits::lift_upper_limit_mm,    ///< Upper lift limit
     /* lower_limit_switch_pin   */ lower_limit_switch_pin,  ///< Lower end-stop input
     /* upper_limit_switch_pin   */ upper_limit_switch_pin,  ///< Upper end-stop input
 };
 
-/// @}
-
-/// Actuators timeouts
-/// @{
-constexpr uint32_t default_timeout_period_motor_lift = 30;
-/// @}
-
-/// Motors initial pose
-/// @{
-constexpr int32_t motor_lift_initial_pose = 0;
 /// @}
 
 } // namespace actuators

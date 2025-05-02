@@ -1,4 +1,4 @@
-APPLICATION = cup2024-robot-motors
+APPLICATION = cup2025-robot1-lift
 
 BOARD ?= cogip-board
 
