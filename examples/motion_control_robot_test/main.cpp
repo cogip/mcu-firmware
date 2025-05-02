@@ -94,8 +94,14 @@ static void pf_pose_reached_cb([[maybe_unused]] const cogip::motion_control::tar
 
 }
 
+static constexpr uint32_t motion_control_thread_period_ms = 20;
+
 // Motion control engine
-static cogip::motion_control::PlatformEngine motion_control_platform_engine(localization, drive_controller, cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>());
+static cogip::motion_control::PlatformEngine motion_control_platform_engine(localization,
+    drive_controller,
+    cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
+    motion_control_thread_period_ms
+);
 
 
 int main(void)
