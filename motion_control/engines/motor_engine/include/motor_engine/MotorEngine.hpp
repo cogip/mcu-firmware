@@ -14,61 +14,73 @@
 
 // Project includes
 #include "etl/delegate.h"
+#include "odometer/OdometerInterface.hpp"
 #include "motion_control_common/BaseControllerEngine.hpp"
+#include "motor/MotorInterface.hpp"
 
 namespace cogip {
 
 namespace motion_control {
-
-/// Get current speed and pose from motor
-using motor_get_speed_and_pose_cb_t = etl::delegate<void(float&, float&)>;
-
-/// Process motion control commands
-using motor_process_commands_cb_t = etl::delegate<void(const int, BaseControllerEngine&)>;
 
 /// Engine getting inputs from motor and setting outputs for the motor
 class MotorEngine : public BaseControllerEngine {
 public:
     /// Constructor
     MotorEngine(
-        motor_get_speed_and_pose_cb_t motor_get_speed_and_pose_cb,    ///< [in]  Motor callback to get robot current speed and pose
-        motor_process_commands_cb_t motor_process_commands_cb         ///< [in]  Motor callback to process commands output from last controller
-    ) : BaseControllerEngine(),
-        current_speed_(0), target_speed_(0),
-        current_pose_(0), target_pose_(0),
-        motor_get_speed_and_pose_cb_(motor_get_speed_and_pose_cb),
-        motor_process_commands_cb_(motor_process_commands_cb) {};
-
-    /// Get current speed
-    /// return     current speed
-    const float& current_speed() const { return current_speed_; };
+        cogip::motor::MotorInterface& motor,
+        cogip::localization::OdometerInterface& odometer,
+        uint32_t engine_thread_period_ms
+    ) : BaseControllerEngine(engine_thread_period_ms),
+        target_speed_(0),
+        target_distance_(0),
+        motor_(motor),
+        odometer_(odometer) {};
 
     /// Get target speed
     /// return     target speed
     const float& target_speed() const { return target_speed_; };
-
-    /// Get current pose
-    /// return     current pose
-    const float& current_pose() const { return current_pose_; };
-
-    /// Get target pose
-    /// return     target pose
-    const float& target_pose() const { return target_pose_; };
 
     /// Set target speed
     void set_target_speed(
         const float target_speed   ///< [in]   new target speed
         ) { target_speed_ = target_speed; };
 
-    /// Set current pose
-    void set_current_pose(
-        const float current_pose    ///< [in]   new current pose
-        ) { current_pose_ = current_pose; };
+    /// Get current speed
+    /// return     current speed
+    float get_current_speed_from_odometer() const { return odometer_.delta_distance_mm(); };
 
-    /// Set target pose
-    void set_target_pose(
-        const float target_pose     ///< [in]   new target pose
-        ) { target_pose_ = target_pose; };
+    /// Get current distance
+    /// return     current distance
+    float get_current_distance_from_odometer() const { return odometer_.distance_mm(); };
+
+    /// Set current distance
+    void set_current_distance_to_odometer(
+        const float distance    ///< [in]   new current distance
+        ) {
+        mutex_lock(&mutex_);
+        odometer_.set_distance_mm(distance);
+        mutex_unlock(&mutex_);
+    };
+
+    /// Get target distance
+    /// return     target distance
+    const float& target_distance() const { return target_distance_; };
+
+    /// Set target distance
+    void set_target_distance(
+        const float target_distance     ///< [in]   new target distance
+    ) {
+        mutex_lock(&mutex_);
+        target_distance_ = target_distance;
+
+        // New target, reset the timeout
+        timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+
+        // Reset the pose reached flag
+        pose_reached_ = target_pose_status_t::moving;
+
+        mutex_unlock(&mutex_);
+    };
 
 private:
     /// Prepare controller inputs from motor functions.
@@ -77,23 +89,17 @@ private:
     /// Process controller output for motor restitution.
     void process_outputs();
 
-    /// Robot polar current speed
-    float current_speed_;
-
-    /// Robot polar target speed
+    /// Motor polar target speed
     float target_speed_;
 
-    /// Robot current pose
-    float current_pose_;
+    /// Motor target distance
+    float target_distance_;
 
-    /// Robot target pose
-    float target_pose_;
+    /// Motor
+    cogip::motor::MotorInterface& motor_;
 
-    /// Motor callback to get target and current poses from motors
-    motor_get_speed_and_pose_cb_t motor_get_speed_and_pose_cb_;
-
-    /// Motor calback to drive motors according to commands
-    motor_process_commands_cb_t motor_process_commands_cb_;
+    /// EncoderInterface
+    cogip::localization::OdometerInterface& odometer_;
 };
 
 } // namespace motion_control

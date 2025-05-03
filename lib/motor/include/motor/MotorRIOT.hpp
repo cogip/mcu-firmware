@@ -13,6 +13,13 @@ public:
     {
     }
 
+    /// @brief Init the motor and its driver
+    /// @return 0 on success, negative on error
+    int init()
+    {
+        return driver_.init();
+    }
+
     /// @brief Enable the motor
     /// @return 0 on success, negative on error
     int enable()

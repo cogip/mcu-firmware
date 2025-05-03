@@ -1,6 +1,7 @@
 #!/bin/bash
 
 EXCLUDE_DIRECTORIES="venv bin"
+CPPCHECK_OPTIONS="$CPPCHECK_OPTIONS --suppress=unusedStructMember"
 
 if [ $# -gt 1 ] || [ $# -eq 1 ] && [ "$1" != "apply" ]; then
     echo "Error... Usage:"
@@ -13,6 +14,8 @@ apply=$1
 ##################
 ### uncrustify ###
 ##################
+
+echo "=== UNCRUSTIFY CHECK ==="
 
 if [ -n "$apply" ]; then
     while true; do
@@ -55,6 +58,9 @@ done
 ################
 ### cppcheck ###
 ################
+
+echo "=== CPPCHECK CHECK ==="
+
 FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' \)" )
 cppcheck --std=c++17 --enable=style,performance,portability --force --error-exitcode=2 --quiet -j 1 \
     --template "{file}:{line}: {severity} ({id}): {message}"         \

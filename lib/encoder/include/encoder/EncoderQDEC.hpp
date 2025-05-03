@@ -13,7 +13,7 @@ namespace encoder {
 
 class EncoderQDEC : public EncoderInterface {
 public:
-    
+
     ///
     /// @brief Construct a new Encoder object
     /// @note Encoder pulse per revolution must be set according to chosen mode
@@ -21,17 +21,17 @@ public:
     ///              - ENCODER_MODE_X1 -> pulse_per_rev = 2500
     ///              - ENCODER_MODE_X2 -> pulse_per_rev = 5000
     ///              - ENCODER_MODE_X4 -> pulse_per_rev = 10000
-    /// @param mode 
-    /// @param pulse_per_rev 
+    /// @param mode
+    /// @param pulse_per_rev
     ///
     explicit EncoderQDEC(uint8_t id, EncoderMode mode, int32_t pulse_per_rev): EncoderInterface(mode, pulse_per_rev), id_(id) {}
-    
-    /// 
+
+    ///
     /// @brief Setup encoder
     ///
     /// @return int negative on error. 0 on succes
     ///
-    int setup()
+    int init() override
     {
         qdec_t qdec;
         qdec_mode_t qdec_mode;
@@ -56,19 +56,19 @@ public:
         return qdec_init(qdec, qdec_mode, NULL, NULL);;
     }
 
-    /// 
+    ///
     /// @brief Get the pulses counted by the encoder since the last call.
     ///
     /// @return int32_t counter value in ticks
     ///
     int32_t read_and_reset() override { return qdec_read_and_reset(id_); }
 
-    /// 
+    ///
     /// @brief Reset encoder counter
     ///
     ///
     void reset() override { (void)read_and_reset(); };
-    
+
 private:
     uint8_t id_;
 };

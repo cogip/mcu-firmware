@@ -26,16 +26,18 @@ namespace motion_control {
 class BaseControllerEngine {
 public:
     /// Constructor
-    BaseControllerEngine() :
+    BaseControllerEngine(uint32_t engine_thread_period_ms) :
         enable_(true),
         controller_(nullptr),
         current_cycle_(0),
         pose_reached_(moving),
-        timeout_cycle_number_(0),
-        timeout_enable_(false)
+        timeout_cycle_counter_(0),
+        timeout_ms_(0),
+        timeout_enable_(false),
+        engine_thread_period_ms_(engine_thread_period_ms)
         {
-            memset(controller_thread_stack_, 0, sizeof(controller_thread_stack_));
-            mutex_init(&mutex);
+            memset(engine_thread_stack_, 0, sizeof(engine_thread_stack_));
+            mutex_init(&mutex_);
         };
 
     /// Set the controller to launch.
@@ -50,10 +52,12 @@ public:
     virtual void thread_loop();
 
     /// Enable thread loop
-    void enable() { mutex_lock(&mutex); enable_ = true; mutex_unlock(&mutex); };
+    void enable() { mutex_lock(&mutex_); enable_ = true; mutex_unlock(&mutex_); };
 
     /// Disable thread loop
-    void disable() { mutex_lock(&mutex); enable_ = false; mutex_unlock(&mutex); };
+    void disable() {
+        mutex_lock(&mutex_); enable_ = false; mutex_unlock(&mutex_);
+    };
 
     /// Get controller
     BaseController* controller() const { return controller_; };
@@ -66,7 +70,7 @@ public:
     uint32_t current_cycle() const { return current_cycle_; };
 
     /// Return motion control timeout cycle number
-    uint32_t timeout_cycle_number() const { return timeout_cycle_number_; };
+    uint32_t timeout_ms() const { return timeout_ms_; };
 
     /// Return motion control timeout enable flag
     bool timeout_enable() const { return timeout_enable_; };
@@ -82,9 +86,9 @@ public:
         ) { current_cycle_ = current_cycle; };
 
     /// Set timeout cycle number
-    void set_timeout_cycle_number(
-        uint32_t timeout_cycle_number           ///< [in]   timeout in cycles
-        ) { timeout_cycle_number_ = timeout_cycle_number; };
+    void set_timeout_ms(
+        uint32_t timeout_ms                     ///< [in]   timeout in cycles
+        ) { timeout_ms_ = timeout_ms; };
 
     /// Set timeout enable
     void set_timeout_enable(
@@ -110,17 +114,23 @@ protected:
     /// Pose reached flag
     target_pose_status_t pose_reached_;
 
+    /// Timeout cycles decrementing counter
+    int32_t timeout_cycle_counter_;
+
     /// Timeout before the engine considers it has reached the position, useful for speed only controllers.
-    uint32_t timeout_cycle_number_;
+    uint32_t timeout_ms_;
 
     /// Timeout enable flag
     bool timeout_enable_;
 
-    /// Controller thread stack
-    char controller_thread_stack_[THREAD_STACKSIZE_LARGE];
+    /// Engine thread stack
+    char engine_thread_stack_[THREAD_STACKSIZE_LARGE];
+
+    /// Engine thread period
+    uint32_t engine_thread_period_ms_;
 
     /// Mutex protecting engine loop
-    mutex_t mutex;
+    mutex_t mutex_;
 };
 
 } // namespace motion_control

@@ -18,15 +18,15 @@ namespace motion_control {
 
 void PlatformEngine::prepare_inputs() {
     // Update current pose and speed
-    odometer_.update();
+    localization_.update();
 
     if (controller_) {
         size_t index = 0;
 
         // Current pose
-        controller_->set_input(index++, odometer_.pose().x());
-        controller_->set_input(index++, odometer_.pose().y());
-        controller_->set_input(index++, odometer_.pose().O());
+        controller_->set_input(index++, localization_.pose().x());
+        controller_->set_input(index++, localization_.pose().y());
+        controller_->set_input(index++, localization_.pose().O());
 
         // Target pose
         controller_->set_input(index++, target_pose_.x());
@@ -34,8 +34,8 @@ void PlatformEngine::prepare_inputs() {
         controller_->set_input(index++, target_pose_.O());
 
         // Current speed
-        controller_->set_input(index++, odometer_.delta_polar_pose().distance());
-        controller_->set_input(index++, odometer_.delta_polar_pose().angle());
+        controller_->set_input(index++, localization_.delta_polar_pose().distance());
+        controller_->set_input(index++, localization_.delta_polar_pose().angle());
 
         // Target speed
         controller_->set_input(index++, target_speed_.distance());

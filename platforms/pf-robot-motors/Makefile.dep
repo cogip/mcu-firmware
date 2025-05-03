@@ -11,10 +11,14 @@ USEMODULE += shell
 USEMODULE += shell_cmds_default
 
 # mcu-firmware modules
+USEMODULE += actuator
 USEMODULE += cogip_defs
 USEMODULE += canpb
 USEMODULE += pid
 USEMODULE += utils
+USEMODULE += encoder
+USEMODULE += motor
+USEMODULE += localization
 
 # Controllers
 USEMODULE += dualpid_meta_controller

@@ -11,6 +11,10 @@ public:
     {
     }
 
+    /// @brief Init the motor
+    /// @return 0 on success, negative on error
+    virtual int init() = 0;
+
     /// @brief Enable the motor
     /// @return 0 on success, negative on error
     virtual int enable() = 0;

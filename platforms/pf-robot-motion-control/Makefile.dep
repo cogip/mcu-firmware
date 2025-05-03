@@ -11,7 +11,7 @@ USEMODULE += shell_cmds_default
 
 # mcu-firmware modules
 USEMODULE += cogip_defs
-USEMODULE += odometry-ng
+USEMODULE += localization
 USEMODULE += path
 USEMODULE += canpb
 USEMODULE += encoder

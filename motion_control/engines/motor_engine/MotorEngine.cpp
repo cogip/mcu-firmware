@@ -17,20 +17,22 @@ namespace cogip {
 namespace motion_control {
 
 void MotorEngine::prepare_inputs() {
-    // Update current pose and speed
-    motor_get_speed_and_pose_cb_(current_speed_, current_pose_);
+    // Update current distance and speed
+    odometer_.update();
+    float current_distance = odometer_.distance_mm();
+    float current_speed = odometer_.delta_distance_mm();
 
     if (controller_) {
         size_t index = 0;
 
-        // Current pose
-        controller_->set_input(index++, current_pose_);
+        // Current distance
+        controller_->set_input(index++, current_distance);
 
-        // Target pose
-        controller_->set_input(index++, target_pose_);
+        // Target distance
+        controller_->set_input(index++, target_distance_);
 
         // Current speed
-        controller_->set_input(index++, current_speed_);
+        controller_->set_input(index++, current_speed);
 
         // Target speed
         controller_->set_input(index++, target_speed_);
@@ -46,12 +48,28 @@ void MotorEngine::prepare_inputs() {
 
 void MotorEngine::process_outputs() {
     // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
-    if (!timeout_enable_)
+    if (pose_reached_ != target_pose_status_t::timeout) {
         pose_reached_ = (target_pose_status_t)controller_->output(1);
+    }
+    else {
+        std::cerr << "MotorEngine timed out, brake." << std::endl;
+
+        // Disable motor
+        motor_.disable();
+
+        return;
+    }
+
+    // Disable the timeout as we want to hold the position
+    if ((pose_reached_ == target_pose_status_t::reached)
+        && (timeout_enable_ == true)) {
+        // Reset timeout cycles counter
+        timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+    }
 
     int command = (int)controller_->output(0);
 
-    motor_process_commands_cb_(command, *this);
+    motor_.set_speed(command);
 };
 
 } // namespace motion_control

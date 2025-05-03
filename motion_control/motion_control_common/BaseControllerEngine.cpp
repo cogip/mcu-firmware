@@ -6,15 +6,11 @@
 #include <time_units.h>
 #include <ztimer.h>
 
-#ifndef CONTROLLER_PERIOD_USEC
-    #define CONTROLLER_PERIOD_USEC (20 * US_PER_MS)
-#endif
-
 namespace cogip {
 
 namespace motion_control {
 
-#define CONTROLLER_PRIO (THREAD_PRIORITY_MAIN - 1)
+#define CONTROLLER_PRIO (THREAD_PRIORITY_MAIN - 2)
 
 static void *_start_thread(void *arg)
 {
@@ -33,7 +29,7 @@ void BaseControllerEngine::thread_loop() {
 
     while (true) {
         // Protect engine loop
-        mutex_lock(&mutex);
+        mutex_lock(&mutex_);
 
         COGIP_DEBUG_COUT("Engine loop");
 
@@ -41,9 +37,6 @@ void BaseControllerEngine::thread_loop() {
 
             // Set controller inputs
             prepare_inputs();
-
-            // Cycles decrementing counter
-            static uint32_t timeout_cycle_counter = timeout_cycle_number_;
 
             // Execute controller
             if (controller_) {
@@ -54,11 +47,15 @@ void BaseControllerEngine::thread_loop() {
             current_cycle_++;
 
             // Consider pose reached on timeout
-            if ((timeout_enable_) && (!--timeout_cycle_counter)) {
+            if ((timeout_enable_) && (--timeout_cycle_counter_ <= 0)) {
                 // Reset timeout cycles counter
-                timeout_cycle_counter = timeout_cycle_number_;
+                timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
                 // Force target pose status to notify the platform the timeout is over
-                pose_reached_ = target_pose_status_t::reached;
+                pose_reached_ = target_pose_status_t::timeout;
+
+                std::cerr << "Motor engine timed out" << std::endl;
+
+                enable_ = false;
             }
 
             // Process controller outputs
@@ -66,17 +63,17 @@ void BaseControllerEngine::thread_loop() {
         }
 
         // End of engine loop
-        mutex_unlock(&mutex);
+        mutex_unlock(&mutex_);
 
         // Wait thread period to end
-        thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, CONTROLLER_PERIOD_USEC);
+        thread::thread_ztimer_periodic_wakeup(ZTIMER_USEC, &loop_start_time, engine_thread_period_ms_ * US_PER_MS);
     }
 }
 
 void BaseControllerEngine::start_thread() {
     thread_create(
-        controller_thread_stack_,
-        sizeof(controller_thread_stack_),
+        engine_thread_stack_,
+        sizeof(engine_thread_stack_),
         CONTROLLER_PRIO,
         THREAD_CREATE_STACKTEST,
         _start_thread,

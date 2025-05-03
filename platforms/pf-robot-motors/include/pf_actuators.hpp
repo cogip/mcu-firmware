@@ -13,6 +13,7 @@
 
 // Firmware includes
 #include "canpb/CanProtobuf.hpp"
+#include "actuator/Actuator.hpp"
 
 // Standard includes
 #include <cstdint>
@@ -26,6 +27,7 @@ constexpr cogip::canpb::uuid_t actuator_state_uuid = 0x2003;
 constexpr cogip::canpb::uuid_t thread_start_uuid = 0x2001;
 constexpr cogip::canpb::uuid_t thread_stop_uuid = 0x2002;
 constexpr cogip::canpb::uuid_t command_uuid = 0x2004;
+constexpr cogip::canpb::uuid_t init_uuid = 0x2005;
 
 /// Enable all actuators
 void enable_all();

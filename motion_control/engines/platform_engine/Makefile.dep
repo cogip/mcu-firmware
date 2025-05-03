@@ -1,6 +1,6 @@
 USEMODULE += motion_control_common
 USEMODULE += drive_controller
-USEMODULE += odometry-ng
+USEMODULE += localization
 USEMODULE += cogip_defs
 USEMODULE += path
 USEMODULE += thread

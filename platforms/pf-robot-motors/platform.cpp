@@ -57,11 +57,6 @@ static void *_heartbeat_thread(void *args)
     return 0;
 }
 
-bool pf_trace_on(void)
-{
-    return copilot_connected;
-}
-
 void pf_set_copilot_connected(bool connected)
 {
     copilot_connected = connected;
@@ -82,7 +77,6 @@ static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer & buffe
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
     cogip::pf::actuators::enable_all();
-    cogip::pf::actuators::positional_actuators::pf_init_motors_sequence();
 }
 
 /// Start threading sending actuators state.
@@ -146,8 +140,6 @@ void pf_init(void)
     }
 
     cogip::pf::actuators::init();
-
-    shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
 }
 
 void pf_init_tasks(void)

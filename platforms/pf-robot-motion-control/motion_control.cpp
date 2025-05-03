@@ -3,7 +3,7 @@
 
 // Project includes
 #include "encoder/EncoderQDEC.hpp"
-#include "odometer/OdometerDifferential.hpp"
+#include "localization/LocalizationDifferential.hpp"
 #include "motor/MotorDriverDRV8873.hpp"
 #include "motor/MotorRIOT.hpp"
 #include "app.hpp"
@@ -180,12 +180,12 @@ static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODE
                          encoder_wheels_resolution_pulses);
 
 /// Odometry
-static cogip::odometer::OdometerDifferentialParameters odometry_params(left_encoder_wheels_diameter_mm,
+static cogip::localization::LocalizationDifferentialParameters localization_params(left_encoder_wheels_diameter_mm,
                                                                        right_encoder_wheels_diameter_mm,
                                                                        encoder_wheels_distance_mm,
                                                                        QDEC_LEFT_POLARITY,
                                                                        QDEC_RIGHT_POLARITY);
-static cogip::odometer::OdometerDifferential odometry(odometry_params, left_encoder, right_encoder);
+static cogip::localization::LocalizationDifferential localization(localization_params, left_encoder, right_encoder);
 
 /// Motor driver
 static cogip::motor::MotorDriverDRV8873 motor_driver(motion_motors_params);
@@ -208,9 +208,10 @@ static cogip::drive_controller::DifferentialDriveController drive_controller(dri
                                                     right_motor);
 static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state);
 // Motion control engine
-static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(odometry,
+static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(localization,
                                                         drive_controller,
-                                                        cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>());
+                                                        cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
+                                                        motion_control_thread_period_ms);
 
 /// Initialize platform QuadPID meta controller
 /// Return initialized QuadPID meta controller
@@ -594,7 +595,7 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
 
     if (target_pose.timeout_ms()) {
         pf_motion_control_platform_engine.set_timeout_enable(true);
-        pf_motion_control_platform_engine.set_timeout_cycle_number(target_pose.timeout_ms() / motion_control_thread_period_ms);
+        pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms() / motion_control_thread_period_ms);
     }
     else {
         pf_motion_control_platform_engine.set_timeout_enable(false);
@@ -671,15 +672,12 @@ void pf_enable_motion_control()
 
 void pf_init_motion_control(void)
 {
-    // Init motor driver
-    motor_driver.init();
-
-    // Setup encoders
-    int error = left_encoder.setup();
+    // Init encoders
+    int error = left_encoder.init();
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_LEFT, error);
     }
-    error = right_encoder.setup();
+    error = right_encoder.init();
     if (error) {
         printf("QDEC %u not initialized, error=%d !!!\n", MOTOR_RIGHT, error);
     }
@@ -691,7 +689,7 @@ void pf_init_motion_control(void)
     pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
 
     // Set timeout for speed only loops as no pose has to be reached
-    pf_motion_control_platform_engine.set_timeout_cycle_number(motion_control_pid_tuning_period_ms /
+    pf_motion_control_platform_engine.set_timeout_ms(motion_control_pid_tuning_period_ms /
                                    motion_control_thread_period_ms);
 
     //// Register pid request command

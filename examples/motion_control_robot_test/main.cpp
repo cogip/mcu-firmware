@@ -14,7 +14,7 @@
 #include "drive_controller/DifferentialDriveControllerParameters.hpp"
 #include "drive_controller/DifferentialDriveController.hpp"
 #include "encoder/EncoderQDEC.hpp"
-#include "odometer/OdometerDifferential.hpp"
+#include "localization/LocalizationDifferential.hpp"
 #include "motor/MotorDriverDRV8873.hpp"
 #include "motor/MotorRIOT.hpp"
 #include "motion_control_common/Controller.hpp"
@@ -33,13 +33,13 @@ static cogip::encoder::EncoderQDEC right_encoder(1, cogip::encoder::EncoderMode:
 
 
 /// Odometry
-static cogip::odometer::OdometerDifferentialParameters odometry_params(
+static cogip::localization::LocalizationDifferentialParameters localization_params(
     50.00,
     50.00,
-    100.00, 
+    100.00,
     -1,
     1);
-static cogip::odometer::OdometerDifferential odometry(odometry_params, left_encoder, right_encoder);
+static cogip::localization::LocalizationDifferential localization(localization_params, left_encoder, right_encoder);
 
 /// Motor driver
 static const motor_driver_params_t motion_motors_params = {
@@ -94,8 +94,14 @@ static void pf_pose_reached_cb([[maybe_unused]] const cogip::motion_control::tar
 
 }
 
+static constexpr uint32_t motion_control_thread_period_ms = 20;
+
 // Motion control engine
-static cogip::motion_control::PlatformEngine motion_control_platform_engine(odometry, drive_controller, cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>());
+static cogip::motion_control::PlatformEngine motion_control_platform_engine(localization,
+    drive_controller,
+    cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
+    motion_control_thread_period_ms
+);
 
 
 int main(void)
