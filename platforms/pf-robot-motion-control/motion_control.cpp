@@ -672,6 +672,10 @@ void pf_enable_motion_control()
 
 void pf_init_motion_control(void)
 {
+    // Init motors
+    left_motor.init();
+    right_motor.init();
+
     // Init encoders
     int error = left_encoder.init();
     if (error) {
