@@ -16,6 +16,7 @@
 #include <iostream>
 
 // Project includes
+#include "ControllersIO.hpp"
 #include "etl/vector.h"
 
 namespace cogip {
@@ -42,40 +43,9 @@ public:
     /// Destructor
     virtual ~BaseController() {};
 
-    /// Get input at given index
-    /// return input
-    virtual float input (
-        size_t index    ///< [in]  index
-        ) const = 0;
-
-    /// Set input at given index
-    virtual void set_input(
-        size_t index,   ///< [in]  index
-        float value    ///< [in]  value
-        ) = 0;
-
-    /// Get output at given index
-    /// return output
-    virtual float output (
-        size_t index    ///< [in]  index
-        ) const = 0;
-
-    /// Set output at given index
-    virtual void set_output(
-        size_t index,   ///< [in]  index
-        float value    ///< [in]  value
-        ) = 0;
-
-    /// Get numer of inputs
-    /// return number of inputs
-    virtual size_t nb_inputs() const = 0;
-
-    /// Get numer of outputs
-    /// return number of outputs
-    virtual size_t nb_outputs() const = 0;
-
     /// Controller core method
-    virtual void execute() = 0;
+    /// @param io Controllers input/output datas shared accross controllers
+    virtual void execute(ControllersIO& io) = 0;
 
     /// Get meta controller to which current controller belongs to
     /// return Meta controller

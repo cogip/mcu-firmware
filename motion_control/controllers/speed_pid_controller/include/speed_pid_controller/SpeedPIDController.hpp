@@ -14,6 +14,7 @@
 
 // Project includes
 #include "motion_control_common/Controller.hpp"
+#include "motion_control_common/ControllersIO.hpp"
 #include "SpeedPIDControllerParameters.hpp"
 
 namespace cogip {
@@ -33,7 +34,8 @@ public:
         ) : BaseController(), Controller(parameters) {};
 
     /// Compute PID to correct given error according to PID parameters and inputs.
-    void execute() override;
+    /// @param io input/output datas shared accross controllers
+    void execute(ControllersIO& io) override;
 };
 
 } // namespace motion_control
