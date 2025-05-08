@@ -40,7 +40,7 @@ void BaseControllerEngine::thread_loop() {
 
             // Execute controller
             if (controller_) {
-                controller_->execute();
+                controller_->execute(io_);
             }
 
             // Next cycle

@@ -15,11 +15,11 @@ namespace cogip {
 
 namespace motion_control {
 
-void PassthroughPosePIDController::execute() {
+void PassthroughPosePIDController::execute(ControllersIO& io) {
     COGIP_DEBUG_COUT("Execute PassthroughPosePIDController");
 
     // Read position error
-    float position_error = this->inputs_[0];
+    float position_error = *io.get_as<float>("position_error");
 
     float position_error_sign = 1;
 
@@ -33,16 +33,8 @@ void PassthroughPosePIDController::execute() {
         speed_order *= position_error_sign;
     }
 
-    // Store speed order
-    this->outputs_[0] = speed_order;
-    // Store current speed (pass through)
-    this->outputs_[1] = this->inputs_[1];
-    // Store target speed
-    this->outputs_[2] = parameters_->target_speed();
-    // Store disabling speed filter (pass through)
-    this->outputs_[3] = this->inputs_[3];
-    // Pose reached (pass through)
-    this->outputs_[4] = this->inputs_[4];
+    io.set("speed_order",  speed_order);
+    io.set("target_speed", parameters_->target_speed());
 };
 
 } // namespace motion_control

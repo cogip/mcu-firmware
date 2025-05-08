@@ -13,6 +13,7 @@
 #pragma once
 
 #include "Controller.hpp"
+#include "ControllersIO.hpp"
 #include "thread/thread.hpp"
 
 // RIOT includes
@@ -131,6 +132,9 @@ protected:
 
     /// Mutex protecting engine loop
     mutex_t mutex_;
+
+    /// Controllers input/output datas shared accross controllers
+    ControllersIO io_;
 };
 
 } // namespace motion_control

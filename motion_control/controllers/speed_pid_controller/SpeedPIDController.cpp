@@ -16,7 +16,7 @@ namespace cogip {
 
 namespace motion_control {
 
-void SpeedPIDController::execute() {
+void SpeedPIDController::execute(ControllersIO& io) {
     COGIP_DEBUG_COUT("Execute SpeedPIDController");
 
     // Speed error
