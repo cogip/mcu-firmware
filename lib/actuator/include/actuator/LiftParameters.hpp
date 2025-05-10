@@ -34,10 +34,10 @@ struct LiftParameters {
     float init_speed_percentage;
 
     /// Lower travel limit in millimeters.
-    int32_t lower_limit_ms;
+    int32_t lower_limit_mm;
 
     /// Upper travel limit in millimeters.
-    int32_t upper_limit_ms;
+    int32_t upper_limit_mm;
 
     /// GPIO pin connected to the lower limit switch.
     gpio_t lower_limit_switch_pin;

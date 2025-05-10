@@ -40,14 +40,14 @@ void Lift::init() {
         ztimer_sleep(ZTIMER_MSEC, motor_engine_.timeout_ms());
     }
     else {
-        set_current_distance(params_.upper_limit_ms);
+        set_current_distance(params_.upper_limit_mm);
     }
     if (gpio_read(params_.lower_limit_switch_pin)) {
         Motor::actuate(INT16_MIN);
         ztimer_sleep(ZTIMER_MSEC, motor_engine_.timeout_ms());
     }
     else {
-        set_current_distance(params_.lower_limit_ms);
+        set_current_distance(params_.lower_limit_mm);
     }
 }
 
@@ -60,8 +60,8 @@ void Lift::actuate(const int32_t command)
 {
     std::cout << "Move lift to command " << command << std::endl;
     // clamp within mechanical bounds
-    const int32_t clamped = (command < params_.lower_limit_ms) ? params_.lower_limit_ms
-                          : (command > params_.upper_limit_ms) ? params_.upper_limit_ms
+    const int32_t clamped = (command < params_.lower_limit_mm) ? params_.lower_limit_mm
+                          : (command > params_.upper_limit_mm) ? params_.upper_limit_mm
                           : command;
 
     std::cout << "Move lift to clamped command " << clamped << std::endl;
@@ -87,15 +87,15 @@ void Lift::at_limits(gpio_t pin)
 void Lift::at_lower_limit()
 {
     std::cout << "Lower limit switch triggered" << std::endl;
-    set_current_distance(params_.lower_limit_ms);
-    actuate(params_.lower_limit_ms);
+    set_current_distance(params_.lower_limit_mm);
+    actuate(params_.lower_limit_mm);
 }
 
 void Lift::at_upper_limit()
 {
     std::cout << "Upper limit switch triggered" << std::endl;
-    set_current_distance(params_.upper_limit_ms);
-    actuate(params_.upper_limit_ms);
+    set_current_distance(params_.upper_limit_mm);
+    actuate(params_.upper_limit_mm);
 }
 
 } // namespace positional_actuators
