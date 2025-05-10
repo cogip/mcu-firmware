@@ -36,14 +36,14 @@ void Lift::init() {
     set_target_speed_percent(params_.init_speed_percentage);
 
     if (gpio_read(params_.upper_limit_switch_pin)) {
-        Motor::actuate(INT16_MAX);
+        Motor::actuate(params_.upper_limit_mm);
         ztimer_sleep(ZTIMER_MSEC, motor_engine_.timeout_ms());
     }
     else {
         set_current_distance(params_.upper_limit_mm);
     }
     if (gpio_read(params_.lower_limit_switch_pin)) {
-        Motor::actuate(INT16_MIN);
+        Motor::actuate(params_.lower_limit_mm);
         ztimer_sleep(ZTIMER_MSEC, motor_engine_.timeout_ms());
     }
     else {
@@ -88,14 +88,12 @@ void Lift::at_lower_limit()
 {
     std::cout << "Lower limit switch triggered" << std::endl;
     set_current_distance(params_.lower_limit_mm);
-    actuate(params_.lower_limit_mm);
 }
 
 void Lift::at_upper_limit()
 {
     std::cout << "Upper limit switch triggered" << std::endl;
     set_current_distance(params_.upper_limit_mm);
-    actuate(params_.upper_limit_mm);
 }
 
 } // namespace positional_actuators
