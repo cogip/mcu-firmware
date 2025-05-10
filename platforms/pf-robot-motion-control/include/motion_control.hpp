@@ -52,8 +52,8 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 ///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
 ///
 /// @{
-constexpr double wheels_diameter_mm = 48.027;
-constexpr double wheels_distance_mm = 274;
+constexpr double wheels_diameter_mm = 48.06;
+constexpr double wheels_distance_mm = 274.5;
 constexpr double wheels_encoder_resolution = 4096 * 4;
 constexpr double wheels_perimeter = M_PI * wheels_diameter_mm;
 constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
@@ -69,7 +69,7 @@ constexpr int pwm_minimal = 70;
 // Linear maximum speed and acceleration
 constexpr double platform_linear_anti_blocking_speed_threshold_per_period = 0.25;
 constexpr double platform_linear_anti_blocking_error_threshold_per_period = 1;
-constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 15;
+constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 5;
 constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
 constexpr double platform_max_speed_m_per_s = 2 ;  ///< Maximum speed (m/s)
 constexpr double platform_max_acc_m_per_s2 = 3;   ///< Maximum acceleration (m/s²)
@@ -97,7 +97,7 @@ constexpr bool platform_linear_antiblocking = true;
 constexpr double platform_min_speed_deg_per_s = 0; ///< Maximum speed (deg/s)
 constexpr double platform_max_speed_deg_per_s = 360*4; ///< Maximum speed (deg/s)
 constexpr double platform_max_acc_deg_per_s2 =  360*10;  ///< Maximum acceleration (deg/s²)
-constexpr double platform_max_dec_deg_per_s2 =  360*4;  ///< Maximum deceleration (deg/s²)
+constexpr double platform_max_dec_deg_per_s2 =  360*2;  ///< Maximum deceleration (deg/s²)
 constexpr double platform_max_acc_angular_deg_per_period2 = (
     (platform_max_acc_deg_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
