@@ -34,5 +34,5 @@ constexpr double linear_threshold = 1;
 // Angular threshold
 constexpr double angular_threshold = 1;
 // Angular intermediate threshold (when the robot turns on itself to go straight to its destination)
-constexpr double angular_intermediate_threshold = 5;
+constexpr double angular_intermediate_threshold = 20;
 
