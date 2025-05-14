@@ -57,7 +57,7 @@ void CanProtobuf::message_reader()
             //std::cout << "Unknown message uuid: " << (uint32_t)uuid << std::endl;
             continue;
         }
-        std::cout << "receive message uuid: 0x" << std::hex << (uint32_t)uuid << std::endl;
+        std::cout << "receive message uuid: 0x" << std::hex << (uint32_t)uuid << std::dec << std::endl;
 
         // Read Protobuf message if any
         if (frame.len > 0) {
