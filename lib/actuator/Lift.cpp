@@ -16,22 +16,24 @@ Lift::Lift(const LiftParameters& params)
     : Motor(params.motor_params),
     params_(params)
 {
-
-    if (LiftsLimitSwitchesManager::instance().register_gpio(
-        params_.lower_limit_switch_pin,
-        this
-    )) {
-        std::cerr << "Lower switch pin for lift " << id_ << " failed" << std::endl;
-    }
-    if (LiftsLimitSwitchesManager::instance().register_gpio(
-        params_.upper_limit_switch_pin,
-        this
-    )) {
-        std::cerr << "Lower switch pin for lift " << id_ << " failed" << std::endl;
-    }
 }
 
 void Lift::init() {
+    int ret = LiftsLimitSwitchesManager::instance().register_gpio(
+        params_.lower_limit_switch_pin,
+        this
+    );
+    if (ret) {
+        std::cerr << "Lower switch pin for lift " << id_ << " registering failed" << std::endl;
+    }
+    ret = LiftsLimitSwitchesManager::instance().register_gpio(
+        params_.upper_limit_switch_pin,
+        this
+    );
+    if (ret) {
+        std::cerr << "Upper switch pin for lift " << id_ << " registering failed" << std::endl;
+    }
+
     // Homing sequence: move to lower, then upper end-stop at lower speed
     set_target_speed_percent(params_.init_speed_percentage);
 
@@ -48,6 +50,19 @@ void Lift::init() {
     }
     else {
         set_current_distance(params_.lower_limit_mm);
+    }
+
+    ret = LiftsLimitSwitchesManager::instance().unregister_gpio(
+        params_.lower_limit_switch_pin
+    );
+    if (ret) {
+        std::cerr << "Lower switch pin for lift " << id_ << " unregistering failed" << std::endl;
+    }
+    ret = LiftsLimitSwitchesManager::instance().unregister_gpio(
+        params_.upper_limit_switch_pin
+    );
+    if (ret) {
+        std::cerr << "Upper switch pin for lift " << id_ << " unregistering failed" << std::endl;
     }
 }
 
