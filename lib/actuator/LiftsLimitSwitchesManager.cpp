@@ -67,6 +67,38 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, cogip::actuators::posit
     return 0;
 }
 
+int LiftsLimitSwitchesManager::unregister_gpio(gpio_t pin) {
+    if (pin == GPIO_UNDEF) return -ENODEV;
+
+    mutex_lock(&mutex_);
+
+    auto it = gpio_to_event_.find(pin);
+    if (it == gpio_to_event_.end()) {
+        mutex_unlock(&mutex_);
+        return -ENOENT; // GPIO not registered
+    }
+
+    event_t* evt = it->second;
+
+    // Disable interrupt on the pin
+    gpio_irq_disable(pin);
+
+    // Clean up maps
+    gpio_to_event_.erase(pin);
+    event_to_gpio_.erase(evt);
+    callbacks_.erase(pin);
+
+    // Free the event
+    event_pool_.release(evt);
+
+    std::cout << "GPIO " << pin << " unregistered" << std::endl;
+
+    mutex_unlock(&mutex_);
+
+    return 0;
+}
+
+
 void LiftsLimitSwitchesManager::isr_callback(void* arg) {
     gpio_t pin = reinterpret_cast<gpio_t>(arg);
     event_t* evt = instance().gpio_to_event_[pin];
