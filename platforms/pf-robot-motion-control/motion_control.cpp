@@ -595,7 +595,7 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
 
     if (target_pose.timeout_ms()) {
         pf_motion_control_platform_engine.set_timeout_enable(true);
-        pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms() / motion_control_thread_period_ms);
+        pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms());
     }
     else {
         pf_motion_control_platform_engine.set_timeout_enable(false);
