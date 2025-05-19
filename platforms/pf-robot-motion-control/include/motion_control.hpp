@@ -38,28 +38,42 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 /// @name Robot mechanical properties
 ///
 /// To be computed:
-///  - pulse_per_mm             : number of pulses per mm of coding wheel
+///  - pulses_per_mm             : number of pulses per mm of coding wheel
 ///  - wheels_distance          : distance between coding wheels (pulses)
-///  - pulse_per_degree         : number of pulses per degree of coding wheel
+///  - pulse_per_degree         : number of pulses per degree of robot rotation
 ///
-/// must be known:
-///  - wheels_diameter          : coding wheel diameter (mm)
+/// Must be known:
+///  - left_wheel_diameter_mm   : left coding wheel diameter (mm)
+///  - right_wheel_diameter_mm  : right coding wheel diameter (mm)
 ///  - wheels_distance_mm       : distance between coding wheels (mm)
-///  - wheels_encoder_resolution: number of pulses by turn of coding wheels
+///  - wheels_encoder_resolution: number of pulses per revolution of coding wheels
 ///
 /// Intermediate calculation:
-///  - wheels_perimeter = pi*wheels_diameter
-///  - pulse_per_mm = wheels_encoder_resolution / wheels_perimeter
+///  - left_wheels_perimeter_mm  = π * left_wheel_diameter_mm
+///  - right_wheels_perimeter_mm = π * right_wheel_diameter_mm
+///  - left_pulses_per_mm         = wheels_encoder_resolution / left_wheels_perimeter_mm
+///  - right_pulses_per_mm        = wheels_encoder_resolution / right_wheels_perimeter_mm
+///  - pulses_per_mm              = (left_pulses_per_mm + right_pulses_per_mm) / 2
 ///
 /// @{
-constexpr double wheels_diameter_mm = 48.06;
-constexpr double wheels_distance_mm = 274.5;
-constexpr double wheels_encoder_resolution = 4096 * 4;
-constexpr double wheels_perimeter = M_PI * wheels_diameter_mm;
-constexpr double pulse_per_mm = wheels_encoder_resolution / wheels_perimeter;   ///< WHEELS_ENCODER_RESOLUTION / WHEELS_PERIMETER
-constexpr double wheels_distance_pulse = wheels_distance_mm * pulse_per_mm;     ///< WHEELS_DISTANCE_MM * PULSE_PER_MM
-constexpr double pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;   ///< WHEELS_DISTANCE_PULSE * 2 * PI / 360
+constexpr double left_wheel_diameter_mm    = 48.09;        ///< Left wheel diameter in millimeters (adjust as needed)
+constexpr double right_wheel_diameter_mm   = 48.09;         ///< Right wheel diameter in millimeters (adjust as needed)
+constexpr double wheels_distance_mm        = 274.8;         ///< Distance between coding wheels in millimeters
+constexpr double wheels_encoder_resolution = 4096 * 4;      ///< Encoder pulses per wheel revolution
+
+// Intermediate calculations
+constexpr double left_wheels_perimeter_mm   = M_PI * left_wheel_diameter_mm;  ///< π * left_wheel_diameter_mm
+constexpr double right_wheels_perimeter_mm  = M_PI * right_wheel_diameter_mm; ///< π * right_wheel_diameter_mm
+constexpr double left_pulses_per_mm          = wheels_encoder_resolution / left_wheels_perimeter_mm;  ///< left pulses per mm
+constexpr double right_pulses_per_mm         = wheels_encoder_resolution / right_wheels_perimeter_mm; ///< right pulses per mm
+constexpr double pulses_per_mm               = (left_pulses_per_mm + right_pulses_per_mm) * 0.5;           ///< average pulses per mm
+
+// To be computed
+constexpr double wheels_distance            = wheels_distance_mm * pulses_per_mm;                       ///< wheels_distance_mm * pulses_per_mm
+constexpr double pulse_per_degree           = (wheels_distance * 2.0 * M_PI) / 360.0;                 ///< wheels_distance * 2π / 360
+constexpr double mm_per_degree = wheels_distance_mm * M_PI / 180.0;  ///< wheels_distan
 /// @}
+
 
 /// Minimal PWM value
 constexpr int pwm_minimal = 70;
@@ -72,8 +86,8 @@ constexpr double platform_linear_anti_blocking_error_threshold_per_period = 1;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 5;
 constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
 constexpr double platform_max_speed_m_per_s = 2 ;  ///< Maximum speed (m/s)
-constexpr double platform_max_acc_m_per_s2 = 3;   ///< Maximum acceleration (m/s²)
-constexpr double platform_max_dec_m_per_s2 = 1.25;   ///< Maximum deceleration (m/s²)
+constexpr double platform_max_acc_m_per_s2 = 0.5;   ///< Maximum acceleration (m/s²)
+constexpr double platform_max_dec_m_per_s2 = 0.5;   ///< Maximum deceleration (m/s²)
 constexpr double platform_max_acc_linear_mm_per_period2 = (
     (1000 * platform_max_acc_m_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)
@@ -95,9 +109,9 @@ constexpr bool platform_linear_antiblocking = true;
 
 // Angular maximum speed and acceleration
 constexpr double platform_min_speed_deg_per_s = 0; ///< Maximum speed (deg/s)
-constexpr double platform_max_speed_deg_per_s = 360*4; ///< Maximum speed (deg/s)
-constexpr double platform_max_acc_deg_per_s2 =  360*10;  ///< Maximum acceleration (deg/s²)
-constexpr double platform_max_dec_deg_per_s2 =  360*2;  ///< Maximum deceleration (deg/s²)
+constexpr double platform_max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
+constexpr double platform_max_acc_deg_per_s2 =  720;  ///< Maximum acceleration (deg/s²)
+constexpr double platform_max_dec_deg_per_s2 =  720;  ///< Maximum deceleration (deg/s²)
 constexpr double platform_max_acc_angular_deg_per_period2 = (
     (platform_max_acc_deg_per_s2 * motion_control_thread_period_ms * motion_control_thread_period_ms) \
     / (1000 * 1000)

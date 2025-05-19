@@ -278,12 +278,21 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
 /// Update current speed from quadrature encoders measure.
 void pf_encoder_read(cogip::cogip_defs::Polar &current_speed)
 {
-    int32_t left_speed = qdec_read_and_reset(MOTOR_LEFT) * QDEC_LEFT_POLARITY;
-    int32_t right_speed = qdec_read_and_reset(MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
+    // Read and reset raw encoder pulses since last call
+    int32_t ticks_left  = qdec_read_and_reset(MOTOR_LEFT)  * QDEC_LEFT_POLARITY;
+    int32_t ticks_right = qdec_read_and_reset(MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
 
-    // update speed
-    current_speed.set_distance(((right_speed + left_speed) / 2.0) / pulse_per_mm);
-    current_speed.set_angle((right_speed - left_speed) / pulse_per_degree);
+    // Convert pulses to millimeters per wheel for this period
+    double dist_left_mm  = ticks_left  / left_pulses_per_mm;
+    double dist_right_mm = ticks_right / right_pulses_per_mm;
+
+    // Compute linear distance (mm) per period (mean of both wheels)
+    double dist_mm = (dist_right_mm + dist_left_mm) * 0.5;
+    current_speed.set_distance(dist_mm);
+
+    // Compute angular displacement (°) per period
+    double angle_deg = (dist_right_mm - dist_left_mm) / mm_per_degree;
+    current_speed.set_angle(angle_deg);
 }
 
 static void pf_encoder_reset(void)
@@ -634,10 +643,10 @@ void cogip_native_motor_driver_qdec_simulation(
 
     // On native architecture set speeds at their theorical value, no error.
     if (pf_motion_control_platform_engine.pose_reached() != cogip::motion_control::target_pose_status_t::reached) {
-        qdecs_value[MOTOR_RIGHT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm
+        qdecs_value[MOTOR_RIGHT] = (linear_speed_filter.previous_speed_order() * pulses_per_mm
                                    + angular_speed_filter.previous_speed_order() * pulse_per_degree / 2)
                                    * QDEC_RIGHT_POLARITY;
-        qdecs_value[MOTOR_LEFT] = (linear_speed_filter.previous_speed_order() * pulse_per_mm
+        qdecs_value[MOTOR_LEFT] = (linear_speed_filter.previous_speed_order() * pulses_per_mm
                                   - angular_speed_filter.previous_speed_order() * pulse_per_degree / 2)
                                   * QDEC_LEFT_POLARITY;
     }
