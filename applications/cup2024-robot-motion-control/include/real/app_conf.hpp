@@ -4,11 +4,11 @@
 #include "etl/numeric.h"
 
 // Linear pose PID
-constexpr double linear_pose_pid_kp = 0.1;
+constexpr double linear_pose_pid_kp = 0.5;
 constexpr double linear_pose_pid_ki = 0;
 constexpr double linear_pose_pid_kd = 0;
 // Angular pose PID
-constexpr double angular_pose_pid_kp = 0.1;
+constexpr double angular_pose_pid_kp = 0.4;
 constexpr double angular_pose_pid_ki = 0;
 constexpr double angular_pose_pid_kd = 0;
 // Linear speed PID
@@ -34,5 +34,5 @@ constexpr double linear_threshold = 1;
 // Angular threshold
 constexpr double angular_threshold = 1;
 // Angular intermediate threshold (when the robot turns on itself to go straight to its destination)
-constexpr double angular_intermediate_threshold = 20;
+constexpr double angular_intermediate_threshold = 5;
 
