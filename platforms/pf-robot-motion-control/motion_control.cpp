@@ -41,6 +41,10 @@ static motor_driver_t motion_motors_driver;
 // Current controller
 static uint32_t current_controller_id = 0;
 
+// Total ticks
+static int32_t left_total_ticks = 0;
+static int32_t right_total_ticks = 0;
+
 // Protobuf
 PB_Pose pb_pose;
 PB_Controller pb_controller;
@@ -282,6 +286,9 @@ void pf_encoder_read(cogip::cogip_defs::Polar &current_speed)
     int32_t ticks_left  = qdec_read_and_reset(MOTOR_LEFT)  * QDEC_LEFT_POLARITY;
     int32_t ticks_right = qdec_read_and_reset(MOTOR_RIGHT) * QDEC_RIGHT_POLARITY;
 
+    left_total_ticks += ticks_left;
+    right_total_ticks += ticks_right;
+
     // Convert pulses to millimeters per wheel for this period
     double dist_left_mm  = ticks_left  / left_pulses_per_mm;
     double dist_right_mm = ticks_right / right_pulses_per_mm;
@@ -299,6 +306,9 @@ static void pf_encoder_reset(void)
 {
     qdec_read_and_reset(MOTOR_LEFT);
     qdec_read_and_reset(MOTOR_RIGHT);
+
+    left_total_ticks = 0;
+    right_total_ticks = 0;
 }
 
 void pf_send_pb_pose(void)
@@ -534,6 +544,16 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
                 << pf_motion_control_platform_engine.current_pose().O()
                 << ")"
                 << std::endl;
+
+            std::cout << "Total ticks (Left, Right): ("
+                << left_total_ticks
+                << ", "
+                << right_total_ticks
+                << ")"
+                << std::endl;
+
+            left_total_ticks = 0;
+            right_total_ticks = 0;
         }
 
         // Reset previous speed orders
