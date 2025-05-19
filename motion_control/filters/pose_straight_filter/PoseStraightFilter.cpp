@@ -145,6 +145,9 @@ void PoseStraightFilter::execute() {
             else {
                 pos_err.set_angle(0);
             }
+            // Force linear speed to 0
+            target_speed.set_distance(0);
+
             // Rotate towards the final orientation
             if (fabs(pos_err.angle()) <= parameters_->angular_threshold()) {
                 // Reached final pose
