@@ -58,7 +58,7 @@ constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thre
 /// @{
 constexpr double left_wheel_diameter_mm    = 48.09;        ///< Left wheel diameter in millimeters (adjust as needed)
 constexpr double right_wheel_diameter_mm   = 48.09;         ///< Right wheel diameter in millimeters (adjust as needed)
-constexpr double wheels_distance_mm        = 274.8;         ///< Distance between coding wheels in millimeters
+constexpr double wheels_distance_mm        = 275;         ///< Distance between coding wheels in millimeters
 constexpr double wheels_encoder_resolution = 4096 * 4;      ///< Encoder pulses per wheel revolution
 
 // Intermediate calculations
@@ -81,9 +81,15 @@ constexpr int pwm_minimal = 70;
 /// @name Acceleration and speed profiles
 /// @{
 // Linear maximum speed and acceleration
-constexpr double platform_linear_anti_blocking_speed_threshold_per_period = 0.25;
-constexpr double platform_linear_anti_blocking_error_threshold_per_period = 1;
-constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 5;
+constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 12.5;
+constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_period
+    = (motion_control_thread_period_ms * platform_linear_anti_blocking_speed_threshold_mm_per_s)
+        / 1000;
+constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
+constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period
+    = (motion_control_thread_period_ms * platform_linear_anti_blocking_error_threshold_mm_per_s)
+        / 1000;
+constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
 constexpr double platform_min_speed_m_per_s = 0;  ///< Minimum speed (m/s)
 constexpr double platform_max_speed_m_per_s = 2 ;  ///< Maximum speed (m/s)
 constexpr double platform_max_acc_m_per_s2 = 0.5;   ///< Maximum acceleration (m/s²)
