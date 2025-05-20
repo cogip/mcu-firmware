@@ -503,6 +503,10 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
             pose_straight_filter.force_finished_state();
 
             std::cout << "BLOCKED" << std::endl;
+
+            if (previous_target_pose_status != cogip::motion_control::target_pose_status_t::blocked) {
+                pf_get_canpb().send_message(blocked_uuid);
+            }
         }
     }
     else {
