@@ -67,7 +67,10 @@ public:
     /// @brief Reset encoder counter
     ///
     ///
-    void reset() override { (void)read_and_reset(); };
+    void reset() override
+    {
+        (void)read_and_reset();
+    };
 
 private:
     uint8_t id_;

@@ -52,11 +52,11 @@ public:
     virtual void thread_loop();
 
     /// Enable thread loop
-    void enable() { mutex_lock(&mutex_); enable_ = true; mutex_unlock(&mutex_); };
+    void enable() { /*mutex_lock(&mutex_);*/ enable_ = true; /*mutex_unlock(&mutex_);*/ };
 
     /// Disable thread loop
     void disable() {
-        mutex_lock(&mutex_); enable_ = false; mutex_unlock(&mutex_);
+        /*mutex_lock(&mutex_);*/ enable_ = false; /*mutex_unlock(&mutex_);*/
     };
 
     /// Get controller

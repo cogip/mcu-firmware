@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <iostream>
+
 #include "etl/math_constants.h"
 #include "etl/algorithm.h"
 
@@ -58,6 +60,9 @@ public:
             right_motor_speed_percent = (right_motor_speed_percent < 0 ? -1 : 1) * parameters_.min_speed_percentage();
         }
 
+        //std::cout << "(left, right): (" <<  etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage())
+        //    << ", " << etl::clamp(right_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage())
+        //    << ")" << std::endl;
 
         // Apply motor speed
         left_motor_.set_speed(etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));

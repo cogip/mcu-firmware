@@ -38,7 +38,7 @@ public:
     /// @param mode
     /// @param pulse_per_rev
     ///
-    EncoderInterface(EncoderMode mode, int32_t pulse_per_rev): mode_(mode), pulse_per_rev_(pulse_per_rev) {}
+    EncoderInterface(EncoderMode mode, int32_t pulse_per_rev): mode_(mode), pulse_per_rev_(pulse_per_rev), counter_(0) {}
 
     ///
     /// @brief Init low level encoder driver.
@@ -64,11 +64,22 @@ public:
     ///
     /// @return float traveled angle since last call (rad).
     ///
-    float get_angle_and_reset() { return ((float)read_and_reset() / (float)pulse_per_rev_) * etl::math::pi; }
+    float get_angle_and_reset()
+    {
+        int delta = read_and_reset();
+        counter_ += delta;
+        return ((float)delta / (float)pulse_per_rev_) * etl::math::pi;
+    }
+
+    int64_t get_counter()
+    {
+        return counter_;
+    }
 
 protected:
     const EncoderMode mode_;
     const int32_t pulse_per_rev_;
+    int64_t counter_;
 };
 
 } /// namespace encoder

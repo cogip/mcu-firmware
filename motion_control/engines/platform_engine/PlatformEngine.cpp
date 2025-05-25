@@ -19,6 +19,7 @@ namespace motion_control {
 void PlatformEngine::prepare_inputs() {
     // Update current pose and speed
     localization_.update();
+    std::cout << localization_.pose().O() << std::endl;
 
     if (controller_) {
         size_t index = 0;

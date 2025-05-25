@@ -6,4 +6,6 @@ message PB_State {
     uint32 cycle = 2;
     PB_Polar speed_current = 3;
     PB_Polar speed_order = 4;
+    int64 left_counter = 5;
+    int64 right_counter = 6;
 }

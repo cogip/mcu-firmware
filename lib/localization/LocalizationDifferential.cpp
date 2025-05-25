@@ -4,6 +4,7 @@
 // directory for more details.
 
 #include <cmath>
+#include <iostream>
 
 #include "localization/LocalizationDifferential.hpp"
 #include "trigonometry.h"
@@ -15,6 +16,7 @@ namespace localization {
 
 int LocalizationDifferential::update()
 {
+    //std::cout << "(L, R): (" << left_encoder_.get_counter() << ", " << right_encoder_.get_counter() << ")" << std::endl;
     // Compute encoders wheels left and right linear delta in mm
     const float dL = left_encoder_.get_angle_and_reset() * parameters_.left_wheel_diameter_mm() * parameters_.left_polarity();
     const float dR = right_encoder_.get_angle_and_reset() * parameters_.right_wheel_diameter_mm() * parameters_.right_polarity();
@@ -32,6 +34,11 @@ int LocalizationDifferential::update()
     // Compute x and y coordinates in mm
     pose_.set_x(pose_.x() + delta_linear_pose * cos(O_rad));
     pose_.set_y(pose_.y() + delta_linear_pose * sin(O_rad));
+
+    static float O_rad_total = 0;
+    O_rad_total += delta_angular_pose;
+    //std::cout << "(" << O_rad_total << ", " << O_rad << ")" << std::endl;
+    //pose_.set_O(RAD2DEG(O_rad_total));
     pose_.set_O(RAD2DEG(O_rad));
 
     // Save polar pose delta since last call

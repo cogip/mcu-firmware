@@ -563,6 +563,8 @@ void pf_send_pb_state(void)
     pb_state.mutable_cycle() = pf_motion_control_platform_engine.current_cycle();
     pf_motion_control_platform_engine.current_speed().pb_copy(pb_state.mutable_speed_current());
     pf_motion_control_platform_engine.target_speed().pb_copy(pb_state.mutable_speed_order());
+    pb_state.mutable_left_counter() = left_encoder.get_counter();
+    pb_state.mutable_right_counter() = right_encoder.get_counter();
 
     pf_get_canpb().send_message(state_uuid, &pb_state);
 }
@@ -662,6 +664,8 @@ void pf_motion_control_reset(void)
 
     // Reset pose straight filter state
     pose_straight_filter.reset_current_state();
+
+    pf_disable_motion_control();
 }
 
 void pf_disable_motion_control()

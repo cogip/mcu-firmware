@@ -141,6 +141,8 @@ void PoseStraightFilter::execute() {
             // Check if final orientation should be bypassed
             if (!parameters_->bypass_final_orientation()) {
                 pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+                //pos_err.set_angle(target_pose.O() - current_pose.O());
+                //std::cout << current_pose.O() << std::endl;
             }
             else {
                 pos_err.set_angle(0);
