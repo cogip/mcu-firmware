@@ -53,7 +53,7 @@ void BaseControllerEngine::thread_loop() {
                 // Force target pose status to notify the platform the timeout is over
                 pose_reached_ = target_pose_status_t::timeout;
 
-                std::cerr << "Motor engine timed out" << std::endl;
+                std::cerr << "Engine timed out" << std::endl;
 
                 enable_ = false;
             }
