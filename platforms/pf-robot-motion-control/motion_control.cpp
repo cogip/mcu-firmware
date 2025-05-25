@@ -41,7 +41,6 @@ namespace pf {
 
 namespace motion_control {
 
-
 // Current controller
 static uint32_t current_controller_id = 0;
 
@@ -486,6 +485,10 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             angular_speed_filter.reset_previous_speed_order();
 
             std::cout << "BLOCKED" << std::endl;
+
+            if (previous_target_pose_status != cogip::motion_control::target_pose_status_t::blocked) {
+                pf_get_canpb().send_message(blocked_uuid);
+            }
         }
 
         break;
