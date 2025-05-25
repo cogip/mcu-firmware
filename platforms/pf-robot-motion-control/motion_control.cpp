@@ -124,8 +124,8 @@ static cogip::motion_control::SpeedFilterParameters linear_speed_filter_paramete
     platform_max_speed_linear_mm_per_period,
     platform_max_acc_linear_mm_per_period2,
     platform_linear_antiblocking,
-    platform_linear_anti_blocking_speed_threshold_per_period,
-    platform_linear_anti_blocking_error_threshold_per_period,
+    platform_linear_anti_blocking_speed_threshold_mm_per_period,
+    platform_linear_anti_blocking_error_threshold_mm_per_period,
     platform_linear_anti_blocking_blocked_cycles_nb_threshold
     );
 /// Linear SpeedFilter to limit speed and acceleration for linear SpeedPIDController.

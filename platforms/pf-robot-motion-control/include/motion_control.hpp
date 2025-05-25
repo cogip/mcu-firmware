@@ -55,8 +55,16 @@ constexpr float platform_max_speed_angular_deg_per_period = X_SEC_TO_X_PERIOD(ma
 
 /// Low angular speed (rad/<motion_control_thread_period_ms>)
 constexpr float platform_low_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 4);
-///< Normal angular speed (deg/<motion_control_thread_period_ms>)
+/// Normal angular speed (deg/<motion_control_thread_period_ms>)
 constexpr float platform_normal_speed_angular_deg_per_period = (platform_max_speed_angular_deg_per_period / 2);
+
+/// Linear anti-cloking setup
+constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_period
+    = (motion_control_thread_period_ms * platform_linear_anti_blocking_speed_threshold_mm_per_s)
+        / 1000;
+constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period
+    = (motion_control_thread_period_ms * platform_linear_anti_blocking_error_threshold_mm_per_s)
+        / 1000;
 /// @}
 
 /// Handle brake signal to stop the robot
