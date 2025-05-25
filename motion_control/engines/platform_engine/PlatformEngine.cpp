@@ -55,10 +55,12 @@ void PlatformEngine::process_outputs() {
     if (!timeout_enable_)
         pose_reached_ = (target_pose_status_t)controller_->output(2);
 
-    cogip_defs::Polar command(
-        controller_->output(0),
-        controller_->output(1)
-    );
+    cogip_defs::Polar command(0, 0);
+
+    if (pose_reached_ == target_pose_status_t::moving) {
+        command.set_distance(controller_->output(0));
+        command.set_angle(controller_->output(1));
+    }
 
     // Set robot polar velocity order
     drive_contoller_.set_polar_velocity(command);
