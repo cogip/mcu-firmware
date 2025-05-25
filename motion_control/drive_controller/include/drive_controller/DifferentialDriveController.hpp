@@ -51,15 +51,13 @@ public:
         float left_motor_speed_percent = (left_wheel_speed_mm_per_s / (etl::math::pi * parameters_.left_wheel_diameter_mm())) * parameters_.left_motor_constant();
         float right_motor_speed_percent = (right_wheel_speed_mm_per_s / (etl::math::pi * parameters_.right_wheel_diameter_mm())) * parameters_.right_motor_constant();
 
-        left_motor_speed_percent =
-            (left_motor_speed_percent < 0 ? -parameters_.min_speed_percentage()
-                              : parameters_.min_speed_percentage()) +
-            (left_motor_speed_percent * (100.0 - parameters_.min_speed_percentage()) / 100.0);
+        if (std::abs(left_motor_speed_percent) < parameters_.min_speed_percentage()) {
+            left_motor_speed_percent = (left_motor_speed_percent < 0 ? -1 : 1) * parameters_.min_speed_percentage();
+        }
+        if (std::abs(right_motor_speed_percent) < parameters_.min_speed_percentage()) {
+            right_motor_speed_percent = (right_motor_speed_percent < 0 ? -1 : 1) * parameters_.min_speed_percentage();
+        }
 
-        right_motor_speed_percent =
-            (right_motor_speed_percent < 0 ? -parameters_.min_speed_percentage()
-                               : parameters_.min_speed_percentage()) +
-            (right_motor_speed_percent * (100.0 - parameters_.min_speed_percentage()) / 100.0);
 
         // Apply motor speed
         left_motor_.set_speed(etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(), parameters_.max_speed_percentage()));
