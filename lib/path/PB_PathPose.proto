@@ -10,4 +10,5 @@ message PB_PathPose {
     bool bypass_anti_blocking = 5;
     uint32 timeout_ms = 6;
     bool bypass_final_orientation = 7;
+    bool is_intermediate = 8;
 }
