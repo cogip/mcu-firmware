@@ -660,8 +660,6 @@ void pf_motion_control_reset(void)
 
     // Reset pose straight filter state
     pose_straight_filter.reset_current_state();
-
-    pf_encoder_reset();
 }
 
 void pf_disable_motion_control()
