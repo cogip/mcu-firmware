@@ -440,7 +440,12 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
     case cogip::motion_control::target_pose_status_t::reached:
         // Send message in case of final pose reached only.
         if (previous_target_pose_status != state) {
-            pf_get_canpb().send_message(pose_reached_uuid);
+            if (pf_motion_control_platform_engine.target_pose().is_intermediate()) {
+                pf_get_canpb().send_message(intermediate_pose_reached_uuid);
+            }
+            else {
+                pf_get_canpb().send_message(pose_reached_uuid);
+            }
 
             // Reset previous speed orders
             linear_speed_filter.reset_previous_speed_order();

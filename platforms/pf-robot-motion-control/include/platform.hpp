@@ -39,6 +39,7 @@ constexpr cogip::canpb::uuid_t pid_uuid = 0x1006;
 constexpr cogip::canpb::uuid_t brake_uuid = 0x1007;
 constexpr cogip::canpb::uuid_t controller_uuid = 0x1008;
 constexpr cogip::canpb::uuid_t blocked_uuid = 0x1009;
+constexpr cogip::canpb::uuid_t intermediate_pose_reached_uuid = 0x100A;
 // Actuators: 0x2000 - 0x2FFF
 // Board: 0xF000 - 0xFFFF
 // Game: 0x4000 - 0x4FFF
