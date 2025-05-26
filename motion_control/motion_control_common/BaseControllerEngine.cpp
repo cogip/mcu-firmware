@@ -33,10 +33,10 @@ void BaseControllerEngine::thread_loop() {
 
         COGIP_DEBUG_COUT("Engine loop");
 
-        if ((enable_) && (controller_)) {
+        // Set controller inputs
+        prepare_inputs();
 
-            // Set controller inputs
-            prepare_inputs();
+        if ((enable_) && (controller_)) {
 
             // Execute controller
             if (controller_) {
