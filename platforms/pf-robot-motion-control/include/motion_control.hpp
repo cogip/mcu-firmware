@@ -33,6 +33,7 @@ constexpr cogip::canpb::uuid_t pid_uuid = 0x1006;
 constexpr cogip::canpb::uuid_t brake_uuid = 0x1007;
 constexpr cogip::canpb::uuid_t controller_uuid = 0x1008;
 constexpr cogip::canpb::uuid_t blocked_uuid = 0x1009;
+constexpr cogip::canpb::uuid_t intermediate_pose_reached_uuid = 0x100A;
 
 constexpr uint16_t motion_control_thread_period_ms = 20;    ///< controller thread loop period
 

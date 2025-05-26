@@ -539,7 +539,13 @@ void pf_motor_drive(const cogip::cogip_defs::Polar &command)
         // Send message in case of final pose reached only.
         if ((pf_motion_control_platform_engine.pose_reached() == cogip::motion_control::target_pose_status_t::reached)
             &&  (previous_target_pose_status != cogip::motion_control::target_pose_status_t::reached)) {
-            pf_get_canpb().send_message(pose_reached_uuid);
+            if (pf_motion_control_platform_engine.target_pose().is_intermediate()) {
+                pf_get_canpb().send_message(intermediate_pose_reached_uuid);
+            }
+            else {
+                pf_get_canpb().send_message(pose_reached_uuid);
+            }
+
             std::cout << "Pose reached: ("
                 << pf_motion_control_platform_engine.current_pose().x()
                 << ", "
