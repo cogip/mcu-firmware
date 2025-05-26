@@ -33,7 +33,8 @@ public:
         bool allow_reverse=true,        ///< [in] reverse mode
         bool bypass_antiblocking=false, ///< [in] bypass anti blocking
         uint32_t timeout_ms=0,          ///< [in] move timeout
-        bool bypass_final_orientation=false ///< [in] bypass final orientation
+        bool bypass_final_orientation=false, ///< [in] bypass final orientation
+        bool is_intermediate=false      ///< [in] is an intermediate pose
         );
 
     /// Destructor
@@ -61,6 +62,9 @@ public:
 
     /// Return true if final orientation should be bypassed
     virtual bool bypass_final_orientation() const { return bypass_final_orientation_; }
+
+    /// Return true if pose is an intermediate pose
+    virtual bool is_intermediate() const { return is_intermediate_; }
 
     /// Initialize the object from a Protobuf message.
     void pb_read(
@@ -94,6 +98,7 @@ private:
     bool bypass_anti_blocking_;     ///< bypass anti blocking
     uint32_t timeout_ms_;           ///< timeout(ms) to reach the path pose
     bool bypass_final_orientation_; ///< bypass anti blocking
+    bool is_intermediate_;          ///< intermediate pose
 };
 
 } // namespace path
