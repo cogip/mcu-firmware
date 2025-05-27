@@ -103,6 +103,9 @@ void Motor::actuate(int32_t command) {
 
     // Enable engine in case it has been previously disabled by timeout
     motor_engine_.enable();
+
+    // Enable motor
+    params_.motor.enable();
 }
 
 } // namespace positional_actuators
