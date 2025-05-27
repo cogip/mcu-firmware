@@ -71,7 +71,7 @@ void Lift::stop()
     actuate(get_current_distance());
 }
 
-void Lift::actuate(const int32_t command)
+void Lift::actuate(int32_t command)
 {
     std::cout << "Move lift to command " << command << std::endl;
     // clamp within mechanical bounds
