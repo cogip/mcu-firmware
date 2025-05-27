@@ -570,8 +570,23 @@ void pf_send_pb_state(void)
 
 void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer &buffer) {
     pf_motion_control_platform_engine.set_target_speed({0, 0});
+
+    // Reset previous speed orders
+    angular_speed_filter.reset_previous_speed_order();
+    linear_speed_filter.reset_previous_speed_order();
+
+    // Reset anti-blocking
+    angular_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+    linear_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+
+    // Reset PIDs
     reset_speed_pids();
+
+    // Force position filter finished state
     pose_straight_filter.force_finished_state();
+
+    // Disable motion control to avoid new motion
+    pf_disable_motion_control();
 }
 
 void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
