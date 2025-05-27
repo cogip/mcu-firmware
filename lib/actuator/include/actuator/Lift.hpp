@@ -36,7 +36,7 @@ public:
     /// @brief Immediately brake the lift actuator.
     void stop();
 
-    /// @brief Override of Motor::actuate with limit-switch enforcement.
+    /// @brief Override of Motor::actuate.
     /// @param command Desired movement command in millimeters.
     void actuate(int32_t command) override;
 

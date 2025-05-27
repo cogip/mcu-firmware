@@ -70,7 +70,8 @@ void Motor::disable() {
     params_.motor.brake();
 }
 
-void Motor::actuate(int32_t command) {
+void Motor::actuate(int32_t command)
+{
     std::cout << "Move motor to command " << command
               << " from distance " << motor_engine_.get_current_distance_from_odometer()
               << std::endl;
