@@ -29,7 +29,7 @@ public:
                                         ///< [in]   new anti blocking speed threshold
         float anti_blocking_error_threshold = 0,
                                         ///< [in]   new anti blocking error threshold
-        float anti_blocking_blocked_cycles_nb_threshold = 0
+        uint32_t anti_blocking_blocked_cycles_nb_threshold = 0
                                         ///< [in]   new anti blocking blocked cycles threshold
     ) :  min_speed_(min_speed), max_speed_(max_speed), max_acceleration_(max_acceleration),
          anti_blocking_(anti_blocking),
