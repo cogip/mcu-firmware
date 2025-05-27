@@ -122,9 +122,14 @@ namespace lift_limits {
 
 /// @brief Anti-blocking filter thresholds (in controller units).
 namespace lift_anti_blocking {
-    constexpr float speed_threshold            = 0.3f;      ///< Speed below which blockage is suspected (mm/period)
-    constexpr float error_threshold            = 0.02f;     ///< Position error threshold (mm)
-    constexpr float blocked_cycles_threshold   = 10.0f;     ///< Max consecutive cycles below speed_threshold
+    constexpr float speed_threshold_mm_per_s    = 200.0;     ///< Speed below which blockage is suspected (mm/s)
+    constexpr float error_threshold_mm_per_s    = 15.0f;    ///< Speed error threshold (mm/s)
+    constexpr float speed_threshold_mm_per_period =
+        speed_threshold_mm_per_s * lift_control::control_period_ms / 1000.0f;   ///< Speed below which blockage is suspected (mm/period)
+    constexpr float error_threshold_mm_per_period =
+        error_threshold_mm_per_s * lift_control::control_period_ms / 1000.0f;   ///< Speed error threshold (mm/period)
+
+    constexpr uint32_t blocked_cycles_threshold = 7;        ///< Max consecutive cycles below speed_threshold
 }
 
 /// @brief Limit switch GPIO pins.
@@ -162,8 +167,8 @@ static cogip::motion_control::SpeedFilterParameters motor_lift_speed_filter_para
     lift_limits::max_speed_mm_per_period,
     lift_limits::max_acceleration_mm_per_period2,
     false,
-    lift_anti_blocking::speed_threshold,
-    lift_anti_blocking::error_threshold,
+    lift_anti_blocking::speed_threshold_mm_per_period,
+    lift_anti_blocking::error_threshold_mm_per_period,
     lift_anti_blocking::blocked_cycles_threshold
     );
 
