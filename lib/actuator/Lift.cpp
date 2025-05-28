@@ -81,6 +81,15 @@ void Lift::actuate(int32_t command)
 
     std::cout << "Move lift to clamped command " << clamped << std::endl;
 
+    if (clamped >= motor_engine_.get_current_distance_from_odometer()) {
+        gpio_clear(params_.motor_params.clear_overload_pin);
+    }
+    else {
+        gpio_clear(params_.motor_params.clear_overload_pin);
+        ztimer_sleep(ZTIMER_MSEC, 10);
+        gpio_set(params_.motor_params.clear_overload_pin);
+    }
+
     Motor::actuate(clamped);
 }
 
