@@ -37,11 +37,8 @@ void BaseControllerEngine::thread_loop() {
         prepare_inputs();
 
         if ((enable_) && (controller_)) {
-
             // Execute controller
-            if (controller_) {
-                controller_->execute();
-            }
+            controller_->execute();
 
             // Next cycle
             current_cycle_++;
