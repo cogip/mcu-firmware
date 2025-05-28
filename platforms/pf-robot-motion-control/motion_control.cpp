@@ -570,6 +570,12 @@ void pf_send_pb_state(void)
 
 void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer &buffer) {
     pf_motion_control_platform_engine.set_target_speed({0, 0});
+    reset_speed_pids();
+    pose_straight_filter.force_finished_state();
+}
+
+void pf_handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer &buffer) {
+    pf_motion_control_platform_engine.set_target_speed({0, 0});
 
     // Reset previous speed orders
     angular_speed_filter.reset_previous_speed_order();
