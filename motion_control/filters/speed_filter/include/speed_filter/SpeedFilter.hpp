@@ -51,15 +51,29 @@ protected:
     /// Anti blocking, number of blocked cycle
     uint32_t anti_blocking_blocked_cycles_nb_;
 
+    /// @brief Applies acceleration and speed bounds to the commanded speed.
+    /// @details
+    ///   1. Clamps the target_speed to the range [-max_speed, max_speed].
+    ///   2. Computes the requested acceleration as (*speed_order) minus previous_speed_order_
+    ///      and limits it to the range [-max_acc, max_acc].
+    ///   3. Updates *speed_order to previous_speed_order_ plus the limited acceleration.
+    ///   4. Applies a minimum speed threshold: if the absolute value of *speed_order is
+    ///      less than min_speed, snaps it to +min_speed or -min_speed depending on the sign
+    ///      of the acceleration.
+    ///   5. Finally clamps *speed_order to the range [-target_speed, target_speed].
+    ///
+    /// @param[in,out] speed_order  Pointer to the current speed command; updated in place.
+    /// @param[in]     target_speed Desired speed setpoint (will be clamped to ±max_speed).
+    /// @param[in]     min_speed    Minimum non-zero speed magnitude (deadband threshold).
+    /// @param[in]     max_speed    Maximum allowable speed magnitude.
+    /// @param[in]     max_acc      Maximum allowable change in speed per call (acceleration limit).
     void limit_speed_order(
         float *speed_order,
         float target_speed,
-        float current_speed,
         float min_speed,
         float max_speed,
         float max_acc
     );
-
 };
 
 } // namespace motion_control

@@ -33,15 +33,12 @@ void BaseControllerEngine::thread_loop() {
 
         COGIP_DEBUG_COUT("Engine loop");
 
+        // Set controller inputs
+        prepare_inputs();
+
         if ((enable_) && (controller_)) {
-
-            // Set controller inputs
-            prepare_inputs();
-
             // Execute controller
-            if (controller_) {
-                controller_->execute();
-            }
+            controller_->execute();
 
             // Next cycle
             current_cycle_++;
@@ -53,7 +50,7 @@ void BaseControllerEngine::thread_loop() {
                 // Force target pose status to notify the platform the timeout is over
                 pose_reached_ = target_pose_status_t::timeout;
 
-                std::cerr << "Motor engine timed out" << std::endl;
+                std::cerr << "Engine timed out" << std::endl;
 
                 enable_ = false;
             }

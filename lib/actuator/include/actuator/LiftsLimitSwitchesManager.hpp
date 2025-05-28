@@ -52,6 +52,15 @@ public:
     ///         -ENOMEM on event creation failed
     int register_gpio(gpio_t pin, cogip::actuators::positional_actuators::Lift* lift);
 
+    /// @brief Unregister a previously registered GPIO pin.
+    /// @details Disables the interrupt, releases the associated event, and removes
+    ///          all internal references to the pin and its callback.
+    /// @param pin GPIO pin to unregister.
+    /// @return 0 on success,
+    ///         -ENODEV if GPIO is undefined,
+    ///         -ENOENT if GPIO was not previously registered.
+    int unregister_gpio(gpio_t pin);
+
     /// @brief Event handler executed in the event thread context.
     /// @param evt Pointer to the event to handle.
     static void event_handler(event_t* evt);

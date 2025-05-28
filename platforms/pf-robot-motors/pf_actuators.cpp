@@ -50,6 +50,7 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
 
             // Timeout is valid, speed can be set
             positional_actuators::get(id).set_target_speed_percent(pb_positional_actuator_command.speed());
+
             if (timeout_ms > 0) {
                 positional_actuators::get(id).actuate_timeout(
                     pb_positional_actuator_command.command(),
@@ -59,6 +60,10 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
             else {
                 positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
             }
+
+            std::cout << "Target distance   : " << pb_positional_actuator_command.command() << std::endl;
+            std::cout << "Target speed      : " << pb_positional_actuator_command.speed() << std::endl;
+            std::cout << "Timeout           : " << timeout_ms << std::endl;
         }
     }
 }

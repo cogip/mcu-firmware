@@ -19,7 +19,6 @@ namespace motion_control {
 void SpeedFilter::limit_speed_order(
     float *speed_order,
     float target_speed,
-    float current_speed,
     float min_speed,
     float max_speed,
     float max_acc
@@ -29,7 +28,7 @@ void SpeedFilter::limit_speed_order(
     target_speed = std::min(target_speed, max_speed);
 
     // Limit speed command (maximum acceleration)
-    float a = *speed_order - current_speed;
+    float a = *speed_order - previous_speed_order_;
 
     if (a > max_acc) {
         a =  max_acc;
@@ -39,7 +38,7 @@ void SpeedFilter::limit_speed_order(
         a = -max_acc;
     }
 
-    *speed_order = current_speed + a;
+    *speed_order = previous_speed_order_ + a;
 
     if (*speed_order < min_speed && *speed_order > -min_speed) {
         if (a > 0)
@@ -72,7 +71,6 @@ void SpeedFilter::execute() {
         limit_speed_order(
             &speed_order,
             target_speed,
-            current_speed,
             parameters_->min_speed(),
             parameters_->max_speed(),
             parameters_->max_acceleration()
@@ -93,6 +91,7 @@ void SpeedFilter::execute() {
             // Increment a counter for cycles during which the robot is supposedly blocked.
             // This evaluation cannot be done within a single cycle, so the counter is incremented.
             anti_blocking_blocked_cycles_nb_++;
+            std::cout << "Anti blocking cycles number: " << anti_blocking_blocked_cycles_nb_ << std::endl;
         }
         else {
             anti_blocking_blocked_cycles_nb_= 0;
@@ -100,6 +99,7 @@ void SpeedFilter::execute() {
 
         // After a certain number of cycles, the robot is considered blocked.
         if (anti_blocking_blocked_cycles_nb_ > parameters_->anti_blocking_blocked_cycles_nb_threshold()) {
+            std::cout << "BLOCKED" << std::endl;
             pose_reached = target_pose_status_t::blocked;
         }
     }

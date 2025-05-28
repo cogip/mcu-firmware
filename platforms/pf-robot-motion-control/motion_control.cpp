@@ -41,7 +41,6 @@ namespace pf {
 
 namespace motion_control {
 
-
 // Current controller
 static uint32_t current_controller_id = 0;
 
@@ -125,8 +124,8 @@ static cogip::motion_control::SpeedFilterParameters linear_speed_filter_paramete
     platform_max_speed_linear_mm_per_period,
     platform_max_acc_linear_mm_per_period2,
     platform_linear_antiblocking,
-    platform_linear_anti_blocking_speed_threshold_per_period,
-    platform_linear_anti_blocking_error_threshold_per_period,
+    platform_linear_anti_blocking_speed_threshold_mm_per_period,
+    platform_linear_anti_blocking_error_threshold_mm_per_period,
     platform_linear_anti_blocking_blocked_cycles_nb_threshold
     );
 /// Linear SpeedFilter to limit speed and acceleration for linear SpeedPIDController.
@@ -441,7 +440,12 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
     case cogip::motion_control::target_pose_status_t::reached:
         // Send message in case of final pose reached only.
         if (previous_target_pose_status != state) {
-            pf_get_canpb().send_message(pose_reached_uuid);
+            if (pf_motion_control_platform_engine.target_pose().is_intermediate()) {
+                pf_get_canpb().send_message(intermediate_pose_reached_uuid);
+            }
+            else {
+                pf_get_canpb().send_message(pose_reached_uuid);
+            }
 
             // Reset previous speed orders
             linear_speed_filter.reset_previous_speed_order();
@@ -473,6 +477,8 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             angular_speed_filter.reset_previous_speed_order();
 
             std::cout << "BLOCKED bypasssed" << std::endl;
+
+            pf_get_canpb().send_message(pose_reached_uuid);
         } else {
             // Stop motors
             left_motor.set_speed(0);
@@ -486,6 +492,10 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             angular_speed_filter.reset_previous_speed_order();
 
             std::cout << "BLOCKED" << std::endl;
+
+            if (previous_target_pose_status != cogip::motion_control::target_pose_status_t::blocked) {
+                pf_get_canpb().send_message(blocked_uuid);
+            }
         }
 
         break;
@@ -560,8 +570,23 @@ void pf_send_pb_state(void)
 
 void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer &buffer) {
     pf_motion_control_platform_engine.set_target_speed({0, 0});
+
+    // Reset previous speed orders
+    angular_speed_filter.reset_previous_speed_order();
+    linear_speed_filter.reset_previous_speed_order();
+
+    // Reset anti-blocking
+    angular_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+    linear_speed_filter.reset_anti_blocking_blocked_cycles_nb();
+
+    // Reset PIDs
     reset_speed_pids();
+
+    // Force position filter finished state
     pose_straight_filter.force_finished_state();
+
+    // Disable motion control to avoid new motion
+    pf_disable_motion_control();
 }
 
 void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
@@ -595,7 +620,7 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer)
 
     if (target_pose.timeout_ms()) {
         pf_motion_control_platform_engine.set_timeout_enable(true);
-        pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms() / motion_control_thread_period_ms);
+        pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms());
     }
     else {
         pf_motion_control_platform_engine.set_timeout_enable(false);
@@ -652,8 +677,6 @@ void pf_motion_control_reset(void)
 
     // Reset pose straight filter state
     pose_straight_filter.reset_current_state();
-
-    pf_encoder_reset();
 }
 
 void pf_disable_motion_control()
@@ -672,6 +695,10 @@ void pf_enable_motion_control()
 
 void pf_init_motion_control(void)
 {
+    // Init motors
+    left_motor.init();
+    right_motor.init();
+
     // Init encoders
     int error = left_encoder.init();
     if (error) {

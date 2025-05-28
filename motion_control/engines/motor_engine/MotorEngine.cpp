@@ -52,7 +52,22 @@ void MotorEngine::process_outputs() {
         pose_reached_ = (target_pose_status_t)controller_->output(1);
     }
     else {
-        std::cerr << "MotorEngine timed out, brake." << std::endl;
+        std::cerr << "MotorEngine timed out, disable." << std::endl;
+
+        // Disable engine
+        enable_ = false;
+
+        // Disable motor
+        motor_.disable();
+
+        return;
+    }
+
+    if (pose_reached_ == target_pose_status_t::blocked) {
+        std::cerr << "MotorEngine blocked, disable." << std::endl;
+
+        // Disable engine
+        enable_ = false;
 
         // Disable motor
         motor_.disable();
