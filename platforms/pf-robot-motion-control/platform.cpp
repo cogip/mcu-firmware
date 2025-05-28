@@ -86,7 +86,7 @@ static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer & buffe
 /// Start threading sending actuators state.
 static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer & buffer)
 {
-    cogip::pf::motion_control::pf_handle_brake(buffer);
+    cogip::pf::motion_control::pf_handle_game_end(buffer);
 }
 
 void _handle_copilot_connected(cogip::canpb::ReadBuffer &)
