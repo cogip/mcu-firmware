@@ -31,7 +31,7 @@ constexpr float linear_pose_pid_kp = 0.2;
 constexpr float linear_pose_pid_ki = 0;
 constexpr float linear_pose_pid_kd = 0;
 // Angular pose PID
-constexpr float angular_pose_pid_kp = 0.4;
+constexpr float angular_pose_pid_kp = 0.3;
 constexpr float angular_pose_pid_ki = 0;
 constexpr float angular_pose_pid_kd = 0;
 // Linear speed PID
