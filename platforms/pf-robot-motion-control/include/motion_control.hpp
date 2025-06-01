@@ -70,6 +70,9 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period
 /// Handle brake signal to stop the robot
 void pf_handle_brake(cogip::canpb::ReadBuffer &buffer);
 
+/// Handle game end signal to stop the robot
+void pf_handle_game_end(cogip::canpb::ReadBuffer &buffer);
+
 /// Get pose to reach from protobuf message
 void pf_handle_target_pose(cogip::canpb::ReadBuffer &buffer);
 
