@@ -15,16 +15,6 @@ bool BaseController::set_meta(BaseMetaController *meta) {
     return true;
 }
 
-bool BaseController::is_index_valid(size_t index) {
-    if (index != nb_inputs()) {
-        std::cerr << "Wrong number of inputs, " << index << " given, " << nb_inputs() << " expected." << std::endl;
-
-       return false;
-    }
-
-    return true;
-}
-
 } // namespace motion_control
 
 } // namespace cogip

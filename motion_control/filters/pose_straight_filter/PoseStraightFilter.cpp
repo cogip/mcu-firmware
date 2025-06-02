@@ -1,198 +1,193 @@
-// RIOT includes
-#include <ztimer.h>
-
 // System includes
-#include <cstdio>
+#include <cmath>
 #include <iostream>
 
 // Project includes
 #include "cogip_defs/Pose.hpp"
 #include "cogip_defs/Polar.hpp"
-#include "etl/list.h"
-#include "etl/vector.h"
-
 #include "pose_straight_filter/PoseStraightFilter.hpp"
+#include "trigonometry.h"
 
 namespace cogip {
 
 namespace motion_control {
 
-void PoseStraightFilter::execute() {
+void PoseStraightFilter::execute(ControllersIO& io)
+{
     COGIP_DEBUG_COUT("Execute PoseStraightFilter");
 
-    size_t input_index = 0;
+    // Read current pose coordinates and orientation
+    float curr_x = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->current_pose_x)) {
+        curr_x = *opt;
+    }
+    float curr_y = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->current_pose_y)) {
+        curr_y = *opt;
+    }
+    float curr_o = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->current_pose_o)) {
+        curr_o = *opt;
+    }
+    cogip_defs::Pose current_pose(curr_x, curr_y, curr_o);
 
-    // Current pose
-    float current_pose_x = inputs_[input_index++];
-    float current_pose_y = inputs_[input_index++];
-    float current_pose_O = inputs_[input_index++];
-    cogip_defs::Pose current_pose(
-        current_pose_x,
-        current_pose_y,
-        current_pose_O
-    );
+    // Read target pose coordinates and orientation
+    float tgt_x = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->target_pose_x)) {
+        tgt_x = *opt;
+    }
+    float tgt_y = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->target_pose_y)) {
+        tgt_y = *opt;
+    }
+    float tgt_o = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->target_pose_o)) {
+        tgt_o = *opt;
+    }
+    cogip_defs::Pose target_pose(tgt_x, tgt_y, tgt_o);
 
-    // Target pose
-    float target_pose_x = this->inputs_[input_index++];
-    float target_pose_y = this->inputs_[input_index++];
-    float target_pose_O = this->inputs_[input_index++];
-    cogip_defs::Pose target_pose(
-        target_pose_x,
-        target_pose_y,
-        target_pose_O
-    );
+    // Read current linear and angular speeds
+    float curr_lin = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->current_linear_speed)) {
+        curr_lin = *opt;
+    }
+    float curr_ang = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->current_angular_speed)) {
+        curr_ang = *opt;
+    }
+    cogip_defs::Polar current_speed(curr_lin, curr_ang);
 
-    // Current speed
-    float current_linear_speed = this->inputs_[input_index++];
-    float current_angular_speed = this->inputs_[input_index++];
-    cogip_defs::Polar current_speed(
-        current_linear_speed,
-        current_angular_speed
-    );
+    // Read target linear and angular speeds
+    float tgt_lin = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->target_linear_speed)) {
+        tgt_lin = *opt;
+    }
+    float tgt_ang = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->target_angular_speed)) {
+        tgt_ang = *opt;
+    }
+    cogip_defs::Polar target_speed(tgt_lin, tgt_ang);
 
-    // Target speed
-    float target_linear_speed = this->inputs_[input_index++];
-    float target_angular_speed = this->inputs_[input_index++];
-    cogip_defs::Polar target_speed(
-        target_linear_speed,
-        target_angular_speed
-    );
-
-    // Allow moving reversely
-    bool allow_reverse = (bool)inputs_[input_index++];
-
-    // Force allow-reverse once step 2 is done
-    static bool force_allow_reverse = false;
-
-    // Keep trace of previous target pose
-    static cogip_defs::Pose previous_target_pose(
-        INT32_MAX,
-        INT32_MAX,
-        INT32_MAX
-    );
-
-    if (
-        (target_pose.x() != previous_target_pose.x())
-        || (target_pose.y() != previous_target_pose.y())
-        || (target_pose.O() != previous_target_pose.O())) {
-        force_allow_reverse = false;
-
-        previous_target_pose = target_pose;
+    // Read reverse permission flag
+    bool allow_rev = false;
+    if (auto opt = io.get_as<float>(keys_->allow_reverse)) {
+        allow_rev = static_cast<bool>(*opt);
     }
 
-    if (force_allow_reverse) {
-        allow_reverse = true;
+    // Persist reverse flag when switching to MOVE_TO_POSITION state
+    static bool force_rev = false;
+    static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
+
+    if ((tgt_x != prev_target.x()) ||
+        (tgt_y != prev_target.y()) ||
+        (tgt_o != prev_target.O()))
+    {
+        force_rev = false;
+        prev_target = target_pose;
+    }
+    if (force_rev) {
+        allow_rev = true;
     }
 
-    if (!is_index_valid(input_index)) {
-        return;
-    }
-
-    // Position reached flag
-    target_pose_status_t pose_reached = target_pose_status_t::moving;
-
-    // compute position error
+    // Compute pose error as polar difference
     cogip_defs::Polar pos_err = target_pose - current_pose;
-
-    // If the robot is allowed to go backward, reverse the error if it shorten the move.
-    if (allow_reverse && (fabs(pos_err.angle()) > 90)) {
+    if (allow_rev && (std::fabs(pos_err.angle()) > 90.0f)) {
         pos_err.reverse();
     }
 
-    bool no_angular_speed_limit = false;
-    bool no_linear_speed_limit = false;
+    bool no_ang_limit = false;
+    bool no_lin_limit = false;
 
-    // Each move is decomposed in three steps:
-    //   1. The robot rotates on its center to take the direction of the pose to reach.
-    //   2. The robot goes straight to that pose.
-    //   3. Once arrived at this pose, it rotates again on its center to the wanted angle.
-    // The angular threshold is used to check if a rotation of the robot on itself has to be done.
-    // The linear threshold is used to check if the robot is close to the pose to reach.
-    if ((this->current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION)
-        && (fabs((pos_err.distance())) <= parameters_->linear_threshold())) {
-        // If already on target pose, directly take orientation.
-        this->current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+    float lin_thresh = this->parameters_->linear_threshold();
+    float ang_thresh = this->parameters_->angular_threshold();
+    float lin_decel = this->parameters_->linear_deceleration();
+    float ang_decel = this->parameters_->angular_deceleration();
+    float ang_inter = this->parameters_->angular_intermediate_threshold();
+
+    float abs_dist = std::fabs(pos_err.distance());
+    float abs_ang = std::fabs(pos_err.angle());
+
+    // State transitions
+    if ((current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION) &&
+        (abs_dist <= lin_thresh))
+    {
+        current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
     }
-    switch (this->current_state_) {
+
+    switch (current_state_) {
         case PoseStraightFilterState::ROTATE_TO_DIRECTION:
-            if (fabs(pos_err.angle()) > parameters_->angular_intermediate_threshold()) {
-                // Rotate towards the direction of the target pose
-                // Set linear speed to 0
-                target_speed.set_distance(0);
+            if (abs_ang > ang_inter) {
+                target_speed.set_distance(0.0f);
             } else {
-                // Angular direction correct, move to the next step
-                pose_reached = target_pose_status_t::intermediate_reached;
-                force_allow_reverse = true;
-                this->current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
+                target_speed.set_distance(pos_err.distance() >= 0 ? 1.0f : -1.0f); // forward motion sign
+                force_rev = true;
+                current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
             }
             break;
 
         case PoseStraightFilterState::MOVE_TO_POSITION:
-            // Move towards the target pose
-            // Angular speed and linear threshold unrestricted
-            if (fabs(pos_err.distance()) <= parameters_->linear_threshold()) {
-                // Reached intermediate pose, move to the final step
-                pose_reached = target_pose_status_t::intermediate_reached;
-                this->current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+            if (abs_dist <= lin_thresh) {
+                current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
             }
             break;
 
         case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
-            // Check if final orientation should be bypassed
-            if (!parameters_->bypass_final_orientation()) {
-                pos_err.set_angle(limit_angle_deg(target_pose.O() - current_pose.O()));
+            if (!this->parameters_->bypass_final_orientation()) {
+                pos_err.set_angle(limit_angle_deg(tgt_o - curr_o));
+            } else {
+                pos_err.set_angle(0.0f);
             }
-            else {
-                pos_err.set_angle(0);
-            }
-            // Force linear speed to 0
-            target_speed.set_distance(0);
-
-            // Rotate towards the final orientation
-            if (fabs(pos_err.angle()) <= parameters_->angular_threshold()) {
-                // Reached final pose
-                pose_reached = target_pose_status_t::reached;
-                this->current_state_ = PoseStraightFilterState::FINISHED;
+            target_speed.set_distance(0.0f);
+            if (std::fabs(pos_err.angle()) <= ang_thresh) {
+                current_state_ = PoseStraightFilterState::FINISHED;
             }
             break;
 
         case PoseStraightFilterState::FINISHED:
-            // All steps completed, nothing to do
-            target_speed.set_distance(0);
-            target_speed.set_angle(0);
+            target_speed.set_distance(0.0f);
+            target_speed.set_angle(0.0f);
             break;
     }
 
-    if (fabs(pos_err.distance()) <= ((current_speed.distance() * current_speed.distance()) / (2 * parameters_->linear_deceleration()))) {
-        target_speed.set_distance(sqrt(2 * parameters_->linear_deceleration() * fabs(pos_err.distance())));
+    // Apply deceleration rules if needed
+    if (abs_dist <= ((curr_lin * curr_lin) / (2.0f * lin_decel))) {
+        target_speed.set_distance(std::sqrt(2.0f * lin_decel * abs_dist));
+    }
+    if (abs_ang <= ((curr_ang * curr_ang) / (2.0f * ang_decel))) {
+        target_speed.set_angle(std::sqrt(2.0f * ang_decel * abs_ang));
     }
 
-    if (fabs(pos_err.angle()) <= ((current_speed.angle() * current_speed.angle()) / (2 * parameters_->angular_deceleration()))) {
-        target_speed.set_angle(sqrt(2 * parameters_->angular_deceleration() * fabs(pos_err.angle())));
-    }
+    // Write linear pose error
+    io.set(keys_->linear_pose_error, pos_err.distance());
 
-    // Linear pose error
-    outputs_[0] = pos_err.distance();
-    // Linear current speed
-    outputs_[1] = current_speed.distance();
-    // Linear target speed
-    outputs_[2] = fabs(target_speed.distance());
-    // Should linear speed be filtered?
-    outputs_[3] = (float)no_linear_speed_limit;
+    // Write linear current speed
+    io.set(keys_->linear_current_speed, current_speed.distance());
 
-    // Angular pose error
-    outputs_[4] = pos_err.angle();
-    // Angular current speed
-    outputs_[5] = current_speed.angle();
-    // Angular target speed
-    outputs_[6] = fabs(target_speed.angle());
-    // Should angular speed be filtered?
-    outputs_[7] = (float)no_angular_speed_limit;
+    // Write linear target speed as absolute
+    io.set(keys_->linear_target_speed, std::fabs(target_speed.distance()));
 
-    // Pose reached
-    outputs_[8] = (float)pose_reached;
-};
+    // Write linear speed filter flag
+    io.set(keys_->linear_speed_filter_flag, static_cast<float>(no_lin_limit));
 
-} // namespace motion_control
+    // Write angular pose error
+    io.set(keys_->angular_pose_error, pos_err.angle());
 
-} // namespace cogip
+    // Write angular current speed
+    io.set(keys_->angular_current_speed, current_speed.angle());
+
+    // Write angular target speed as absolute
+    io.set(keys_->angular_target_speed, std::fabs(target_speed.angle()));
+
+    // Write angular speed filter flag
+    io.set(keys_->angular_speed_filter_flag, static_cast<float>(no_ang_limit));
+
+    // Write updated pose reached status
+    target_pose_status_t reached = (current_state_ == PoseStraightFilterState::FINISHED)
+                                   ? target_pose_status_t::reached
+                                   : target_pose_status_t::moving;
+    io.set(keys_->pose_reached, static_cast<float>(reached));
+}
+
+}  // namespace motion_control
+
+}  // namespace cogip

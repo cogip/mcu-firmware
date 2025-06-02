@@ -25,78 +25,25 @@ namespace motion_control {
 // class ControllerParameters;
 class BaseMetaController;
 
-/// A controller transforms input data to outputs
-/// @tparam INPUT_SIZE  number of inputs
-/// @tparam OUTPUT_SIZE number of outputs
-/// @tparam ParamsT     controller parameters type
-
+/// @brief Base class for typed controllers with parameters and IO key mapping.
 ///
-/// @tparam ParamsT
-/// @tparam INPUT_SIZE
-/// @tparam OUTPUT_SIZE
-template <size_t INPUT_SIZE, size_t OUTPUT_SIZE, typename ParamsT>
+/// This class transforms inputs to outputs using a `ControllersIO` object.
+/// It is templated to allow specific parameter and key types for each controller.
+/// Input/output keys are typically defined in a tag structure (e.g., LinearTags, AngularTags),
+/// enabling reuse of generic controller logic with different data sets.
+///
+/// @tparam ParamsT Type defining the controller’s parameters.
+/// @tparam IOKeysT Type defining the names/keys used to access inputs and outputs.
+template <typename ParamsT, typename IOKeysT>
 class Controller : virtual public BaseController {
 public:
-    /// Constructors
+    /// @brief Constructor for the controller.
+    /// @param parameters Pointer to controller parameters (can be nullptr if unused).
+    /// @param keys Pointer to the IO key definitions used to access ControllersIO values.
     Controller(
-        ParamsT *parameters = nullptr   ///< [in]  Controller parameters, specific to controller derived classes
-    ) : BaseController(), parameters_(parameters) {};
-
-    /// Get input at given index
-    /// return         input at given index, max float value if error
-    float input(
-        size_t index    ///< [in]  input index
-        ) const override {
-        if (index >= INPUT_SIZE) {
-            COGIP_DEBUG_COUT("Error: not enough values.");
-            return std::numeric_limits<float>::max();
-        }
-        return this->inputs_[index];
-    };
-
-    /// Set input at given index
-    void set_input(
-        size_t index,   ///< [in]  input index
-        float value    ///< [in]  value to set at given index
-        ) override {
-        if (index >= INPUT_SIZE) {
-            COGIP_DEBUG_COUT("Error: not enough input values.");
-            return;
-        }
-        this->inputs_[index] = value;
-    };
-
-    /// Get output at given index
-    /// return         output at given index, max float value if error
-    float output(
-        size_t index    ///< [in]  output index
-        ) const override {
-        if (index >= OUTPUT_SIZE) {
-            COGIP_DEBUG_COUT("Error: cannot get output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ").");
-            return std::numeric_limits<float>::max();
-        }
-        return this->outputs_[index];
-    };
-
-    /// Set output at given index
-    void set_output(
-        size_t index,   ///< [in]  output index
-        float value    ///< [in]  value to set at given index
-        ) override {
-        if (index >= OUTPUT_SIZE) {
-            COGIP_DEBUG_COUT("Error: cannot set output at index " << index << ", not enough output values(" << OUTPUT_SIZE << ").");
-            return;
-        }
-        this->outputs_[index] = value;
-    };
-
-    /// Get number of inputs
-    /// return number of inputs
-    size_t nb_inputs() const override { return INPUT_SIZE; };
-
-    /// Get number of outputs
-    /// return number of outputs
-    size_t nb_outputs() const override { return OUTPUT_SIZE; };
+        ParamsT* parameters = nullptr,
+        const IOKeysT* keys = nullptr
+    ) : BaseController(), parameters_(parameters), keys_(keys) {};
 
     /// Get parameters
     /// return current parameters
@@ -109,14 +56,11 @@ public:
         ) { parameters_ = new_params; };
 
 protected:
-    /// Inputs vector
-    etl::vector<float, INPUT_SIZE> inputs_;
-
-    /// outputs vector
-    etl::vector<float, OUTPUT_SIZE> outputs_;
-
     /// Controller parameters
     const ParamsT *parameters_;
+
+    /// Controller IOs keys used by this controller
+    const IOKeysT* keys_;
 };
 
 } // namespace motion_control

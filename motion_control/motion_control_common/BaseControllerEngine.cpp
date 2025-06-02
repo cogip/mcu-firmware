@@ -36,9 +36,13 @@ void BaseControllerEngine::thread_loop() {
         // Set controller inputs
         prepare_inputs();
 
+        // Clear modified flags
+        io_.clear_modified();
+
         if ((enable_) && (controller_)) {
+
             // Execute controller
-            controller_->execute();
+            controller_->execute(io_);
 
             // Next cycle
             current_cycle_++;

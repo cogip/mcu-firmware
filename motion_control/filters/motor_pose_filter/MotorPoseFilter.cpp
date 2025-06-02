@@ -15,58 +15,77 @@ namespace cogip {
 
 namespace motion_control {
 
-void MotorPoseFilter::execute() {
+void MotorPoseFilter::execute(ControllersIO& io)
+{
     COGIP_DEBUG_COUT("Execute MotorPoseFilter");
 
-    size_t input_index = 0;
-
-    // Current pose
-    float current_pose = this->inputs_[input_index++];
-
-    // Target pose
-    float target_pose = this->inputs_[input_index++];
-
-    // Current speed
-    float current_speed = this->inputs_[input_index++];
-
-    // Target speed
-    float target_speed = this->inputs_[input_index++];
-
-    // Position reached flag
-    target_pose_status_t pose_reached = (target_pose_status_t)this->inputs_[input_index++];
-
-    if (!is_index_valid(input_index)) {
-        std::cerr << __func__ << ": wrong number of inputs" << std::endl;
-        return;
+    // Read current pose (default to zero if missing)
+    float current_pose = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->current_pose)) {
+        current_pose = *opt;
     }
 
-    // compute position error
-    float pos_err = target_pose - current_pose;
+    // Read target pose (default to zero if missing)
+    float target_pose = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->target_pose)) {
+        target_pose = *opt;
+    }
 
-    // Do not disable speed limitation
+    // Read current speed (default to zero if missing)
+    float current_speed = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->current_speed)) {
+        current_speed = *opt;
+    }
+
+    // Read target speed (default to zero if missing)
+    float target_speed = 0.0f;
+    if (auto opt = io.get_as<float>(keys_->target_speed)) {
+        target_speed = *opt;
+    }
+
+    // Read pose reached status (default to moving if missing)
+    target_pose_status_t pose_reached = target_pose_status_t::moving;
+    if (auto opt = io.get_as<float>(keys_->pose_reached)) {
+        pose_reached = static_cast<target_pose_status_t>(static_cast<int>(*opt));
+    }
+
+    // Compute pose difference
+    float position_error = target_pose - current_pose;
+
+    // Decide whether to stop or decelerate based on thresholds
     bool no_speed_limit = false;
+    float abs_error = std::fabs(position_error);
+    float threshold = this->parameters_->threshold();
+    float decel = this->parameters_->deceleration();
 
-    if (fabs(pos_err) <= parameters_->threshold()) {
-        // Reached final pose
+    if (abs_error <= threshold) {
+        // final pose reached
         pose_reached = target_pose_status_t::reached;
-        target_speed = 0;
+        target_speed = 0.0f;
     }
-    else if (fabs(pos_err) <= ((current_speed * current_speed) / (2 * parameters_->deceleration()))) {
-        target_speed = sqrt(2 * parameters_->deceleration() * fabs(pos_err));
+    else {
+        // compute deceleration if needed
+        float stopping_distance = (current_speed * current_speed) / (2.0f * decel);
+        if (abs_error <= stopping_distance) {
+            target_speed = std::sqrt(2.0f * decel * abs_error);
+        }
     }
 
-    // Pose error
-    outputs_[0] = pos_err;
-    // Current speed
-    outputs_[1] = current_speed;
-    // Target speed
-    outputs_[2] = fabs(target_speed);
-    // Should speed be filtered ?
-    outputs_[3] = (float)no_speed_limit;
+    // Write pose error
+    io.set(keys_->position_error, position_error);
 
-    // Pose reached
-    outputs_[4] = (float)pose_reached;
-};
+    // Pass through current speed
+    io.set(keys_->current_speed, current_speed);
+
+    // Write filtered target speed as absolute value
+    io.set(keys_->filtered_speed, std::fabs(target_speed));
+
+    // Indicate whether speed limitation is disabled
+    io.set(keys_->speed_filter_flag, static_cast<float>(no_speed_limit));
+
+    // Write updated pose reached status
+    io.set(keys_->pose_reached_out, static_cast<float>(pose_reached));
+}
 
 } // namespace motion_control
 

@@ -14,28 +14,34 @@
 
 // Project includes
 #include "motion_control_common/Controller.hpp"
+#include "motion_control_common/ControllersIO.hpp"
 #include "PosePIDControllerParameters.hpp"
+#include "PosePIDControllerIOKeys.hpp"
 
 namespace cogip {
 
 namespace motion_control {
 
-/// Pose PID controller.
-/// Input 0:    polar pose error
-/// Input 1:    current speed
-/// Input 2:    target speed
-/// Output 0:   speed order
-/// Output 1:   current speed
-/// Output 2:   target speed
-class PosePIDController : public Controller<5, 5, PosePIDControllerParameters> {
+/// @brief Pose PID controller.
+///        Reads “position_error” and computes “speed_order” via PID.
+class PosePIDController
+    : public Controller<PosePIDControllerParameters, PosePIDControllerIOKeys>
+{
 public:
-    /// Constructor
+    /// @brief Constructor
+    /// @param parameters Pointer to PID parameters (contains pid() ).
+    /// @param keys       Pointer to a POD containing all controller keys.
     explicit PosePIDController(
-        PosePIDControllerParameters *parameters     ///< [in]  PID paramaters. See PosePIDControllerParameters
-        ) : BaseController(), Controller(parameters) {};
+        PosePIDControllerParameters*       parameters,
+        const PosePIDControllerIOKeys*     keys
+    )
+        : Controller<PosePIDControllerParameters, PosePIDControllerIOKeys>(parameters, keys)
+    {
+    }
 
-    /// Compute PID to correct given error according to PID parameters and inputs.
-    void execute() override;
+    /// @brief Read position error via keys_->position_error,
+    ///        compute speed order, and write it to controller IO map.
+    void execute(ControllersIO& io) override;
 };
 
 } // namespace motion_control
