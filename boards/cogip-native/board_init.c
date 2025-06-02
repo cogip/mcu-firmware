@@ -44,7 +44,7 @@ void board_init(void)
     MALLINFO minfo = MALLINFO_FUNC();
 
     /* Compute heap start address */
-    __sheap = (char *)malloc(0) - minfo.uordblks - MALLOC_OVERHEAD;
+    __sheap = (char *)sbrk(0) - minfo.uordblks - MALLOC_OVERHEAD;
     __eheap = (char *)sbrk(0);
 
     puts("COGIP native board initialized.");
