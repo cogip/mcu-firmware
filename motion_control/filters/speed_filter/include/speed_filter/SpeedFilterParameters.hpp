@@ -19,7 +19,7 @@ namespace motion_control {
 class SpeedFilterParameters {
 public:
     /// Constructor
-    SpeedFilterParameters(
+    explicit SpeedFilterParameters(
         float min_speed = 0.0,         ///< [in]  see max_speed_
         float max_speed = 0.0,         ///< [in]  see max_speed_
         float max_acceleration = 0.0,  ///< [in]  see max_acceleration_

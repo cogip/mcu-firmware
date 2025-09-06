@@ -13,105 +13,65 @@
 #pragma once
 
 // Project includes
+#include "ControllersIO.hpp"
 #include "etl/deque.h"
-#include "BaseMetaController.hpp"
-#include "MetaControllerParameters.hpp"
-#include "Controller.hpp"
+#include "MetaController.hpp"
+#include <iostream>
 
 namespace cogip {
-
 namespace motion_control {
 
-/// Parallel meta controllers are controllers containers to execute them in parallel.
-/// @tparam INPUT_SIZE      number of inputs
-/// @tparam OUTPUT_SIZE     number of outputs
-/// @tparam NB_CONTROLLERS  maximum number of controllers
-template <
-    size_t INPUT_SIZE,
-    size_t OUTPUT_SIZE,
-    size_t NB_CONTROLLERS
->
-class ParallelMetaController :
-    public BaseMetaController,
-    public Controller<INPUT_SIZE, OUTPUT_SIZE, MetaControllerParameters>,
-    protected etl::deque<BaseController *, NB_CONTROLLERS> {
+/// @brief Runs multiple sub-controllers “in parallel” using the same ControllersIO.
+/// @details If any ParamKey gets written by ≥2 top‐level controllers, prints a warning.
+/// @tparam NB_CONTROLLERS Maximum number of sub-controllers.
+template <size_t NB_CONTROLLERS>
+class ParallelMetaController : public MetaController<NB_CONTROLLERS>
+{
 public:
-    /// Controller core method. Meta controller executes all sub-controllers in parallel.
-    void execute() override {
-        if (this->empty()) {
-            COGIP_DEBUG_COUT("Error: no controller added.");
+    /// @brief Execute all sub-controllers on the same `io`.
+    ///        Detects and warns if the same key is modified by ≥2 controllers.
+    /// @param io Shared ControllersIO instance.
+    void execute(ControllersIO& io) override
+    {
+        if (controllers_.empty()) {
+            std::cerr << "Error: no controller added." << std::endl;
             return;
         }
 
-        COGIP_DEBUG_COUT("Execute ParallelMetaController");
+        std::cout << "Execute ParallelMetaController" << std::endl;
 
-        this->set_inputs();
+        // Cumulative set of keys already written by previous controllers.
+        etl::set<ParamKey, MAX_PARAMS> cumulative_written;
 
-        // Execute each controller.
-        for (auto ctrl: *this) {
-            // Execute controller.
-            ctrl->execute();
+        // For each top-level controller:
+        for (auto ctrl : controllers_) {
+            auto before_io = io.snapshot_modified();
+
+            // Execute controller
+            ctrl->execute(io);
+
+            auto after_io = io.snapshot_modified();
+
+            // Compute difference after/before on inputs/outputs via static helper
+            auto just_written = ControllersIO::difference(after_io, before_io);
+
+            // Detect collisions, parallel controllers should not modify the same entry
+            // in the inputs/outputs map
+            auto collisions = ControllersIO::find_collisions(just_written, cumulative_written);
+            for (auto h : collisions) {
+                std::cerr << "Warning: key hash " << h
+                          << " was already written by another parallel controller.\n";
+            }
+
+            // Merge
+            for (auto h_new : just_written) {
+                cumulative_written.insert(h_new);
+            }
         }
+    }
 
-        this->sort_outputs();
-    };
-
-    /// Add a controller to the end of the controllers chain.
-    void add_controller(
-        BaseController *ctrl    ///< [in]  new controller to add
-        ) override {
-        if (! ctrl->set_meta(this)) {
-            return;
-        }
-        this->push_back(ctrl);
-
-        nb_controllers_++;
-    };
-
-    /// Add a controller to the beginning of the controllers chain.
-    void prepend_controller(
-        BaseController *ctrl    ///< [in]  new controller to add
-        ) override {
-        if (! ctrl->set_meta(this)) {
-            return;
-        }
-        this->push_front(ctrl);
-
-        nb_controllers_++;
-    };
-
-    /// Replace a controller at the given position in the controllers chain.
-    void replace_controller(
-        uint32_t index,             ///< [in]  index
-        BaseController *new_ctrl    ///< [in]  position of the controller to replace
-        ) override {
-        if (index >= nb_controllers_) {
-            return;
-        }
-
-        BaseController *ctrl_to_replace = (*this)[index];
-
-        if (ctrl_to_replace == new_ctrl) {
-            return;
-        }
-
-        if ((ctrl_to_replace->nb_inputs() != new_ctrl->nb_inputs())
-            || (ctrl_to_replace->nb_outputs() != new_ctrl->nb_outputs())
-            || (! new_ctrl->set_meta(this))
-            || (! ctrl_to_replace->set_meta(nullptr))
-            ) {
-            return;
-        }
-
-        (*this)[index] = new_ctrl;
-    };
-
-    protected:
-        /// Set inputs for all parallel controllers.
-        virtual void set_inputs() = 0;
-
-        /// Sort outputs from all parallel controllers.
-        virtual void sort_outputs() = 0;
+private:
+    etl::deque<BaseController*, NB_CONTROLLERS> controllers_;
 };
 
 } // namespace motion_control

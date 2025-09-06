@@ -14,32 +14,35 @@
 
 // Project includes
 #include "motion_control_common/Controller.hpp"
+#include "motion_control_common/ControllersIO.hpp"
 #include "PassthroughPosePIDControllerParameters.hpp"
+#include "PassthroughPosePIDControllerIOKeys.hpp"
 
 namespace cogip {
 
 namespace motion_control {
 
-/// Pose PID controller.
-/// Input 0:    polar pose error
-/// Input 1:    current speed
-/// Input 2:    target speed
-/// Input 3:    filter speed bool
-/// Input 4:    pose reached
-/// Output 0:   speed order
-/// Output 1:   current speed
-/// Output 2:   target speed
-/// Output 3:   filter speed bool
-/// Output 4:   pose reached
-class PassthroughPosePIDController : public Controller<5, 5, PassthroughPosePIDControllerParameters> {
+/// @brief Pose PID controller: reads “position_error”, computes a “speed_order”,
+///        and writes “speed_order” + “target_speed” into ControllersIO.
+///        Both the key names and the PID parameters are supplied by the caller.
+class PassthroughPosePIDController : public Controller<
+    PassthroughPosePIDControllerIOKeys,
+    PassthroughPosePIDControllerParameters> {
 public:
-    /// Constructor
+    /// @brief Constructor.
+    /// @param keys        Pointer to a POD containing the three key names.
+    /// @param parameters  Reference to PID parameters.
     explicit PassthroughPosePIDController(
-        PassthroughPosePIDControllerParameters *parameters     ///< [in]  PID paramaters. See PassthroughPosePIDControllerParameters
-        ) : BaseController(), Controller(parameters) {};
+        const PassthroughPosePIDControllerIOKeys&       keys,
+        const PassthroughPosePIDControllerParameters&   parameters
+    )
+        : Controller<PassthroughPosePIDControllerIOKeys,
+                     PassthroughPosePIDControllerParameters>(keys, parameters) {}
 
-    /// Compute PID to correct given error according to PID parameters and inputs.
-    void execute() override;
+    /// @brief Read “position_error” via keys_->position_error, compute speed order,
+    ///        and write “speed_order” + “target_speed” back via keys_->speed_order/target_speed.
+    /// @param io Shared ControllersIO.
+    void execute(ControllersIO& io) override;
 };
 
 } // namespace motion_control

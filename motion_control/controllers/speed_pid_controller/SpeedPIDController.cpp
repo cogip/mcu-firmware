@@ -1,36 +1,34 @@
-// RIOT includes
-#include <ztimer.h>
-
-// System includes
-#include <cstdio>
-#include <iostream>
-
-// Project includes
-#include "cogip_defs/Polar.hpp"
-#include "etl/list.h"
-#include "etl/vector.h"
-
 #include "speed_pid_controller/SpeedPIDController.hpp"
+#include <iostream>
 
 namespace cogip {
 
 namespace motion_control {
 
-void SpeedPIDController::execute() {
-    COGIP_DEBUG_COUT("Execute SpeedPIDController");
+void SpeedPIDController::execute(ControllersIO& io)
+{
+    std::cout << "Start SpeedPIDController" << std::endl;
 
-    // Speed error
-    float speed_error = this->inputs_[0];
+    // Read speed error (default to 0.0f if missing)
+    float speed_error = 0.0f;
+    if (auto opt_err = io.get_as<float>(keys_.speed_error)) {
+        speed_error = *opt_err;
+    }
+    else {
+        std::cout   << "WARNING: " << keys_.speed_error
+                    << " is not available, using default value "
+                    << speed_error << std::endl;
+    }
 
-    // Compute output values.
-    float speed_command = parameters_->pid()->compute(speed_error);
+    // Compute speed command via PID
+    float speed_command = this->parameters_.pid()->compute(speed_error);
 
-    // Store output values.
-    this->outputs_[0] = speed_command;
-    // Pose reached
-    this->outputs_[1] = this->inputs_[1];
-};
+    // Write speed command
+    io.set(keys_.speed_command, speed_command);
 
-} // namespace motion_control
+    std::cout << "End SpeedPIDController" << std::endl;
+}
 
-} // namespace cogip
+}  // namespace motion_control
+
+}  // namespace cogip

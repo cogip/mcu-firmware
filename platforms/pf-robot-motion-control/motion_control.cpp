@@ -16,20 +16,26 @@
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
 #include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
 #include "passthrough_pose_pid_controller/PassthroughPosePIDControllerParameters.hpp"
+#include "passthrough_pose_pid_controller/PassthroughPosePIDControllerIOKeysDefault.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
 #include "pose_pid_controller/PosePIDControllerParameters.hpp"
+#include "pose_pid_controller/PosePIDControllerIOKeysDefault.hpp"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "pose_straight_filter/PoseStraightFilterParameters.hpp"
+#include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
 #include "quadpid_meta_controller/QuadPIDMetaController.hpp"
 #include "speed_filter/SpeedFilter.hpp"
 #include "speed_filter/SpeedFilterParameters.hpp"
+#include "speed_filter/SpeedFilterIOKeysDefault.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
+#include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 #include "drive_controller/DifferentialDriveControllerParameters.hpp"
 #include "drive_controller/DifferentialDriveController.hpp"
 
+#include "etl/limits.h"
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
 #include "PB_Pid.hpp"
@@ -108,7 +114,8 @@ static cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_
             platform_max_dec_linear_mm_per_period2);
 /// PoseStraightFilter controller to make the robot always moves in a straight line.
 static cogip::motion_control::PoseStraightFilter pose_straight_filter =
-        cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);
+        cogip::motion_control::PoseStraightFilter(cogip::motion_control::pose_straight_filter_io_keys_default,
+            pose_straight_filter_parameters);
 /// PolarParallelMetaController to split linear and angular chain.
 static cogip::motion_control::PolarParallelMetaController polar_parallel_meta_controller;
 
@@ -117,7 +124,8 @@ static cogip::motion_control::DualPIDMetaController linear_dualpid_meta_controll
 /// Linear PosePIDControllerParameters.
 static cogip::motion_control::PosePIDControllerParameters linear_pose_controller_parameters(&linear_pose_pid);
 /// Linear PosePIDController that provides SpeedPIDController order first filtered by SpeedFilter.
-static cogip::motion_control::PosePIDController linear_pose_controller(&linear_pose_controller_parameters);
+static cogip::motion_control::PosePIDController linear_pose_controller(cogip::motion_control::linear_pose_pid_controller_io_keys_default,
+    linear_pose_controller_parameters);
 /// Linear SpeedFilterParameters.
 static cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
     platform_min_speed_linear_mm_per_period,
@@ -129,18 +137,21 @@ static cogip::motion_control::SpeedFilterParameters linear_speed_filter_paramete
     platform_linear_anti_blocking_blocked_cycles_nb_threshold
     );
 /// Linear SpeedFilter to limit speed and acceleration for linear SpeedPIDController.
-static cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters);
+static cogip::motion_control::SpeedFilter linear_speed_filter(cogip::motion_control::linear_speed_filter_io_keys_default,
+    linear_speed_filter_parameters);
 /// Linear SpeedPIDControllerParameters.
 static cogip::motion_control::SpeedPIDControllerParameters linear_speed_controller_parameters(&linear_speed_pid);
 /// Linear SpeedPIDController to compute linear command to send to motors.
-static cogip::motion_control::SpeedPIDController linear_speed_controller(&linear_speed_controller_parameters);
+static cogip::motion_control::SpeedPIDController linear_speed_controller(cogip::motion_control::linear_speed_pid_controller_io_keys_default,
+    linear_speed_controller_parameters);
 
 /// Angular DualPIDMetaController for pose and speed control in cascade.
 static cogip::motion_control::DualPIDMetaController angular_dualpid_meta_controller;
 /// Angular PosePIDControllerParameters.
 static cogip::motion_control::PosePIDControllerParameters angular_pose_controller_parameters(&angular_pose_pid);
 /// Angular PosePIDController that provides SpeedPIDController order first filtered by SpeedFilter.
-static cogip::motion_control::PosePIDController angular_pose_controller(&angular_pose_controller_parameters);
+static cogip::motion_control::PosePIDController angular_pose_controller(cogip::motion_control::angular_pose_pid_controller_io_keys_default,
+    angular_pose_controller_parameters);
 /// Angular SpeedFilterParameters.
 static cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(
     platform_min_speed_angular_deg_per_period,
@@ -148,11 +159,13 @@ static cogip::motion_control::SpeedFilterParameters angular_speed_filter_paramet
     platform_max_acc_angular_deg_per_period2
     );
 /// Angular SpeedFilter to limit speed and acceleration for angular SpeedPIDController.
-static cogip::motion_control::SpeedFilter angular_speed_filter(&angular_speed_filter_parameters);
+static cogip::motion_control::SpeedFilter angular_speed_filter(cogip::motion_control::angular_speed_filter_io_keys_default,
+    angular_speed_filter_parameters);
 /// Angular SpeedPIDControllerParameters.
 static cogip::motion_control::SpeedPIDControllerParameters angular_speed_controller_parameters(&angular_speed_pid);
 /// Angular SpeedPIDController to compute angular command to send to motors.
-static cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters);
+static cogip::motion_control::SpeedPIDController angular_speed_controller(cogip::motion_control::angular_speed_pid_controller_io_keys_default,
+    angular_speed_controller_parameters);
 
 /// Linear PassthroughPosePIDControllerParameters.
 static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_linear_pose_controller_parameters(
@@ -160,14 +173,16 @@ static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough
     true
     );
 /// Linear PassthroughPosePIDController replaces linear PosePIDController to bypass it, imposing target speed as speed order.
-static cogip::motion_control::PassthroughPosePIDController passthrough_linear_pose_controller(&passthrough_linear_pose_controller_parameters);
+static cogip::motion_control::PassthroughPosePIDController passthrough_linear_pose_controller(cogip::motion_control::linear_passthrough_pose_pid_controller_io_keys_default,
+    passthrough_linear_pose_controller_parameters);
 /// Angular PassthroughPosePIDControllerParameters.
 static cogip::motion_control::PassthroughPosePIDControllerParameters passthrough_angular_pose_controller_parameters(
     platform_max_speed_angular_deg_per_period,
     true
     );
 /// Angular PassthroughPosePIDController replaces angular PosePIDController to bypass it, imposing target speed as speed order.
-static cogip::motion_control::PassthroughPosePIDController passthrough_angular_pose_controller(&passthrough_angular_pose_controller_parameters);
+static cogip::motion_control::PassthroughPosePIDController passthrough_angular_pose_controller(cogip::motion_control::angular_passthrough_pose_pid_controller_io_keys_default,
+    passthrough_angular_pose_controller_parameters);
 
 /// Quad PID meta controller.
 static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
@@ -228,7 +243,7 @@ static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_
     angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
     angular_dualpid_meta_controller.add_controller(&angular_speed_controller);
 
-    // ParallelMetaController:
+    // PolarParallelMetaController:
     // --> Linear DualPIDMetaController
     // `-> Angular DualPIDMetaController
     polar_parallel_meta_controller.add_controller(&linear_dualpid_meta_controller);
@@ -281,8 +296,8 @@ static void pf_quadpid_meta_controller_linear_speed_controller_test_setup(void) 
     pf_quadpid_meta_controller_restore();
 
     // Disable speed filter by setting maximum speed and acceleration to unreachable limits
-    linear_speed_filter_parameters.set_max_speed(std::numeric_limits<uint16_t>::max());
-    linear_speed_filter_parameters.set_max_acceleration(std::numeric_limits<uint16_t>::max());
+    linear_speed_filter_parameters.set_max_speed(etl::numeric_limits<uint16_t>::max());
+    linear_speed_filter_parameters.set_max_acceleration(etl::numeric_limits<uint16_t>::max());
 
     // Disable pose PID correction by using a passthrough controller
     linear_dualpid_meta_controller.replace_controller(0, &passthrough_linear_pose_controller);
@@ -300,8 +315,8 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
     pf_quadpid_meta_controller_restore();
 
     // Disable speed filter by setting maximum speed and acceleration to unreachable limits
-    angular_speed_filter_parameters.set_max_speed(std::numeric_limits<uint16_t>::max());
-    angular_speed_filter_parameters.set_max_acceleration(std::numeric_limits<uint16_t>::max());
+    angular_speed_filter_parameters.set_max_speed(etl::numeric_limits<uint16_t>::max());
+    angular_speed_filter_parameters.set_max_acceleration(etl::numeric_limits<uint16_t>::max());
 
     // Disable pose PID correction by using a passthrough controller
     angular_dualpid_meta_controller.replace_controller(0, &passthrough_angular_pose_controller);

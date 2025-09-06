@@ -1,5 +1,6 @@
 #include "motion_control_common/BaseControllerEngine.hpp"
 #include "motion_control_common/Controller.hpp"
+#include <iostream>
 #include "thread/thread.hpp"
 
 // RIOT includes
@@ -15,7 +16,7 @@ namespace motion_control {
 static void *_start_thread(void *arg)
 {
     COGIP_DEBUG_COUT("Engine start thread");
-    ((BaseControllerEngine *)arg)->thread_loop();
+    static_cast<BaseControllerEngine *>(arg)->thread_loop();
     return EXIT_SUCCESS;
 }
 
@@ -33,12 +34,19 @@ void BaseControllerEngine::thread_loop() {
 
         COGIP_DEBUG_COUT("Engine loop");
 
+        // Reset all read-only markers to allow data update
+        io_.reset_readonly_markers();
+
         // Set controller inputs
         prepare_inputs();
 
+        // Clear modified flags
+        io_.clear_modified();
+
         if ((enable_) && (controller_)) {
+
             // Execute controller
-            controller_->execute();
+            controller_->execute(io_);
 
             // Next cycle
             current_cycle_++;

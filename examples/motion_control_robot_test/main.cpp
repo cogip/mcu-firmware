@@ -26,6 +26,10 @@
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "speed_filter/SpeedFilter.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
+#include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
+#include "pose_pid_controller/PosePIDControllerIOKeysDefault.hpp"
+#include "speed_filter/SpeedFilterIOKeysDefault.hpp"
+#include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 
 /// Encoders
 static cogip::encoder::EncoderQDEC left_encoder(0, cogip::encoder::EncoderMode::ENCODER_MODE_X1, 1024);
@@ -110,7 +114,8 @@ int main(void)
 
     // Filter controller behavior to always moves in a straight line
     cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters = cogip::motion_control::PoseStraightFilterParameters(2, 2);
-    cogip::motion_control::PoseStraightFilter pose_straight_filter = cogip::motion_control::PoseStraightFilter(&pose_straight_filter_parameters);
+    cogip::motion_control::PoseStraightFilter pose_straight_filter = cogip::motion_control::PoseStraightFilter(cogip::motion_control::pose_straight_filter_io_keys_default,
+        pose_straight_filter_parameters);
     std::cout << "PoseStraightFilter created" << std::endl;
 
     // Split angular and linear controls
@@ -124,18 +129,21 @@ int main(void)
     // Linear pose PID controller
     cogip::pid::PID linear_position_pid(1, 0., 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::PosePIDControllerParameters linear_position_controller_parameters(&linear_position_pid);
-    cogip::motion_control::PosePIDController linear_position_controller(&linear_position_controller_parameters);
+    cogip::motion_control::PosePIDController linear_position_controller(cogip::motion_control::linear_pose_pid_controller_io_keys_default,
+        linear_position_controller_parameters);
     linear_dualpid_meta_controller.add_controller(&linear_position_controller);
     std::cout << "PosePIDController created and added to LinearDualPIDMetaController" << std::endl;
     // Linear speed filter
     cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(1000., 500.);
-    cogip::motion_control::SpeedFilter linear_speed_filter(&linear_speed_filter_parameters);
+    cogip::motion_control::SpeedFilter linear_speed_filter(cogip::motion_control::linear_speed_filter_io_keys_default,
+        linear_speed_filter_parameters);
     linear_dualpid_meta_controller.add_controller(&linear_speed_filter);
     std::cout << "SpeedFilter created and added to LinearDualPIDMetaController" << std::endl;
     // Linear speed PID controller
     cogip::pid::PID linear_speed_pid(1, 0.1, 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::SpeedPIDControllerParameters linear_speed_controller_parameters(&linear_speed_pid);
-    cogip::motion_control::SpeedPIDController linear_speed_controller(&linear_speed_controller_parameters);
+    cogip::motion_control::SpeedPIDController linear_speed_controller(cogip::motion_control::linear_speed_pid_controller_io_keys_default,
+        linear_speed_controller_parameters);
     linear_dualpid_meta_controller.add_controller(&linear_speed_controller);
     std::cout << "SpeedPIDController created and added to LinearDualPIDMetaController" << std::endl;
 
@@ -146,18 +154,21 @@ int main(void)
     // Angular pose PID controller
     cogip::pid::PID angular_position_pid(1, 0., 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::PosePIDControllerParameters angular_position_controller_parameters(&angular_position_pid);
-    cogip::motion_control::PosePIDController angular_position_controller(&angular_position_controller_parameters);
+    cogip::motion_control::PosePIDController angular_position_controller(cogip::motion_control::angular_pose_pid_controller_io_keys_default,
+        angular_position_controller_parameters);
     angular_dualpid_meta_controller.add_controller(&angular_position_controller);
     std::cout << "PosePIDController created and added to AngularDualPIDMetaController" << std::endl;
     // Angular speed filter
     cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(1000., 500.);
-    cogip::motion_control::SpeedFilter angular_speed_filter(&angular_speed_filter_parameters);
+    cogip::motion_control::SpeedFilter angular_speed_filter(cogip::motion_control::angular_speed_filter_io_keys_default,
+        angular_speed_filter_parameters);
     angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
     std::cout << "SpeedFilter created and added to AngularDualPIDMetaController" << std::endl;
     // Angular speed PID controller
     cogip::pid::PID angular_speed_pid(1, 0.1, 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::SpeedPIDControllerParameters angular_speed_controller_parameters(&angular_speed_pid);
-    cogip::motion_control::SpeedPIDController angular_speed_controller(&angular_speed_controller_parameters);
+    cogip::motion_control::SpeedPIDController angular_speed_controller(cogip::motion_control::angular_speed_pid_controller_io_keys_default,
+        angular_speed_controller_parameters);
     angular_dualpid_meta_controller.add_controller(&angular_speed_controller);
     std::cout << "SpeedPIDController created and added to AngularDualPIDMetaController" << std::endl;
 

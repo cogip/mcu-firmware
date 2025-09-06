@@ -6,6 +6,10 @@
 #include "board.h"
 #include "actuator/Motor.hpp"
 #include "actuator/PositionalActuator.hpp"
+#include "motor_pose_filter/MotorPoseFilterIOKeysDefault.hpp"
+#include "pose_pid_controller/PosePIDControllerIOKeysDefault.hpp"
+#include "speed_filter/SpeedFilterIOKeysDefault.hpp"
+#include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 
 #include <iostream>
 
@@ -22,10 +26,10 @@ Motor::Motor(const MotorParameters& motor_parameters)
           motor_parameters.send_state_cb
       ),
       params_(motor_parameters),
-      distance_controller_(&motor_parameters.pose_controller_parameters),
-      speed_controller_(&motor_parameters.speed_controller_parameters),
-      motor_distance_filter_(&motor_parameters.motor_pose_filter_parameters),
-      speed_filter_(&motor_parameters.speed_filter_parameters),
+      distance_controller_(motion_control::linear_pose_pid_controller_io_keys_default, motor_parameters.pose_controller_parameters),
+      speed_controller_(motion_control::linear_speed_pid_controller_io_keys_default, motor_parameters.speed_controller_parameters),
+      motor_distance_filter_(motion_control::motor_pose_filter_io_keys_default, motor_parameters.motor_pose_filter_parameters),
+      speed_filter_(motion_control::linear_speed_filter_io_keys_default, motor_parameters.speed_filter_parameters),
       motor_engine_(motor_parameters.motor, motor_parameters.odometer, motor_parameters.engine_thread_period_ms)
 {
     // Build the cascade: MotorPoseFilter → PosePID → SpeedFilter → SpeedPID
@@ -77,8 +81,8 @@ void Motor::actuate(int32_t command)
               << std::endl;
 
     // Reset filters/PIDs on a new command
-    distance_controller_.parameters()->pid()->reset();
-    speed_controller_.parameters()->pid()->reset();
+    distance_controller_.parameters().pid()->reset();
+    speed_controller_.parameters().pid()->reset();
     speed_filter_.reset_previous_speed_order();
     speed_filter_.reset_anti_blocking_blocked_cycles_nb();
 

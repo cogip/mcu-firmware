@@ -27,8 +27,8 @@ class MotorEngine : public BaseControllerEngine {
 public:
     /// Constructor
     MotorEngine(
-        cogip::motor::MotorInterface& motor,
-        cogip::localization::OdometerInterface& odometer,
+        motor::MotorInterface& motor,
+        localization::OdometerInterface& odometer,
         uint32_t engine_thread_period_ms
     ) : BaseControllerEngine(engine_thread_period_ms),
         target_speed_(0),
@@ -96,10 +96,10 @@ private:
     float target_distance_;
 
     /// Motor
-    cogip::motor::MotorInterface& motor_;
+    motor::MotorInterface& motor_;
 
     /// EncoderInterface
-    cogip::localization::OdometerInterface& odometer_;
+    localization::OdometerInterface& odometer_;
 };
 
 } // namespace motion_control

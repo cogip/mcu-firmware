@@ -3,10 +3,10 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-/// @ingroup    motor_pose_filter Pose straight filter parameters
+/// @ingroup    motor_pose_filter Motor pose filter parameters
 /// @{
 /// @file
-/// @brief      Movements switch thresholds
+/// @brief      Motor pose filter parameters
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
@@ -20,7 +20,7 @@ namespace motion_control {
 class MotorPoseFilterParameters {
 public:
     /// Constructor
-    MotorPoseFilterParameters(
+    explicit MotorPoseFilterParameters(
         float threshold = 0.0,   ///< [in]  see linear_threshold_
         float deceleration = 0.0    ///< [in]  see linear_deceleration_threshold_
     ) :

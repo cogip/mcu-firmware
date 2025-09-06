@@ -10,6 +10,7 @@
 
 #include "etl/math_constants.h"
 #include "etl/algorithm.h"
+#include "etl/absolute.h"
 
 #include "cogip_defs/Polar.hpp"
 
@@ -27,8 +28,8 @@ namespace drive_controller {
 class DifferentialDriveController : public DriveControllerInterface {
 public:
     DifferentialDriveController(DifferentialDriveControllerParameters &parameters,
-                                cogip::motor::MotorInterface &left_motor,
-                                cogip::motor::MotorInterface &right_motor):
+                                motor::MotorInterface &left_motor,
+                                motor::MotorInterface &right_motor):
                                 parameters_(parameters), left_motor_(left_motor), right_motor_(right_motor)
     {
     }
@@ -51,10 +52,10 @@ public:
         float left_motor_speed_percent = (left_wheel_speed_mm_per_s / (etl::math::pi * parameters_.left_wheel_diameter_mm())) * parameters_.left_motor_constant();
         float right_motor_speed_percent = (right_wheel_speed_mm_per_s / (etl::math::pi * parameters_.right_wheel_diameter_mm())) * parameters_.right_motor_constant();
 
-        if (std::abs(left_motor_speed_percent) < parameters_.min_speed_percentage()) {
+        if (etl::absolute(left_motor_speed_percent) < parameters_.min_speed_percentage()) {
             left_motor_speed_percent = (left_motor_speed_percent < 0 ? -1 : 1) * parameters_.min_speed_percentage();
         }
-        if (std::abs(right_motor_speed_percent) < parameters_.min_speed_percentage()) {
+        if (etl::absolute(right_motor_speed_percent) < parameters_.min_speed_percentage()) {
             right_motor_speed_percent = (right_motor_speed_percent < 0 ? -1 : 1) * parameters_.min_speed_percentage();
         }
 
@@ -69,8 +70,8 @@ public:
 private:
     DifferentialDriveControllerParameters &parameters_;
 
-    cogip::motor::MotorInterface &left_motor_;
-    cogip::motor::MotorInterface &right_motor_;
+    motor::MotorInterface &left_motor_;
+    motor::MotorInterface &right_motor_;
 };
 
 } // namespace drive_controller

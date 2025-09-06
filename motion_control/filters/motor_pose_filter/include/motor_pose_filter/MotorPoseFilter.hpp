@@ -3,10 +3,10 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-/// @ingroup    motor_pose_filter Pose straight filter
+/// @ingroup    motor_pose_filter Motor pose filter
 /// @{
 /// @file
-/// @brief      Breaks down a movement into a straight trajectory
+/// @brief      Filter one motor positionning
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
@@ -14,32 +14,32 @@
 
 // Project includes
 #include "motion_control_common/Controller.hpp"
+#include "motion_control_common/ControllersIO.hpp"
 #include "MotorPoseFilterParameters.hpp"
+#include "MotorPoseFilterIOKeys.hpp"
 
 namespace cogip {
-
 namespace motion_control {
 
-/// Breaks down a movement into a straight trajectory.
-///        The robot first orients itself towards the point to be reached, then goes towards this point in a straight line.
-/// Input 0:    current pose
-/// Input 1:    target pose
-/// Input 2:    current speed
-/// Input 3:    target speed
-/// Output 0:   pose error
-/// Output 1:   current speed
-/// Output 2:   target speed
-/// Output 3:   speed filter flag
-/// Output 4:   pose reached
-class MotorPoseFilter : public Controller<5, 5, MotorPoseFilterParameters> {
+/// @brief Filter one motor positionning.
+class MotorPoseFilter
+    : public Controller<MotorPoseFilterIOKeys, MotorPoseFilterParameters>
+{
 public:
-    /// Constructor
+    /// @brief Constructor.
+    /// @param keys       Reference to IO keys.
+    /// @param parameters Reference to parameters.
     explicit MotorPoseFilter(
-        MotorPoseFilterParameters *parameters    ///< [in]  Movements switch thresholds. See MotorPoseFilterParameters.
-        ) : Controller(parameters) { };
+        const MotorPoseFilterIOKeys&         keys,
+        const MotorPoseFilterParameters&     parameters
+    )
+        : Controller<MotorPoseFilterIOKeys, MotorPoseFilterParameters>(keys, parameters)
+    {
+    }
 
-    /// Breaks down a movement into a straight trajectory according to movements switch thresholds.
-    void execute() override;
+    /// @brief Compute pose error and decide filtered speed and pose reached status.
+    /// @param io Shared controllers IOs.
+    void execute(ControllersIO& io) override;
 };
 
 } // namespace motion_control

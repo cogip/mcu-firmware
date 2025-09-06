@@ -19,69 +19,11 @@ namespace cogip {
 
 namespace motion_control {
 
-/// Number of controllers to be ran in parallel.
-inline constexpr size_t polar_parallel_meta_controller_nb_controllers = 2;
-
-/// Run 2 (meta-)controllers, one for linear control, one for angular control
-/// Input 0:    linear pose error
-/// Input 1:    linear current speed
-/// Input 2:    linear target speed
-/// Input 3:    angular pose error
-/// Input 4:    angular current speed1
-/// Input 5:    angular target speed
-/// Input 6:    pose reached
-/// Output 0:   linear motor command
-/// Output 1:   angular motor command
-class PolarParallelMetaController : public ParallelMetaController<9, 3, polar_parallel_meta_controller_nb_controllers> {
-protected:
-
-    /// Set inputs for each parallel controller
-    void set_inputs() override {
-        BaseController *linear_ctrl = this->front();
-        BaseController *angular_ctrl = this->back();
-
-        // Linear pose error
-        linear_ctrl->set_input(0, inputs_[0]);
-        // Linear current speed
-        linear_ctrl->set_input(1, inputs_[1]);
-        // Linear target speed
-        linear_ctrl->set_input(2, inputs_[2]);
-        // Should linear speed be filtered ?
-        linear_ctrl->set_input(3, inputs_[3]);
-        // Pose reached
-        linear_ctrl->set_input(4, inputs_[8]);
-
-        // Angular pose error
-        angular_ctrl->set_input(0, inputs_[4]);
-        // Angular current speed
-        angular_ctrl->set_input(1, inputs_[5]);
-        // Angular target speed
-        angular_ctrl->set_input(2, inputs_[6]);
-        // Should angular speed be filtered ?
-        angular_ctrl->set_input(3, inputs_[7]);
-        // Pose reached
-        angular_ctrl->set_input(4, inputs_[8]);
-    };
-
-    /// Sort outputs from each parallel controller
-    void sort_outputs() override {
-        BaseController *linear_ctrl = this->front();
-        BaseController *angular_ctrl = this->back();
-
-        // Linear command
-        outputs_[0] = linear_ctrl->output(0);
-        // Angular command
-        outputs_[1] = angular_ctrl->output(0);
-        // Pose reached has been set by previous filter except if blocked
-        if ((linear_ctrl->output(1) == (float)target_pose_status_t::blocked)
-            || (angular_ctrl->output(1) == (float)target_pose_status_t::blocked)) {
-            outputs_[2] = (float)target_pose_status_t::blocked;
-        }
-        else {
-            outputs_[2] = inputs_[8];
-        }
-    };
-};
+/// @brief Runs two dual PID controllers in parallel.
+///
+/// This class executes two dual PID controllers (position and speed)
+/// pseudo simultaneously for controlling both linear and angular motion.
+class PolarParallelMetaController : public ParallelMetaController<2> {};
 
 } // namespace motion_control
 

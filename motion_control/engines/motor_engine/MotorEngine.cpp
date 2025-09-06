@@ -23,33 +23,27 @@ void MotorEngine::prepare_inputs() {
     float current_speed = odometer_.delta_distance_mm();
 
     if (controller_) {
-        size_t index = 0;
-
         // Current distance
-        controller_->set_input(index++, current_distance);
+        io_.set("current_pose", current_distance);
 
         // Target distance
-        controller_->set_input(index++, target_distance_);
+        io_.set("target_pose", target_distance_);
 
         // Current speed
-        controller_->set_input(index++, current_speed);
+        io_.set("current_speed", current_speed);
 
         // Target speed
-        controller_->set_input(index++, target_speed_);
+        io_.set("target_speed", target_speed_);
 
         // Position reached flag
-        controller_->set_input(index++, target_pose_status_t::moving);
-
-        if (index != controller_->nb_inputs()) {
-            std::cerr << "MotorEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.";
-        }
+        io_.set("pose_reached", target_pose_status_t::moving);
     }
 };
 
 void MotorEngine::process_outputs() {
     // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
     if (pose_reached_ != target_pose_status_t::timeout) {
-        pose_reached_ = (target_pose_status_t)controller_->output(1);
+        pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
     }
     else {
         std::cerr << "MotorEngine timed out, disable." << std::endl;
@@ -82,7 +76,7 @@ void MotorEngine::process_outputs() {
         timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
     }
 
-    int command = (int)controller_->output(0);
+    float command = io_.get_as<float>("speed_command").value();
 
     motor_.set_speed(command);
 };

@@ -16,19 +16,12 @@
 #include <iostream>
 
 // Project includes
+#include "ControllersIO.hpp"
 #include "etl/vector.h"
 
 namespace cogip {
 
 namespace motion_control {
-
-/// Status of a position to reach
-/// - moving:               in motion to its destination
-/// - reached:              the position has been reached
-/// - intermediate_reached: a transient position has been reached
-/// - blocked:              motion is blocked by an abnormal event
-/// - timeout:              motion time has reached the timeout
-typedef enum {moving = 0, reached, intermediate_reached, blocked, timeout} target_pose_status_t;
 
 // Forward declarations
 class BaseMetaController;
@@ -42,40 +35,9 @@ public:
     /// Destructor
     virtual ~BaseController() {};
 
-    /// Get input at given index
-    /// return input
-    virtual float input (
-        size_t index    ///< [in]  index
-        ) const = 0;
-
-    /// Set input at given index
-    virtual void set_input(
-        size_t index,   ///< [in]  index
-        float value    ///< [in]  value
-        ) = 0;
-
-    /// Get output at given index
-    /// return output
-    virtual float output (
-        size_t index    ///< [in]  index
-        ) const = 0;
-
-    /// Set output at given index
-    virtual void set_output(
-        size_t index,   ///< [in]  index
-        float value    ///< [in]  value
-        ) = 0;
-
-    /// Get numer of inputs
-    /// return number of inputs
-    virtual size_t nb_inputs() const = 0;
-
-    /// Get numer of outputs
-    /// return number of outputs
-    virtual size_t nb_outputs() const = 0;
-
     /// Controller core method
-    virtual void execute() = 0;
+    /// @param io Controllers input/output datas shared accross controllers
+    virtual void execute(ControllersIO& io) = 0;
 
     /// Get meta controller to which current controller belongs to
     /// return Meta controller
@@ -85,13 +47,6 @@ public:
     /// return true if set, false otherwise
     virtual bool set_meta(
         BaseMetaController *meta    ///< [in]  meta controller
-        );
-
-protected:
-    ///  Check if given index is valid regarding number of inputs
-    /// return true if index is valid, false otherwise
-    bool is_index_valid(
-        size_t index    ///< [in]  index
         );
 
 private:

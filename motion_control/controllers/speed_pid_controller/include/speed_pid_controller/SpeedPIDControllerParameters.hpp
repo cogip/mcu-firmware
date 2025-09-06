@@ -23,7 +23,7 @@ namespace motion_control {
 class SpeedPIDControllerParameters {
 public:
     /// Constructor
-    SpeedPIDControllerParameters(
+    explicit SpeedPIDControllerParameters(
         pid::PID *pid = nullptr     ///< [in]  PID parameters
     ) : pid_(pid) {};
 

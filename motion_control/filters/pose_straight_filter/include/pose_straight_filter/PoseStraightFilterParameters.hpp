@@ -20,7 +20,7 @@ namespace motion_control {
 class PoseStraightFilterParameters {
 public:
     /// Constructor
-    PoseStraightFilterParameters(
+    explicit PoseStraightFilterParameters(
         float angular_threshold = 0.0,  ///< [in]  see angular_threshold_
         float linear_threshold = 0.0,   ///< [in]  see linear_threshold_
         float angular_intermediate_threshold = 0.0,  ///< [in]  see angular_threshold_
