@@ -1,3 +1,16 @@
+///  Copyright (C) 2025 COGIP Robotics association
+///
+///  This file is subject to the terms and conditions of the GNU Lesser
+///  General Public License v2.1. See the file LICENSE in the top level
+///  directory for more details.
+
+///
+///  @file
+///  @ingroup     platforms_pf-power-supply
+///  @brief       Power supply control platform implementation
+///
+///  @author      Mathis LECRIVAIN <lecrivain.mathis@gmail.com>
+
 /* RIOT includes */
 #include "log.h"
 #include "shell.h"
@@ -13,6 +26,8 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
+#include "pf_power_supply.hpp"
+
 // canpb CAN device
 static cogip::canpb::CanProtobuf canpb(0);
 // canpb default filter
@@ -20,10 +35,6 @@ struct can_filter canpb_filter = {0x0, 0x0};
 
 // Thread stacks
 static char heartbeat_thread_stack[THREAD_STACKSIZE_DEFAULT];
-
-static bool copilot_connected = false;
-
-char line_buf[SHELL_DEFAULT_BUFSIZE];
 
 // Heartbeat led blinking interval (ms)
 constexpr uint16_t heartbeat_leds_interval = 200;
@@ -53,34 +64,21 @@ static void* _heartbeat_thread(void* args)
     return 0;
 }
 
-void pf_set_copilot_connected(bool connected)
-{
-    copilot_connected = connected;
-}
-
 cogip::canpb::CanProtobuf& pf_get_canpb()
 {
     return canpb;
 }
 
-/// Start game message handler
-static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer) {}
-
-/// Reset game message handler
-static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer) {}
-
-/// Start threading sending actuators state.
-static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer) {}
-
 void _handle_copilot_connected(cogip::canpb::ReadBuffer&)
 {
-    pf_set_copilot_connected(true);
+    cogip::pf::power_supply::send_emergency_stop_status();
+    cogip::pf::power_supply::send_power_rails_status();
+    cogip::pf::power_supply::send_power_source_status();
     LOG_INFO("Copilot connected");
 }
 
 void _handle_copilot_disconnected(cogip::canpb::ReadBuffer&)
 {
-    pf_set_copilot_connected(false);
     LOG_INFO("Copilot disconnected");
 }
 
@@ -95,12 +93,6 @@ void pf_init(void)
         LOG_ERROR("CAN initialization failed, error: %d\n", canpb_res);
     } else {
         canpb.register_message_handler(
-            game_reset_uuid, cogip::canpb::message_handler_t::create<_handle_game_reset>());
-        canpb.register_message_handler(
-            game_start_uuid, cogip::canpb::message_handler_t::create<_handle_game_start>());
-        canpb.register_message_handler(game_end_uuid,
-                                       cogip::canpb::message_handler_t::create<_handle_game_end>());
-        canpb.register_message_handler(
             copilot_connected_uuid,
             cogip::canpb::message_handler_t::create<_handle_copilot_connected>());
         canpb.register_message_handler(
@@ -110,7 +102,10 @@ void pf_init(void)
         canpb.start_reader();
     }
 
-    shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
+    cogip::pf::power_supply::pf_init_power_supply();
 }
 
-void pf_init_tasks(void) {}
+void pf_init_tasks(void)
+{
+    cogip::pf::power_supply::pf_init_power_supply_tasks();
+}
