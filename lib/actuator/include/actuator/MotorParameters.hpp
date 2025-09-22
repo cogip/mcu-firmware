@@ -34,7 +34,7 @@ namespace positional_actuators {
 ///   including control, filtering, timeout, and hardware interface options.
 struct MotorParameters {
     /// @brief Motor identifier (enum used internally to differentiate motors).
-    cogip::actuators::Enum id;
+    Enum id;
 
     /// @brief Default timeout period, in milliseconds.
     /// @details Used to determine if the motor should be disabled due to inactivity.
@@ -47,25 +47,25 @@ struct MotorParameters {
     gpio_t clear_overload_pin = GPIO_UNDEF;
 
     /// @brief Parameters for the PosePIDController (position control).
-    cogip::motion_control::PosePIDControllerParameters& pose_controller_parameters;
+    motion_control::PosePIDControllerParameters& pose_controller_parameters;
 
     /// @brief Parameters for the SpeedPIDController (speed control).
-    cogip::motion_control::SpeedPIDControllerParameters& speed_controller_parameters;
+    motion_control::SpeedPIDControllerParameters& speed_controller_parameters;
 
     /// @brief Parameters for the MotorPoseFilter (used to smooth and validate position).
-    cogip::motion_control::MotorPoseFilterParameters& motor_pose_filter_parameters;
+    motion_control::MotorPoseFilterParameters& motor_pose_filter_parameters;
 
     /// @brief Parameters for the SpeedFilter (used to smooth and limit speed).
-    cogip::motion_control::SpeedFilterParameters& speed_filter_parameters;
+    motion_control::SpeedFilterParameters& speed_filter_parameters;
 
     /// @brief Period of the motor engine thread, in milliseconds.
     uint32_t engine_thread_period_ms;
 
     /// @brief Reference to the motor driver interface.
-    cogip::motor::MotorInterface& motor;
+    motor::MotorInterface& motor;
 
     /// @brief Reference to the odometer interface.
-    cogip::localization::OdometerInterface& odometer;
+    localization::OdometerInterface& odometer;
 };
 
 } // namespace positional_actuators

@@ -23,7 +23,7 @@ void LiftsLimitSwitchesManager::init() {
     std::cout << "Motor limit switches manager started" << std::endl;
 }
 
-int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, cogip::actuators::positional_actuators::Lift* lift) {
+int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
     if (pin == GPIO_UNDEF) return -ENODEV;
 
     mutex_lock(&mutex_);

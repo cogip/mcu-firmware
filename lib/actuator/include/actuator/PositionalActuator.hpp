@@ -38,7 +38,7 @@ public:
     /// @param default_timeout_ms  Default timeout period (in ms) before disabling on inactivity.
     /// @param send_state_cb       Optional callback to send the actuator’s state.
     PositionalActuator(
-        cogip::actuators::Enum id,
+        Enum id,
         uint32_t default_timeout_ms = 0,
         send_state_cb_t send_state_cb = nullptr
     ) : Actuator(id, send_state_cb),
