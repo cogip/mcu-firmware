@@ -44,7 +44,7 @@ char* __eheap = &_eheap;
  */
 void board_init(void)
 {
-    // Setup and set heartbit LED
+    // Setup and set heartbeat LED
     gpio_init(HEARTBEAT_LED, GPIO_OUT);
     gpio_set(HEARTBEAT_LED);
 

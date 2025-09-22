@@ -13,7 +13,7 @@ Pose::Pose(float x, float y, float O, float max_speed_ratio_linear, float max_sp
       bypass_anti_blocking_(bypass_anti_blocking), timeout_ms_(timeout_ms),
       bypass_final_orientation_(bypass_final_orientation), is_intermediate_(is_intermediate)
 {
-    // Ratios are betwen 0 and 1
+    // Ratios are between 0 and 1
     max_speed_ratio_linear_ = std::min(max_speed_ratio_linear, 1.0f);
     max_speed_ratio_angular_ = std::min(max_speed_ratio_angular, 1.0f);
 }
