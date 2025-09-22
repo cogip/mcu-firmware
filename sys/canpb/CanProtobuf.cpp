@@ -36,7 +36,7 @@ void CanProtobuf::start_reader()
         CANPB_READER_PRIO,
         THREAD_CREATE_STACKTEST,
         message_reader_wrapper,
-        (void *)this,
+        static_cast<void *>(this),
         "Protobuf reader"
         );
 }

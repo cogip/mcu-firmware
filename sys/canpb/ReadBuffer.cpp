@@ -100,7 +100,7 @@ uint8_t * ReadBuffer::get_base64_data()
 
 size_t ReadBuffer::base64_decode()
 {
-    size_t base64_message_length = strlen((const char *)base64_data_);
+    size_t base64_message_length = strlen(reinterpret_cast<const char *>(base64_data_));
     size_t pb_buffer_size = 0;
     int ret = ::base64_decode(base64_data_, base64_message_length, NULL, &pb_buffer_size);
     if (ret != BASE64_ERROR_BUFFER_OUT_SIZE) {

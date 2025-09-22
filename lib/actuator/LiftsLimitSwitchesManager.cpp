@@ -28,7 +28,7 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, cogip::actuators::posit
 
     mutex_lock(&mutex_);
     // Initialize pin interrupt on falling edges with pulldown
-    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, (void*)pin) != 0) {
+    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) != 0) {
         std::cerr << "ERROR: Failed to init pin " << pin << std::endl;
 
         mutex_unlock(&mutex_);
@@ -54,7 +54,7 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, cogip::actuators::posit
     callbacks_[pin] = lift;
 
     // Initialize pin interrupt on falling edges with pulldown
-    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, (void*)pin) != 0) {
+    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) != 0) {
         std::cerr << "ERROR: Failed to init pin " << pin << std::endl;
 
         return -EIO;
