@@ -136,7 +136,7 @@ public:
         return 0;
     }
 
-private:
+protected:
     etl::deque<BaseController*, NB_CONTROLLERS> controllers_;
 };
 

@@ -33,7 +33,7 @@ public:
     /// @param io Shared ControllersIO instance.
     void execute(ControllersIO& io) override
     {
-        if (controllers_.empty()) {
+        if (this->controllers_.empty()) {
             std::cerr << "Error: no controller added." << std::endl;
             return;
         }
@@ -44,7 +44,7 @@ public:
         etl::set<ParamKey, MAX_PARAMS> cumulative_written;
 
         // For each top-level controller:
-        for (auto ctrl : controllers_) {
+        for (auto ctrl : this->controllers_) {
             auto before_io = io.snapshot_modified();
 
             // Execute controller
@@ -69,9 +69,6 @@ public:
             }
         }
     }
-
-private:
-    etl::deque<BaseController*, NB_CONTROLLERS> controllers_;
 };
 
 } // namespace motion_control
