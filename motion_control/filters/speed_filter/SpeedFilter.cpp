@@ -86,8 +86,8 @@ void SpeedFilter::execute(ControllersIO& io)
 
     // Read flag disabling filtering (default to false if missing)
     bool no_filter = false;
-    if (auto opt = io.get_as<float>(keys_.speed_filter_flag)) {
-        no_filter = static_cast<bool>(*opt);
+    if (auto opt = io.get_as<bool>(keys_.speed_filter_flag)) {
+        no_filter = *opt;
     }
     else {
         std::cout   << "WARNING: " << keys_.speed_filter_flag
