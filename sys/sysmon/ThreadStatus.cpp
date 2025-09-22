@@ -11,8 +11,8 @@ namespace cogip {
 namespace sysmon {
 
 void ThreadStatus::update_pb_message() {
-    MemoryStatus::update_pb_message();
-    pb_message_.mutable_stack_status() = MemoryStatus::pb_message();
+    stack_status_.update_pb_message();
+    pb_message_.mutable_stack_status() = stack_status_.pb_message();
 
     pb_message_.set_pid(pid_);
     pb_message_.mutable_name() = name_.c_str();
