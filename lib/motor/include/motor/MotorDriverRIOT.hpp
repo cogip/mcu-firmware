@@ -17,7 +17,7 @@ class MotorDriverRIOT : public MotorDriverInterface
     /// @param parameters motor driver parameters reference
     explicit MotorDriverRIOT(const motor_driver_params_t& parameters) : parameters_(parameters) {}
 
-    /// @brief Intialize the motor driver
+    /// @brief Initialize the motor driver
     /// @return 0 on success, negative on error
     int init() override;
 
@@ -41,7 +41,7 @@ class MotorDriverRIOT : public MotorDriverInterface
     /// @return  0 on success, negative on error
     int set_speed(float speed, int id) override;
 
-    /// @brief break the motor
+    /// @brief Brake the motor
     /// @param id id of the motor
     /// @return 0 on success, negative on error
     int brake(int id) override;

@@ -20,7 +20,7 @@ class OdometerInterface
   public:
     virtual ~OdometerInterface() = default;
 
-    /// @brief Initialiaze odometer.
+    /// @brief Initialize odometer.
     /// @return 0 on success, negative value on failure.
     virtual int init() = 0;
 

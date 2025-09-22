@@ -10,7 +10,7 @@ class MotorDriverInterface
     /// @brief Virtual destructor
     ~MotorDriverInterface() {}
 
-    /// @brief Intialize the motor driver
+    /// @brief Initialize the motor driver
     /// @return 0 on success, negative on error
     virtual int init() = 0;
 
@@ -34,7 +34,7 @@ class MotorDriverInterface
     /// @return  0 on success, negative on error
     virtual int set_speed(float speed, int id) = 0;
 
-    /// @brief break the motor
+    /// @brief Brake the motor
     /// @param id id of the motor
     /// @return 0 on success, negative on error
     virtual int brake(int id) = 0;
