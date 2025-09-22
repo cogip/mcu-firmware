@@ -99,7 +99,7 @@ void display_heap_status(void)
 static void _update_threads_status(void)
 {
     for (kernel_pid_t i = KERNEL_PID_FIRST; i <= KERNEL_PID_LAST; i++) {
-        thread_t *thread = thread_get(i);
+        const thread_t *thread = thread_get(i);
 
         if (thread != NULL) {
             mutex_lock(&_mutex_sysmon);
@@ -148,7 +148,7 @@ void update_thread_sched_status(kernel_pid_t pid, bool has_overshot)
 void display_threads_status(void)
 {
     for (kernel_pid_t i = KERNEL_PID_FIRST; i <= KERNEL_PID_LAST; i++) {
-        thread_t *thread = thread_get(i);
+        const thread_t *thread = thread_get(i);
 
         if (thread != NULL) {
             mutex_lock(&_mutex_sysmon);
