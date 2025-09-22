@@ -21,7 +21,7 @@ namespace cogip_defs {
 class Polar {
 public:
     /// Constructor.
-    Polar(
+    explicit Polar(
         float distance = 0.0, ///< [in] distance
         float angle = 0.0     ///< [in] angle
         ) : distance_(distance), angle_(angle) {};

@@ -24,7 +24,7 @@ namespace path {
 class Pose : public cogip_defs::Pose {
 public:
     /// Constuctor.
-    Pose(
+    explicit Pose(
         float x=0.0,                   ///< [in] X coordinate
         float y=0.0,                   ///< [in] Y coodinate
         float O=0.0,                   ///< [in] 0-orientation

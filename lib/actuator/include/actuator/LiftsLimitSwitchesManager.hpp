@@ -67,7 +67,7 @@ public:
 
 private:
     /// @brief Private constructor to enforce singleton pattern.
-    LiftsLimitSwitchesManager() = default;
+    LiftsLimitSwitchesManager() : mutex_(MUTEX_INIT), event_stack_{}, event_thread_pid_(KERNEL_PID_UNDEF) {}
 
     /// @brief GPIO ISR callback invoked in interrupt context.
     /// @details Enqueues the corresponding event for later handling.

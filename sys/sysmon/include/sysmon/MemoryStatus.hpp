@@ -51,9 +51,9 @@ class MemoryStatus {
         void set_used(const std::size_t used) { used_ = used; };
 
         /// Return the Protobuf message.
-        const PB_Message &pb_message() const { return pb_message_; };
+        virtual const PB_Message &pb_message() const { return pb_message_; };
         /// Update Protobuf message
-        void update_pb_message();
+        virtual void update_pb_message();
 
     private:
         /// Memory total size in bytes

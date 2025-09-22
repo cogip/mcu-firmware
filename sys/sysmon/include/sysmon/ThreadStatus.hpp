@@ -69,9 +69,9 @@ class ThreadStatus: public MemoryStatus {
         void set_pid(const uint32_t pid) { pid_ = pid; };
 
         /// Return the Protobuf message.
-        const PB_Message &pb_message() const { return pb_message_; };
+        const PB_Message &pb_message() const override { return pb_message_; };
         /// Update Protobuf message
-        void update_pb_message();
+        void update_pb_message() override;
 
     private:
         /// Thread pid
