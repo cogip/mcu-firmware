@@ -55,6 +55,24 @@ for FILE in ${UNCRUSTIFIED_FILES}; do
     rm -f ${FILE}
 done
 
+####################
+### clang-format ###
+####################
+
+echo "=== CLANG-FORMAT CHECK ==="
+
+FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \)" )
+for FILE in ${FILES_TO_CHECK}; do
+    if [ -z "$apply" ]; then
+        clang-format $FILE | diff --color -u $FILE -
+        if [ $? -ne 0 ]; then
+            EXIT_STATUS=1
+        fi
+    else
+        clang-format -i $FILE
+    fi
+done
+
 ################
 ### cppcheck ###
 ################
@@ -72,3 +90,4 @@ if [ $? -ne 0 ]; then
 fi
 
 exit ${EXIT_STATUS}
+
