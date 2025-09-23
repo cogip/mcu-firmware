@@ -20,31 +20,41 @@ namespace cogip {
 namespace motion_control {
 
 /// Pose controller parameters
-class PassthroughPosePIDControllerParameters {
-public:
+class PassthroughPosePIDControllerParameters
+{
+  public:
     /// Constructor
     explicit PassthroughPosePIDControllerParameters(
-        float target_speed = 0.0,          ///< [in] PID parameters
-        bool signed_target_speed = true     ///< [in] target speed signed flag
-    ) : target_speed_(target_speed), signed_target_speed_(signed_target_speed) {};
+        float target_speed = 0.0,       ///< [in] PID parameters
+        bool signed_target_speed = true ///< [in] target speed signed flag
+        )
+        : target_speed_(target_speed), signed_target_speed_(signed_target_speed){};
 
     /// Get target speed parameter
     /// return     target speed
-    float target_speed() const { return target_speed_; };
+    float target_speed() const
+    {
+        return target_speed_;
+    };
 
-    void set_target_speed(
-        float target_speed
-        ) { target_speed_ = target_speed; }
+    void set_target_speed(float target_speed)
+    {
+        target_speed_ = target_speed;
+    }
 
     /// Get force target speed flag
     /// return      force target speed flag
-    bool signed_target_speed() const { return signed_target_speed_; };
+    bool signed_target_speed() const
+    {
+        return signed_target_speed_;
+    };
 
-    void set_signed_target_speed(
-        bool signed_target_speed
-        ) { signed_target_speed_ = signed_target_speed; }
+    void set_signed_target_speed(bool signed_target_speed)
+    {
+        signed_target_speed_ = signed_target_speed;
+    }
 
-private:
+  private:
     /// Target speed
     float target_speed_;
 

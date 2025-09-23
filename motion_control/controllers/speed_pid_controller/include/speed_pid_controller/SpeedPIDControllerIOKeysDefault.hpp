@@ -18,23 +18,23 @@ namespace cogip {
 namespace motion_control {
 
 /// @brief Default IO key names for linear SpeedPIDController.
-/// Each key is prefixed with "linear_" and set to its corresponding member name.
+/// Each key is prefixed with "linear_" and set to its corresponding member
+/// name.
 static const SpeedPIDControllerIOKeys linear_speed_pid_controller_io_keys_default = {
     .speed_error = "linear_speed_error",
     .current_speed = "linear_current_speed",
-    .speed_command = "linear_speed_command"
-};
+    .speed_command = "linear_speed_command"};
 
 /// @brief Default IO key names for angular SpeedPIDController.
-/// Each key is prefixed with "angular_" and set to its corresponding member name.
+/// Each key is prefixed with "angular_" and set to its corresponding member
+/// name.
 static const SpeedPIDControllerIOKeys angular_speed_pid_controller_io_keys_default = {
     .speed_error = "angular_speed_error",
     .current_speed = "angular_current_speed",
-    .speed_command = "angular_speed_command"
-};
+    .speed_command = "angular_speed_command"};
 
-}  // namespace motion_control
+} // namespace motion_control
 
-}  // namespace cogip
+} // namespace cogip
 
 /// @}

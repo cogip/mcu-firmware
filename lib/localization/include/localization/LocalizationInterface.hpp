@@ -14,11 +14,13 @@ namespace cogip {
 
 namespace localization {
 
-class LocalizationInterface {
-public:
+class LocalizationInterface
+{
+  public:
     /// @brief Set the default localization pose
     ///
-    /// @note this function should be called to reset robot pose and defined a new default one
+    /// @note this function should be called to reset robot pose and defined a new
+    /// default one
     ///
     /// @param x X coordinate (mm)
     /// @param y Y coordinate (mm)
@@ -27,10 +29,11 @@ public:
 
     /// @brief Set the default localization pose
     ///
-    /// @note this function should be called to reset robot pose and defined a new default one
+    /// @note this function should be called to reset robot pose and defined a new
+    /// default one
     ///
     /// @param pose postion reference
-    virtual void set_pose(const cogip::cogip_defs::Pose &pose) = 0;
+    virtual void set_pose(const cogip::cogip_defs::Pose& pose) = 0;
 
     /// @brief Get current pose using cogip def format
     /// @note Data units:
@@ -43,7 +46,8 @@ public:
     /// @note Data units:
     ///         - linear: mm
     ///         - O: deg
-    /// @return velocity cogip::cogip_defs::Polar current polar pose delta reference
+    /// @return velocity cogip::cogip_defs::Polar current polar pose delta
+    /// reference
     virtual const cogip::cogip_defs::Polar& delta_polar_pose() = 0;
 
     /// @brief update new robot pose (x, y, O)
@@ -51,6 +55,6 @@ public:
     virtual int update() = 0;
 };
 
-} /// namespace localization
+} // namespace localization
 
-} ///namespace cogip
+} // namespace cogip

@@ -18,9 +18,11 @@
 namespace cogip {
 namespace motion_control {
 
-/// @brief Meta controller that chains one PosePIDController and one SpeedPIDController (or SpeedFilter) in sequence.
-class DualPIDMetaController
-    : public MetaController<3> {};
+/// @brief Meta controller that chains one PosePIDController and one
+/// SpeedPIDController (or SpeedFilter) in sequence.
+class DualPIDMetaController : public MetaController<3>
+{
+};
 
 } // namespace motion_control
 

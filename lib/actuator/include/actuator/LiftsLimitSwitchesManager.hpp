@@ -1,6 +1,6 @@
-// Copyright (C) CONFIG_ACTUATOR_NUMBER25 COGIP Robotics association <cogip35@gmail.com>
-// This file is subject to the terms and conditions of the GNU Lesser
-// General Public License v2.1. See the file LICENSE in the top level
+// Copyright (C) CONFIG_ACTUATOR_NUMBER25 COGIP Robotics association
+// <cogip35@gmail.com> This file is subject to the terms and conditions of the
+// GNU Lesser General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
 /// @ingroup     actuator
@@ -19,10 +19,9 @@
 #include "actuator/Lift.hpp"
 
 // Packages includes
-#include "etl/map.h"
 #include "etl/delegate.h"
+#include "etl/map.h"
 #include "etl/pool.h"
-
 
 namespace cogip {
 namespace actuators {
@@ -32,8 +31,9 @@ namespace positional_actuators {
 /// @details This class handles GPIO interrupts via a dedicated thread,
 ///          allowing motor control to react to events such as limit switches
 ///          in a safe, non-blocking, and asynchronous way.
-class LiftsLimitSwitchesManager {
-public:
+class LiftsLimitSwitchesManager
+{
+  public:
     /// @brief Get the singleton instance of the manager.
     /// @return Reference to the LiftsLimitSwitchesManager singleton.
     static LiftsLimitSwitchesManager& instance();
@@ -41,7 +41,8 @@ public:
     /// @brief Initialize the manager by creating the event thread and queue.
     void init();
 
-    /// @brief Register a GPIO pin for falling-edge interrupts with a Lift handler.
+    /// @brief Register a GPIO pin for falling-edge interrupts with a Lift
+    /// handler.
     /// @details Configures the pin with pulldown and sets up the ISR to enqueue
     ///          events which are later dispatched in thread context.
     /// @param pin GPIO pin to register.
@@ -53,7 +54,8 @@ public:
     int register_gpio(gpio_t pin, Lift* lift);
 
     /// @brief Unregister a previously registered GPIO pin.
-    /// @details Disables the interrupt, releases the associated event, and removes
+    /// @details Disables the interrupt, releases the associated event, and
+    /// removes
     ///          all internal references to the pin and its callback.
     /// @param pin GPIO pin to unregister.
     /// @return 0 on success,
@@ -65,9 +67,12 @@ public:
     /// @param evt Pointer to the event to handle.
     static void event_handler(event_t* evt);
 
-private:
+  private:
     /// @brief Private constructor to enforce singleton pattern.
-    LiftsLimitSwitchesManager() : mutex_(MUTEX_INIT), event_stack_{}, event_thread_pid_(KERNEL_PID_UNDEF) {}
+    LiftsLimitSwitchesManager()
+        : mutex_(MUTEX_INIT), event_stack_{}, event_thread_pid_(KERNEL_PID_UNDEF)
+    {
+    }
 
     /// @brief GPIO ISR callback invoked in interrupt context.
     /// @details Enqueues the corresponding event for later handling.

@@ -13,31 +13,29 @@
 #pragma once
 
 // Project includes
+#include "MotorPoseFilterIOKeys.hpp"
+#include "MotorPoseFilterParameters.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
-#include "MotorPoseFilterParameters.hpp"
-#include "MotorPoseFilterIOKeys.hpp"
 
 namespace cogip {
 namespace motion_control {
 
 /// @brief Filter one motor positionning.
-class MotorPoseFilter
-    : public Controller<MotorPoseFilterIOKeys, MotorPoseFilterParameters>
+class MotorPoseFilter : public Controller<MotorPoseFilterIOKeys, MotorPoseFilterParameters>
 {
-public:
+  public:
     /// @brief Constructor.
     /// @param keys       Reference to IO keys.
     /// @param parameters Reference to parameters.
-    explicit MotorPoseFilter(
-        const MotorPoseFilterIOKeys&         keys,
-        const MotorPoseFilterParameters&     parameters
-    )
+    explicit MotorPoseFilter(const MotorPoseFilterIOKeys& keys,
+                             const MotorPoseFilterParameters& parameters)
         : Controller<MotorPoseFilterIOKeys, MotorPoseFilterParameters>(keys, parameters)
     {
     }
 
-    /// @brief Compute pose error and decide filtered speed and pose reached status.
+    /// @brief Compute pose error and decide filtered speed and pose reached
+    /// status.
     /// @param io Shared controllers IOs.
     void execute(ControllersIO& io) override;
 };

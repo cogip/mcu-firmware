@@ -9,22 +9,17 @@
 #include "etl/vector.h"
 #include "thread/thread.hpp"
 
-#include "motor_engine/MotorEngine.hpp"
 #include "log.h"
+#include "motor_engine/MotorEngine.hpp"
 
 namespace cogip {
 
 namespace motion_control {
 
-MotorEngine::MotorEngine(
-    motor::MotorInterface& motor,
-    localization::OdometerInterface& odometer,
-    uint32_t engine_thread_period_ms
-) : BaseControllerEngine(engine_thread_period_ms),
-    target_speed_(0),
-    target_distance_(0),
-    motor_(motor),
-    odometer_(odometer)
+MotorEngine::MotorEngine(motor::MotorInterface& motor, localization::OdometerInterface& odometer,
+                         uint32_t engine_thread_period_ms)
+    : BaseControllerEngine(engine_thread_period_ms), target_speed_(0), target_distance_(0),
+      motor_(motor), odometer_(odometer)
 {
 }
 
@@ -49,7 +44,8 @@ void MotorEngine::set_target_distance(const float target_distance)
     mutex_unlock(&mutex_);
 }
 
-void MotorEngine::prepare_inputs() {
+void MotorEngine::prepare_inputs()
+{
     // Update current distance and speed
     odometer_.update();
     float current_distance = odometer_.distance_mm();
@@ -73,12 +69,13 @@ void MotorEngine::prepare_inputs() {
     }
 };
 
-void MotorEngine::process_outputs() {
-    // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
+void MotorEngine::process_outputs()
+{
+    // If timeout is enabled, pose_reached_ has been set by the engine itself, do
+    // not override it.
     if (pose_reached_ != target_pose_status_t::timeout) {
         pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
-    }
-    else {
+    } else {
         LOG_ERROR("MotorEngine timed out, disable.\n");
 
         // Disable engine
@@ -103,8 +100,7 @@ void MotorEngine::process_outputs() {
     }
 
     // Disable the timeout as we want to hold the position
-    if ((pose_reached_ == target_pose_status_t::reached)
-        && (timeout_enable_ == true)) {
+    if ((pose_reached_ == target_pose_status_t::reached) && (timeout_enable_ == true)) {
         // Reset timeout cycles counter
         timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
     }

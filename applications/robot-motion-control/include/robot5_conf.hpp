@@ -5,13 +5,12 @@
 #include "trigonometry.h"
 
 /* Motion motors */
-#define MOTOR_LEFT  0
+#define MOTOR_LEFT 0
 #define MOTOR_RIGHT 1
 
 /* Quadrature decoding polarity */
-#define QDEC_LEFT_POLARITY  -1
+#define QDEC_LEFT_POLARITY -1
 #define QDEC_RIGHT_POLARITY 1
-
 
 /// Motors properties
 constexpr float motor_wheels_diameter_mm = 60.0;
@@ -49,7 +48,8 @@ constexpr float angular_speed_pid_kd = 0.0;
 constexpr float linear_threshold = 5;
 // Angular threshold
 constexpr float angular_threshold = 5;
-// Angular intermediate threshold (when the robot turns on itself to go straight to its destination)
+// Angular intermediate threshold (when the robot turns on itself to go straight
+// to its destination)
 constexpr float angular_intermediate_threshold = 5;
 
 // TODO:
@@ -57,10 +57,10 @@ constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 12.5;
 constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
 
-constexpr float min_speed_mm_per_s = 0;    ///< Minimum speed (mm/s)
-constexpr float max_speed_mm_per_s = 1000.0;  ///< Maximum speed (mm/s)
-constexpr float max_acc_mm_per_s2 = 250.0; ///< Maximum acceleration (mm/s²)
-constexpr float max_dec_mm_per_s2 = 250.0; ///< Maximum deceleration (mm/s²)
+constexpr float min_speed_mm_per_s = 0;      ///< Minimum speed (mm/s)
+constexpr float max_speed_mm_per_s = 1000.0; ///< Maximum speed (mm/s)
+constexpr float max_acc_mm_per_s2 = 250.0;   ///< Maximum acceleration (mm/s²)
+constexpr float max_dec_mm_per_s2 = 250.0;   ///< Maximum deceleration (mm/s²)
 
 constexpr float min_speed_deg_per_s = 20;  ///< Maximum speed (deg/s)
 constexpr float max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)

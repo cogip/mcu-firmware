@@ -11,10 +11,10 @@
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
 // Project includes
+#include "SpeedPIDControllerIOKeys.hpp"
+#include "SpeedPIDControllerParameters.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
-#include "SpeedPIDControllerParameters.hpp"
-#include "SpeedPIDControllerIOKeys.hpp"
 
 namespace cogip {
 
@@ -22,17 +22,14 @@ namespace motion_control {
 
 /// @brief PID speed controller.
 ///        Reads speed error and computes a speed command via PID.
-class SpeedPIDController
-    : public Controller<SpeedPIDControllerIOKeys, SpeedPIDControllerParameters>
+class SpeedPIDController : public Controller<SpeedPIDControllerIOKeys, SpeedPIDControllerParameters>
 {
-public:
+  public:
     /// @brief Constructor.
     /// @param keys       Reference to IO key names.
     /// @param parameters Reference to PID parameters.
-    explicit SpeedPIDController(
-        const SpeedPIDControllerIOKeys&         keys,
-        const SpeedPIDControllerParameters&     parameters
-    )
+    explicit SpeedPIDController(const SpeedPIDControllerIOKeys& keys,
+                                const SpeedPIDControllerParameters& parameters)
         : Controller<SpeedPIDControllerIOKeys, SpeedPIDControllerParameters>(keys, parameters)
     {
     }
@@ -41,8 +38,8 @@ public:
     void execute(ControllersIO& io) override;
 };
 
-}  // namespace motion_control
+} // namespace motion_control
 
-}  // namespace cogip
+} // namespace cogip
 
 /// @}

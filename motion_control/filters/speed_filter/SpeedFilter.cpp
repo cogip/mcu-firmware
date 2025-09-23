@@ -1,6 +1,7 @@
 // System includes
-#include <cmath>
+#include "etl/absolute.h"
 #include "etl/algorithm.h"
+#include <cmath>
 
 // RIOT includes
 #include "log.h"
@@ -16,13 +17,8 @@ namespace cogip {
 
 namespace motion_control {
 
-void SpeedFilter::limit_speed_order(
-    float *speed_order,
-    float raw_target,
-    float min_speed,
-    float max_speed,
-    float max_acc
-)
+void SpeedFilter::limit_speed_order(float* speed_order, float raw_target, float min_speed,
+                                    float max_speed, float max_acc)
 {
     raw_target = etl::min(raw_target, max_speed);
 
@@ -39,8 +35,7 @@ void SpeedFilter::limit_speed_order(
     if (*speed_order < min_speed && *speed_order > -min_speed) {
         if (acceleration > 0.0f) {
             *speed_order = min_speed;
-        }
-        else if (acceleration < 0.0f) {
+        } else if (acceleration < 0.0f) {
             *speed_order = -min_speed;
         }
     }
@@ -61,8 +56,7 @@ void SpeedFilter::execute(ControllersIO& io)
     float speed_order = 0.0f;
     if (auto opt = io.get_as<float>(keys_.speed_order)) {
         speed_order = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.speed_order.data(), speed_order);
     }
@@ -71,8 +65,7 @@ void SpeedFilter::execute(ControllersIO& io)
     float current_speed = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_speed)) {
         current_speed = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_speed.data(), current_speed);
     }
@@ -81,8 +74,7 @@ void SpeedFilter::execute(ControllersIO& io)
     float target_speed = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_speed)) {
         target_speed = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_speed.data(), target_speed);
     }
@@ -91,37 +83,33 @@ void SpeedFilter::execute(ControllersIO& io)
     bool no_filter = false;
     if (auto opt = io.get_as<bool>(keys_.speed_filter_flag)) {
         no_filter = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %d",
                     keys_.speed_filter_flag.data(), no_filter);
     }
 
     if (!no_filter) {
-        limit_speed_order(
-            &speed_order,
-            target_speed,
-            parameters_.min_speed(),
-            parameters_.max_speed(),
-            parameters_.max_acceleration()
-        );
+        limit_speed_order(&speed_order, target_speed, parameters_.min_speed(),
+                          parameters_.max_speed(), parameters_.max_acceleration());
     }
 
     if (parameters_.anti_blocking()) {
         const float anti_blocking_speed_threshold = parameters_.anti_blocking_speed_threshold();
         const float anti_blocking_error_threshold = parameters_.anti_blocking_error_threshold();
         bool below_threshold = etl::absolute(current_speed) < anti_blocking_speed_threshold;
-        bool no_acceleration = etl::absolute(previous_speed_order_ - current_speed) > anti_blocking_error_threshold;
+        bool no_acceleration =
+            etl::absolute(previous_speed_order_ - current_speed) > anti_blocking_error_threshold;
 
         if (below_threshold && no_acceleration) {
             anti_blocking_blocked_cycles_nb_++;
-            DEBUG("Anti blocking cycles number: %" PRIu32, static_cast<uint32_t>(anti_blocking_blocked_cycles_nb_));
-        }
-        else {
+            DEBUG("Anti blocking cycles number: %" PRIu32,
+                  static_cast<uint32_t>(anti_blocking_blocked_cycles_nb_));
+        } else {
             anti_blocking_blocked_cycles_nb_ = 0;
         }
 
-        if (anti_blocking_blocked_cycles_nb_ > parameters_.anti_blocking_blocked_cycles_nb_threshold()) {
+        if (anti_blocking_blocked_cycles_nb_ >
+            parameters_.anti_blocking_blocked_cycles_nb_threshold()) {
             LOG_WARNING("BLOCKED");
 
             // Write updated pose‐reached status

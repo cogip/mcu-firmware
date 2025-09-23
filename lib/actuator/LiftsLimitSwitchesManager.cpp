@@ -1,7 +1,7 @@
 #include "actuator/LiftsLimitSwitchesManager.hpp"
-#include <thread.h>
 #include "log.h"
 #include <inttypes.h>
+#include <thread.h>
 
 #define ENABLE_DEBUG 0
 #include <debug.h>
@@ -10,29 +10,31 @@ namespace cogip {
 namespace actuators {
 namespace positional_actuators {
 
-LiftsLimitSwitchesManager& LiftsLimitSwitchesManager::instance() {
+LiftsLimitSwitchesManager& LiftsLimitSwitchesManager::instance()
+{
     static LiftsLimitSwitchesManager inst;
     return inst;
 }
 
-void LiftsLimitSwitchesManager::init() {
+void LiftsLimitSwitchesManager::init()
+{
     // Create the thread to handle GPIO events
-    event_thread_pid_ = thread_create(
-        event_stack_, sizeof(event_stack_),
-        THREAD_PRIORITY_MAIN - 1,
-        THREAD_CREATE_STACKTEST,
-        event_thread_entry, nullptr, "gpio_evt"
-    );
+    event_thread_pid_ =
+        thread_create(event_stack_, sizeof(event_stack_), THREAD_PRIORITY_MAIN - 1,
+                      THREAD_CREATE_STACKTEST, event_thread_entry, nullptr, "gpio_evt");
 
     LOG_INFO("Motor limit switches manager started\n");
 }
 
-int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
-    if (pin == GPIO_UNDEF) return -ENODEV;
+int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift)
+{
+    if (pin == GPIO_UNDEF)
+        return -ENODEV;
 
     mutex_lock(&mutex_);
     // Initialize pin interrupt on falling edges with pulldown
-    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) != 0) {
+    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) !=
+        0) {
         LOG_ERROR("Failed to init pin %p\n", reinterpret_cast<void*>(pin));
 
         mutex_unlock(&mutex_);
@@ -58,7 +60,8 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
     callbacks_[pin] = lift;
 
     // Initialize pin interrupt on falling edges with pulldown
-    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) != 0) {
+    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) !=
+        0) {
         LOG_ERROR("Failed to init pin %p\n", reinterpret_cast<void*>(pin));
 
         return -EIO;
@@ -71,8 +74,10 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
     return 0;
 }
 
-int LiftsLimitSwitchesManager::unregister_gpio(gpio_t pin) {
-    if (pin == GPIO_UNDEF) return -ENODEV;
+int LiftsLimitSwitchesManager::unregister_gpio(gpio_t pin)
+{
+    if (pin == GPIO_UNDEF)
+        return -ENODEV;
 
     mutex_lock(&mutex_);
 
@@ -102,8 +107,8 @@ int LiftsLimitSwitchesManager::unregister_gpio(gpio_t pin) {
     return 0;
 }
 
-
-void LiftsLimitSwitchesManager::isr_callback(void* arg) {
+void LiftsLimitSwitchesManager::isr_callback(void* arg)
+{
     gpio_t pin = reinterpret_cast<gpio_t>(arg);
     event_t* evt = instance().gpio_to_event_[pin];
 
@@ -113,14 +118,16 @@ void LiftsLimitSwitchesManager::isr_callback(void* arg) {
     }
 }
 
-void LiftsLimitSwitchesManager::event_handler(event_t* evt) {
+void LiftsLimitSwitchesManager::event_handler(event_t* evt)
+{
     DEBUG("Event %p handling\n", static_cast<void*>(evt));
 
     gpio_t pin = instance().event_to_gpio_[evt];
     instance().handle_gpio_event(pin);
 }
 
-void LiftsLimitSwitchesManager::handle_gpio_event(gpio_t pin) {
+void LiftsLimitSwitchesManager::handle_gpio_event(gpio_t pin)
+{
     DEBUG("GPIO %p triggered\n", reinterpret_cast<void*>(pin));
     mutex_lock(&mutex_);
 
@@ -134,7 +141,8 @@ void LiftsLimitSwitchesManager::handle_gpio_event(gpio_t pin) {
     LOG_INFO("Event handled\n");
 }
 
-void* LiftsLimitSwitchesManager::event_thread_entry(void*) {
+void* LiftsLimitSwitchesManager::event_thread_entry(void*)
+{
     // Initialize the queue in the same thread than the event loop
     event_queue_init(&instance().event_queue_);
 

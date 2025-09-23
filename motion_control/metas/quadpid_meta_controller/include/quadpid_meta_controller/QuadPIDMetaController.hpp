@@ -6,7 +6,8 @@
 /// @ingroup    quadpid_meta_controller
 /// @{
 /// @file
-/// @brief      Run 2 (meta-)controllers, one for linear control, one for angular control
+/// @brief      Run 2 (meta-)controllers, one for linear control, one for
+/// angular control
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
@@ -25,7 +26,9 @@ namespace motion_control {
 /// - one dedicated to position filtering if needed,
 /// - one dedicated to coordinating dual PID control (position and speed)
 ///   for both linear and angular motion.
-class QuadPIDMetaController: public MetaController <2> {};
+class QuadPIDMetaController : public MetaController<2>
+{
+};
 
 } // namespace motion_control
 

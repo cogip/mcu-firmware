@@ -7,27 +7,31 @@
 
 #include <cstdint>
 
-#include "encoder/EncoderInterface.hpp"
-#include "LocalizationInterface.hpp"
 #include "LocalizationDifferentialParameters.hpp"
+#include "LocalizationInterface.hpp"
+#include "encoder/EncoderInterface.hpp"
 
 namespace cogip {
 
 namespace localization {
 
-class LocalizationDifferential: public LocalizationInterface {
+class LocalizationDifferential : public LocalizationInterface
+{
 
-public:
+  public:
     /// @brief Construct a new differential localization object
     /// @param parameters Localization parameters
-    explicit LocalizationDifferential(LocalizationDifferentialParameters &parameters,
-                                  cogip::encoder::EncoderInterface &left_encoder,
-                                  cogip::encoder::EncoderInterface &right_encoder) :
-                                  parameters_(parameters), left_encoder_(left_encoder), right_encoder_(right_encoder) {}
+    explicit LocalizationDifferential(LocalizationDifferentialParameters& parameters,
+                                      cogip::encoder::EncoderInterface& left_encoder,
+                                      cogip::encoder::EncoderInterface& right_encoder)
+        : parameters_(parameters), left_encoder_(left_encoder), right_encoder_(right_encoder)
+    {
+    }
 
     /// @brief Set the default localization pose
     ///
-    /// @note this function should be called to reset robot pose and defined a new default one
+    /// @note this function should be called to reset robot pose and defined a new
+    /// default one
     ///
     /// @param x X coordinate (mm)
     /// @param y Y coordinate (mm)
@@ -41,10 +45,11 @@ public:
 
     /// @brief Set the default localization pose
     ///
-    /// @note this function should be called to reset robot pose and defined a new default one
+    /// @note this function should be called to reset robot pose and defined a new
+    /// default one
     ///
     /// @param pose postion reference
-    void set_pose(const cogip::cogip_defs::Pose &pose) override
+    void set_pose(const cogip::cogip_defs::Pose& pose) override
     {
         pose_.set_x(pose.x());
         pose_.set_y(pose.y());
@@ -65,7 +70,8 @@ public:
     /// @note Data units:
     ///         - linear: mm
     ///         - O: deg
-    /// @return velocity cogip::cogip_defs::Polar current polar pose delta reference
+    /// @return velocity cogip::cogip_defs::Polar current polar pose delta
+    /// reference
     const cogip::cogip_defs::Polar& delta_polar_pose() override
     {
         return polar_;
@@ -75,11 +81,11 @@ public:
     /// @return int 0 on success, negative on failure.
     int update() override;
 
-private:
-    LocalizationDifferentialParameters &parameters_;
+  private:
+    LocalizationDifferentialParameters& parameters_;
 
-    cogip::encoder::EncoderInterface &left_encoder_;
-    cogip::encoder::EncoderInterface &right_encoder_;
+    cogip::encoder::EncoderInterface& left_encoder_;
+    cogip::encoder::EncoderInterface& right_encoder_;
 
     cogip::cogip_defs::Pose pose_;
     cogip::cogip_defs::Polar polar_;

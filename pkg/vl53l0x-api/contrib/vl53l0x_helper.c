@@ -25,7 +25,7 @@ static VL53L0X_Error status[VL53L0X_NUMOF];
 int vl53l0x_init_dev(vl53l0x_t dev)
 {
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
-    VL53L0X_Dev_t *st_api_vl53l0x = NULL;
+    VL53L0X_Dev_t* st_api_vl53l0x = NULL;
     uint32_t refSpadCount;
     uint8_t isApertureSpads;
     uint8_t VhvSettings;
@@ -40,13 +40,13 @@ int vl53l0x_init_dev(vl53l0x_t dev)
     st_api_vl53l0x = &devices[dev];
 
     /* Retrieve ToF */
-    const vl53l0x_conf_t *vl53l0x = &vl53l0x_config[dev];
+    const vl53l0x_conf_t* vl53l0x = &vl53l0x_config[dev];
 
-    st_api_vl53l0x->I2cDev =  vl53l0x->i2c_dev;
-    st_api_vl53l0x->I2cDevAddr =  vl53l0x->i2c_addr;
+    st_api_vl53l0x->I2cDev = vl53l0x->i2c_dev;
+    st_api_vl53l0x->I2cDevAddr = vl53l0x->i2c_addr;
 
     /* Force use of I2C communication protocol */
-    st_api_vl53l0x->comms_type =  1;
+    st_api_vl53l0x->comms_type = 1;
 
     /* Data init */
     if (Status == VL53L0X_ERROR_NONE) {
@@ -60,19 +60,16 @@ int vl53l0x_init_dev(vl53l0x_t dev)
 
     /* Reference calibration */
     if (Status == VL53L0X_ERROR_NONE) {
-        Status = VL53L0X_PerformRefCalibration(st_api_vl53l0x,
-                                               &VhvSettings, &PhaseCal);
+        Status = VL53L0X_PerformRefCalibration(st_api_vl53l0x, &VhvSettings, &PhaseCal);
     }
 
     /* Spad init */
     if (Status == VL53L0X_ERROR_NONE) {
-        Status = VL53L0X_PerformRefSpadManagement(st_api_vl53l0x,
-                                                  &refSpadCount, &isApertureSpads);
+        Status = VL53L0X_PerformRefSpadManagement(st_api_vl53l0x, &refSpadCount, &isApertureSpads);
     }
 
     if (Status == VL53L0X_ERROR_NONE) {
-        Status = VL53L0X_SetDeviceMode(st_api_vl53l0x,
-                                       VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+        Status = VL53L0X_SetDeviceMode(st_api_vl53l0x, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
     }
 
     if (Status == VL53L0X_ERROR_NONE) {
@@ -87,7 +84,7 @@ int vl53l0x_init_dev(vl53l0x_t dev)
 int vl53l0x_reset_dev(vl53l0x_t dev)
 {
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
-    VL53L0X_Dev_t *st_api_vl53l0x = &devices[dev];
+    VL53L0X_Dev_t* st_api_vl53l0x = &devices[dev];
 
     status[dev] = VL53L0X_ERROR_UNDEFINED;
 
@@ -120,7 +117,7 @@ uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
     VL53L0X_RangingMeasurementData_t RangingMeasurementData;
     VL53L0X_Error Status = VL53L0X_ERROR_NONE;
     FixPoint1616_t LimitCheckCurrent;
-    VL53L0X_Dev_t *st_api_vl53l0x = NULL;
+    VL53L0X_Dev_t* st_api_vl53l0x = NULL;
 
     /* Check device exists */
     assert(dev < VL53L0X_NUMOF);
@@ -130,18 +127,15 @@ uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
 
     /* Check device description is initialized */
     if (status[dev] == 0) {
-        Status = VL53L0X_GetRangingMeasurementData(st_api_vl53l0x,
-                                                   &RangingMeasurementData);
+        Status = VL53L0X_GetRangingMeasurementData(st_api_vl53l0x, &RangingMeasurementData);
 
-        VL53L0X_GetLimitCheckCurrent(st_api_vl53l0x,
-                                     VL53L0X_CHECKENABLE_RANGE_IGNORE_THRESHOLD,
+        VL53L0X_GetLimitCheckCurrent(st_api_vl53l0x, VL53L0X_CHECKENABLE_RANGE_IGNORE_THRESHOLD,
                                      &LimitCheckCurrent);
 
         if (Status != VL53L0X_ERROR_NONE) {
             goto vl53l0x_continuous_ranging_get_measure_err;
         }
-    }
-    else {
+    } else {
         goto vl53l0x_continuous_ranging_get_measure_err;
     }
 

@@ -7,13 +7,12 @@ namespace cogip {
 
 namespace cogip_defs {
 
-float Coords::distance(const Coords &dest) const
+float Coords::distance(const Coords& dest) const
 {
-    return sqrt((dest.x_ - x_) * (dest.x_ - x_)
-                + (dest.y_ - y_) * (dest.y_ - y_));
+    return sqrt((dest.x_ - x_) * (dest.x_ - x_) + (dest.y_ - y_) * (dest.y_ - y_));
 }
 
-bool Coords::on_segment(const Coords &a, const Coords &b) const
+bool Coords::on_segment(const Coords& a, const Coords& b) const
 {
     bool res = false;
 
@@ -22,8 +21,7 @@ bool Coords::on_segment(const Coords &a, const Coords &b) const
             if ((x_ < b.x()) && (x_ > a.x())) {
                 res = true;
             }
-        }
-        else {
+        } else {
             if ((x_ < a.x()) && (x_ > b.x())) {
                 res = true;
             }

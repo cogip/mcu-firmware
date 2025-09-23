@@ -29,24 +29,22 @@ extern "C" {
  * @name I2C configuration
  * @{
  */
-static const i2c_conf_t i2c_config[] = {
-    {
-        .dev = I2C2,
-        .speed = I2C_SPEED_NORMAL,
-        .scl_pin = GPIO_PIN(PORT_A, 9),
-        .sda_pin = GPIO_PIN(PORT_A, 8),
-        .scl_af = GPIO_AF4,
-        .sda_af = GPIO_AF4,
-        .bus = APB1,
-        .rcc_mask = RCC_APB1ENR1_I2C2EN,
-        .rcc_sw_mask = RCC_CCIPR_I2C2SEL_1,             /* HSI (16 MHz) */
-        .irqn = I2C2_ER_IRQn,
-    }
-};
+static const i2c_conf_t i2c_config[] = {{
+    .dev = I2C2,
+    .speed = I2C_SPEED_NORMAL,
+    .scl_pin = GPIO_PIN(PORT_A, 9),
+    .sda_pin = GPIO_PIN(PORT_A, 8),
+    .scl_af = GPIO_AF4,
+    .sda_af = GPIO_AF4,
+    .bus = APB1,
+    .rcc_mask = RCC_APB1ENR1_I2C2EN,
+    .rcc_sw_mask = RCC_CCIPR_I2C2SEL_1, /* HSI (16 MHz) */
+    .irqn = I2C2_ER_IRQn,
+}};
 
-#define I2C_0_ISR           isr_i2c2_er
+#define I2C_0_ISR isr_i2c2_er
 
-#define I2C_NUMOF           ARRAY_SIZE(i2c_config)
+#define I2C_NUMOF ARRAY_SIZE(i2c_config)
 /** @} */
 
 #ifdef __cplusplus

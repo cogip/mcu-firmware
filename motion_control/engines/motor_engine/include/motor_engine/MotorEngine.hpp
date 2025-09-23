@@ -6,7 +6,8 @@
 /// @ingroup    motor_engine Motor engine
 /// @{
 /// @file
-/// @brief      Engine getting inputs from motor and setting outputs for the motor
+/// @brief      Engine getting inputs from motor and setting outputs for the
+/// motor
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
@@ -14,56 +15,66 @@
 
 // Project includes
 #include "etl/delegate.h"
-#include "odometer/OdometerInterface.hpp"
 #include "motion_control_common/BaseControllerEngine.hpp"
 #include "motor/MotorInterface.hpp"
+#include "odometer/OdometerInterface.hpp"
 
 namespace cogip {
 
 namespace motion_control {
 
 /// Engine getting inputs from motor and setting outputs for the motor
-class MotorEngine : public BaseControllerEngine {
-public:
+class MotorEngine : public BaseControllerEngine
+{
+  public:
     /// Constructor
-    MotorEngine(
-        motor::MotorInterface& motor,
-        localization::OdometerInterface& odometer,
-        uint32_t engine_thread_period_ms
-    );
+    MotorEngine(motor::MotorInterface& motor, localization::OdometerInterface& odometer,
+                uint32_t engine_thread_period_ms);
 
     /// Get target speed
     /// return     target speed
-    const float& target_speed() const { return target_speed_; };
+    const float& target_speed() const
+    {
+        return target_speed_;
+    };
 
     /// Set target speed
-    void set_target_speed(
-        const float target_speed   ///< [in]   new target speed
-        ) { target_speed_ = target_speed; };
+    void set_target_speed(const float target_speed ///< [in]   new target speed
+    )
+    {
+        target_speed_ = target_speed;
+    };
 
     /// Get current speed
     /// return     current speed
-    float get_current_speed_from_odometer() const { return odometer_.delta_distance_mm(); };
+    float get_current_speed_from_odometer() const
+    {
+        return odometer_.delta_distance_mm();
+    };
 
     /// Get current distance
     /// return     current distance
-    float get_current_distance_from_odometer() const { return odometer_.distance_mm(); };
+    float get_current_distance_from_odometer() const
+    {
+        return odometer_.distance_mm();
+    };
 
     /// Set current distance
-    void set_current_distance_to_odometer(
-        const float distance    ///< [in]   new current distance
-        );
+    void set_current_distance_to_odometer(const float distance ///< [in]   new current distance
+    );
 
     /// Get target distance
     /// return     target distance
-    const float& target_distance() const { return target_distance_; };
+    const float& target_distance() const
+    {
+        return target_distance_;
+    };
 
     /// Set target distance
-    void set_target_distance(
-        const float target_distance     ///< [in]   new target distance
+    void set_target_distance(const float target_distance ///< [in]   new target distance
     );
 
-private:
+  private:
     /// Prepare controller inputs from motor functions.
     void prepare_inputs();
 

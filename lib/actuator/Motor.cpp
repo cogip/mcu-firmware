@@ -3,35 +3,37 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-#include "board.h"
 #include "actuator/Motor.hpp"
-#include "log.h"
-#include <inttypes.h>
 #include "actuator/PositionalActuator.hpp"
+#include "board.h"
+#include "log.h"
 #include "motor_pose_filter/MotorPoseFilterIOKeysDefault.hpp"
 #include "pose_pid_controller/PosePIDControllerIOKeysDefault.hpp"
 #include "speed_filter/SpeedFilterIOKeysDefault.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
-
+#include <inttypes.h>
 
 namespace cogip {
 namespace actuators {
 namespace positional_actuators {
 
-/// @brief Construct a Motor by unpacking the static parameters and starting the control thread.
+/// @brief Construct a Motor by unpacking the static parameters and starting the
+/// control thread.
 /// @param motor_parameters  Reference to a `MotorParameters` in static storage.
 Motor::Motor(const MotorParameters& motor_parameters)
-    : PositionalActuator(
-          motor_parameters.id,
-          motor_parameters.default_timeout_ms,
-          motor_parameters.send_state_cb
-      ),
+    : PositionalActuator(motor_parameters.id, motor_parameters.default_timeout_ms,
+                         motor_parameters.send_state_cb),
       params_(motor_parameters),
-      distance_controller_(motion_control::linear_pose_pid_controller_io_keys_default, motor_parameters.pose_controller_parameters),
-      speed_controller_(motion_control::linear_speed_pid_controller_io_keys_default, motor_parameters.speed_controller_parameters),
-      motor_distance_filter_(motion_control::motor_pose_filter_io_keys_default, motor_parameters.motor_pose_filter_parameters),
-      speed_filter_(motion_control::linear_speed_filter_io_keys_default, motor_parameters.speed_filter_parameters),
-      motor_engine_(motor_parameters.motor, motor_parameters.odometer, motor_parameters.engine_thread_period_ms)
+      distance_controller_(motion_control::linear_pose_pid_controller_io_keys_default,
+                           motor_parameters.pose_controller_parameters),
+      speed_controller_(motion_control::linear_speed_pid_controller_io_keys_default,
+                        motor_parameters.speed_controller_parameters),
+      motor_distance_filter_(motion_control::motor_pose_filter_io_keys_default,
+                             motor_parameters.motor_pose_filter_parameters),
+      speed_filter_(motion_control::linear_speed_filter_io_keys_default,
+                    motor_parameters.speed_filter_parameters),
+      motor_engine_(motor_parameters.motor, motor_parameters.odometer,
+                    motor_parameters.engine_thread_period_ms)
 {
     // Build the cascade: MotorPoseFilter → PosePID → SpeedFilter → SpeedPID
     dualpid_meta_controller_.add_controller(&motor_distance_filter_);
@@ -61,23 +63,27 @@ Motor::Motor(const MotorParameters& motor_parameters)
     motor_engine_.start_thread();
 }
 
-void Motor::init() {
+void Motor::init()
+{
     params_.motor.enable();
     motor_engine_.enable();
 }
 
-void Motor::enable() {
+void Motor::enable()
+{
     motor_engine_.enable();
 }
 
-void Motor::disable() {
+void Motor::disable()
+{
     motor_engine_.disable();
     params_.motor.brake();
 }
 
 void Motor::actuate(int32_t command)
 {
-    LOG_INFO("Move motor to command %" PRIi32 " from distance %.2f\n", command, static_cast<double>(motor_engine_.get_current_distance_from_odometer()));
+    LOG_INFO("Move motor to command %" PRIi32 " from distance %.2f\n", command,
+             static_cast<double>(motor_engine_.get_current_distance_from_odometer()));
 
     // Reset filters/PIDs on a new command
     distance_controller_.parameters().pid()->reset();

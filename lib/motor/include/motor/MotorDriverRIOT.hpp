@@ -10,13 +10,12 @@ namespace cogip {
 
 namespace motor {
 
-class MotorDriverRIOT: public MotorDriverInterface {
-public:
+class MotorDriverRIOT : public MotorDriverInterface
+{
+  public:
     /// @brief Create a new motor driver object
     /// @param parameters motor driver parameters reference
-    explicit MotorDriverRIOT(const motor_driver_params_t& parameters): parameters_(parameters)
-    {
-    }
+    explicit MotorDriverRIOT(const motor_driver_params_t& parameters) : parameters_(parameters) {}
 
     /// @brief Intialize the motor driver
     /// @return 0 on success, negative on error
@@ -60,7 +59,8 @@ public:
         // Convert speed in percent to pwm value
         float pwm_value = (speed * (float)parameters_.pwm_resolution) / 100.0;
 
-        // limit pwm value in order to ensure range between [-parameters_.pwm_resolution;parameters_.pwm_resolution]
+        // limit pwm value in order to ensure range between
+        // [-parameters_.pwm_resolution;parameters_.pwm_resolution]
         if (fabs(pwm_value) > (float)parameters_.pwm_resolution) {
             pwm_value = (speed < 0.0 ? -1.0 : 1.0) * (float)parameters_.pwm_resolution;
         }
@@ -76,7 +76,7 @@ public:
         return motor_brake(&driver_, id);
     }
 
-private:
+  private:
     motor_driver_params_t parameters_;
     motor_driver_t driver_;
 };

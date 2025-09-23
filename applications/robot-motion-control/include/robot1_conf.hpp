@@ -4,11 +4,11 @@
 #include "etl/numeric.h"
 
 /* Motion motors */
-#define MOTOR_LEFT  1
+#define MOTOR_LEFT 1
 #define MOTOR_RIGHT 0
 
 /* Quadrature decoding polarity */
-#define QDEC_LEFT_POLARITY  1
+#define QDEC_LEFT_POLARITY 1
 #define QDEC_RIGHT_POLARITY -1
 
 /// Motors properties
@@ -47,7 +47,8 @@ constexpr float angular_speed_pid_kd = 0;
 constexpr float linear_threshold = 1;
 // Angular threshold
 constexpr float angular_threshold = 1;
-// Angular intermediate threshold (when the robot turns on itself to go straight to its destination)
+// Angular intermediate threshold (when the robot turns on itself to go straight
+// to its destination)
 constexpr float angular_intermediate_threshold = 20;
 
 // Linear anti-blocking
@@ -56,15 +57,15 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
 
 // Speeds and accelerations/decelerations limits
-constexpr float min_speed_mm_per_s = 0;     ///< Minimum speed (mm/s)
-constexpr float max_speed_mm_per_s = 2000;  ///< Maximum speed (mm/s)
+constexpr float min_speed_mm_per_s = 0;    ///< Minimum speed (mm/s)
+constexpr float max_speed_mm_per_s = 2000; ///< Maximum speed (mm/s)
 constexpr float max_acc_mm_per_s2 = 500.0; ///< Maximum acceleration (mm/s²)
 constexpr float max_dec_mm_per_s2 = 500.0; ///< Maximum deceleration (mm/s²)
 
-constexpr float min_speed_deg_per_s = 0;    ///< Maximum speed (deg/s)
-constexpr float max_speed_deg_per_s = 720;  ///< Maximum speed (deg/s)
-constexpr float max_acc_deg_per_s2 = 360;   ///< Maximum acceleration (deg/s²)
-constexpr float max_dec_deg_per_s2 = 360;   ///< Maximum deceleration (deg/s²)
+constexpr float min_speed_deg_per_s = 0;   ///< Maximum speed (deg/s)
+constexpr float max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
+constexpr float max_acc_deg_per_s2 = 360;  ///< Maximum acceleration (deg/s²)
+constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
 
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = true;

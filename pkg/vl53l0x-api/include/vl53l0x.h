@@ -32,7 +32,6 @@
 #include "vl53l0x_api.h"
 #include "vl53l0x_platform.h"
 
-
 /**
  * @brief   VL53L0X ToF sensor id
  */
@@ -41,11 +40,11 @@ typedef uint16_t vl53l0x_t;
 /**
  * @brief   VL53L0X ToF sensor configuration
  */
-typedef struct {
-    i2c_t i2c_dev;          /**< I2C bus */
-    uint16_t i2c_addr;      /**< I2C ToF address */
+typedef struct
+{
+    i2c_t i2c_dev;     /**< I2C bus */
+    uint16_t i2c_addr; /**< I2C ToF address */
 } vl53l0x_conf_t;
-
 
 /**
  * @brief Initialize given VL53L0X ToF sensor

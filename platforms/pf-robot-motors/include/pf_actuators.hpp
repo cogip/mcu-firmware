@@ -12,8 +12,8 @@
 #pragma once
 
 // Firmware includes
-#include "canpb/CanProtobuf.hpp"
 #include "actuator/Actuator.hpp"
+#include "canpb/CanProtobuf.hpp"
 
 // Standard includes
 #include <cstdint>

@@ -11,16 +11,19 @@
 
 #pragma once
 
+// System includes
+#include <inttypes.h>
+
 namespace cogip {
 namespace actuators {
 
 /// @enum GroupEnum
 /// Forward declaration of GroupEnum to identify actuators groups.
-enum class GroupEnum: uint8_t;
+enum class GroupEnum : uint8_t;
 
 /// @enum Enum
 /// Forward declaration of Enum used to identify actuators.
-enum class Enum: uint8_t;
+enum class Enum : uint8_t;
 
 /// @typedef send_state_cb_t
 /// Function pointer type for sending actuator state.
@@ -36,33 +39,44 @@ typedef void (*send_state_cb_t)(Enum id);
 /// - Unique identifier
 /// - Blocked state management
 /// - State sending via callback mechanism
-class Actuator {
-public:
+class Actuator
+{
+  public:
     /// @brief Constructor.
     ///
     /// @param id            Unique identifier of the actuator.
     /// @param send_state_cb Optional callback to send the actuator's state.
-    explicit Actuator(
-        Enum id,                                ///< actuator id
-        send_state_cb_t send_state_cb = nullptr ///< send state callback
-    ) : id_(id), blocked_(false), send_state_cb_(send_state_cb) {}
+    explicit Actuator(Enum id,                                ///< actuator id
+                      send_state_cb_t send_state_cb = nullptr ///< send state callback
+                      )
+        : id_(id), blocked_(false), send_state_cb_(send_state_cb)
+    {
+    }
 
     /// @brief Get blocked state.
     /// @return true if blocked, false otherwise.
-    bool blocked() { return blocked_; }
+    bool blocked()
+    {
+        return blocked_;
+    }
 
     /// @brief Set blocked state.
     /// @param blocked true to block the actuator, false to unblock.
-    void set_blocked(bool blocked) { blocked_ = blocked; }
+    void set_blocked(bool blocked)
+    {
+        blocked_ = blocked;
+    }
 
     /// @brief Send actuator state on communication bus.
     ///
     /// If the callback is set, it invokes the callback with the actuator ID.
-    virtual void send_state(void) {
-        if (send_state_cb_) send_state_cb_(id_);
+    virtual void send_state(void)
+    {
+        if (send_state_cb_)
+            send_state_cb_(id_);
     }
 
-protected:
+  protected:
     /// Actuator ID
     Enum id_;
 

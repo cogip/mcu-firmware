@@ -21,9 +21,10 @@
 #pragma once
 
 /// Heap description
-typedef struct {
+typedef struct
+{
     // cppcheck-suppress unusedStructMember
-    char *start;    ///< Heap start
+    char* start; ///< Heap start
     // cppcheck-suppress unusedStructMember
-    char *end;      ///< Heap end
+    char* end; ///< Heap end
 } sysmon_heap_t;

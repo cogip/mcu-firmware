@@ -26,7 +26,8 @@ namespace positional_actuators {
 /// @details
 ///   Combines generic motor parameters with lift-specific limits,
 ///   speed settings, and limit-switch pin assignments.
-struct LiftParameters {
+struct LiftParameters
+{
     /// Lift motor configuration parameters.
     MotorParameters motor_params;
 

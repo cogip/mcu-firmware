@@ -21,22 +21,22 @@
 #include <sys/shm.h>
 
 /* Project includes */
-#include "vl53l0x.h"
 #include "board.h"
 #include "platform.h"
 #include "shmem.h"
+#include "vl53l0x.h"
 
-uint16_t *shmem_ptrr = NULL;
+uint16_t* shmem_ptrr = NULL;
 
 int vl53l0x_init_dev(vl53l0x_t dev)
 {
-    (void) dev;
+    (void)dev;
     return 0;
 }
 
 int vl53l0x_reset_dev(vl53l0x_t dev)
 {
-    (void) dev;
+    (void)dev;
     return 0;
 }
 
@@ -56,7 +56,7 @@ void vl53l0x_init(void)
 
 uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
 {
-    const shmem_data_t *shared_data = shmem_get_data();
+    const shmem_data_t* shared_data = shmem_get_data();
 
     /* Return max value if shared memory is not initialized */
     if (shared_data == NULL) {
@@ -67,6 +67,5 @@ uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
 
     /* Return value from simulator */
     return shared_data->vl53l0x_values[dev];
-
 }
 /** @} */

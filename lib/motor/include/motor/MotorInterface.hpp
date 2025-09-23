@@ -4,12 +4,11 @@ namespace cogip {
 
 namespace motor {
 
-class MotorInterface {
-public:
+class MotorInterface
+{
+  public:
     /// @brief Virtual destructor
-    ~MotorInterface()
-    {
-    }
+    ~MotorInterface() {}
 
     /// @brief Init the motor
     /// @return 0 on success, negative on error

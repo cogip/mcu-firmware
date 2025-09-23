@@ -19,14 +19,16 @@ namespace cogip {
 namespace motion_control {
 
 /// @brief Bundle of ControllersIO key names for a PassthroughPosePIDController.
-struct PassthroughPosePIDControllerIOKeys {
-    etl::string_view position_error;  ///< e.g. "linear_position_error"  or "angular_position_error"
-    etl::string_view speed_order;     ///< e.g. "linear_speed_order"     or "angular_speed_order"
-    etl::string_view target_speed;    ///< e.g. "linear_target_speed"    or "angular_target_speed"
+struct PassthroughPosePIDControllerIOKeys
+{
+    etl::string_view position_error; ///< e.g. "linear_position_error"  or
+                                     ///< "angular_position_error"
+    etl::string_view speed_order;    ///< e.g. "linear_speed_order"     or "angular_speed_order"
+    etl::string_view target_speed;   ///< e.g. "linear_target_speed"    or "angular_target_speed"
 };
 
-}  // namespace motion_control
+} // namespace motion_control
 
-}  // namespace cogip
+} // namespace cogip
 
 /// @}

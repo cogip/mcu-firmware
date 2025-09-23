@@ -20,20 +20,24 @@ namespace cogip {
 namespace motion_control {
 
 /// Pose controller parameters
-class PosePIDControllerParameters {
-public:
+class PosePIDControllerParameters
+{
+  public:
     /// Constructor
-    explicit PosePIDControllerParameters(
-        pid::PID *pid = nullptr     ///< [in]  PID parameters
-    ) : pid_(pid) {};
+    explicit PosePIDControllerParameters(pid::PID* pid = nullptr ///< [in]  PID parameters
+                                         )
+        : pid_(pid){};
 
     /// Get PID parameters
     /// return     PID parameters pointer
-    pid::PID *pid() const { return pid_; };
+    pid::PID* pid() const
+    {
+        return pid_;
+    };
 
-private:
+  private:
     /// PID parameters
-    pid::PID *pid_;   ///< Position PID
+    pid::PID* pid_; ///< Position PID
 };
 
 } // namespace motion_control

@@ -23,16 +23,17 @@ namespace cogip {
 
 namespace motion_control {
 
-/// Base class for controllers engine. The engine is responsible of launching the controllers chain.
-class BaseControllerEngine {
-public:
+/// Base class for controllers engine. The engine is responsible of launching
+/// the controllers chain.
+class BaseControllerEngine
+{
+  public:
     /// Constructor
     BaseControllerEngine(uint32_t engine_thread_period_ms);
 
     /// Set the controller to launch.
-    void set_controller(
-        BaseController *controller  ///< [in]   controller
-        );
+    void set_controller(BaseController* controller ///< [in]   controller
+    );
 
     /// Start controller main thread, launching the thread loop.
     void start_thread();
@@ -41,50 +42,81 @@ public:
     virtual void thread_loop();
 
     /// Enable thread loop
-    void enable() { mutex_lock(&mutex_); enable_ = true; mutex_unlock(&mutex_); };
+    void enable()
+    {
+        mutex_lock(&mutex_);
+        enable_ = true;
+        mutex_unlock(&mutex_);
+    };
 
     /// Disable thread loop
-    void disable() {
-        mutex_lock(&mutex_); enable_ = false; mutex_unlock(&mutex_);
+    void disable()
+    {
+        mutex_lock(&mutex_);
+        enable_ = false;
+        mutex_unlock(&mutex_);
     };
 
     /// Get controller
-    BaseController* controller() const { return controller_; };
+    BaseController* controller() const
+    {
+        return controller_;
+    };
 
     /// Get pose reached flag
     /// return     true if pose reached
-    target_pose_status_t pose_reached() const { return pose_reached_; };
+    target_pose_status_t pose_reached() const
+    {
+        return pose_reached_;
+    };
 
     /// Return motion control current cycle
-    uint32_t current_cycle() const { return current_cycle_; };
+    uint32_t current_cycle() const
+    {
+        return current_cycle_;
+    };
 
     /// Return motion control timeout cycle number
-    uint32_t timeout_ms() const { return timeout_ms_; };
+    uint32_t timeout_ms() const
+    {
+        return timeout_ms_;
+    };
 
     /// Return motion control timeout enable flag
-    bool timeout_enable() const { return timeout_enable_; };
+    bool timeout_enable() const
+    {
+        return timeout_enable_;
+    };
 
     /// Set pose reached flag
-    void set_pose_reached(
-        target_pose_status_t pose_reached       ///< [in]   pose reached flag
-        ) { pose_reached_ = pose_reached; };
+    void set_pose_reached(target_pose_status_t pose_reached ///< [in]   pose reached flag
+    )
+    {
+        pose_reached_ = pose_reached;
+    };
 
     /// Set current cycle
-    void set_current_cycle(
-        uint32_t current_cycle                  ///< [in]   new current cycle
-        ) { current_cycle_ = current_cycle; };
+    void set_current_cycle(uint32_t current_cycle ///< [in]   new current cycle
+    )
+    {
+        current_cycle_ = current_cycle;
+    };
 
     /// Set timeout cycle number
-    void set_timeout_ms(
-        uint32_t timeout_ms                     ///< [in]   timeout in cycles
-        ) { timeout_ms_ = timeout_ms; };
+    void set_timeout_ms(uint32_t timeout_ms ///< [in]   timeout in cycles
+    )
+    {
+        timeout_ms_ = timeout_ms;
+    };
 
     /// Set timeout enable
-    void set_timeout_enable(
-        bool timeout_enable                     ///< [in]   timeout enable flag
-        ) { timeout_enable_ = timeout_enable; };
+    void set_timeout_enable(bool timeout_enable ///< [in]   timeout enable flag
+    )
+    {
+        timeout_enable_ = timeout_enable;
+    };
 
-protected:
+  protected:
     /// Prepare controller inputs from platform functions.
     virtual void prepare_inputs() = 0;
 
@@ -94,8 +126,9 @@ protected:
     /// Enable thread loop flag
     bool enable_;
 
-    /// Controller to be launched by this engine. This could be a meta controller leading to the execution of a chain of controllers.
-    BaseController *controller_;
+    /// Controller to be launched by this engine. This could be a meta controller
+    /// leading to the execution of a chain of controllers.
+    BaseController* controller_;
 
     /// Current motion control cycle
     uint32_t current_cycle_;
@@ -106,7 +139,8 @@ protected:
     /// Timeout cycles decrementing counter
     int32_t timeout_cycle_counter_;
 
-    /// Timeout before the engine considers it has reached the position, useful for speed only controllers.
+    /// Timeout before the engine considers it has reached the position, useful
+    /// for speed only controllers.
     uint32_t timeout_ms_;
 
     /// Timeout enable flag

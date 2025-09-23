@@ -10,12 +10,14 @@
 namespace cogip {
 namespace localization {
 
-/// @brief 1D odometer interface: tracks a single linear distance (e.g., elevator travel).
+/// @brief 1D odometer interface: tracks a single linear distance (e.g.,
+/// elevator travel).
 /// @details
-///   Unlike LocalizationInterface, this interface only manages a single distance value (millimeters)
-///   and its increment between two update() calls.
-class OdometerInterface {
-public:
+///   Unlike LocalizationInterface, this interface only manages a single
+///   distance value (millimeters) and its increment between two update() calls.
+class OdometerInterface
+{
+  public:
     virtual ~OdometerInterface() = default;
 
     /// @brief Initialiaze odometer.

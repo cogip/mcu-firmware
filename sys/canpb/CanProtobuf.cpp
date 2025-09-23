@@ -1,9 +1,9 @@
 #include "canpb/CanProtobuf.hpp"
 
 // System includes
+#include "can/can.h"
 #include "log.h"
 #include <inttypes.h>
-#include "can/can.h"
 
 // RIOT includes
 #include "Errors.h"
@@ -11,22 +11,20 @@
 #define ENABLE_DEBUG 0
 #include <debug.h>
 
-#define MESSAGE_READER_THREAD_MSG_QUEUE_SIZE    8
+#define MESSAGE_READER_THREAD_MSG_QUEUE_SIZE 8
 
 // CAN message types
-#define CAN_MSG_RECV        0x400
+#define CAN_MSG_RECV 0x400
 
 namespace cogip {
 
 namespace canpb {
 
-CanProtobuf::CanProtobuf(
-    uint8_t can_interface_number) :
-    can_interface_number_(can_interface_number)
+CanProtobuf::CanProtobuf(uint8_t can_interface_number) : can_interface_number_(can_interface_number)
 {
 }
 
-bool CanProtobuf::init(struct can_filter *filter)
+bool CanProtobuf::init(struct can_filter* filter)
 {
     LOG_INFO("Initialize CanProtobuf %" PRIu8 "\n", can_interface_number_);
     return conn_can_raw_create(&conn_can_raw_, filter, 1, can_interface_number_, 0);
@@ -34,15 +32,9 @@ bool CanProtobuf::init(struct can_filter *filter)
 
 void CanProtobuf::start_reader()
 {
-    reader_pid_ = thread_create(
-        reader_stack_,
-        sizeof(reader_stack_),
-        CANPB_READER_PRIO,
-        THREAD_CREATE_STACKTEST,
-        message_reader_wrapper,
-        static_cast<void *>(this),
-        "Protobuf reader"
-        );
+    reader_pid_ = thread_create(reader_stack_, sizeof(reader_stack_), CANPB_READER_PRIO,
+                                THREAD_CREATE_STACKTEST, message_reader_wrapper,
+                                static_cast<void*>(this), "Protobuf reader");
 }
 
 void CanProtobuf::message_reader()
@@ -51,14 +43,13 @@ void CanProtobuf::message_reader()
 
     LOG_INFO("Waiting for messages...\n");
 
-    while (conn_can_raw_recv(&conn_can_raw_, &frame,
-           0) == sizeof(can_frame_t)) {
+    while (conn_can_raw_recv(&conn_can_raw_, &frame, 0) == sizeof(can_frame_t)) {
 
         uuid_t uuid = frame.can_id & CAN_EFF_MASK;
 
         // Check a handler corresponding to the uuid is registered
         if (message_handlers_.count(uuid) != 1) {
-            //std::cout << "Unknown message uuid: " << (uint32_t)uuid << std::endl;
+            // std::cout << "Unknown message uuid: " << (uint32_t)uuid << std::endl;
             continue;
         }
         DEBUG("receive message uuid: 0x%" PRIx32 "\n", static_cast<uint32_t>(uuid));
@@ -80,7 +71,7 @@ void CanProtobuf::message_reader()
     LOG_INFO("Stop waiting for messages...\n");
 }
 
-bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterface *message)
+bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterface* message)
 {
     bool success = true;
     size_t base64_size = 0;
@@ -89,11 +80,10 @@ bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfac
     if (message) {
         write_buffer_.clear();
         auto serialization_status = message->serialize(write_buffer_);
-        if(EmbeddedProto::Error::NO_ERRORS != serialization_status) {
+        if (EmbeddedProto::Error::NO_ERRORS != serialization_status) {
             LOG_ERROR("Failed to serialize Protobuf message\n");
             success = false;
-        }
-        else if (write_buffer_.get_size() > 0) {
+        } else if (write_buffer_.get_size() > 0) {
             base64_size = write_buffer_.base64_encode();
             if (base64_size == 0) {
                 LOG_ERROR("Failed to base64 encode Protobuf serialized message\n");
@@ -114,9 +104,9 @@ bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfac
             conn_can_raw_create(&conn, NULL, 0, can_interface_number_, 0);
             conn_can_raw_send(&conn, &frame, 0);
             conn_can_raw_close(&conn);
-        }
-        else {
-            LOG_ERROR("Bad message length(%zu) for uuid: 0x%" PRIx32 "\n", base64_size, static_cast<uint32_t>(uuid));
+        } else {
+            LOG_ERROR("Bad message length(%zu) for uuid: 0x%" PRIx32 "\n", base64_size,
+                      static_cast<uint32_t>(uuid));
         }
     }
 

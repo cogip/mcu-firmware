@@ -1,7 +1,7 @@
 // System includes
+#include "log.h"
 #include <cstdio>
 #include <string.h>
-#include "log.h"
 
 // RIOT includes
 #include "base64.h"
@@ -17,49 +17,47 @@ namespace canpb {
 
 void WriteBuffer::clear()
 {
-  write_index_ = 0;
+    write_index_ = 0;
 }
 
 uint32_t WriteBuffer::get_size() const
 {
-  return write_index_;
+    return write_index_;
 }
 
 uint32_t WriteBuffer::get_max_size() const
 {
-  return CANPB_OUTPUT_MESSAGE_LENGTH_MAX;
+    return CANPB_OUTPUT_MESSAGE_LENGTH_MAX;
 }
 
 uint32_t WriteBuffer::get_available_size() const
 {
-  return CANPB_OUTPUT_MESSAGE_LENGTH_MAX - write_index_;
+    return CANPB_OUTPUT_MESSAGE_LENGTH_MAX - write_index_;
 }
 
 bool WriteBuffer::push(const uint8_t byte)
 {
-  bool return_value = CANPB_OUTPUT_MESSAGE_LENGTH_MAX > write_index_;
-  if (return_value)
-  {
-    data_[write_index_] = byte;
-    ++write_index_;
-  }
-  return return_value;
+    bool return_value = CANPB_OUTPUT_MESSAGE_LENGTH_MAX > write_index_;
+    if (return_value) {
+        data_[write_index_] = byte;
+        ++write_index_;
+    }
+    return return_value;
 }
 
-bool WriteBuffer::push(const uint8_t *bytes, const uint32_t length)
+bool WriteBuffer::push(const uint8_t* bytes, const uint32_t length)
 {
-  bool return_value = CANPB_OUTPUT_MESSAGE_LENGTH_MAX > (write_index_ + length);
-  if (return_value)
-  {
-    memcpy(data_ + write_index_, bytes, length);
-    write_index_ += length;
-  }
-  return return_value;
+    bool return_value = CANPB_OUTPUT_MESSAGE_LENGTH_MAX > (write_index_ + length);
+    if (return_value) {
+        memcpy(data_ + write_index_, bytes, length);
+        write_index_ += length;
+    }
+    return return_value;
 }
 
-uint8_t * WriteBuffer::get_data()
+uint8_t* WriteBuffer::get_data()
 {
-  return data_;
+    return data_;
 }
 
 size_t WriteBuffer::base64_encode()
@@ -72,7 +70,8 @@ size_t WriteBuffer::base64_encode()
         return 0;
     }
     if (base64_buffer_size > CANPB_BASE64_ENCODE_BUFFER_SIZE) {
-        LOG_ERROR("Failed to base64 encode, buffer too small (%zu > %u)\n", base64_buffer_size, CANPB_BASE64_ENCODE_BUFFER_SIZE);
+        LOG_ERROR("Failed to base64 encode, buffer too small (%zu > %u)\n", base64_buffer_size,
+                  CANPB_BASE64_ENCODE_BUFFER_SIZE);
         return 0;
     }
 

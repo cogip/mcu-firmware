@@ -1,6 +1,6 @@
 // System includes
-#include <cstdio>
 #include "log.h"
+#include <cstdio>
 #include <inttypes.h>
 
 // RIOT includes
@@ -19,7 +19,7 @@ struct can_filter canpb_filter = {0x0, 0x0};
 
 #endif
 
-static int cmd_display_heap_status(int argc, char **argv)
+static int cmd_display_heap_status(int argc, char** argv)
 {
     (void)argc;
     (void)argv;
@@ -29,7 +29,7 @@ static int cmd_display_heap_status(int argc, char **argv)
     return 0;
 }
 
-static int cmd_display_threads_status(int argc, char **argv)
+static int cmd_display_threads_status(int argc, char** argv)
 {
     (void)argc;
     (void)argv;
@@ -40,10 +40,9 @@ static int cmd_display_threads_status(int argc, char **argv)
 }
 
 static const shell_command_t shell_commands[] = {
-    { "heap_status", "Display heap memory status", cmd_display_heap_status },
-    { "threads_status", "Display threads status", cmd_display_threads_status },
-    { NULL, NULL, NULL }
-};
+    {"heap_status", "Display heap memory status", cmd_display_heap_status},
+    {"threads_status", "Display threads status", cmd_display_threads_status},
+    {NULL, NULL, NULL}};
 
 int main(void)
 {

@@ -12,10 +12,10 @@
 
 #pragma once
 
-#include <cstdint>
-#include <cstddef>
-#include "canpb.hpp"
 #include "ReadBufferInterface.h"
+#include "canpb.hpp"
+#include <cstddef>
+#include <cstdint>
 
 /// Size of the base64 decoding buffer
 #define CANPB_BASE64_DECODE_BUFFER_SIZE (CANPB_INPUT_MESSAGE_LENGTH_MAX * 2)
@@ -27,7 +27,7 @@ namespace canpb {
 /// ReadBuffer class used to decode Protobuf messages
 class ReadBuffer : public EmbeddedProto::ReadBufferInterface
 {
-public:
+  public:
     /// Class constructor
     ReadBuffer();
 
@@ -37,34 +37,35 @@ public:
 
     uint32_t get_max_size() const override;
 
-    bool peek(uint8_t &byte) const override;
+    bool peek(uint8_t& byte) const override;
 
     bool advance() override;
 
     bool advance(const uint32_t n) override;
 
-    bool pop(uint8_t &byte) override;
+    bool pop(uint8_t& byte) override;
 
     /// Return a pointer to the data array
-    uint8_t * get_data_array();
+    uint8_t* get_data_array();
 
-    /// Return a non constant reference to the number of bytes written to the data array.
-    uint32_t & get_bytes_written();
+    /// Return a non constant reference to the number of bytes written to the data
+    /// array.
+    uint32_t& get_bytes_written();
 
     /// Clear all indices, in effect allowing the data to be overwritten.
     void clear();
 
     /// Push new data into the buffer.
-    bool push(uint8_t &byte);
+    bool push(uint8_t& byte);
 
     /// Decode the data buffer from base64 before deserialization.
     /// @return size of decoded message, 0 in case of failure.
     size_t base64_decode();
 
     /// Return a pointer to the data array.
-    uint8_t * get_base64_data();
+    uint8_t* get_base64_data();
 
-private:
+  private:
     ///< array in which the data received over uart is stored
     uint8_t data_[CANPB_INPUT_MESSAGE_LENGTH_MAX];
     ///< array in which the base64 encoded serialized data is stored

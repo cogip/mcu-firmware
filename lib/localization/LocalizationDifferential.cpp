@@ -16,14 +16,16 @@ namespace localization {
 int LocalizationDifferential::update()
 {
     // Compute encoders wheels left and right linear delta in mm
-    const float dL = left_encoder_.get_angle_and_reset() * parameters_.left_wheel_diameter_mm() * parameters_.left_polarity();
-    const float dR = right_encoder_.get_angle_and_reset() * parameters_.right_wheel_diameter_mm() * parameters_.right_polarity();
+    const float dL = left_encoder_.get_angle_and_reset() * parameters_.left_wheel_diameter_mm() *
+                     parameters_.left_polarity();
+    const float dR = right_encoder_.get_angle_and_reset() * parameters_.right_wheel_diameter_mm() *
+                     parameters_.right_polarity();
 
     // Compute linear delta for robot in mm
-    const float delta_linear_pose      = (dL + dR) / 2;
+    const float delta_linear_pose = (dL + dR) / 2;
 
     // Compute angular delta for robot in rad
-    const float delta_angular_pose      = (dR - dL) / parameters_.track_width_mm();
+    const float delta_angular_pose = (dR - dL) / parameters_.track_width_mm();
 
     // Compute angle in rad between -pi and pi
     float O_rad = DEG2RAD(pose_.O());

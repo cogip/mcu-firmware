@@ -34,20 +34,13 @@ extern "C" {
 #endif
 
 /* Fake GPIOs */
-enum {
-    PORT_A = 0,
-    PORT_B,
-    PORT_C,
-    PORT_D,
-    PORT_E,
-    NATIVE_GPIO_PORT_NUMOF
-};
+enum { PORT_A = 0, PORT_B, PORT_C, PORT_D, PORT_E, NATIVE_GPIO_PORT_NUMOF };
 
 /* Heartbeat LED */
-#define HEARTBEAT_LED   GPIO_PIN(PORT_A, 0)
+#define HEARTBEAT_LED GPIO_PIN(PORT_A, 0)
 
 /* Servomotors */
-#define LX_UART_DEV     2
+#define LX_UART_DEV 2
 
 /* Encoder mode */
 /* QDEC on native architecture only support X1 mode, so force it here */
@@ -60,10 +53,10 @@ enum {
  * @name    ztimer configuration
  * @{
  */
-#define CONFIG_ZTIMER_USEC_TYPE    ZTIMER_TYPE_PERIPH_TIMER
-#define CONFIG_ZTIMER_USEC_DEV     TIMER_DEV(0)
+#define CONFIG_ZTIMER_USEC_TYPE ZTIMER_TYPE_PERIPH_TIMER
+#define CONFIG_ZTIMER_USEC_DEV TIMER_DEV(0)
 /* on native, anything can happen... */
-#define CONFIG_ZTIMER_USEC_MIN     (64)
+#define CONFIG_ZTIMER_USEC_MIN (64)
 /** @} */
 
 #ifdef __cplusplus

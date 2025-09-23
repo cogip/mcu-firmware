@@ -6,14 +6,15 @@
 /// @ingroup     actuator
 /// @{
 /// @file
-/// @brief       C++ class representing a motor using a motor driver and cascaded PID+filter control.
+/// @brief       C++ class representing a motor using a motor driver and
+/// cascaded PID+filter control.
 /// @author      Gilles DOFFE <g.doffe@gmail.com>
 
 #pragma once
 
 // Project includes
-#include "actuator/PositionalActuator.hpp"
 #include "actuator/MotorParameters.hpp"
+#include "actuator/PositionalActuator.hpp"
 // Motion control
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
 #include "motor_engine/MotorEngine.hpp"
@@ -36,14 +37,17 @@ namespace positional_actuators {
 /// @return     Reference to the output stream.
 std::ostream& operator<<(std::ostream& os, Enum id);
 
-/// @brief Class representing a motor using a motor driver and cascaded PID+filter control.
+/// @brief Class representing a motor using a motor driver and cascaded
+/// PID+filter control.
 /// @details
-///   Instantiates and configures all sub-controllers and the control engine according
-///   to the parameters passed in @ref MotorParameters.
-class Motor : public PositionalActuator {
-public:
+///   Instantiates and configures all sub-controllers and the control engine
+///   according to the parameters passed in @ref MotorParameters.
+class Motor : public PositionalActuator
+{
+  public:
     /// @brief Construct a Motor from its static parameter set.
-    /// @param motor_parameters Reference to a `MotorParameters` in static storage.
+    /// @param motor_parameters Reference to a `MotorParameters` in static
+    /// storage.
     explicit Motor(const MotorParameters& motor_parameters);
 
     /// @brief Perform the initialization sequence (e.g., homing).
@@ -61,49 +65,57 @@ public:
 
     /// @brief Return the target speed as a percentage of the maximum speed.
     /// @return Target speed (in %) relative to max speed.
-    float get_target_speed_percentage() const override {
+    float get_target_speed_percentage() const override
+    {
         return params_.speed_filter_parameters.max_speed() == 0.0f
-            ? 0.0f
-            : (motor_engine_.target_speed() / params_.speed_filter_parameters.max_speed()) * 100.0f;
+                   ? 0.0f
+                   : (motor_engine_.target_speed() / params_.speed_filter_parameters.max_speed()) *
+                         100.0f;
     }
 
     /// @brief Set the target speed as a percentage of the maximum speed.
     /// @param percentage Target speed (in %) relative to max speed.
-    void set_target_speed_percent(float percentage) override {
-        motor_engine_.set_target_speed(
-            (percentage / 100.0f) * params_.speed_filter_parameters.max_speed()
-        );
+    void set_target_speed_percent(float percentage) override
+    {
+        motor_engine_.set_target_speed((percentage / 100.0f) *
+                                       params_.speed_filter_parameters.max_speed());
     }
 
     /// @brief Get the current measured distance.
     /// @return Current distance in mm.
-    float get_current_distance() const { return motor_engine_.get_current_distance_from_odometer(); }
+    float get_current_distance() const
+    {
+        return motor_engine_.get_current_distance_from_odometer();
+    }
 
     /// @brief Manually override the current distance reading.
     /// @param distance New distance in mm.
-    void set_current_distance(float distance) { motor_engine_.set_current_distance_to_odometer(distance); }
+    void set_current_distance(float distance)
+    {
+        motor_engine_.set_current_distance_to_odometer(distance);
+    }
 
-protected:
+  protected:
     /// Reference to the static parameter set.
     const MotorParameters& params_;
 
     /// Cascade controller combining pose and speed control.
-    motion_control::DualPIDMetaController    dualpid_meta_controller_;
+    motion_control::DualPIDMetaController dualpid_meta_controller_;
 
     /// Position (pose) PID controller.
-    motion_control::PosePIDController        distance_controller_;
+    motion_control::PosePIDController distance_controller_;
 
     /// Speed PID controller.
-    motion_control::SpeedPIDController       speed_controller_;
+    motion_control::SpeedPIDController speed_controller_;
 
     /// Filter for pose (distance) measurement.
-    motion_control::MotorPoseFilter          motor_distance_filter_;
+    motion_control::MotorPoseFilter motor_distance_filter_;
 
     /// Filter for speed/acceleration measurement.
-    motion_control::SpeedFilter              speed_filter_;
+    motion_control::SpeedFilter speed_filter_;
 
     /// Threaded control engine managing the control loop.
-    motion_control::MotorEngine              motor_engine_;
+    motion_control::MotorEngine motor_engine_;
 };
 
 } // namespace positional_actuators

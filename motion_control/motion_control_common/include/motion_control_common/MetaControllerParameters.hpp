@@ -19,7 +19,8 @@ namespace motion_control {
 /// Empty Meta Controller parameters.
 /// MetaController does not use parameters, but it inherits from controller
 /// which requires a parameters class, so declare it empty.
-class MetaControllerParameters {
+class MetaControllerParameters
+{
 };
 
 } // namespace motion_control

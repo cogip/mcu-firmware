@@ -27,28 +27,32 @@ class BaseMetaController;
 /// @brief Base class for typed controllers with parameters and IO key mapping.
 ///
 /// This class transforms inputs to outputs using a `ControllersIO` object.
-/// It is templated to allow specific parameter and key types for each controller.
-/// Input/output keys are typically defined in a tag structure (e.g., LinearTags, AngularTags),
-/// enabling reuse of generic controller logic with different data sets.
+/// It is templated to allow specific parameter and key types for each
+/// controller. Input/output keys are typically defined in a tag structure
+/// (e.g., LinearTags, AngularTags), enabling reuse of generic controller logic
+/// with different data sets.
 ///
-/// @tparam IOKeysT Type defining the names/keys used to access inputs and outputs.
+/// @tparam IOKeysT Type defining the names/keys used to access inputs and
+/// outputs.
 /// @tparam ParamsT Type defining the controller's parameters.
-template <typename IOKeysT, typename ParamsT>
-class Controller : virtual public BaseController {
-public:
+template <typename IOKeysT, typename ParamsT> class Controller : virtual public BaseController
+{
+  public:
     /// @brief Constructor for the controller.
-    /// @param keys Reference to the IO key definitions used to access ControllersIO values.
+    /// @param keys Reference to the IO key definitions used to access
+    /// ControllersIO values.
     /// @param parameters Reference to controller parameters.
-    Controller(
-        const IOKeysT& keys,
-        const ParamsT& parameters
-    ) : BaseController(), keys_(keys), parameters_(parameters) {};
+    Controller(const IOKeysT& keys, const ParamsT& parameters)
+        : BaseController(), keys_(keys), parameters_(parameters){};
 
     /// Get parameters
     /// return current parameters
-    virtual const ParamsT& parameters() const { return parameters_; };
+    virtual const ParamsT& parameters() const
+    {
+        return parameters_;
+    };
 
-protected:
+  protected:
     /// Controller IOs keys used by this controller
     const IOKeysT& keys_;
 

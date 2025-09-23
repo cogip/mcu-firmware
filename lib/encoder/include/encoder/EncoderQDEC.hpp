@@ -11,9 +11,9 @@ namespace cogip {
 
 namespace encoder {
 
-class EncoderQDEC : public EncoderInterface {
-public:
-
+class EncoderQDEC : public EncoderInterface
+{
+  public:
     ///
     /// @brief Construct a new Encoder object
     /// @note Encoder pulse per revolution must be set according to chosen mode
@@ -24,7 +24,10 @@ public:
     /// @param mode
     /// @param pulse_per_rev
     ///
-    explicit EncoderQDEC(uint8_t id, EncoderMode mode, int32_t pulse_per_rev): EncoderInterface(mode, pulse_per_rev), id_(id) {}
+    explicit EncoderQDEC(uint8_t id, EncoderMode mode, int32_t pulse_per_rev)
+        : EncoderInterface(mode, pulse_per_rev), id_(id)
+    {
+    }
 
     ///
     /// @brief Setup encoder
@@ -53,7 +56,8 @@ public:
         }
 
         /* Setup QDEC peripheral */
-        return qdec_init(qdec, qdec_mode, NULL, NULL);;
+        return qdec_init(qdec, qdec_mode, NULL, NULL);
+        ;
     }
 
     ///
@@ -61,20 +65,26 @@ public:
     ///
     /// @return int32_t counter value in ticks
     ///
-    int32_t read_and_reset() override { return qdec_read_and_reset(id_); }
+    int32_t read_and_reset() override
+    {
+        return qdec_read_and_reset(id_);
+    }
 
     ///
     /// @brief Reset encoder counter
     ///
     ///
-    void reset() override { (void)read_and_reset(); };
+    void reset() override
+    {
+        (void)read_and_reset();
+    };
 
-private:
+  private:
     uint8_t id_;
 };
 
-} /// namespace encoder
+} // namespace encoder
 
-} /// namespace cogip
+} // namespace cogip
 
 /// @}

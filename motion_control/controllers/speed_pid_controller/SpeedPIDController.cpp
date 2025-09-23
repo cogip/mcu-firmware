@@ -16,8 +16,7 @@ void SpeedPIDController::execute(ControllersIO& io)
     float speed_error = 0.0f;
     if (auto opt_err = io.get_as<float>(keys_.speed_error)) {
         speed_error = *opt_err;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.speed_error.data(), speed_error);
     }
@@ -31,6 +30,6 @@ void SpeedPIDController::execute(ControllersIO& io)
     DEBUG("End SpeedPIDController\n");
 }
 
-}  // namespace motion_control
+} // namespace motion_control
 
-}  // namespace cogip
+} // namespace cogip

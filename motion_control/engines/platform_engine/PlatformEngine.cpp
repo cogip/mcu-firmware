@@ -9,8 +9,8 @@
 #include "etl/vector.h"
 #include "thread/thread.hpp"
 
-#include "platform_engine/PlatformEngine.hpp"
 #include "log.h"
+#include "platform_engine/PlatformEngine.hpp"
 
 #define ENABLE_DEBUG 0
 #include <debug.h>
@@ -19,19 +19,16 @@ namespace cogip {
 
 namespace motion_control {
 
-PlatformEngine::PlatformEngine(
-    localization::LocalizationInterface &localization,
-    drive_controller::DriveControllerInterface &drive_contoller,
-    pose_reached_cb_t pose_reached_cb,
-    uint32_t engine_thread_period_ms
-) : BaseControllerEngine(engine_thread_period_ms),
-    localization_(localization),
-    drive_contoller_(drive_contoller),
-    pose_reached_cb_(pose_reached_cb)
+PlatformEngine::PlatformEngine(localization::LocalizationInterface& localization,
+                               drive_controller::DriveControllerInterface& drive_contoller,
+                               pose_reached_cb_t pose_reached_cb, uint32_t engine_thread_period_ms)
+    : BaseControllerEngine(engine_thread_period_ms), localization_(localization),
+      drive_contoller_(drive_contoller), pose_reached_cb_(pose_reached_cb)
 {
 }
 
-void PlatformEngine::prepare_inputs() {
+void PlatformEngine::prepare_inputs()
+{
     // Update current pose and speed
     localization_.update();
 
@@ -54,7 +51,7 @@ void PlatformEngine::prepare_inputs() {
     io_.set("target_angular_speed", target_speed_.angle());
 
     // Allow reverse
-    io_.set("allow_reverse",   target_pose_.allow_reverse());
+    io_.set("allow_reverse", target_pose_.allow_reverse());
 
     // Mark measured values read‑only:
     io_.mark_readonly("allow_reverse");
@@ -65,8 +62,10 @@ void PlatformEngine::prepare_inputs() {
     io_.mark_readonly("current_angular_speed");
 };
 
-void PlatformEngine::process_outputs() {
-    // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
+void PlatformEngine::process_outputs()
+{
+    // If timeout is enabled, pose_reached_ has been set by the engine itself, do
+    // not override it.
     if (!timeout_enable_) {
         pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
     }

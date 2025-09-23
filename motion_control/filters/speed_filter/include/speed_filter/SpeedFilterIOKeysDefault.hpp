@@ -18,7 +18,8 @@ namespace cogip {
 namespace motion_control {
 
 /// @brief Default IO key names for linear SpeedFilter.
-/// Each key is prefixed with "linear_" and set to its corresponding member name.
+/// Each key is prefixed with "linear_" and set to its corresponding member
+/// name.
 static const SpeedFilterIOKeys linear_speed_filter_io_keys_default = {
     .speed_order = "linear_speed_order",
     .current_speed = "linear_current_speed",
@@ -29,7 +30,8 @@ static const SpeedFilterIOKeys linear_speed_filter_io_keys_default = {
 };
 
 /// @brief Default IO key names for angular SpeedFilter.
-/// Each key is prefixed with "angular_" and set to its corresponding member name.
+/// Each key is prefixed with "angular_" and set to its corresponding member
+/// name.
 static const SpeedFilterIOKeys angular_speed_filter_io_keys_default = {
     .speed_order = "angular_speed_order",
     .current_speed = "angular_current_speed",

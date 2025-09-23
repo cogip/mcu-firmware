@@ -8,31 +8,32 @@
 
 #pragma once
 
-#include "cogip_defs/Polar.hpp"
-#include "DriveControllerInterface.hpp"
 #include "DifferentialDriveControllerParameters.hpp"
+#include "DriveControllerInterface.hpp"
+#include "cogip_defs/Polar.hpp"
 #include "motor/MotorInterface.hpp"
 
 namespace cogip {
 
 namespace drive_controller {
 
-class DifferentialDriveController : public DriveControllerInterface {
-public:
-    DifferentialDriveController(DifferentialDriveControllerParameters &parameters,
-                                motor::MotorInterface &left_motor,
-                                motor::MotorInterface &right_motor);
+class DifferentialDriveController : public DriveControllerInterface
+{
+  public:
+    DifferentialDriveController(DifferentialDriveControllerParameters& parameters,
+                                motor::MotorInterface& left_motor,
+                                motor::MotorInterface& right_motor);
 
     /// @brief Set polar velocity command
     /// @param command polar velocity command reference
     /// @return  0 on success, negative on error
-    int set_polar_velocity(cogip_defs::Polar &command) override;
+    int set_polar_velocity(cogip_defs::Polar& command) override;
 
-private:
-    DifferentialDriveControllerParameters &parameters_;
+  private:
+    DifferentialDriveControllerParameters& parameters_;
 
-    motor::MotorInterface &left_motor_;
-    motor::MotorInterface &right_motor_;
+    motor::MotorInterface& left_motor_;
+    motor::MotorInterface& right_motor_;
 };
 
 } // namespace drive_controller

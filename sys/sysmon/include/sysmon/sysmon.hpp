@@ -10,7 +10,8 @@
 /// @defgroup    sys_sysmon System monitoring
 /// @ingroup     sys
 /// @brief       System monitoring module
-///              Module used to monitor memory (thread stacks, heap and overall).
+///              Module used to monitor memory (thread stacks, heap and
+///              overall).
 ///
 /// @{
 /// @file
@@ -43,7 +44,7 @@ void update_thread_sched_status(kernel_pid_t pid, bool has_overshot);
 
 #ifdef MODULE_CANPB
 /// Register canpb serial interface for messaging
-void register_canpb(cogip::canpb::CanProtobuf *);
+void register_canpb(cogip::canpb::CanProtobuf*);
 #endif
 
 } // namespace sysmon

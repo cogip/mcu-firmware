@@ -33,11 +33,11 @@ extern char _eheap;
 /**
  * Pointer to start of the heap
  */
-char *__sheap = &_sheap;
+char* __sheap = &_sheap;
 /**
  * Pointer to end of the heap
  */
-char *__eheap = &_eheap;
+char* __eheap = &_eheap;
 
 /**
  * Board init

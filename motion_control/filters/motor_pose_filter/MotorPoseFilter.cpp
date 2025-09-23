@@ -5,12 +5,12 @@
 #include <cstdio>
 
 // Project includes
+#include "etl/absolute.h"
 #include "etl/list.h"
 #include "etl/vector.h"
-#include "etl/absolute.h"
 
-#include "motor_pose_filter/MotorPoseFilter.hpp"
 #include "log.h"
+#include "motor_pose_filter/MotorPoseFilter.hpp"
 
 #define ENABLE_DEBUG 0
 #include <debug.h>
@@ -27,8 +27,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     float current_pose = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose)) {
         current_pose = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_pose.data(), current_pose);
     }
@@ -37,8 +36,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     float target_pose = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose)) {
         target_pose = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_pose.data(), target_pose);
     }
@@ -47,8 +45,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     float current_speed = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_speed)) {
         current_speed = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_speed.data(), current_speed);
     }
@@ -57,8 +54,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     float target_speed = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_speed)) {
         target_speed = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_speed.data(), target_speed);
     }
@@ -67,8 +63,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     target_pose_status_t pose_reached = target_pose_status_t::moving;
     if (auto opt = io.get_as<float>(keys_.pose_reached)) {
         pose_reached = static_cast<target_pose_status_t>(static_cast<int>(*opt));
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %d",
                     keys_.pose_reached.data(), static_cast<int>(pose_reached));
     }
@@ -86,8 +81,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
         // final pose reached
         pose_reached = target_pose_status_t::reached;
         target_speed = 0.0f;
-    }
-    else {
+    } else {
         // compute deceleration if needed
         float stopping_distance = (current_speed * current_speed) / (2.0f * decel);
         if (abs_error <= stopping_distance) {

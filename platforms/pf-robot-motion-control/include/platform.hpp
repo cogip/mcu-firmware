@@ -22,8 +22,8 @@
 #pragma once
 
 /* Project includes */
-#include "utils.hpp"
 #include "canpb/CanProtobuf.hpp"
+#include "utils.hpp"
 
 /**
  * @name Messages Id
@@ -87,7 +87,7 @@ int pf_is_game_launched(void);
  *
  * return   canpb pointer
  **/
-cogip::canpb::CanProtobuf & pf_get_canpb();
+cogip::canpb::CanProtobuf& pf_get_canpb();
 
 /**
  * @brief Initialize all platforms threads

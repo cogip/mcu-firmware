@@ -29,8 +29,7 @@ static const MotorPoseFilterIOKeys motor_pose_filter_io_keys_default = {
     .position_error = "position_error",
     .filtered_speed = "filtered_speed",
     .speed_filter_flag = "speed_filter_flag",
-    .pose_reached_out = "pose_reached_out"
-};
+    .pose_reached_out = "pose_reached_out"};
 
 } // namespace motion_control
 

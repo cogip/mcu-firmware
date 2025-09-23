@@ -15,13 +15,13 @@
 
 // Project includes
 #include "Actuator.hpp"
-#include "odometer/OdometerInterface.hpp"
 #include "motor/MotorInterface.hpp"
+#include "odometer/OdometerInterface.hpp"
 // Motion control
 #include "motor_pose_filter/MotorPoseFilterParameters.hpp"
 #include "pose_pid_controller/PosePIDControllerParameters.hpp"
-#include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 #include "speed_filter/SpeedFilterParameters.hpp"
+#include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 
 namespace cogip {
 namespace actuators {
@@ -32,12 +32,14 @@ namespace positional_actuators {
 /// @details
 ///   Gathers all necessary parameters to configure and instantiate a Motor,
 ///   including control, filtering, timeout, and hardware interface options.
-struct MotorParameters {
+struct MotorParameters
+{
     /// @brief Motor identifier (enum used internally to differentiate motors).
     Enum id;
 
     /// @brief Default timeout period, in milliseconds.
-    /// @details Used to determine if the motor should be disabled due to inactivity.
+    /// @details Used to determine if the motor should be disabled due to
+    /// inactivity.
     const uint32_t default_timeout_ms = 0;
 
     /// @brief Callback used to send the actuator state.
@@ -52,7 +54,8 @@ struct MotorParameters {
     /// @brief Parameters for the SpeedPIDController (speed control).
     motion_control::SpeedPIDControllerParameters& speed_controller_parameters;
 
-    /// @brief Parameters for the MotorPoseFilter (used to smooth and validate position).
+    /// @brief Parameters for the MotorPoseFilter (used to smooth and validate
+    /// position).
     motion_control::MotorPoseFilterParameters& motor_pose_filter_parameters;
 
     /// @brief Parameters for the SpeedFilter (used to smooth and limit speed).

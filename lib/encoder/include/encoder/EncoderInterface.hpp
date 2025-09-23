@@ -9,25 +9,33 @@ namespace cogip {
 namespace encoder {
 
 enum class EncoderMode : uint8_t {
-    /// With X1 encoding, either the rising (aka leading) or the falling (aka following) edge of
-    /// channel A is counted. If channel A leads channel B, the rising edge is counted, and the
-    /// movement is forward, or clockwise. Conversely, if channel B leads channel A, the falling edge
+    /// With X1 encoding, either the rising (aka leading) or the falling (aka
+    /// following) edge of
+    /// channel A is counted. If channel A leads channel B, the rising edge is
+    /// counted, and the
+    /// movement is forward, or clockwise. Conversely, if channel B leads channel
+    /// A, the falling edge
     /// is counted, and the movement is backwards, or counterclockwise.
     ENCODER_MODE_X1 = 0,
 
-    /// When X2 encoding is used, both the rising and falling edges of channel A are counted. This
-    /// doubles the number of pulses that are counted for each rotation or linear distance, which in
+    /// When X2 encoding is used, both the rising and falling edges of channel A
+    /// are counted. This
+    /// doubles the number of pulses that are counted for each rotation or linear
+    /// distance, which in
     /// turn doubles the encoder’s resolution.
     ENCODER_MODE_X2 = 1,
 
-    /// X4 encoding goes one step further, to count both the rising and falling edges of both
-    /// channels A and B, which quadruples the number of pulses and increases resolution by four
+    /// X4 encoding goes one step further, to count both the rising and falling
+    /// edges of both
+    /// channels A and B, which quadruples the number of pulses and increases
+    /// resolution by four
     /// times.
     ENCODER_MODE_X4 = 2,
 };
 
-class EncoderInterface {
-public:
+class EncoderInterface
+{
+  public:
     ///
     /// @brief Construct a new Encoder Interface object
     /// @note Encoder pulse per revolution must be set according to chosen mode
@@ -38,7 +46,10 @@ public:
     /// @param mode
     /// @param pulse_per_rev
     ///
-    EncoderInterface(EncoderMode mode, int32_t pulse_per_rev): mode_(mode), pulse_per_rev_(pulse_per_rev) {}
+    EncoderInterface(EncoderMode mode, int32_t pulse_per_rev)
+        : mode_(mode), pulse_per_rev_(pulse_per_rev)
+    {
+    }
 
     ///
     /// @brief Init low level encoder driver.
@@ -64,15 +75,18 @@ public:
     ///
     /// @return float traveled angle since last call (rad).
     ///
-    float get_angle_and_reset() { return ((float)read_and_reset() / (float)pulse_per_rev_) * etl::math::pi; }
+    float get_angle_and_reset()
+    {
+        return ((float)read_and_reset() / (float)pulse_per_rev_) * etl::math::pi;
+    }
 
-protected:
+  protected:
     const EncoderMode mode_;
     const int32_t pulse_per_rev_;
 };
 
-} /// namespace encoder
+} // namespace encoder
 
-} /// namespace cogip
+} // namespace cogip
 
 /// @}

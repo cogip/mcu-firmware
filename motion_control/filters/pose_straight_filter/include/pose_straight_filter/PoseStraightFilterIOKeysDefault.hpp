@@ -42,8 +42,7 @@ static const PoseStraightFilterIOKeys pose_straight_filter_io_keys_default = {
     .angular_current_speed = "angular_current_speed",
     .angular_target_speed = "angular_target_speed",
     .angular_speed_filter_flag = "angular_speed_filter_flag",
-    .pose_reached = "pose_reached"
-};
+    .pose_reached = "pose_reached"};
 
 } // namespace motion_control
 

@@ -9,8 +9,8 @@
 #include "thread/thread.hpp"
 
 /* Periodic task */
-#define TASK_PERIOD_MSEC_POSE    (50)
-#define TASK_PERIOD_MSEC_STATE    (200)
+#define TASK_PERIOD_MSEC_POSE (50)
+#define TASK_PERIOD_MSEC_STATE (200)
 
 /* Thread stack */
 static char pose_thread_stack[THREAD_STACKSIZE_MEDIUM];
@@ -20,7 +20,7 @@ static char state_thread_stack[THREAD_STACKSIZE_MEDIUM];
 #define TRACE_PRIO (THREAD_PRIORITY_MAIN - 1)
 
 /* Thread loop */
-static void *_thread_pose(void *arg)
+static void* _thread_pose(void* arg)
 {
     (void)arg;
 
@@ -33,13 +33,14 @@ static void *_thread_pose(void *arg)
         }
 
         // Wait thread period to end
-        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, TASK_PERIOD_MSEC_POSE);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time,
+                                                     TASK_PERIOD_MSEC_POSE);
     }
 
     return NULL;
 }
 
-static void *_thread_state(void *arg)
+static void* _thread_state(void* arg)
 {
     (void)arg;
 
@@ -52,35 +53,20 @@ static void *_thread_state(void *arg)
         }
 
         // Wait thread period to end
-        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, TASK_PERIOD_MSEC_STATE);
+        cogip::thread::thread_ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time,
+                                                     TASK_PERIOD_MSEC_STATE);
     }
 
     return NULL;
 }
 
-
 void trace_start(void)
 {
     /* Start the state thread */
-    thread_create(
-        state_thread_stack,
-        sizeof(state_thread_stack),
-        TRACE_PRIO,
-        THREAD_CREATE_STACKTEST,
-        _thread_state,
-        NULL,
-        "State thread"
-        );
+    thread_create(state_thread_stack, sizeof(state_thread_stack), TRACE_PRIO,
+                  THREAD_CREATE_STACKTEST, _thread_state, NULL, "State thread");
 
     /* Start the pose thread */
-    thread_create(
-        pose_thread_stack,
-        sizeof(pose_thread_stack),
-        TRACE_PRIO,
-        THREAD_CREATE_STACKTEST,
-        _thread_pose,
-        NULL,
-        "Pose thread"
-        );
-
+    thread_create(pose_thread_stack, sizeof(pose_thread_stack), TRACE_PRIO, THREAD_CREATE_STACKTEST,
+                  _thread_pose, NULL, "Pose thread");
 }
