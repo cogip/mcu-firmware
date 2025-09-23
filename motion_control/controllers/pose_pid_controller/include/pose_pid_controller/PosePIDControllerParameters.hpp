@@ -23,7 +23,7 @@ namespace motion_control {
 class PosePIDControllerParameters {
 public:
     /// Constructor
-    PosePIDControllerParameters(
+    explicit PosePIDControllerParameters(
         pid::PID *pid = nullptr     ///< [in]  PID parameters
     ) : pid_(pid) {};
 

@@ -21,7 +21,7 @@ namespace cogip_defs {
 class Coords {
 public:
     /// Constructor.
-    Coords(
+    explicit Coords(
         float x=0.0,       ///< [in] X coordinate
         float y=0.0        ///< [in] Y coordinate
         ) : x_(x), y_(y) {};

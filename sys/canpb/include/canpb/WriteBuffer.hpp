@@ -28,7 +28,7 @@ class WriteBuffer : public EmbeddedProto::WriteBufferInterface
 {
 public:
     /// Class constructor
-    WriteBuffer() = default;
+    WriteBuffer() : data_{}, base64_data_{}, write_index_(0) {}
 
     ~WriteBuffer() override = default;
 

@@ -39,13 +39,11 @@ namespace cogip {
 
 namespace sysmon {
 
-class ThreadStatus: public MemoryStatus {
-    /// Protobuf message type. Shortcut for original template type.
-    using PB_Message = PB_ThreadStatus<SYSMON_THREADSTATUS_NAME_MAX_LENGTH>;
+class ThreadStatus: public StatusBase<PB_ThreadStatus<SYSMON_THREADSTATUS_NAME_MAX_LENGTH>> {
 
     public:
         /// Constructor
-        ThreadStatus() : MemoryStatus(), pid_(0), loops_(0), overshots_(0) {};
+        ThreadStatus() : pid_(0), loops_(0), overshots_(0) {};
 
         /// Increment thread loops number
         void inc_loops() { loops_++; };
@@ -68,10 +66,14 @@ class ThreadStatus: public MemoryStatus {
         /// Set thread pid
         void set_pid(const uint32_t pid) { pid_ = pid; };
 
-        /// Return the Protobuf message.
-        const PB_Message &pb_message() const { return pb_message_; };
+        /// Memory status accessors (delegating to stack_status_)
+        std::size_t size() const { return stack_status_.size(); };
+        std::size_t used() const { return stack_status_.used(); };
+        void set_size(const std::size_t size) { stack_status_.set_size(size); };
+        void set_used(const std::size_t used) { stack_status_.set_used(used); };
+
         /// Update Protobuf message
-        void update_pb_message();
+        void update_pb_message() override;
 
     private:
         /// Thread pid
@@ -82,9 +84,8 @@ class ThreadStatus: public MemoryStatus {
         uint32_t loops_;
         /// Thread time overshot
         uint32_t overshots_;
-
-        /// Protobug message
-        PB_Message pb_message_;
+        /// Stack memory status
+        MemoryStatus stack_status_;
 };
 
 /// Display heap memory status

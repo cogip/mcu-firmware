@@ -91,7 +91,7 @@ else
 endif
 
 # Display only errors
-CFLAGS += -DLOG_LEVEL=LOG_ERROR
+CFLAGS += -DLOG_LEVEL=LOG_INFO
 
 # Activate asserts debug
 CFLAGS += -DDEBUG_ASSERT_VERBOSE

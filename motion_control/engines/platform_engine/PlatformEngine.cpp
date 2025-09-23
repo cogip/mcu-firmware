@@ -3,7 +3,6 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
@@ -11,55 +10,74 @@
 #include "thread/thread.hpp"
 
 #include "platform_engine/PlatformEngine.hpp"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
 namespace motion_control {
 
+PlatformEngine::PlatformEngine(
+    localization::LocalizationInterface &localization,
+    drive_controller::DriveControllerInterface &drive_contoller,
+    pose_reached_cb_t pose_reached_cb,
+    uint32_t engine_thread_period_ms
+) : BaseControllerEngine(engine_thread_period_ms),
+    localization_(localization),
+    drive_contoller_(drive_contoller),
+    pose_reached_cb_(pose_reached_cb)
+{
+}
+
 void PlatformEngine::prepare_inputs() {
     // Update current pose and speed
     localization_.update();
 
-    if (controller_) {
-        size_t index = 0;
+    // Current pose
+    io_.set("current_pose_x", localization_.pose().x());
+    io_.set("current_pose_y", localization_.pose().y());
+    io_.set("current_pose_O", localization_.pose().O());
 
-        // Current pose
-        controller_->set_input(index++, localization_.pose().x());
-        controller_->set_input(index++, localization_.pose().y());
-        controller_->set_input(index++, localization_.pose().O());
+    // Target pose
+    io_.set("target_pose_x", target_pose_.x());
+    io_.set("target_pose_y", target_pose_.y());
+    io_.set("target_pose_O", target_pose_.O());
 
-        // Target pose
-        controller_->set_input(index++, target_pose_.x());
-        controller_->set_input(index++, target_pose_.y());
-        controller_->set_input(index++, target_pose_.O());
+    // Current speed
+    io_.set("current_linear_speed", localization_.delta_polar_pose().distance());
+    io_.set("current_angular_speed", localization_.delta_polar_pose().angle());
 
-        // Current speed
-        controller_->set_input(index++, localization_.delta_polar_pose().distance());
-        controller_->set_input(index++, localization_.delta_polar_pose().angle());
+    // Target speed
+    io_.set("target_linear_speed", target_speed_.distance());
+    io_.set("target_angular_speed", target_speed_.angle());
 
-        // Target speed
-        controller_->set_input(index++, target_speed_.distance());
-        controller_->set_input(index++, target_speed_.angle());
+    // Allow reverse
+    io_.set("allow_reverse",   target_pose_.allow_reverse());
 
-        // Allow reverse
-        controller_->set_input(index++, target_pose_.allow_reverse());
-
-        if (index != controller_->nb_inputs()) {
-            std::cerr << "PlatformEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected." << std::endl;
-        }
-    }
+    // Mark measured values read‑only:
+    io_.mark_readonly("allow_reverse");
+    io_.mark_readonly("current_pose_x");
+    io_.mark_readonly("current_pose_y");
+    io_.mark_readonly("current_pose_O");
+    io_.mark_readonly("current_linear_speed");
+    io_.mark_readonly("current_angular_speed");
 };
 
 void PlatformEngine::process_outputs() {
     // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
-    if (!timeout_enable_)
-        pose_reached_ = (target_pose_status_t)controller_->output(2);
+    if (!timeout_enable_) {
+        pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
+    }
 
     cogip_defs::Polar command(0, 0);
 
     if (pose_reached_ == target_pose_status_t::moving) {
-        command.set_distance(controller_->output(0));
-        command.set_angle(controller_->output(1));
+        DEBUG("Start process_outputs()\n");
+        command.set_distance(io_.get_as<float>("linear_speed_command").value());
+        command.set_angle(io_.get_as<float>("angular_speed_command").value());
+        DEBUG("End process_outputs()\n");
     }
 
     // Set robot polar velocity order

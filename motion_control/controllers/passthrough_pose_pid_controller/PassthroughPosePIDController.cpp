@@ -3,47 +3,52 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
 #include "etl/vector.h"
+#include "etl/absolute.h"
 
 #include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
 namespace motion_control {
 
-void PassthroughPosePIDController::execute() {
-    COGIP_DEBUG_COUT("Execute PassthroughPosePIDController");
+void PassthroughPosePIDController::execute(ControllersIO& io)
+{
+    DEBUG("Execute PassthroughPosePIDController");
 
-    // Read position error
-    float position_error = this->inputs_[0];
-
-    float position_error_sign = 1;
-
-    if (parameters_->signed_target_speed() && (position_error != 0)) {
-        position_error_sign = position_error / fabs(position_error);
+    // Read position error (default to 0.0f if missing)
+    float position_error = 0.0f;
+    if (auto opt_err = io.get_as<float>(keys_.position_error)) {
+        position_error = *opt_err;
+    }
+    else {
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.position_error.data(), position_error);
     }
 
-    float speed_order = parameters_->target_speed();
-    if (position_error != 0) {
-        // Compute output values
+    // Determine position error sign
+    float position_error_sign = 1.0f;
+    if (this->parameters_.signed_target_speed() && (position_error != 0.0f)) {
+        position_error_sign = position_error / etl::absolute(position_error);
+    }
+
+    // Base speed = target_speed from parameters signed by position error
+    float speed_order = this->parameters_.target_speed();
+    if (position_error != 0.0f) {
         speed_order *= position_error_sign;
     }
 
-    // Store speed order
-    this->outputs_[0] = speed_order;
-    // Store current speed (pass through)
-    this->outputs_[1] = this->inputs_[1];
-    // Store target speed
-    this->outputs_[2] = parameters_->target_speed();
-    // Store disabling speed filter (pass through)
-    this->outputs_[3] = this->inputs_[3];
-    // Pose reached (pass through)
-    this->outputs_[4] = this->inputs_[4];
-};
+    // Write outputs
+    io.set(keys_.speed_order,  speed_order);
+    io.set(keys_.target_speed, this->parameters_.target_speed());
+}
 
 } // namespace motion_control
 

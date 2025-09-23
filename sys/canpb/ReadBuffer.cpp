@@ -6,6 +6,7 @@
 #include "base64.h"
 
 #include "canpb/ReadBuffer.hpp"
+#include "log.h"
 
 namespace cogip {
 
@@ -100,19 +101,19 @@ uint8_t * ReadBuffer::get_base64_data()
 
 size_t ReadBuffer::base64_decode()
 {
-    size_t base64_message_length = strlen((const char *)base64_data_);
+    size_t base64_message_length = strlen(reinterpret_cast<const char *>(base64_data_));
     size_t pb_buffer_size = 0;
     int ret = ::base64_decode(base64_data_, base64_message_length, NULL, &pb_buffer_size);
     if (ret != BASE64_ERROR_BUFFER_OUT_SIZE) {
         return 0;
     }
     if (pb_buffer_size > CANPB_INPUT_MESSAGE_LENGTH_MAX) {
-        printf("Failed to base64 decode, buffer too small (%zu > %u).\n", pb_buffer_size, CANPB_INPUT_MESSAGE_LENGTH_MAX);
+        LOG_ERROR("Failed to base64 decode, buffer too small (%zu > %u)\n", pb_buffer_size, CANPB_INPUT_MESSAGE_LENGTH_MAX);
         return 0;
     }
     ret = ::base64_decode(base64_data_, base64_message_length, data_, &pb_buffer_size);
     if (ret != BASE64_SUCCESS) {
-        printf("Failed to base64 decode (ret = %d)\n", ret);
+        LOG_ERROR("Failed to base64 decode (ret = %d)\n", ret);
         return 0;
     }
     write_index_ = pb_buffer_size;

@@ -1,5 +1,6 @@
 // Project includes
 #include "pid/PID.hpp"
+#include "etl/algorithm.h"
 
 namespace cogip {
 
@@ -13,8 +14,8 @@ float PID::compute(float error)
     integral_term_ += error;
 
     // Integral limitation
-    integral_term_ = std::min(integral_term_, integral_term_limit_);
-    integral_term_ = std::max(integral_term_, -integral_term_limit_);
+    integral_term_ = etl::min(integral_term_, integral_term_limit_);
+    integral_term_ = etl::max(integral_term_, -integral_term_limit_);
 
     // Proportional
     p = error * kp_;

@@ -13,6 +13,7 @@
 #pragma once
 
 #include "Controller.hpp"
+#include "ControllersIO.hpp"
 #include "thread/thread.hpp"
 
 // RIOT includes
@@ -26,19 +27,7 @@ namespace motion_control {
 class BaseControllerEngine {
 public:
     /// Constructor
-    BaseControllerEngine(uint32_t engine_thread_period_ms) :
-        enable_(true),
-        controller_(nullptr),
-        current_cycle_(0),
-        pose_reached_(moving),
-        timeout_cycle_counter_(0),
-        timeout_ms_(0),
-        timeout_enable_(false),
-        engine_thread_period_ms_(engine_thread_period_ms)
-        {
-            memset(engine_thread_stack_, 0, sizeof(engine_thread_stack_));
-            mutex_init(&mutex_);
-        };
+    BaseControllerEngine(uint32_t engine_thread_period_ms);
 
     /// Set the controller to launch.
     void set_controller(
@@ -131,6 +120,9 @@ protected:
 
     /// Mutex protecting engine loop
     mutex_t mutex_;
+
+    /// Controllers input/output datas shared accross controllers
+    ControllersIO io_;
 };
 
 } // namespace motion_control

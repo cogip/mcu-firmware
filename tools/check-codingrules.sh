@@ -63,7 +63,7 @@ echo "=== CPPCHECK CHECK ==="
 
 FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' \)" )
 cppcheck --std=c++17 --enable=style,performance,portability --force --error-exitcode=2 --quiet -j 1 \
-    --template "{file}:{line}: {severity} ({id}): {message}"         \
+    --template="{file}:{line}: {severity} ({id}): {message}"         \
     --inline-suppr ${DEFAULT_SUPPRESSIONS} ${CPPCHECK_OPTIONS} ${@}  \
     ${FILES_TO_CHECK}
 

@@ -50,7 +50,7 @@ public:
     ///         -ENODEV if GPIO is undefined,
     ///         -EIO on gpio init failed
     ///         -ENOMEM on event creation failed
-    int register_gpio(gpio_t pin, cogip::actuators::positional_actuators::Lift* lift);
+    int register_gpio(gpio_t pin, Lift* lift);
 
     /// @brief Unregister a previously registered GPIO pin.
     /// @details Disables the interrupt, releases the associated event, and removes
@@ -67,7 +67,7 @@ public:
 
 private:
     /// @brief Private constructor to enforce singleton pattern.
-    LiftsLimitSwitchesManager() = default;
+    LiftsLimitSwitchesManager() : mutex_(MUTEX_INIT), event_stack_{}, event_thread_pid_(KERNEL_PID_UNDEF) {}
 
     /// @brief GPIO ISR callback invoked in interrupt context.
     /// @details Enqueues the corresponding event for later handling.
@@ -88,7 +88,7 @@ private:
 
     /// @brief Map from GPIO pin to associated Lift actuator pointer.
     /// @note Consider 2 GPIOs per lift.
-    etl::map<gpio_t, cogip::actuators::positional_actuators::Lift*, CONFIG_ACTUATOR_LIFT_NUMBER * 2> callbacks_;
+    etl::map<gpio_t, Lift*, CONFIG_ACTUATOR_LIFT_NUMBER * 2> callbacks_;
 
     /// @brief Map from GPIO pin to allocated event pointer.
     /// @note Consider 2 GPIOs per lift.

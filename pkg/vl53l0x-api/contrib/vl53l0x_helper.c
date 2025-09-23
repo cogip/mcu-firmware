@@ -129,7 +129,7 @@ uint16_t vl53l0x_continuous_ranging_get_measure(vl53l0x_t dev)
     st_api_vl53l0x = &devices[dev];
 
     /* Check device description is initialized */
-    if ((st_api_vl53l0x != NULL) && (status[dev] == 0)) {
+    if (status[dev] == 0) {
         Status = VL53L0X_GetRangingMeasurementData(st_api_vl53l0x,
                                                    &RangingMeasurementData);
 

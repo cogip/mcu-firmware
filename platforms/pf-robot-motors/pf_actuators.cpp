@@ -8,6 +8,8 @@
 
 #include "board.h"
 #include "platform.hpp"
+#include "log.h"
+#include <inttypes.h>
 
 #include "canpb/CanProtobuf.hpp"
 #include "canpb/ReadBuffer.hpp"
@@ -42,9 +44,7 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
             // Negative timeout is not possible
             int32_t timeout_ms = pb_positional_actuator_command.timeout();
             if (timeout_ms < 0) {
-                std::cerr << "Negative timeout, do not actuate actuator with ID="
-                          << static_cast<uint8_t>(id)
-                          << std::endl;
+                LOG_ERROR("Negative timeout, do not actuate actuator with ID=%" PRIu8, static_cast<uint8_t>(id));
                 return;
             }
 
@@ -61,9 +61,9 @@ static void _handle_command(cogip::canpb::ReadBuffer & buffer)
                 positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
             }
 
-            std::cout << "Target distance   : " << pb_positional_actuator_command.command() << std::endl;
-            std::cout << "Target speed      : " << pb_positional_actuator_command.speed() << std::endl;
-            std::cout << "Timeout           : " << timeout_ms << std::endl;
+            LOG_INFO("Target distance: %" PRIi32, pb_positional_actuator_command.command());
+            LOG_INFO("Target speed: %" PRIi32, pb_positional_actuator_command.speed());
+            LOG_INFO("Timeout: %" PRIi32, timeout_ms);
         }
     }
 }

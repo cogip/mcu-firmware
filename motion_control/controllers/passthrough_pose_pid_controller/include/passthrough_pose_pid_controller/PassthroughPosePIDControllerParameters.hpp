@@ -23,7 +23,7 @@ namespace motion_control {
 class PassthroughPosePIDControllerParameters {
 public:
     /// Constructor
-    PassthroughPosePIDControllerParameters(
+    explicit PassthroughPosePIDControllerParameters(
         float target_speed = 0.0,          ///< [in] PID parameters
         bool signed_target_speed = true     ///< [in] target speed signed flag
     ) : target_speed_(target_speed), signed_target_speed_(signed_target_speed) {};

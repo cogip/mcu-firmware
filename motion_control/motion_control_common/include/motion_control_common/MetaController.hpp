@@ -12,130 +12,135 @@
 
 #pragma once
 
+// RIOT includes
+#include "log.h"
+#include <inttypes.h>
+
+#include <debug.h>
+
 // Project includes
+#include "ControllersIO.hpp"
 #include "etl/deque.h"
 #include "BaseMetaController.hpp"
-#include "Controller.hpp"
-#include "MetaControllerParameters.hpp"
 
 namespace cogip {
-
 namespace motion_control {
 
-/// Meta controllers are controllers containers to execute them in chain.
-/// @tparam INPUT_SIZE      number of inputs
-/// @tparam OUTPUT_SIZE     number of outputs
-/// @tparam NB_CONTROLLERS  maximum number of controllers
-template <
-    size_t INPUT_SIZE,
-    size_t OUTPUT_SIZE,
-    size_t NB_CONTROLLERS
->
-class MetaController :
-    public BaseMetaController,
-    public Controller<INPUT_SIZE, OUTPUT_SIZE, MetaControllerParameters>,
-    private etl::deque<BaseController *, NB_CONTROLLERS> {
+/// @brief Container of sub-controllers executed in sequence, sharing a single ControllersIO.
+///
+/// Each sub-controller’s execute(ControllersIO& io) is called in order, using the same
+/// ControllersIO instance. No checks on input/output sizes are performed—it's up to the
+/// sub-controllers (and the engine) to agree on which keys to read/write.
+///
+/// @tparam NB_CONTROLLERS Maximum number of controllers in the chain.
+template <size_t NB_CONTROLLERS>
+class MetaController : public BaseMetaController
+{
 public:
-    /// Controller core method. Meta controller executes all sub-controllers in chain.
-    void execute() override {
-        if (this->empty()) {
-            std::cerr << "Error: no controller added." << std::endl;
-            return;
-        }
-        if (this->back()->nb_outputs() != OUTPUT_SIZE) {
-            std::cerr << "Error: First controller must have the same number of outputs (" << this->back()->nb_inputs() << ") "
-                      << "as the last controller (" << this->back()->nb_inputs() << ")." << std::endl;
+    /// @brief Run every controller in the chain, passing along the same ControllersIO.
+    /// @param io Shared IO object containing inputs/outputs for all controllers.
+    void execute(ControllersIO& io) override
+    {
+        if (controllers_.empty()) {
+            LOG_ERROR("Error: no controller in MetaController");
             return;
         }
 
-        COGIP_DEBUG_COUT("Execute MetaController");
+        DEBUG("Execute MetaController of %" PRIu32 " controllers", static_cast<uint32_t>(controllers_.size()));
 
-        // Execute each controller in chain.
-        BaseController *previous = nullptr;
-        for (auto ctrl: *this) {
-            // Set inputs.
-            for (size_t i = 0; i < ctrl->nb_inputs(); i++) {
-                if (previous) {
-                    ctrl->set_input(i, previous->output(i));
-                }
-                else {
-                    ctrl->set_input(i, this->input(i));
-                }
+        size_t index = 0;
+        for (auto* controller : controllers_) {
+            if (!controller) {
+                LOG_ERROR("controllers_[%" PRIu32 "] is nullptr!", static_cast<uint32_t>(index));
             }
+            else {
+                controller->execute(io);
+            }
+            index++;
+        }
+    }
 
-            // Execute controller.
-            ctrl->execute();
-
-            previous = ctrl;
+    /// @brief Add a controller to the end of the chain.
+    /// @param controller Controller to add
+    /// @return 0 on success, negative code otherwise
+    int add_controller(BaseController* controller) override
+    {
+        if (controller == nullptr) {
+            return -EINVAL;
         }
 
-        // Set outputs.
-        for (size_t i = 0; i < this->back()->nb_outputs(); i++) {
-            this->set_output(i, this->back()->output(i));
-        }
-    };
-
-    /// Add a controller to the end of the controllers chain.
-    void add_controller(
-        BaseController *ctrl    ///< [in]  new controller to add
-        ) override {
-        if (! ctrl->set_meta(this)) {
-            return;
-        }
-        if (this->empty() && INPUT_SIZE != ctrl->nb_inputs()) {
-            std::cerr << "Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ")." << std::endl;
-            return;
-        }
-        this->push_back(ctrl);
-
-        nb_controllers_++;
-    };
-
-    /// Add a controller to the beginning of the controllers chain.
-    void prepend_controller(
-        BaseController *ctrl    ///< [in]  new controller to add
-        ) override {
-        if (! ctrl->set_meta(this)) {
-            return;
-        }
-        if (INPUT_SIZE != ctrl->nb_inputs()) {
-            std::cerr << "Error: First controller must have the same number of inputs (" << ctrl->nb_inputs() << ") as the meta controller (" << INPUT_SIZE << ")." << std::endl;
-            return;
-        }
-        this->push_front(ctrl);
-
-        nb_controllers_++;
-    };
-
-    /// Replace a controller at the given position in the controllers chain.
-    void replace_controller(
-        uint32_t index,             ///< [in]  index
-        BaseController *new_ctrl    ///< [in]  position of the controller to replace
-        ) override {
-        if (index >= nb_controllers_) {
-            return;
+        if (!controller->set_meta(this)) {
+            return -EPERM;
         }
 
-        BaseController *ctrl_to_replace = (*this)[index];
-
-        if (ctrl_to_replace == new_ctrl) {
-            return;
+        if (controllers_.size() >= NB_CONTROLLERS) {
+            controller->set_meta(nullptr);
+            return -ENOMEM;
         }
 
-        if ((ctrl_to_replace->nb_inputs() != new_ctrl->nb_inputs())
-            || (ctrl_to_replace->nb_outputs() != new_ctrl->nb_outputs())
-            || (! new_ctrl->set_meta(this))
-            || (! ctrl_to_replace->set_meta(nullptr))
-            ) {
-            return;
+        controllers_.push_back(controller);
+
+        return 0;
+    }
+
+    /// @brief Add a controller to the front of the chain.
+    /// @param controller Controller to add
+    /// @return 0 on success, negative code otherwise
+    int prepend_controller(BaseController* controller) override
+    {
+        if (controller == nullptr) {
+            return -EINVAL;
         }
 
-        (*this)[index] = new_ctrl;
-    };
+        if (!controller->set_meta(this)) {
+            return -EPERM;
+        }
+
+        if (controllers_.size() >= NB_CONTROLLERS) {
+            controller->set_meta(nullptr);
+            return -ENOMEM;
+        }
+
+        controllers_.push_front(controller);
+
+        return 0;
+    }
+
+    /// @brief Replace the controller at index with a new one.
+    /// @param index    Position in the chain to replace.
+    /// @param controller New Controller
+    /// @return 0 on success, negative code otherwise
+    int replace_controller(
+        uint32_t index,             ///< [in] Index of controller to replace
+        BaseController* new_controller    ///< [in] Replacement controller
+    ) override
+    {
+        if (index >= controllers_.size()) {
+            return -ERANGE;
+        }
+
+        BaseController* old_controller = controllers_[index];
+        if (old_controller == new_controller) {
+            return 0;
+        }
+
+        if (!new_controller->set_meta(this)) {
+            return -EPERM;
+        }
+
+        if (!old_controller->set_meta(nullptr)) {
+            new_controller->set_meta(nullptr);
+            return -EPERM;
+        }
+
+        controllers_[index] = new_controller;
+
+        return 0;
+    }
+
+protected:
+    etl::deque<BaseController*, NB_CONTROLLERS> controllers_;
 };
 
 } // namespace motion_control
-
 } // namespace cogip
-
-/// @}

@@ -3,38 +3,41 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
 #include "etl/vector.h"
 
 #include "pose_pid_controller/PosePIDController.hpp"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
 namespace motion_control {
 
-void PosePIDController::execute() {
-    COGIP_DEBUG_COUT("Execute PosePIDController");
+void PosePIDController::execute(ControllersIO& io)
+{
+    DEBUG("Execute PosePIDController");
 
-    // Read position error.
-    float position_error = this->inputs_[0];
+    // Read position error (default to 0.0f if missing)
+    float position_error = 0.0f;
+    if (auto opt_err = io.get_as<float>(keys_.position_error)) {
+        position_error = *opt_err;
+    }
+    else {
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.position_error.data(), position_error);
+    }
 
-    // Compute output values.
-    float speed_order = parameters_->pid()->compute(position_error);
+    // Compute speed_order via PID
+    float speed_order = this->parameters_.pid()->compute(position_error);
 
-    // Store speed order
-    this->outputs_[0] = speed_order;
-    // Store current speed (pass through)
-    this->outputs_[1] = this->inputs_[1];
-    // Store target speed (pass through)
-    this->outputs_[2] = this->inputs_[2];
-    // Store disabling speed filter (pass through)
-    this->outputs_[3] = this->inputs_[3];
-    // Pose reached (pass through)
-    this->outputs_[4] = this->inputs_[4];
-};
+    // Write speed order output
+    io.set(keys_.speed_order, speed_order);
+}
 
 } // namespace motion_control
 

@@ -24,7 +24,7 @@ namespace cogip_defs {
 class Pose : public Coords {
 public:
     /// Constructor.
-    Pose(
+    explicit Pose(
         float x=0.0,         ///< [in] X coordinate
         float y=0.0,         ///< [in] Y coordinate
         float O=0.0          ///< [in] 0-orientation

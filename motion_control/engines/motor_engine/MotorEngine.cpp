@@ -3,7 +3,6 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
@@ -11,10 +10,44 @@
 #include "thread/thread.hpp"
 
 #include "motor_engine/MotorEngine.hpp"
+#include "log.h"
 
 namespace cogip {
 
 namespace motion_control {
+
+MotorEngine::MotorEngine(
+    motor::MotorInterface& motor,
+    localization::OdometerInterface& odometer,
+    uint32_t engine_thread_period_ms
+) : BaseControllerEngine(engine_thread_period_ms),
+    target_speed_(0),
+    target_distance_(0),
+    motor_(motor),
+    odometer_(odometer)
+{
+}
+
+void MotorEngine::set_current_distance_to_odometer(const float distance)
+{
+    mutex_lock(&mutex_);
+    odometer_.set_distance_mm(distance);
+    mutex_unlock(&mutex_);
+}
+
+void MotorEngine::set_target_distance(const float target_distance)
+{
+    mutex_lock(&mutex_);
+    target_distance_ = target_distance;
+
+    // New target, reset the timeout
+    timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+
+    // Reset the pose reached flag
+    pose_reached_ = target_pose_status_t::moving;
+
+    mutex_unlock(&mutex_);
+}
 
 void MotorEngine::prepare_inputs() {
     // Update current distance and speed
@@ -23,36 +56,30 @@ void MotorEngine::prepare_inputs() {
     float current_speed = odometer_.delta_distance_mm();
 
     if (controller_) {
-        size_t index = 0;
-
         // Current distance
-        controller_->set_input(index++, current_distance);
+        io_.set("current_pose", current_distance);
 
         // Target distance
-        controller_->set_input(index++, target_distance_);
+        io_.set("target_pose", target_distance_);
 
         // Current speed
-        controller_->set_input(index++, current_speed);
+        io_.set("current_speed", current_speed);
 
         // Target speed
-        controller_->set_input(index++, target_speed_);
+        io_.set("target_speed", target_speed_);
 
         // Position reached flag
-        controller_->set_input(index++, target_pose_status_t::moving);
-
-        if (index != controller_->nb_inputs()) {
-            std::cerr << "MotorEngine: Wrong number of inputs, " << index << " given, " << controller_->nb_inputs() << " expected.";
-        }
+        io_.set("pose_reached", target_pose_status_t::moving);
     }
 };
 
 void MotorEngine::process_outputs() {
     // If timeout is enabled, pose_reached_ has been set by the engine itself, do not override it.
     if (pose_reached_ != target_pose_status_t::timeout) {
-        pose_reached_ = (target_pose_status_t)controller_->output(1);
+        pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
     }
     else {
-        std::cerr << "MotorEngine timed out, disable." << std::endl;
+        LOG_ERROR("MotorEngine timed out, disable.\n");
 
         // Disable engine
         enable_ = false;
@@ -64,7 +91,7 @@ void MotorEngine::process_outputs() {
     }
 
     if (pose_reached_ == target_pose_status_t::blocked) {
-        std::cerr << "MotorEngine blocked, disable." << std::endl;
+        LOG_ERROR("MotorEngine blocked, disable.\n");
 
         // Disable engine
         enable_ = false;
@@ -82,7 +109,7 @@ void MotorEngine::process_outputs() {
         timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
     }
 
-    int command = (int)controller_->output(0);
+    float command = io_.get_as<float>("speed_command").value();
 
     motor_.set_speed(command);
 };

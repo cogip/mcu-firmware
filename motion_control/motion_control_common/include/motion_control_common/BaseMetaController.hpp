@@ -22,21 +22,20 @@ namespace motion_control {
 class BaseMetaController : virtual public BaseController {
 public:
     /// Add a controller to the beginning of the controllers chain.
-    /// @param controller
-    virtual void prepend_controller(BaseController *controller) = 0;
+    /// @param controller Controller to add
+    /// @return 0 on success, negative code otherwise
+    virtual int prepend_controller(BaseController *controller) = 0;
 
     /// Add a controller to the end of the controllers chain.
-    /// @param controller
-    virtual void add_controller(BaseController *controller) = 0;
+    /// @param controller Controller to add
+    /// @return 0 on success, negative code otherwise
+    virtual int add_controller(BaseController *controller) = 0;
 
     /// Replace a controller at a given index of the controllers chain.
-    /// @param index
-    /// @param controller
-    virtual void replace_controller(uint32_t index, BaseController *controller) = 0;
-
-protected:
-    /// Number of controllers added to the chain.
-    size_t nb_controllers_ = 0;
+    /// @param index place of the controller in the queue
+    /// @param controller New controller
+    /// @return 0 on success, negative code otherwise
+    virtual int replace_controller(uint32_t index, BaseController *controller) = 0;
 };
 
 } // namespace motion_control

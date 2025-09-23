@@ -1,12 +1,15 @@
 // System includes
 #include <cstdio>
 #include <string.h>
-#include <iostream>
+#include "log.h"
 
 // RIOT includes
 #include "base64.h"
 
 #include "canpb/WriteBuffer.hpp"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -65,17 +68,17 @@ size_t WriteBuffer::base64_encode()
     memset(base64_data_, '\n', CANPB_BASE64_ENCODE_BUFFER_SIZE);
     int ret = ::base64_encode(data_, write_index_, NULL, &base64_buffer_size);
     if (ret != BASE64_ERROR_BUFFER_OUT_SIZE) {
-        printf("1 ret = %d (success = %d)\n", ret, BASE64_SUCCESS);
+        DEBUG("base64_encode ret = %d (success = %d)\n", ret, BASE64_SUCCESS);
         return 0;
     }
     if (base64_buffer_size > CANPB_BASE64_ENCODE_BUFFER_SIZE) {
-        printf("Failed to base64 encode, buffer too small (%zu > %u).\n", base64_buffer_size, CANPB_BASE64_ENCODE_BUFFER_SIZE);
+        LOG_ERROR("Failed to base64 encode, buffer too small (%zu > %u)\n", base64_buffer_size, CANPB_BASE64_ENCODE_BUFFER_SIZE);
         return 0;
     }
 
     ret = ::base64_encode(data_, write_index_, base64_data_, &base64_buffer_size);
     if (ret != BASE64_SUCCESS) {
-        printf("2 ret = %d (success = %d)\n", ret, BASE64_SUCCESS);
+        DEBUG("base64_encode ret = %d (success = %d)\n", ret, BASE64_SUCCESS);
         return 0;
     }
 

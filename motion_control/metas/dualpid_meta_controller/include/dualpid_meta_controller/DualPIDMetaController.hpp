@@ -16,19 +16,11 @@
 #include "motion_control_common/MetaController.hpp"
 
 namespace cogip {
-
 namespace motion_control {
 
-/// Meta controller for at least one PID controller for position and one PID controller for speed in chain.
-/// A filter can be used between the two PID controllers.
-/// Input 0:    polar pose error
-/// Input 1:    current speed
-/// Input 2:    target speed
-/// Input 3:    filter speed bool
-/// Input 4:    pose reached
-/// Output 0:   motor command
-/// Output 0:   pose reached
-class DualPIDMetaController: public MetaController <5, 2, 4> {};
+/// @brief Meta controller that chains one PosePIDController and one SpeedPIDController (or SpeedFilter) in sequence.
+class DualPIDMetaController
+    : public MetaController<3> {};
 
 } // namespace motion_control
 

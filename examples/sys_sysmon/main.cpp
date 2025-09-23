@@ -1,6 +1,7 @@
 // System includes
 #include <cstdio>
-#include <iostream>
+#include "log.h"
+#include <inttypes.h>
 
 // RIOT includes
 #include <periph/can.h>
@@ -46,12 +47,12 @@ static const shell_command_t shell_commands[] = {
 
 int main(void)
 {
-    puts("\n== System monitoring example ==");
+    LOG_INFO("== System monitoring example ==\n");
 
 #ifdef MODULE_CANPB
     bool res = canpb.init(&canpb_filter);
     if (res) {
-        std::cerr << "CAN initialization status: " << res << std::endl;
+        LOG_ERROR("CAN initialization status: %d\n", res);
         exit(1);
     }
 

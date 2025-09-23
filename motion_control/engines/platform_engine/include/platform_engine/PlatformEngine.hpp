@@ -37,10 +37,7 @@ public:
         drive_controller::DriveControllerInterface &drive_contoller,///< [in] Robot drive controller
         pose_reached_cb_t pose_reached_cb,                          ///< [in] Callback to send pose reached state from last controller
         uint32_t engine_thread_period_ms                            ///< [in] Motion control enginethread period
-    ) : BaseControllerEngine(engine_thread_period_ms),
-        localization_(localization),
-        drive_contoller_(drive_contoller),
-        pose_reached_cb_(pose_reached_cb) {};
+    );
 
     /// Get current speed
     /// return     current speed

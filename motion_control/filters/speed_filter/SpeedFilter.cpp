@@ -1,16 +1,16 @@
-// RIOT includes
-#include <ztimer.h>
-
 // System includes
-#include <cstdio>
-#include <iostream>
+#include <cmath>
+#include "etl/algorithm.h"
+
+// RIOT includes
+#include "log.h"
+#include <inttypes.h>
 
 // Project includes
-#include "cogip_defs/Polar.hpp"
-#include "etl/list.h"
-#include "etl/vector.h"
-
 #include "speed_filter/SpeedFilter.hpp"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -18,99 +18,124 @@ namespace motion_control {
 
 void SpeedFilter::limit_speed_order(
     float *speed_order,
-    float target_speed,
+    float raw_target,
     float min_speed,
     float max_speed,
     float max_acc
-    )
+)
 {
-    // Limit target speed
-    target_speed = std::min(target_speed, max_speed);
+    raw_target = etl::min(raw_target, max_speed);
 
-    // Limit speed command (maximum acceleration)
-    float a = *speed_order - previous_speed_order_;
-
-    if (a > max_acc) {
-        a =  max_acc;
+    float acceleration = *speed_order - previous_speed_order_;
+    if (acceleration > max_acc) {
+        acceleration = max_acc;
+    }
+    if (acceleration < -max_acc) {
+        acceleration = -max_acc;
     }
 
-    if (a < -max_acc) {
-        a = -max_acc;
-    }
-
-    *speed_order = previous_speed_order_ + a;
+    *speed_order = previous_speed_order_ + acceleration;
 
     if (*speed_order < min_speed && *speed_order > -min_speed) {
-        if (a > 0)
+        if (acceleration > 0.0f) {
             *speed_order = min_speed;
-        else if (a < 0)
+        }
+        else if (acceleration < 0.0f) {
             *speed_order = -min_speed;
+        }
     }
 
-    // Limit speed command
-    *speed_order = std::min(*speed_order, target_speed);
-    *speed_order = std::max(*speed_order, -target_speed);
+    if (*speed_order > raw_target) {
+        *speed_order = raw_target;
+    }
+    if (*speed_order < -raw_target) {
+        *speed_order = -raw_target;
+    }
 }
 
-void SpeedFilter::execute() {
-    COGIP_DEBUG_COUT("Execute SpeedFilter");
+void SpeedFilter::execute(ControllersIO& io)
+{
+    DEBUG("Execute SpeedFilter");
 
-    // Speed order
-    float speed_order = this->inputs_[0];
-    // Current speed
-    float current_speed = this->inputs_[1];
-    // Target speed
-    float target_speed = this->inputs_[2];
-    // Do not filter speed order ?
-    bool no_speed_filter = this->inputs_[3];
-    // Pose reached
-    target_pose_status_t pose_reached = (target_pose_status_t)this->inputs_[4];
+    // Read commanded speed before filtering (default to zero if missing)
+    float speed_order = 0.0f;
+    if (auto opt = io.get_as<float>(keys_.speed_order)) {
+        speed_order = *opt;
+    }
+    else {
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.speed_order.data(), speed_order);
+    }
 
-    if (!no_speed_filter) {
-        // Limit speed order
+    // Read measured current speed (default to zero if missing)
+    float current_speed = 0.0f;
+    if (auto opt = io.get_as<float>(keys_.current_speed)) {
+        current_speed = *opt;
+    }
+    else {
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_speed.data(), current_speed);
+    }
+
+    // Read raw target speed (default to zero if missing)
+    float target_speed = 0.0f;
+    if (auto opt = io.get_as<float>(keys_.target_speed)) {
+        target_speed = *opt;
+    }
+    else {
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_speed.data(), target_speed);
+    }
+
+    // Read flag disabling filtering (default to false if missing)
+    bool no_filter = false;
+    if (auto opt = io.get_as<bool>(keys_.speed_filter_flag)) {
+        no_filter = *opt;
+    }
+    else {
+        LOG_WARNING("WARNING: %s is not available, using default value %d",
+                    keys_.speed_filter_flag.data(), no_filter);
+    }
+
+    if (!no_filter) {
         limit_speed_order(
             &speed_order,
             target_speed,
-            parameters_->min_speed(),
-            parameters_->max_speed(),
-            parameters_->max_acceleration()
-            );
+            parameters_.min_speed(),
+            parameters_.max_speed(),
+            parameters_.max_acceleration()
+        );
     }
 
-    // If anti blocking is activated
-    if (parameters_->anti_blocking()) {
-        // Check if the current speed of the robot is below a speed threshold, typically set low.
-        // This is because if the robot is blocked by an obstacle, it may move slightly,
-        // so a threshold must be considered as the speed won't be zero.
-        // Additionally, ensure the robot isn't accelerating by comparing the current speed
-        // with the speed order from the previous cycle. If the difference between these two
-        // speeds exceeds a threshold, it indicates that the robot hasn't accelerated since its
-        // previous cycle.
-        if ((fabs(current_speed) < parameters_->anti_blocking_speed_threshold())
-            && (fabs(previous_speed_order_ - current_speed) > parameters_->anti_blocking_error_threshold())) {
-            // Increment a counter for cycles during which the robot is supposedly blocked.
-            // This evaluation cannot be done within a single cycle, so the counter is incremented.
+    if (parameters_.anti_blocking()) {
+        const float anti_blocking_speed_threshold = parameters_.anti_blocking_speed_threshold();
+        const float anti_blocking_error_threshold = parameters_.anti_blocking_error_threshold();
+        bool below_threshold = etl::absolute(current_speed) < anti_blocking_speed_threshold;
+        bool no_acceleration = etl::absolute(previous_speed_order_ - current_speed) > anti_blocking_error_threshold;
+
+        if (below_threshold && no_acceleration) {
             anti_blocking_blocked_cycles_nb_++;
-            std::cout << "Anti blocking cycles number: " << anti_blocking_blocked_cycles_nb_ << std::endl;
+            DEBUG("Anti blocking cycles number: %" PRIu32, static_cast<uint32_t>(anti_blocking_blocked_cycles_nb_));
         }
         else {
-            anti_blocking_blocked_cycles_nb_= 0;
+            anti_blocking_blocked_cycles_nb_ = 0;
         }
 
-        // After a certain number of cycles, the robot is considered blocked.
-        if (anti_blocking_blocked_cycles_nb_ > parameters_->anti_blocking_blocked_cycles_nb_threshold()) {
-            std::cout << "BLOCKED" << std::endl;
-            pose_reached = target_pose_status_t::blocked;
+        if (anti_blocking_blocked_cycles_nb_ > parameters_.anti_blocking_blocked_cycles_nb_threshold()) {
+            LOG_WARNING("BLOCKED");
+
+            // Write updated pose‐reached status
+            io.set(keys_.pose_reached, target_pose_status_t::blocked);
         }
     }
 
     previous_speed_order_ = speed_order;
 
-    // Store speed_error
-    this->outputs_[0] = speed_order - current_speed;
-    // Pose reached
-    this->outputs_[1] = pose_reached;
-};
+    float speed_error = speed_order - current_speed;
+
+    // Write computed speed error
+    io.set(keys_.speed_error, speed_error);
+}
 
 } // namespace motion_control
 

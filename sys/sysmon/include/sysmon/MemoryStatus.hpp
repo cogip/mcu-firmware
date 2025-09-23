@@ -35,9 +35,25 @@ namespace cogip {
 
 namespace sysmon {
 
-class MemoryStatus {
-    /// Protobuf message type. Shortcut for original template type.
-    using PB_Message = PB_MemoryStatus;
+/// Base template class for status classes with protobuf messages
+template<typename PBMessageType>
+class StatusBase {
+public:
+    using PB_Message = PBMessageType;
+
+    /// Return the Protobuf message.
+    const PB_Message &pb_message() const { return pb_message_; }
+    /// Update Protobuf message
+    virtual void update_pb_message() = 0;
+
+    /// Virtual destructor for proper inheritance
+    virtual ~StatusBase() = default;
+
+protected:
+    PB_Message pb_message_;
+};
+
+class MemoryStatus : public StatusBase<PB_MemoryStatus> {
 
     public:
         MemoryStatus();
@@ -50,19 +66,14 @@ class MemoryStatus {
         /// Set memory used size in bytes
         void set_used(const std::size_t used) { used_ = used; };
 
-        /// Return the Protobuf message.
-        const PB_Message &pb_message() const { return pb_message_; };
         /// Update Protobuf message
-        void update_pb_message();
+        void update_pb_message() override;
 
     private:
         /// Memory total size in bytes
         std::size_t size_;
         /// Memory used size in bytes
         std::size_t used_;
-
-        /// Protobug message
-        PB_Message pb_message_;
 };
 
 } // namespace sysmon

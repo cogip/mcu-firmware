@@ -5,9 +5,14 @@
 
 #include "board.h"
 #include "actuator/Motor.hpp"
+#include "log.h"
+#include <inttypes.h>
 #include "actuator/PositionalActuator.hpp"
+#include "motor_pose_filter/MotorPoseFilterIOKeysDefault.hpp"
+#include "pose_pid_controller/PosePIDControllerIOKeysDefault.hpp"
+#include "speed_filter/SpeedFilterIOKeysDefault.hpp"
+#include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 
-#include <iostream>
 
 namespace cogip {
 namespace actuators {
@@ -22,10 +27,10 @@ Motor::Motor(const MotorParameters& motor_parameters)
           motor_parameters.send_state_cb
       ),
       params_(motor_parameters),
-      distance_controller_(&motor_parameters.pose_controller_parameters),
-      speed_controller_(&motor_parameters.speed_controller_parameters),
-      motor_distance_filter_(&motor_parameters.motor_pose_filter_parameters),
-      speed_filter_(&motor_parameters.speed_filter_parameters),
+      distance_controller_(motion_control::linear_pose_pid_controller_io_keys_default, motor_parameters.pose_controller_parameters),
+      speed_controller_(motion_control::linear_speed_pid_controller_io_keys_default, motor_parameters.speed_controller_parameters),
+      motor_distance_filter_(motion_control::motor_pose_filter_io_keys_default, motor_parameters.motor_pose_filter_parameters),
+      speed_filter_(motion_control::linear_speed_filter_io_keys_default, motor_parameters.speed_filter_parameters),
       motor_engine_(motor_parameters.motor, motor_parameters.odometer, motor_parameters.engine_thread_period_ms)
 {
     // Build the cascade: MotorPoseFilter → PosePID → SpeedFilter → SpeedPID
@@ -39,12 +44,12 @@ Motor::Motor(const MotorParameters& motor_parameters)
     // Init motor
     int ret = params_.motor.init();
     if (ret) {
-        std::cerr << "Motor init failed" << std::endl;
+        LOG_ERROR("Motor init failed\n");
     }
     // Init encoder
     ret = params_.odometer.init();
     if (ret) {
-        std::cerr << "Odometer init failed" << std::endl;
+        LOG_ERROR("Odometer init failed\n");
     }
 
     // Ensure overload flag is cleared at startup
@@ -72,13 +77,11 @@ void Motor::disable() {
 
 void Motor::actuate(int32_t command)
 {
-    std::cout << "Move motor to command " << command
-              << " from distance " << motor_engine_.get_current_distance_from_odometer()
-              << std::endl;
+    LOG_INFO("Move motor to command %" PRIi32 " from distance %.2f\n", command, static_cast<double>(motor_engine_.get_current_distance_from_odometer()));
 
     // Reset filters/PIDs on a new command
-    distance_controller_.parameters()->pid()->reset();
-    speed_controller_.parameters()->pid()->reset();
+    distance_controller_.parameters().pid()->reset();
+    speed_controller_.parameters().pid()->reset();
     speed_filter_.reset_previous_speed_order();
     speed_filter_.reset_anti_blocking_blocked_cycles_nb();
 
@@ -90,7 +93,7 @@ void Motor::actuate(int32_t command)
         timeout_ms_ = params_.default_timeout_ms;
     }
 
-    std::cout << "Timeout is set to " << std::dec << timeout_ms_ << "ms" << std::endl;
+    LOG_INFO("Timeout is set to %" PRIu32 "ms\n", timeout_ms_);
 
     // Apply timeout
     motor_engine_.set_timeout_ms(timeout_ms_);

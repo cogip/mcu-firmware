@@ -88,22 +88,22 @@ protected:
     const MotorParameters& params_;
 
     /// Cascade controller combining pose and speed control.
-    cogip::motion_control::DualPIDMetaController    dualpid_meta_controller_;
+    motion_control::DualPIDMetaController    dualpid_meta_controller_;
 
     /// Position (pose) PID controller.
-    cogip::motion_control::PosePIDController        distance_controller_;
+    motion_control::PosePIDController        distance_controller_;
 
     /// Speed PID controller.
-    cogip::motion_control::SpeedPIDController       speed_controller_;
+    motion_control::SpeedPIDController       speed_controller_;
 
     /// Filter for pose (distance) measurement.
-    cogip::motion_control::MotorPoseFilter          motor_distance_filter_;
+    motion_control::MotorPoseFilter          motor_distance_filter_;
 
     /// Filter for speed/acceleration measurement.
-    cogip::motion_control::SpeedFilter              speed_filter_;
+    motion_control::SpeedFilter              speed_filter_;
 
     /// Threaded control engine managing the control loop.
-    cogip::motion_control::MotorEngine              motor_engine_;
+    motion_control::MotorEngine              motor_engine_;
 };
 
 } // namespace positional_actuators

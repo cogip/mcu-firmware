@@ -6,7 +6,7 @@ namespace canpb {
 
 void *message_reader_wrapper(void *arg)
 {
-    CanProtobuf *canpb = (CanProtobuf *)arg;
+    CanProtobuf *canpb = static_cast<CanProtobuf *>(arg);
     canpb->message_reader();
 
     return NULL;

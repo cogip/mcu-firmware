@@ -1,11 +1,15 @@
 #include "canpb/CanProtobuf.hpp"
 
 // System includes
-#include <iostream>
+#include "log.h"
+#include <inttypes.h>
 #include "can/can.h"
 
 // RIOT includes
 #include "Errors.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 #define MESSAGE_READER_THREAD_MSG_QUEUE_SIZE    8
 
@@ -24,7 +28,7 @@ CanProtobuf::CanProtobuf(
 
 bool CanProtobuf::init(struct can_filter *filter)
 {
-    std::cout << "Initialiaze CanProtobuf " << can_interface_number_ << std::endl;
+    LOG_INFO("Initialize CanProtobuf %" PRIu8 "\n", can_interface_number_);
     return conn_can_raw_create(&conn_can_raw_, filter, 1, can_interface_number_, 0);
 }
 
@@ -36,7 +40,7 @@ void CanProtobuf::start_reader()
         CANPB_READER_PRIO,
         THREAD_CREATE_STACKTEST,
         message_reader_wrapper,
-        (void *)this,
+        static_cast<void *>(this),
         "Protobuf reader"
         );
 }
@@ -45,7 +49,7 @@ void CanProtobuf::message_reader()
 {
     can_frame_t frame;
 
-    std::cout << "Waiting for messages..." << std::endl;
+    LOG_INFO("Waiting for messages...\n");
 
     while (conn_can_raw_recv(&conn_can_raw_, &frame,
            0) == sizeof(can_frame_t)) {
@@ -57,7 +61,7 @@ void CanProtobuf::message_reader()
             //std::cout << "Unknown message uuid: " << (uint32_t)uuid << std::endl;
             continue;
         }
-        std::cout << "receive message uuid: 0x" << std::hex << (uint32_t)uuid << std::dec << std::endl;
+        DEBUG("receive message uuid: 0x%" PRIx32 "\n", static_cast<uint32_t>(uuid));
 
         // Read Protobuf message if any
         if (frame.len > 0) {
@@ -65,7 +69,7 @@ void CanProtobuf::message_reader()
             memcpy(read_buffer_.get_base64_data(), frame.data, frame.len);
             size_t res = read_buffer_.base64_decode();
             if (res == 0) {
-                std::cout << "Failed to base64 decode Protobuf message (res = " << res <<  ")" << std::endl;
+                LOG_ERROR("Failed to base64 decode Protobuf message (res = %zu)\n", res);
                 continue;
             }
         }
@@ -73,7 +77,7 @@ void CanProtobuf::message_reader()
         message_handlers_[uuid](read_buffer_);
     }
 
-    std::cout << "Stop waiting for messages..." << std::endl;
+    LOG_INFO("Stop waiting for messages...\n");
 }
 
 bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterface *message)
@@ -86,13 +90,13 @@ bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfac
         write_buffer_.clear();
         auto serialization_status = message->serialize(write_buffer_);
         if(EmbeddedProto::Error::NO_ERRORS != serialization_status) {
-            puts("Failed to serialize Protobuf message.");
+            LOG_ERROR("Failed to serialize Protobuf message\n");
             success = false;
         }
         else if (write_buffer_.get_size() > 0) {
             base64_size = write_buffer_.base64_encode();
             if (base64_size == 0) {
-                puts("Failed to base64 encode Protobuf serialized message.");
+                LOG_ERROR("Failed to base64 encode Protobuf serialized message\n");
                 success = false;
             }
         }
@@ -112,7 +116,7 @@ bool CanProtobuf::send_message(uuid_t uuid, const EmbeddedProto::MessageInterfac
             conn_can_raw_close(&conn);
         }
         else {
-            std::cerr << "Bad message length(" << base64_size << ") for uuid: " << uuid << std::endl;
+            LOG_ERROR("Bad message length(%zu) for uuid: 0x%" PRIx32 "\n", base64_size, static_cast<uint32_t>(uuid));
         }
     }
 

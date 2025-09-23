@@ -1,6 +1,7 @@
 // System includes
 #include <malloc.h>
-#include <iostream>
+#include "log.h"
+#include <inttypes.h>
 
 // RIOT includes
 #include <etl/map.h>
@@ -88,9 +89,8 @@ void display_heap_status(void)
 {
     mutex_lock(&_mutex_sysmon);
 
-    std::cout << "  heap size = " << _sysmon_heap_status.size() << " bytes" << std::endl;
-    std::cout << "  heap used = " << _sysmon_heap_status.used() << " bytes" << std::endl;
-    std::cout << std::endl;
+    LOG_INFO("  heap size = %" PRIu32 " bytes\n", static_cast<uint32_t>(_sysmon_heap_status.size()));
+    LOG_INFO("  heap used = %" PRIu32 " bytes\n", static_cast<uint32_t>(_sysmon_heap_status.used()));
 
     mutex_unlock(&_mutex_sysmon);
 }
@@ -99,7 +99,7 @@ void display_heap_status(void)
 static void _update_threads_status(void)
 {
     for (kernel_pid_t i = KERNEL_PID_FIRST; i <= KERNEL_PID_LAST; i++) {
-        thread_t *thread = thread_get(i);
+        const thread_t *thread = thread_get(i);
 
         if (thread != NULL) {
             mutex_lock(&_mutex_sysmon);
@@ -148,22 +148,21 @@ void update_thread_sched_status(kernel_pid_t pid, bool has_overshot)
 void display_threads_status(void)
 {
     for (kernel_pid_t i = KERNEL_PID_FIRST; i <= KERNEL_PID_LAST; i++) {
-        thread_t *thread = thread_get(i);
+        const thread_t *thread = thread_get(i);
 
         if (thread != NULL) {
             mutex_lock(&_mutex_sysmon);
 
-            std::cout << "Thread '" << thread->name << "' with pid " << i << std::endl;
-            std::cout << "  stack size = " <<_sysmon_threads_status[i]->size() << " bytes" << std::endl;
-            std::cout << "  stack used = " <<_sysmon_threads_status[i]->used() << " bytes" << std::endl;
-            std::cout << "  loops      = " <<_sysmon_threads_status[i]->loops() << std::endl;
-            std::cout << "  overshots  = " <<_sysmon_threads_status[i]->overshots() << std::endl;
+            LOG_INFO("Thread '%s' with pid %" PRIi16 "\n", thread->name, static_cast<int16_t>(i));
+            LOG_INFO("  stack size = %" PRIu32 " bytes\n", static_cast<uint32_t>(_sysmon_threads_status[i]->size()));
+            LOG_INFO("  stack used = %" PRIu32 " bytes\n", static_cast<uint32_t>(_sysmon_threads_status[i]->used()));
+            LOG_INFO("  loops      = %" PRIu32 "\n", static_cast<uint32_t>(_sysmon_threads_status[i]->loops()));
+            LOG_INFO("  overshots  = %" PRIu32 "\n", static_cast<uint32_t>(_sysmon_threads_status[i]->overshots()));
 
             mutex_unlock(&_mutex_sysmon);
         }
     }
 
-    std::cout << std::endl;
 }
 
 #ifdef MODULE_CANPB
@@ -178,7 +177,7 @@ static void _canpb_send_status(void)
         can_protobuf->send_message(sysmon_uuid, &pb_sysmon_message_);
     }
     else {
-        std::cerr << "sysmon: error, canpb interface has not been registered." << std::endl;
+        LOG_ERROR("sysmon: canpb interface has not been registered\n");
     }
 }
 #endif // MODULE_CANPB

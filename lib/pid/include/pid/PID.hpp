@@ -23,7 +23,7 @@ namespace pid {
 class PID {
 public:
     /// Constructor.
-    PID(
+    explicit PID(
         float kp = 0.0,                                                ///< [in] proportional gain
         float ki = 0.0,                                                ///< [in] integral gain
         float kd = 0.0,                                                ///< [in] derivative gain
