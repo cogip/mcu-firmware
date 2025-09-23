@@ -16,6 +16,39 @@ namespace cogip {
 
 namespace motion_control {
 
+MotorEngine::MotorEngine(
+    motor::MotorInterface& motor,
+    localization::OdometerInterface& odometer,
+    uint32_t engine_thread_period_ms
+) : BaseControllerEngine(engine_thread_period_ms),
+    target_speed_(0),
+    target_distance_(0),
+    motor_(motor),
+    odometer_(odometer)
+{
+}
+
+void MotorEngine::set_current_distance_to_odometer(const float distance)
+{
+    mutex_lock(&mutex_);
+    odometer_.set_distance_mm(distance);
+    mutex_unlock(&mutex_);
+}
+
+void MotorEngine::set_target_distance(const float target_distance)
+{
+    mutex_lock(&mutex_);
+    target_distance_ = target_distance;
+
+    // New target, reset the timeout
+    timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+
+    // Reset the pose reached flag
+    pose_reached_ = target_pose_status_t::moving;
+
+    mutex_unlock(&mutex_);
+}
+
 void MotorEngine::prepare_inputs() {
     // Update current distance and speed
     odometer_.update();

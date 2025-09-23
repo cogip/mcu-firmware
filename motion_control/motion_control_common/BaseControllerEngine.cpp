@@ -9,12 +9,27 @@
 // RIOT includes
 #include <time_units.h>
 #include <ztimer.h>
+#include <cstring>
 
 namespace cogip {
 
 namespace motion_control {
 
 #define CONTROLLER_PRIO (THREAD_PRIORITY_MAIN - 2)
+
+BaseControllerEngine::BaseControllerEngine(uint32_t engine_thread_period_ms) :
+    enable_(true),
+    controller_(nullptr),
+    current_cycle_(0),
+    pose_reached_(moving),
+    timeout_cycle_counter_(0),
+    timeout_ms_(0),
+    timeout_enable_(false),
+    engine_thread_period_ms_(engine_thread_period_ms)
+{
+    memset(engine_thread_stack_, 0, sizeof(engine_thread_stack_));
+    mutex_init(&mutex_);
+}
 
 static void *_start_thread(void *arg)
 {

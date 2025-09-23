@@ -19,6 +19,18 @@ namespace cogip {
 
 namespace motion_control {
 
+PlatformEngine::PlatformEngine(
+    localization::LocalizationInterface &localization,
+    drive_controller::DriveControllerInterface &drive_contoller,
+    pose_reached_cb_t pose_reached_cb,
+    uint32_t engine_thread_period_ms
+) : BaseControllerEngine(engine_thread_period_ms),
+    localization_(localization),
+    drive_contoller_(drive_contoller),
+    pose_reached_cb_(pose_reached_cb)
+{
+}
+
 void PlatformEngine::prepare_inputs() {
     // Update current pose and speed
     localization_.update();
