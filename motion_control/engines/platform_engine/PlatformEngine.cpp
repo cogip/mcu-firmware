@@ -3,7 +3,6 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
@@ -11,6 +10,10 @@
 #include "thread/thread.hpp"
 
 #include "platform_engine/PlatformEngine.hpp"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -59,10 +62,10 @@ void PlatformEngine::process_outputs() {
     cogip_defs::Polar command(0, 0);
 
     if (pose_reached_ == target_pose_status_t::moving) {
-        std::cout << "Start process_outputs()" << std::endl;
+        DEBUG("Start process_outputs()\n");
         command.set_distance(io_.get_as<float>("linear_speed_command").value());
         command.set_angle(io_.get_as<float>("angular_speed_command").value());
-        std::cout << "End process_outputs()" << std::endl;
+        DEBUG("End process_outputs()\n");
     }
 
     // Set robot polar velocity order

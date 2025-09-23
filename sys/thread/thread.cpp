@@ -1,5 +1,6 @@
 // System includes
-#include <iostream>
+#include "log.h"
+#include <inttypes.h>
 
 // RIOT includes
 #include <irq.h>
@@ -38,7 +39,7 @@ void thread_ztimer_periodic_wakeup(ztimer_clock_t *clock, uint32_t *last_wakeup,
 #ifdef MODULE_SYSMON
         has_overshot = true;
 #endif
-        std::cerr << "[WARNING] Thread '" << thread_getname(pid) << "' latency: " << offset << std::endl;
+        LOG_WARNING("Thread '%s' latency: %d\n", thread_getname(pid), static_cast<int>(offset));
     }
 
 #ifdef MODULE_SYSMON

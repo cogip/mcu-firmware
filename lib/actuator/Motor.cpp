@@ -5,13 +5,14 @@
 
 #include "board.h"
 #include "actuator/Motor.hpp"
+#include "log.h"
+#include <inttypes.h>
 #include "actuator/PositionalActuator.hpp"
 #include "motor_pose_filter/MotorPoseFilterIOKeysDefault.hpp"
 #include "pose_pid_controller/PosePIDControllerIOKeysDefault.hpp"
 #include "speed_filter/SpeedFilterIOKeysDefault.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 
-#include <iostream>
 
 namespace cogip {
 namespace actuators {
@@ -43,12 +44,12 @@ Motor::Motor(const MotorParameters& motor_parameters)
     // Init motor
     int ret = params_.motor.init();
     if (ret) {
-        std::cerr << "Motor init failed" << std::endl;
+        LOG_ERROR("Motor init failed\n");
     }
     // Init encoder
     ret = params_.odometer.init();
     if (ret) {
-        std::cerr << "Odometer init failed" << std::endl;
+        LOG_ERROR("Odometer init failed\n");
     }
 
     // Ensure overload flag is cleared at startup
@@ -76,9 +77,7 @@ void Motor::disable() {
 
 void Motor::actuate(int32_t command)
 {
-    std::cout << "Move motor to command " << command
-              << " from distance " << motor_engine_.get_current_distance_from_odometer()
-              << std::endl;
+    LOG_INFO("Move motor to command %" PRIi32 " from distance %.2f\n", command, static_cast<double>(motor_engine_.get_current_distance_from_odometer()));
 
     // Reset filters/PIDs on a new command
     distance_controller_.parameters().pid()->reset();
@@ -94,7 +93,7 @@ void Motor::actuate(int32_t command)
         timeout_ms_ = params_.default_timeout_ms;
     }
 
-    std::cout << "Timeout is set to " << std::dec << timeout_ms_ << "ms" << std::endl;
+    LOG_INFO("Timeout is set to %" PRIu32 "ms\n", timeout_ms_);
 
     // Apply timeout
     motor_engine_.set_timeout_ms(timeout_ms_);

@@ -81,13 +81,13 @@ static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer &buffer)
 void _handle_copilot_connected(cogip::canpb::ReadBuffer &)
 {
 	pf_set_copilot_connected(true);
-	std::cout << "Copilot connected" << std::endl;
+	LOG_INFO("Copilot connected");
 }
 
 void _handle_copilot_disconnected(cogip::canpb::ReadBuffer &)
 {
 	pf_set_copilot_connected(false);
-	std::cout << "Copilot disconnected" << std::endl;
+	LOG_INFO("Copilot disconnected");
 }
 
 void pf_init(void)
@@ -99,7 +99,7 @@ void pf_init(void)
 	/* Initialize CANPB */
 	int canpb_res = canpb.init(&canpb_filter);
 	if (canpb_res) {
-		COGIP_DEBUG_CERR("CAN initialization failed, error: " << canpb_res);
+		LOG_ERROR("CAN initialization failed, error: %d\n", canpb_res);
 	} else {
 		canpb.register_message_handler(
 			game_reset_uuid,

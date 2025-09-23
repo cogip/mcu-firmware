@@ -12,11 +12,16 @@
 
 #pragma once
 
+// RIOT includes
+#include "log.h"
+#include <inttypes.h>
+
+#include <debug.h>
+
 // Project includes
 #include "ControllersIO.hpp"
 #include "etl/deque.h"
 #include "MetaController.hpp"
-#include <iostream>
 
 namespace cogip {
 namespace motion_control {
@@ -34,11 +39,11 @@ public:
     void execute(ControllersIO& io) override
     {
         if (this->controllers_.empty()) {
-            std::cerr << "Error: no controller added." << std::endl;
+            LOG_ERROR("Error: no controller added.");
             return;
         }
 
-        std::cout << "Execute ParallelMetaController" << std::endl;
+        DEBUG("Execute ParallelMetaController");
 
         // Cumulative set of keys already written by previous controllers.
         etl::set<ParamKey, MAX_PARAMS> cumulative_written;
@@ -59,8 +64,7 @@ public:
             // in the inputs/outputs map
             auto collisions = ControllersIO::find_collisions(just_written, cumulative_written);
             for (auto h : collisions) {
-                std::cerr << "Warning: key hash " << h
-                          << " was already written by another parallel controller.\n";
+                LOG_WARNING("Key hash %" PRIu32 " was already written by another parallel controller", static_cast<uint32_t>(h));
             }
 
             // Merge

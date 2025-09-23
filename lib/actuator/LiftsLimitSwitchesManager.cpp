@@ -1,6 +1,10 @@
 #include "actuator/LiftsLimitSwitchesManager.hpp"
 #include <thread.h>
-#include <iostream>
+#include "log.h"
+#include <inttypes.h>
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 namespace actuators {
@@ -20,7 +24,7 @@ void LiftsLimitSwitchesManager::init() {
         event_thread_entry, nullptr, "gpio_evt"
     );
 
-    std::cout << "Motor limit switches manager started" << std::endl;
+    LOG_INFO("Motor limit switches manager started\n");
 }
 
 int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
@@ -29,7 +33,7 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
     mutex_lock(&mutex_);
     // Initialize pin interrupt on falling edges with pulldown
     if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) != 0) {
-        std::cerr << "ERROR: Failed to init pin " << pin << std::endl;
+        LOG_ERROR("Failed to init pin %p\n", reinterpret_cast<void*>(pin));
 
         mutex_unlock(&mutex_);
 
@@ -39,7 +43,7 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
     // Allocate a new event from the pool
     event_t* evt = event_pool_.create();
     if (!evt) {
-        std::cerr << "ERROR: Cannot allocate event for pin " << pin << std::endl;
+        LOG_ERROR("Cannot allocate event for pin %p\n", reinterpret_cast<void*>(pin));
 
         mutex_unlock(&mutex_);
 
@@ -55,12 +59,12 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift) {
 
     // Initialize pin interrupt on falling edges with pulldown
     if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) != 0) {
-        std::cerr << "ERROR: Failed to init pin " << pin << std::endl;
+        LOG_ERROR("Failed to init pin %p\n", reinterpret_cast<void*>(pin));
 
         return -EIO;
     }
 
-    std::cout << "GPIO " << pin << " registered" << std::endl;
+    LOG_INFO("GPIO %p registered\n", reinterpret_cast<void*>(pin));
 
     mutex_unlock(&mutex_);
 
@@ -91,7 +95,7 @@ int LiftsLimitSwitchesManager::unregister_gpio(gpio_t pin) {
     // Free the event
     event_pool_.release(evt);
 
-    std::cout << "GPIO " << pin << " unregistered" << std::endl;
+    LOG_INFO("GPIO %p unregistered\n", reinterpret_cast<void*>(pin));
 
     mutex_unlock(&mutex_);
 
@@ -105,19 +109,19 @@ void LiftsLimitSwitchesManager::isr_callback(void* arg) {
 
     if (evt) {
         event_post(&instance().event_queue_, evt);
-        std::cout << "Event " << evt << " thrown" << std::endl;
+        DEBUG("Event %p thrown\n", static_cast<void*>(evt));
     }
 }
 
 void LiftsLimitSwitchesManager::event_handler(event_t* evt) {
-    std::cout << "Event " << evt << " handling" << std::endl;
+    DEBUG("Event %p handling\n", static_cast<void*>(evt));
 
     gpio_t pin = instance().event_to_gpio_[evt];
     instance().handle_gpio_event(pin);
 }
 
 void LiftsLimitSwitchesManager::handle_gpio_event(gpio_t pin) {
-    std::cout << "GPIO " << pin << " triggered" << std::endl;
+    DEBUG("GPIO %p triggered\n", reinterpret_cast<void*>(pin));
     mutex_lock(&mutex_);
 
     auto it = callbacks_.find(pin);
@@ -127,7 +131,7 @@ void LiftsLimitSwitchesManager::handle_gpio_event(gpio_t pin) {
 
     mutex_unlock(&mutex_);
 
-    std::cout << "Event handled" << std::endl;
+    LOG_INFO("Event handled\n");
 }
 
 void* LiftsLimitSwitchesManager::event_thread_entry(void*) {
@@ -135,7 +139,7 @@ void* LiftsLimitSwitchesManager::event_thread_entry(void*) {
     event_queue_init(&instance().event_queue_);
 
     // Main event loop (blocks waiting for events)
-    std::cout << "Start event loop" << std::endl;
+    LOG_INFO("Start event loop\n");
     event_loop(&instance().event_queue_);
     return nullptr;
 }

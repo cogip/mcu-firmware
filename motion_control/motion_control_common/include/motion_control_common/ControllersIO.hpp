@@ -20,7 +20,7 @@
 #include <etl/optional.h>
 #include <etl/vector.h>
 #include <cerrno>
-#include <iostream>
+#include "log.h"
 
 namespace cogip {
 
@@ -95,7 +95,7 @@ public:
                 return etl::get<T>(*opt);
             }
             else {
-                std::cerr << "Error getting " << std::string(key.data(), key.size()) << std::endl;
+                LOG_ERROR("Error getting %.*s", static_cast<int>(key.size()), key.data());
             }
         }
         return {};

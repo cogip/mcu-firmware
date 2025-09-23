@@ -12,8 +12,11 @@
 
 #pragma once
 
-// System includes
-#include <iostream>
+// RIOT includes
+#include "log.h"
+#include <inttypes.h>
+
+#include <debug.h>
 
 // Project includes
 #include "ControllersIO.hpp"
@@ -39,17 +42,16 @@ public:
     void execute(ControllersIO& io) override
     {
         if (controllers_.empty()) {
-            std::cerr << "Error: no controller in MetaController.\n";
+            LOG_ERROR("Error: no controller in MetaController");
             return;
         }
 
-        std::cout << "Execute MetaController of "
-            << controllers_.size() << " controllers" << std::endl;
+        DEBUG("Execute MetaController of %" PRIu32 " controllers", static_cast<uint32_t>(controllers_.size()));
 
         size_t index = 0;
         for (auto* controller : controllers_) {
             if (!controller) {
-                std::cerr << "controllers_[" << index << "] is nullptr!" << std::endl;
+                LOG_ERROR("controllers_[%" PRIu32 "] is nullptr!", static_cast<uint32_t>(index));
             }
             else {
                 controller->execute(io);

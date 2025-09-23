@@ -3,7 +3,6 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
@@ -11,6 +10,7 @@
 #include "thread/thread.hpp"
 
 #include "motor_engine/MotorEngine.hpp"
+#include "log.h"
 
 namespace cogip {
 
@@ -46,7 +46,7 @@ void MotorEngine::process_outputs() {
         pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
     }
     else {
-        std::cerr << "MotorEngine timed out, disable." << std::endl;
+        LOG_ERROR("MotorEngine timed out, disable.\n");
 
         // Disable engine
         enable_ = false;
@@ -58,7 +58,7 @@ void MotorEngine::process_outputs() {
     }
 
     if (pose_reached_ == target_pose_status_t::blocked) {
-        std::cerr << "MotorEngine blocked, disable." << std::endl;
+        LOG_ERROR("MotorEngine blocked, disable.\n");
 
         // Disable engine
         enable_ = false;

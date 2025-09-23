@@ -1,7 +1,7 @@
 #include "motion_control_common/ControllersIO.hpp"
 #include "etl/fnv_1.h"
 #include "etl/algorithm.h"
-#include <iostream>
+#include "log.h"
 
 namespace cogip {
 
@@ -16,18 +16,16 @@ ParamKey ControllersIO::hash_key(KeyType key) {
 int ControllersIO::set(KeyType key, const ParamValue& value) {
     ParamKey h = hash_key(key);
     if (readonly_keys_.contains(h)) {
-        std::cerr << "Cannot set read-only " << std::string(key.data(), key.size()) << std::endl;
+        LOG_ERROR("Cannot set read-only %.*s\n", static_cast<int>(key.size()), key.data());
         return EACCES;
     }
     if (data_.full() && !data_.contains(h)) {
-        std::cerr << "Error: Cannot set " << std::string(key.data(), key.size())
-                  << " - parameters storage is full" << std::endl;
+        LOG_ERROR("Error: Cannot set %.*s - parameters storage is full\n", static_cast<int>(key.size()), key.data());
         return ENOMEM;
     }
     data_[h] = value;
     if (_modified_keys.full() && !_modified_keys.contains(h)) {
-        std::cerr << "Warning: Cannot track modification for " << std::string(key.data(), key.size())
-                  << " - modified keys storage is full" << std::endl;
+        LOG_WARNING("Warning: Cannot track modification for %.*s - modified keys storage is full\n", static_cast<int>(key.size()), key.data());
     } else {
         _modified_keys.insert(h);
     }
@@ -37,8 +35,7 @@ int ControllersIO::set(KeyType key, const ParamValue& value) {
 /// Mark a parameter key as read-only.
 void ControllersIO::mark_readonly(KeyType key) {
     if (readonly_keys_.full()) {
-        std::cerr << "Error: Cannot mark " << std::string(key.data(), key.size())
-                  << " as read-only - readonly keys storage is full" << std::endl;
+        LOG_ERROR("Error: Cannot mark %.*s as read-only - readonly keys storage is full\n", static_cast<int>(key.size()), key.data());
         return;
     }
     readonly_keys_.insert(hash_key(key));
@@ -54,7 +51,7 @@ OptionalValue ControllersIO::get(KeyType key) const {
     ParamKey h = hash_key(key);
     auto it = data_.find(h);
     if (it == data_.end()) {
-        std::cerr << "Error key not found " << std::string(key.data(), key.size()) << std::endl;
+        LOG_ERROR("Error key not found %.*s\n", static_cast<int>(key.size()), key.data());
     }
     return (it != data_.end()) ? OptionalValue{it->second} : OptionalValue{};
 }
@@ -65,7 +62,7 @@ ParamKeyVector ControllersIO::snapshot_modified() const {
     result.reserve(_modified_keys.size());
     for (auto it = _modified_keys.begin(); it != _modified_keys.end(); ++it) {
         if (result.full()) {
-            std::cerr << "Warning: snapshot_modified() result vector is full, some keys will be missing" << std::endl;
+            LOG_WARNING("Warning: snapshot_modified() result vector is full, some keys will be missing\n");
             break;
         }
         result.push_back(*it);
@@ -87,7 +84,7 @@ ParamKeyVector ControllersIO::find_collisions(
     for (auto h_new : new_keys) {
         if (already_written.contains(h_new)) {
             if (collisions.full()) {
-                std::cerr << "Warning: find_collisions() result vector is full, some collisions will be missing" << std::endl;
+                LOG_WARNING("Warning: find_collisions() result vector is full, some collisions will be missing\n");
                 break;
             }
             collisions.push_back(h_new);
@@ -115,7 +112,7 @@ ControllersIO::difference(const ParamKeyVector& after_ctrl,
         bool in_before = etl::any_of(before_ctrl.begin(), before_ctrl.end(), predicate);
         if (!in_before) {
             if (result.full()) {
-                std::cerr << "Warning: difference() result vector is full, some keys will be missing" << std::endl;
+                LOG_WARNING("Warning: difference() result vector is full, some keys will be missing\n");
                 break;
             }
             result.push_back(h_new);

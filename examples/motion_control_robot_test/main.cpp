@@ -4,7 +4,7 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
+#include "log.h"
 
 #include "etl/list.h"
 #include "etl/vector.h"
@@ -110,67 +110,67 @@ static cogip::motion_control::PlatformEngine motion_control_platform_engine(loca
 
 int main(void)
 {
-    puts("\n== Controller skeleton ==");
+    LOG_INFO("== Controller skeleton ==\n");
 
     // Filter controller behavior to always moves in a straight line
     cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters = cogip::motion_control::PoseStraightFilterParameters(2, 2);
     cogip::motion_control::PoseStraightFilter pose_straight_filter = cogip::motion_control::PoseStraightFilter(cogip::motion_control::pose_straight_filter_io_keys_default,
         pose_straight_filter_parameters);
-    std::cout << "PoseStraightFilter created" << std::endl;
+    LOG_INFO("PoseStraightFilter created\n");
 
     // Split angular and linear controls
     cogip::motion_control::PolarParallelMetaController polar_parallel_meta_controller;
-    std::cout << "PolarParallelMetaController created" << std::endl;
+    LOG_INFO("PolarParallelMetaController created\n");
 
     // Linear dual PID meta controller
     cogip::motion_control::DualPIDMetaController linear_dualpid_meta_controller;
     polar_parallel_meta_controller.add_controller(&linear_dualpid_meta_controller);
-    std::cout << "LinearDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
+    LOG_INFO("LinearDualPIDMetaController created and added to PolarParallelMetaController\n");
     // Linear pose PID controller
     cogip::pid::PID linear_position_pid(1, 0., 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::PosePIDControllerParameters linear_position_controller_parameters(&linear_position_pid);
     cogip::motion_control::PosePIDController linear_position_controller(cogip::motion_control::linear_pose_pid_controller_io_keys_default,
         linear_position_controller_parameters);
     linear_dualpid_meta_controller.add_controller(&linear_position_controller);
-    std::cout << "PosePIDController created and added to LinearDualPIDMetaController" << std::endl;
+    LOG_INFO("PosePIDController created and added to LinearDualPIDMetaController\n");
     // Linear speed filter
     cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(1000., 500.);
     cogip::motion_control::SpeedFilter linear_speed_filter(cogip::motion_control::linear_speed_filter_io_keys_default,
         linear_speed_filter_parameters);
     linear_dualpid_meta_controller.add_controller(&linear_speed_filter);
-    std::cout << "SpeedFilter created and added to LinearDualPIDMetaController" << std::endl;
+    LOG_INFO("SpeedFilter created and added to LinearDualPIDMetaController\n");
     // Linear speed PID controller
     cogip::pid::PID linear_speed_pid(1, 0.1, 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::SpeedPIDControllerParameters linear_speed_controller_parameters(&linear_speed_pid);
     cogip::motion_control::SpeedPIDController linear_speed_controller(cogip::motion_control::linear_speed_pid_controller_io_keys_default,
         linear_speed_controller_parameters);
     linear_dualpid_meta_controller.add_controller(&linear_speed_controller);
-    std::cout << "SpeedPIDController created and added to LinearDualPIDMetaController" << std::endl;
+    LOG_INFO("SpeedPIDController created and added to LinearDualPIDMetaController\n");
 
     // Angular dual PID meta controller
     cogip::motion_control::DualPIDMetaController angular_dualpid_meta_controller;
     polar_parallel_meta_controller.add_controller(&angular_dualpid_meta_controller);
-    std::cout << "AngularDualPIDMetaController created and added to PolarParallelMetaController" << std::endl;
+    LOG_INFO("AngularDualPIDMetaController created and added to PolarParallelMetaController\n");
     // Angular pose PID controller
     cogip::pid::PID angular_position_pid(1, 0., 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::PosePIDControllerParameters angular_position_controller_parameters(&angular_position_pid);
     cogip::motion_control::PosePIDController angular_position_controller(cogip::motion_control::angular_pose_pid_controller_io_keys_default,
         angular_position_controller_parameters);
     angular_dualpid_meta_controller.add_controller(&angular_position_controller);
-    std::cout << "PosePIDController created and added to AngularDualPIDMetaController" << std::endl;
+    LOG_INFO("PosePIDController created and added to AngularDualPIDMetaController\n");
     // Angular speed filter
     cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(1000., 500.);
     cogip::motion_control::SpeedFilter angular_speed_filter(cogip::motion_control::angular_speed_filter_io_keys_default,
         angular_speed_filter_parameters);
     angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
-    std::cout << "SpeedFilter created and added to AngularDualPIDMetaController" << std::endl;
+    LOG_INFO("SpeedFilter created and added to AngularDualPIDMetaController\n");
     // Angular speed PID controller
     cogip::pid::PID angular_speed_pid(1, 0.1, 0., etl::numeric_limits<uint16_t>::max());
     cogip::motion_control::SpeedPIDControllerParameters angular_speed_controller_parameters(&angular_speed_pid);
     cogip::motion_control::SpeedPIDController angular_speed_controller(cogip::motion_control::angular_speed_pid_controller_io_keys_default,
         angular_speed_controller_parameters);
     angular_dualpid_meta_controller.add_controller(&angular_speed_controller);
-    std::cout << "SpeedPIDController created and added to AngularDualPIDMetaController" << std::endl;
+    LOG_INFO("SpeedPIDController created and added to AngularDualPIDMetaController\n");
 
     // Quad PID meta controller
     cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
@@ -179,7 +179,7 @@ int main(void)
 
     motion_control_platform_engine.set_controller(&quadpid_meta_controller);
 
-    puts("\n== Start thread with current controller ==");
+    LOG_INFO("== Start thread with current controller ==\n");
     motion_control_platform_engine.start_thread();
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];

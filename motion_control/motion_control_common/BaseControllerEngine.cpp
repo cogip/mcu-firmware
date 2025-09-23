@@ -1,7 +1,10 @@
 #include "motion_control_common/BaseControllerEngine.hpp"
 #include "motion_control_common/Controller.hpp"
-#include <iostream>
 #include "thread/thread.hpp"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 // RIOT includes
 #include <time_units.h>
@@ -15,7 +18,7 @@ namespace motion_control {
 
 static void *_start_thread(void *arg)
 {
-    COGIP_DEBUG_COUT("Engine start thread");
+    DEBUG("Engine start thread\n");
     static_cast<BaseControllerEngine *>(arg)->thread_loop();
     return EXIT_SUCCESS;
 }
@@ -32,7 +35,7 @@ void BaseControllerEngine::thread_loop() {
         // Protect engine loop
         mutex_lock(&mutex_);
 
-        COGIP_DEBUG_COUT("Engine loop");
+        DEBUG("Engine loop\n");
 
         // Reset all read-only markers to allow data update
         io_.reset_readonly_markers();
@@ -58,7 +61,7 @@ void BaseControllerEngine::thread_loop() {
                 // Force target pose status to notify the platform the timeout is over
                 pose_reached_ = target_pose_status_t::timeout;
 
-                std::cerr << "Engine timed out" << std::endl;
+                LOG_ERROR("Engine timed out\n");
 
                 enable_ = false;
             }

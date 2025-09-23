@@ -1,10 +1,16 @@
 // System includes
 #include <cmath>
-#include <iostream>
 #include "etl/algorithm.h"
+
+// RIOT includes
+#include "log.h"
+#include <inttypes.h>
 
 // Project includes
 #include "speed_filter/SpeedFilter.hpp"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -49,7 +55,7 @@ void SpeedFilter::limit_speed_order(
 
 void SpeedFilter::execute(ControllersIO& io)
 {
-    std::cout << "Execute SpeedFilter" << std::endl;
+    DEBUG("Execute SpeedFilter");
 
     // Read commanded speed before filtering (default to zero if missing)
     float speed_order = 0.0f;
@@ -57,9 +63,8 @@ void SpeedFilter::execute(ControllersIO& io)
         speed_order = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.speed_order
-                    << " is not available, using default value "
-                    << speed_order << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.speed_order.data(), speed_order);
     }
 
     // Read measured current speed (default to zero if missing)
@@ -68,9 +73,8 @@ void SpeedFilter::execute(ControllersIO& io)
         current_speed = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_speed
-                    << " is not available, using default value "
-                    << current_speed << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_speed.data(), current_speed);
     }
 
     // Read raw target speed (default to zero if missing)
@@ -79,9 +83,8 @@ void SpeedFilter::execute(ControllersIO& io)
         target_speed = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_speed
-                    << " is not available, using default value "
-                    << target_speed << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_speed.data(), target_speed);
     }
 
     // Read flag disabling filtering (default to false if missing)
@@ -90,9 +93,8 @@ void SpeedFilter::execute(ControllersIO& io)
         no_filter = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.speed_filter_flag
-                    << " is not available, using default value "
-                    << no_filter << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %d",
+                    keys_.speed_filter_flag.data(), no_filter);
     }
 
     if (!no_filter) {
@@ -113,14 +115,14 @@ void SpeedFilter::execute(ControllersIO& io)
 
         if (below_threshold && no_acceleration) {
             anti_blocking_blocked_cycles_nb_++;
-            std::cout << "Anti blocking cycles number: " << anti_blocking_blocked_cycles_nb_ << std::endl;
+            DEBUG("Anti blocking cycles number: %" PRIu32, static_cast<uint32_t>(anti_blocking_blocked_cycles_nb_));
         }
         else {
             anti_blocking_blocked_cycles_nb_ = 0;
         }
 
         if (anti_blocking_blocked_cycles_nb_ > parameters_.anti_blocking_blocked_cycles_nb_threshold()) {
-            std::cout << "BLOCKED" << std::endl;
+            LOG_WARNING("BLOCKED");
 
             // Write updated pose‐reached status
             io.set(keys_.pose_reached, target_pose_status_t::blocked);

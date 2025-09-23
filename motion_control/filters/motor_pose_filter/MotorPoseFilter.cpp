@@ -3,7 +3,6 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
@@ -11,6 +10,10 @@
 #include "etl/absolute.h"
 
 #include "motor_pose_filter/MotorPoseFilter.hpp"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -18,7 +21,7 @@ namespace motion_control {
 
 void MotorPoseFilter::execute(ControllersIO& io)
 {
-    std::cout << "Execute MotorPoseFilter" << std::endl;
+    DEBUG("Execute MotorPoseFilter");
 
     // Read current pose (default to zero if missing)
     float current_pose = 0.0f;
@@ -26,9 +29,8 @@ void MotorPoseFilter::execute(ControllersIO& io)
         current_pose = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_pose
-                    << " is not available, using default value "
-                    << current_pose << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_pose.data(), current_pose);
     }
 
     // Read target pose (default to zero if missing)
@@ -37,9 +39,8 @@ void MotorPoseFilter::execute(ControllersIO& io)
         target_pose = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_pose
-                    << " is not available, using default value "
-                    << target_pose << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_pose.data(), target_pose);
     }
 
     // Read current speed (default to zero if missing)
@@ -48,9 +49,8 @@ void MotorPoseFilter::execute(ControllersIO& io)
         current_speed = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_speed
-                    << " is not available, using default value "
-                    << current_speed << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_speed.data(), current_speed);
     }
 
     // Read target speed (default to zero if missing)
@@ -59,9 +59,8 @@ void MotorPoseFilter::execute(ControllersIO& io)
         target_speed = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_speed
-                    << " is not available, using default value "
-                    << target_speed << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_speed.data(), target_speed);
     }
 
     // Read pose reached status (default to moving if missing)
@@ -70,9 +69,8 @@ void MotorPoseFilter::execute(ControllersIO& io)
         pose_reached = static_cast<target_pose_status_t>(static_cast<int>(*opt));
     }
     else {
-        std::cout   << "WARNING: " << keys_.pose_reached
-                    << " is not available, using default value "
-                    << static_cast<int>(pose_reached) << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %d",
+                    keys_.pose_reached.data(), static_cast<int>(pose_reached));
     }
 
     // Compute pose difference

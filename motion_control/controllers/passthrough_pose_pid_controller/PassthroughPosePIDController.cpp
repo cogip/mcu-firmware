@@ -3,7 +3,6 @@
 
 // System includes
 #include <cstdio>
-#include <iostream>
 
 // Project includes
 #include "etl/list.h"
@@ -11,6 +10,10 @@
 #include "etl/absolute.h"
 
 #include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -18,7 +21,7 @@ namespace motion_control {
 
 void PassthroughPosePIDController::execute(ControllersIO& io)
 {
-    std::cout << "Execute PassthroughPosePIDController" << std::endl;
+    DEBUG("Execute PassthroughPosePIDController");
 
     // Read position error (default to 0.0f if missing)
     float position_error = 0.0f;
@@ -26,9 +29,8 @@ void PassthroughPosePIDController::execute(ControllersIO& io)
         position_error = *opt_err;
     }
     else {
-        std::cout   << "WARNING: " << keys_.position_error
-                    << " is not available, using default value "
-                    << position_error << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.position_error.data(), position_error);
     }
 
     // Determine position error sign

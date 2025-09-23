@@ -17,6 +17,7 @@
 
 #include "etl/map.h"
 #include "etl/pool.h"
+#include "log.h"
 
 // RIOT includes
 #include <event.h>
@@ -74,7 +75,7 @@ int create_lift(
     );
 
     if (!_positional_actuators[id]) {
-        std::cerr << "Error creating lift" << std::endl;
+        LOG_ERROR("Error creating lift");
         return -ENOMEM;
     }
 
@@ -107,7 +108,7 @@ void send_state(cogip::actuators::Enum positional_actuator) {
     _pb_actuator_state.clear();
     positional_actuators::get(positional_actuator).pb_copy(_pb_actuator_state.mutable_positional_actuator());
     if (!canpb.send_message(actuator_state_uuid, &_pb_actuator_state)) {
-        std::cerr << "Error: actuator_state_uuid message not sent" << std::endl;
+        LOG_ERROR("actuator_state_uuid message not sent");
     }
 }
 

@@ -1,5 +1,8 @@
 #include "speed_pid_controller/SpeedPIDController.hpp"
-#include <iostream>
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -7,7 +10,7 @@ namespace motion_control {
 
 void SpeedPIDController::execute(ControllersIO& io)
 {
-    std::cout << "Start SpeedPIDController" << std::endl;
+    DEBUG("Start SpeedPIDController\n");
 
     // Read speed error (default to 0.0f if missing)
     float speed_error = 0.0f;
@@ -15,9 +18,8 @@ void SpeedPIDController::execute(ControllersIO& io)
         speed_error = *opt_err;
     }
     else {
-        std::cout   << "WARNING: " << keys_.speed_error
-                    << " is not available, using default value "
-                    << speed_error << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
+                    keys_.speed_error.data(), speed_error);
     }
 
     // Compute speed command via PID
@@ -26,7 +28,7 @@ void SpeedPIDController::execute(ControllersIO& io)
     // Write speed command
     io.set(keys_.speed_command, speed_command);
 
-    std::cout << "End SpeedPIDController" << std::endl;
+    DEBUG("End SpeedPIDController\n");
 }
 
 }  // namespace motion_control

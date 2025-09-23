@@ -1,13 +1,18 @@
 // System includes
 #include <cmath>
-#include <iostream>
 #include "etl/absolute.h"
+
+// Set log level for this file (only show state transitions - WARNING level)
 
 // Project includes
 #include "cogip_defs/Pose.hpp"
 #include "cogip_defs/Polar.hpp"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "trigonometry.h"
+#include "log.h"
+
+#define ENABLE_DEBUG 0
+#include <debug.h>
 
 namespace cogip {
 
@@ -15,7 +20,7 @@ namespace motion_control {
 
 void PoseStraightFilter::execute(ControllersIO& io)
 {
-    std::cout << "Execute PoseStraightFilter" << std::endl;
+    DEBUG("Execute PoseStraightFilter");
 
     // Read current pose coordinates and orientation
     float current_pose_x = 0.0f;
@@ -23,27 +28,24 @@ void PoseStraightFilter::execute(ControllersIO& io)
         current_pose_x = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_pose_x
-                    << " is not available, using default value "
-                    << current_pose_x << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_pose_x.data(), current_pose_x);
     }
     float current_pose_y = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_y)) {
         current_pose_y = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_pose_y
-                    << " is not available, using default value "
-                    << current_pose_y << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_pose_y.data(), current_pose_y);
     }
     float current_pose_O = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_O)) {
         current_pose_O = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_pose_O
-                    << " is not available, using default value "
-                    << current_pose_O << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_pose_O.data(), current_pose_O);
     }
     cogip_defs::Pose current_pose(current_pose_x, current_pose_y, current_pose_O);
 
@@ -53,27 +55,24 @@ void PoseStraightFilter::execute(ControllersIO& io)
         target_pose_x = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_pose_x
-                    << " is not available, using default value "
-                    << target_pose_x << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_pose_x.data(), target_pose_x);
     }
     float target_pose_y = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose_y)) {
         target_pose_y = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_pose_y
-                    << " is not available, using default value "
-                    << target_pose_y << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_pose_y.data(), target_pose_y);
     }
     float target_pose_O = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose_O)) {
         target_pose_O = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_pose_O
-                    << " is not available, using default value "
-                    << target_pose_O << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_pose_O.data(), target_pose_O);
     }
     cogip_defs::Pose target_pose(target_pose_x, target_pose_y, target_pose_O);
 
@@ -83,18 +82,16 @@ void PoseStraightFilter::execute(ControllersIO& io)
         curr_lin = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_linear_speed
-                    << " is not available, using default value "
-                    << curr_lin << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_linear_speed.data(), curr_lin);
     }
     float curr_ang = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_angular_speed)) {
         curr_ang = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.current_angular_speed
-                    << " is not available, using default value "
-                    << curr_ang << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.current_angular_speed.data(), curr_ang);
     }
     const cogip_defs::Polar current_speed(curr_lin, curr_ang);
 
@@ -104,18 +101,16 @@ void PoseStraightFilter::execute(ControllersIO& io)
         target_pose_lin = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_linear_speed
-                    << " is not available, using default value "
-                    << target_pose_lin << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_linear_speed.data(), target_pose_lin);
     }
     float target_pose_ang = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_angular_speed)) {
         target_pose_ang = *opt;
     }
     else {
-        std::cout   << "WARNING: " << keys_.target_angular_speed
-                    << " is not available, using default value "
-                    << target_pose_ang << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value %f",
+                    keys_.target_angular_speed.data(), target_pose_ang);
     }
     cogip_defs::Polar target_speed(target_pose_lin, target_pose_ang);
 
@@ -125,9 +120,8 @@ void PoseStraightFilter::execute(ControllersIO& io)
         allow_rev = static_cast<bool>(*opt);
     }
     else {
-        std::cout   << "WARNING: " << keys_.allow_reverse
-                    << " is not available, using default value "
-                    << allow_rev << std::endl;
+        LOG_WARNING("WARNING: %s is not available, using default value false",
+                    keys_.allow_reverse.data());
     }
 
     // Persist reverse flag when switching to MOVE_TO_POSITION state
@@ -172,7 +166,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     switch (current_state_) {
         case PoseStraightFilterState::ROTATE_TO_DIRECTION:
-            std::cout << "ROTATE_TO_DIRECTION" << std::endl;
+            DEBUG("ROTATE_TO_DIRECTION");
             if (absolute_angular_pose_error > angular_intermediate_threshold) {
                 target_speed.set_distance(0.0f);
             } else {
@@ -183,14 +177,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
             break;
 
         case PoseStraightFilterState::MOVE_TO_POSITION:
-            std::cout << "MOVE_TO_POSITION" << std::endl;
+            DEBUG("MOVE_TO_POSITION");
             if (absolute_linear_pose_error <= linear_threshold) {
                 current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
             }
             break;
 
         case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
-            std::cout << "ROTATE_TO_FINAL_ANGLE" << std::endl;
+            DEBUG("ROTATE_TO_FINAL_ANGLE");
             if (!parameters_.bypass_final_orientation()) {
                 pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
             } else {
@@ -203,7 +197,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
             break;
 
         case PoseStraightFilterState::FINISHED:
-            std::cout << "FINISHED" << std::endl;
+            DEBUG("FINISHED");
             target_speed.set_distance(0.0f);
             target_speed.set_angle(0.0f);
             break;
