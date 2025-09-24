@@ -11,15 +11,9 @@ fi
 
 apply=$1
 
-##################
-### uncrustify ###
-##################
-
-echo "=== UNCRUSTIFY CHECK ==="
-
 if [ -n "$apply" ]; then
     while true; do
-        read -p "Are you sure to apply uncrustify corrections to all your source files [Yy/Nn] ? " yn
+        read -p "Are you sure to apply corrections to all your source files [Yy/Nn] ? " yn
         case $yn in
             [Yy]* ) break;;
             [Nn]* ) exit;;
@@ -27,6 +21,12 @@ if [ -n "$apply" ]; then
         esac
     done
 fi
+
+##################
+### uncrustify ###
+##################
+
+echo "=== UNCRUSTIFY CHECK ==="
 
 # Filter to only check .c and .h files
 for directory in $EXCLUDE_DIRECTORIES; do find_exclude="$find_exclude $sep -not -path '*/$directory/*'"; sep='-a'; done
