@@ -118,6 +118,30 @@ void Motor::actuate(int32_t command)
     params_.motor.enable();
 }
 
+float Motor::get_target_speed_percentage() const
+{
+    return params_.speed_filter_parameters.max_speed() == 0.0f
+               ? 0.0f
+               : (motor_engine_.target_speed() / params_.speed_filter_parameters.max_speed()) *
+                     100.0f;
+}
+
+void Motor::set_target_speed_percent(float percentage)
+{
+    motor_engine_.set_target_speed((percentage / 100.0f) *
+                                   params_.speed_filter_parameters.max_speed());
+}
+
+float Motor::get_current_distance() const
+{
+    return motor_engine_.get_current_distance_from_odometer();
+}
+
+void Motor::set_current_distance(float distance)
+{
+    motor_engine_.set_current_distance_to_odometer(distance);
+}
+
 } // namespace positional_actuators
 } // namespace actuators
 } // namespace cogip

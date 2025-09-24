@@ -36,12 +36,7 @@ class LocalizationDifferential : public LocalizationInterface
     /// @param x X coordinate (mm)
     /// @param y Y coordinate (mm)
     /// @param O angle (deg)
-    void set_pose(float x, float y, float O) override
-    {
-        pose_.set_x(x);
-        pose_.set_y(y);
-        pose_.set_O(O);
-    }
+    void set_pose(float x, float y, float O) override;
 
     /// @brief Set the default localization pose
     ///
@@ -49,12 +44,7 @@ class LocalizationDifferential : public LocalizationInterface
     /// default one
     ///
     /// @param pose postion reference
-    void set_pose(const cogip::cogip_defs::Pose& pose) override
-    {
-        pose_.set_x(pose.x());
-        pose_.set_y(pose.y());
-        pose_.set_O(pose.O());
-    }
+    void set_pose(const cogip::cogip_defs::Pose& pose) override;
 
     /// @brief Get current pose using cogip def format
     /// @note Data units:

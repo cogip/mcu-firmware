@@ -78,15 +78,7 @@ class Pose : public Coords
         pose.set_O(O_);
     };
 
-    Polar operator-(const Pose& p)
-    {
-        float error_x = x_ - p.x();
-        float error_y = y_ - p.y();
-
-        float error_O = limit_angle_rad(atan2(error_y, error_x) - DEG2RAD(p.O()));
-
-        return Polar(sqrt(square(error_x) + square(error_y)), RAD2DEG(error_O));
-    };
+    Polar operator-(const Pose& p);
 
   protected:
     float O_; ///< 0-orientation

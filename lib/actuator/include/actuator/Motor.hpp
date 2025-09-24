@@ -65,35 +65,19 @@ class Motor : public PositionalActuator
 
     /// @brief Return the target speed as a percentage of the maximum speed.
     /// @return Target speed (in %) relative to max speed.
-    float get_target_speed_percentage() const override
-    {
-        return params_.speed_filter_parameters.max_speed() == 0.0f
-                   ? 0.0f
-                   : (motor_engine_.target_speed() / params_.speed_filter_parameters.max_speed()) *
-                         100.0f;
-    }
+    float get_target_speed_percentage() const override;
 
     /// @brief Set the target speed as a percentage of the maximum speed.
     /// @param percentage Target speed (in %) relative to max speed.
-    void set_target_speed_percent(float percentage) override
-    {
-        motor_engine_.set_target_speed((percentage / 100.0f) *
-                                       params_.speed_filter_parameters.max_speed());
-    }
+    void set_target_speed_percent(float percentage) override;
 
     /// @brief Get the current measured distance.
     /// @return Current distance in mm.
-    float get_current_distance() const
-    {
-        return motor_engine_.get_current_distance_from_odometer();
-    }
+    float get_current_distance() const;
 
     /// @brief Manually override the current distance reading.
     /// @param distance New distance in mm.
-    void set_current_distance(float distance)
-    {
-        motor_engine_.set_current_distance_to_odometer(distance);
-    }
+    void set_current_distance(float distance);
 
   protected:
     /// Reference to the static parameter set.

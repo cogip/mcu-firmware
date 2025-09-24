@@ -70,11 +70,7 @@ class Actuator
     /// @brief Send actuator state on communication bus.
     ///
     /// If the callback is set, it invokes the callback with the actuator ID.
-    virtual void send_state(void)
-    {
-        if (send_state_cb_)
-            send_state_cb_(id_);
-    }
+    virtual void send_state(void);
 
   protected:
     /// Actuator ID

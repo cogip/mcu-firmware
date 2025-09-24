@@ -13,6 +13,20 @@ namespace cogip {
 
 namespace localization {
 
+void LocalizationDifferential::set_pose(float x, float y, float O)
+{
+    pose_.set_x(x);
+    pose_.set_y(y);
+    pose_.set_O(O);
+}
+
+void LocalizationDifferential::set_pose(const cogip::cogip_defs::Pose& pose)
+{
+    pose_.set_x(pose.x());
+    pose_.set_y(pose.y());
+    pose_.set_O(pose.O());
+}
+
 int LocalizationDifferential::update()
 {
     // Compute encoders wheels left and right linear delta in mm
