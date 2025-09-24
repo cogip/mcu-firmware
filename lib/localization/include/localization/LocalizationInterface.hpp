@@ -32,7 +32,7 @@ class LocalizationInterface
     /// @note this function should be called to reset robot pose and defined a new
     /// default one
     ///
-    /// @param pose postion reference
+    /// @param pose position reference
     virtual void set_pose(const cogip::cogip_defs::Pose& pose) = 0;
 
     /// @brief Get current pose using cogip def format
