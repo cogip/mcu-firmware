@@ -13,34 +13,37 @@
 #pragma once
 
 // Project includes
+#include "PassthroughPosePIDControllerIOKeys.hpp"
+#include "PassthroughPosePIDControllerParameters.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
-#include "PassthroughPosePIDControllerParameters.hpp"
-#include "PassthroughPosePIDControllerIOKeys.hpp"
 
 namespace cogip {
 
 namespace motion_control {
 
-/// @brief Pose PID controller: reads “position_error”, computes a “speed_order”,
+/// @brief Pose PID controller: reads “position_error”, computes a
+/// “speed_order”,
 ///        and writes “speed_order” + “target_speed” into ControllersIO.
 ///        Both the key names and the PID parameters are supplied by the caller.
-class PassthroughPosePIDController : public Controller<
-    PassthroughPosePIDControllerIOKeys,
-    PassthroughPosePIDControllerParameters> {
-public:
+class PassthroughPosePIDController
+    : public Controller<PassthroughPosePIDControllerIOKeys, PassthroughPosePIDControllerParameters>
+{
+  public:
     /// @brief Constructor.
     /// @param keys        Pointer to a POD containing the three key names.
     /// @param parameters  Reference to PID parameters.
-    explicit PassthroughPosePIDController(
-        const PassthroughPosePIDControllerIOKeys&       keys,
-        const PassthroughPosePIDControllerParameters&   parameters
-    )
-        : Controller<PassthroughPosePIDControllerIOKeys,
-                     PassthroughPosePIDControllerParameters>(keys, parameters) {}
+    explicit PassthroughPosePIDController(const PassthroughPosePIDControllerIOKeys& keys,
+                                          const PassthroughPosePIDControllerParameters& parameters)
+        : Controller<PassthroughPosePIDControllerIOKeys, PassthroughPosePIDControllerParameters>(
+              keys, parameters)
+    {
+    }
 
-    /// @brief Read “position_error” via keys_->position_error, compute speed order,
-    ///        and write “speed_order” + “target_speed” back via keys_->speed_order/target_speed.
+    /// @brief Read “position_error” via keys_->position_error, compute speed
+    /// order,
+    ///        and write “speed_order” + “target_speed” back via
+    ///        keys_->speed_order/target_speed.
     /// @param io Shared ControllersIO.
     void execute(ControllersIO& io) override;
 };

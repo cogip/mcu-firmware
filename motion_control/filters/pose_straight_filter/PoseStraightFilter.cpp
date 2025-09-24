@@ -1,15 +1,15 @@
 // System includes
-#include <cmath>
 #include "etl/absolute.h"
+#include <cmath>
 
 // Set log level for this file (only show state transitions - WARNING level)
 
 // Project includes
-#include "cogip_defs/Pose.hpp"
 #include "cogip_defs/Polar.hpp"
+#include "cogip_defs/Pose.hpp"
+#include "log.h"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "trigonometry.h"
-#include "log.h"
 
 #define ENABLE_DEBUG 0
 #include <debug.h>
@@ -26,24 +26,21 @@ void PoseStraightFilter::execute(ControllersIO& io)
     float current_pose_x = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_x)) {
         current_pose_x = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_pose_x.data(), current_pose_x);
     }
     float current_pose_y = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_y)) {
         current_pose_y = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_pose_y.data(), current_pose_y);
     }
     float current_pose_O = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_O)) {
         current_pose_O = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_pose_O.data(), current_pose_O);
     }
@@ -53,24 +50,21 @@ void PoseStraightFilter::execute(ControllersIO& io)
     float target_pose_x = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose_x)) {
         target_pose_x = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_pose_x.data(), target_pose_x);
     }
     float target_pose_y = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose_y)) {
         target_pose_y = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_pose_y.data(), target_pose_y);
     }
     float target_pose_O = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose_O)) {
         target_pose_O = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_pose_O.data(), target_pose_O);
     }
@@ -80,16 +74,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
     float curr_lin = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_linear_speed)) {
         curr_lin = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_linear_speed.data(), curr_lin);
     }
     float curr_ang = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_angular_speed)) {
         curr_ang = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.current_angular_speed.data(), curr_ang);
     }
@@ -99,16 +91,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
     float target_pose_lin = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_linear_speed)) {
         target_pose_lin = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_linear_speed.data(), target_pose_lin);
     }
     float target_pose_ang = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_angular_speed)) {
         target_pose_ang = *opt;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.target_angular_speed.data(), target_pose_ang);
     }
@@ -118,8 +108,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
     bool allow_rev = false;
     if (auto opt = io.get_as<bool>(keys_.allow_reverse)) {
         allow_rev = static_cast<bool>(*opt);
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value false",
                     keys_.allow_reverse.data());
     }
@@ -128,10 +117,8 @@ void PoseStraightFilter::execute(ControllersIO& io)
     static bool force_rev = false;
     static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
 
-    if ((target_pose_x != prev_target.x()) ||
-        (target_pose_y != prev_target.y()) ||
-        (target_pose_O != prev_target.O()))
-    {
+    if ((target_pose_x != prev_target.x()) || (target_pose_y != prev_target.y()) ||
+        (target_pose_O != prev_target.O())) {
         force_rev = false;
         prev_target = target_pose;
     }
@@ -159,56 +146,58 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     // State transitions
     if ((current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION) &&
-        (absolute_linear_pose_error <= linear_threshold))
-    {
+        (absolute_linear_pose_error <= linear_threshold)) {
         current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
     }
 
     switch (current_state_) {
-        case PoseStraightFilterState::ROTATE_TO_DIRECTION:
-            DEBUG("ROTATE_TO_DIRECTION");
-            if (absolute_angular_pose_error > angular_intermediate_threshold) {
-                target_speed.set_distance(0.0f);
-            } else {
-                target_speed.set_distance(pos_err.distance() >= 0 ? 1.0f : -1.0f); // forward motion sign
-                force_rev = true;
-                current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
-            }
-            break;
-
-        case PoseStraightFilterState::MOVE_TO_POSITION:
-            DEBUG("MOVE_TO_POSITION");
-            if (absolute_linear_pose_error <= linear_threshold) {
-                current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
-            }
-            break;
-
-        case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
-            DEBUG("ROTATE_TO_FINAL_ANGLE");
-            if (!parameters_.bypass_final_orientation()) {
-                pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
-            } else {
-                pos_err.set_angle(0.0f);
-            }
+    case PoseStraightFilterState::ROTATE_TO_DIRECTION:
+        DEBUG("ROTATE_TO_DIRECTION");
+        if (absolute_angular_pose_error > angular_intermediate_threshold) {
             target_speed.set_distance(0.0f);
-            if (etl::absolute(pos_err.angle()) <= angular_threshold) {
-                current_state_ = PoseStraightFilterState::FINISHED;
-            }
-            break;
+        } else {
+            target_speed.set_distance(pos_err.distance() >= 0 ? 1.0f
+                                                              : -1.0f); // forward motion sign
+            force_rev = true;
+            current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
+        }
+        break;
 
-        case PoseStraightFilterState::FINISHED:
-            DEBUG("FINISHED");
-            target_speed.set_distance(0.0f);
-            target_speed.set_angle(0.0f);
-            break;
+    case PoseStraightFilterState::MOVE_TO_POSITION:
+        DEBUG("MOVE_TO_POSITION");
+        if (absolute_linear_pose_error <= linear_threshold) {
+            current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+        }
+        break;
+
+    case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
+        DEBUG("ROTATE_TO_FINAL_ANGLE");
+        if (!parameters_.bypass_final_orientation()) {
+            pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
+        } else {
+            pos_err.set_angle(0.0f);
+        }
+        target_speed.set_distance(0.0f);
+        if (etl::absolute(pos_err.angle()) <= angular_threshold) {
+            current_state_ = PoseStraightFilterState::FINISHED;
+        }
+        break;
+
+    case PoseStraightFilterState::FINISHED:
+        DEBUG("FINISHED");
+        target_speed.set_distance(0.0f);
+        target_speed.set_angle(0.0f);
+        break;
     }
 
     // Apply deceleration rules if needed
     if (absolute_linear_pose_error <= ((curr_lin * curr_lin) / (2.0f * linear_deceleration))) {
-        target_speed.set_distance(std::sqrt(2.0f * linear_deceleration * absolute_linear_pose_error));
+        target_speed.set_distance(
+            std::sqrt(2.0f * linear_deceleration * absolute_linear_pose_error));
     }
     if (absolute_angular_pose_error <= ((curr_ang * curr_ang) / (2.0f * angular_deceleration))) {
-        target_speed.set_angle(std::sqrt(2.0f * angular_deceleration * absolute_angular_pose_error));
+        target_speed.set_angle(
+            std::sqrt(2.0f * angular_deceleration * absolute_angular_pose_error));
     }
 
     // Write linear pose error
@@ -237,11 +226,11 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     // Write updated pose reached status
     target_pose_status_t reached = (current_state_ == PoseStraightFilterState::FINISHED)
-                                   ? target_pose_status_t::reached
-                                   : target_pose_status_t::moving;
+                                       ? target_pose_status_t::reached
+                                       : target_pose_status_t::moving;
     io.set(keys_.pose_reached, reached);
 }
 
-}  // namespace motion_control
+} // namespace motion_control
 
-}  // namespace cogip
+} // namespace cogip

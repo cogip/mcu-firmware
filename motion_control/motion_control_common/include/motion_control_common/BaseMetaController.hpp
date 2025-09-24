@@ -18,24 +18,26 @@ namespace cogip {
 
 namespace motion_control {
 
-/// Base class for meta controllers. Meta controllers are controllers containers to execute them in chain.
-class BaseMetaController : virtual public BaseController {
-public:
+/// Base class for meta controllers. Meta controllers are controllers containers
+/// to execute them in chain.
+class BaseMetaController : virtual public BaseController
+{
+  public:
     /// Add a controller to the beginning of the controllers chain.
     /// @param controller Controller to add
     /// @return 0 on success, negative code otherwise
-    virtual int prepend_controller(BaseController *controller) = 0;
+    virtual int prepend_controller(BaseController* controller) = 0;
 
     /// Add a controller to the end of the controllers chain.
     /// @param controller Controller to add
     /// @return 0 on success, negative code otherwise
-    virtual int add_controller(BaseController *controller) = 0;
+    virtual int add_controller(BaseController* controller) = 0;
 
     /// Replace a controller at a given index of the controllers chain.
     /// @param index place of the controller in the queue
     /// @param controller New controller
     /// @return 0 on success, negative code otherwise
-    virtual int replace_controller(uint32_t index, BaseController *controller) = 0;
+    virtual int replace_controller(uint32_t index, BaseController* controller) = 0;
 };
 
 } // namespace motion_control

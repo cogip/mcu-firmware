@@ -11,9 +11,9 @@ namespace cogip {
 
 namespace encoder {
 
-class EncoderQDEC : public EncoderInterface {
-public:
-
+class EncoderQDEC : public EncoderInterface
+{
+  public:
     ///
     /// @brief Construct a new Encoder object
     /// @note Encoder pulse per revolution must be set according to chosen mode
@@ -24,57 +24,37 @@ public:
     /// @param mode
     /// @param pulse_per_rev
     ///
-    explicit EncoderQDEC(uint8_t id, EncoderMode mode, int32_t pulse_per_rev): EncoderInterface(mode, pulse_per_rev), id_(id) {}
+    explicit EncoderQDEC(uint8_t id, EncoderMode mode, int32_t pulse_per_rev)
+        : EncoderInterface(mode, pulse_per_rev), id_(id)
+    {
+    }
 
     ///
     /// @brief Setup encoder
     ///
     /// @return int negative on error. 0 on succes
     ///
-    int init() override
-    {
-        qdec_t qdec;
-        qdec_mode_t qdec_mode;
-
-        qdec = QDEC_DEV(id_);
-
-        switch (mode_) {
-        case EncoderMode::ENCODER_MODE_X1:
-            qdec_mode = QDEC_X1;
-            break;
-        case EncoderMode::ENCODER_MODE_X2:
-            qdec_mode = QDEC_X2;
-            break;
-        case EncoderMode::ENCODER_MODE_X4:
-            qdec_mode = QDEC_X4;
-            break;
-        default:
-            return -1;
-        }
-
-        /* Setup QDEC peripheral */
-        return qdec_init(qdec, qdec_mode, NULL, NULL);;
-    }
+    int init() override;
 
     ///
     /// @brief Get the pulses counted by the encoder since the last call.
     ///
     /// @return int32_t counter value in ticks
     ///
-    int32_t read_and_reset() override { return qdec_read_and_reset(id_); }
+    int32_t read_and_reset() override;
 
     ///
     /// @brief Reset encoder counter
     ///
     ///
-    void reset() override { (void)read_and_reset(); };
+    void reset() override;
 
-private:
+  private:
     uint8_t id_;
 };
 
-} /// namespace encoder
+} // namespace encoder
 
-} /// namespace cogip
+} // namespace cogip
 
 /// @}

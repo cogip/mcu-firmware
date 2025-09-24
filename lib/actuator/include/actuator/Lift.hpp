@@ -21,10 +21,12 @@ namespace positional_actuators {
 
 /// @brief  Vertical lift actuator built on top of the generic Motor class.
 /// @details
-///   Uses a static configuration (LiftParameters) to control upward and downward motion,
-///   handle limit switches, and provide stop functionality specific to a robot elevator.
-class Lift : public Motor {
-public:
+///   Uses a static configuration (LiftParameters) to control upward and
+///   downward motion, handle limit switches, and provide stop functionality
+///   specific to a robot elevator.
+class Lift : public Motor
+{
+  public:
     /// @brief Construct a Lift actuator from its configuration parameters.
     /// @param params Reference to a static LiftParameters instance containing
     ///               both MotorParameters and lift-specific speed settings.
@@ -44,7 +46,7 @@ public:
     /// @param pin GPIO pin identifier for the triggered limit switch.
     void at_limits(gpio_t pin);
 
-private:
+  private:
     /// Reference to the static configuration parameters for this lift actuator.
     const LiftParameters& params_;
 

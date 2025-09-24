@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cmath>
 #include "etl/math_constants.h"
+#include <cmath>
 
 #ifndef M_PI
-#define M_PI   3.14159265358979323846  /* pi */
+#define M_PI 3.14159265358979323846 /* pi */
 #endif
 
 #define square(__x) (__x * __x)
@@ -16,7 +16,8 @@
 extern "C" {
 #endif
 
-/// @brief Periodic boundary condition using modulus in order to map periodic values
+/// @brief Periodic boundary condition using modulus in order to map periodic
+/// values
 ///
 /// @note This can be used in oder to map value inside one interval.
 ///
@@ -25,7 +26,7 @@ extern "C" {
 /// @return
 inline float periodicmod(float x, float y)
 {
-    return fmod(fmod(x, y) + y, y);  // ((x % y) + y) % y
+    return fmod(fmod(x, y) + y, y); // ((x % y) + y) % y
 }
 
 /// @brief Map input value to the given range

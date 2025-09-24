@@ -10,7 +10,8 @@
 /// @defgroup    sys_sysmon System monitoring
 /// @ingroup     sys
 /// @brief       System monitoring module
-///              Module used to monitor memory (thread stacks, heap and overall).
+///              Module used to monitor memory (thread stacks, heap and
+///              overall).
 ///
 /// @{
 /// @file
@@ -36,44 +37,60 @@ namespace cogip {
 namespace sysmon {
 
 /// Base template class for status classes with protobuf messages
-template<typename PBMessageType>
-class StatusBase {
-public:
+template <typename PBMessageType> class StatusBase
+{
+  public:
     using PB_Message = PBMessageType;
 
     /// Return the Protobuf message.
-    const PB_Message &pb_message() const { return pb_message_; }
+    const PB_Message& pb_message() const
+    {
+        return pb_message_;
+    }
     /// Update Protobuf message
     virtual void update_pb_message() = 0;
 
     /// Virtual destructor for proper inheritance
     virtual ~StatusBase() = default;
 
-protected:
+  protected:
     PB_Message pb_message_;
 };
 
-class MemoryStatus : public StatusBase<PB_MemoryStatus> {
+class MemoryStatus : public StatusBase<PB_MemoryStatus>
+{
 
-    public:
-        MemoryStatus();
-        /// Get memory total size in bytes
-        std::size_t size() const { return size_; };
-        /// Get memory used size in bytes
-        std::size_t used() const { return used_; };
-        /// Set memory total size in bytes
-        void set_size(const std::size_t size) { size_ = size; };
-        /// Set memory used size in bytes
-        void set_used(const std::size_t used) { used_ = used; };
+  public:
+    MemoryStatus();
+    /// Get memory total size in bytes
+    std::size_t size() const
+    {
+        return size_;
+    };
+    /// Get memory used size in bytes
+    std::size_t used() const
+    {
+        return used_;
+    };
+    /// Set memory total size in bytes
+    void set_size(const std::size_t size)
+    {
+        size_ = size;
+    };
+    /// Set memory used size in bytes
+    void set_used(const std::size_t used)
+    {
+        used_ = used;
+    };
 
-        /// Update Protobuf message
-        void update_pb_message() override;
+    /// Update Protobuf message
+    void update_pb_message() override;
 
-    private:
-        /// Memory total size in bytes
-        std::size_t size_;
-        /// Memory used size in bytes
-        std::size_t used_;
+  private:
+    /// Memory total size in bytes
+    std::size_t size_;
+    /// Memory used size in bytes
+    std::size_t used_;
 };
 
 } // namespace sysmon

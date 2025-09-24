@@ -27,13 +27,14 @@ namespace motion_control {
 class BaseMetaController;
 
 /// All controllers, filters and metas inherit from this class
-class BaseController {
-public:
+class BaseController
+{
+  public:
     /// Constructor
-    BaseController() : meta_(nullptr) {};
+    BaseController() : meta_(nullptr){};
 
     /// Destructor
-    virtual ~BaseController() {};
+    virtual ~BaseController(){};
 
     /// Controller core method
     /// @param io Controllers input/output datas shared accross controllers
@@ -41,17 +42,19 @@ public:
 
     /// Get meta controller to which current controller belongs to
     /// return Meta controller
-    BaseMetaController *meta() const { return meta_; };
+    BaseMetaController* meta() const
+    {
+        return meta_;
+    };
 
     /// Set meta controller to which current controller belongs to
     /// return true if set, false otherwise
-    virtual bool set_meta(
-        BaseMetaController *meta    ///< [in]  meta controller
-        );
+    virtual bool set_meta(BaseMetaController* meta ///< [in]  meta controller
+    );
 
-private:
+  private:
     /// Meta controller to which current controller belongs to
-    BaseMetaController *meta_;
+    BaseMetaController* meta_;
 };
 
 } // namespace motion_control

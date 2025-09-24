@@ -10,7 +10,8 @@ namespace cogip {
 
 namespace sysmon {
 
-void ThreadStatus::update_pb_message() {
+void ThreadStatus::update_pb_message()
+{
     stack_status_.update_pb_message();
     pb_message_.mutable_stack_status() = stack_status_.pb_message();
 

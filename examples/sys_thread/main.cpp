@@ -1,6 +1,6 @@
 // System includes
-#include <cstdio>
 #include "log.h"
+#include <cstdio>
 #include <inttypes.h>
 
 // RIOT includes
@@ -15,7 +15,7 @@
 #endif
 
 // Periodic task
-#define TASK_PERIOD_SEC    (1)
+#define TASK_PERIOD_SEC (1)
 
 // Thread stack
 static char _thread_buggy_stack[THREAD_STACKSIZE_SMALL];
@@ -24,7 +24,7 @@ cogip::canpb::CanProtobuf canpb(0);
 // canpb default filter
 struct can_filter canpb_filter = {0x0, 0x0};
 
-static int cmd_display_heap_status(int argc, char **argv)
+static int cmd_display_heap_status(int argc, char** argv)
 {
     (void)argc;
     (void)argv;
@@ -34,7 +34,7 @@ static int cmd_display_heap_status(int argc, char **argv)
     return 0;
 }
 
-static int cmd_display_threads_status(int argc, char **argv)
+static int cmd_display_threads_status(int argc, char** argv)
 {
     (void)argc;
     (void)argv;
@@ -45,12 +45,11 @@ static int cmd_display_threads_status(int argc, char **argv)
 }
 
 static const shell_command_t shell_commands[] = {
-    { "heap_status", "Display heap memory status", cmd_display_heap_status },
-    { "threads_status", "Display threads status", cmd_display_threads_status },
-    { NULL, NULL, NULL }
-};
+    {"heap_status", "Display heap memory status", cmd_display_heap_status},
+    {"threads_status", "Display threads status", cmd_display_threads_status},
+    {NULL, NULL, NULL}};
 
-static void *_thread_buggy(void *data)
+static void* _thread_buggy(void* data)
 {
     (void)data;
 
@@ -69,15 +68,8 @@ static void *_thread_buggy(void *data)
 
 static void thread_buggy_start(void)
 {
-    thread_create(
-        _thread_buggy_stack,
-        sizeof(_thread_buggy_stack),
-        THREAD_PRIORITY_MAIN - 1,
-        THREAD_CREATE_STACKTEST,
-        _thread_buggy,
-        NULL,
-        "Buggy thread"
-        );
+    thread_create(_thread_buggy_stack, sizeof(_thread_buggy_stack), THREAD_PRIORITY_MAIN - 1,
+                  THREAD_CREATE_STACKTEST, _thread_buggy, NULL, "Buggy thread");
 }
 
 int main(void)
@@ -85,7 +77,7 @@ int main(void)
     LOG_INFO("== System thread monitoring example ==\n");
 
     bool res = canpb.init(&canpb_filter);
-    if (! res) {
+    if (!res) {
         LOG_ERROR("CAN initialization status: %d\n", res);
         exit(1);
     }

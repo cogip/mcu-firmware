@@ -17,7 +17,7 @@ namespace cogip {
 
 namespace thread {
 
-void thread_ztimer_periodic_wakeup(ztimer_clock_t *clock, uint32_t *last_wakeup, uint32_t period)
+void thread_ztimer_periodic_wakeup(ztimer_clock_t* clock, uint32_t* last_wakeup, uint32_t period)
 {
     unsigned state = irq_disable();
     uint32_t now = ztimer_now(clock);
@@ -33,8 +33,7 @@ void thread_ztimer_periodic_wakeup(ztimer_clock_t *clock, uint32_t *last_wakeup,
     if (now <= target) {
         ztimer_sleep(clock, (uint32_t)offset);
         *last_wakeup = target;
-    }
-    else {
+    } else {
         *last_wakeup = now;
 #ifdef MODULE_SYSMON
         has_overshot = true;

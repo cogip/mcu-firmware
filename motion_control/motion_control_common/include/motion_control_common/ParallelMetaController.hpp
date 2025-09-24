@@ -20,19 +20,21 @@
 
 // Project includes
 #include "ControllersIO.hpp"
-#include "etl/deque.h"
 #include "MetaController.hpp"
+#include "etl/deque.h"
 
 namespace cogip {
 namespace motion_control {
 
-/// @brief Runs multiple sub-controllers “in parallel” using the same ControllersIO.
-/// @details If any ParamKey gets written by ≥2 top‐level controllers, prints a warning.
+/// @brief Runs multiple sub-controllers “in parallel” using the same
+/// ControllersIO.
+/// @details If any ParamKey gets written by ≥2 top‐level controllers, prints a
+/// warning.
 /// @tparam NB_CONTROLLERS Maximum number of sub-controllers.
 template <size_t NB_CONTROLLERS>
 class ParallelMetaController : public MetaController<NB_CONTROLLERS>
 {
-public:
+  public:
     /// @brief Execute all sub-controllers on the same `io`.
     ///        Detects and warns if the same key is modified by ≥2 controllers.
     /// @param io Shared ControllersIO instance.
@@ -60,11 +62,13 @@ public:
             // Compute difference after/before on inputs/outputs via static helper
             auto just_written = ControllersIO::difference(after_io, before_io);
 
-            // Detect collisions, parallel controllers should not modify the same entry
-            // in the inputs/outputs map
+            // Detect collisions, parallel controllers should not modify the same
+            // entry in the inputs/outputs map
             auto collisions = ControllersIO::find_collisions(just_written, cumulative_written);
             for (auto h : collisions) {
-                LOG_WARNING("Key hash %" PRIu32 " was already written by another parallel controller", static_cast<uint32_t>(h));
+                LOG_WARNING("Key hash %" PRIu32
+                            " was already written by another parallel controller",
+                            static_cast<uint32_t>(h));
             }
 
             // Merge

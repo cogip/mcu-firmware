@@ -8,8 +8,8 @@
 #include "etl/list.h"
 #include "etl/vector.h"
 
-#include "pose_pid_controller/PosePIDController.hpp"
 #include "log.h"
+#include "pose_pid_controller/PosePIDController.hpp"
 
 #define ENABLE_DEBUG 0
 #include <debug.h>
@@ -26,8 +26,7 @@ void PosePIDController::execute(ControllersIO& io)
     float position_error = 0.0f;
     if (auto opt_err = io.get_as<float>(keys_.position_error)) {
         position_error = *opt_err;
-    }
-    else {
+    } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f",
                     keys_.position_error.data(), position_error);
     }

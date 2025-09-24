@@ -18,62 +18,73 @@ namespace cogip {
 namespace cogip_defs {
 
 /// Absolute coordinates along X and Y axis
-class Coords {
-public:
+class Coords
+{
+  public:
     /// Constructor.
-    explicit Coords(
-        float x=0.0,       ///< [in] X coordinate
-        float y=0.0        ///< [in] Y coordinate
-        ) : x_(x), y_(y) {};
+    explicit Coords(float x = 0.0, ///< [in] X coordinate
+                    float y = 0.0  ///< [in] Y coordinate
+                    )
+        : x_(x), y_(y){};
 
     /// Constructor from Protobuf class
-    explicit Coords(const PB_Coords &coords) : x_(coords.get_x()), y_(coords.get_y()) {};
+    explicit Coords(const PB_Coords& coords) : x_(coords.get_x()), y_(coords.get_y()){};
 
     /// Return X coordinate.
-    float x(void) const { return x_; };
+    float x(void) const
+    {
+        return x_;
+    };
 
     /// Return Y coordinate.
-    float y(void) const { return y_; };
+    float y(void) const
+    {
+        return y_;
+    };
 
     /// Set X coordinate.
-    void set_x(
-        float x            ///< [in] new X coordinate
-        ) { x_ = x; };
+    void set_x(float x ///< [in] new X coordinate
+    )
+    {
+        x_ = x;
+    };
 
     /// Set Y coordinate.
-    void set_y(
-        float y            ///< [in] new Y coordinate
-        ) { y_ = y; };
+    void set_y(float y ///< [in] new Y coordinate
+    )
+    {
+        y_ = y;
+    };
 
     /// Compute the distance the destination point.
-    float distance(
-        const Coords &dest  ///< [in] destination
-        ) const;
+    float distance(const Coords& dest ///< [in] destination
+    ) const;
 
     /// Check if this point is placed on a segment defined by two points A,B.
     /// @return true if on [AB], false otherwise
-    bool on_segment(
-        const Coords &a,    ///< [in] point A
-        const Coords &b     ///< [in] point A
-        ) const;
+    bool on_segment(const Coords& a, ///< [in] point A
+                    const Coords& b  ///< [in] point A
+    ) const;
 
     /// Check if this point is equal to another.
     /// @return true if points are equal, false otherwise
-    bool operator == (
-        const Coords other  ///< [in] point to compare
-        ) const { return x_ == other.x_ && y_ == other.y_; };
+    bool operator==(const Coords other ///< [in] point to compare
+    ) const
+    {
+        return x_ == other.x_ && y_ == other.y_;
+    };
 
     /// Copy data to Protobuf message.
-    void pb_copy(
-        PB_Coords &coords   ///< [out] Protobuf message to fill
-        ) const {
+    void pb_copy(PB_Coords& coords ///< [out] Protobuf message to fill
+    ) const
+    {
         coords.set_x(x_);
         coords.set_y(y_);
     };
 
-protected:
-    float x_;              ///< x-position
-    float y_;              ///< y-position
+  protected:
+    float x_; ///< x-position
+    float y_; ///< y-position
 };
 
 } // namespace cogip_defs

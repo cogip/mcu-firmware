@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "OdometerInterface.hpp"
 #include "OdometerEncoderParameters.hpp"
+#include "OdometerInterface.hpp"
 #include "encoder/EncoderInterface.hpp"
 
 namespace cogip {
@@ -16,8 +16,9 @@ namespace localization {
 /// @details
 ///   Implements @ref OdometerInterface: accumulates distance in millimeters
 ///   and reports the incremental delta on each update().
-class OdometerEncoder : public OdometerInterface {
-public:
+class OdometerEncoder : public OdometerInterface
+{
+  public:
     /// @brief Construct a new OdometerEncoder.
     /// @param parameters   Static configuration (conversion factor).
     /// @param encoder      Hardware encoder (must implement read-and-reset).
@@ -39,7 +40,7 @@ public:
     /// @copydoc OdometerInterface::update()
     int update() override;
 
-private:
+  private:
     /// @brief Conversion factor storage
     const OdometerEncoderParameters& params_;
 
@@ -47,10 +48,10 @@ private:
     cogip::encoder::EncoderInterface& encoder_;
 
     /// @brief Total accumulated distance (mm)
-    float distance_mm_  = 0.0f;
+    float distance_mm_ = 0.0f;
 
     /// @brief Distance increment from last update (mm)
-    float delta_mm_     = 0.0f;
+    float delta_mm_ = 0.0f;
 };
 
 } // namespace localization

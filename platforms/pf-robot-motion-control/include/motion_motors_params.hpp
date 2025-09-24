@@ -18,17 +18,16 @@ namespace motion_control {
  *
  * @param[in] motor_driver      motor driver to which motor is attached
  * @param[in] motor_id          motor ID on driver
- * @param[in] pwm_duty_cycle    Signed PWM duty_cycle to set motor speed and direction
+ * @param[in] pwm_duty_cycle    Signed PWM duty_cycle to set motor speed and
+ * direction
  *
  * @return                      0 on success
  */
-void cogip_native_motor_driver_qdec_simulation(
-    const motor_driver_t *motor_driver, uint8_t motor_id,
-    int32_t pwm_duty_cycle);
+void cogip_native_motor_driver_qdec_simulation(const motor_driver_t* motor_driver, uint8_t motor_id,
+                                               int32_t pwm_duty_cycle);
 
 /// Motion control motors
-static const motor_driver_params_t motion_motors_params =
-{
+static const motor_driver_params_t motion_motors_params = {
     .mode = MOTOR_DRIVER_1_DIR_BRAKE,
     .pwm_dev = 0,
     .pwm_mode = PWM_LEFT,
@@ -37,26 +36,26 @@ static const motor_driver_params_t motion_motors_params =
     .brake_inverted = true,
     .enable_inverted = false,
     .nb_motors = 2,
-    .motors = {
-        // Left motor
+    .motors =
         {
-            .pwm_channel = 0,
-            .gpio_enable = GPIO_PIN(PORT_A, 10),
-            .gpio_dir0 = GPIO_PIN(PORT_C, 6),
-            .gpio_brake = GPIO_PIN(PORT_C, 8),
-            .gpio_dir_reverse = 1,
+            // Left motor
+            {
+                .pwm_channel = 0,
+                .gpio_enable = GPIO_PIN(PORT_A, 10),
+                .gpio_dir0 = GPIO_PIN(PORT_C, 6),
+                .gpio_brake = GPIO_PIN(PORT_C, 8),
+                .gpio_dir_reverse = 1,
+            },
+            // Right motor
+            {
+                .pwm_channel = 1,
+                .gpio_enable = GPIO_PIN(PORT_B, 1),
+                .gpio_dir0 = GPIO_PIN(PORT_B, 10),
+                .gpio_brake = GPIO_PIN(PORT_B, 2),
+                .gpio_dir_reverse = 0,
+            },
         },
-        // Right motor
-        {
-            .pwm_channel = 1,
-            .gpio_enable = GPIO_PIN(PORT_B, 1),
-            .gpio_dir0 = GPIO_PIN(PORT_B, 10),
-            .gpio_brake = GPIO_PIN(PORT_B, 2),
-            .gpio_dir_reverse = 0,
-        },
-    },
-    .motor_set_post_cb = MOTION_MOTORS_POST_CB
-};
+    .motor_set_post_cb = MOTION_MOTORS_POST_CB};
 
 } // namespace motion_control
 

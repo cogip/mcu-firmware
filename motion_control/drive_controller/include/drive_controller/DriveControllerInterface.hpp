@@ -14,17 +14,16 @@ namespace cogip {
 
 namespace drive_controller {
 
-class DriveControllerInterface {
-public:
+class DriveControllerInterface
+{
+  public:
     /// @brief Virtual destructor
-    ~DriveControllerInterface()
-    {
-    }
+    ~DriveControllerInterface() {}
 
     /// @brief Set polar velocity command
     /// @param command polar velocity command reference
     /// @return  0 on success, negative on error
-    virtual int set_polar_velocity(cogip_defs::Polar &command) = 0;
+    virtual int set_polar_velocity(cogip_defs::Polar& command) = 0;
 };
 
 } // namespace drive_controller

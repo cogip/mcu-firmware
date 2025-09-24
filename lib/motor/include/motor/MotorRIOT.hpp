@@ -1,17 +1,16 @@
 #pragma once
 
-#include "motor/MotorInterface.hpp"
 #include "motor/MotorDriverDRV8873.hpp"
+#include "motor/MotorInterface.hpp"
 
 namespace cogip {
 
 namespace motor {
 
-class MotorRIOT: public MotorInterface {
-public:
-    MotorRIOT(MotorDriverRIOT& driver, int id): driver_(driver), id_(id)
-    {
-    }
+class MotorRIOT : public MotorInterface
+{
+  public:
+    MotorRIOT(MotorDriverRIOT& driver, int id) : driver_(driver), id_(id) {}
 
     /// @brief Init the motor and its driver
     /// @return 0 on success, negative on error
@@ -49,8 +48,8 @@ public:
         return driver_.brake(id_);
     }
 
-private:
-    MotorDriverRIOT &driver_;
+  private:
+    MotorDriverRIOT& driver_;
     int id_;
 };
 

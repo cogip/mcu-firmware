@@ -18,17 +18,18 @@ namespace cogip {
 namespace motion_control {
 
 /// @brief Bundle of ControllersIO key names for a PosePIDController.
-struct PosePIDControllerIOKeys {
-    etl::string_view position_error;   ///< e.g. "pose_error"
-    etl::string_view current_speed;    ///< e.g. "current_speed"
-    etl::string_view target_speed;     ///< e.g. "target_speed"
-    etl::string_view disable_filter;   ///< e.g. "disable_speed_filter"
-    etl::string_view pose_reached;     ///< e.g. "pose_reached"
-    etl::string_view speed_order;      ///< e.g. "speed_order"
+struct PosePIDControllerIOKeys
+{
+    etl::string_view position_error; ///< e.g. "pose_error"
+    etl::string_view current_speed;  ///< e.g. "current_speed"
+    etl::string_view target_speed;   ///< e.g. "target_speed"
+    etl::string_view disable_filter; ///< e.g. "disable_speed_filter"
+    etl::string_view pose_reached;   ///< e.g. "pose_reached"
+    etl::string_view speed_order;    ///< e.g. "speed_order"
 };
 
-}  // namespace motion_control
+} // namespace motion_control
 
-}  // namespace cogip
+} // namespace cogip
 
 /// @}

@@ -19,25 +19,27 @@
 #include <debug.h>
 
 // Project includes
+#include "BaseMetaController.hpp"
 #include "ControllersIO.hpp"
 #include "etl/deque.h"
-#include "BaseMetaController.hpp"
 
 namespace cogip {
 namespace motion_control {
 
-/// @brief Container of sub-controllers executed in sequence, sharing a single ControllersIO.
+/// @brief Container of sub-controllers executed in sequence, sharing a single
+/// ControllersIO.
 ///
-/// Each sub-controller’s execute(ControllersIO& io) is called in order, using the same
-/// ControllersIO instance. No checks on input/output sizes are performed—it's up to the
-/// sub-controllers (and the engine) to agree on which keys to read/write.
+/// Each sub-controller’s execute(ControllersIO& io) is called in order, using
+/// the same ControllersIO instance. No checks on input/output sizes are
+/// performed—it's up to the sub-controllers (and the engine) to agree on which
+/// keys to read/write.
 ///
 /// @tparam NB_CONTROLLERS Maximum number of controllers in the chain.
-template <size_t NB_CONTROLLERS>
-class MetaController : public BaseMetaController
+template <size_t NB_CONTROLLERS> class MetaController : public BaseMetaController
 {
-public:
-    /// @brief Run every controller in the chain, passing along the same ControllersIO.
+  public:
+    /// @brief Run every controller in the chain, passing along the same
+    /// ControllersIO.
     /// @param io Shared IO object containing inputs/outputs for all controllers.
     void execute(ControllersIO& io) override
     {
@@ -46,14 +48,14 @@ public:
             return;
         }
 
-        DEBUG("Execute MetaController of %" PRIu32 " controllers", static_cast<uint32_t>(controllers_.size()));
+        DEBUG("Execute MetaController of %" PRIu32 " controllers",
+              static_cast<uint32_t>(controllers_.size()));
 
         size_t index = 0;
         for (auto* controller : controllers_) {
             if (!controller) {
                 LOG_ERROR("controllers_[%" PRIu32 "] is nullptr!", static_cast<uint32_t>(index));
-            }
-            else {
+            } else {
                 controller->execute(io);
             }
             index++;
@@ -110,10 +112,9 @@ public:
     /// @param index    Position in the chain to replace.
     /// @param controller New Controller
     /// @return 0 on success, negative code otherwise
-    int replace_controller(
-        uint32_t index,             ///< [in] Index of controller to replace
-        BaseController* new_controller    ///< [in] Replacement controller
-    ) override
+    int replace_controller(uint32_t index,                ///< [in] Index of controller to replace
+                           BaseController* new_controller ///< [in] Replacement controller
+                           ) override
     {
         if (index >= controllers_.size()) {
             return -ERANGE;
@@ -138,7 +139,7 @@ public:
         return 0;
     }
 
-protected:
+  protected:
     etl::deque<BaseController*, NB_CONTROLLERS> controllers_;
 };
 

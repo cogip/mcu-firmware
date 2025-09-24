@@ -6,7 +6,8 @@
 /// @ingroup    polar_parallel_meta_controller
 /// @{
 /// @file
-/// @brief      Run 2 (meta-)controllers, one for linear control, one for angular control
+/// @brief      Run 2 (meta-)controllers, one for linear control, one for
+/// angular control
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
@@ -23,7 +24,9 @@ namespace motion_control {
 ///
 /// This class executes two dual PID controllers (position and speed)
 /// pseudo simultaneously for controlling both linear and angular motion.
-class PolarParallelMetaController : public ParallelMetaController<2> {};
+class PolarParallelMetaController : public ParallelMetaController<2>
+{
+};
 
 } // namespace motion_control
 

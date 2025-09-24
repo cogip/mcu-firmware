@@ -17,25 +17,31 @@ namespace cogip {
 namespace motion_control {
 
 /// Movements switch thresholds
-class MotorPoseFilterParameters {
-public:
+class MotorPoseFilterParameters
+{
+  public:
     /// Constructor
     explicit MotorPoseFilterParameters(
         float threshold = 0.0,   ///< [in]  see linear_threshold_
-        float deceleration = 0.0    ///< [in]  see linear_deceleration_threshold_
-    ) :
-    threshold_(threshold),
-    deceleration_(deceleration) {};
+        float deceleration = 0.0 ///< [in]  see linear_deceleration_threshold_
+        )
+        : threshold_(threshold), deceleration_(deceleration){};
 
     /// Get threshold
     /// return threshold
-    float threshold() const { return threshold_; };
+    float threshold() const
+    {
+        return threshold_;
+    };
 
     /// Get deceleration
     /// return deceleration
-    float deceleration() const { return deceleration_; };
+    float deceleration() const
+    {
+        return deceleration_;
+    };
 
-private:
+  private:
     /// the motor has reach the pose when the error is lower than this threshold
     float threshold_;
 

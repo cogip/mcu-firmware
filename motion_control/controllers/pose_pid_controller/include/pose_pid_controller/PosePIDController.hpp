@@ -13,10 +13,10 @@
 #pragma once
 
 // Project includes
+#include "PosePIDControllerIOKeys.hpp"
+#include "PosePIDControllerParameters.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
-#include "PosePIDControllerParameters.hpp"
-#include "PosePIDControllerIOKeys.hpp"
 
 namespace cogip {
 
@@ -24,17 +24,14 @@ namespace motion_control {
 
 /// @brief Pose PID controller.
 ///        Reads “position_error” and computes “speed_order” via PID.
-class PosePIDController
-    : public Controller<PosePIDControllerIOKeys, PosePIDControllerParameters>
+class PosePIDController : public Controller<PosePIDControllerIOKeys, PosePIDControllerParameters>
 {
-public:
+  public:
     /// @brief Constructor
     /// @param keys       Reference to a POD containing all controller keys.
     /// @param parameters Reference to PID parameters.
-    explicit PosePIDController(
-        const PosePIDControllerIOKeys&         keys,
-        const PosePIDControllerParameters&     parameters
-    )
+    explicit PosePIDController(const PosePIDControllerIOKeys& keys,
+                               const PosePIDControllerParameters& parameters)
         : Controller<PosePIDControllerIOKeys, PosePIDControllerParameters>(keys, parameters)
     {
     }

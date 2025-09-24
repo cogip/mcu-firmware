@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include "actuator/PositionalActuator.hpp"
 #include "actuator/LiftParameters.hpp"
+#include "actuator/PositionalActuator.hpp"
 
 namespace cogip {
 namespace pf {
@@ -26,13 +26,12 @@ void init();
 void init_sequence();
 
 /// Check if a positional_actuator identified by id exists.
-bool contains(
-    cogip::actuators::Enum id  ///< [in] positional_actuator id
+bool contains(cogip::actuators::Enum id ///< [in] positional_actuator id
 );
 
 /// Get a positional_actuator by id.
-cogip::actuators::positional_actuators::PositionalActuator & get(
-    cogip::actuators::Enum id  ///< [in] positional_actuator id
+cogip::actuators::positional_actuators::PositionalActuator&
+get(cogip::actuators::Enum id ///< [in] positional_actuator id
 );
 
 /// Disable all positional actuators
@@ -49,9 +48,8 @@ void pf_init_motors_sequence(void);
 
 /// Instanciate a lift
 /// @return 0 if ok, negative otherwise
-int create_lift(
-    cogip::actuators::Enum id,
-    const cogip::actuators::positional_actuators::LiftParameters& lift_params);
+int create_lift(cogip::actuators::Enum id,
+                const cogip::actuators::positional_actuators::LiftParameters& lift_params);
 
 } // namespace positional_actuators
 } // namespace actuators

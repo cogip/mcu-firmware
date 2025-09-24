@@ -13,10 +13,10 @@
 #pragma once
 
 // Project includes
+#include "PoseStraightFilterIOKeys.hpp"
+#include "PoseStraightFilterParameters.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
-#include "PoseStraightFilterParameters.hpp"
-#include "PoseStraightFilterIOKeys.hpp"
 
 namespace cogip {
 
@@ -30,36 +30,43 @@ enum class PoseStraightFilterState {
     FINISHED
 };
 
-/// @brief Motion broken into rotate‐move‐rotate steps according to state machine.
-///        Reads full current and target poses, speeds, and reverse permission from IO,
-///        then computes filtered linear and angular speeds plus pose‐reached flag.
-class PoseStraightFilter
-    : public Controller<PoseStraightFilterIOKeys, PoseStraightFilterParameters>
+/// @brief Motion broken into rotate‐move‐rotate steps according to state
+/// machine.
+///        Reads full current and target poses, speeds, and reverse permission
+///        from IO, then computes filtered linear and angular speeds plus
+///        pose‐reached flag.
+class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStraightFilterParameters>
 {
-public:
+  public:
     /// @brief Constructor.
-    /// @param keys       Reference to a POD containing all input and output key names.
+    /// @param keys       Reference to a POD containing all input and output key
+    /// names.
     /// @param parameters Reference to movement switch thresholds.
-    explicit PoseStraightFilter(
-        const PoseStraightFilterIOKeys&         keys,
-        const PoseStraightFilterParameters&     parameters
-    )
+    explicit PoseStraightFilter(const PoseStraightFilterIOKeys& keys,
+                                const PoseStraightFilterParameters& parameters)
         : Controller<PoseStraightFilterIOKeys, PoseStraightFilterParameters>(keys, parameters)
     {
         current_state_ = PoseStraightFilterState::FINISHED;
     }
 
-    /// @brief Evaluate state machine and compute errors, filtered speeds, and reached status.
+    /// @brief Evaluate state machine and compute errors, filtered speeds, and
+    /// reached status.
     /// @param io Shared ControllersIO containing inputs and receiving outputs.
     void execute(ControllersIO& io) override;
 
     /// @brief Reset internal state machine to initial rotation state.
-    void reset_current_state() { current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION; }
+    void reset_current_state()
+    {
+        current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
+    }
 
     /// @brief Force state machine to finished state.
-    void force_finished_state() { current_state_ = PoseStraightFilterState::FINISHED; }
+    void force_finished_state()
+    {
+        current_state_ = PoseStraightFilterState::FINISHED;
+    }
 
-private:
+  private:
     PoseStraightFilterState current_state_;
 };
 

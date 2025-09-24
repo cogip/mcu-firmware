@@ -10,12 +10,13 @@ namespace localization {
 
 /// @brief Configuration for a single‐encoder odometer.
 /// @details
-///   The encoder produces raw pulses; this parameter converts them into millimeters.
-///   distance_mm = pulses / pulses_per_mm
-struct OdometerEncoderParameters {
-    float pulses_per_mm;    ///< Number of encoder pulses per millimeter of travel
+///   The encoder produces raw pulses; this parameter converts them into
+///   millimeters. distance_mm = pulses / pulses_per_mm
+struct OdometerEncoderParameters
+{
+    float pulses_per_mm; ///< Number of encoder pulses per millimeter of travel
 
-    bool reverse_polarity = false;  ///< Reverse Encoder value if true
+    bool reverse_polarity = false; ///< Reverse Encoder value if true
 };
 
 } // namespace localization

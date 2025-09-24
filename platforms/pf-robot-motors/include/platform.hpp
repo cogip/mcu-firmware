@@ -22,13 +22,13 @@
 // Actuators: 0x2000 - 0x2FFF
 // Board: 0xF000 - 0xFFFF
 // Game: 0x4000 - 0x4FFF
-constexpr cogip::canpb::uuid_t game_start_uuid              = 0x4001;
-constexpr cogip::canpb::uuid_t game_end_uuid                = 0x4002;
-constexpr cogip::canpb::uuid_t game_reset_uuid              = 0x4003;
+constexpr cogip::canpb::uuid_t game_start_uuid = 0x4001;
+constexpr cogip::canpb::uuid_t game_end_uuid = 0x4002;
+constexpr cogip::canpb::uuid_t game_reset_uuid = 0x4003;
 // Service: 0x3000 - 0x3FFF
-constexpr cogip::canpb::uuid_t reset_uuid                   = 0x3001;
-constexpr cogip::canpb::uuid_t copilot_connected_uuid       = 0x3002;
-constexpr cogip::canpb::uuid_t copilot_disconnected_uuid    = 0x3003;
+constexpr cogip::canpb::uuid_t reset_uuid = 0x3001;
+constexpr cogip::canpb::uuid_t copilot_connected_uuid = 0x3002;
+constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 0x3003;
 /// @}
 
 /// @brief Set/unset copilot connected
@@ -39,7 +39,7 @@ void pf_set_copilot_connected(bool connected);
 /// @brief Returns canpb.
 ///
 /// @return  canpb pointer
-cogip::canpb::CanProtobuf & pf_get_canpb();
+cogip::canpb::CanProtobuf& pf_get_canpb();
 
 /// @brief Initialize all platform threads
 ///

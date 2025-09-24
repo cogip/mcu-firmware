@@ -12,32 +12,29 @@
 #pragma once
 
 // Project includes
+#include "SpeedFilterIOKeys.hpp"
+#include "SpeedFilterParameters.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
-#include "SpeedFilterParameters.hpp"
-#include "SpeedFilterIOKeys.hpp"
 
 namespace cogip {
 namespace motion_control {
 
 /// @brief Filter commanded speed according to acceleration and speed bounds,
 ///        and detect blocking.
-///        Reads speed order, current speed, raw target speed, disable flag, and pose‐reached status,
-///        then writes filtered speed error and updated pose‐reached status.
-class SpeedFilter
-    : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
+///        Reads speed order, current speed, raw target speed, disable flag, and
+///        pose‐reached status, then writes filtered speed error and updated
+///        pose‐reached status.
+class SpeedFilter : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
 {
-public:
+  public:
     /// @brief Constructor.
-    /// @param keys       Reference to a POD containing all input and output key names.
+    /// @param keys       Reference to a POD containing all input and output key
+    /// names.
     /// @param parameters Reference to filtering parameters.
-    explicit SpeedFilter(
-        const SpeedFilterIOKeys&         keys,
-        const SpeedFilterParameters&     parameters
-    )
+    explicit SpeedFilter(const SpeedFilterIOKeys& keys, const SpeedFilterParameters& parameters)
         : Controller<SpeedFilterIOKeys, SpeedFilterParameters>(keys, parameters),
-          previous_speed_order_(0.0f),
-          anti_blocking_blocked_cycles_nb_(0)
+          previous_speed_order_(0.0f), anti_blocking_blocked_cycles_nb_(0)
     {
     }
 
@@ -47,17 +44,26 @@ public:
     void execute(ControllersIO& io) override;
 
     /// @brief Get filtered speed from previous cycle.
-    float previous_speed_order() const { return previous_speed_order_; }
+    float previous_speed_order() const
+    {
+        return previous_speed_order_;
+    }
 
     /// @brief Reset filtered speed to zero.
-    void reset_previous_speed_order() { previous_speed_order_ = 0.0f; }
+    void reset_previous_speed_order()
+    {
+        previous_speed_order_ = 0.0f;
+    }
 
     /// @brief Reset blocked cycle counter to zero.
-    void reset_anti_blocking_blocked_cycles_nb() { anti_blocking_blocked_cycles_nb_ = 0; }
+    void reset_anti_blocking_blocked_cycles_nb()
+    {
+        anti_blocking_blocked_cycles_nb_ = 0;
+    }
 
-protected:
-    float previous_speed_order_;          ///< filtered speed from previous cycle
-    uint32_t anti_blocking_blocked_cycles_nb_;  ///< count of consecutive blocked cycles
+  protected:
+    float previous_speed_order_;               ///< filtered speed from previous cycle
+    uint32_t anti_blocking_blocked_cycles_nb_; ///< count of consecutive blocked cycles
 
     /// @brief Constrain commanded speed according to bounds and acceleration.
     /// @param[in,out] speed_order  pointer to commanded speed; updated in place.
@@ -65,13 +71,8 @@ protected:
     /// @param[in]     min_speed    minimum non‐zero speed threshold.
     /// @param[in]     max_speed    maximum absolute speed allowed.
     /// @param[in]     max_acc      maximum change in speed per cycle.
-    void limit_speed_order(
-        float *speed_order,
-        float raw_target,
-        float min_speed,
-        float max_speed,
-        float max_acc
-    );
+    void limit_speed_order(float* speed_order, float raw_target, float min_speed, float max_speed,
+                           float max_acc);
 };
 
 } // namespace motion_control

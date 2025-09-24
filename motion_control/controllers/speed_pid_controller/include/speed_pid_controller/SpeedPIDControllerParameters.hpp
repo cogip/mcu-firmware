@@ -20,25 +20,31 @@ namespace cogip {
 namespace motion_control {
 
 /// Speed PID controller parameters
-class SpeedPIDControllerParameters {
-public:
+class SpeedPIDControllerParameters
+{
+  public:
     /// Constructor
-    explicit SpeedPIDControllerParameters(
-        pid::PID *pid = nullptr     ///< [in]  PID parameters
-    ) : pid_(pid) {};
+    explicit SpeedPIDControllerParameters(pid::PID* pid = nullptr ///< [in]  PID parameters
+                                          )
+        : pid_(pid){};
 
     /// Get PID parameters
     /// return     PID parameters pointer
-    pid::PID *pid() const { return pid_; };
+    pid::PID* pid() const
+    {
+        return pid_;
+    };
 
     /// Set PID
-    void set_pid(
-        pid::PID *pid               ///< [in]   new PID
-        ) { pid_ = pid; };
+    void set_pid(pid::PID* pid ///< [in]   new PID
+    )
+    {
+        pid_ = pid;
+    };
 
-private:
+  private:
     /// PID parameters
-    pid::PID *pid_;   ///< Speed PID
+    pid::PID* pid_; ///< Speed PID
 };
 
 } // namespace motion_control

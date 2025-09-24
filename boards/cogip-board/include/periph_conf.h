@@ -20,17 +20,17 @@
 #pragma once
 
 /* Add specific clock configuration (HSE, LSE) for this board here */
-#define CONFIG_BOARD_HAS_LSE            0
+#define CONFIG_BOARD_HAS_LSE 0
 /* This board provides a 24MHz HSE oscillator */
-#define CONFIG_BOARD_HAS_HSE            1
+#define CONFIG_BOARD_HAS_HSE 1
 /* By default, configure a 80MHz SYSCLK with PLL using HSE as input clock */
-#define CONFIG_CLOCK_PLL_M              (6)
+#define CONFIG_CLOCK_PLL_M (6)
 
-#include "periph_cpu.h"
-#include "clk_conf.h"
 #include "cfg_i2c2_pa9_pa8.h"
 #include "cfg_rtt_default.h"
 #include "cfg_timer_tim2.h"
+#include "clk_conf.h"
+#include "periph_cpu.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,10 +69,10 @@ static const uart_conf_t uart_config[] = {
     },
 };
 
-#define UART_0_ISR      (isr_lpuart1)
-#define UART_1_ISR      (isr_usart1)
+#define UART_0_ISR (isr_lpuart1)
+#define UART_1_ISR (isr_usart1)
 
-#define UART_NUMOF      ARRAY_SIZE(uart_config)
+#define UART_NUMOF ARRAY_SIZE(uart_config)
 /** @} */
 
 /**
@@ -81,21 +81,18 @@ static const uart_conf_t uart_config[] = {
  */
 static const pwm_conf_t pwm_config[] = {
     /* Motion motors */
-    {
-        .dev = TIM1,
-        .rcc_mask = RCC_APB2ENR_TIM1EN,
-        .chan = {
-            /* Left motor PWM */
-            { .pin = GPIO_PIN(PORT_A, 8), .cc_chan = 0 },
-            /* Right motor PWM */
-            { .pin = GPIO_PIN(PORT_A, 9), .cc_chan = 1 }
-        },
-        .af = GPIO_AF6,
-        .bus = APB2
-    },
+    {.dev = TIM1,
+     .rcc_mask = RCC_APB2ENR_TIM1EN,
+     .chan =
+         {/* Left motor PWM */
+          {.pin = GPIO_PIN(PORT_A, 8), .cc_chan = 0},
+          /* Right motor PWM */
+          {.pin = GPIO_PIN(PORT_A, 9), .cc_chan = 1}},
+     .af = GPIO_AF6,
+     .bus = APB2},
 };
 
-#define PWM_NUMOF   (sizeof(pwm_config) / sizeof(pwm_config[0]))
+#define PWM_NUMOF (sizeof(pwm_config) / sizeof(pwm_config[0]))
 /** @} */
 
 /**
@@ -104,33 +101,29 @@ static const pwm_conf_t pwm_config[] = {
  */
 static const qdec_conf_t qdec_config[] = {
     /* Left encoder */
-    {
-        .dev = TIM4,
-        .max = 0xffffffff,
-        .rcc_mask = RCC_APB1ENR1_TIM4EN,
-        .chan = { { .pin = GPIO_PIN(PORT_B, 6), .cc_chan = 0 },
-                  { .pin = GPIO_PIN(PORT_B, 7), .cc_chan = 1 } },
-        .af = GPIO_AF2,
-        .bus = APB1,
-        .irqn = TIM4_IRQn
-    },
+    {.dev = TIM4,
+     .max = 0xffffffff,
+     .rcc_mask = RCC_APB1ENR1_TIM4EN,
+     .chan = {{.pin = GPIO_PIN(PORT_B, 6), .cc_chan = 0},
+              {.pin = GPIO_PIN(PORT_B, 7), .cc_chan = 1}},
+     .af = GPIO_AF2,
+     .bus = APB1,
+     .irqn = TIM4_IRQn},
     /* Right encoder */
-    {
-        .dev = TIM3,
-        .max = 0xffffffff,
-        .rcc_mask = RCC_APB1ENR1_TIM3EN,
-        .chan = { { .pin = GPIO_PIN(PORT_A, 6), .cc_chan = 0 },
-                  { .pin = GPIO_PIN(PORT_A, 4), .cc_chan = 1 } },
-        .af = GPIO_AF2,
-        .bus = APB1,
-        .irqn = TIM3_IRQn
-    },
+    {.dev = TIM3,
+     .max = 0xffffffff,
+     .rcc_mask = RCC_APB1ENR1_TIM3EN,
+     .chan = {{.pin = GPIO_PIN(PORT_A, 6), .cc_chan = 0},
+              {.pin = GPIO_PIN(PORT_A, 4), .cc_chan = 1}},
+     .af = GPIO_AF2,
+     .bus = APB1,
+     .irqn = TIM3_IRQn},
 };
 
-#define QDEC_0_ISR  isr_tim3
-#define QDEC_1_ISR  isr_tim4
+#define QDEC_0_ISR isr_tim3
+#define QDEC_1_ISR isr_tim4
 
-#define QDEC_NUMOF  (sizeof(qdec_config) / sizeof(qdec_config[0]))
+#define QDEC_NUMOF (sizeof(qdec_config) / sizeof(qdec_config[0]))
 /** @} */
 
 #ifdef __cplusplus

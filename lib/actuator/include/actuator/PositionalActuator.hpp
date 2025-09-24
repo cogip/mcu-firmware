@@ -31,21 +31,20 @@ std::ostream& operator<<(std::ostream& os, Enum id);
 /// @details
 ///   Extends @ref Actuator with timeout management, command storage,
 ///   and Protobuf serialization support.
-class PositionalActuator : public Actuator {
-public:
+class PositionalActuator : public Actuator
+{
+  public:
     /// @brief Constructor.
     /// @param id                  Actuator identifier.
-    /// @param default_timeout_ms  Default timeout period (in ms) before disabling on inactivity.
+    /// @param default_timeout_ms  Default timeout period (in ms) before disabling
+    /// on inactivity.
     /// @param send_state_cb       Optional callback to send the actuator’s state.
-    PositionalActuator(
-        Enum id,
-        uint32_t default_timeout_ms = 0,
-        send_state_cb_t send_state_cb = nullptr
-    ) : Actuator(id, send_state_cb),
-      command_(0),
-      timeout_ms_(0),
-      default_timeout_ms_(default_timeout_ms)
-    {}
+    PositionalActuator(Enum id, uint32_t default_timeout_ms = 0,
+                       send_state_cb_t send_state_cb = nullptr)
+        : Actuator(id, send_state_cb), command_(0), timeout_ms_(0),
+          default_timeout_ms_(default_timeout_ms)
+    {
+    }
 
     /// @brief Get current timeout value.
     /// @return Remaining timeout in milliseconds.
@@ -79,9 +78,9 @@ public:
 
     /// @brief Copy actuator state into a Protobuf message.
     /// @param pb_positional_actuator  Protobuf message to populate.
-    void pb_copy(PB_PositionalActuator &pb_positional_actuator) const;
+    void pb_copy(PB_PositionalActuator& pb_positional_actuator) const;
 
-protected:
+  protected:
     /// Current actuator command as a duty cycle percentage.
     int32_t command_;
 

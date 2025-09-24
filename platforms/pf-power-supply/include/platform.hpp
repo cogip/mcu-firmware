@@ -57,7 +57,7 @@ int pf_is_game_launched(void);
  *
  * return   uarpb pointer
  **/
-cogip::canpb::CanProtobuf &pf_get_canpb();
+cogip::canpb::CanProtobuf& pf_get_canpb();
 
 /**
  * @brief Initialize all platforms threads
