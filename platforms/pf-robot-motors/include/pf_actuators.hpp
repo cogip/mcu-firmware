@@ -14,6 +14,7 @@
 // Firmware includes
 #include "actuator/Actuator.hpp"
 #include "canpb/CanProtobuf.hpp"
+#include "pf_common/uuids.hpp"
 
 // Standard includes
 #include <cstdint>
@@ -22,12 +23,21 @@ namespace cogip {
 namespace pf {
 namespace actuators {
 
-/// Actuators: 0x2000 - 0x2FFF
-constexpr cogip::canpb::uuid_t actuator_state_uuid = 0x2003;
-constexpr cogip::canpb::uuid_t thread_start_uuid = 0x2001;
-constexpr cogip::canpb::uuid_t thread_stop_uuid = 0x2002;
-constexpr cogip::canpb::uuid_t command_uuid = 0x2004;
-constexpr cogip::canpb::uuid_t init_uuid = 0x2005;
+/**
+ * @name Actuator Message UUIDs (0x2000 - 0x2FFF)
+ * @{
+ * @note UUID definitions are centralized in platforms/pf-common/include/pf_common/uuids.hpp
+ *       Add new UUIDs there to ensure consistency across all platforms.
+ */
+// Import common actuator UUIDs
+using pf_common::actuator_command_uuid;
+using pf_common::actuator_init_uuid;
+using pf_common::actuator_state_uuid;
+constexpr cogip::canpb::uuid_t thread_start_uuid = pf_common::actuator_thread_start_uuid;
+constexpr cogip::canpb::uuid_t thread_stop_uuid = pf_common::actuator_thread_stop_uuid;
+constexpr cogip::canpb::uuid_t command_uuid = actuator_command_uuid;
+constexpr cogip::canpb::uuid_t init_uuid = actuator_init_uuid;
+/// @}
 
 /// Enable all actuators
 void enable_all();

@@ -16,30 +16,23 @@
 #pragma once
 
 // Project includes
-#include "canpb/CanProtobuf.hpp"
+#include "pf_common/platform_common.hpp"
+#include "pf_common/uuids.hpp"
 
-#include <iostream>
-
-/// Messages Id
-/// @{
-// Motion Control: 0x1000 - 0x1FFF
-// Actuators: 0x2000 - 0x2FFF
-// Service: 0x3000 - 0x3FFF
-constexpr cogip::canpb::uuid_t copilot_connected_uuid = 0x3002;
-constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 0x3003;
-// Game: 0x4000 - 0x4FFF
+/**
+ * @name Messages Id
+ * @{
+ * @note UUID definitions are centralized in platforms/pf-common/include/pf_common/uuids.hpp
+ *       Add new UUIDs there to ensure consistency across all platforms.
+ */
+// Import common UUIDs into global namespace for compatibility
 // Power Supply: 0x5000 - 0x5FFF
-constexpr cogip::canpb::uuid_t emergency_stop_status_uuid = 0x5001;
-constexpr cogip::canpb::uuid_t power_source_status_uuid = 0x5002;
-constexpr cogip::canpb::uuid_t power_rails_status_uuid = 0x5003;
-// Board: 0xF000 - 0xFFFF
+using cogip::pf_common::emergency_stop_status_uuid;
+using cogip::pf_common::power_rails_status_uuid;
+using cogip::pf_common::power_source_status_uuid;
 /// @}
 
-/// @brief Returns uarpb.
-/// @return uarpb pointer
-cogip::canpb::CanProtobuf& pf_get_canpb();
-
-/// @brief Initialize all platforms threads
+/// @brief Initialize all platform threads
 void pf_init_tasks(void);
 
 /// @brief Platform initialization.

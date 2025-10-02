@@ -13,7 +13,7 @@ USEMODULE += shell_cmds_default
 USEMODULE += cogip_defs
 USEMODULE += localization
 USEMODULE += path
-USEMODULE += canpb
+USEMODULE += pf-common
 USEMODULE += encoder
 USEMODULE += motor
 # Controllers

@@ -13,7 +13,7 @@ USEMODULE += shell_cmds_default
 # mcu-firmware modules
 USEMODULE += actuator
 USEMODULE += cogip_defs
-USEMODULE += canpb
+USEMODULE += pf-common
 USEMODULE += pid
 USEMODULE += utils
 USEMODULE += encoder

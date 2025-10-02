@@ -1,0 +1,2 @@
+# Dependencies for pf-common module
+USEMODULE += canpb

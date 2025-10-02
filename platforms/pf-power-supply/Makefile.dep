@@ -7,6 +7,6 @@ USEMODULE += shell_cmds_default
 
 # mcu-firmware modules
 USEMODULE += cogip_defs
-USEMODULE += canpb
+USEMODULE += pf-common
 USEMODULE += utils
 USEMODULE += gpio
