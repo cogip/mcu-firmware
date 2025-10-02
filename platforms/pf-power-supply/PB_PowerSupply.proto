@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message PB_PowerRailsStatus {
+    bool p3V3_pgood = 1;       // 3.3V power good status (true = OK, false = fault)
+    bool p5V0_pgood = 2;       // 5.0V power good status (true = OK, false = fault)
+    bool p7V5_pgood = 3;       // 7.5V power good status (true = OK, false = fault)
+    bool pxVx_pgood = 4;       // Variable voltage power good status (true = OK, false = fault)
+}
+
+message PB_EmergencyStopStatus {
+    bool emergency_stop = 1;   // Emergency stop button status (true = released, false = engaged)
+}
+
+message PB_PowerSourceStatus {
+    bool battery_valid = 1;    // Battery validity status (true = connected, false = disconnected)
+    bool dc_supply_valid = 2;  // DC supply validity status (true = connected, false = disconnected)
+}
