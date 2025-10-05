@@ -65,27 +65,15 @@ class Polar
         polar.set_angle(angle_);
     };
 
-    /// Reverse distance
-    void reverse_distance()
+    /// Reverse distance and angle
+    void reverse()
     {
         distance_ *= -1;
-    }
-
-    /// Reverse angle
-    void reverse_angle()
-    {
         if (angle_ < 0) {
             angle_ += 180;
         } else {
             angle_ -= 180;
         }
-    };
-
-    /// Reverse distance and angle
-    void reverse()
-    {
-        reverse_distance();
-        reverse_angle();
     };
 
   private:

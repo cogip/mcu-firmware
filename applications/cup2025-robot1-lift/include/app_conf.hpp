@@ -35,9 +35,6 @@ namespace actuators {
 #endif
 #define QDEC_LIFT_POLARITY -1
 
-/// Motor minimal PWM
-constexpr int pwm_minimal = 0;
-
 // Motor lift pose PID
 constexpr float motor_lift_pose_pid_kp = .2;
 constexpr float motor_lift_pose_pid_ki = 0;
@@ -50,8 +47,6 @@ constexpr float motor_lift_speed_pid_kd = 0;
 // Motor lift pose PID integral limit
 constexpr float motor_lift_pose_pid_integral_limit = etl::numeric_limits<int16_t>::max();
 // Motor lift speed PID integral limit
-// constexpr float motor_lift_speed_pid_integral_limit =
-// etl::numeric_limits<int16_t>::max();
 constexpr float motor_lift_speed_pid_integral_limit = 500 / motor_lift_speed_pid_ki;
 
 // Motor lift threshold

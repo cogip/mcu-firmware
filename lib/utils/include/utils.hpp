@@ -1,7 +1,5 @@
 #pragma once
 
-typedef void (*func_cb_t)(void);
-
 /**
  * @brief Compare two floating-point numbers (float) with a specified tolerance.
  *
@@ -17,9 +15,3 @@ typedef void (*func_cb_t)(void);
  * @return false        Otherwise.
  */
 bool areDoublesEqual(float a, float b, float epsilon = 1e-3);
-
-#define FALSE (0)
-#define TRUE (!FALSE)
-
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))

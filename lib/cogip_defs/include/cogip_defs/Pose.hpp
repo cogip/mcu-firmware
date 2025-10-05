@@ -34,20 +34,6 @@ class Pose : public Coords
     /// Constructor from Protobuf class
     explicit Pose(const PB_Pose& pose) : Coords(pose.get_x(), pose.get_y()), O_(pose.get_O()){};
 
-    /// Return coordinates.
-    Coords coords(void) const
-    {
-        return Coords(x_, y_);
-    };
-
-    /// Set coordinates.
-    void set_coords(const Coords& coords ///< [in] new coordinates
-    )
-    {
-        x_ = coords.x();
-        y_ = coords.y();
-    };
-
     /// Return 0-orientation.
     float O(void) const
     {
