@@ -46,7 +46,7 @@ constexpr float angular_speed_pid_kd = 0;
 // Linear threshold
 constexpr float linear_threshold = 1;
 // Angular threshold
-constexpr float angular_threshold = 1;
+constexpr float angular_threshold = 2;
 // Angular intermediate threshold (when the robot turns on itself to go straight
 // to its destination)
 constexpr float angular_intermediate_threshold = 20;
