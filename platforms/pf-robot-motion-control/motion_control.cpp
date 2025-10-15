@@ -13,6 +13,8 @@
 #include "encoder/EncoderQDEC.hpp"
 #include "localization/LocalizationDifferential.hpp"
 #include "motion_control.hpp"
+#include "motion_control_common/MetaController.hpp"
+#include "motion_control_common/ThrottledController.hpp"
 #include "motion_motors_params.hpp"
 #include "motor/MotorDriverDRV8873.hpp"
 #include "motor/MotorRIOT.hpp"
@@ -101,11 +103,21 @@ static cogip::motion_control::PoseStraightFilter pose_straight_filter =
     cogip::motion_control::PoseStraightFilter(
         cogip::motion_control::pose_straight_filter_io_keys_default,
         pose_straight_filter_parameters);
-/// PolarParallelMetaController to split linear and angular chain.
-static cogip::motion_control::PolarParallelMetaController polar_parallel_meta_controller;
 
-/// Linear DualPIDMetaController for pose and speed control in cascade.
-static cogip::motion_control::DualPIDMetaController linear_dualpid_meta_controller;
+/// MetaController for pose loop controllers (executed at reduced frequency)
+static cogip::motion_control::MetaController<2> pose_loop_meta_controller;
+
+/// PolarParallelMetaController to split linear and angular chain for pose loop controllers.
+static cogip::motion_control::PolarParallelMetaController pose_loop_polar_parallel_meta_controller;
+
+/// PolarParallelMetaController to split linear and angular chain for speed loop controllers.
+static cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;
+
+/// Linear MetaController for pose loop controller only
+static cogip::motion_control::MetaController<1> linear_pose_loop_meta_controller;
+
+/// Linear MetaController for speed loop controllers
+static cogip::motion_control::MetaController<2> linear_speed_loop_meta_controller;
 /// Linear PosePIDControllerParameters.
 static cogip::motion_control::PosePIDControllerParameters
     linear_pose_controller_parameters(&linear_pose_pid);
@@ -134,8 +146,12 @@ static cogip::motion_control::SpeedPIDController
     linear_speed_controller(cogip::motion_control::linear_speed_pid_controller_io_keys_default,
                             linear_speed_controller_parameters);
 
-/// Angular DualPIDMetaController for pose and speed control in cascade.
-static cogip::motion_control::DualPIDMetaController angular_dualpid_meta_controller;
+/// Angular MetaController for pose loop controller only
+static cogip::motion_control::MetaController<1> angular_pose_loop_meta_controller;
+
+/// Angular MetaController for speed loop controllers
+static cogip::motion_control::MetaController<2> angular_speed_loop_meta_controller;
+
 /// Angular PosePIDControllerParameters.
 static cogip::motion_control::PosePIDControllerParameters
     angular_pose_controller_parameters(&angular_pose_pid);
@@ -161,6 +177,10 @@ static cogip::motion_control::SpeedPIDControllerParameters
 static cogip::motion_control::SpeedPIDController
     angular_speed_controller(cogip::motion_control::angular_speed_pid_controller_io_keys_default,
                              angular_speed_controller_parameters);
+
+/// Throttled controller wrapping all pose loop controllers
+static cogip::motion_control::ThrottledController
+    throttled_pose_loop_controllers(&pose_loop_meta_controller, pose_controllers_throttle_divider);
 
 /// Linear PassthroughPosePIDControllerParameters.
 static cogip::motion_control::PassthroughPosePIDControllerParameters
@@ -221,29 +241,41 @@ static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
 /// Return initialized QuadPID meta controller
 static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_init(void)
 {
+    // Linear pose loop meta controller (pose controller only, executed at reduced frequency)
+    linear_pose_loop_meta_controller.add_controller(&linear_pose_controller);
 
-    // Linear DualPIDMetaController
-    //  PosePIDController -> SpeedFilter -> SpeedPIDController
-    linear_dualpid_meta_controller.add_controller(&linear_pose_controller);
-    linear_dualpid_meta_controller.add_controller(&linear_speed_filter);
-    linear_dualpid_meta_controller.add_controller(&linear_speed_controller);
+    // Linear speed loop meta controller (speed filter + speed controller, executed every cycle)
+    linear_speed_loop_meta_controller.add_controller(&linear_speed_filter);
+    linear_speed_loop_meta_controller.add_controller(&linear_speed_controller);
 
-    // Angular DualPIDMetaController:
-    //  PosePIDController -> SpeedFilter -> SpeedPIDController
-    angular_dualpid_meta_controller.add_controller(&angular_pose_controller);
-    angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
-    angular_dualpid_meta_controller.add_controller(&angular_speed_controller);
+    // Angular pose loop meta controller (pose controller only, executed at reduced frequency)
+    angular_pose_loop_meta_controller.add_controller(&angular_pose_controller);
 
-    // PolarParallelMetaController:
-    // --> Linear DualPIDMetaController
-    // `-> Angular DualPIDMetaController
-    polar_parallel_meta_controller.add_controller(&linear_dualpid_meta_controller);
-    polar_parallel_meta_controller.add_controller(&angular_dualpid_meta_controller);
+    // Angular speed loop meta controller (speed filter + speed controller, executed every cycle)
+    angular_speed_loop_meta_controller.add_controller(&angular_speed_filter);
+    angular_speed_loop_meta_controller.add_controller(&angular_speed_controller);
+
+    // Pose loop PolarParallelMetaController (pose controllers only)
+    // --> Linear pose loop meta controller
+    // `-> Angular pose loop meta controller
+    pose_loop_polar_parallel_meta_controller.add_controller(&linear_pose_loop_meta_controller);
+    pose_loop_polar_parallel_meta_controller.add_controller(&angular_pose_loop_meta_controller);
+
+    // Pose loop meta controller (pose_straight_filter + pose loop polar parallel)
+    // PoseStraightFilter -> Pose loop PolarParallelMetaController
+    pose_loop_meta_controller.add_controller(&pose_straight_filter);
+    pose_loop_meta_controller.add_controller(&pose_loop_polar_parallel_meta_controller);
+
+    // Speed loop PolarParallelMetaController (speed controllers only)
+    // --> Linear speed loop meta controller
+    // `-> Angular speed loop meta controller
+    speed_loop_polar_parallel_meta_controller.add_controller(&linear_speed_loop_meta_controller);
+    speed_loop_polar_parallel_meta_controller.add_controller(&angular_speed_loop_meta_controller);
 
     // QuadPIDMetaController:
-    // PoseStraightFilter -> PolarParallelMetaController
-    quadpid_meta_controller.add_controller(&pose_straight_filter);
-    quadpid_meta_controller.add_controller(&polar_parallel_meta_controller);
+    // ThrottledController(pose_loop_meta_controller, 10) -> Speed loop PolarParallelMetaController
+    quadpid_meta_controller.add_controller(&throttled_pose_loop_controllers);
+    quadpid_meta_controller.add_controller(&speed_loop_polar_parallel_meta_controller);
 
     return &quadpid_meta_controller;
 }
@@ -258,10 +290,10 @@ static void pf_quadpid_meta_controller_restore(void)
     angular_speed_filter_parameters.set_max_speed(platform_max_speed_angular_deg_per_period);
     angular_speed_filter_parameters.set_max_acceleration(platform_max_acc_angular_deg_per_period2);
 
-    // Linear dual PID meta controller
-    linear_dualpid_meta_controller.replace_controller(0, &linear_pose_controller);
-    // Angular dual PID meta controller
-    angular_dualpid_meta_controller.replace_controller(0, &angular_pose_controller);
+    // Linear pose loop meta controller
+    linear_pose_loop_meta_controller.replace_controller(0, &linear_pose_controller);
+    // Angular pose loop meta controller
+    angular_pose_loop_meta_controller.replace_controller(0, &angular_pose_controller);
 
     // Linear speed PID controller parameters
     linear_speed_controller_parameters.set_pid(&linear_speed_pid);
@@ -280,7 +312,7 @@ static void pf_quadpid_meta_controller_linear_pose_controller_disabled(void)
     pf_quadpid_meta_controller_restore();
 
     // Disable pose PID correction by using a passthrough controller
-    linear_dualpid_meta_controller.replace_controller(0, &passthrough_linear_pose_controller);
+    linear_pose_loop_meta_controller.replace_controller(0, &passthrough_linear_pose_controller);
 }
 
 /// Disable angular correction and linear speed filtering for linear speed PID
@@ -296,7 +328,7 @@ static void pf_quadpid_meta_controller_linear_speed_controller_test_setup(void)
     linear_speed_filter_parameters.set_max_acceleration(etl::numeric_limits<uint16_t>::max());
 
     // Disable pose PID correction by using a passthrough controller
-    linear_dualpid_meta_controller.replace_controller(0, &passthrough_linear_pose_controller);
+    linear_pose_loop_meta_controller.replace_controller(0, &passthrough_linear_pose_controller);
 
     // Disable angular speed loop by using a PID with all gain set to zero
     angular_speed_controller_parameters.set_pid(&null_pid);
@@ -318,7 +350,7 @@ static void pf_quadpid_meta_controller_angular_speed_controller_test_setup(void)
     angular_speed_filter_parameters.set_max_acceleration(etl::numeric_limits<uint16_t>::max());
 
     // Disable pose PID correction by using a passthrough controller
-    angular_dualpid_meta_controller.replace_controller(0, &passthrough_angular_pose_controller);
+    angular_pose_loop_meta_controller.replace_controller(0, &passthrough_angular_pose_controller);
 
     // Disable linear speed loop by using a PID with all gain set to zero
     linear_speed_controller_parameters.set_pid(&null_pid);

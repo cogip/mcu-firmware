@@ -31,6 +31,9 @@ constexpr auto PID_COUNT = __LINE__ - START_LINE - 3;
 
 constexpr uint16_t motion_control_thread_period_ms = 20; ///< controller thread loop period
 
+/// Throttle divider for pose loop controllers (execute every N cycles)
+constexpr uint16_t pose_controllers_throttle_divider = 10;
+
 /// @name Acceleration and speed profiles
 /// @{
 /// Maximum linear acceleration/deceleration
