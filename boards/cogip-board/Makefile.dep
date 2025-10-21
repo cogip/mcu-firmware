@@ -6,3 +6,10 @@ endif
 DISABLE_MODULE += periph_init_i2c
 
 USEMODULE += mpu_stack_guard
+
+# FlashDB modules
+USEMODULE += flashdb_kvdb          # Key-Value database module
+USEMODULE += flashdb_mtd           # MTD backend for FlashDB
+
+# MTD(Memory Technology Device) driver
+USEMODULE += mtd_flashpage # Use internal flash via flashpage interface
