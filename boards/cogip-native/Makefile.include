@@ -3,3 +3,9 @@ include $(RIOTBASE)/boards/native/Makefile.include
 
 # Set onboard transceiver loop delay, mandatory so set fake value
 CFLAGS += -DCONFIG_FDCAN_DEVICE_TRANSCEIVER_LOOP_DELAY=0
+
+# FlashDB FAL (Flash Abstraction Layer) partition configuration
+# Define partition for KVDB storage
+# Adjust partition size based on your needs (2KB is sufficient for small amount of settings)
+CFLAGS += -DFAL_PART0_LABEL=\"settings\"
+CFLAGS += -DFAL_PART0_LENGTH=2048

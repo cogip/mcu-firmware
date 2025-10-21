@@ -27,6 +27,7 @@
 #include <motor_driver.h>
 
 /* Project includes */
+#include "mtd_conf.h"
 #include "periph_conf.h"
 
 #ifdef __cplusplus
