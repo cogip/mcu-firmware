@@ -20,6 +20,10 @@
 #include <unistd.h>
 
 #include "board_internal.h"
+#include "mtd_conf.h"
+
+/* Instantiate the emulated MTD device and register it in the XFA */
+MTD_SETTINGS_INIT_VAL;
 
 /**
  * malloc() memory overhead (size + next address)
