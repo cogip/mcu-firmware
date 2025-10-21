@@ -9,3 +9,11 @@ include $(RIOTMAKE)/boards/stm32.inc.mk
 
 # Set onboard transceiver loop delay
 CFLAGS += -DCONFIG_FDCAN_DEVICE_TRANSCEIVER_LOOP_DELAY=130
+
+# FlashDB configuration
+# STM32G474RE has 64-bit (doubleword) flash write granularity
+CFLAGS += -DFDB_WRITE_GRAN=64
+
+# FAL (Flash Abstraction Layer) partition configuration for KVDB storage
+CFLAGS += -DFAL_PART0_LABEL=\"settings\"
+CFLAGS += -DFAL_PART0_LENGTH=8*2048
