@@ -1,0 +1,67 @@
+// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
+/// @file PB_ParameterCommands.proto
+/// @brief Parameter command and response messages for CAN communication
+///
+/// These messages define the request/response protocol for reading and writing
+/// parameters over CAN bus. All parameter operations use a generic interface
+/// with UUID-based addressing and status feedback.
+
+syntax = "proto3";
+
+/// @brief Status codes for parameter operations
+enum ParameterStatus {
+	SUCCESS = 0;           ///< Success, no error
+	VALIDATION_FAILED = 1; ///< Validation failed (value out of bounds)
+	NOT_FOUND = 2;         ///< Parameter UUID not found
+	READ_ONLY = 3;         ///< Attempted write to read-only parameter
+	TYPE_MISMATCH = 4;     ///< Type mismatch (e.g., setting float as bool)
+}
+
+/// @brief Request to get a parameter value
+message ParameterGetRequest
+{
+	uint32 param_uuid = 1; ///< UUID of the parameter to read
+}
+
+/// @brief Response to a get parameter request
+message ParameterGetResponse
+{
+	ParameterStatus status = 1; ///< Status code (SUCCESS if success, error code otherwise)
+	oneof value
+	{
+		float float_value = 2;   ///< 32-bit float
+		double double_value = 3; ///< 64-bit double
+		int32 int32_value = 4;   ///< Signed 32-bit integer
+		uint32 uint32_value = 5; ///< Unsigned 32-bit integer
+		int64 int64_value = 6;   ///< Signed 64-bit integer
+		uint64 uint64_value = 7; ///< Unsigned 64-bit integer
+		bool bool_value = 8;     ///< Boolean
+	}
+}
+
+/// @brief Request to set a parameter value
+message ParameterSetRequest
+{
+	uint32 param_uuid = 1; ///< UUID of the parameter to write
+	oneof value
+	{
+		float float_value = 2;   ///< 32-bit float value to set
+		double double_value = 3; ///< 64-bit double value to set
+		int32 int32_value = 4;   ///< Signed 32-bit integer value to set
+		uint32 uint32_value = 5; ///< Unsigned 32-bit integer value to set
+		int64 int64_value = 6;   ///< Signed 64-bit integer value to set
+		uint64 uint64_value = 7; ///< Unsigned 64-bit integer value to set
+		bool bool_value = 8;     ///< Boolean value to set
+	}
+}
+
+/// @brief Response to a set parameter request
+message ParameterSetResponse
+{
+	ParameterStatus status = 1; ///< Status code (SUCCESS if success, error code otherwise)
+	uint32 param_uuid = 2;      ///< UUID of the parameter that was written
+}
