@@ -4,64 +4,59 @@
 // directory for more details.
 
 /// @file PB_ParameterCommands.proto
-/// @brief Parameter command and response messages for CAN communication
+/// @brief Parameter read/write protocol for CAN communication
 ///
-/// These messages define the request/response protocol for reading and writing
-/// parameters over CAN bus. All parameter operations use a generic interface
-/// with UUID-based addressing and status feedback.
+/// Generic interface for reading and writing parameters using key hash addressing.
 
 syntax = "proto3";
 
-/// @brief Status codes for parameter operations
+/// @brief Status codes for set operations
 enum ParameterStatus {
-	SUCCESS = 0;           ///< Success, no error
-	VALIDATION_FAILED = 1; ///< Validation failed (value out of bounds)
-	NOT_FOUND = 2;         ///< Parameter UUID not found
-	READ_ONLY = 3;         ///< Attempted write to read-only parameter
-	TYPE_MISMATCH = 4;     ///< Type mismatch (e.g., setting float as bool)
+	SUCCESS = 0;           ///< Operation succeeded
+	VALIDATION_FAILED = 1; ///< Value out of bounds
+	NOT_FOUND = 2;         ///< Parameter not found
+	READ_ONLY = 3;         ///< Write to read-only parameter
+	TYPE_MISMATCH = 4;     ///< Type mismatch
 }
 
-/// @brief Request to get a parameter value
+/// @brief Parameter value with type variants
+message ParameterValue
+{
+	oneof value
+	{
+		float float_value = 1;   ///< 32-bit float
+		double double_value = 2; ///< 64-bit double
+		int32 int32_value = 3;   ///< Signed 32-bit integer
+		uint32 uint32_value = 4; ///< Unsigned 32-bit integer
+		int64 int64_value = 5;   ///< Signed 64-bit integer
+		uint64 uint64_value = 6; ///< Unsigned 64-bit integer
+		bool bool_value = 7;     ///< Boolean
+	}
+}
+
+/// @brief Get parameter request
 message ParameterGetRequest
 {
-	uint32 param_uuid = 1; ///< UUID of the parameter to read
+	uint32 key_hash = 1; ///< Parameter key hash
 }
 
-/// @brief Response to a get parameter request
+/// @brief Get parameter response
 message ParameterGetResponse
 {
-	ParameterStatus status = 1; ///< Status code (SUCCESS if success, error code otherwise)
-	oneof value
-	{
-		float float_value = 2;   ///< 32-bit float
-		double double_value = 3; ///< 64-bit double
-		int32 int32_value = 4;   ///< Signed 32-bit integer
-		uint32 uint32_value = 5; ///< Unsigned 32-bit integer
-		int64 int64_value = 6;   ///< Signed 64-bit integer
-		uint64 uint64_value = 7; ///< Unsigned 64-bit integer
-		bool bool_value = 8;     ///< Boolean
-	}
+	uint32 key_hash = 1;      ///< Parameter key hash
+	ParameterValue value = 2; ///< Parameter value (absent if not found)
 }
 
-/// @brief Request to set a parameter value
+/// @brief Set parameter request
 message ParameterSetRequest
 {
-	uint32 param_uuid = 1; ///< UUID of the parameter to write
-	oneof value
-	{
-		float float_value = 2;   ///< 32-bit float value to set
-		double double_value = 3; ///< 64-bit double value to set
-		int32 int32_value = 4;   ///< Signed 32-bit integer value to set
-		uint32 uint32_value = 5; ///< Unsigned 32-bit integer value to set
-		int64 int64_value = 6;   ///< Signed 64-bit integer value to set
-		uint64 uint64_value = 7; ///< Unsigned 64-bit integer value to set
-		bool bool_value = 8;     ///< Boolean value to set
-	}
+	uint32 key_hash = 1;      ///< Parameter key hash
+	ParameterValue value = 2; ///< Value to set
 }
 
-/// @brief Response to a set parameter request
+/// @brief Set parameter response
 message ParameterSetResponse
 {
-	ParameterStatus status = 1; ///< Status code (SUCCESS if success, error code otherwise)
-	uint32 param_uuid = 2;      ///< UUID of the parameter that was written
+	uint32 key_hash = 1;        ///< Parameter key hash
+	ParameterStatus status = 2; ///< Operation status
 }

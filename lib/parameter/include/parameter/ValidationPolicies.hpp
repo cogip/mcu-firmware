@@ -34,22 +34,32 @@ struct NoValidation
     }
 };
 
-/// @brief Bounds validation policy - clamps values to [min, max] range
+/// @brief Bounds validation policy - rejects values outside [min, max] range
 /// @tparam MinVal Minimum allowed value (compile-time constant)
 /// @tparam MaxVal Maximum allowed value (compile-time constant)
-/// @details This policy automatically clamps values that exceed the bounds.
-///          The clamping is done using etl::clamp for embedded-friendly behavior.
-///          Only applicable to numeric types (float).
+/// @details This policy rejects values that are outside the specified bounds.
+///          If the value is out of range, validation fails and the parameter remains unchanged.
+///          Only applicable to numeric types.
+///
+/// @note Compile-time checks:
+///       - MinVal must be less than or equal to MaxVal (enforced via static_assert)
+///       - Initial values in constructors are only checked at runtime
 template <auto MinVal, auto MaxVal> struct WithBounds
 {
-    /// @brief Validate and clamp a parameter value to specified bounds
+    // Compile-time validation of bounds
+    static_assert(MinVal <= MaxVal, "MinVal must be less than or equal to MaxVal");
+
+    /// @brief Validate a parameter value against specified bounds
     /// @tparam T The parameter value type
     /// @param value The input value to validate
-    /// @param out The output value (clamped to [MinVal, MaxVal])
-    /// @return true Always returns true (clamped value is always valid)
+    /// @param out The output value (set only if validation succeeds)
+    /// @return true if value is within [MinVal, MaxVal], false otherwise
     template <typename T> static bool validate(const T& value, T& out)
     {
-        out = etl::clamp(value, static_cast<T>(MinVal), static_cast<T>(MaxVal));
+        if (value < static_cast<T>(MinVal) || value > static_cast<T>(MaxVal)) {
+            return false;
+        }
+        out = value;
         return true;
     }
 };

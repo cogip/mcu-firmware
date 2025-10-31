@@ -11,49 +11,34 @@
 ///   uint8_t, uint16_t, uint32_t, uint64_t, float, double, and bool)
 /// - Compile-time behavior composition via policies
 /// - Zero-overhead abstraction
-/// - CAN bus integration for get/set operations
+/// - Serialization to ParameterValue protobuf messages
 ///
 /// Usage example:
 /// @code
+/// using namespace cogip::parameter;
+///
 /// // Simple float parameter
 /// Parameter<float> speed;
 /// speed.set(25.5f);
 /// float value = speed.get();
 ///
-/// // Integer parameter
-/// Parameter<int32_t> count;
-/// count.set(42);
+/// // Integer parameter with initial value
+/// Parameter<int32_t> count{42};
 ///
-/// // With validation bounds
-/// using TempParam = Parameter<float, WithBounds<-50.0f, 150.0f>>;
-/// TempParam temp;
-/// temp.set(200.0f);  // Auto-clamped to 150.0f
+/// // With validation bounds (bounds are integers, cast to float at runtime)
+/// Parameter<float, WithBounds<-50, 150>> temp;
+/// temp.set(200.0f);  // Validation fails, value remains unchanged
+/// temp.set(25.0f);   // OK, within bounds
 ///
-/// // With protobuf serialization
-/// using SerializableParam = Parameter<float, NoValidation, NoStorage, WithProtobuf>;
-/// SerializableParam wheel_diameter;
-/// wheel_diameter.set(80.5f);
-/// ParameterSetRequest request;
-/// wheel_diameter.serialize(request);  // Serializes to float_value field
+/// // Serialization to protobuf ParameterValue (enabled by default)
+/// Parameter<float> wheel_diameter{80.5f};
+/// ParameterValue param_value;
+/// wheel_diameter.serialize(param_value);  // Fills param_value.float_value
 ///
-/// // Polymorphic usage via ParameterInterface<T> interface
-/// Parameter<float> speed_param{25.0f};
-/// Parameter<float, WithBounds<0.0f, 100.0f>> humidity_param{60.0f};
+/// // Deserialization from protobuf ParameterValue
+/// Parameter<double> angle;
+/// angle.deserialize(param_value);  // Reads param_value.double_value
 ///
-/// // Manipulate via interface reference
-/// ParameterInterface<float>& param_ref1 = speed_param;
-/// ParameterInterface<float>& param_ref2 = humidity_param;
-/// param_ref1.set(30.0f);
-/// bool valid = param_ref2.isValid();
-///
-/// // Heterogeneous collections
-/// etl::array<ParameterInterface<float>*, 2> params = {&speed_param, &humidity_param};
-/// for (auto* p : params) {
-///     if (p->isValid()) {
-///         float val = p->get();
-///         // Process parameter value
-///     }
-/// }
 /// @endcode
 
 #pragma once
@@ -62,9 +47,8 @@
 
 #include "etl/type_traits.h"
 
+#include "PB_ParameterCommands.hpp"
 #include "ParameterInterface.hpp"
-#include "SerializationPolicies.hpp"
-#include "StoragePolicies.hpp"
 #include "ValidationPolicies.hpp"
 
 namespace cogip {
@@ -75,14 +59,12 @@ namespace parameter {
 /// @tparam T The C++ value type (arithmetic types: int8_t to int64_t, uint8_t to uint64_t, float,
 /// double, or bool)
 /// @tparam ValidationPolicy Policy for value validation (default: NoValidation)
-/// @tparam StoragePolicy Policy for persistence (default: NoStorage)
-/// @tparam SerializationPolicy Policy for serialization (default: NoSerialization)
 ///
-/// This class stores a value with validation, storage, and serialization policies applied.
-/// Serialization for CAN communication is handled via ParameterSetRequest/Response
-/// messages defined in PB_ParameterCommands.proto.
-template <typename T, typename ValidationPolicy = NoValidation, typename StoragePolicy = NoStorage,
-          typename SerializationPolicy = NoSerialization>
+/// This class stores a value with validation policy applied.
+/// Serializes to/from ParameterValue messages (oneof value field).
+/// Key management and protocol handling (Request/Response with key_hash) are
+/// handled externally by a parameter registry or communication layer.
+template <typename T, typename ValidationPolicy = NoValidation>
 class Parameter : public ParameterInterface<T>
 {
     // Compile-time type checking: only arithmetic types (integers, floats) and bool are supported
@@ -110,9 +92,11 @@ class Parameter : public ParameterInterface<T>
     /// This method applies the validation policy and updates the internal value.
     bool set(const T& value) override
     {
-        T validated_value;
+        T validated_value = value_;  // Initialize with current value
         valid_ = ValidationPolicy::validate(value, validated_value);
-        value_ = validated_value;
+        if (valid_) {
+            value_ = validated_value;
+        }
         return valid_;
     }
 
@@ -133,56 +117,75 @@ class Parameter : public ParameterInterface<T>
         return valid_;
     }
 
-    /// @brief Load parameter from persistent storage
-    /// @return true if loaded successfully, false otherwise
-    ///
-    /// Uses the storage policy to load the value from non-volatile memory.
-    /// If successful, the loaded value is validated and set.
-    bool load()
-    {
-        T loaded_value;
-        if (StoragePolicy::load(loaded_value)) {
-            return set(loaded_value);
-        }
-        return false;
-    }
-
-    /// @brief Store parameter to persistent storage
-    /// @return true if stored successfully, false otherwise
-    ///
-    /// Uses the storage policy to persist the current value to non-volatile memory.
-    bool store() const
-    {
-        if (isValid()) {
-            return StoragePolicy::store(get());
-        }
-        return false;
-    }
-
-    /// @brief Serialize parameter value to protobuf message
-    /// @tparam MsgType The protobuf message type (e.g., ParameterSetRequest)
-    /// @param message The protobuf message to serialize into
+    /// @brief Serialize parameter value to protobuf ParameterValue message
+    /// @param message The ParameterValue message to serialize into
     /// @return true if serialization succeeded, false otherwise
     ///
-    /// Uses the serialization policy to serialize the current value into the appropriate
-    /// oneof field of the protobuf message.
-    template <typename MsgType> bool serialize(MsgType& message) const
+    /// Uses compile-time type dispatch to set the correct oneof field in ParameterValue message.
+    bool serialize(ParameterValue& message) const override
     {
-        return SerializationPolicy::template serialize<T, MsgType>(value_, message);
+        if constexpr (etl::is_same<T, float>::value) {
+            message.set_float_value(value_);
+            return true;
+        } else if constexpr (etl::is_same<T, double>::value) {
+            message.set_double_value(value_);
+            return true;
+        } else if constexpr (etl::is_same<T, int32_t>::value) {
+            message.set_int32_value(value_);
+            return true;
+        } else if constexpr (etl::is_same<T, uint32_t>::value) {
+            message.set_uint32_value(value_);
+            return true;
+        } else if constexpr (etl::is_same<T, int64_t>::value) {
+            message.set_int64_value(value_);
+            return true;
+        } else if constexpr (etl::is_same<T, uint64_t>::value) {
+            message.set_uint64_value(value_);
+            return true;
+        } else if constexpr (etl::is_same<T, bool>::value) {
+            message.set_bool_value(value_);
+            return true;
+        } else {
+            // Unsupported type (should never happen due to Parameter static_assert)
+            return false;
+        }
     }
 
-    /// @brief Deserialize parameter value from protobuf message
-    /// @tparam MsgType The protobuf message type (e.g., ParameterGetResponse)
-    /// @param message The protobuf message to deserialize from
+    /// @brief Deserialize parameter value from protobuf ParameterValue message
+    /// @param message The ParameterValue message to deserialize from
     /// @return true if deserialization succeeded, false otherwise
     ///
-    /// Uses the serialization policy to deserialize the value from the appropriate
-    /// oneof field of the protobuf message and update the parameter.
+    /// Uses compile-time type dispatch to get the correct oneof field from ParameterValue message.
     /// Validation is applied to the deserialized value.
-    template <typename MsgType> bool deserialize(const MsgType& message)
+    bool deserialize(const ParameterValue& message) override
     {
         T new_value;
-        if (SerializationPolicy::template deserialize<T, MsgType>(message, new_value)) {
+        bool success = false;
+
+        if constexpr (etl::is_same<T, float>::value) {
+            new_value = message.float_value();
+            success = true;
+        } else if constexpr (etl::is_same<T, double>::value) {
+            new_value = message.double_value();
+            success = true;
+        } else if constexpr (etl::is_same<T, int32_t>::value) {
+            new_value = message.int32_value();
+            success = true;
+        } else if constexpr (etl::is_same<T, uint32_t>::value) {
+            new_value = message.uint32_value();
+            success = true;
+        } else if constexpr (etl::is_same<T, int64_t>::value) {
+            new_value = message.int64_value();
+            success = true;
+        } else if constexpr (etl::is_same<T, uint64_t>::value) {
+            new_value = message.uint64_value();
+            success = true;
+        } else if constexpr (etl::is_same<T, bool>::value) {
+            new_value = message.bool_value();
+            success = true;
+        }
+
+        if (success) {
             return set(new_value); // Apply validation
         }
         return false;
