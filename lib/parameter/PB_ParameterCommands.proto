@@ -1,0 +1,58 @@
+// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
+/// @file PB_ParameterCommands.proto
+/// @brief Parameter Generic interface for reading and writing parameters using key hash addressing.
+
+syntax = "proto3";
+
+/// @brief Status codes for set operations
+enum PB_ParameterStatus {
+	SUCCESS = 0;           ///< Operation succeeded
+	VALIDATION_FAILED = 1; ///< Value out of bounds
+	NOT_FOUND = 2;         ///< Parameter not found
+}
+
+/// @brief Parameter value with type variants
+message PB_ParameterValue
+{
+	oneof value
+	{
+		float float_value = 1;   ///< 32-bit float
+		double double_value = 2; ///< 64-bit double
+		int32 int32_value = 3;   ///< Signed 32-bit integer
+		uint32 uint32_value = 4; ///< Unsigned 32-bit integer
+		int64 int64_value = 5;   ///< Signed 64-bit integer
+		uint64 uint64_value = 6; ///< Unsigned 64-bit integer
+		bool bool_value = 7;     ///< Boolean
+	}
+}
+
+/// @brief Get parameter request
+message PB_ParameterGetRequest
+{
+	uint32 key_hash = 1; ///< Parameter key hash
+}
+
+/// @brief Get parameter response
+message PB_ParameterGetResponse
+{
+	uint32 key_hash = 1;         ///< Parameter key hash
+	PB_ParameterValue value = 2; ///< Parameter value (absent if not found)
+}
+
+/// @brief Set parameter request
+message PB_ParameterSetRequest
+{
+	uint32 key_hash = 1;         ///< Parameter key hash
+	PB_ParameterValue value = 2; ///< Value to set
+}
+
+/// @brief Set parameter response
+message PB_ParameterSetResponse
+{
+	uint32 key_hash = 1;           ///< Parameter key hash
+	PB_ParameterStatus status = 2; ///< Operation status
+}
