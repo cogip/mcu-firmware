@@ -45,6 +45,10 @@ constexpr canpb::uuid_t brake_uuid = 0x1007;
 constexpr canpb::uuid_t controller_uuid = 0x1008;
 constexpr canpb::uuid_t blocked_uuid = 0x1009;
 constexpr canpb::uuid_t intermediate_pose_reached_uuid = 0x100A;
+constexpr canpb::uuid_t parameter_set_uuid = 0x100B;
+constexpr canpb::uuid_t parameter_set_response_uuid = 0x100C;
+constexpr canpb::uuid_t parameter_get_uuid = 0x100D;
+constexpr canpb::uuid_t parameter_get_response_uuid = 0x100E;
 /** @} */
 
 /**
@@ -65,6 +69,7 @@ constexpr canpb::uuid_t actuator_init_uuid = 0x2005;
 constexpr canpb::uuid_t reset_uuid = 0x3001;
 constexpr canpb::uuid_t copilot_connected_uuid = 0x3002;
 constexpr canpb::uuid_t copilot_disconnected_uuid = 0x3003;
+
 /** @} */
 
 /**
