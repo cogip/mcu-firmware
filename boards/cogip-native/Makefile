@@ -1,5 +1,5 @@
 MODULE = board
 
-DIRS = $(RIOTBASE)/boards/native/drivers
+DIRS = $(RIOTBOARD)/common/native/drivers
 
 include $(RIOTBASE)/Makefile.base

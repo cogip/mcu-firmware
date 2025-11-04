@@ -11,6 +11,7 @@
 #include "drive_controller/DifferentialDriveControllerParameters.hpp"
 #include "dualpid_meta_controller/DualPIDMetaController.hpp"
 #include "encoder/EncoderQDEC.hpp"
+#include "feedforward_combiner_controller/FeedforwardCombinerController.hpp"
 #include "localization/LocalizationDifferential.hpp"
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
@@ -31,6 +32,7 @@
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
 #include "pose_straight_filter/PoseStraightFilterParameters.hpp"
+#include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
 #include "quadpid_meta_controller/QuadPIDMetaController.hpp"
 #include "speed_filter/SpeedFilter.hpp"
 #include "speed_filter/SpeedFilterIOKeysDefault.hpp"
@@ -202,6 +204,130 @@ static cogip::motion_control::PassthroughPosePIDController passthrough_angular_p
 /// Quad PID meta controller.
 static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
 
+// ============================================================================
+// Feedforward chain controllers
+// ============================================================================
+
+/// Quad PID Feedforward meta controller.
+static cogip::motion_control::QuadPIDMetaController quadpid_feedforward_meta_controller;
+
+/// Linear ProfileFeedforwardController IO keys
+static cogip::motion_control::ProfileFeedforwardControllerIOKeys
+    linear_profile_feedforward_io_keys = {
+        .pose_error = "linear_pose_error",
+        .current_speed = "current_linear_speed",
+        .new_target = "new_linear_target",
+        .feedforward_velocity = "linear_feedforward_velocity",
+        .tracking_error = "linear_tracking_error"};
+
+/// Linear ProfileFeedforwardController parameters
+static cogip::motion_control::ProfileFeedforwardControllerParameters
+    linear_profile_feedforward_parameters(
+        platform_max_speed_linear_mm_per_period,   // max_speed
+        platform_max_acc_linear_mm_per_period2,    // acceleration
+        platform_max_dec_linear_mm_per_period2,    // deceleration
+        true                                       // must_stop_at_end
+    );
+
+/// Linear ProfileFeedforwardController
+static cogip::motion_control::ProfileFeedforwardController
+    linear_profile_feedforward_controller(linear_profile_feedforward_io_keys,
+                                         linear_profile_feedforward_parameters);
+
+/// Linear FeedforwardCombinerController IO keys
+static cogip::motion_control::FeedforwardCombinerControllerIOKeys
+    linear_feedforward_combiner_io_keys = {
+        .feedforward_velocity = "linear_feedforward_velocity",
+        .feedback_correction = "linear_feedback_correction",
+        .speed_order = "linear_speed_order"};
+
+/// Linear FeedforwardCombinerController parameters
+static cogip::motion_control::FeedforwardCombinerControllerParameters
+    linear_feedforward_combiner_parameters;
+
+/// Linear FeedforwardCombinerController
+static cogip::motion_control::FeedforwardCombinerController
+    linear_feedforward_combiner_controller(linear_feedforward_combiner_io_keys,
+                                          linear_feedforward_combiner_parameters);
+
+/// Linear DualPIDMetaController for feedforward chain
+static cogip::motion_control::DualPIDMetaController linear_feedforward_dualpid_meta_controller;
+
+/// Linear PosePIDController for tracking error correction (feedforward chain)
+/// Uses same parameters as normal pose controller but different IO keys
+static cogip::motion_control::PosePIDControllerIOKeys
+    linear_feedforward_pose_pid_io_keys = {
+        .position_error = "linear_tracking_error",
+        .current_speed = "current_linear_speed",
+        .target_speed = "dummy_target_speed",
+        .disable_filter = "dummy_disable",
+        .pose_reached = "dummy_pose_reached",
+        .speed_order = "linear_feedback_correction"};
+
+static cogip::motion_control::PosePIDController
+    linear_feedforward_pose_controller(linear_feedforward_pose_pid_io_keys,
+                                       linear_pose_controller_parameters);
+
+/// Angular ProfileFeedforwardController IO keys
+static cogip::motion_control::ProfileFeedforwardControllerIOKeys
+    angular_profile_feedforward_io_keys = {
+        .pose_error = "angular_pose_error",
+        .current_speed = "current_angular_speed",
+        .new_target = "new_angular_target",
+        .feedforward_velocity = "angular_feedforward_velocity",
+        .tracking_error = "angular_tracking_error"};
+
+/// Angular ProfileFeedforwardController parameters
+static cogip::motion_control::ProfileFeedforwardControllerParameters
+    angular_profile_feedforward_parameters(
+        platform_max_speed_angular_deg_per_period,   // max_speed
+        platform_max_acc_angular_deg_per_period2,    // acceleration
+        platform_max_dec_angular_deg_per_period2,    // deceleration (same as acc for angular)
+        true                                         // must_stop_at_end
+    );
+
+/// Angular ProfileFeedforwardController
+static cogip::motion_control::ProfileFeedforwardController
+    angular_profile_feedforward_controller(angular_profile_feedforward_io_keys,
+                                          angular_profile_feedforward_parameters);
+
+/// Angular FeedforwardCombinerController IO keys
+static cogip::motion_control::FeedforwardCombinerControllerIOKeys
+    angular_feedforward_combiner_io_keys = {
+        .feedforward_velocity = "angular_feedforward_velocity",
+        .feedback_correction = "angular_feedback_correction",
+        .speed_order = "angular_speed_order"};
+
+/// Angular FeedforwardCombinerController parameters
+static cogip::motion_control::FeedforwardCombinerControllerParameters
+    angular_feedforward_combiner_parameters;
+
+/// Angular FeedforwardCombinerController
+static cogip::motion_control::FeedforwardCombinerController
+    angular_feedforward_combiner_controller(angular_feedforward_combiner_io_keys,
+                                           angular_feedforward_combiner_parameters);
+
+/// Angular DualPIDMetaController for feedforward chain
+static cogip::motion_control::DualPIDMetaController angular_feedforward_dualpid_meta_controller;
+
+/// Angular PosePIDController for tracking error correction (feedforward chain)
+static cogip::motion_control::PosePIDControllerIOKeys
+    angular_feedforward_pose_pid_io_keys = {
+        .position_error = "angular_tracking_error",
+        .current_speed = "current_angular_speed",
+        .target_speed = "dummy_target_speed",
+        .disable_filter = "dummy_disable",
+        .pose_reached = "dummy_pose_reached",
+        .speed_order = "angular_feedback_correction"};
+
+static cogip::motion_control::PosePIDController
+    angular_feedforward_pose_controller(angular_feedforward_pose_pid_io_keys,
+                                        angular_pose_controller_parameters);
+
+/// PolarParallelMetaController for feedforward chain
+static cogip::motion_control::PolarParallelMetaController
+    polar_parallel_feedforward_meta_controller;
+
 /// Encoders
 static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
                                                 encoder_wheels_resolution_pulses);
@@ -303,6 +429,83 @@ static void pf_quadpid_meta_controller_restore(void)
     // Sign target speed according to pose error
     passthrough_linear_pose_controller_parameters.set_signed_target_speed(true);
     passthrough_angular_pose_controller_parameters.set_signed_target_speed(true);
+}
+
+/// Initialize platform QuadPID Feedforward meta controller
+/// Return initialized QuadPID Feedforward meta controller
+static cogip::motion_control::QuadPIDMetaController*
+pf_quadpid_feedforward_meta_controller_init(void)
+{
+    // Linear feedforward chain:
+    //  ProfileFeedforwardController -> PosePIDController -> FeedforwardCombinerController
+    //                                                    -> SpeedFilter -> SpeedPIDController
+    linear_feedforward_dualpid_meta_controller.add_controller(
+        &linear_profile_feedforward_controller);
+    linear_feedforward_dualpid_meta_controller.add_controller(
+        &linear_feedforward_pose_controller);
+    linear_feedforward_dualpid_meta_controller.add_controller(
+        &linear_feedforward_combiner_controller);
+    linear_feedforward_dualpid_meta_controller.add_controller(&linear_speed_filter);
+    linear_feedforward_dualpid_meta_controller.add_controller(&linear_speed_controller);
+
+    // Angular feedforward chain:
+    //  ProfileFeedforwardController -> PosePIDController -> FeedforwardCombinerController
+    //                                                    -> SpeedFilter -> SpeedPIDController
+    angular_feedforward_dualpid_meta_controller.add_controller(
+        &angular_profile_feedforward_controller);
+    angular_feedforward_dualpid_meta_controller.add_controller(
+        &angular_feedforward_pose_controller);
+    angular_feedforward_dualpid_meta_controller.add_controller(
+        &angular_feedforward_combiner_controller);
+    angular_feedforward_dualpid_meta_controller.add_controller(&angular_speed_filter);
+    angular_feedforward_dualpid_meta_controller.add_controller(&angular_speed_controller);
+
+    // PolarParallelMetaController:
+    // --> Linear feedforward chain
+    // `-> Angular feedforward chain
+    polar_parallel_feedforward_meta_controller.add_controller(
+        &linear_feedforward_dualpid_meta_controller);
+    polar_parallel_feedforward_meta_controller.add_controller(
+        &angular_feedforward_dualpid_meta_controller);
+
+    // QuadPIDFeedforwardMetaController:
+    // PoseStraightFilter -> PolarParallelFeedforwardMetaController
+    quadpid_feedforward_meta_controller.add_controller(&pose_straight_filter);
+    quadpid_feedforward_meta_controller.add_controller(
+        &polar_parallel_feedforward_meta_controller);
+
+    return &quadpid_feedforward_meta_controller;
+}
+
+/// Restore platform QuadPID Feedforward meta controller to its original
+/// configuration.
+static void pf_quadpid_feedforward_meta_controller_restore(void)
+{
+    // Linear speed limits
+    linear_speed_filter_parameters.set_max_speed(platform_max_speed_linear_mm_per_period);
+    linear_speed_filter_parameters.set_max_acceleration(platform_max_acc_linear_mm_per_period2);
+
+    // Angular speed limits
+    angular_speed_filter_parameters.set_max_speed(platform_max_speed_angular_deg_per_period);
+    angular_speed_filter_parameters.set_max_acceleration(platform_max_acc_angular_deg_per_period2);
+
+    // Linear feedforward profile parameters
+    linear_profile_feedforward_parameters.set_max_speed(platform_max_speed_linear_mm_per_period);
+    linear_profile_feedforward_parameters.set_acceleration(platform_max_acc_linear_mm_per_period2);
+    linear_profile_feedforward_parameters.set_deceleration(platform_max_dec_linear_mm_per_period2);
+
+    // Angular feedforward profile parameters
+    angular_profile_feedforward_parameters.set_max_speed(
+        platform_max_speed_angular_deg_per_period);
+    angular_profile_feedforward_parameters.set_acceleration(
+        platform_max_acc_angular_deg_per_period2);
+    angular_profile_feedforward_parameters.set_deceleration(
+        platform_max_dec_angular_deg_per_period2);
+
+    // Linear speed PID controller parameters
+    linear_speed_controller_parameters.set_pid(&linear_speed_pid);
+    // Angular speed PID controller parameters
+    angular_speed_controller_parameters.set_pid(&angular_speed_pid);
 }
 
 /// Disable linear pose control to avoid stopping once point is reached.
@@ -463,9 +666,17 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
+    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_FEEDFORWARD):
+        pf_quadpid_feedforward_meta_controller_restore();
+        pf_motion_control_platform_engine.set_controller(
+            &quadpid_feedforward_meta_controller);
+        pf_motion_control_platform_engine.set_timeout_enable(false);
+        break;
+
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
     default:
         pf_quadpid_meta_controller_restore();
+        pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
     }
@@ -784,8 +995,9 @@ void pf_init_motion_control(void)
 
     // Init controllers
     pf_quadpid_meta_controller = pf_quadpid_meta_controller_init();
+    pf_quadpid_feedforward_meta_controller_init();
 
-    // Associate a controller to the engine
+    // Associate default controller (QUADPID) to the engine
     pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
 
     // Set timeout for speed only loops as no pose has to be reached

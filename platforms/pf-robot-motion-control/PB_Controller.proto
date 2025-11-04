@@ -5,6 +5,7 @@ enum PB_ControllerEnum {
     ANGULAR_SPEED_TEST = 1;
     LINEAR_SPEED_TEST = 2;
     LINEAR_POSE_DISABLED = 3;
+    QUADPID_FEEDFORWARD = 4;
 }
 
 message PB_Controller {
