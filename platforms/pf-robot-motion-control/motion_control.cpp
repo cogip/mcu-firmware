@@ -45,6 +45,7 @@
 #include "PB_State.hpp"
 #include "etl/limits.h"
 
+#include "motion_control_parameters.hpp"
 namespace cogip {
 
 namespace pf {
@@ -209,11 +210,8 @@ static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODE
                                                  encoder_wheels_resolution_pulses);
 
 /// Odometry
-static cogip::localization::LocalizationDifferentialParameters
-    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
-                        encoder_wheels_distance_mm, QDEC_LEFT_POLARITY, QDEC_RIGHT_POLARITY);
-static cogip::localization::LocalizationDifferential localization(localization_params, left_encoder,
-                                                                  right_encoder);
+static cogip::localization::LocalizationDifferential localization(pf_localization_parameters(),
+                                                                  left_encoder, right_encoder);
 
 /// Motor driver
 static cogip::motor::MotorDriverDRV8873 motor_driver(motion_motors_params);
