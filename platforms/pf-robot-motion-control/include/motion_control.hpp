@@ -118,9 +118,6 @@ void pf_send_pb_pose(void);
 /// Send current robot state in Protobuf format over UART
 void pf_send_pb_state(void);
 
-/// Print robot state
-void pf_print_state(void);
-
 } // namespace motion_control
 
 } // namespace pf

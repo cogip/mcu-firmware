@@ -13,93 +13,30 @@
 
 /* RIOT includes */
 #include "log.h"
-#include "shell.h"
-#include "ztimer.h"
 
 /* Project includes */
-#include "app.hpp"
-#include "board.h"
 #include "canpb/ReadBuffer.hpp"
+#include "pf_common/platform_common.hpp"
 #include "platform.hpp"
-#include "utils.hpp"
 
-#define ENABLE_DEBUG (0)
-#include "debug.h"
-
+/* Platform includes */
 #include "pf_power_supply.hpp"
 
-// canpb CAN device
-static cogip::canpb::CanProtobuf canpb(0);
-// canpb default filter
-struct can_filter canpb_filter = {0x0, 0x0};
-
-// Thread stacks
-static char heartbeat_thread_stack[THREAD_STACKSIZE_DEFAULT];
-
-// Heartbeat led blinking interval (ms)
-constexpr uint16_t heartbeat_leds_interval = 200;
-// Heartbeat thread period
-constexpr uint16_t heartbeat_period = 1800;
-
-static void* _heartbeat_thread(void* args)
-{
-    (void)args;
-
-    // Init loop iteration start time
-    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_MSEC);
-
-    while (true) {
-        gpio_set(HEARTBEAT_LED);
-        ztimer_sleep(ZTIMER_MSEC, heartbeat_leds_interval);
-        gpio_clear(HEARTBEAT_LED);
-        ztimer_sleep(ZTIMER_MSEC, heartbeat_leds_interval);
-        gpio_set(HEARTBEAT_LED);
-        ztimer_sleep(ZTIMER_MSEC, heartbeat_leds_interval);
-        gpio_clear(HEARTBEAT_LED);
-
-        // Wait thread period to end
-        ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, heartbeat_period);
-    }
-
-    return 0;
-}
-
-cogip::canpb::CanProtobuf& pf_get_canpb()
-{
-    return canpb;
-}
-
-void _handle_copilot_connected(cogip::canpb::ReadBuffer&)
+/// Custom copilot connected callback for power supply
+static void _on_copilot_connected(cogip::canpb::ReadBuffer&)
 {
     cogip::pf::power_supply::send_emergency_stop_status();
     cogip::pf::power_supply::send_power_rails_status();
     cogip::pf::power_supply::send_power_source_status();
-    LOG_INFO("Copilot connected");
-}
-
-void _handle_copilot_disconnected(cogip::canpb::ReadBuffer&)
-{
-    LOG_INFO("Copilot disconnected");
 }
 
 void pf_init(void)
 {
-    thread_create(heartbeat_thread_stack, sizeof(heartbeat_thread_stack), THREAD_PRIORITY_MAIN - 1,
-                  THREAD_CREATE_STACKTEST, _heartbeat_thread, NULL, "Heartbeat thread");
-
-    /* Initialize CANPB */
-    int canpb_res = canpb.init(&canpb_filter);
-    if (canpb_res) {
-        LOG_ERROR("CAN initialization failed, error: %d\n", canpb_res);
-    } else {
-        canpb.register_message_handler(
-            copilot_connected_uuid,
-            cogip::canpb::message_handler_t::create<_handle_copilot_connected>());
-        canpb.register_message_handler(
-            copilot_disconnected_uuid,
-            cogip::canpb::message_handler_t::create<_handle_copilot_disconnected>());
-
-        canpb.start_reader();
+    /* Initialize common platform (CAN, heartbeat, copilot handlers) with custom callback */
+    int ret = cogip::pf_common::pf_init(
+        cogip::pf_common::copilot_callback_t::create<_on_copilot_connected>());
+    if (ret) {
+        LOG_ERROR("Common platform initialization failed, error: %d\n", ret);
     }
 
     cogip::pf::power_supply::pf_init_power_supply();
@@ -107,5 +44,7 @@ void pf_init(void)
 
 void pf_init_tasks(void)
 {
+    cogip::pf_common::pf_init_tasks();
+
     cogip::pf::power_supply::pf_init_power_supply_tasks();
 }

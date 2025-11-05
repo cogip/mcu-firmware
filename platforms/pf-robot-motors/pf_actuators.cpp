@@ -4,11 +4,12 @@
 // directory for more details.
 
 #include "pf_actuators.hpp"
+
+#include "pf_common/platform_common.hpp"
 #include "pf_positional_actuators.hpp"
 
 #include "board.h"
 #include "log.h"
-#include "platform.hpp"
 #include <inttypes.h>
 
 #include "canpb/CanProtobuf.hpp"

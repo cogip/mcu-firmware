@@ -12,34 +12,21 @@
 #pragma once
 
 // Project includes
-#include "canpb/CanProtobuf.hpp"
+#include "pf_common/platform_common.hpp"
+#include "pf_common/uuids.hpp"
 
-#include <iostream>
-
-/// @name Messages Id
-/// @{
-// Motion Control: 0x1000 - 0x1FFF
-// Actuators: 0x2000 - 0x2FFF
-// Board: 0xF000 - 0xFFFF
+/**
+ * @name Messages Id
+ * @{
+ * @note UUID definitions are centralized in platforms/pf-common/include/pf_common/uuids.hpp
+ *       Add new UUIDs there to ensure consistency across all platforms.
+ */
+// Import common UUIDs into global namespace for compatibility
 // Game: 0x4000 - 0x4FFF
-constexpr cogip::canpb::uuid_t game_start_uuid = 0x4001;
-constexpr cogip::canpb::uuid_t game_end_uuid = 0x4002;
-constexpr cogip::canpb::uuid_t game_reset_uuid = 0x4003;
-// Service: 0x3000 - 0x3FFF
-constexpr cogip::canpb::uuid_t reset_uuid = 0x3001;
-constexpr cogip::canpb::uuid_t copilot_connected_uuid = 0x3002;
-constexpr cogip::canpb::uuid_t copilot_disconnected_uuid = 0x3003;
+using cogip::pf_common::game_end_uuid;
+using cogip::pf_common::game_reset_uuid;
+using cogip::pf_common::game_start_uuid;
 /// @}
-
-/// @brief Set/unset copilot connected
-///
-/// @param[in] connected  copilot connected if true, not connected otherwise
-void pf_set_copilot_connected(bool connected);
-
-/// @brief Returns canpb.
-///
-/// @return  canpb pointer
-cogip::canpb::CanProtobuf& pf_get_canpb();
 
 /// @brief Initialize all platform threads
 ///
