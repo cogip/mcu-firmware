@@ -31,7 +31,7 @@ struct PoseStraightFilterIOKeys
     etl::string_view current_angular_speed; ///< key for angular component of current speed
     etl::string_view target_linear_speed;   ///< key for linear component of target speed
     etl::string_view target_angular_speed;  ///< key for angular component of target speed
-    etl::string_view allow_reverse;         ///< key for permission to move backwards
+    etl::string_view motion_direction;      ///< key for motion direction mode
 
     // Output keys
     etl::string_view linear_pose_error;         ///< key for linear distance to target

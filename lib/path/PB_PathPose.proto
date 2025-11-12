@@ -2,11 +2,17 @@ syntax = "proto3";
 
 import "PB_Pose.proto";
 
+enum PB_MotionDirection {
+    BIDIRECTIONAL = 0;    // Robot can move forward or backward (choose optimal)
+    FORWARD_ONLY = 1;     // Force forward motion only
+    BACKWARD_ONLY = 2;    // Force backward motion only
+}
+
 message PB_PathPose {
     PB_Pose pose = 1;
     uint32 max_speed_ratio_linear = 2;
     uint32 max_speed_ratio_angular = 3;
-    bool allow_reverse = 4;
+    PB_MotionDirection motion_direction = 4;
     bool bypass_anti_blocking = 5;
     uint32 timeout_ms = 6;
     bool bypass_final_orientation = 7;

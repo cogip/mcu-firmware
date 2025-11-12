@@ -7,9 +7,9 @@ namespace cogip {
 namespace path {
 
 Pose::Pose(float x, float y, float O, float max_speed_ratio_linear, float max_speed_ratio_angular,
-           bool allow_reverse, bool bypass_anti_blocking, uint32_t timeout_ms,
+           motion_direction motion_dir, bool bypass_anti_blocking, uint32_t timeout_ms,
            bool bypass_final_orientation, bool is_intermediate)
-    : cogip_defs::Pose(x, y, O), allow_reverse_(allow_reverse),
+    : cogip_defs::Pose(x, y, O), motion_direction_(motion_dir),
       bypass_anti_blocking_(bypass_anti_blocking), timeout_ms_(timeout_ms),
       bypass_final_orientation_(bypass_final_orientation), is_intermediate_(is_intermediate)
 {
@@ -24,7 +24,7 @@ void Pose::pb_read(const PB_PathPose& path_pose)
     x_ = pose.x();
     y_ = pose.y();
     O_ = pose.O();
-    allow_reverse_ = path_pose.allow_reverse();
+    motion_direction_ = static_cast<motion_direction>(path_pose.motion_direction());
     max_speed_ratio_linear_ = path_pose.max_speed_ratio_linear();
     max_speed_ratio_angular_ = path_pose.max_speed_ratio_angular();
     bypass_anti_blocking_ = path_pose.bypass_anti_blocking();
@@ -39,7 +39,7 @@ void Pose::pb_copy(PB_PathPose& path_pose) const
     pose.set_x(x_);
     pose.set_y(y_);
     pose.set_O(O_);
-    path_pose.set_allow_reverse(allow_reverse_);
+    path_pose.set_motion_direction(static_cast<PB_MotionDirection>(motion_direction_));
     path_pose.set_max_speed_ratio_linear(max_speed_ratio_linear_);
     path_pose.set_max_speed_ratio_angular(max_speed_ratio_angular_);
     path_pose.set_bypass_anti_blocking(bypass_anti_blocking_);
