@@ -8,6 +8,7 @@
 #include "cogip_defs/Polar.hpp"
 #include "cogip_defs/Pose.hpp"
 #include "log.h"
+#include "path/MotionDirection.hpp"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "trigonometry.h"
 
@@ -104,31 +105,61 @@ void PoseStraightFilter::execute(ControllersIO& io)
     }
     cogip_defs::Polar target_speed(target_pose_lin, target_pose_ang);
 
-    // Read reverse permission flag
-    bool allow_rev = false;
-    if (auto opt = io.get_as<bool>(keys_.allow_reverse)) {
-        allow_rev = static_cast<bool>(*opt);
+    // Read motion direction mode
+    cogip::path::motion_direction motion_dir = cogip::path::motion_direction::bidirectional;
+    if (auto opt = io.get_as<int>(keys_.motion_direction)) {
+        motion_dir = static_cast<cogip::path::motion_direction>(*opt);
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value false",
-                    keys_.allow_reverse.data());
+        LOG_WARNING("WARNING: %s is not available, using default value bidirectional",
+                    keys_.motion_direction.data());
     }
 
-    // Persist reverse flag when switching to MOVE_TO_POSITION state
-    static bool force_rev = false;
+    // Persist reverse permission when switching to MOVE_TO_POSITION state
+    static bool force_can_reverse = false;
     static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
 
     if ((target_pose_x != prev_target.x()) || (target_pose_y != prev_target.y()) ||
         (target_pose_O != prev_target.O())) {
-        force_rev = false;
+        force_can_reverse = false;
         prev_target = target_pose;
     }
-    if (force_rev) {
-        allow_rev = true;
+
+    // Apply motion direction constraints
+    bool can_reverse = false;
+    bool must_reverse = false;
+
+    switch (motion_dir) {
+    case cogip::path::motion_direction::bidirectional:
+        // Allow optimal choice: reverse if angle > 90°
+        can_reverse = true;
+        break;
+    case cogip::path::motion_direction::forward_only:
+        // Never reverse
+        break;
+    case cogip::path::motion_direction::backward_only:
+        // Always reverse
+        must_reverse = true;
+        break;
+    default:
+        LOG_ERROR("ERROR: motion direction invalid - should never happen\n");
+    }
+
+    // Force can_reverse to true once motion has started
+    if (force_can_reverse) {
+        can_reverse = true;
+        must_reverse = false;
     }
 
     // Compute pose error as polar difference
     cogip_defs::Polar pos_err = target_pose - current_pose;
-    if (allow_rev && (etl::absolute(pos_err.angle()) > 90.0f)) {
+
+    // Apply direction: reverse if must or if allowed and angle > 90°
+    if (must_reverse) {
+        DEBUG("Reverse error as must reverse\n");
+        pos_err.reverse();
+    }
+    if (can_reverse && etl::absolute(pos_err.angle()) > 90.0f) {
+        DEBUG("Reverse error as can reverse\n");
         pos_err.reverse();
     }
 
@@ -158,7 +189,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
         } else {
             target_speed.set_distance(pos_err.distance() >= 0 ? 1.0f
                                                               : -1.0f); // forward motion sign
-            force_rev = true;
+            force_can_reverse = true;
             current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
         }
         break;

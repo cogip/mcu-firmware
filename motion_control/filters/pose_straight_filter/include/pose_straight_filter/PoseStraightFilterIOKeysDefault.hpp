@@ -31,7 +31,7 @@ static const PoseStraightFilterIOKeys pose_straight_filter_io_keys_default = {
     .current_angular_speed = "current_angular_speed",
     .target_linear_speed = "target_linear_speed",
     .target_angular_speed = "target_angular_speed",
-    .allow_reverse = "allow_reverse",
+    .motion_direction = "motion_direction",
 
     // Output keys
     .linear_pose_error = "linear_pose_error",
