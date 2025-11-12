@@ -115,13 +115,18 @@ void PoseStraightFilter::execute(ControllersIO& io)
     }
 
     // Persist reverse permission when switching to MOVE_TO_POSITION state
+    // and detect target changes to reset oscillation detection
     static bool force_can_reverse = false;
     static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
+    static bool target_changed = false;
 
     if ((target_pose_x != prev_target.x()) || (target_pose_y != prev_target.y()) ||
         (target_pose_O != prev_target.O())) {
         force_can_reverse = false;
+        target_changed = true;
         prev_target = target_pose;
+    } else {
+        target_changed = false;
     }
 
     // Apply motion direction constraints
@@ -203,14 +208,42 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
         DEBUG("ROTATE_TO_FINAL_ANGLE");
-        if (!parameters_.bypass_final_orientation()) {
-            pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
-        } else {
-            pos_err.set_angle(0.0f);
-        }
-        target_speed.set_distance(0.0f);
-        if (etl::absolute(pos_err.angle()) <= angular_threshold) {
-            current_state_ = PoseStraightFilterState::FINISHED;
+        {
+            static float prev_angular_error = 0.0f;
+            static bool first_entry = true;
+
+            // Reset on target change
+            if (target_changed) {
+                first_entry = true;
+                prev_angular_error = 0.0f;
+            }
+
+            if (!parameters_.bypass_final_orientation()) {
+                pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
+            } else {
+                pos_err.set_angle(0.0f);
+            }
+            target_speed.set_distance(0.0f);
+
+            float current_angular_error = pos_err.angle();
+
+            // Detect completion conditions:
+            // 1. Sign change: angular error crosses zero (prev and current have opposite signs)
+            //    This indicates oscillation around the target angle - we're close enough
+            // 2. Within threshold: angular error is small enough to consider target reached
+            // Note: first_entry check prevents false positive on first iteration
+            bool sign_changed = !first_entry && (prev_angular_error * current_angular_error < 0.0f);
+            bool within_threshold = etl::absolute(current_angular_error) <= angular_threshold;
+
+            if (within_threshold || sign_changed) {
+                // Target angle reached - move to FINISHED state
+                current_state_ = PoseStraightFilterState::FINISHED;
+                first_entry = true;
+            } else {
+                // Continue rotating - save current error for next iteration's oscillation detection
+                prev_angular_error = current_angular_error;
+                first_entry = false;
+            }
         }
         break;
 
