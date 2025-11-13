@@ -99,7 +99,7 @@ class ControllersIO
             if (etl::holds_alternative<T>(*opt)) {
                 return etl::get<T>(*opt);
             } else {
-                LOG_ERROR("Error getting %.*s", static_cast<int>(key.size()), key.data());
+                LOG_ERROR("Error getting %.*s\n", static_cast<int>(key.size()), key.data());
             }
         }
         return {};

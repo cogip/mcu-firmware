@@ -27,7 +27,7 @@ void PosePIDController::execute(ControllersIO& io)
     if (auto opt_err = io.get_as<float>(keys_.position_error)) {
         position_error = *opt_err;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.position_error.data(), position_error);
     }
 

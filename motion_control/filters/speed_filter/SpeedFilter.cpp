@@ -57,7 +57,7 @@ void SpeedFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.speed_order)) {
         speed_order = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.speed_order.data(), speed_order);
     }
 
@@ -66,7 +66,7 @@ void SpeedFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.current_speed)) {
         current_speed = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_speed.data(), current_speed);
     }
 
@@ -75,7 +75,7 @@ void SpeedFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.target_speed)) {
         target_speed = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_speed.data(), target_speed);
     }
 
@@ -84,7 +84,7 @@ void SpeedFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<bool>(keys_.speed_filter_flag)) {
         no_filter = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %d",
+        LOG_WARNING("WARNING: %s is not available, using default value %d\n",
                     keys_.speed_filter_flag.data(), no_filter);
     }
 
@@ -110,7 +110,7 @@ void SpeedFilter::execute(ControllersIO& io)
 
         if (anti_blocking_blocked_cycles_nb_ >
             parameters_.anti_blocking_blocked_cycles_nb_threshold()) {
-            LOG_WARNING("BLOCKED");
+            LOG_WARNING("BLOCKED\n");
 
             // Write updated pose‐reached status
             io.set(keys_.pose_reached, target_pose_status_t::blocked);
