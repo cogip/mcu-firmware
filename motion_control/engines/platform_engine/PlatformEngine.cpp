@@ -32,6 +32,9 @@ void PlatformEngine::prepare_inputs()
     // Update current pose and speed
     localization_.update();
 
+    // Reset read-only markers to allow engine updates
+    io_.reset_readonly_markers();
+
     // Current pose
     io_.set("current_pose_x", localization_.pose().x());
     io_.set("current_pose_y", localization_.pose().y());
