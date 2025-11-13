@@ -267,9 +267,6 @@ void PoseStraightFilter::execute(ControllersIO& io)
     // Write linear pose error
     io.set(keys_.linear_pose_error, pos_err.distance());
 
-    // Write linear current speed
-    io.set(keys_.linear_current_speed, current_speed.distance());
-
     // Write linear target speed as absolute
     io.set(keys_.linear_target_speed, etl::absolute(target_speed.distance()));
 
@@ -278,9 +275,6 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     // Write angular pose error
     io.set(keys_.angular_pose_error, pos_err.angle());
-
-    // Write angular current speed
-    io.set(keys_.angular_current_speed, current_speed.angle());
 
     // Write angular target speed as absolute
     io.set(keys_.angular_target_speed, etl::absolute(target_speed.angle()));
