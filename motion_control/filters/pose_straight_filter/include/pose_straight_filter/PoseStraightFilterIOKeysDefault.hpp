@@ -27,10 +27,10 @@ static const PoseStraightFilterIOKeys pose_straight_filter_io_keys_default = {
     .target_pose_x = "target_pose_x",
     .target_pose_y = "target_pose_y",
     .target_pose_O = "target_pose_O",
-    .current_linear_speed = "current_linear_speed",
-    .current_angular_speed = "current_angular_speed",
-    .target_linear_speed = "target_linear_speed",
-    .target_angular_speed = "target_angular_speed",
+    .current_linear_speed = "linear_current_speed",
+    .current_angular_speed = "angular_current_speed",
+    .target_linear_speed = "linear_target_speed",
+    .target_angular_speed = "angular_target_speed",
     .motion_direction = "motion_direction",
 
     // Output keys
