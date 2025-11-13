@@ -21,28 +21,28 @@ namespace motion_control {
 
 void PoseStraightFilter::execute(ControllersIO& io)
 {
-    DEBUG("Execute PoseStraightFilter");
+    DEBUG("Execute PoseStraightFilter\n");
 
     // Read current pose coordinates and orientation
     float current_pose_x = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_x)) {
         current_pose_x = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_pose_x.data(), current_pose_x);
     }
     float current_pose_y = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_y)) {
         current_pose_y = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_pose_y.data(), current_pose_y);
     }
     float current_pose_O = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose_O)) {
         current_pose_O = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_pose_O.data(), current_pose_O);
     }
     cogip_defs::Pose current_pose(current_pose_x, current_pose_y, current_pose_O);
@@ -52,21 +52,21 @@ void PoseStraightFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.target_pose_x)) {
         target_pose_x = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_pose_x.data(), target_pose_x);
     }
     float target_pose_y = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose_y)) {
         target_pose_y = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_pose_y.data(), target_pose_y);
     }
     float target_pose_O = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_pose_O)) {
         target_pose_O = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_pose_O.data(), target_pose_O);
     }
     cogip_defs::Pose target_pose(target_pose_x, target_pose_y, target_pose_O);
@@ -76,14 +76,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.current_linear_speed)) {
         curr_lin = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_linear_speed.data(), curr_lin);
     }
     float curr_ang = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_angular_speed)) {
         curr_ang = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_angular_speed.data(), curr_ang);
     }
     const cogip_defs::Polar current_speed(curr_lin, curr_ang);
@@ -93,14 +93,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.target_linear_speed)) {
         target_pose_lin = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_linear_speed.data(), target_pose_lin);
     }
     float target_pose_ang = 0.0f;
     if (auto opt = io.get_as<float>(keys_.target_angular_speed)) {
         target_pose_ang = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_angular_speed.data(), target_pose_ang);
     }
     cogip_defs::Polar target_speed(target_pose_lin, target_pose_ang);
@@ -110,7 +110,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<int>(keys_.motion_direction)) {
         motion_dir = static_cast<cogip::path::motion_direction>(*opt);
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value bidirectional",
+        LOG_WARNING("WARNING: %s is not available, using default value bidirectional\n",
                     keys_.motion_direction.data());
     }
 
@@ -188,7 +188,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     switch (current_state_) {
     case PoseStraightFilterState::ROTATE_TO_DIRECTION:
-        DEBUG("ROTATE_TO_DIRECTION");
+        DEBUG("ROTATE_TO_DIRECTION\n");
         if (absolute_angular_pose_error > angular_intermediate_threshold) {
             target_speed.set_distance(0.0f);
         } else {
@@ -200,14 +200,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
         break;
 
     case PoseStraightFilterState::MOVE_TO_POSITION:
-        DEBUG("MOVE_TO_POSITION");
+        DEBUG("MOVE_TO_POSITION\n");
         if (absolute_linear_pose_error <= linear_threshold) {
             current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
         }
         break;
 
     case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
-        DEBUG("ROTATE_TO_FINAL_ANGLE");
+        DEBUG("ROTATE_TO_FINAL_ANGLE\n");
         {
             static float prev_angular_error = 0.0f;
             static bool first_entry = true;
@@ -248,7 +248,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
         break;
 
     case PoseStraightFilterState::FINISHED:
-        DEBUG("FINISHED");
+        DEBUG("FINISHED\n");
         target_speed.set_distance(0.0f);
         target_speed.set_angle(0.0f);
         break;
