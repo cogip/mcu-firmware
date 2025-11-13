@@ -50,7 +50,7 @@ void SpeedFilter::limit_speed_order(float* speed_order, float raw_target, float 
 
 void SpeedFilter::execute(ControllersIO& io)
 {
-    DEBUG("Execute SpeedFilter");
+    DEBUG("Execute SpeedFilter\n");
 
     // Read commanded speed before filtering (default to zero if missing)
     float speed_order = 0.0f;
@@ -102,7 +102,7 @@ void SpeedFilter::execute(ControllersIO& io)
 
         if (below_threshold && no_acceleration) {
             anti_blocking_blocked_cycles_nb_++;
-            DEBUG("Anti blocking cycles number: %" PRIu32,
+            DEBUG("Anti blocking cycles number: %" PRIu32 "\n",
                   static_cast<uint32_t>(anti_blocking_blocked_cycles_nb_));
         } else {
             anti_blocking_blocked_cycles_nb_ = 0;

@@ -21,7 +21,7 @@ namespace motion_control {
 
 void PassthroughPosePIDController::execute(ControllersIO& io)
 {
-    DEBUG("Execute PassthroughPosePIDController");
+    DEBUG("Execute PassthroughPosePIDController\n");
 
     // Read position error (default to 0.0f if missing)
     float position_error = 0.0f;

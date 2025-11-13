@@ -48,7 +48,7 @@ template <size_t NB_CONTROLLERS> class MetaController : public BaseMetaControlle
             return;
         }
 
-        DEBUG("Execute MetaController of %" PRIu32 " controllers",
+        DEBUG("Execute MetaController of %" PRIu32 " controllers\n",
               static_cast<uint32_t>(controllers_.size()));
 
         size_t index = 0;

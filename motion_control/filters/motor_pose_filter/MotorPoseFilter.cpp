@@ -21,7 +21,7 @@ namespace motion_control {
 
 void MotorPoseFilter::execute(ControllersIO& io)
 {
-    DEBUG("Execute MotorPoseFilter");
+    DEBUG("Execute MotorPoseFilter\n");
 
     // Read current pose (default to zero if missing)
     float current_pose = 0.0f;

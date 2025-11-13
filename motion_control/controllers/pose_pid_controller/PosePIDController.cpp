@@ -20,7 +20,7 @@ namespace motion_control {
 
 void PosePIDController::execute(ControllersIO& io)
 {
-    DEBUG("Execute PosePIDController");
+    DEBUG("Execute PosePIDController\n");
 
     // Read position error (default to 0.0f if missing)
     float position_error = 0.0f;

@@ -45,7 +45,7 @@ class ParallelMetaController : public MetaController<NB_CONTROLLERS>
             return;
         }
 
-        DEBUG("Execute ParallelMetaController");
+        DEBUG("Execute ParallelMetaController\n");
 
         // Cumulative set of keys already written by previous controllers.
         etl::set<ParamKey, MAX_PARAMS> cumulative_written;

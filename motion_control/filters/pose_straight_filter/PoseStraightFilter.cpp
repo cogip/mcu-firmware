@@ -21,7 +21,7 @@ namespace motion_control {
 
 void PoseStraightFilter::execute(ControllersIO& io)
 {
-    DEBUG("Execute PoseStraightFilter");
+    DEBUG("Execute PoseStraightFilter\n");
 
     // Read current pose coordinates and orientation
     float current_pose_x = 0.0f;
@@ -186,7 +186,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     switch (current_state_) {
     case PoseStraightFilterState::ROTATE_TO_DIRECTION:
-        DEBUG("ROTATE_TO_DIRECTION");
+        DEBUG("ROTATE_TO_DIRECTION\n");
         if (absolute_angular_pose_error > angular_intermediate_threshold) {
             target_speed.set_distance(0.0f);
         } else {
@@ -198,14 +198,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
         break;
 
     case PoseStraightFilterState::MOVE_TO_POSITION:
-        DEBUG("MOVE_TO_POSITION");
+        DEBUG("MOVE_TO_POSITION\n");
         if (absolute_linear_pose_error <= linear_threshold) {
             current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
         }
         break;
 
     case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
-        DEBUG("ROTATE_TO_FINAL_ANGLE");
+        DEBUG("ROTATE_TO_FINAL_ANGLE\n");
         {
             static float prev_angular_error = 0.0f;
             static bool first_entry = true;
@@ -240,7 +240,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
         break;
 
     case PoseStraightFilterState::FINISHED:
-        DEBUG("FINISHED");
+        DEBUG("FINISHED\n");
         target_speed.set_distance(0.0f);
         target_speed.set_angle(0.0f);
         break;
