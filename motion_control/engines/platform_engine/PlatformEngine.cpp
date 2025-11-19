@@ -54,7 +54,7 @@ void PlatformEngine::prepare_inputs()
     io_.set("angular_target_speed", target_speed_.angle());
 
     // Motion direction
-    io_.set("motion_direction", static_cast<int>(target_pose_.get_motion_direction()));
+    io_.set("motion_direction", target_pose_.get_motion_direction());
 
     // Mark measured values read‑only:
     io_.mark_readonly("motion_direction");

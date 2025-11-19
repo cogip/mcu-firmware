@@ -271,7 +271,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
     io.set(keys_.linear_target_speed, etl::absolute(target_speed.distance()));
 
     // Write linear speed filter flag
-    io.set(keys_.linear_speed_filter_flag, static_cast<bool>(no_linear_limit_flag));
+    io.set(keys_.linear_speed_filter_flag, no_linear_limit_flag);
 
     // Write angular pose error
     io.set(keys_.angular_pose_error, pos_err.angle());
@@ -280,7 +280,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
     io.set(keys_.angular_target_speed, etl::absolute(target_speed.angle()));
 
     // Write angular speed filter flag
-    io.set(keys_.angular_speed_filter_flag, static_cast<bool>(no_angular_limit_flag));
+    io.set(keys_.angular_speed_filter_flag, no_angular_limit_flag);
 
     // Write updated pose reached status
     target_pose_status_t reached = (current_state_ == PoseStraightFilterState::FINISHED)

@@ -99,10 +99,10 @@ void MotorPoseFilter::execute(ControllersIO& io)
     io.set(keys_.filtered_speed, etl::absolute(target_speed));
 
     // Indicate whether speed limitation is disabled
-    io.set(keys_.speed_filter_flag, static_cast<float>(no_speed_limit));
+    io.set(keys_.speed_filter_flag, no_speed_limit);
 
     // Write updated pose reached status
-    io.set(keys_.pose_reached_out, static_cast<float>(pose_reached));
+    io.set(keys_.pose_reached_out, pose_reached);
 }
 
 } // namespace motion_control
