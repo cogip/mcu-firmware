@@ -21,7 +21,7 @@ class LocalizationDifferential : public LocalizationInterface
   public:
     /// @brief Construct a new differential localization object
     /// @param parameters Localization parameters
-    explicit LocalizationDifferential(LocalizationDifferentialParameters& parameters,
+    explicit LocalizationDifferential(const LocalizationDifferentialParameters& parameters,
                                       cogip::encoder::EncoderInterface& left_encoder,
                                       cogip::encoder::EncoderInterface& right_encoder)
         : parameters_(parameters), left_encoder_(left_encoder), right_encoder_(right_encoder)
@@ -72,7 +72,7 @@ class LocalizationDifferential : public LocalizationInterface
     int update() override;
 
   private:
-    LocalizationDifferentialParameters& parameters_;
+    const LocalizationDifferentialParameters& parameters_;
 
     cogip::encoder::EncoderInterface& left_encoder_;
     cogip::encoder::EncoderInterface& right_encoder_;
