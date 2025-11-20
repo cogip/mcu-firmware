@@ -16,46 +16,73 @@ namespace cogip {
 
 namespace parameter {
 
-/// @brief No validation policy - accepts all values as-is
-/// @details This is the default policy that performs no validation.
-///          The value is always considered valid.
-struct NoValidation
-{
-    /// @brief Validate a parameter value
-    /// @tparam T The parameter value type
-    /// @param value The input value to validate
-    /// @return true Always returns true (value is always valid)
-    template <typename T> static bool validate([[maybe_unused]] const T& value)
-    {
-        return true;
-    }
-};
-
 /// @brief Bounds validation policy - rejects values outside [min, max] range
 /// @tparam MinVal Minimum allowed value (compile-time constant)
 /// @tparam MaxVal Maximum allowed value (compile-time constant)
 /// @details This policy rejects values that are outside the specified bounds.
-///          If the value is out of range, validation fails and the parameter remains unchanged.
-///          Only applicable to numeric types.
-///
-/// @note Compile-time checks:
-///       - MinVal must be less than or equal to MaxVal (enforced via static_assert)
-///       - Initial values in constructors are only checked at runtime
+///          If the value is out of range, on_set returns false and the parameter remains unchanged.
 template <auto MinVal, auto MaxVal> struct WithBounds
 {
-    // Compile-time validation of bounds
     static_assert(MinVal <= MaxVal, "MinVal must be less than or equal to MaxVal");
 
-    /// @brief Validate a parameter value against specified bounds
+    /// @brief Validate value against specified bounds
     /// @tparam T The parameter value type
-    /// @param value The input value to validate
+    /// @param value The value to validate (not modified)
     /// @return true if value is within [MinVal, MaxVal], false otherwise
-    template <typename T> static bool validate(const T& value)
+    template <typename T> static bool on_set(T& value)
     {
-        if (value < static_cast<T>(MinVal) || value > static_cast<T>(MaxVal)) {
-            return false;
+        return value >= static_cast<T>(MinVal) && value <= static_cast<T>(MaxVal);
+    }
+};
+
+/// @brief Clamping policy - clamps values to [min, max] range (always succeeds)
+/// @tparam MinVal Minimum allowed value (compile-time constant)
+/// @tparam MaxVal Maximum allowed value (compile-time constant)
+/// @details This policy modifies out-of-range values to fit within bounds.
+template <auto MinVal, auto MaxVal> struct Clamp
+{
+    static_assert(MinVal <= MaxVal, "MinVal must be less than or equal to MaxVal");
+
+    /// @brief Clamp value to specified bounds
+    /// @tparam T The parameter value type
+    /// @param value The value to clamp (modified in place)
+    /// @return true always (clamping never fails)
+    template <typename T> static bool on_set(T& value)
+    {
+        if (value < static_cast<T>(MinVal)) {
+            value = static_cast<T>(MinVal);
+        } else if (value > static_cast<T>(MaxVal)) {
+            value = static_cast<T>(MaxVal);
         }
         return true;
+    }
+};
+
+/// @brief Non-zero validation policy - rejects zero values
+/// @details Useful for parameters that must not be zero (e.g., divisors, multipliers)
+struct NonZero
+{
+    /// @brief Validate that value is not zero
+    /// @tparam T The parameter value type
+    /// @param value The value to validate (not modified)
+    /// @return true if value is not zero, false otherwise
+    template <typename T> static bool on_set(T& value)
+    {
+        return value != T{};
+    }
+};
+
+/// @brief Positive validation policy - rejects zero and negative values
+/// @details Useful for parameters that must be strictly positive (e.g., speeds)
+struct Positive
+{
+    /// @brief Validate that value is strictly positive (> 0)
+    /// @tparam T The parameter value type
+    /// @param value The value to validate (not modified)
+    /// @return true if value is positive, false otherwise
+    template <typename T> static bool on_set(T& value)
+    {
+        return value > T{};
     }
 };
 
