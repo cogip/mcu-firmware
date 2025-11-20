@@ -14,6 +14,9 @@ ROBOT_ID ?= 1
 # Platform
 USEMODULE += pf-robot-motion-control
 
+# Lib
+USEMODULE += parameter
+
 # Update maximum number of motors for actuators
 CFLAGS += -DCONFIG_MOTOR_DRIVER_MAX=2
 CFLAGS += -DROBOT_ID=$(ROBOT_ID)
