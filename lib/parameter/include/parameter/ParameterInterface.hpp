@@ -39,6 +39,10 @@ class ParameterBase
     /// @brief Check if parameter holds valid value
     /// @return Status depending on the validation policy
     virtual bool isValid() const = 0;
+
+    /// @brief Check if the parameter can be written to
+    /// @return true if write operations are allowed, false otherwise
+    virtual bool canWrite() const = 0;
 };
 
 /// @brief Typed interface for polymorphic parameter manipulation
