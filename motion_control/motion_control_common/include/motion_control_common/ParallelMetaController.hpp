@@ -41,11 +41,11 @@ class ParallelMetaController : public MetaController<NB_CONTROLLERS>
     void execute(ControllersIO& io) override
     {
         if (this->controllers_.empty()) {
-            LOG_ERROR("Error: no controller added.");
+            LOG_ERROR("Error: no controller added.\n");
             return;
         }
 
-        DEBUG("Execute ParallelMetaController");
+        DEBUG("Execute ParallelMetaController\n");
 
         // Cumulative set of keys already written by previous controllers.
         etl::set<ParamKey, MAX_PARAMS> cumulative_written;
@@ -67,7 +67,7 @@ class ParallelMetaController : public MetaController<NB_CONTROLLERS>
             auto collisions = ControllersIO::find_collisions(just_written, cumulative_written);
             for (auto h : collisions) {
                 LOG_WARNING("Key hash %" PRIu32
-                            " was already written by another parallel controller",
+                            " was already written by another parallel controller\n",
                             static_cast<uint32_t>(h));
             }
 

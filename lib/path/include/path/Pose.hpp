@@ -12,6 +12,7 @@
 #pragma once
 
 #include "cogip_defs/Pose.hpp"
+#include "path/MotionDirection.hpp"
 #include "utils.hpp"
 
 #include "PB_PathPose.hpp"
@@ -25,16 +26,17 @@ class Pose : public cogip_defs::Pose
 {
   public:
     /// Constuctor.
-    explicit Pose(float x = 0.0,                         ///< [in] X coordinate
-                  float y = 0.0,                         ///< [in] Y coodinate
-                  float O = 0.0,                         ///< [in] 0-orientation
-                  float max_speed_ratio_linear = 0.0,    ///< [in] max speed linear
-                  float max_speed_ratio_angular = 0.0,   ///< [in] max speed angular
-                  bool allow_reverse = true,             ///< [in] reverse mode
-                  bool bypass_antiblocking = false,      ///< [in] bypass anti blocking
-                  uint32_t timeout_ms = 0,               ///< [in] move timeout
-                  bool bypass_final_orientation = false, ///< [in] bypass final orientation
-                  bool is_intermediate = false           ///< [in] is an intermediate pose
+    explicit Pose(
+        float x = 0.0,                                                 ///< [in] X coordinate
+        float y = 0.0,                                                 ///< [in] Y coodinate
+        float O = 0.0,                                                 ///< [in] 0-orientation
+        float max_speed_ratio_linear = 0.0,                            ///< [in] max speed linear
+        float max_speed_ratio_angular = 0.0,                           ///< [in] max speed angular
+        motion_direction motion_dir = motion_direction::bidirectional, ///< [in] motion direction
+        bool bypass_antiblocking = false,      ///< [in] bypass anti blocking
+        uint32_t timeout_ms = 0,               ///< [in] move timeout
+        bool bypass_final_orientation = false, ///< [in] bypass final orientation
+        bool is_intermediate = false           ///< [in] is an intermediate pose
     );
 
     /// Destructor
@@ -52,17 +54,17 @@ class Pose : public cogip_defs::Pose
         return max_speed_ratio_angular_;
     };
 
-    /// Is reverse mode allowed or not.
-    virtual bool allow_reverse() const
+    /// Get motion direction setting.
+    virtual motion_direction get_motion_direction() const
     {
-        return allow_reverse_;
+        return motion_direction_;
     };
 
-    /// Enable or disable reverse mode.
-    virtual void set_allow_reverse(bool enable ///< new value for reverse mode
+    /// Set motion direction.
+    virtual void set_motion_direction(motion_direction direction ///< new motion direction
     )
     {
-        allow_reverse_ = enable;
+        motion_direction_ = direction;
     };
 
     /// Return true if anti blocking should be bypassed
@@ -104,20 +106,20 @@ class Pose : public cogip_defs::Pose
                 areDoublesEqual(O(), other.O()) &&
                 areDoublesEqual(max_speed_ratio_linear(), other.max_speed_ratio_linear()) &&
                 areDoublesEqual(max_speed_ratio_angular(), other.max_speed_ratio_angular()) &&
-                allow_reverse() == other.allow_reverse() &&
+                get_motion_direction() == other.get_motion_direction() &&
                 bypass_anti_blocking() == other.bypass_anti_blocking() &&
                 timeout_ms() == other.timeout_ms() &&
                 bypass_final_orientation() == other.bypass_final_orientation());
     };
 
   private:
-    float max_speed_ratio_linear_;  ///< max speed
-    float max_speed_ratio_angular_; ///< max speed
-    bool allow_reverse_;            ///< reverse mode
-    bool bypass_anti_blocking_;     ///< bypass anti blocking
-    uint32_t timeout_ms_;           ///< timeout(ms) to reach the path pose
-    bool bypass_final_orientation_; ///< bypass anti blocking
-    bool is_intermediate_;          ///< intermediate pose
+    float max_speed_ratio_linear_;      ///< max speed
+    float max_speed_ratio_angular_;     ///< max speed
+    motion_direction motion_direction_; ///< motion direction mode
+    bool bypass_anti_blocking_;         ///< bypass anti blocking
+    uint32_t timeout_ms_;               ///< timeout(ms) to reach the path pose
+    bool bypass_final_orientation_;     ///< bypass anti blocking
+    bool is_intermediate_;              ///< intermediate pose
 };
 
 } // namespace path

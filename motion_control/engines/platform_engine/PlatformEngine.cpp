@@ -32,6 +32,9 @@ void PlatformEngine::prepare_inputs()
     // Update current pose and speed
     localization_.update();
 
+    // Reset read-only markers to allow engine updates
+    io_.reset_readonly_markers();
+
     // Current pose
     io_.set("current_pose_x", localization_.pose().x());
     io_.set("current_pose_y", localization_.pose().y());
@@ -43,23 +46,23 @@ void PlatformEngine::prepare_inputs()
     io_.set("target_pose_O", target_pose_.O());
 
     // Current speed
-    io_.set("current_linear_speed", localization_.delta_polar_pose().distance());
-    io_.set("current_angular_speed", localization_.delta_polar_pose().angle());
+    io_.set("linear_current_speed", localization_.delta_polar_pose().distance());
+    io_.set("angular_current_speed", localization_.delta_polar_pose().angle());
 
     // Target speed
-    io_.set("target_linear_speed", target_speed_.distance());
-    io_.set("target_angular_speed", target_speed_.angle());
+    io_.set("linear_target_speed", target_speed_.distance());
+    io_.set("angular_target_speed", target_speed_.angle());
 
-    // Allow reverse
-    io_.set("allow_reverse", target_pose_.allow_reverse());
+    // Motion direction
+    io_.set("motion_direction", target_pose_.get_motion_direction());
 
     // Mark measured values read‑only:
-    io_.mark_readonly("allow_reverse");
+    io_.mark_readonly("motion_direction");
     io_.mark_readonly("current_pose_x");
     io_.mark_readonly("current_pose_y");
     io_.mark_readonly("current_pose_O");
-    io_.mark_readonly("current_linear_speed");
-    io_.mark_readonly("current_angular_speed");
+    io_.mark_readonly("linear_current_speed");
+    io_.mark_readonly("angular_current_speed");
 };
 
 void PlatformEngine::process_outputs()

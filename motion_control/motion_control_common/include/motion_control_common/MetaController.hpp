@@ -44,17 +44,17 @@ template <size_t NB_CONTROLLERS> class MetaController : public BaseMetaControlle
     void execute(ControllersIO& io) override
     {
         if (controllers_.empty()) {
-            LOG_ERROR("Error: no controller in MetaController");
+            LOG_ERROR("Error: no controller in MetaController\n");
             return;
         }
 
-        DEBUG("Execute MetaController of %" PRIu32 " controllers",
+        DEBUG("Execute MetaController of %" PRIu32 " controllers\n",
               static_cast<uint32_t>(controllers_.size()));
 
         size_t index = 0;
         for (auto* controller : controllers_) {
             if (!controller) {
-                LOG_ERROR("controllers_[%" PRIu32 "] is nullptr!", static_cast<uint32_t>(index));
+                LOG_ERROR("controllers_[%" PRIu32 "] is nullptr!\n", static_cast<uint32_t>(index));
             } else {
                 controller->execute(io);
             }

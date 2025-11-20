@@ -21,14 +21,14 @@ namespace motion_control {
 
 void MotorPoseFilter::execute(ControllersIO& io)
 {
-    DEBUG("Execute MotorPoseFilter");
+    DEBUG("Execute MotorPoseFilter\n");
 
     // Read current pose (default to zero if missing)
     float current_pose = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_pose)) {
         current_pose = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_pose.data(), current_pose);
     }
 
@@ -37,7 +37,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.target_pose)) {
         target_pose = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_pose.data(), target_pose);
     }
 
@@ -46,7 +46,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.current_speed)) {
         current_speed = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.current_speed.data(), current_speed);
     }
 
@@ -55,7 +55,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.target_speed)) {
         target_speed = *opt;
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %f",
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
                     keys_.target_speed.data(), target_speed);
     }
 
@@ -64,7 +64,7 @@ void MotorPoseFilter::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.pose_reached)) {
         pose_reached = static_cast<target_pose_status_t>(static_cast<int>(*opt));
     } else {
-        LOG_WARNING("WARNING: %s is not available, using default value %d",
+        LOG_WARNING("WARNING: %s is not available, using default value %d\n",
                     keys_.pose_reached.data(), static_cast<int>(pose_reached));
     }
 
@@ -99,10 +99,10 @@ void MotorPoseFilter::execute(ControllersIO& io)
     io.set(keys_.filtered_speed, etl::absolute(target_speed));
 
     // Indicate whether speed limitation is disabled
-    io.set(keys_.speed_filter_flag, static_cast<float>(no_speed_limit));
+    io.set(keys_.speed_filter_flag, no_speed_limit);
 
     // Write updated pose reached status
-    io.set(keys_.pose_reached_out, static_cast<float>(pose_reached));
+    io.set(keys_.pose_reached_out, pose_reached);
 }
 
 } // namespace motion_control

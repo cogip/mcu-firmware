@@ -18,6 +18,7 @@
 #include <etl/set.h>
 #include <etl/string.h>
 #include <etl/string_view.h>
+#include <etl/type_traits.h>
 #include <etl/unordered_map.h>
 #include <etl/variant.h>
 #include <etl/vector.h>
@@ -75,6 +76,21 @@ class ControllersIO
     /// returned.
     int set(KeyType key, const ParamValue& value);
 
+    /// @brief Template overload to set values with automatic type conversion.
+    /// @tparam T Type of the value (enum or basic type).
+    /// @param key   The parameter name.
+    /// @param value The value to store.
+    /// @return 0 on success; EACCES if the key is read-only.
+    /// @note Enums are automatically converted to their underlying integer type.
+    template <typename T> int set(KeyType key, const T& value)
+    {
+        if constexpr (etl::is_enum_v<T>) {
+            return set(key, ParamValue(static_cast<int>(value)));
+        } else {
+            return set(key, ParamValue(value));
+        }
+    }
+
     /// @brief Mark a parameter key as read-only.
     /// @param key The parameter name to protect.
     void mark_readonly(KeyType key);
@@ -99,7 +115,7 @@ class ControllersIO
             if (etl::holds_alternative<T>(*opt)) {
                 return etl::get<T>(*opt);
             } else {
-                LOG_ERROR("Error getting %.*s", static_cast<int>(key.size()), key.data());
+                LOG_ERROR("Error getting %.*s\n", static_cast<int>(key.size()), key.data());
             }
         }
         return {};
