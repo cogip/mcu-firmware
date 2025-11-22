@@ -15,6 +15,7 @@
 #include "etl/type_traits.h"
 #include "mutex.h"
 
+#include "AccessPolicies.hpp"
 #include "PB_ParameterCommands.hpp"
 #include "ParameterInterface.hpp"
 #include "ValidationPolicies.hpp"
@@ -25,11 +26,12 @@ namespace parameter {
 
 /// @brief Policy-based parameter class template
 /// @tparam T The C++ value type (arithmetic types or bool)
+/// @tparam AccessPolicy Policy for read/write access control (default: ReadWrite)
 /// @tparam ValidationPolicy Policy for value validation (default: NoValidation)
 ///
-/// @note This class stores a value with validation policy applied.
+/// @note This class stores a value with validation and access policies applied.
 ///       Serializes to/from PB_ParameterValue messages (oneof value field).
-template <typename T, typename ValidationPolicy = NoValidation>
+template <typename T, typename AccessPolicy = ReadWrite, typename ValidationPolicy = NoValidation>
 class Parameter : public ParameterInterface<T>
 {
     /// Compile-time type checking: only arithmetic types (integers, floats) and bool are supported
@@ -52,13 +54,19 @@ class Parameter : public ParameterInterface<T>
         valid_ = ValidationPolicy::validate(value_);
     }
 
-    /// @brief Set the parameter value with validation
+    /// @brief Set the parameter value with validation and access control
     /// @param value The new value to set
-    /// @return true if value was set successfully (after validation)
+    /// @return true if value was set successfully (after validation and access check)
     ///
-    /// @note This method applies the validation policy and updates the internal value.
+    /// @note This method applies the access and validation policies before updating the internal
+    /// value.
     bool set(const T& value) override
     {
+        // Check access policy first
+        if (!AccessPolicy::canWrite()) {
+            return false;
+        }
+
         mutex_lock(&mutex_);
         valid_ = ValidationPolicy::validate(value);
         if (valid_) {
@@ -94,6 +102,13 @@ class Parameter : public ParameterInterface<T>
         mutex_unlock(&mutex_);
 
         return result;
+    }
+
+    /// @brief Check if the parameter can be written to
+    /// @return true if write operations are allowed, false otherwise
+    bool canWrite() const override
+    {
+        return AccessPolicy::canWrite();
     }
 
     /// @brief Convert parameter to protobuf PB_ParameterValue message
@@ -144,9 +159,14 @@ class Parameter : public ParameterInterface<T>
     /// @note Uses compile-time type dispatch to get the correct oneof field from PB_ParameterValue
     /// message.
     ///
-    /// @note Validation is applied to the converted value.
+    /// @note Access policy and validation are applied to the converted value.
     bool pb_read(const PB_ParameterValue& message) override
     {
+        // Check access policy first
+        if (!AccessPolicy::canWrite()) {
+            return false;
+        }
+
         T new_value;
         bool success = false;
 

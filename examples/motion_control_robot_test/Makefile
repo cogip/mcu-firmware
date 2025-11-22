@@ -24,6 +24,7 @@ USEMODULE += shell_cmds_default
 
 # Misc
 USEMODULE += utils
+USEMODULE += parameter
 
 # Embedded Template Library
 USEPKG += etl

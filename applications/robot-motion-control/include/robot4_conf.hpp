@@ -2,15 +2,17 @@
 
 // Project includes
 #include "etl/numeric.h"
-#include "trigonometry.h"
+#include "parameter/Parameter.hpp"
+
+using namespace cogip::parameter;
 
 /* Motion motors */
 #define MOTOR_LEFT 0
 #define MOTOR_RIGHT 1
 
 /* Quadrature decoding polarity */
-#define QDEC_LEFT_POLARITY -1
-#define QDEC_RIGHT_POLARITY 1
+inline Parameter<float, ReadOnly> qdec_left_polarity{-1.0};
+inline Parameter<float, ReadOnly> qdec_right_polarity{1.0};
 
 /// Motors properties
 constexpr float motor_wheels_diameter_mm = 60.0;
@@ -22,10 +24,10 @@ constexpr float min_motor_speed_percent = 0;
 constexpr float max_motor_speed_percent = 100;
 
 /// Encoders properties
-constexpr float left_encoder_wheels_diameter_mm = motor_wheels_diameter_mm;
-constexpr float right_encoder_wheels_diameter_mm = motor_wheels_diameter_mm;
-constexpr float encoder_wheels_distance_mm = motor_wheels_distance_mm;
-constexpr float encoder_wheels_resolution_pulses = 16 * 4 * 8;
+inline Parameter<float> left_encoder_wheels_diameter_mm{motor_wheels_diameter_mm};
+inline Parameter<float> right_encoder_wheels_diameter_mm{motor_wheels_diameter_mm};
+inline Parameter<float> encoder_wheels_distance_mm{motor_wheels_distance_mm};
+inline Parameter<float>, ReadOnly encoder_wheels_resolution_pulses{16 * 4 * 8};
 
 // Linear pose PID
 constexpr float linear_pose_pid_kp = 1;

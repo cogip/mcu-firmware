@@ -204,14 +204,14 @@ static cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
 
 /// Encoders
 static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
-                                                encoder_wheels_resolution_pulses);
+                                                encoder_wheels_resolution_pulses.get());
 static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
-                                                 encoder_wheels_resolution_pulses);
+                                                 encoder_wheels_resolution_pulses.get());
 
 /// Odometry
 static cogip::localization::LocalizationDifferentialParameters
     localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
-                        encoder_wheels_distance_mm, QDEC_LEFT_POLARITY, QDEC_RIGHT_POLARITY);
+                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
 static cogip::localization::LocalizationDifferential localization(localization_params, left_encoder,
                                                                   right_encoder);
 
@@ -584,10 +584,10 @@ void cogip_native_motor_driver_qdec_simulation(const motor_driver_t* motor_drive
     (void)motor_id;
     (void)pwm_duty_cycle;
 
-    static float wheels_perimeter = M_PI * left_encoder_wheels_diameter_mm;
-    static float pulse_per_mm = encoder_wheels_resolution_pulses / wheels_perimeter;
-    static float wheels_distance_pulse = encoder_wheels_distance_mm * pulse_per_mm;
-    static float pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;
+    float wheels_perimeter = M_PI * left_encoder_wheels_diameter_mm.get();
+    float pulse_per_mm = encoder_wheels_resolution_pulses.get() / wheels_perimeter;
+    float wheels_distance_pulse = encoder_wheels_distance_mm.get() * pulse_per_mm;
+    float pulse_per_degree = (wheels_distance_pulse * 2 * M_PI) / 360;
 
     // On native architecture set speeds at their theorical value, no error.
     if (pf_motion_control_platform_engine.pose_reached() !=
@@ -595,11 +595,11 @@ void cogip_native_motor_driver_qdec_simulation(const motor_driver_t* motor_drive
         qdecs_value[MOTOR_RIGHT] =
             (linear_speed_filter.previous_speed_order() * pulse_per_mm +
              angular_speed_filter.previous_speed_order() * pulse_per_degree / 2) *
-            QDEC_RIGHT_POLARITY;
+            qdec_right_polarity.get();
         qdecs_value[MOTOR_LEFT] =
             (linear_speed_filter.previous_speed_order() * pulse_per_mm -
              angular_speed_filter.previous_speed_order() * pulse_per_degree / 2) *
-            QDEC_LEFT_POLARITY;
+            qdec_left_polarity.get();
     }
 }
 

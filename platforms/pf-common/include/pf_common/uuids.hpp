@@ -65,6 +65,11 @@ constexpr canpb::uuid_t actuator_init_uuid = 0x2005;
 constexpr canpb::uuid_t reset_uuid = 0x3001;
 constexpr canpb::uuid_t copilot_connected_uuid = 0x3002;
 constexpr canpb::uuid_t copilot_disconnected_uuid = 0x3003;
+constexpr canpb::uuid_t parameter_set_uuid = 0x3004;
+constexpr canpb::uuid_t parameter_set_response_uuid = 0x3005;
+constexpr canpb::uuid_t parameter_get_uuid = 0x3006;
+constexpr canpb::uuid_t parameter_get_response_uuid = 0x3007;
+
 /** @} */
 
 /**

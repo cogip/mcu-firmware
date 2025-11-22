@@ -12,7 +12,8 @@ syntax = "proto3";
 enum PB_ParameterStatus {
 	SUCCESS = 0;           ///< Operation succeeded
 	VALIDATION_FAILED = 1; ///< Value out of bounds
-	NOT_FOUND = 2;         ///< Parameter not found
+	READ_ONLY = 2;         ///< Read Only parameter
+	NOT_FOUND = 3;         ///< Parameter not found
 }
 
 /// @brief Parameter value with type variants
