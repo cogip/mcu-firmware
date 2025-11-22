@@ -37,7 +37,7 @@ static Parameter<float> left_encoder_wheels_diameter_mm{47.8};
 static Parameter<float> right_encoder_wheels_diameter_mm{47.8};
 static Parameter<float> encoder_wheels_distance_mm{275};
 static Parameter<float> encoder_wheels_resolution_pulses{4096 * 4};
-static Parameter<float, WithBounds<0, 500>> max_angular_velocity_deg_s{180.0}; // With validation: 0-500°/s
+static Parameter<float> max_angular_velocity_deg_s{180.0};
 static Parameter<bool> enable_logging{true};
 
 /// @brief Parameter registry mapping key hashes to parameter references
@@ -107,7 +107,6 @@ int main(void)
     LOG_INFO("=== Memory Footprint ===\n");
     LOG_INFO("- float:                                %zu bytes\n", sizeof(float));
     LOG_INFO("- Parameter<float>:                     %zu bytes\n", sizeof(Parameter<float>));
-    LOG_INFO("- Parameter<float, WithBounds<0, 500>>: %zu bytes\n", sizeof(Parameter<float, WithBounds<0, 500>>));
     LOG_INFO("- Parameter<bool>:                      %zu bytes\n", sizeof(Parameter<bool>));
     LOG_INFO("- ParameterBase*:                       %zu bytes\n", sizeof(ParameterBase*));
     LOG_INFO("\n");
