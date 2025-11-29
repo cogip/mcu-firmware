@@ -11,7 +11,7 @@ syntax = "proto3";
 /// @brief Status codes for set operations
 enum PB_ParameterStatus {
 	SUCCESS = 0;           ///< Operation succeeded
-	VALIDATION_FAILED = 1; ///< Value out of bounds
+	VALIDATION_FAILED = 1; ///< Value rejected by policy (out of bounds, read-only, etc.)
 	NOT_FOUND = 2;         ///< Parameter not found
 }
 

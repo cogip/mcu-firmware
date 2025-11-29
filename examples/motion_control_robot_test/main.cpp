@@ -18,6 +18,7 @@
 #include "motion_control_common/Controller.hpp"
 #include "motor/MotorDriverDRV8873.hpp"
 #include "motor/MotorRIOT.hpp"
+#include "parameter/Parameter.hpp"
 #include "pid/PID.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
@@ -31,6 +32,13 @@
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 
+/// Odometry parameters
+static cogip::parameter::Parameter<float> left_encoder_wheels_diameter_mm{50.00};
+static cogip::parameter::Parameter<float> right_encoder_wheels_diameter_mm{50.00};
+static cogip::parameter::Parameter<float> encoder_wheels_distance_mm{100.00};
+static cogip::parameter::Parameter<float> qdec_left_polarity{-1.0};
+static cogip::parameter::Parameter<float> qdec_right_polarity{1.0};
+
 /// Encoders
 static cogip::encoder::EncoderQDEC left_encoder(0, cogip::encoder::EncoderMode::ENCODER_MODE_X1,
                                                 1024);
@@ -38,8 +46,9 @@ static cogip::encoder::EncoderQDEC right_encoder(1, cogip::encoder::EncoderMode:
                                                  1024);
 
 /// Odometry
-static cogip::localization::LocalizationDifferentialParameters localization_params(50.00, 50.00,
-                                                                                   100.00, -1, 1);
+static cogip::localization::LocalizationDifferentialParameters
+    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
+                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
 static cogip::localization::LocalizationDifferential localization(localization_params, left_encoder,
                                                                   right_encoder);
 

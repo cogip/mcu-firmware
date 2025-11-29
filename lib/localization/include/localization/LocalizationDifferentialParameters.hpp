@@ -5,101 +5,39 @@
 
 #pragma once
 
+#include "parameter/ParameterInterface.hpp"
+
 namespace cogip {
 
 namespace localization {
 
-class LocalizationDifferentialParameters
+using namespace cogip::parameter;
+
+struct LocalizationDifferentialParameters
 {
-  public:
-    /// @brief Construct a new Odometry Params object
-    /// @param left_wheel_diameter left wheel diameter value (mm)
-    /// @param right_wheel_diameter right wheel diameter value (mm)
-    /// @param track_width Track width value (mm)
-    /// @param left_polarity left wheel polarity no unit, 1 or -1
-    /// @param right_polarity riht wheel polarity no unit, 1 or -1
-    LocalizationDifferentialParameters(float left_wheel_diameter, float right_wheel_diameter,
-                                       float track_width, float left_polarity, float right_polarity)
-        : left_wheel_diameter_(left_wheel_diameter), right_wheel_diameter_(right_wheel_diameter),
-          track_width_(track_width), left_polarity_(left_polarity),
-          right_polarity_(right_polarity){};
-
-    /// @brief Set the left encoder wheel diameter dimension
-    /// @param wheel_diameter Wheel diameter value (mm)
-    void set_left_wheel_diameter(float wheel_diameter)
+    /// @brief Constructs the Odometry parameter aggregation structure
+    /// @param left_wheel_diameter_mm Left encoder wheel diameter parameter
+    /// @param right_wheel_diameter_mm Right encoder wheel diameter parameter
+    /// @param track_width_mm Distance between encoder wheels parameter
+    /// @param left_polarity Encoder left wheel polarity
+    /// @param right_polarity Encoder right wheel polarity
+    LocalizationDifferentialParameters(const ParameterInterface<float>& left_wheel_diameter_mm,
+                                       const ParameterInterface<float>& right_wheel_diameter_mm,
+                                       const ParameterInterface<float>& track_width_mm,
+                                       const ParameterInterface<float>& left_polarity,
+                                       const ParameterInterface<float>& right_polarity)
+        : left_wheel_diameter_mm(left_wheel_diameter_mm),
+          right_wheel_diameter_mm(right_wheel_diameter_mm), track_width_mm(track_width_mm),
+          left_polarity(left_polarity), right_polarity(right_polarity)
     {
-        left_wheel_diameter_ = wheel_diameter;
     }
 
-    /// @brief Return left encoder wheel diameter value in mm.
-    /// @return float Wheel diameter value (mm)
-    float left_wheel_diameter_mm() const
-    {
-        return left_wheel_diameter_;
-    }
-
-    /// @brief Set the right wheel encoder diameter dimension
-    /// @param wheel_diameter Wheel diameter value (mm)
-    void set_right_wheel_diameter(float wheel_diameter)
-    {
-        right_wheel_diameter_ = wheel_diameter;
-    }
-
-    /// @brief Return right encoder wheel diameter value in mm.
-    /// @return float Wheel diameter value (mm)
-    float right_wheel_diameter_mm() const
-    {
-        return right_wheel_diameter_;
-    }
-
-    /// @brief Set the axle track dimension
-    /// @param track_width Track width value (mm)
-    void set_track_width(float track_width)
-    {
-        track_width_ = track_width;
-    }
-
-    /// @brief Get the axle track value
-    /// @return float Track width value (mm)
-    float track_width_mm() const
-    {
-        return track_width_;
-    }
-
-    /// @brief Set the left encoder polarity
-    /// @param polarity Encoder polarity. -1 or 1.
-    void set_left_polarity(float polarity)
-    {
-        left_polarity_ = polarity;
-    }
-
-    /// @brief Get the left encoder polarity
-    /// @return float Encoder polarity. -1 or 1
-    float left_polarity() const
-    {
-        return left_polarity_;
-    }
-
-    /// @brief Set the right encoder polarity
-    /// @param polarity Encoder polarity. -1 or 1.
-    void set_right_polarity(float polarity)
-    {
-        right_polarity_ = polarity;
-    }
-
-    /// @brief Get the right encoder polarity
-    /// @return float Encoder polarity. -1 or 1
-    float right_polarity() const
-    {
-        return right_polarity_;
-    }
-
-  private:
-    float left_wheel_diameter_;
-    float right_wheel_diameter_;
-    float track_width_;
-    float left_polarity_;
-    float right_polarity_;
+    /// Read only-parameter. Each parameter have it's own getter.
+    const ParameterInterface<float>& left_wheel_diameter_mm;
+    const ParameterInterface<float>& right_wheel_diameter_mm;
+    const ParameterInterface<float>& track_width_mm;
+    const ParameterInterface<float>& left_polarity;
+    const ParameterInterface<float>& right_polarity;
 };
 
 } // namespace localization

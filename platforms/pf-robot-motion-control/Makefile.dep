@@ -16,6 +16,9 @@ USEMODULE += path
 USEMODULE += pf-common
 USEMODULE += encoder
 USEMODULE += motor
+USEMODULE += parameter
+USEMODULE += parameter_handler
+
 # Controllers
 USEMODULE += passthrough_pose_pid_controller
 USEMODULE += quadpid_meta_controller
