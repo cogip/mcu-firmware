@@ -1,0 +1,2 @@
+USEMODULE_INCLUDES_target_change_detector := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_target_change_detector)
