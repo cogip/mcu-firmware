@@ -22,11 +22,16 @@ USEMODULE += telemetry
 USEMODULE += utils
 
 # Controllers
+USEMODULE += reset_controller
+USEMODULE += anti_blocking_controller
+USEMODULE += feedforward_combiner_controller
 USEMODULE += passthrough_pose_pid_controller
+USEMODULE += profile_feedforward_controller
 USEMODULE += quadpid_meta_controller
 USEMODULE += platform_engine
 USEMODULE += pose_straight_filter
 USEMODULE += speed_filter
+USEMODULE += target_change_detector
 
 # Board features required
 FEATURES_REQUIRED += periph_qdec
