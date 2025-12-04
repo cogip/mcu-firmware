@@ -22,11 +22,12 @@ namespace motion_control {
 
 /// @brief Meta-controller combining four PID controllers.
 ///
-/// This class manages up to two sub-controllers:
+/// This class manages up to three sub-controllers:
+/// - one dedicated to resetting IO values at each cycle,
 /// - one dedicated to position filtering if needed,
 /// - one dedicated to coordinating dual PID control (position and speed)
 ///   for both linear and angular motion.
-class QuadPIDMetaController : public MetaController<2>
+class QuadPIDMetaController : public MetaController<3>
 {
 };
 
