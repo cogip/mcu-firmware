@@ -68,6 +68,7 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
 
   private:
     PoseStraightFilterState current_state_;
+    bool target_is_in_front_ = true; ///< Track if target is in front for overshoot detection
 };
 
 } // namespace motion_control
