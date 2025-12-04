@@ -10,6 +10,8 @@
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
+#pragma once
+
 // Project includes
 #include "SpeedPIDControllerIOKeys.hpp"
 #include "SpeedPIDControllerParameters.hpp"

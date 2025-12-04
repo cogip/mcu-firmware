@@ -12,14 +12,26 @@ void SpeedPIDController::execute(ControllersIO& io)
 {
     DEBUG("Start SpeedPIDController\n");
 
-    // Read speed error (default to 0.0f if missing)
-    float speed_error = 0.0f;
-    if (auto opt_err = io.get_as<float>(keys_.speed_error)) {
-        speed_error = *opt_err;
+    // Read speed order (default to 0.0f if missing)
+    float speed_order = 0.0f;
+    if (auto opt = io.get_as<float>(keys_.speed_order)) {
+        speed_order = *opt;
     } else {
         LOG_WARNING("WARNING: %s is not available, using default value %f\n",
-                    keys_.speed_error.data(), speed_error);
+                    keys_.speed_order.data(), speed_order);
     }
+
+    // Read current speed (default to 0.0f if missing)
+    float current_speed = 0.0f;
+    if (auto opt = io.get_as<float>(keys_.current_speed)) {
+        current_speed = *opt;
+    } else {
+        LOG_WARNING("WARNING: %s is not available, using default value %f\n",
+                    keys_.current_speed.data(), current_speed);
+    }
+
+    // Compute speed error
+    float speed_error = speed_order - current_speed;
 
     // Compute speed command via PID
     float speed_command = this->parameters_.pid()->compute(speed_error);
