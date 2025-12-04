@@ -116,6 +116,12 @@ class BaseControllerEngine
         timeout_enable_ = timeout_enable;
     };
 
+    /// Get ControllersIO reference
+    const ControllersIO& io() const
+    {
+        return io_;
+    };
+
   protected:
     /// Prepare controller inputs from platform functions.
     virtual void prepare_inputs() = 0;
