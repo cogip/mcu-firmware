@@ -20,7 +20,7 @@ namespace motion_control {
 /// @brief Bundle of ControllersIO key names for a SpeedPIDController.
 struct SpeedPIDControllerIOKeys
 {
-    etl::string_view speed_error;   ///< e.g. "speed_error"
+    etl::string_view speed_order;   ///< e.g. "speed_order"
     etl::string_view current_speed; ///< e.g. "current_speed"
     etl::string_view speed_command; ///< e.g. "speed_command"
 };
