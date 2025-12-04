@@ -45,6 +45,13 @@ struct PoseStraightFilterIOKeys
     etl::string_view angular_target_speed;      ///< key for filtered angular speed output
     etl::string_view angular_speed_filter_flag; ///< key for angular speed filter indicator
     etl::string_view pose_reached;              ///< key for updated pose reached status
+    etl::string_view current_state;             ///< key for current state machine state
+    etl::string_view linear_recompute_profile;  ///< key to signal linear profile recomputation
+    etl::string_view
+        linear_invalidate_profile; ///< key to signal linear profile invalidation (on new target)
+    etl::string_view angular_recompute_profile;  ///< key to signal angular profile recomputation
+    etl::string_view angular_invalidate_profile; ///< key to signal angular profile invalidation (on
+                                                 ///< MOVE_TO_POSITION entry)
 };
 
 } // namespace motion_control
