@@ -627,6 +627,7 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
     }
 
     pf_motion_control_platform_engine.set_current_cycle(0);
+    pf_motion_control_platform_engine.dump_pipeline();
 }
 
 static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state)
@@ -959,6 +960,7 @@ void pf_init_motion_control(void)
 
     // Associate default controller (QUADPID) to the engine
     pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
+    pf_motion_control_platform_engine.dump_pipeline();
 
     // Set timeout for speed only loops as no pose has to be reached
     pf_motion_control_platform_engine.set_timeout_ms(motion_control_pid_tuning_period_ms /
