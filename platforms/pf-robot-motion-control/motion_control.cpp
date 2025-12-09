@@ -374,17 +374,19 @@ pf_quadpid_feedforward_meta_controller_init(void)
 {
     // Linear feedforward chain:
     //  ProfileFeedforwardController -> PosePIDController -> FeedforwardCombinerController ->
-    //  SpeedPIDController
+    //  SpeedPIDController -> AntiBlockingController
     linear_feedforward_dualpid_meta_controller.add_controller(
         &linear_profile_feedforward_controller);
     linear_feedforward_dualpid_meta_controller.add_controller(&linear_feedforward_pose_controller);
     linear_feedforward_dualpid_meta_controller.add_controller(
         &linear_feedforward_combiner_controller);
     linear_feedforward_dualpid_meta_controller.add_controller(&linear_feedforward_speed_controller);
+    linear_feedforward_dualpid_meta_controller.add_controller(
+        &feedforward_chain::linear_anti_blocking_controller);
 
     // Angular feedforward chain:
     //  ProfileFeedforwardController -> PosePIDController -> FeedforwardCombinerController ->
-    //  SpeedPIDController
+    //  SpeedPIDController -> AntiBlockingController
     angular_feedforward_dualpid_meta_controller.add_controller(
         &angular_profile_feedforward_controller);
     angular_feedforward_dualpid_meta_controller.add_controller(
@@ -393,6 +395,8 @@ pf_quadpid_feedforward_meta_controller_init(void)
         &angular_feedforward_combiner_controller);
     angular_feedforward_dualpid_meta_controller.add_controller(
         &angular_feedforward_speed_controller);
+    angular_feedforward_dualpid_meta_controller.add_controller(
+        &feedforward_chain::angular_anti_blocking_controller);
 
     // PolarParallelMetaController:
     // --> Linear feedforward chain

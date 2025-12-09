@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include "anti_blocking_controller/AntiBlockingController.hpp"
+#include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "app_conf.hpp"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
@@ -46,6 +48,42 @@ inline cogip::motion_control::TargetChangeDetectorParameters target_change_detec
 
 inline cogip::motion_control::TargetChangeDetector
     target_change_detector(target_change_detector_io_keys, target_change_detector_parameters);
+
+// ============================================================================
+// Anti-blocking controllers
+// ============================================================================
+
+inline cogip::motion_control::AntiBlockingControllerIOKeys linear_anti_blocking_io_keys = {
+    .speed_order = "linear_speed_order",
+    .current_speed = "linear_current_speed",
+    .speed_error = "linear_speed_error",
+    .pose_reached = "pose_reached"};
+
+inline cogip::motion_control::AntiBlockingControllerParameters
+    linear_anti_blocking_parameters(true, // enabled
+                                    platform_linear_anti_blocking_speed_threshold_mm_per_period,
+                                    platform_linear_anti_blocking_error_threshold_mm_per_period,
+                                    platform_linear_anti_blocking_blocked_cycles_nb_threshold);
+
+inline cogip::motion_control::AntiBlockingController
+    linear_anti_blocking_controller(linear_anti_blocking_io_keys, linear_anti_blocking_parameters);
+
+inline cogip::motion_control::AntiBlockingControllerIOKeys angular_anti_blocking_io_keys = {
+    .speed_order = "angular_speed_order",
+    .current_speed = "angular_current_speed",
+    .speed_error = "angular_speed_error",
+    .pose_reached = "pose_reached"};
+
+// Angular anti-blocking disabled by default (same as QUADPID chain)
+inline cogip::motion_control::AntiBlockingControllerParameters
+    angular_anti_blocking_parameters(false, // disabled by default
+                                     platform_linear_anti_blocking_speed_threshold_mm_per_period,
+                                     platform_linear_anti_blocking_error_threshold_mm_per_period,
+                                     platform_linear_anti_blocking_blocked_cycles_nb_threshold);
+
+inline cogip::motion_control::AntiBlockingController
+    angular_anti_blocking_controller(angular_anti_blocking_io_keys,
+                                     angular_anti_blocking_parameters);
 
 } // namespace feedforward_chain
 } // namespace motion_control
