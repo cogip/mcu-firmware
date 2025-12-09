@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "anti_blocking_controller/AntiBlockingController.hpp"
+#include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "app_conf.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_control_common/ThrottledController.hpp"
@@ -68,7 +70,7 @@ inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_paral
 // ============================================================================
 
 inline cogip::motion_control::MetaController<1> linear_pose_loop_meta_controller;
-inline cogip::motion_control::MetaController<2> linear_speed_loop_meta_controller;
+inline cogip::motion_control::MetaController<3> linear_speed_loop_meta_controller;
 
 inline cogip::motion_control::PosePIDControllerParameters
     linear_pose_controller_parameters(&cogip::pf::motion_control::linear_pose_pid);
@@ -77,10 +79,9 @@ inline cogip::motion_control::PosePIDController
     linear_pose_controller(cogip::motion_control::linear_pose_pid_controller_io_keys_default,
                            linear_pose_controller_parameters);
 
-inline cogip::motion_control::SpeedFilterParameters
-    linear_speed_filter_parameters(platform_min_speed_linear_mm_per_period,
-                                   platform_max_speed_linear_mm_per_period,
-                                   platform_max_acc_linear_mm_per_period2);
+inline cogip::motion_control::SpeedFilterParameters linear_speed_filter_parameters(
+    platform_min_speed_linear_mm_per_period, platform_max_speed_linear_mm_per_period,
+    platform_max_acc_linear_mm_per_period2, platform_max_dec_linear_mm_per_period2);
 
 inline cogip::motion_control::SpeedFilter
     linear_speed_filter(cogip::motion_control::linear_speed_filter_io_keys_default,
@@ -98,7 +99,7 @@ inline cogip::motion_control::SpeedPIDController
 // ============================================================================
 
 inline cogip::motion_control::MetaController<1> angular_pose_loop_meta_controller;
-inline cogip::motion_control::MetaController<2> angular_speed_loop_meta_controller;
+inline cogip::motion_control::MetaController<3> angular_speed_loop_meta_controller;
 
 inline cogip::motion_control::PosePIDControllerParameters
     angular_pose_controller_parameters(&cogip::pf::motion_control::angular_pose_pid);
@@ -107,10 +108,9 @@ inline cogip::motion_control::PosePIDController
     angular_pose_controller(cogip::motion_control::angular_pose_pid_controller_io_keys_default,
                             angular_pose_controller_parameters);
 
-inline cogip::motion_control::SpeedFilterParameters
-    angular_speed_filter_parameters(platform_min_speed_angular_deg_per_period,
-                                    platform_max_speed_angular_deg_per_period,
-                                    platform_max_acc_angular_deg_per_period2);
+inline cogip::motion_control::SpeedFilterParameters angular_speed_filter_parameters(
+    platform_min_speed_angular_deg_per_period, platform_max_speed_angular_deg_per_period,
+    platform_max_acc_angular_deg_per_period2, platform_max_dec_angular_deg_per_period2);
 
 inline cogip::motion_control::SpeedFilter
     angular_speed_filter(cogip::motion_control::angular_speed_filter_io_keys_default,
@@ -147,6 +147,42 @@ inline cogip::motion_control::PassthroughPosePIDControllerParameters
 inline cogip::motion_control::PassthroughPosePIDController passthrough_angular_pose_controller(
     cogip::motion_control::angular_passthrough_pose_pid_controller_io_keys_default,
     passthrough_angular_pose_controller_parameters);
+
+// ============================================================================
+// Anti-blocking controllers
+// ============================================================================
+
+inline cogip::motion_control::AntiBlockingControllerIOKeys linear_anti_blocking_io_keys = {
+    .speed_order = "linear_speed_order",
+    .current_speed = "linear_current_speed",
+    .speed_error = "linear_speed_error",
+    .pose_reached = "pose_reached"};
+
+inline cogip::motion_control::AntiBlockingControllerParameters
+    linear_anti_blocking_parameters(true, // enabled
+                                    platform_linear_anti_blocking_speed_threshold_mm_per_period,
+                                    platform_linear_anti_blocking_error_threshold_mm_per_period,
+                                    platform_linear_anti_blocking_blocked_cycles_nb_threshold);
+
+inline cogip::motion_control::AntiBlockingController
+    linear_anti_blocking_controller(linear_anti_blocking_io_keys, linear_anti_blocking_parameters);
+
+inline cogip::motion_control::AntiBlockingControllerIOKeys angular_anti_blocking_io_keys = {
+    .speed_order = "angular_speed_order",
+    .current_speed = "angular_current_speed",
+    .speed_error = "angular_speed_error",
+    .pose_reached = "pose_reached"};
+
+// Angular anti-blocking disabled by default (was not present in original QUADPID)
+inline cogip::motion_control::AntiBlockingControllerParameters angular_anti_blocking_parameters(
+    false, // enabled (disabled by default, can be enabled later with proper thresholds)
+    platform_linear_anti_blocking_speed_threshold_mm_per_period,
+    platform_linear_anti_blocking_error_threshold_mm_per_period,
+    platform_linear_anti_blocking_blocked_cycles_nb_threshold);
+
+inline cogip::motion_control::AntiBlockingController
+    angular_anti_blocking_controller(angular_anti_blocking_io_keys,
+                                     angular_anti_blocking_parameters);
 
 // ============================================================================
 // QuadPID meta controller
