@@ -284,9 +284,11 @@ static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_
     quadpid_chain::linear_pose_loop_meta_controller.add_controller(
         &quadpid_chain::linear_pose_controller);
 
-    // Linear speed loop meta controller (speed filter + speed controller, executed every cycle)
+    // Linear speed loop meta controller (speed filter + anti-blocking + speed controller)
     quadpid_chain::linear_speed_loop_meta_controller.add_controller(
         &quadpid_chain::linear_speed_filter);
+    quadpid_chain::linear_speed_loop_meta_controller.add_controller(
+        &quadpid_chain::linear_anti_blocking_controller);
     quadpid_chain::linear_speed_loop_meta_controller.add_controller(
         &quadpid_chain::linear_speed_controller);
 
@@ -294,9 +296,11 @@ static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_
     quadpid_chain::angular_pose_loop_meta_controller.add_controller(
         &quadpid_chain::angular_pose_controller);
 
-    // Angular speed loop meta controller (speed filter + speed controller, executed every cycle)
+    // Angular speed loop meta controller (speed filter + anti-blocking + speed controller)
     quadpid_chain::angular_speed_loop_meta_controller.add_controller(
         &quadpid_chain::angular_speed_filter);
+    quadpid_chain::angular_speed_loop_meta_controller.add_controller(
+        &quadpid_chain::angular_anti_blocking_controller);
     quadpid_chain::angular_speed_loop_meta_controller.add_controller(
         &quadpid_chain::angular_speed_controller);
 
