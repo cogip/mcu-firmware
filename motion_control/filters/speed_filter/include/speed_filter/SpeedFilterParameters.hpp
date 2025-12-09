@@ -20,11 +20,13 @@ class SpeedFilterParameters
 {
   public:
     /// Constructor
-    explicit SpeedFilterParameters(float min_speed = 0.0,       ///< [in]  see min_speed_
-                                   float max_speed = 0.0,       ///< [in]  see max_speed_
-                                   float max_acceleration = 0.0 ///< [in]  see max_acceleration_
+    explicit SpeedFilterParameters(float min_speed = 0.0,        ///< [in]  see min_speed_
+                                   float max_speed = 0.0,        ///< [in]  see max_speed_
+                                   float max_acceleration = 0.0, ///< [in]  see max_acceleration_
+                                   float max_deceleration = 0.0  ///< [in]  see max_deceleration_
                                    )
-        : min_speed_(min_speed), max_speed_(max_speed), max_acceleration_(max_acceleration){};
+        : min_speed_(min_speed), max_speed_(max_speed), max_acceleration_(max_acceleration),
+          max_deceleration_(max_deceleration == 0.0 ? max_acceleration : max_deceleration){};
 
     /// Get minimum speed
     /// return minimum speed
@@ -68,6 +70,20 @@ class SpeedFilterParameters
         max_acceleration_ = max_acceleration;
     };
 
+    /// Get maximum deceleration
+    /// return maximum deceleration
+    float max_deceleration() const
+    {
+        return max_deceleration_;
+    };
+
+    /// Set maximum deceleration
+    void set_max_deceleration(float max_deceleration ///< [in]   maximum deceleration
+    )
+    {
+        max_deceleration_ = max_deceleration;
+    };
+
   private:
     /// minimum speed the robot should reach
     float min_speed_;
@@ -77,6 +93,9 @@ class SpeedFilterParameters
 
     /// maximum robot acceleration allowed
     float max_acceleration_;
+
+    /// maximum robot deceleration allowed
+    float max_deceleration_;
 };
 
 } // namespace motion_control
