@@ -127,7 +127,8 @@ class BaseControllerEngine
     {
         printf("Pipeline:\n");
         if (controller_) {
-            controller_->dump(1, true, "");
+            int counter = 0;
+            controller_->dump(1, true, "", &counter);
         } else {
             printf("  (no controller set)\n");
         }

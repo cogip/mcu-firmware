@@ -68,11 +68,19 @@ class BaseController
     /// @param indent Current indentation level
     /// @param is_last Whether this is the last child at current level
     /// @param prefix Prefix string for tree drawing
-    virtual void dump(int indent = 0, bool is_last = true, const char* prefix = "") const
+    /// @param counter Execution order counter (incremented for leaf controllers)
+    virtual void dump(int indent = 0, bool is_last = true, const char* prefix = "",
+                      int* counter = nullptr) const
     {
         // Print tree branch
         if (indent > 0) {
             printf("%s%s", prefix, is_last ? "└── " : "├── ");
+        }
+
+        // Print execution order number for leaf controllers
+        if (counter) {
+            (*counter)++;
+            printf("[%d] ", *counter);
         }
 
         // Print type and name
