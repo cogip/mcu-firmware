@@ -62,14 +62,15 @@ class SpeedFilter : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
   protected:
     float previous_speed_order_; ///< filtered speed from previous cycle
 
-    /// @brief Constrain commanded speed according to bounds and acceleration.
+    /// @brief Constrain commanded speed according to bounds and acceleration/deceleration.
     /// @param[in,out] speed_order  pointer to commanded speed; updated in place.
     /// @param[in]     raw_target   raw setpoint for maximum speed.
     /// @param[in]     min_speed    minimum non-zero speed threshold.
     /// @param[in]     max_speed    maximum absolute speed allowed.
-    /// @param[in]     max_acc      maximum change in speed per cycle.
+    /// @param[in]     max_acc      maximum acceleration (speed increase) per cycle.
+    /// @param[in]     max_dec      maximum deceleration (speed decrease) per cycle.
     void limit_speed_order(float* speed_order, float raw_target, float min_speed, float max_speed,
-                           float max_acc);
+                           float max_acc, float max_dec);
 };
 
 } // namespace motion_control

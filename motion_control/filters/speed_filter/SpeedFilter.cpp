@@ -16,16 +16,26 @@ namespace cogip {
 namespace motion_control {
 
 void SpeedFilter::limit_speed_order(float* speed_order, float raw_target, float min_speed,
-                                    float max_speed, float max_acc)
+                                    float max_speed, float max_acc, float max_dec)
 {
     raw_target = etl::min(raw_target, max_speed);
 
     float acceleration = *speed_order - previous_speed_order_;
-    if (acceleration > max_acc) {
-        acceleration = max_acc;
+
+    // Determine if we're accelerating or decelerating based on speed direction
+    // Accelerating: increasing absolute speed (moving away from zero)
+    // Decelerating: decreasing absolute speed (moving toward zero)
+    bool is_decelerating =
+        (previous_speed_order_ > 0.0f && acceleration < 0.0f) || // positive speed, slowing down
+        (previous_speed_order_ < 0.0f && acceleration > 0.0f);   // negative speed, slowing down
+
+    float limit = is_decelerating ? max_dec : max_acc;
+
+    if (acceleration > limit) {
+        acceleration = limit;
     }
-    if (acceleration < -max_acc) {
-        acceleration = -max_acc;
+    if (acceleration < -limit) {
+        acceleration = -limit;
     }
 
     *speed_order = previous_speed_order_ + acceleration;
@@ -71,9 +81,9 @@ void SpeedFilter::execute(ControllersIO& io)
           static_cast<double>(current_speed), static_cast<double>(target_speed),
           static_cast<double>(previous_speed_order_));
 
-    // Apply speed/acceleration limits
+    // Apply speed/acceleration/deceleration limits
     limit_speed_order(&speed_order, target_speed, parameters_.min_speed(), parameters_.max_speed(),
-                      parameters_.max_acceleration());
+                      parameters_.max_acceleration(), parameters_.max_deceleration());
 
     previous_speed_order_ = speed_order;
 
