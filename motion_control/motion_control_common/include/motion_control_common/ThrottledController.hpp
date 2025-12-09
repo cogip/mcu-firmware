@@ -46,14 +46,16 @@ class ThrottledController : public BaseController
     }
 
     /// @brief Dump the controller hierarchy including the wrapped controller
-    void dump(int indent = 0, bool is_last = true, const char* prefix = "") const override
+    /// @param counter Execution order counter (passed to wrapped controller, not used for wrapper)
+    void dump(int indent = 0, bool is_last = true, const char* prefix = "",
+              int* counter = nullptr) const override
     {
         // Print tree branch for this controller
         if (indent > 0) {
             printf("%s%s", prefix, is_last ? "└── " : "├── ");
         }
 
-        // Print type and name
+        // Print type and name (no execution number for wrapper)
         if (name_.empty()) {
             printf("%s\n", type_name());
         } else {
@@ -65,7 +67,7 @@ class ThrottledController : public BaseController
             etl::string<128> new_prefix;
             new_prefix.append(prefix);
             new_prefix.append(is_last ? "    " : "│   ");
-            wrapped_controller_->dump(indent + 1, true, new_prefix.c_str());
+            wrapped_controller_->dump(indent + 1, true, new_prefix.c_str(), counter);
         }
     }
 

@@ -54,14 +54,16 @@ template <size_t NB_CONTROLLERS> class MetaController : public BaseMetaControlle
     /// @param indent Current indentation level
     /// @param is_last Whether this is the last child at current level
     /// @param prefix Prefix string for tree drawing
-    void dump(int indent = 0, bool is_last = true, const char* prefix = "") const override
+    /// @param counter Execution order counter (passed to children, not used for meta)
+    void dump(int indent = 0, bool is_last = true, const char* prefix = "",
+              int* counter = nullptr) const override
     {
         // Print tree branch for this meta controller
         if (indent > 0) {
             printf("%s%s", prefix, is_last ? "└── " : "├── ");
         }
 
-        // Print type and name
+        // Print type and name (no execution number for meta controllers)
         if (name_.empty()) {
             printf("%s\n", type_name());
         } else {
@@ -79,7 +81,7 @@ template <size_t NB_CONTROLLERS> class MetaController : public BaseMetaControlle
         for (const auto* controller : controllers_) {
             if (controller) {
                 bool child_is_last = (index == count - 1);
-                controller->dump(indent + 1, child_is_last, new_prefix.c_str());
+                controller->dump(indent + 1, child_is_last, new_prefix.c_str(), counter);
             }
             index++;
         }
