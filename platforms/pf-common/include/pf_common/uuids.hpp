@@ -45,6 +45,8 @@ constexpr canpb::uuid_t brake_uuid = 0x1007;
 constexpr canpb::uuid_t controller_uuid = 0x1008;
 constexpr canpb::uuid_t blocked_uuid = 0x1009;
 constexpr canpb::uuid_t intermediate_pose_reached_uuid = 0x100A;
+constexpr canpb::uuid_t telemetry_type_uuid = 0x100B;
+constexpr canpb::uuid_t telemetry_data_uuid = 0x100C;
 /** @} */
 
 /**

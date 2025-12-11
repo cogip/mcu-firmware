@@ -43,6 +43,7 @@
 #include "PB_PathPose.hpp"
 #include "PB_Pid.hpp"
 #include "PB_State.hpp"
+#include "PB_Telemetry.hpp"
 #include "etl/limits.h"
 #include "telemetry/Telemetry.hpp"
 
@@ -63,6 +64,11 @@ PB_Controller pb_controller;
 PB_State pb_state;
 PB_Pid pb_pid;
 PB_Pid_Id pb_pid_id;
+PB_Telemetry pb_telemetry;
+PB_TelemetryTypeCommand pb_telemetry_type_command;
+
+// Current telemetry type
+static PB_TelemetryType current_telemetry_type = PB_TelemetryType::TELEMETRY_TYPE_NONE;
 
 // PID tuning period
 constexpr uint16_t motion_control_pid_tuning_period_ms = 1500;
@@ -815,6 +821,20 @@ void pf_init_motion_control(void)
 
     pf_encoder_reset();
     pf_disable_motion_control();
+}
+
+void pf_set_telemetry_type(cogip::canpb::ReadBuffer& buffer)
+{
+    pb_telemetry_type_command.clear();
+
+    EmbeddedProto::Error error = pb_telemetry_type_command.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Telemetry type: Protobuf deserialization error: %d\n", static_cast<int>(error));
+        return;
+    }
+
+    current_telemetry_type = pb_telemetry_type_command.type();
+    LOG_INFO("Telemetry type set to: %d\n", static_cast<int>(current_telemetry_type));
 }
 
 } // namespace motion_control

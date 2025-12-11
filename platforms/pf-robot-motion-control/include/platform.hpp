@@ -43,6 +43,8 @@ using cogip::pf_common::pose_order_uuid;
 using cogip::pf_common::pose_reached_uuid;
 using cogip::pf_common::pose_start_uuid;
 using cogip::pf_common::state_uuid;
+using cogip::pf_common::telemetry_data_uuid;
+using cogip::pf_common::telemetry_type_uuid;
 // Service: 0x3000 - 0x3FFF
 using cogip::pf_common::parameter_get_response_uuid;
 using cogip::pf_common::parameter_get_uuid;
