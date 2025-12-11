@@ -47,7 +47,7 @@ class EncoderInterface
     /// @param pulse_per_rev
     ///
     EncoderInterface(EncoderMode mode, int32_t pulse_per_rev)
-        : mode_(mode), pulse_per_rev_(pulse_per_rev)
+        : mode_(mode), pulse_per_rev_(pulse_per_rev), counter_(0)
     {
     }
 
@@ -71,6 +71,16 @@ class EncoderInterface
     virtual void reset() = 0;
 
     ///
+    /// @brief Get the accumulated encoder counter value.
+    ///
+    /// @return int64_t accumulated counter value in ticks.
+    ///
+    int64_t counter()
+    {
+        return counter_;
+    }
+
+    ///
     /// @brief Get the angle measured by the encoder since the last call.
     ///
     /// @return float traveled angle since last call (rad).
@@ -83,6 +93,7 @@ class EncoderInterface
   protected:
     const EncoderMode mode_;
     const int32_t pulse_per_rev_;
+    int64_t counter_;
 };
 
 } // namespace encoder

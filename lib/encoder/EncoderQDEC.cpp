@@ -42,12 +42,17 @@ int EncoderQDEC::init()
 
 int32_t EncoderQDEC::read_and_reset()
 {
-    return qdec_read_and_reset(id_);
+    int32_t delta = qdec_read_and_reset(id_);
+    // Overflow is not a concern: int64_t range (~9.2 quintillion) far exceeds realistic encoder
+    // counts
+    counter_ += delta;
+    return delta;
 }
 
 void EncoderQDEC::reset()
 {
     static_cast<void>(read_and_reset());
+    counter_ = 0;
 }
 
 } // namespace encoder
