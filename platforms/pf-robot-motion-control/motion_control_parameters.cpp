@@ -8,10 +8,10 @@
 
 // Project includes
 #include "motion_control_parameters.hpp"
+#include "KeyHash.hpp"
 #include "app_conf.hpp"
 #include "parameter_handler/ParameterHandler.hpp"
 #include "platform.hpp"
-#include "KeyHash.hpp"
 
 namespace cogip {
 namespace pf {
