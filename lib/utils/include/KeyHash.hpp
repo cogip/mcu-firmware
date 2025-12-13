@@ -3,9 +3,9 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-/// @ingroup    lib_parameter
+/// @ingroup    lib_utils
 /// @{
-/// @brief      Compile-time FNV-1a hashing for parameter key identification
+/// @brief      Compile-time FNV-1a hashing for key identification
 /// @author     Mathis Lécrivain <lecrivain.mathis@gmail.com>
 
 #pragma once
@@ -15,7 +15,7 @@
 
 namespace cogip {
 
-namespace parameter {
+namespace utils {
 
 /// @brief Constexpr FNV-1a hash implementation
 /// @param str Pointer to current character
@@ -32,7 +32,7 @@ namespace parameter {
 ///       - Algorithm: hash = (hash ^ byte) * prime
 ///
 ///       This ensures compatibility: hash_key() produces the same results as etl::fnv_1a_32
-///       but can be evaluated at compile-time for parameter key hashing.
+///       but can be evaluated at compile-time for key hashing.
 constexpr uint32_t fnv1a_hash_bytes(const char* str, size_t len, uint32_t hash = 0x811C9DC5)
 {
     return (len == 0) ? hash
@@ -62,7 +62,7 @@ constexpr uint32_t operator"" _key_hash(const char* str, size_t len)
     return fnv1a_hash_bytes(str, len);
 }
 
-} // namespace parameter
+} // namespace utils
 } // namespace cogip
 
 /// @}

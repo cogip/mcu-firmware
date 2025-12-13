@@ -11,14 +11,15 @@
 
 #include "log.h"
 
+#include "KeyHash.hpp"
 #include "PB_ParameterCommands.hpp"
 #include "etl/array.h"
 #include "etl/map.h"
 #include "etl/string.h"
 #include "parameter/Parameter.hpp"
-#include "parameter/ParameterKeyHash.hpp"
 
 using namespace cogip::parameter;
+using cogip::utils::operator"" _key_hash;
 
 /// @brief Parameter key hashes for identification
 ///

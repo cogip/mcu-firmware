@@ -9,15 +9,16 @@
 // Project includes
 #include "motion_control_parameters.hpp"
 #include "app_conf.hpp"
-#include "parameter/ParameterKeyHash.hpp"
 #include "parameter_handler/ParameterHandler.hpp"
 #include "platform.hpp"
+#include "KeyHash.hpp"
 
 namespace cogip {
 namespace pf {
 namespace motion_control {
 
 using namespace cogip::parameter;
+using cogip::utils::operator"" _key_hash;
 
 /// @brief Parameter key hashes for identification
 ///
