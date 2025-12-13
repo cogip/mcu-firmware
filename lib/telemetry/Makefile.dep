@@ -1,0 +1,5 @@
+USEPKG += embedded-proto
+
+USEMODULE += core_mutex
+USEMODULE += utils
+USEMODULE += ztimer_msec

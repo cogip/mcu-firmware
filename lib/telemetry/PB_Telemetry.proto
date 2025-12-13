@@ -1,0 +1,22 @@
+// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
+/// @file PB_Telemetry.proto
+/// @brief Generic telemetry data message for sending timestamped values.
+
+syntax = "proto3";
+
+message PB_TelemetryData {
+    uint32 key_hash = 1;     ///< FNV-1a hash of the telemetry key
+    uint32 timestamp_ms = 2; ///< Timestamp in milliseconds
+
+    oneof value {
+        float float_value = 3;   ///< 32-bit float
+        int32 int32_value = 5;   ///< Signed 32-bit integer
+        uint32 uint32_value = 6; ///< Unsigned 32-bit integer
+        int64 int64_value = 7;   ///< Signed 64-bit integer
+        uint64 uint64_value = 8; ///< Unsigned 64-bit integer
+    }
+}
