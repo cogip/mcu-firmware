@@ -1,4 +1,5 @@
 // RIOT includes
+#include <cstddef>
 #include <shell.h>
 #include <ztimer.h>
 
