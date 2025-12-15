@@ -44,12 +44,15 @@
 #include "PB_Pid.hpp"
 #include "PB_State.hpp"
 #include "etl/limits.h"
+#include "telemetry/Telemetry.hpp"
 
 namespace cogip {
 
 namespace pf {
 
 namespace motion_control {
+
+using cogip::utils::operator"" _key_hash;
 
 // Current controller
 static uint32_t current_controller_id = 0;
@@ -621,6 +624,12 @@ void pf_send_pb_state(void)
     pf_motion_control_platform_engine.target_speed().pb_copy(pb_state.mutable_speed_order());
 
     pf_get_canpb().send_message(state_uuid, &pb_state);
+}
+
+void pf_send_encoder_telemetry(void)
+{
+    cogip::telemetry::Telemetry::send<int64_t>("encoder_left"_key_hash, left_encoder.counter());
+    cogip::telemetry::Telemetry::send<int64_t>("encoder_right"_key_hash, right_encoder.counter());
 }
 
 void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)

@@ -7,6 +7,7 @@
 #include "motion_control_parameters.hpp"
 #include "pf_common/platform_common.hpp"
 #include "platform.hpp"
+#include "telemetry/Telemetry.hpp"
 
 /* Platform includes */
 #include "trace_utils.hpp"
@@ -19,6 +20,8 @@ static void _handle_pose_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer
 static void _handle_pose_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 
 bool pf_trace_on(void)
 {
@@ -52,7 +55,14 @@ void pf_init(void)
                                        cogip::canpb::message_handler_t::create<_handle_parameter_get>());
         canpb.register_message_handler(parameter_set_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_parameter_set>());
+        canpb.register_message_handler(telemetry_enable_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_telemetry_enable>());
+        canpb.register_message_handler(telemetry_disable_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_telemetry_disable>());
         // clang-format on
+
+        // Initialize telemetry
+        cogip::telemetry::Telemetry::init(canpb, telemetry_data_uuid);
 
         canpb.send_message(reset_uuid);
     }
@@ -117,4 +127,16 @@ static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buf
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     cogip::pf::motion_control::pf_handle_parameter_set(buffer);
+}
+
+/// Telemetry enable message handler
+static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::telemetry::Telemetry::enable();
+}
+
+/// Telemetry disable message handler
+static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::telemetry::Telemetry::disable();
 }

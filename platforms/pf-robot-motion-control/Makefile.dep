@@ -18,6 +18,8 @@ USEMODULE += encoder
 USEMODULE += motor
 USEMODULE += parameter
 USEMODULE += parameter_handler
+USEMODULE += telemetry
+USEMODULE += utils
 
 # Controllers
 USEMODULE += passthrough_pose_pid_controller

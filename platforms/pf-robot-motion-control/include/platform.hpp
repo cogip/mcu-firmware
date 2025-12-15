@@ -49,6 +49,9 @@ using cogip::pf_common::parameter_get_uuid;
 using cogip::pf_common::parameter_set_response_uuid;
 using cogip::pf_common::parameter_set_uuid;
 using cogip::pf_common::reset_uuid;
+using cogip::pf_common::telemetry_data_uuid;
+using cogip::pf_common::telemetry_disable_uuid;
+using cogip::pf_common::telemetry_enable_uuid;
 // Game: 0x4000 - 0x4FFF
 using cogip::pf_common::game_end_uuid;
 using cogip::pf_common::game_reset_uuid;
