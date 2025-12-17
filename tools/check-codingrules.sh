@@ -11,17 +11,6 @@ fi
 
 apply=$1
 
-if [ -n "$apply" ]; then
-    while true; do
-        read -p "Are you sure to apply corrections to all your source files [Yy/Nn] ? " yn
-        case $yn in
-            [Yy]* ) break;;
-            [Nn]* ) exit;;
-            * ) echo "Please answer yes with [Yy] or no with [Nn].";;
-        esac
-    done
-fi
-
 # Filter directories
 for directory in $EXCLUDE_DIRECTORIES; do find_exclude="$find_exclude $sep -not -path '*/$directory/*'"; sep='-a'; done
 find_exclude=$(echo $find_exclude | tr -s ' ')
