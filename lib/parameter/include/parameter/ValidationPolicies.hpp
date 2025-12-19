@@ -86,6 +86,20 @@ struct Positive
     }
 };
 
+/// @brief Non-negative validation policy - rejects negative values but allows zero
+/// @details Useful for parameters that must be positive or zero (e.g., PID gains)
+struct NonNegative
+{
+    /// @brief Validate that value is non-negative (>= 0)
+    /// @tparam T The parameter value type
+    /// @param value The value to validate (not modified)
+    /// @return true if value is non-negative, false otherwise
+    template <typename T> static bool on_set(T& value)
+    {
+        return value >= T{};
+    }
+};
+
 } // namespace parameter
 } // namespace cogip
 
