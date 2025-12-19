@@ -37,8 +37,6 @@ using cogip::pf_common::blocked_uuid;
 using cogip::pf_common::brake_uuid;
 using cogip::pf_common::controller_uuid;
 using cogip::pf_common::intermediate_pose_reached_uuid;
-using cogip::pf_common::pid_request_uuid;
-using cogip::pf_common::pid_uuid;
 using cogip::pf_common::pose_order_uuid;
 using cogip::pf_common::pose_reached_uuid;
 using cogip::pf_common::pose_start_uuid;
