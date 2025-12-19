@@ -56,6 +56,17 @@ void PlatformEngine::prepare_inputs()
     // Motion direction
     io_.set("motion_direction", target_pose_.get_motion_direction());
 
+    // Initialize pose_reached to moving (will be updated by PoseStraightFilter)
+    io_.set("pose_reached", target_pose_status_t::moving);
+
+    // Initialize speed commands to 0 (will be updated by SpeedPIDController)
+    io_.set("linear_speed_command", 0.0f);
+    io_.set("angular_speed_command", 0.0f);
+
+    // Initialize speed orders to 0 (will be updated by PosePIDController or FeedforwardCombiner)
+    io_.set("linear_speed_order", 0.0f);
+    io_.set("angular_speed_order", 0.0f);
+
     // Mark measured values read‑only:
     io_.mark_readonly("motion_direction");
     io_.mark_readonly("current_pose_x");

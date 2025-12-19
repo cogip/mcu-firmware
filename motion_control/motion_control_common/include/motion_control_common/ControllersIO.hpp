@@ -37,10 +37,10 @@ typedef enum { moving = 0, reached, intermediate_reached, blocked, timeout } tar
 
 /// @brief Maximum number of parameters that can be stored.
 /// @note Used as ETL template parameter for the underlying unordered_map.
-constexpr size_t MAX_PARAMS = 32;
+constexpr size_t MAX_PARAMS = 48;
 
 /// @brief Variant type that can hold any supported parameter value.
-using ParamValue = etl::variant<float, double, int, bool, etl::string<32>, target_pose_status_t>;
+using ParamValue = etl::variant<float, double, int, bool, etl::string<32>>;
 /// @brief Hashed key type for lookup.
 using ParamKey = size_t;
 /// @brief String key type for parameter names.
@@ -81,7 +81,7 @@ class ControllersIO
     /// @param key   The parameter name.
     /// @param value The value to store.
     /// @return 0 on success; EACCES if the key is read-only.
-    /// @note Enums are automatically converted to their underlying integer type.
+    /// @note Enums are stored as int (weak typing). Use get_as<int>() and cast manually.
     template <typename T> int set(KeyType key, const T& value)
     {
         if constexpr (etl::is_enum_v<T>) {
@@ -109,16 +109,30 @@ class ControllersIO
     /// @param key The parameter name.
     /// @return An optional containing the value cast to `T` if present and
     /// type-matched; empty otherwise.
+    /// @note Enums are stored as int, so get_as<EnumType>() will retrieve int and cast to enum.
     template <typename T> etl::optional<T> get_as(KeyType key) const
     {
-        if (auto opt = get(key)) {
-            if (etl::holds_alternative<T>(*opt)) {
-                return etl::get<T>(*opt);
-            } else {
-                LOG_ERROR("Error getting %.*s\n", static_cast<int>(key.size()), key.data());
+        if constexpr (etl::is_enum_v<T>) {
+            // Enums are stored as int, retrieve as int and cast to enum
+            if (auto opt = get(key)) {
+                if (etl::holds_alternative<int>(*opt)) {
+                    return static_cast<T>(etl::get<int>(*opt));
+                } else {
+                    LOG_ERROR("Error getting %.*s (expected int for enum)\n",
+                              static_cast<int>(key.size()), key.data());
+                }
             }
+            return {};
+        } else {
+            if (auto opt = get(key)) {
+                if (etl::holds_alternative<T>(*opt)) {
+                    return etl::get<T>(*opt);
+                } else {
+                    LOG_ERROR("Error getting %.*s\n", static_cast<int>(key.size()), key.data());
+                }
+            }
+            return {};
         }
-        return {};
     }
 
     /// @brief Once you have run some controllers, you can call
