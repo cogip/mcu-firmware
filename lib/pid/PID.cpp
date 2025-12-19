@@ -14,18 +14,18 @@ float PID::compute(float error)
     integral_term_ += error;
 
     // Integral limitation
-    integral_term_ = etl::min(integral_term_, integral_term_limit_);
-    integral_term_ = etl::max(integral_term_, -integral_term_limit_);
+    integral_term_ = etl::min(integral_term_, parameters_.integral_term_limit.get());
+    integral_term_ = etl::max(integral_term_, -parameters_.integral_term_limit.get());
 
     // Proportional
-    p = error * kp_;
+    p = error * parameters_.kp.get();
 
     // Integral
-    i = integral_term_ * ki_;
+    i = integral_term_ * parameters_.ki.get();
 
     // Derivative
     d = error - previous_error_;
-    d *= kd_;
+    d *= parameters_.kd.get();
 
     // Backup previous error
     previous_error_ = error;
