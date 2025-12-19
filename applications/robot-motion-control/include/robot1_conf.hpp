@@ -30,21 +30,21 @@ inline Parameter<float> encoder_wheels_distance_mm{275.7117596881151};
 inline Parameter<float, ReadOnly> encoder_wheels_resolution_pulses{4096 * 4};
 
 // Linear pose PID
-constexpr float linear_pose_pid_kp = 0.2;
-constexpr float linear_pose_pid_ki = 0;
-constexpr float linear_pose_pid_kd = 0;
+inline Parameter<float, NonNegative> linear_pose_pid_kp{0.2};
+inline Parameter<float, NonNegative> linear_pose_pid_ki{0};
+inline Parameter<float, NonNegative> linear_pose_pid_kd{0};
 // Angular pose PID
-constexpr float angular_pose_pid_kp = 0.3;
-constexpr float angular_pose_pid_ki = 0;
-constexpr float angular_pose_pid_kd = 0;
+inline Parameter<float, NonNegative> angular_pose_pid_kp{0.3};
+inline Parameter<float, NonNegative> angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> angular_pose_pid_kd{0};
 // Linear speed PID
-constexpr float linear_speed_pid_kp = 3.;
-constexpr float linear_speed_pid_ki = 0.8;
-constexpr float linear_speed_pid_kd = 0;
+inline Parameter<float, NonNegative> linear_speed_pid_kp{3.};
+inline Parameter<float, NonNegative> linear_speed_pid_ki{0.8};
+inline Parameter<float, NonNegative> linear_speed_pid_kd{0};
 // Angular speed PID
-constexpr float angular_speed_pid_kp = 5.5;
-constexpr float angular_speed_pid_ki = 0.6;
-constexpr float angular_speed_pid_kd = 0;
+inline Parameter<float, NonNegative> angular_speed_pid_kp{5.5};
+inline Parameter<float, NonNegative> angular_speed_pid_ki{0.6};
+inline Parameter<float, NonNegative> angular_speed_pid_kd{0};
 
 // Linear threshold
 constexpr float linear_threshold = 1;
@@ -76,10 +76,14 @@ constexpr bool platform_linear_antiblocking = true;
 constexpr bool angular_antiblocking = false;
 
 // Linear pose PID integral limit
-constexpr float linear_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+inline Parameter<float, NonNegative> linear_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
 // Angular pose PID integral limit
-constexpr float angular_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+inline Parameter<float, NonNegative> angular_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
 // Linear speed PID integral limit
-constexpr float linear_speed_pid_integral_limit = max_speed_mm_per_s / linear_speed_pid_ki;
+inline Parameter<float, NonNegative> linear_speed_pid_integral_limit{max_speed_mm_per_s /
+                                                                     linear_speed_pid_ki.get()};
 // Angular speed PID integral limit
-constexpr float angular_speed_pid_integral_limit = max_speed_deg_per_s / angular_speed_pid_ki;
+inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_deg_per_s /
+                                                                      angular_speed_pid_ki.get()};
