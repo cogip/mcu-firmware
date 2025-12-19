@@ -584,72 +584,6 @@ static void pf_encoder_reset(void)
     right_encoder.reset();
 }
 
-static void pf_send_pid(PB_PidEnum id)
-{
-    pb_pid.clear();
-    pb_pid.set_id(id);
-
-    switch (id) {
-    case PB_PidEnum::LINEAR_POSE_PID:
-        linear_pose_pid.pb_copy(pb_pid);
-        break;
-    case PB_PidEnum::ANGULAR_POSE_PID:
-        angular_pose_pid.pb_copy(pb_pid);
-        break;
-    case PB_PidEnum::LINEAR_SPEED_PID:
-        linear_speed_pid.pb_copy(pb_pid);
-        break;
-    case PB_PidEnum::ANGULAR_SPEED_PID:
-        angular_speed_pid.pb_copy(pb_pid);
-        break;
-    }
-
-    pf_get_canpb().send_message(pid_uuid, &pb_pid);
-}
-
-/// Handle pid request command message.
-static void _handle_pid_request(cogip::canpb::ReadBuffer& buffer)
-{
-    pb_pid_id.clear();
-    EmbeddedProto::Error error = pb_pid_id.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        LOG_ERROR("Pid request: Protobuf deserialization error: %d\n", static_cast<int>(error));
-        return;
-    } else {
-        LOG_INFO("Pid request: %" PRIu32 "\n", static_cast<uint32_t>(pb_pid_id.id()));
-    }
-
-    // Send PIDs
-    pf_send_pid(pb_pid_id.id());
-}
-
-/// Handle new pid config message.
-static void _handle_new_pid_config(cogip::canpb::ReadBuffer& buffer)
-{
-    pb_pid.clear();
-
-    EmbeddedProto::Error error = pb_pid.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        LOG_ERROR("New pid config: Protobuf deserialization error: %d\n", static_cast<int>(error));
-        return;
-    }
-
-    switch (pb_pid.id()) {
-    case PB_PidEnum::LINEAR_POSE_PID:
-        linear_pose_pid.pb_read(pb_pid);
-        break;
-    case PB_PidEnum::ANGULAR_POSE_PID:
-        angular_pose_pid.pb_read(pb_pid);
-        break;
-    case PB_PidEnum::LINEAR_SPEED_PID:
-        linear_speed_pid.pb_read(pb_pid);
-        break;
-    case PB_PidEnum::ANGULAR_SPEED_PID:
-        angular_speed_pid.pb_read(pb_pid);
-        break;
-    }
-}
-
 /// Handle controller change request
 static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
 {
@@ -1052,14 +986,6 @@ void pf_init_motion_control(void)
     // Set timeout for speed only loops as no pose has to be reached
     pf_motion_control_platform_engine.set_timeout_ms(motion_control_pid_tuning_period_ms /
                                                      motion_control_thread_period_ms);
-
-    //// Register pid request command
-    pf_get_canpb().register_message_handler(
-        pid_request_uuid, cogip::canpb::message_handler_t::create<_handle_pid_request>());
-
-    // Register new pids config
-    pf_get_canpb().register_message_handler(
-        pid_uuid, cogip::canpb::message_handler_t::create<_handle_new_pid_config>());
 
     // Register new pids config
     pf_get_canpb().register_message_handler(
