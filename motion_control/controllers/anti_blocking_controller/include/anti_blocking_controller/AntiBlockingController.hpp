@@ -35,12 +35,20 @@ class AntiBlockingController
     /// @brief Constructor.
     /// @param keys       IO key configuration
     /// @param parameters Anti-blocking parameters
+    /// @param name       Optional instance name for identification
     AntiBlockingController(const AntiBlockingControllerIOKeys& keys,
-                           const AntiBlockingControllerParameters& parameters)
-        : Controller<AntiBlockingControllerIOKeys, AntiBlockingControllerParameters>(keys,
-                                                                                     parameters),
+                           const AntiBlockingControllerParameters& parameters,
+                           etl::string_view name = "")
+        : Controller<AntiBlockingControllerIOKeys, AntiBlockingControllerParameters>(
+              keys, parameters, name),
           blocked_cycles_count_(0)
     {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "AntiBlockingController";
     }
 
     /// @brief Execute the controller logic.

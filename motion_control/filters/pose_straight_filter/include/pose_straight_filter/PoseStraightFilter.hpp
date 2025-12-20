@@ -42,11 +42,19 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
     /// @param keys       Reference to a POD containing all input and output key
     /// names.
     /// @param parameters Reference to movement switch thresholds.
+    /// @param name       Optional instance name for identification.
     explicit PoseStraightFilter(const PoseStraightFilterIOKeys& keys,
-                                const PoseStraightFilterParameters& parameters)
-        : Controller<PoseStraightFilterIOKeys, PoseStraightFilterParameters>(keys, parameters)
+                                const PoseStraightFilterParameters& parameters,
+                                etl::string_view name = "")
+        : Controller<PoseStraightFilterIOKeys, PoseStraightFilterParameters>(keys, parameters, name)
     {
         current_state_ = PoseStraightFilterState::FINISHED;
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "PoseStraightFilter";
     }
 
     /// @brief Evaluate state machine and compute errors, filtered speeds, and

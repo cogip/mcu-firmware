@@ -29,10 +29,18 @@ class SpeedFilter : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
     /// @brief Constructor.
     /// @param keys       Reference to a POD containing all input and output key names.
     /// @param parameters Reference to filtering parameters.
-    explicit SpeedFilter(const SpeedFilterIOKeys& keys, const SpeedFilterParameters& parameters)
-        : Controller<SpeedFilterIOKeys, SpeedFilterParameters>(keys, parameters),
+    /// @param name       Optional instance name for identification.
+    explicit SpeedFilter(const SpeedFilterIOKeys& keys, const SpeedFilterParameters& parameters,
+                         etl::string_view name = "")
+        : Controller<SpeedFilterIOKeys, SpeedFilterParameters>(keys, parameters, name),
           previous_speed_order_(0.0f)
     {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "SpeedFilter";
     }
 
     /// @brief Apply acceleration and speed limits, and compute speed error.

@@ -57,8 +57,16 @@ class ProfileFeedforwardController
     /// @brief Constructor
     /// @param keys       Reference to a POD containing all controller keys
     /// @param parameters Reference to controller parameters
+    /// @param name       Optional instance name for identification
     explicit ProfileFeedforwardController(const ProfileFeedforwardControllerIOKeys& keys,
-                                          const ProfileFeedforwardControllerParameters& parameters);
+                                          const ProfileFeedforwardControllerParameters& parameters,
+                                          etl::string_view name = "");
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "ProfileFeedforwardController";
+    }
 
     /// @brief Execute profile feedforward computation
     ///

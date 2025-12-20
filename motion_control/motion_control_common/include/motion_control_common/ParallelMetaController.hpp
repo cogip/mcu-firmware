@@ -35,6 +35,19 @@ template <size_t NB_CONTROLLERS>
 class ParallelMetaController : public MetaController<NB_CONTROLLERS>
 {
   public:
+    /// Constructor
+    /// @param name Optional instance name for identification
+    explicit ParallelMetaController(etl::string_view name = "")
+        : MetaController<NB_CONTROLLERS>(name)
+    {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "ParallelMetaController";
+    }
+
     /// @brief Execute all sub-controllers on the same `io`.
     ///        Detects and warns if the same key is modified by ≥2 controllers.
     /// @param io Shared ControllersIO instance.

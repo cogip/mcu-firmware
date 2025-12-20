@@ -122,6 +122,17 @@ class BaseControllerEngine
         return io_;
     };
 
+    /// Dump the controller pipeline hierarchy to stdout as ASCII tree
+    void dump_pipeline() const
+    {
+        printf("Pipeline:\n");
+        if (controller_) {
+            controller_->dump(1, true, "");
+        } else {
+            printf("  (no controller set)\n");
+        }
+    }
+
   protected:
     /// Prepare controller inputs from platform functions.
     virtual void prepare_inputs() = 0;
@@ -153,7 +164,7 @@ class BaseControllerEngine
     bool timeout_enable_;
 
     /// Engine thread stack
-    char engine_thread_stack_[THREAD_STACKSIZE_LARGE];
+    char engine_thread_stack_[THREAD_STACKSIZE_LARGE * 4];
 
     /// Engine thread period
     uint32_t engine_thread_period_ms_;

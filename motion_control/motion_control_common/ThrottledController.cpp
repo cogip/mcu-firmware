@@ -15,9 +15,9 @@ namespace cogip {
 namespace motion_control {
 
 ThrottledController::ThrottledController(BaseController* wrapped_controller,
-                                         uint16_t period_divider)
-    : BaseController(), wrapped_controller_(wrapped_controller), period_divider_(period_divider),
-      current_count_(period_divider)
+                                         uint16_t period_divider, etl::string_view name)
+    : BaseController(name), wrapped_controller_(wrapped_controller),
+      period_divider_(period_divider), current_count_(period_divider)
 {
     // Ensure period_divider is at least 1
     if (period_divider_ < 1) {

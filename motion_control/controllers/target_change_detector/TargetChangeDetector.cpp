@@ -21,8 +21,10 @@ namespace cogip {
 namespace motion_control {
 
 TargetChangeDetector::TargetChangeDetector(const TargetChangeDetectorIOKeys& keys,
-                                           const TargetChangeDetectorParameters& parameters)
-    : Controller<TargetChangeDetectorIOKeys, TargetChangeDetectorParameters>(keys, parameters),
+                                           const TargetChangeDetectorParameters& parameters,
+                                           etl::string_view name)
+    : Controller<TargetChangeDetectorIOKeys, TargetChangeDetectorParameters>(keys, parameters,
+                                                                             name),
       previous_target_x_(0.0), previous_target_y_(0.0), previous_target_O_(0.0),
       previous_state_(-1), first_run_(true)
 {
