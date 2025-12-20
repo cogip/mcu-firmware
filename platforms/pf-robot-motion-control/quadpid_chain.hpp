@@ -12,6 +12,9 @@
 #include "anti_blocking_controller/AntiBlockingController.hpp"
 #include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "app_conf.hpp"
+#include "deceleration_filter/DecelerationFilter.hpp"
+#include "deceleration_filter/DecelerationFilterIOKeys.hpp"
+#include "deceleration_filter/DecelerationFilterParameters.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_control_common/ThrottledController.hpp"
 #include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
@@ -58,10 +61,38 @@ inline cogip::motion_control::PoseStraightFilter
                          pose_straight_filter_parameters);
 
 // ============================================================================
+// DecelerationFilters
+// ============================================================================
+
+inline cogip::motion_control::DecelerationFilterIOKeys linear_deceleration_filter_io_keys = {
+    .pose_error = "linear_pose_error",
+    .current_speed = "linear_current_speed",
+    .target_speed = "linear_target_speed"};
+
+inline cogip::motion_control::DecelerationFilterParameters
+    linear_deceleration_filter_parameters(platform_max_dec_linear_mm_per_period2);
+
+inline cogip::motion_control::DecelerationFilter
+    linear_deceleration_filter(linear_deceleration_filter_io_keys,
+                               linear_deceleration_filter_parameters);
+
+inline cogip::motion_control::DecelerationFilterIOKeys angular_deceleration_filter_io_keys = {
+    .pose_error = "angular_pose_error",
+    .current_speed = "angular_current_speed",
+    .target_speed = "angular_target_speed"};
+
+inline cogip::motion_control::DecelerationFilterParameters
+    angular_deceleration_filter_parameters(platform_max_dec_angular_deg_per_period2);
+
+inline cogip::motion_control::DecelerationFilter
+    angular_deceleration_filter(angular_deceleration_filter_io_keys,
+                                angular_deceleration_filter_parameters);
+
+// ============================================================================
 // MetaControllers
 // ============================================================================
 
-inline cogip::motion_control::MetaController<2> pose_loop_meta_controller;
+inline cogip::motion_control::MetaController<4> pose_loop_meta_controller;
 inline cogip::motion_control::PolarParallelMetaController pose_loop_polar_parallel_meta_controller;
 inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;
 

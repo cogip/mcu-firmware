@@ -115,10 +115,8 @@ void PoseStraightFilter::execute(ControllersIO& io)
     }
 
     // Persist direction choice when switching to MOVE_TO_POSITION state
-    // and detect target changes to reset state
     static bool force_can_reverse = false;
     static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
-    static bool target_changed = false;
     // Reference orientation saved when entering MOVE_TO_POSITION for heading maintenance
     static float reference_orientation = 0.0f;
     // Initial direction sign: +1 for forward, -1 for backward
@@ -131,20 +129,25 @@ void PoseStraightFilter::execute(ControllersIO& io)
     bool angular_recompute_profile = false;
     bool angular_invalidate_profile = false;
 
+    // Static variables for ROTATE_TO_FINAL_ANGLE oscillation detection
+    // Declared here so they can be reset on target change
+    static float prev_angular_error = 0.0f;
+    static bool first_entry = true;
+
     if ((target_pose_x != prev_target.x()) || (target_pose_y != prev_target.y()) ||
         (target_pose_O != prev_target.O())) {
         force_can_reverse = false;
-        target_changed = true;
         prev_target = target_pose;
         // Reset state machine to initial state on new target
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
+        // Reset ROTATE_TO_FINAL_ANGLE oscillation detection variables
+        prev_angular_error = 0.0f;
+        first_entry = true;
         // New external target -> recompute angular profile for initial rotation
         angular_recompute_profile = true;
         // Invalidate linear profile - will be recomputed when entering MOVE_TO_POSITION
         linear_invalidate_profile = true;
         DEBUG("New target detected, reset state to ROTATE_TO_DIRECTION\n");
-    } else {
-        target_changed = false;
     }
 
     // Apply motion direction constraints
@@ -224,8 +227,10 @@ void PoseStraightFilter::execute(ControllersIO& io)
         DEBUG("ROTATE_TO_DIRECTION\n");
         // Keep linear profile invalidated during initial rotation
         linear_invalidate_profile = true;
+        // Force linear target speed to 0 during initial rotation
+        target_speed.set_distance(0.0f);
         if (absolute_angular_pose_error > angular_intermediate_threshold) {
-            target_speed.set_distance(0.0f);
+            // Still rotating to face target direction
         } else {
             // Save the initial direction sign for use during MOVE_TO_POSITION
             // This determines if we started going forward (+1) or backward (-1)
@@ -332,22 +337,14 @@ void PoseStraightFilter::execute(ControllersIO& io)
         {
             // Keep linear profile invalidated during final rotation
             linear_invalidate_profile = true;
-
-            static float prev_angular_error = 0.0f;
-            static bool first_entry = true;
-
-            // Reset on target change
-            if (target_changed) {
-                first_entry = true;
-                prev_angular_error = 0.0f;
-            }
+            // Force linear target speed to 0 during final rotation
+            target_speed.set_distance(0.0f);
 
             if (!parameters_.bypass_final_orientation()) {
                 pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
             } else {
                 pos_err.set_angle(0.0f);
             }
-            target_speed.set_distance(0.0f);
 
             float current_angular_error = pos_err.angle();
 
@@ -373,6 +370,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     case PoseStraightFilterState::FINISHED:
         DEBUG("FINISHED\n");
+        // Force target speeds to 0 to prevent any motion
         target_speed.set_distance(0.0f);
         target_speed.set_angle(0.0f);
         // Keep profiles invalidated in FINISHED state

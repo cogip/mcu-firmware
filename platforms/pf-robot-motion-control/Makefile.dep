@@ -24,6 +24,7 @@ USEMODULE += utils
 # Controllers
 USEMODULE += reset_controller
 USEMODULE += anti_blocking_controller
+USEMODULE += deceleration_filter
 USEMODULE += feedforward_combiner_controller
 USEMODULE += passthrough_pose_pid_controller
 USEMODULE += profile_feedforward_controller

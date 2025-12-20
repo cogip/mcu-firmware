@@ -25,6 +25,7 @@ struct SpeedFilterIOKeys
     etl::string_view current_speed; ///< key for measured current speed
     etl::string_view target_speed;  ///< key for raw speed setpoint
     etl::string_view speed_error;   ///< key for computed speed error (filtered)
+    etl::string_view bypass_filter; ///< key for bypass flag (optional, skip accel limiting if true)
 };
 } // namespace motion_control
 

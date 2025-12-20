@@ -76,16 +76,31 @@ void SpeedFilter::execute(ControllersIO& io)
         target_speed = *opt;
     }
 
-    DEBUG("SpeedFilter[%s]: speed_order=%.2f, current_speed=%.2f, target_speed=%.2f, prev=%.2f\n",
+    // Check for bypass flag (optional key, defaults to false)
+    bool bypass = false;
+    if (!keys_.bypass_filter.empty()) {
+        if (auto opt = io.get_as<bool>(keys_.bypass_filter)) {
+            bypass = *opt;
+        }
+    }
+
+    DEBUG("SpeedFilter[%s]: speed_order=%.2f, current_speed=%.2f, target_speed=%.2f, prev=%.2f, "
+          "bypass=%d\n",
           keys_.speed_order.data(), static_cast<double>(speed_order),
           static_cast<double>(current_speed), static_cast<double>(target_speed),
-          static_cast<double>(previous_speed_order_));
+          static_cast<double>(previous_speed_order_), bypass);
 
-    // Apply speed/acceleration/deceleration limits
-    limit_speed_order(&speed_order, target_speed, parameters_.min_speed(), parameters_.max_speed(),
-                      parameters_.max_acceleration(), parameters_.max_deceleration());
+    // Apply speed/acceleration/deceleration limits (unless bypassed)
+    if (!bypass) {
+        limit_speed_order(&speed_order, target_speed, parameters_.min_speed(),
+                          parameters_.max_speed(), parameters_.max_acceleration(),
+                          parameters_.max_deceleration());
+    }
 
     previous_speed_order_ = speed_order;
+
+    // Write filtered speed_order back to IO so downstream controllers use the limited value
+    io.set(keys_.speed_order, speed_order);
 
     float speed_error = speed_order - current_speed;
 
