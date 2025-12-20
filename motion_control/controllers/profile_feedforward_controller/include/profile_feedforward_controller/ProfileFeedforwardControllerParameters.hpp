@@ -21,13 +21,15 @@ class ProfileFeedforwardControllerParameters
   public:
     /// Constructor
     explicit ProfileFeedforwardControllerParameters(
-        float max_speed = 10.0f,     ///< [in] Maximum speed (mm/period or rad/period)
-        float acceleration = 1.0f,   ///< [in] Acceleration (mm/period² or rad/period²)
-        float deceleration = 1.0f,   ///< [in] Deceleration (mm/period² or rad/period²)
-        bool must_stop_at_end = true ///< [in] Stop at target (true) or continue (false)
+        float max_speed = 10.0f,      ///< [in] Maximum speed (mm/period or rad/period)
+        float acceleration = 1.0f,    ///< [in] Acceleration (mm/period² or rad/period²)
+        float deceleration = 1.0f,    ///< [in] Deceleration (mm/period² or rad/period²)
+        bool must_stop_at_end = true, ///< [in] Stop at target (true) or continue (false)
+        uint16_t period_increment =
+            1 ///< [in] Period increment per execute (for throttled controllers)
         )
         : max_speed_(max_speed), acceleration_(acceleration), deceleration_(deceleration),
-          must_stop_at_end_(must_stop_at_end)
+          must_stop_at_end_(must_stop_at_end), period_increment_(period_increment)
     {
     }
 
@@ -79,11 +81,24 @@ class ProfileFeedforwardControllerParameters
         must_stop_at_end_ = must_stop_at_end;
     }
 
+    /// Get period increment
+    uint16_t period_increment() const
+    {
+        return period_increment_;
+    }
+
+    /// Set period increment
+    void set_period_increment(uint16_t period_increment)
+    {
+        period_increment_ = period_increment;
+    }
+
   private:
-    float max_speed_;       ///< Maximum velocity limit
-    float acceleration_;    ///< Maximum acceleration
-    float deceleration_;    ///< Maximum deceleration
-    bool must_stop_at_end_; ///< Stop at end or continue
+    float max_speed_;           ///< Maximum velocity limit
+    float acceleration_;        ///< Maximum acceleration
+    float deceleration_;        ///< Maximum deceleration
+    bool must_stop_at_end_;     ///< Stop at end or continue
+    uint16_t period_increment_; ///< Period increment per execute (for throttling)
 };
 
 } // namespace motion_control

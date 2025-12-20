@@ -180,8 +180,8 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
     io.set(keys_.feedforward_velocity, feedforward_velocity);
     io.set(keys_.tracking_error, tracking_error);
 
-    // Increment period counter
-    period_++;
+    // Increment period counter (by period_increment for throttled controllers)
+    period_ += parameters_.period_increment();
 }
 
 } // namespace motion_control

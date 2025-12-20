@@ -171,10 +171,12 @@ static cogip::motion_control::ProfileFeedforwardControllerIOKeys
 
 /// Linear ProfileFeedforwardController parameters
 static cogip::motion_control::ProfileFeedforwardControllerParameters
-    linear_profile_feedforward_parameters(platform_max_speed_linear_mm_per_period, // max_speed
-                                          platform_max_acc_linear_mm_per_period2,  // acceleration
-                                          platform_max_dec_linear_mm_per_period2,  // deceleration
-                                          true // must_stop_at_end
+    linear_profile_feedforward_parameters(
+        platform_max_speed_linear_mm_per_period,      // max_speed
+        platform_max_acc_linear_mm_per_period2,       // acceleration
+        platform_max_dec_linear_mm_per_period2,       // deceleration
+        true,                                         // must_stop_at_end
+        feedforward_pose_controllers_throttle_divider // period_increment
     );
 
 /// Linear ProfileFeedforwardController
@@ -236,10 +238,11 @@ static cogip::motion_control::ProfileFeedforwardControllerIOKeys
 /// Angular ProfileFeedforwardController parameters
 static cogip::motion_control::ProfileFeedforwardControllerParameters
     angular_profile_feedforward_parameters(
-        platform_max_speed_angular_deg_per_period, // max_speed
-        platform_max_acc_angular_deg_per_period2,  // acceleration
-        platform_max_dec_angular_deg_per_period2,  // deceleration (same as acc for angular)
-        true                                       // must_stop_at_end
+        platform_max_speed_angular_deg_per_period,    // max_speed
+        platform_max_acc_angular_deg_per_period2,     // acceleration
+        platform_max_dec_angular_deg_per_period2,     // deceleration (same as acc for angular)
+        true,                                         // must_stop_at_end
+        feedforward_pose_controllers_throttle_divider // period_increment
     );
 
 /// Angular ProfileFeedforwardController

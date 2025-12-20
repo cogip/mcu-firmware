@@ -70,10 +70,10 @@ inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kd{0};
 // Linear threshold
 constexpr float linear_threshold = 1;
 // Angular threshold
-constexpr float angular_threshold = 2;
+constexpr float angular_threshold = 1;
 // Angular intermediate threshold (when the robot turns on itself to go straight
 // to its destination)
-constexpr float angular_intermediate_threshold = 20;
+constexpr float angular_intermediate_threshold = 2;
 
 // Linear anti-blocking
 constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 12.5;
