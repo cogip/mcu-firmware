@@ -42,8 +42,9 @@ template <typename IOKeysT, typename ParamsT> class Controller : virtual public 
     /// @param keys Reference to the IO key definitions used to access
     /// ControllersIO values.
     /// @param parameters Reference to controller parameters.
-    Controller(const IOKeysT& keys, const ParamsT& parameters)
-        : BaseController(), keys_(keys), parameters_(parameters){};
+    /// @param name Optional instance name for identification.
+    Controller(const IOKeysT& keys, const ParamsT& parameters, etl::string_view name = "")
+        : BaseController(name), keys_(keys), parameters_(parameters){};
 
     /// Get parameters
     /// return current parameters

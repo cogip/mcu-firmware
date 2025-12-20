@@ -26,6 +26,19 @@ namespace motion_control {
 /// pseudo simultaneously for controlling both linear and angular motion.
 class PolarParallelMetaController : public ParallelMetaController<2>
 {
+  public:
+    /// Constructor
+    /// @param name Optional instance name for identification
+    explicit PolarParallelMetaController(etl::string_view name = "")
+        : ParallelMetaController<2>(name)
+    {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "PolarParallelMetaController";
+    }
 };
 
 } // namespace motion_control

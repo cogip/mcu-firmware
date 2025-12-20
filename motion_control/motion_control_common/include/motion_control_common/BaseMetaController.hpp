@@ -23,6 +23,10 @@ namespace motion_control {
 class BaseMetaController : virtual public BaseController
 {
   public:
+    /// Constructor
+    /// @param name Optional instance name for identification
+    explicit BaseMetaController(etl::string_view name = "") : BaseController(name) {}
+
     /// Add a controller to the beginning of the controllers chain.
     /// @param controller Controller to add
     /// @return 0 on success, negative code otherwise

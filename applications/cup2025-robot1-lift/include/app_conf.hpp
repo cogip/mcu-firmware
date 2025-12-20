@@ -154,13 +154,9 @@ static cogip::motion_control::PosePIDControllerParameters
     motor_lift_pose_pid_parameters(&motor_lift_pose_pid);
 
 /// @brief Motor Lift SpeedFilterParameters.
-static cogip::motion_control::SpeedFilterParameters
-    motor_lift_speed_filter_parameters(lift_limits::min_speed_mm_per_period,
-                                       lift_limits::max_speed_mm_per_period,
-                                       lift_limits::max_acceleration_mm_per_period2, false,
-                                       lift_anti_blocking::speed_threshold_mm_per_period,
-                                       lift_anti_blocking::error_threshold_mm_per_period,
-                                       lift_anti_blocking::blocked_cycles_threshold);
+static cogip::motion_control::SpeedFilterParameters motor_lift_speed_filter_parameters(
+    lift_limits::min_speed_mm_per_period, lift_limits::max_speed_mm_per_period,
+    lift_limits::max_acceleration_mm_per_period2, lift_limits::max_deceleration_mm_per_period2);
 
 /// @brief Motor Lift SpeedPIDControllerParameters.
 static cogip::motion_control::SpeedPIDControllerParameters

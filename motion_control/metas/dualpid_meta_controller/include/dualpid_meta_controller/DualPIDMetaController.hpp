@@ -20,8 +20,18 @@ namespace motion_control {
 
 /// @brief Meta controller that chains one PosePIDController and one
 /// SpeedPIDController (or SpeedFilter) in sequence.
-class DualPIDMetaController : public MetaController<3>
+class DualPIDMetaController : public MetaController<5>
 {
+  public:
+    /// Constructor
+    /// @param name Optional instance name for identification
+    explicit DualPIDMetaController(etl::string_view name = "") : MetaController<5>(name) {}
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "DualPIDMetaController";
+    }
 };
 
 } // namespace motion_control

@@ -21,7 +21,7 @@ namespace motion_control {
 /// Each key is prefixed with "linear_" and set to its corresponding member
 /// name.
 static const SpeedPIDControllerIOKeys linear_speed_pid_controller_io_keys_default = {
-    .speed_error = "linear_speed_error",
+    .speed_order = "linear_speed_order",
     .current_speed = "linear_current_speed",
     .speed_command = "linear_speed_command"};
 
@@ -29,7 +29,7 @@ static const SpeedPIDControllerIOKeys linear_speed_pid_controller_io_keys_defaul
 /// Each key is prefixed with "angular_" and set to its corresponding member
 /// name.
 static const SpeedPIDControllerIOKeys angular_speed_pid_controller_io_keys_default = {
-    .speed_error = "angular_speed_error",
+    .speed_order = "angular_speed_order",
     .current_speed = "angular_current_speed",
     .speed_command = "angular_speed_command"};
 

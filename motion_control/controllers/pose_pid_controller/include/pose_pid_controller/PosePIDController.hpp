@@ -30,10 +30,18 @@ class PosePIDController : public Controller<PosePIDControllerIOKeys, PosePIDCont
     /// @brief Constructor
     /// @param keys       Reference to a POD containing all controller keys.
     /// @param parameters Reference to PID parameters.
+    /// @param name       Optional instance name for identification.
     explicit PosePIDController(const PosePIDControllerIOKeys& keys,
-                               const PosePIDControllerParameters& parameters)
-        : Controller<PosePIDControllerIOKeys, PosePIDControllerParameters>(keys, parameters)
+                               const PosePIDControllerParameters& parameters,
+                               etl::string_view name = "")
+        : Controller<PosePIDControllerIOKeys, PosePIDControllerParameters>(keys, parameters, name)
     {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "PosePIDController";
     }
 
     /// @brief Read position error via keys_.position_error,

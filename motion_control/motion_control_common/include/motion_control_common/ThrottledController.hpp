@@ -11,6 +11,9 @@
 
 #pragma once
 
+// ETL includes
+#include "etl/string.h"
+
 // Project includes
 #include "BaseController.hpp"
 
@@ -32,7 +35,41 @@ class ThrottledController : public BaseController
     /// @brief Constructor for the throttled controller.
     /// @param wrapped_controller The controller to wrap and throttle
     /// @param period_divider Execute wrapped controller every N cycles (must be >= 1)
-    explicit ThrottledController(BaseController* wrapped_controller, uint16_t period_divider = 1);
+    /// @param name Optional instance name for identification
+    explicit ThrottledController(BaseController* wrapped_controller, uint16_t period_divider = 1,
+                                 etl::string_view name = "");
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "ThrottledController";
+    }
+
+    /// @brief Dump the controller hierarchy including the wrapped controller
+    /// @param counter Execution order counter (passed to wrapped controller, not used for wrapper)
+    void dump(int indent = 0, bool is_last = true, const char* prefix = "",
+              int* counter = nullptr) const override
+    {
+        // Print tree branch for this controller
+        if (indent > 0) {
+            printf("%s%s", prefix, is_last ? "└── " : "├── ");
+        }
+
+        // Print type and name (no execution number for wrapper)
+        if (name_.empty()) {
+            printf("%s\n", type_name());
+        } else {
+            printf("%s: %.*s\n", type_name(), static_cast<int>(name_.size()), name_.data());
+        }
+
+        // Dump wrapped controller as child
+        if (wrapped_controller_) {
+            etl::string<128> new_prefix;
+            new_prefix.append(prefix);
+            new_prefix.append(is_last ? "    " : "│   ");
+            wrapped_controller_->dump(indent + 1, true, new_prefix.c_str(), counter);
+        }
+    }
 
     /// @brief Execute the wrapped controller if the period has elapsed.
     /// @param io Controllers input/output datas shared across controllers

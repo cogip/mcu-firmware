@@ -20,26 +20,30 @@
 namespace cogip {
 namespace motion_control {
 
-/// @brief Filter commanded speed according to acceleration and speed bounds,
-///        and detect blocking.
-///        Reads speed order, current speed, raw target speed, disable flag, and
-///        pose‐reached status, then writes filtered speed error and updated
-///        pose‐reached status.
+/// @brief Filter commanded speed according to acceleration and speed bounds.
+///        Reads speed order, current speed, raw target speed, and disable flag,
+///        then writes filtered speed error.
 class SpeedFilter : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
 {
   public:
     /// @brief Constructor.
-    /// @param keys       Reference to a POD containing all input and output key
-    /// names.
+    /// @param keys       Reference to a POD containing all input and output key names.
     /// @param parameters Reference to filtering parameters.
-    explicit SpeedFilter(const SpeedFilterIOKeys& keys, const SpeedFilterParameters& parameters)
-        : Controller<SpeedFilterIOKeys, SpeedFilterParameters>(keys, parameters),
-          previous_speed_order_(0.0f), anti_blocking_blocked_cycles_nb_(0)
+    /// @param name       Optional instance name for identification.
+    explicit SpeedFilter(const SpeedFilterIOKeys& keys, const SpeedFilterParameters& parameters,
+                         etl::string_view name = "")
+        : Controller<SpeedFilterIOKeys, SpeedFilterParameters>(keys, parameters, name),
+          previous_speed_order_(0.0f)
     {
     }
 
-    /// @brief Apply acceleration and speed limits, perform blocking detection,
-    ///        and compute speed error and final pose‐reached status.
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "SpeedFilter";
+    }
+
+    /// @brief Apply acceleration and speed limits, and compute speed error.
     /// @param io Shared ControllersIO containing inputs and receiving outputs.
     void execute(ControllersIO& io) override;
 
@@ -55,24 +59,18 @@ class SpeedFilter : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
         previous_speed_order_ = 0.0f;
     }
 
-    /// @brief Reset blocked cycle counter to zero.
-    void reset_anti_blocking_blocked_cycles_nb()
-    {
-        anti_blocking_blocked_cycles_nb_ = 0;
-    }
-
   protected:
-    float previous_speed_order_;               ///< filtered speed from previous cycle
-    uint32_t anti_blocking_blocked_cycles_nb_; ///< count of consecutive blocked cycles
+    float previous_speed_order_; ///< filtered speed from previous cycle
 
-    /// @brief Constrain commanded speed according to bounds and acceleration.
+    /// @brief Constrain commanded speed according to bounds and acceleration/deceleration.
     /// @param[in,out] speed_order  pointer to commanded speed; updated in place.
     /// @param[in]     raw_target   raw setpoint for maximum speed.
-    /// @param[in]     min_speed    minimum non‐zero speed threshold.
+    /// @param[in]     min_speed    minimum non-zero speed threshold.
     /// @param[in]     max_speed    maximum absolute speed allowed.
-    /// @param[in]     max_acc      maximum change in speed per cycle.
+    /// @param[in]     max_acc      maximum acceleration (speed increase) per cycle.
+    /// @param[in]     max_dec      maximum deceleration (speed decrease) per cycle.
     void limit_speed_order(float* speed_order, float raw_target, float min_speed, float max_speed,
-                           float max_acc);
+                           float max_acc, float max_dec);
 };
 
 } // namespace motion_control

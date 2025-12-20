@@ -13,10 +13,12 @@
 #pragma once
 
 // System includes
-#include <iostream>
+#include <cstdio>
 
 // Project includes
 #include "ControllersIO.hpp"
+#include "etl/string.h"
+#include "etl/string_view.h"
 #include "etl/vector.h"
 
 namespace cogip {
@@ -31,7 +33,8 @@ class BaseController
 {
   public:
     /// Constructor
-    BaseController() : meta_(nullptr){};
+    /// @param name Optional instance name for identification
+    explicit BaseController(etl::string_view name = "") : meta_(nullptr), name_(name){};
 
     /// Destructor
     virtual ~BaseController(){};
@@ -39,6 +42,54 @@ class BaseController
     /// Controller core method
     /// @param io Controllers input/output datas shared accross controllers
     virtual void execute(ControllersIO& io) = 0;
+
+    /// Get the type name of this controller (class name)
+    /// @return Type name string
+    virtual const char* type_name() const
+    {
+        return "BaseController";
+    }
+
+    /// Get the instance name of this controller
+    /// @return Instance name string view
+    etl::string_view name() const
+    {
+        return name_;
+    }
+
+    /// Set the instance name of this controller
+    /// @param name New instance name
+    void set_name(etl::string_view name)
+    {
+        name_ = name;
+    }
+
+    /// Dump the controller hierarchy to stdout as ASCII tree
+    /// @param indent Current indentation level
+    /// @param is_last Whether this is the last child at current level
+    /// @param prefix Prefix string for tree drawing
+    /// @param counter Execution order counter (incremented for leaf controllers)
+    virtual void dump(int indent = 0, bool is_last = true, const char* prefix = "",
+                      int* counter = nullptr) const
+    {
+        // Print tree branch
+        if (indent > 0) {
+            printf("%s%s", prefix, is_last ? "└── " : "├── ");
+        }
+
+        // Print execution order number for leaf controllers
+        if (counter) {
+            (*counter)++;
+            printf("[%d] ", *counter);
+        }
+
+        // Print type and name
+        if (name_.empty()) {
+            printf("%s\n", type_name());
+        } else {
+            printf("%s: %.*s\n", type_name(), static_cast<int>(name_.size()), name_.data());
+        }
+    }
 
     /// Get meta controller to which current controller belongs to
     /// return Meta controller
@@ -52,9 +103,12 @@ class BaseController
     virtual bool set_meta(BaseMetaController* meta ///< [in]  meta controller
     );
 
-  private:
+  protected:
     /// Meta controller to which current controller belongs to
     BaseMetaController* meta_;
+
+    /// Instance name for identification
+    etl::string_view name_;
 };
 
 } // namespace motion_control

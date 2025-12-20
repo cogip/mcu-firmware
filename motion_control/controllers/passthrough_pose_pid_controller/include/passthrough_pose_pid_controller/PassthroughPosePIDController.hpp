@@ -33,16 +33,24 @@ class PassthroughPosePIDController
     /// @brief Constructor.
     /// @param keys        Pointer to a POD containing the three key names.
     /// @param parameters  Reference to PID parameters.
+    /// @param name        Optional instance name for identification.
     explicit PassthroughPosePIDController(const PassthroughPosePIDControllerIOKeys& keys,
-                                          const PassthroughPosePIDControllerParameters& parameters)
+                                          const PassthroughPosePIDControllerParameters& parameters,
+                                          etl::string_view name = "")
         : Controller<PassthroughPosePIDControllerIOKeys, PassthroughPosePIDControllerParameters>(
-              keys, parameters)
+              keys, parameters, name)
     {
     }
 
-    /// @brief Read “position_error” via keys_->position_error, compute speed
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "PassthroughPosePIDController";
+    }
+
+    /// @brief Read "position_error" via keys_->position_error, compute speed
     /// order,
-    ///        and write “speed_order” + “target_speed” back via
+    ///        and write "speed_order" + "target_speed" back via
     ///        keys_->speed_order/target_speed.
     /// @param io Shared ControllersIO.
     void execute(ControllersIO& io) override;
