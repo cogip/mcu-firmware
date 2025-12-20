@@ -134,12 +134,14 @@ static cogip::motion_control::QuadPIDMetaController quadpid_feedforward_meta_con
 
 /// Linear ProfileFeedforwardController IO keys
 static cogip::motion_control::ProfileFeedforwardControllerIOKeys
-    linear_profile_feedforward_io_keys = {.pose_error = "linear_pose_error",
-                                          .current_speed = "linear_current_speed",
-                                          .recompute_profile = "linear_recompute_profile",
-                                          .invalidate_profile = "linear_invalidate_profile",
-                                          .feedforward_velocity = "linear_feedforward_velocity",
-                                          .tracking_error = "linear_tracking_error"};
+    linear_profile_feedforward_io_keys = {
+        .pose_error = "linear_pose_error",
+        .current_speed = "linear_current_speed",
+        .recompute_profile = "linear_recompute_profile",
+        .invalidate_profile = "linear_invalidate_profile",
+        .feedforward_velocity = "linear_feedforward_velocity",
+        .tracking_error = "linear_tracking_error",
+        .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
 
 /// Linear ProfileFeedforwardController parameters
 static cogip::motion_control::ProfileFeedforwardControllerParameters
@@ -194,12 +196,14 @@ static cogip::motion_control::PosePIDController
 
 /// Angular ProfileFeedforwardController IO keys
 static cogip::motion_control::ProfileFeedforwardControllerIOKeys
-    angular_profile_feedforward_io_keys = {.pose_error = "angular_pose_error",
-                                           .current_speed = "angular_current_speed",
-                                           .recompute_profile = "angular_recompute_profile",
-                                           .invalidate_profile = "angular_invalidate_profile",
-                                           .feedforward_velocity = "angular_feedforward_velocity",
-                                           .tracking_error = "angular_tracking_error"};
+    angular_profile_feedforward_io_keys = {
+        .pose_error = "angular_pose_error",
+        .current_speed = "angular_current_speed",
+        .recompute_profile = "angular_recompute_profile",
+        .invalidate_profile = "angular_invalidate_profile",
+        .feedforward_velocity = "angular_feedforward_velocity",
+        .tracking_error = "angular_tracking_error",
+        .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
 
 /// Angular ProfileFeedforwardController parameters
 static cogip::motion_control::ProfileFeedforwardControllerParameters
@@ -472,17 +476,20 @@ pf_quadpid_feedforward_meta_controller_init(void)
 // ============================================================================
 
 /// Linear Speed Tuning meta controller
-static cogip::motion_control::MetaController<3> linear_speed_tuning_meta_controller;
+static cogip::motion_control::MetaController<5> linear_speed_tuning_meta_controller;
 
 /// Initialize platform Linear Speed Tuning meta controller
 /// Return initialized meta controller
-static cogip::motion_control::MetaController<3>* pf_linear_speed_tuning_meta_controller_init(void)
+static cogip::motion_control::MetaController<5>* pf_linear_speed_tuning_meta_controller_init(void)
 {
-    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController
+    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController ->
+    // TuningPoseReachedFilter
     linear_speed_tuning_meta_controller.add_controller(&linear_speed_chain::pose_error_filter);
     linear_speed_tuning_meta_controller.add_controller(
         &linear_speed_chain::profile_feedforward_controller);
     linear_speed_tuning_meta_controller.add_controller(&linear_speed_chain::speed_controller);
+    linear_speed_tuning_meta_controller.add_controller(
+        &linear_speed_chain::tuning_pose_reached_filter);
 
     return &linear_speed_tuning_meta_controller;
 }
@@ -492,17 +499,20 @@ static cogip::motion_control::MetaController<3>* pf_linear_speed_tuning_meta_con
 // ============================================================================
 
 /// Angular Speed Tuning meta controller
-static cogip::motion_control::MetaController<3> angular_speed_tuning_meta_controller;
+static cogip::motion_control::MetaController<5> angular_speed_tuning_meta_controller;
 
 /// Initialize platform Angular Speed Tuning meta controller
 /// Return initialized meta controller
-static cogip::motion_control::MetaController<3>* pf_angular_speed_tuning_meta_controller_init(void)
+static cogip::motion_control::MetaController<5>* pf_angular_speed_tuning_meta_controller_init(void)
 {
-    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController
+    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController ->
+    // TuningPoseReachedFilter
     angular_speed_tuning_meta_controller.add_controller(&angular_speed_chain::pose_error_filter);
     angular_speed_tuning_meta_controller.add_controller(
         &angular_speed_chain::profile_feedforward_controller);
     angular_speed_tuning_meta_controller.add_controller(&angular_speed_chain::speed_controller);
+    angular_speed_tuning_meta_controller.add_controller(
+        &angular_speed_chain::tuning_pose_reached_filter);
 
     return &angular_speed_tuning_meta_controller;
 }
