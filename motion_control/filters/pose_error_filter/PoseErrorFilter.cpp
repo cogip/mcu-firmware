@@ -111,19 +111,6 @@ void PoseErrorFilter::execute_angular(ControllersIO& io, float& pose_error, bool
           static_cast<double>(pose_error));
 }
 
-void PoseErrorFilter::check_pose_reached(ControllersIO& io, float pose_error)
-{
-    if (!keys_.pose_reached.empty() && parameters_.pose_reached_threshold() > 0.0f) {
-        float abs_error = std::fabs(pose_error);
-        if (abs_error < parameters_.pose_reached_threshold()) {
-            io.set(keys_.pose_reached, target_pose_status_t::reached);
-            DEBUG("PoseErrorFilter: pose reached (error=%.2f < threshold=%.2f)\n",
-                  static_cast<double>(abs_error),
-                  static_cast<double>(parameters_.pose_reached_threshold()));
-        }
-    }
-}
-
 void PoseErrorFilter::execute(ControllersIO& io)
 {
     DEBUG("Execute PoseErrorFilter\n");
@@ -144,9 +131,6 @@ void PoseErrorFilter::execute(ControllersIO& io)
     if (target_changed && !keys_.recompute.empty()) {
         io.set(keys_.recompute, true);
     }
-
-    // Check for pose reached
-    check_pose_reached(io, pose_error);
 }
 
 } // namespace motion_control

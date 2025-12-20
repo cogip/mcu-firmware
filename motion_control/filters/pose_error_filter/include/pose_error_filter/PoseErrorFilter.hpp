@@ -62,11 +62,6 @@ class PoseErrorFilter : public Controller<PoseErrorFilterIOKeys, PoseErrorFilter
     /// @param[out] target_changed True if target changed
     void execute_angular(ControllersIO& io, float& pose_error, bool& target_changed);
 
-    /// Check and set pose_reached if error is below threshold.
-    /// @param io Controllers IO
-    /// @param pose_error Current pose error
-    void check_pose_reached(ControllersIO& io, float pose_error);
-
     float prev_target_x_; ///< Previous target X for change detection
     float prev_target_y_; ///< Previous target Y for change detection
     float prev_target_O_; ///< Previous target O for change detection
