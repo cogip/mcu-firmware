@@ -47,6 +47,8 @@
 #include "quadpid_chain.hpp"
 #include "quadpid_feedforward_chain.hpp"
 
+#include "pid/PIDParameters.hpp"
+
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
 #include "PB_Pid.hpp"
@@ -82,20 +84,37 @@ static cogip::path::Pose target_pose;
 // Target speed
 static cogip::cogip_defs::Polar target_speed;
 
+// Null parameters for simulation PIDs (feedforward only - speed follower)
+static Parameter<float, ReadOnly> null_kp{0};
+static Parameter<float, ReadOnly> null_ki{0};
+static Parameter<float, ReadOnly> null_kd{0};
+static Parameter<float, ReadOnly> null_integral_limit{0};
+
+// PID parameters
+using namespace cogip::pid;
+static PIDParameters linear_pose_pid_parameters(linear_pose_pid_kp, linear_pose_pid_ki,
+                                                linear_pose_pid_kd, linear_pose_pid_integral_limit);
+static PIDParameters linear_speed_pid_parameters(linear_speed_pid_kp, linear_speed_pid_ki,
+                                                 linear_speed_pid_kd,
+                                                 linear_speed_pid_integral_limit);
+static PIDParameters angular_pose_pid_parameters(angular_pose_pid_kp, angular_pose_pid_ki,
+                                                 angular_pose_pid_kd,
+                                                 angular_pose_pid_integral_limit);
+static PIDParameters angular_speed_pid_parameters(angular_speed_pid_kp, angular_speed_pid_ki,
+                                                  angular_speed_pid_kd,
+                                                  angular_speed_pid_integral_limit);
+static PIDParameters null_pid_parameters(null_kp, null_ki, null_kd, null_integral_limit);
+
 // Linear pose PID controller (extern declared in quadpid_chain.hpp)
-cogip::pid::PID linear_pose_pid(linear_pose_pid_kp, linear_pose_pid_ki, linear_pose_pid_kd,
-                                linear_pose_pid_integral_limit);
+PID linear_pose_pid(linear_pose_pid_parameters);
 // Linear speed PID controller (extern declared in quadpid_chain.hpp)
-cogip::pid::PID linear_speed_pid(linear_speed_pid_kp, linear_speed_pid_ki, linear_speed_pid_kd,
-                                 linear_speed_pid_integral_limit);
+PID linear_speed_pid(linear_speed_pid_parameters);
 // Angular pose PID controller (extern declared in quadpid_chain.hpp)
-cogip::pid::PID angular_pose_pid(angular_pose_pid_kp, angular_pose_pid_ki, angular_pose_pid_kd,
-                                 angular_pose_pid_integral_limit);
+PID angular_pose_pid(angular_pose_pid_parameters);
 // Angular speed PID controller (extern declared in quadpid_chain.hpp)
-cogip::pid::PID angular_speed_pid(angular_speed_pid_kp, angular_speed_pid_ki, angular_speed_pid_kd,
-                                  angular_speed_pid_integral_limit);
+PID angular_speed_pid(angular_speed_pid_parameters);
 // PID null
-static cogip::pid::PID null_pid(0, 0, 0, 0);
+static PID null_pid(null_pid_parameters);
 
 static void reset_speed_pids()
 {
