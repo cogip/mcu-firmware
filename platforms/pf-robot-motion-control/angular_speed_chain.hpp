@@ -7,7 +7,8 @@
 /// @brief Angular speed chain controller instances for speed PID tuning
 /// @details Simplified chain that generates a trapezoidal velocity profile
 ///          and feeds it to the speed PID controller.
-///          Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController
+///          Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController ->
+///          TuningPoseReachedFilter
 
 #pragma once
 
@@ -19,6 +20,8 @@
 #include "quadpid_chain.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
+#include "tuning_pose_reached_filter/TuningPoseReachedFilter.hpp"
+#include "tuning_pose_reached_filter/TuningPoseReachedFilterIOKeys.hpp"
 
 namespace cogip {
 namespace pf {
@@ -37,13 +40,12 @@ inline cogip::motion_control::PoseErrorFilterIOKeys pose_error_filter_io_keys = 
     .current_y = "", // Not used in ANGULAR mode
     .current_O = "current_pose_O",
     .pose_error = "angular_pose_error",
-    .recompute = "angular_speed_recompute_profile",
-    .pose_reached = "pose_reached"};
+    .recompute = "angular_speed_recompute_profile"};
 
-inline cogip::motion_control::PoseErrorFilterParameters
-    pose_error_filter_parameters(cogip::motion_control::PoseErrorFilterMode::ANGULAR,
-                                 angular_threshold // pose_reached_threshold
-    );
+inline cogip::motion_control::PoseErrorFilterParameters pose_error_filter_parameters(
+    cogip::motion_control::PoseErrorFilterMode::ANGULAR,
+    0.0f // pose_reached_threshold (not used, TuningPoseReachedFilter handles this)
+);
 
 inline cogip::motion_control::PoseErrorFilter pose_error_filter(pose_error_filter_io_keys,
                                                                 pose_error_filter_parameters);
@@ -59,7 +61,8 @@ inline cogip::motion_control::ProfileFeedforwardControllerIOKeys profile_feedfor
     .recompute_profile = "angular_speed_recompute_profile",
     .invalidate_profile = "",
     .feedforward_velocity = "angular_speed_order", // Direct to speed PID
-    .tracking_error = "angular_speed_tracking_error"};
+    .tracking_error = "angular_speed_tracking_error",
+    .profile_complete = "angular_speed_profile_complete"};
 
 inline cogip::motion_control::ProfileFeedforwardControllerParameters
     profile_feedforward_parameters(platform_max_speed_angular_deg_per_period, // max_speed
@@ -78,6 +81,16 @@ inline cogip::motion_control::ProfileFeedforwardController
 inline cogip::motion_control::SpeedPIDController
     speed_controller(cogip::motion_control::angular_speed_pid_controller_io_keys_default,
                      quadpid_chain::angular_speed_controller_parameters);
+
+// ============================================================================
+// TuningPoseReachedFilter for signaling pose_reached when profile completes
+// ============================================================================
+
+inline cogip::motion_control::TuningPoseReachedFilterIOKeys tuning_pose_reached_filter_io_keys = {
+    .profile_complete = "angular_speed_profile_complete", .pose_reached = "pose_reached"};
+
+inline cogip::motion_control::TuningPoseReachedFilter
+    tuning_pose_reached_filter(tuning_pose_reached_filter_io_keys);
 
 } // namespace angular_speed_chain
 } // namespace motion_control
