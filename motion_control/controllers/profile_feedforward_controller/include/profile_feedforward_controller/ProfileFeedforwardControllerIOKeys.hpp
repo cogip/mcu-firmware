@@ -37,6 +37,7 @@ struct ProfileFeedforwardControllerIOKeys
                                          ///< current profile, optional)
     etl::string_view feedforward_velocity; ///< e.g. "linear_feedforward_velocity" (output)
     etl::string_view tracking_error;       ///< e.g. "linear_tracking_error" (output)
+    etl::string_view profile_complete;     ///< e.g. "linear_profile_complete" (output, optional)
 };
 
 } // namespace motion_control
