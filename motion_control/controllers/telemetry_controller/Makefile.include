@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_telemetry_controller := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_telemetry_controller)
+
+PROTOBUF_PATH_telemetry_controller := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_telemetry_controller)
