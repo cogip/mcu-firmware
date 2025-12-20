@@ -41,12 +41,19 @@ class FeedforwardCombinerController : public Controller<FeedforwardCombinerContr
     /// @brief Constructor
     /// @param keys       Reference to a POD containing all controller keys
     /// @param parameters Reference to controller parameters (empty)
+    /// @param name       Optional instance name for identification
     explicit FeedforwardCombinerController(
         const FeedforwardCombinerControllerIOKeys& keys,
-        const FeedforwardCombinerControllerParameters& parameters)
+        const FeedforwardCombinerControllerParameters& parameters, etl::string_view name = "")
         : Controller<FeedforwardCombinerControllerIOKeys, FeedforwardCombinerControllerParameters>(
-              keys, parameters)
+              keys, parameters, name)
     {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "FeedforwardCombinerController";
     }
 
     /// @brief Read feedforward_velocity and feedback_correction,

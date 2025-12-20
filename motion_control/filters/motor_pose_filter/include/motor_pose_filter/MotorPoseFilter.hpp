@@ -28,10 +28,18 @@ class MotorPoseFilter : public Controller<MotorPoseFilterIOKeys, MotorPoseFilter
     /// @brief Constructor.
     /// @param keys       Reference to IO keys.
     /// @param parameters Reference to parameters.
+    /// @param name       Optional instance name for identification.
     explicit MotorPoseFilter(const MotorPoseFilterIOKeys& keys,
-                             const MotorPoseFilterParameters& parameters)
-        : Controller<MotorPoseFilterIOKeys, MotorPoseFilterParameters>(keys, parameters)
+                             const MotorPoseFilterParameters& parameters,
+                             etl::string_view name = "")
+        : Controller<MotorPoseFilterIOKeys, MotorPoseFilterParameters>(keys, parameters, name)
     {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "MotorPoseFilter";
     }
 
     /// @brief Compute pose error and decide filtered speed and pose reached

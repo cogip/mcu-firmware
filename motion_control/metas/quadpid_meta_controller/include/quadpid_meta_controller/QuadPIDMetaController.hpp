@@ -29,6 +29,16 @@ namespace motion_control {
 ///   for both linear and angular motion.
 class QuadPIDMetaController : public MetaController<3>
 {
+  public:
+    /// Constructor
+    /// @param name Optional instance name for identification
+    explicit QuadPIDMetaController(etl::string_view name = "") : MetaController<3>(name) {}
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "QuadPIDMetaController";
+    }
 };
 
 } // namespace motion_control

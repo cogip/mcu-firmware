@@ -43,13 +43,21 @@ class ResetController : public BaseController
   public:
     /// @brief Constructor with initializer list of key-value pairs.
     /// @param keys_values Initializer list of {key, value} pairs to reset
-    ResetController(std::initializer_list<ResetKeyValue> keys_values) : keys_values_()
+    /// @param name        Optional instance name for identification
+    ResetController(std::initializer_list<ResetKeyValue> keys_values, etl::string_view name = "")
+        : BaseController(name), keys_values_()
     {
         for (const auto& kv : keys_values) {
             if (keys_values_.size() < RESET_CONTROLLER_MAX_KEYS) {
                 keys_values_.push_back(kv);
             }
         }
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "ResetController";
     }
 
     /// @brief Reset all configured IO keys to their initial values.

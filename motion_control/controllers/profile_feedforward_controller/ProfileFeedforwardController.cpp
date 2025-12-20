@@ -28,9 +28,9 @@ namespace motion_control {
 
 ProfileFeedforwardController::ProfileFeedforwardController(
     const ProfileFeedforwardControllerIOKeys& keys,
-    const ProfileFeedforwardControllerParameters& parameters)
+    const ProfileFeedforwardControllerParameters& parameters, etl::string_view name)
     : Controller<ProfileFeedforwardControllerIOKeys, ProfileFeedforwardControllerParameters>(
-          keys, parameters),
+          keys, parameters, name),
       profile_(), period_(0)
 {
 }
