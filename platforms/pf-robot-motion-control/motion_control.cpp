@@ -200,8 +200,8 @@ static cogip::motion_control::FeedforwardCombinerController
     linear_feedforward_combiner_controller(linear_feedforward_combiner_io_keys,
                                            linear_feedforward_combiner_parameters);
 
-/// Linear DualPIDMetaController for feedforward chain
-static cogip::motion_control::DualPIDMetaController linear_feedforward_dualpid_meta_controller;
+/// Linear DualPIDMetaController for feedforward chain (no longer used, kept for reference)
+// static cogip::motion_control::DualPIDMetaController linear_feedforward_dualpid_meta_controller;
 
 /// Linear PosePIDController for tracking error correction (feedforward chain)
 /// State gating: only active during MOVE_TO_POSITION state (value 1)
@@ -262,8 +262,8 @@ static cogip::motion_control::FeedforwardCombinerController
     angular_feedforward_combiner_controller(angular_feedforward_combiner_io_keys,
                                             angular_feedforward_combiner_parameters);
 
-/// Angular DualPIDMetaController for feedforward chain
-static cogip::motion_control::DualPIDMetaController angular_feedforward_dualpid_meta_controller;
+/// Angular DualPIDMetaController for feedforward chain (no longer used, kept for reference)
+// static cogip::motion_control::DualPIDMetaController angular_feedforward_dualpid_meta_controller;
 
 /// Angular PosePIDController for feedforward chain (tracking error correction)
 /// Uses angular_tracking_error which is:
@@ -302,9 +302,10 @@ static cogip::motion_control::SpeedPIDController angular_feedforward_speed_contr
     cogip::motion_control::angular_speed_pid_controller_io_keys_default,
     angular_feedforward_speed_controller_parameters);
 
-/// PolarParallelMetaController for feedforward chain
-static cogip::motion_control::PolarParallelMetaController
-    polar_parallel_feedforward_meta_controller;
+/// PolarParallelMetaController for feedforward chain (no longer used, using feedforward_chain::
+/// instead)
+// static cogip::motion_control::PolarParallelMetaController
+//     polar_parallel_feedforward_meta_controller;
 
 // ============================================================================
 // telemetry controller
@@ -463,47 +464,68 @@ static void pf_quadpid_meta_controller_restore(void)
 static cogip::motion_control::QuadPIDMetaController*
 pf_quadpid_feedforward_meta_controller_init(void)
 {
-    // Linear feedforward chain:
-    //  ProfileFeedforwardController -> PosePIDController -> FeedforwardCombinerController ->
-    //  SpeedPIDController -> AntiBlockingController
-    linear_feedforward_dualpid_meta_controller.add_controller(
+    // =========================================================================
+    // Linear pose loop (ProfileFeedforward + PosePID + Combiner)
+    // =========================================================================
+    feedforward_chain::linear_pose_loop_meta_controller.add_controller(
         &linear_profile_feedforward_controller);
-    linear_feedforward_dualpid_meta_controller.add_controller(&linear_feedforward_pose_controller);
-    linear_feedforward_dualpid_meta_controller.add_controller(
+    feedforward_chain::linear_pose_loop_meta_controller.add_controller(
+        &linear_feedforward_pose_controller);
+    feedforward_chain::linear_pose_loop_meta_controller.add_controller(
         &linear_feedforward_combiner_controller);
-    linear_feedforward_dualpid_meta_controller.add_controller(&linear_feedforward_speed_controller);
-    linear_feedforward_dualpid_meta_controller.add_controller(
+
+    // =========================================================================
+    // Angular pose loop (ProfileFeedforward + PosePID + Combiner)
+    // =========================================================================
+    feedforward_chain::angular_pose_loop_meta_controller.add_controller(
+        &angular_profile_feedforward_controller);
+    feedforward_chain::angular_pose_loop_meta_controller.add_controller(
+        &angular_feedforward_pose_controller);
+    feedforward_chain::angular_pose_loop_meta_controller.add_controller(
+        &angular_feedforward_combiner_controller);
+
+    // =========================================================================
+    // Pose loop PolarParallel (linear + angular in parallel)
+    // This is throttled - executed at reduced frequency
+    // =========================================================================
+    feedforward_chain::pose_loop_polar_parallel_meta_controller.add_controller(
+        &feedforward_chain::linear_pose_loop_meta_controller);
+    feedforward_chain::pose_loop_polar_parallel_meta_controller.add_controller(
+        &feedforward_chain::angular_pose_loop_meta_controller);
+
+    // =========================================================================
+    // Linear speed loop (SpeedPID + AntiBlocking)
+    // =========================================================================
+    feedforward_chain::linear_speed_loop_meta_controller.add_controller(
+        &linear_feedforward_speed_controller);
+    feedforward_chain::linear_speed_loop_meta_controller.add_controller(
         &feedforward_chain::linear_anti_blocking_controller);
 
-    // Angular feedforward chain:
-    //  ProfileFeedforwardController -> PosePIDController -> FeedforwardCombinerController ->
-    //  SpeedPIDController -> AntiBlockingController
-    angular_feedforward_dualpid_meta_controller.add_controller(
-        &angular_profile_feedforward_controller);
-    angular_feedforward_dualpid_meta_controller.add_controller(
-        &angular_feedforward_pose_controller);
-    angular_feedforward_dualpid_meta_controller.add_controller(
-        &angular_feedforward_combiner_controller);
-    angular_feedforward_dualpid_meta_controller.add_controller(
+    // =========================================================================
+    // Angular speed loop (SpeedPID + AntiBlocking)
+    // =========================================================================
+    feedforward_chain::angular_speed_loop_meta_controller.add_controller(
         &angular_feedforward_speed_controller);
-    angular_feedforward_dualpid_meta_controller.add_controller(
+    feedforward_chain::angular_speed_loop_meta_controller.add_controller(
         &feedforward_chain::angular_anti_blocking_controller);
 
-    // PolarParallelMetaController:
-    // --> Linear feedforward chain
-    // `-> Angular feedforward chain
-    polar_parallel_feedforward_meta_controller.add_controller(
-        &linear_feedforward_dualpid_meta_controller);
-    polar_parallel_feedforward_meta_controller.add_controller(
-        &angular_feedforward_dualpid_meta_controller);
+    // =========================================================================
+    // Speed loop PolarParallel (linear + angular in parallel)
+    // =========================================================================
+    feedforward_chain::speed_loop_polar_parallel_meta_controller.add_controller(
+        &feedforward_chain::linear_speed_loop_meta_controller);
+    feedforward_chain::speed_loop_polar_parallel_meta_controller.add_controller(
+        &feedforward_chain::angular_speed_loop_meta_controller);
 
+    // =========================================================================
     // QuadPIDFeedforwardMetaController:
-    // PoseStraightFilter -> PolarParallelFeedforwardMetaController
-    // Note: PoseStraightFilter now handles profile recompute signals internally
-    // (linear_recompute_profile on MOVE_TO_POSITION entry, angular_recompute_profile on target
-    // change and ROTATE_TO_FINAL_ANGLE entry)
+    // PoseStraightFilter (full rate) -> ThrottledController(pose loops) -> Speed loops
+    // =========================================================================
     quadpid_feedforward_meta_controller.add_controller(&feedforward_chain::pose_straight_filter);
-    quadpid_feedforward_meta_controller.add_controller(&polar_parallel_feedforward_meta_controller);
+    quadpid_feedforward_meta_controller.add_controller(
+        &feedforward_chain::throttled_pose_loop_controllers);
+    quadpid_feedforward_meta_controller.add_controller(
+        &feedforward_chain::speed_loop_polar_parallel_meta_controller);
 
     return &quadpid_feedforward_meta_controller;
 }
