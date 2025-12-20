@@ -25,6 +25,7 @@ static const SpeedFilterIOKeys linear_speed_filter_io_keys_default = {
     .current_speed = "linear_current_speed",
     .target_speed = "linear_target_speed",
     .speed_error = "linear_speed_error",
+    .bypass_filter = "linear_speed_filter_flag",
 };
 
 /// @brief Default IO key names for angular SpeedFilter.
@@ -35,6 +36,7 @@ static const SpeedFilterIOKeys angular_speed_filter_io_keys_default = {
     .current_speed = "angular_current_speed",
     .target_speed = "angular_target_speed",
     .speed_error = "angular_speed_error",
+    .bypass_filter = "angular_speed_filter_flag",
 };
 
 } // namespace motion_control

@@ -312,9 +312,13 @@ static cogip::motion_control::QuadPIDMetaController* pf_quadpid_meta_controller_
     quadpid_chain::pose_loop_polar_parallel_meta_controller.add_controller(
         &quadpid_chain::angular_pose_loop_meta_controller);
 
-    // Pose loop meta controller (pose_straight_filter + pose loop polar parallel)
-    // PoseStraightFilter -> Pose loop PolarParallelMetaController
+    // Pose loop meta controller (pose_straight_filter + deceleration filters + pose loop polar
+    // parallel) PoseStraightFilter -> DecelerationFilters -> Pose loop PolarParallelMetaController
     quadpid_chain::pose_loop_meta_controller.add_controller(&quadpid_chain::pose_straight_filter);
+    quadpid_chain::pose_loop_meta_controller.add_controller(
+        &quadpid_chain::linear_deceleration_filter);
+    quadpid_chain::pose_loop_meta_controller.add_controller(
+        &quadpid_chain::angular_deceleration_filter);
     quadpid_chain::pose_loop_meta_controller.add_controller(
         &quadpid_chain::pose_loop_polar_parallel_meta_controller);
 
