@@ -33,6 +33,7 @@ USEMODULE += platform_engine
 USEMODULE += pose_straight_filter
 USEMODULE += speed_filter
 USEMODULE += target_change_detector
+USEMODULE += telemetry_controller
 
 # Board features required
 FEATURES_REQUIRED += periph_qdec
