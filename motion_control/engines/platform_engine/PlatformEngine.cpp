@@ -78,11 +78,17 @@ void PlatformEngine::prepare_inputs()
 
 void PlatformEngine::process_outputs()
 {
-    // If timeout is enabled, pose_reached_ has been set by the engine itself, do
-    // not override it.
-    if (!timeout_enable_) {
-        pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
+    // Check pose_reached from IO (set by controllers like PoseErrorFilter or PoseStraightFilter)
+    auto io_pose_reached = io_.get_as<target_pose_status_t>("pose_reached");
+    if (io_pose_reached && *io_pose_reached == target_pose_status_t::reached) {
+        // Target reached - use this regardless of timeout mode
+        pose_reached_ = target_pose_status_t::reached;
+    } else if (!timeout_enable_) {
+        // No timeout mode: use IO value directly
+        pose_reached_ = io_pose_reached.value_or(target_pose_status_t::moving);
     }
+    // If timeout is enabled and not reached: pose_reached_ keeps its current value
+    // (either 'moving' or 'timeout' set by the engine)
 
     cogip_defs::Polar command(0, 0);
 
