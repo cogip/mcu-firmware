@@ -23,7 +23,8 @@ namespace motion_control {
 static const TelemetryControllerIOKeys linear_telemetry_controller_io_keys_default = {
     .speed_order = "linear_speed_order",
     .current_speed = "linear_current_speed",
-    .speed_command = "linear_speed_command"};
+    .speed_command = "linear_speed_command",
+    .feedforward_velocity = "linear_feedforward_velocity"};
 
 /// @brief Default IO key names for angular TelemetryController.
 /// Each key is prefixed with "angular_" and set to its corresponding member
@@ -31,7 +32,8 @@ static const TelemetryControllerIOKeys linear_telemetry_controller_io_keys_defau
 static const TelemetryControllerIOKeys angular_telemetry_controller_io_keys_default = {
     .speed_order = "angular_speed_order",
     .current_speed = "angular_current_speed",
-    .speed_command = "angular_speed_command"};
+    .speed_command = "angular_speed_command",
+    .feedforward_velocity = "angular_feedforward_velocity"};
 
 } // namespace motion_control
 
