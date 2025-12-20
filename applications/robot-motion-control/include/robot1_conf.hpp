@@ -29,22 +29,43 @@ inline Parameter<float> right_encoder_wheels_diameter_mm{47.792104995747586};
 inline Parameter<float> encoder_wheels_distance_mm{275.7117596881151};
 inline Parameter<float, ReadOnly> encoder_wheels_resolution_pulses{4096 * 4};
 
-// Linear pose PID
+// Linear pose PID (QUADPID chain)
 inline Parameter<float, NonNegative> linear_pose_pid_kp{0.2};
 inline Parameter<float, NonNegative> linear_pose_pid_ki{0};
 inline Parameter<float, NonNegative> linear_pose_pid_kd{0};
-// Angular pose PID
+// Angular pose PID (QUADPID chain)
 inline Parameter<float, NonNegative> angular_pose_pid_kp{0.3};
 inline Parameter<float, NonNegative> angular_pose_pid_ki{0};
 inline Parameter<float, NonNegative> angular_pose_pid_kd{0};
-// Linear speed PID
+// Linear speed PID (QUADPID chain)
 inline Parameter<float, NonNegative> linear_speed_pid_kp{3.};
 inline Parameter<float, NonNegative> linear_speed_pid_ki{0.8};
 inline Parameter<float, NonNegative> linear_speed_pid_kd{0};
-// Angular speed PID
+// Angular speed PID (QUADPID chain)
 inline Parameter<float, NonNegative> angular_speed_pid_kp{5.5};
 inline Parameter<float, NonNegative> angular_speed_pid_ki{0.6};
 inline Parameter<float, NonNegative> angular_speed_pid_kd{0};
+
+// ============================================================================
+// Feedforward chain PID gains (QUADPID_FEEDFORWARD)
+// ============================================================================
+
+// Feedforward linear pose PID
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kp{0.01};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_ki{0.00075};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kd{0};
+// Feedforward angular pose PID
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kp{0.125};
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kd{0};
+// Feedforward linear speed PID
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kp{3.};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_ki{1.4};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kd{0};
+// Feedforward angular speed PID
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kp{7.};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_ki{1.5};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kd{0};
 
 // Linear threshold
 constexpr float linear_threshold = 1;
@@ -87,3 +108,16 @@ inline Parameter<float, NonNegative> linear_speed_pid_integral_limit{max_speed_m
 // Angular speed PID integral limit
 inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_deg_per_s /
                                                                       angular_speed_pid_ki.get()};
+
+// Feedforward linear pose PID integral limit
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
+// Feedforward angular pose PID integral limit
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
+// Feedforward linear speed PID integral limit
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_integral_limit{
+    max_speed_mm_per_s / feedforward_linear_speed_pid_ki.get()};
+// Feedforward angular speed PID integral limit
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_integral_limit{
+    max_speed_deg_per_s / feedforward_angular_speed_pid_ki.get()};
