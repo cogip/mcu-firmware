@@ -93,7 +93,7 @@ static Parameter<float, ReadOnly> null_ki{0};
 static Parameter<float, ReadOnly> null_kd{0};
 static Parameter<float, ReadOnly> null_integral_limit{0};
 
-// PID parameters
+// PID parameters (QUADPID chain)
 using namespace cogip::pid;
 static PIDParameters linear_pose_pid_parameters(linear_pose_pid_kp, linear_pose_pid_ki,
                                                 linear_pose_pid_kd, linear_pose_pid_integral_limit);
@@ -108,6 +108,20 @@ static PIDParameters angular_speed_pid_parameters(angular_speed_pid_kp, angular_
                                                   angular_speed_pid_integral_limit);
 static PIDParameters null_pid_parameters(null_kp, null_ki, null_kd, null_integral_limit);
 
+// PID parameters (QUADPID_FEEDFORWARD chain)
+static PIDParameters feedforward_linear_pose_pid_parameters(
+    feedforward_linear_pose_pid_kp, feedforward_linear_pose_pid_ki, feedforward_linear_pose_pid_kd,
+    feedforward_linear_pose_pid_integral_limit);
+static PIDParameters feedforward_linear_speed_pid_parameters(
+    feedforward_linear_speed_pid_kp, feedforward_linear_speed_pid_ki,
+    feedforward_linear_speed_pid_kd, feedforward_linear_speed_pid_integral_limit);
+static PIDParameters feedforward_angular_pose_pid_parameters(
+    feedforward_angular_pose_pid_kp, feedforward_angular_pose_pid_ki,
+    feedforward_angular_pose_pid_kd, feedforward_angular_pose_pid_integral_limit);
+static PIDParameters feedforward_angular_speed_pid_parameters(
+    feedforward_angular_speed_pid_kp, feedforward_angular_speed_pid_ki,
+    feedforward_angular_speed_pid_kd, feedforward_angular_speed_pid_integral_limit);
+
 // Linear pose PID controller (extern declared in quadpid_chain.hpp)
 PID linear_pose_pid(linear_pose_pid_parameters);
 // Linear speed PID controller (extern declared in quadpid_chain.hpp)
@@ -119,10 +133,22 @@ PID angular_speed_pid(angular_speed_pid_parameters);
 // PID null
 static PID null_pid(null_pid_parameters);
 
+// Feedforward chain PIDs
+static PID feedforward_linear_pose_pid(feedforward_linear_pose_pid_parameters);
+static PID feedforward_linear_speed_pid(feedforward_linear_speed_pid_parameters);
+static PID feedforward_angular_pose_pid(feedforward_angular_pose_pid_parameters);
+static PID feedforward_angular_speed_pid(feedforward_angular_speed_pid_parameters);
+
 static void reset_speed_pids()
 {
+    // QUADPID chain PIDs
     angular_speed_pid.reset();
     linear_speed_pid.reset();
+    // Feedforward chain PIDs
+    feedforward_linear_speed_pid.reset();
+    feedforward_angular_speed_pid.reset();
+    feedforward_linear_pose_pid.reset();
+    feedforward_angular_pose_pid.reset();
 }
 
 // ============================================================================
@@ -178,7 +204,6 @@ static cogip::motion_control::FeedforwardCombinerController
 static cogip::motion_control::DualPIDMetaController linear_feedforward_dualpid_meta_controller;
 
 /// Linear PosePIDController for tracking error correction (feedforward chain)
-/// Uses same parameters as normal pose controller but different IO keys
 /// State gating: only active during MOVE_TO_POSITION state (value 1)
 static cogip::motion_control::PosePIDControllerIOKeys linear_feedforward_pose_pid_io_keys = {
     .position_error = "linear_tracking_error",
@@ -190,9 +215,12 @@ static cogip::motion_control::PosePIDControllerIOKeys linear_feedforward_pose_pi
     .current_state = "pose_straight_filter_state",
     .active_state = 1};
 
+static cogip::motion_control::PosePIDControllerParameters
+    linear_feedforward_pose_controller_parameters(&feedforward_linear_pose_pid);
+
 static cogip::motion_control::PosePIDController
     linear_feedforward_pose_controller(linear_feedforward_pose_pid_io_keys,
-                                       quadpid_chain::linear_pose_controller_parameters);
+                                       linear_feedforward_pose_controller_parameters);
 
 /// Angular ProfileFeedforwardController IO keys
 static cogip::motion_control::ProfileFeedforwardControllerIOKeys
@@ -251,19 +279,28 @@ static cogip::motion_control::PosePIDControllerIOKeys angular_feedforward_pose_p
     .pose_reached = "dummy_pose_reached",
     .speed_order = "angular_feedback_correction"};
 
+static cogip::motion_control::PosePIDControllerParameters
+    angular_feedforward_pose_controller_parameters(&feedforward_angular_pose_pid);
+
 static cogip::motion_control::PosePIDController
     angular_feedforward_pose_controller(angular_feedforward_pose_pid_io_keys,
-                                        quadpid_chain::angular_pose_controller_parameters);
+                                        angular_feedforward_pose_controller_parameters);
 
 /// Linear SpeedPIDController for feedforward chain (dedicated instance)
+static cogip::motion_control::SpeedPIDControllerParameters
+    linear_feedforward_speed_controller_parameters(&feedforward_linear_speed_pid);
+
 static cogip::motion_control::SpeedPIDController linear_feedforward_speed_controller(
     cogip::motion_control::linear_speed_pid_controller_io_keys_default,
-    quadpid_chain::linear_speed_controller_parameters);
+    linear_feedforward_speed_controller_parameters);
 
 /// Angular SpeedPIDController for feedforward chain (dedicated instance)
+static cogip::motion_control::SpeedPIDControllerParameters
+    angular_feedforward_speed_controller_parameters(&feedforward_angular_speed_pid);
+
 static cogip::motion_control::SpeedPIDController angular_feedforward_speed_controller(
     cogip::motion_control::angular_speed_pid_controller_io_keys_default,
-    quadpid_chain::angular_speed_controller_parameters);
+    angular_feedforward_speed_controller_parameters);
 
 /// PolarParallelMetaController for feedforward chain
 static cogip::motion_control::PolarParallelMetaController
@@ -521,18 +558,6 @@ static cogip::motion_control::MetaController<5>* pf_angular_speed_tuning_meta_co
 /// configuration.
 static void pf_quadpid_feedforward_meta_controller_restore(void)
 {
-    // Linear speed limits
-    quadpid_chain::linear_speed_filter_parameters.set_max_speed(
-        platform_max_speed_linear_mm_per_period);
-    quadpid_chain::linear_speed_filter_parameters.set_max_acceleration(
-        platform_max_acc_linear_mm_per_period2);
-
-    // Angular speed limits
-    quadpid_chain::angular_speed_filter_parameters.set_max_speed(
-        platform_max_speed_angular_deg_per_period);
-    quadpid_chain::angular_speed_filter_parameters.set_max_acceleration(
-        platform_max_acc_angular_deg_per_period2);
-
     // Linear feedforward profile parameters
     linear_profile_feedforward_parameters.set_max_speed(platform_max_speed_linear_mm_per_period);
     linear_profile_feedforward_parameters.set_acceleration(platform_max_acc_linear_mm_per_period2);
@@ -545,10 +570,9 @@ static void pf_quadpid_feedforward_meta_controller_restore(void)
     angular_profile_feedforward_parameters.set_deceleration(
         platform_max_dec_angular_deg_per_period2);
 
-    // Linear speed PID controller parameters
-    quadpid_chain::linear_speed_controller_parameters.set_pid(&linear_speed_pid);
-    // Angular speed PID controller parameters
-    quadpid_chain::angular_speed_controller_parameters.set_pid(&angular_speed_pid);
+    // Feedforward speed PID controller parameters
+    linear_feedforward_speed_controller_parameters.set_pid(&feedforward_linear_speed_pid);
+    angular_feedforward_speed_controller_parameters.set_pid(&feedforward_angular_speed_pid);
 }
 
 /// Disable linear pose control to avoid stopping once point is reached.
