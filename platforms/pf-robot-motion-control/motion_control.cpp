@@ -44,6 +44,8 @@
 
 #include "quadpid_chain.hpp"
 #include "quadpid_feedforward_chain.hpp"
+#include "linear_speed_chain.hpp"
+#include "angular_speed_chain.hpp"
 
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
@@ -421,6 +423,46 @@ pf_quadpid_feedforward_meta_controller_init(void)
     return &quadpid_feedforward_meta_controller;
 }
 
+// ============================================================================
+// Linear Speed Tuning chain
+// ============================================================================
+
+/// Linear Speed Tuning meta controller
+static cogip::motion_control::MetaController<3> linear_speed_tuning_meta_controller;
+
+/// Initialize platform Linear Speed Tuning meta controller
+/// Return initialized meta controller
+static cogip::motion_control::MetaController<3>* pf_linear_speed_tuning_meta_controller_init(void)
+{
+    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController
+    linear_speed_tuning_meta_controller.add_controller(&linear_speed_chain::pose_error_filter);
+    linear_speed_tuning_meta_controller.add_controller(
+        &linear_speed_chain::profile_feedforward_controller);
+    linear_speed_tuning_meta_controller.add_controller(&linear_speed_chain::speed_controller);
+
+    return &linear_speed_tuning_meta_controller;
+}
+
+// ============================================================================
+// Angular Speed Tuning chain
+// ============================================================================
+
+/// Angular Speed Tuning meta controller
+static cogip::motion_control::MetaController<3> angular_speed_tuning_meta_controller;
+
+/// Initialize platform Angular Speed Tuning meta controller
+/// Return initialized meta controller
+static cogip::motion_control::MetaController<3>* pf_angular_speed_tuning_meta_controller_init(void)
+{
+    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController
+    angular_speed_tuning_meta_controller.add_controller(&angular_speed_chain::pose_error_filter);
+    angular_speed_tuning_meta_controller.add_controller(
+        &angular_speed_chain::profile_feedforward_controller);
+    angular_speed_tuning_meta_controller.add_controller(&angular_speed_chain::speed_controller);
+
+    return &angular_speed_tuning_meta_controller;
+}
+
 /// Restore platform QuadPID Feedforward meta controller to its original
 /// configuration.
 static void pf_quadpid_feedforward_meta_controller_restore(void)
@@ -627,6 +669,18 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         pf_quadpid_feedforward_meta_controller_restore();
         pf_motion_control_platform_engine.set_controller(&quadpid_feedforward_meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(false);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TUNING):
+        LOG_INFO("Change to controller: LINEAR_SPEED_TUNING\n");
+        pf_motion_control_platform_engine.set_controller(&linear_speed_tuning_meta_controller);
+        pf_motion_control_platform_engine.set_timeout_enable(true);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TUNING):
+        LOG_INFO("Change to controller: ANGULAR_SPEED_TUNING\n");
+        pf_motion_control_platform_engine.set_controller(&angular_speed_tuning_meta_controller);
+        pf_motion_control_platform_engine.set_timeout_enable(true);
         break;
 
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
@@ -969,6 +1023,8 @@ void pf_init_motion_control(void)
     // Init controllers
     pf_quadpid_meta_controller = pf_quadpid_meta_controller_init();
     pf_quadpid_feedforward_meta_controller_init();
+    pf_linear_speed_tuning_meta_controller_init();
+    pf_angular_speed_tuning_meta_controller_init();
 
     // Associate default controller (QUADPID) to the engine
     pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
