@@ -1,3 +1,5 @@
+#pragma once
+
 // Project includes
 #include "app_conf.hpp"
 #include "pid/PID.hpp"

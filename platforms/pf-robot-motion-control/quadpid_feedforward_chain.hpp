@@ -13,6 +13,10 @@
 #include "anti_blocking_controller/AntiBlockingController.hpp"
 #include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "app_conf.hpp"
+#include "motion_control.hpp"
+#include "motion_control_common/MetaController.hpp"
+#include "motion_control_common/ThrottledController.hpp"
+#include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
 #include "quadpid_chain.hpp"
@@ -31,6 +35,32 @@ namespace feedforward_chain {
 inline cogip::motion_control::PoseStraightFilter
     pose_straight_filter(cogip::motion_control::pose_straight_filter_io_keys_default,
                          quadpid_chain::pose_straight_filter_parameters);
+
+// ============================================================================
+// Pose loop meta controllers (ProfileFeedforward + PosePID + Combiner)
+// ============================================================================
+
+inline cogip::motion_control::MetaController<3> linear_pose_loop_meta_controller;
+inline cogip::motion_control::MetaController<3> angular_pose_loop_meta_controller;
+
+// PolarParallel for pose loop (linear + angular in parallel)
+inline cogip::motion_control::PolarParallelMetaController pose_loop_polar_parallel_meta_controller;
+
+// Throttled pose loop controller (wraps pose_loop_polar_parallel_meta_controller)
+// Note: PoseStraightFilter runs at full rate (not throttled) for faster state transitions
+inline cogip::motion_control::ThrottledController
+    throttled_pose_loop_controllers(&pose_loop_polar_parallel_meta_controller,
+                                    feedforward_pose_controllers_throttle_divider);
+
+// ============================================================================
+// Speed loop meta controllers (SpeedPID + AntiBlocking)
+// ============================================================================
+
+inline cogip::motion_control::MetaController<2> linear_speed_loop_meta_controller;
+inline cogip::motion_control::MetaController<2> angular_speed_loop_meta_controller;
+
+// PolarParallel for speed loop (linear + angular in parallel)
+inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;
 
 // ============================================================================
 // TargetChangeDetector (separate instance - cannot be shared between chains)
