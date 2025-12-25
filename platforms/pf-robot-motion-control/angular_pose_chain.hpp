@@ -4,12 +4,12 @@
 // directory for more details.
 
 /// @file
-/// @brief Angular speed chain controller instances for speed PID tuning
+/// @brief Angular pose chain controller instances for position PID tuning
 /// @details Chain that generates a trapezoidal velocity profile and uses
-///          feedforward + PID feedback for speed control.
+///          feedforward + PID feedback for pose control.
 ///          Chain: PoseErrorFilter -> ProfileFeedforwardController ->
-///                 SpeedPIDController -> FeedforwardCombinerController ->
-///                 TuningPoseReachedFilter
+///                 PosePIDController -> FeedforwardCombinerController ->
+///                 SpeedPIDController -> TuningPoseReachedFilter
 
 #pragma once
 
@@ -21,35 +21,38 @@
 #include "pose_error_filter/PoseErrorFilter.hpp"
 #include "pose_error_filter/PoseErrorFilterIOKeys.hpp"
 #include "pose_error_filter/PoseErrorFilterParameters.hpp"
+#include "pose_pid_controller/PosePIDController.hpp"
+#include "pose_pid_controller/PosePIDControllerIOKeys.hpp"
 #include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
+#include "quadpid_chain.hpp"
 #include "quadpid_feedforward_chain.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
-#include "speed_pid_controller/SpeedPIDControllerIOKeys.hpp"
+#include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilter.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilterIOKeys.hpp"
 
 namespace cogip {
 namespace pf {
 namespace motion_control {
-namespace angular_speed_chain {
+namespace angular_pose_chain {
 
 // ============================================================================
 // PoseErrorFilter for computing angle difference to target
 // ============================================================================
 
 inline cogip::motion_control::PoseErrorFilterIOKeys pose_error_filter_io_keys = {
-    .target_x = "", // Not used in ANGULAR mode
-    .target_y = "", // Not used in ANGULAR mode
+    .target_x = "",  // Not used in ANGULAR mode
+    .target_y = "",  // Not used in ANGULAR mode
     .target_O = "target_pose_O",
-    .current_x = "", // Not used in ANGULAR mode
-    .current_y = "", // Not used in ANGULAR mode
+    .current_x = "",  // Not used in ANGULAR mode
+    .current_y = "",  // Not used in ANGULAR mode
     .current_O = "current_pose_O",
     .pose_error = "angular_pose_error",
-    .recompute = "angular_speed_recompute_profile"};
+    .recompute = "angular_pose_recompute_profile"};
 
 inline cogip::motion_control::PoseErrorFilterParameters pose_error_filter_parameters(
     cogip::motion_control::PoseErrorFilterMode::ANGULAR,
-    0.0f // pose_reached_threshold (not used, TuningPoseReachedFilter handles this)
+    0.0f  // pose_reached_threshold (not used, TuningPoseReachedFilter handles this)
 );
 
 inline cogip::motion_control::PoseErrorFilter pose_error_filter(pose_error_filter_io_keys,
@@ -63,48 +66,51 @@ inline cogip::motion_control::PoseErrorFilter pose_error_filter(pose_error_filte
 inline cogip::motion_control::ProfileFeedforwardControllerIOKeys profile_feedforward_io_keys = {
     .pose_error = "angular_pose_error",
     .current_speed = "angular_current_speed",
-    .recompute_profile = "angular_speed_recompute_profile",
+    .recompute_profile = "angular_pose_recompute_profile",
     .invalidate_profile = "",
-    .feedforward_velocity = "angular_feedforward_velocity", // To Combiner
-    .tracking_error = "angular_speed_tracking_error",
-    .profile_complete = "angular_speed_profile_complete"};
+    .feedforward_velocity = "angular_feedforward_velocity",
+    .tracking_error = "angular_pose_tracking_error",  // For PosePID input
+    .profile_complete = "angular_pose_profile_complete"};
 
 inline cogip::motion_control::ProfileFeedforwardControllerParameters
-    profile_feedforward_parameters(platform_max_speed_angular_deg_per_period, // max_speed
-                                   platform_max_acc_angular_deg_per_period2,  // acceleration
-                                   platform_max_dec_angular_deg_per_period2,  // deceleration
-                                   true                                       // must_stop_at_end
+    profile_feedforward_parameters(platform_max_speed_angular_deg_per_period,  // max_speed
+                                   platform_max_acc_angular_deg_per_period2,   // acceleration
+                                   platform_max_dec_angular_deg_per_period2,   // deceleration
+                                   true                                        // must_stop_at_end
     );
 
 inline cogip::motion_control::ProfileFeedforwardController
     profile_feedforward_controller(profile_feedforward_io_keys, profile_feedforward_parameters);
 
 // ============================================================================
-// SpeedPIDController (computes feedback correction)
+// PosePIDController for position control (the PID we're tuning)
 // ============================================================================
 
-/// IO keys for speed PID: reads feedforward velocity, outputs feedback correction
-inline cogip::motion_control::SpeedPIDControllerIOKeys speed_pid_io_keys = {
-    .speed_order = "angular_feedforward_velocity",  // Input from ProfileFeedforwardController
+/// IO keys for angular pose PID controller
+/// Takes tracking_error from profile, outputs pose_feedback correction
+inline cogip::motion_control::PosePIDControllerIOKeys pose_pid_io_keys = {
+    .position_error = "angular_pose_tracking_error",  // From ProfileFeedforwardController
     .current_speed = "angular_current_speed",
-    .speed_command = "angular_speed_feedback"};     // Output to Combiner (feedback correction)
+    .target_speed = "",
+    .disable_filter = "",
+    .pose_reached = "",
+    .speed_order = "angular_pose_feedback"};  // Output to Combiner
 
-inline cogip::motion_control::SpeedPIDController
-    speed_controller(speed_pid_io_keys, feedforward_chain::angular_speed_controller_parameters);
+// PosePIDController instance is declared in motion_control.cpp
 
 // ============================================================================
-// FeedforwardCombinerController (feedforward + feedback)
+// FeedforwardCombinerController (feedforward + pose feedback)
 // ============================================================================
 
-/// IO keys: combines feedforward velocity + PID feedback correction
-/// speed_order = feedforward_velocity (setpoint from profile)
-/// speed_command = feedforward_velocity + feedback (sent to motors)
+/// IO keys: combines feedforward velocity + pose PID feedback
+/// speed_order = feedforward_velocity (setpoint for telemetry)
+/// speed_command = feedforward_velocity + pose_feedback (input to SpeedPID)
 inline cogip::motion_control::FeedforwardCombinerControllerIOKeys combiner_io_keys = {
     .feedforward_velocity = "angular_feedforward_velocity",
-    .feedback_correction = "angular_speed_feedback",
-    .speed_order = "angular_speed_order",     // Setpoint for telemetry
-    .speed_command = "angular_speed_command", // Output for motors (feedforward + feedback)
-    .current_state = "",  // No state gating
+    .feedback_correction = "angular_pose_feedback",
+    .speed_order = "angular_speed_order",      // Setpoint for telemetry
+    .speed_command = "angular_speed_setpoint", // Input for SpeedPID (feedforward + pose feedback)
+    .current_state = "",                       // No state gating
     .active_state = -1};
 
 inline cogip::motion_control::FeedforwardCombinerControllerParameters combiner_parameters;
@@ -113,16 +119,33 @@ inline cogip::motion_control::FeedforwardCombinerController
     feedforward_combiner_controller(combiner_io_keys, combiner_parameters);
 
 // ============================================================================
+// SpeedPIDController (uses feedforward PID for tuning)
+// ============================================================================
+
+/// IO keys for speed PID: reads combined speed setpoint, outputs speed command
+inline cogip::motion_control::SpeedPIDControllerIOKeys speed_pid_io_keys = {
+    .speed_order = "angular_speed_setpoint",   // From Combiner (feedforward + pose feedback)
+    .current_speed = "angular_current_speed",
+    .speed_command = "angular_speed_command"};
+
+inline cogip::motion_control::SpeedPIDControllerParameters
+    speed_controller_parameters(&cogip::pf::motion_control::feedforward_angular_speed_pid);
+
+inline cogip::motion_control::SpeedPIDController speed_controller(speed_pid_io_keys,
+                                                                  speed_controller_parameters);
+
+// ============================================================================
 // TuningPoseReachedFilter for signaling pose_reached when profile completes
 // ============================================================================
 
 inline cogip::motion_control::TuningPoseReachedFilterIOKeys tuning_pose_reached_filter_io_keys = {
-    .profile_complete = "angular_speed_profile_complete", .pose_reached = "pose_reached"};
+    .profile_complete = "angular_pose_profile_complete",
+    .pose_reached = "pose_reached"};
 
 inline cogip::motion_control::TuningPoseReachedFilter
     tuning_pose_reached_filter(tuning_pose_reached_filter_io_keys);
 
-} // namespace angular_speed_chain
-} // namespace motion_control
-} // namespace pf
-} // namespace cogip
+}  // namespace angular_pose_chain
+}  // namespace motion_control
+}  // namespace pf
+}  // namespace cogip

@@ -233,6 +233,8 @@ void PoseStraightFilter::execute(ControllersIO& io)
         linear_invalidate_profile = true;
         // Force linear target speed to 0 during initial rotation
         target_speed.set_distance(0.0f);
+        // Force linear error to 0 during rotation (no linear correction)
+        pos_err.set_distance(0.0f);
         if (absolute_angular_pose_error > angular_intermediate_threshold) {
             // Still rotating to face target direction
         } else {
@@ -356,6 +358,8 @@ void PoseStraightFilter::execute(ControllersIO& io)
             linear_invalidate_profile = true;
             // Force linear target speed to 0 during final rotation
             target_speed.set_distance(0.0f);
+            // Force linear error to 0 during rotation (no linear correction)
+            pos_err.set_distance(0.0f);
 
             if (!parameters_.bypass_final_orientation()) {
                 pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
@@ -378,33 +382,35 @@ void PoseStraightFilter::execute(ControllersIO& io)
             bool sign_changed = !first_entry && (prev_angular_error * current_angular_error < 0.0f);
             bool within_threshold = etl::absolute(current_angular_error) <= angular_threshold;
 
-            if (position_close_enough && (within_threshold || sign_changed)) {
-                // Target reached - move to FINISHED state
-                current_state_ = PoseStraightFilterState::FINISHED;
-                first_entry = true;
-            } else if (!position_close_enough) {
-                // Still too far from target - go back to MOVE_TO_POSITION
-                current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
-                // Update reference orientation to point towards target
-                float angle_to_target = raw_err.angle();
-                // Determine direction: go forward if |angle| < 90°, backward otherwise
-                bool go_forward = (etl::absolute(angle_to_target) < 90.0f);
-                initial_direction_sign = go_forward ? 1.0f : -1.0f;
-                target_is_in_front_ = go_forward;
-                // Reference orientation: direction robot should face
-                if (go_forward) {
-                    reference_orientation = limit_angle_deg(current_pose_O + angle_to_target);
+            if (within_threshold || sign_changed) {
+                // Rotation complete - check if position is close enough
+                if (position_close_enough) {
+                    // Target fully reached - move to FINISHED state
+                    current_state_ = PoseStraightFilterState::FINISHED;
+                    first_entry = true;
                 } else {
-                    reference_orientation =
-                        limit_angle_deg(current_pose_O + angle_to_target + 180.0f);
+                    // Rotation done but position drifted - go back to MOVE_TO_POSITION
+                    current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
+                    // Update reference orientation to point towards target
+                    float angle_to_target = raw_err.angle();
+                    // Determine direction: go forward if |angle| < 90°, backward otherwise
+                    bool go_forward = (etl::absolute(angle_to_target) < 90.0f);
+                    initial_direction_sign = go_forward ? 1.0f : -1.0f;
+                    target_is_in_front_ = go_forward;
+                    // Reference orientation: direction robot should face
+                    if (go_forward) {
+                        reference_orientation = limit_angle_deg(current_pose_O + angle_to_target);
+                    } else {
+                        reference_orientation =
+                            limit_angle_deg(current_pose_O + angle_to_target + 180.0f);
+                    }
+                    linear_recompute_profile = true;
+                    angular_invalidate_profile = true;
+                    first_entry = true;
+                    DEBUG("ROTATE_TO_FINAL_ANGLE: rotation done but position drifted (%.2f > %.2f), "
+                          "back to MOVE_TO_POSITION\n",
+                          static_cast<double>(current_distance), static_cast<double>(linear_threshold));
                 }
-                linear_recompute_profile = true;
-                angular_invalidate_profile = true;
-                first_entry = true;
-                DEBUG("ROTATE_TO_FINAL_ANGLE: too far (%.2f > %.2f), back to MOVE_TO_POSITION, "
-                      "ref_orientation=%.2f\n",
-                      static_cast<double>(current_distance), static_cast<double>(linear_threshold),
-                      static_cast<double>(reference_orientation));
             } else {
                 // Continue rotating - save current error for next iteration's oscillation detection
                 prev_angular_error = current_angular_error;

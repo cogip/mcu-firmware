@@ -11,6 +11,7 @@
 
 // System includes
 #include <cstdio>
+#include <inttypes.h>
 
 // ETL includes
 #include "etl/absolute.h"
@@ -77,6 +78,10 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
         io.set(keys_.feedforward_velocity, 0.0f);
         // Use pose_error as tracking_error for position control
         io.set(keys_.tracking_error, pose_error);
+        // Profile not running, so not complete
+        if (!keys_.profile_complete.empty()) {
+            io.set(keys_.profile_complete, false);
+        }
         DEBUG("[%s] Profile not ready: tracking_error=%.2f for position control\n",
               keys_.pose_error.data(), pose_error);
         return;
@@ -90,6 +95,9 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
         LOG_ERROR("ProfileFeedforwardController: pose_error not available\n");
         io.set(keys_.feedforward_velocity, 0.0f);
         io.set(keys_.tracking_error, 0.0f);
+        if (!keys_.profile_complete.empty()) {
+            io.set(keys_.profile_complete, false);
+        }
         return;
     }
 
@@ -124,6 +132,9 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
             io.set(keys_.feedforward_velocity, 0.0f);
             io.set(keys_.tracking_error, 0.0f);
             io.set(keys_.recompute_profile, false); // Clear flag even on failure
+            if (!keys_.profile_complete.empty()) {
+                io.set(keys_.profile_complete, false);
+            }
             profile_.reset();
             return;
         }
@@ -179,6 +190,12 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
     // Write outputs
     io.set(keys_.feedforward_velocity, feedforward_velocity);
     io.set(keys_.tracking_error, tracking_error);
+
+    // Debug log for angular axis
+    if (keys_.pose_error.find("angular") != etl::string_view::npos) {
+        LOG_INFO("ANG: p%" PRIu32 " err=%.1f th_rem=%.1f ff=%.2f trk=%.2f\n",
+                 period_, pose_error, theoretical_remaining, feedforward_velocity, tracking_error);
+    }
 
     // Increment period counter (by period_increment for throttled controllers)
     period_ += parameters_.period_increment();

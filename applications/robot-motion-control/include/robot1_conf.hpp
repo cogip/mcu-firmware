@@ -34,7 +34,7 @@ inline Parameter<float, NonNegative> linear_pose_pid_kp{0.2};
 inline Parameter<float, NonNegative> linear_pose_pid_ki{0};
 inline Parameter<float, NonNegative> linear_pose_pid_kd{0};
 // Angular pose PID (QUADPID chain)
-inline Parameter<float, NonNegative> angular_pose_pid_kp{0.3};
+inline Parameter<float, NonNegative> angular_pose_pid_kp{0.1};
 inline Parameter<float, NonNegative> angular_pose_pid_ki{0};
 inline Parameter<float, NonNegative> angular_pose_pid_kd{0};
 // Linear speed PID (QUADPID chain)
@@ -51,20 +51,20 @@ inline Parameter<float, NonNegative> angular_speed_pid_kd{0};
 // ============================================================================
 
 // Feedforward linear pose PID
-inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kp{0.01};
-inline Parameter<float, NonNegative> feedforward_linear_pose_pid_ki{0.00075};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kp{0.09};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_ki{0};
 inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kd{0};
 // Feedforward angular pose PID
-inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kp{0.125};
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kp{0.3};
 inline Parameter<float, NonNegative> feedforward_angular_pose_pid_ki{0};
 inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kd{0};
 // Feedforward linear speed PID
-inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kp{3.};
-inline Parameter<float, NonNegative> feedforward_linear_speed_pid_ki{1.4};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kp{5};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_ki{0.3};
 inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kd{0};
 // Feedforward angular speed PID
-inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kp{7.};
-inline Parameter<float, NonNegative> feedforward_angular_speed_pid_ki{1.5};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kp{10};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_ki{1};
 inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kd{0};
 
 // Linear threshold
@@ -87,9 +87,9 @@ constexpr float max_acc_mm_per_s2 = 1000.0; ///< Maximum acceleration (mm/s²)
 constexpr float max_dec_mm_per_s2 = 1000.0; ///< Maximum deceleration (mm/s²)
 
 constexpr float min_speed_deg_per_s = 0;   ///< Maximum speed (deg/s)
-constexpr float max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
-constexpr float max_acc_deg_per_s2 = 360;  ///< Maximum acceleration (deg/s²)
-constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
+constexpr float max_speed_deg_per_s = 1440; ///< Maximum speed (deg/s)
+constexpr float max_acc_deg_per_s2 = 720;  ///< Maximum acceleration (deg/s²)
+constexpr float max_dec_deg_per_s2 = 720;  ///< Maximum deceleration (deg/s²)
 
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = true;

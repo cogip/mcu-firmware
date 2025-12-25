@@ -14,6 +14,7 @@
 #include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "app_conf.hpp"
 #include "motion_control.hpp"
+#include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_control_common/ThrottledController.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
@@ -53,11 +54,21 @@ inline cogip::motion_control::ThrottledController
                                     feedforward_pose_controllers_throttle_divider);
 
 // ============================================================================
-// Speed loop meta controllers (SpeedPID + AntiBlocking)
+// Speed loop meta controllers (SpeedPID + SpeedCombiner + AntiBlocking)
 // ============================================================================
 
-inline cogip::motion_control::MetaController<2> linear_speed_loop_meta_controller;
-inline cogip::motion_control::MetaController<2> angular_speed_loop_meta_controller;
+inline cogip::motion_control::MetaController<3> linear_speed_loop_meta_controller;
+inline cogip::motion_control::MetaController<3> angular_speed_loop_meta_controller;
+
+// ============================================================================
+// SpeedPIDController parameters (use feedforward PIDs)
+// ============================================================================
+
+inline cogip::motion_control::SpeedPIDControllerParameters
+    linear_speed_controller_parameters(&cogip::pf::motion_control::feedforward_linear_speed_pid);
+
+inline cogip::motion_control::SpeedPIDControllerParameters
+    angular_speed_controller_parameters(&cogip::pf::motion_control::feedforward_angular_speed_pid);
 
 // PolarParallel for speed loop (linear + angular in parallel)
 inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;

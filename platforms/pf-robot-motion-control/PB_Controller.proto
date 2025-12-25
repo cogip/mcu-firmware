@@ -8,6 +8,9 @@ enum PB_ControllerEnum {
     QUADPID_FEEDFORWARD = 4;
     LINEAR_SPEED_TUNING = 5;
     ANGULAR_SPEED_TUNING = 6;
+    LINEAR_POSE_TUNING = 7;
+    ANGULAR_POSE_TUNING = 8;
+    LINEAR_POSE_TEST = 9;
 }
 
 message PB_Controller {

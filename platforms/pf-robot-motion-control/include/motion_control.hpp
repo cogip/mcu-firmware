@@ -37,7 +37,7 @@ constexpr uint16_t motion_control_thread_period_ms = 20; ///< controller thread 
 constexpr uint16_t quadpid_pose_controllers_throttle_divider = 1;
 
 /// Throttle divider for QUADPID_FEEDFORWARD pose loop controllers (execute every N cycles)
-constexpr uint16_t feedforward_pose_controllers_throttle_divider = 5;
+constexpr uint16_t feedforward_pose_controllers_throttle_divider = 1;
 
 /// @name Acceleration and speed profiles
 /// @{
@@ -125,6 +125,12 @@ void pf_send_pb_state(void);
 
 /// Send encoder telemetry data
 void pf_send_encoder_telemetry(void);
+
+/// Feedforward PIDs (for tuning chains)
+extern cogip::pid::PID feedforward_linear_speed_pid;
+extern cogip::pid::PID feedforward_angular_speed_pid;
+extern cogip::pid::PID feedforward_linear_pose_pid;
+extern cogip::pid::PID feedforward_angular_pose_pid;
 
 } // namespace motion_control
 

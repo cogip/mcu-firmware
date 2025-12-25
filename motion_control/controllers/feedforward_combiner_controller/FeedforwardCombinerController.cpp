@@ -42,6 +42,9 @@ void FeedforwardCombinerController::execute(ControllersIO& io)
             DEBUG("Not in active state (current=%d, active=%d), outputting zero\n", current_state,
                   keys_.active_state);
             io.set(keys_.speed_order, 0.0f);
+            if (!keys_.speed_command.empty()) {
+                io.set(keys_.speed_command, 0.0f);
+            }
             return;
         }
     }
@@ -64,14 +67,21 @@ void FeedforwardCombinerController::execute(ControllersIO& io)
             "FeedforwardCombinerController: feedback_correction not available, using 0.0\n");
     }
 
-    // Combine: speed_order = feedforward + feedback
-    float speed_order = feedforward_velocity + feedback_correction;
+    // Combine: speed_command = feedforward + feedback
+    float speed_command = feedforward_velocity + feedback_correction;
 
-    DEBUG("Combiner: feedforward_velocity=%.2f + feedback_correction=%.2f = speed_order=%.2f\n",
-          feedforward_velocity, feedback_correction, speed_order);
+    DEBUG("Combiner: feedforward_velocity=%.2f + feedback_correction=%.2f = speed_command=%.2f\n",
+          feedforward_velocity, feedback_correction, speed_command);
 
-    // Write speed order output
-    io.set(keys_.speed_order, speed_order);
+    // Write speed order output (setpoint = feedforward_velocity)
+    if (!keys_.speed_order.empty()) {
+        io.set(keys_.speed_order, feedforward_velocity);
+    }
+
+    // Write speed command output (for motors = feedforward + feedback)
+    if (!keys_.speed_command.empty()) {
+        io.set(keys_.speed_command, speed_command);
+    }
 }
 
 } // namespace motion_control

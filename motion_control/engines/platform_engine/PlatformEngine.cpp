@@ -96,6 +96,7 @@ void PlatformEngine::process_outputs()
         DEBUG("Start process_outputs()\n");
         command.set_distance(io_.get_as<float>("linear_speed_command").value());
         command.set_angle(io_.get_as<float>("angular_speed_command").value());
+        LOG_INFO("Motors: lin=%.2f ang=%.2f\n", command.distance(), command.angle());
         DEBUG("End process_outputs()\n");
     }
 
