@@ -46,6 +46,43 @@ inline Parameter<float, NonNegative> angular_speed_pid_kp{10};
 inline Parameter<float, NonNegative> angular_speed_pid_ki{1};
 inline Parameter<float, NonNegative> angular_speed_pid_kd{0.0};
 
+// ============================================================================
+// Feedforward pose PID gains (QUADPID_FEEDFORWARD - feedforward branch)
+// Used to track the motion profile in real-time (closed-loop tracking)
+// ============================================================================
+
+// Feedforward linear pose PID (tracker, uses Ki for steady-state error elimination)
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kp{0.09};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_ki{0.05};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kd{0};
+// Feedforward angular pose PID (tracker)
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kp{0.2};
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kd{0};
+// Feedforward linear speed PID
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kp{5};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_ki{0.3};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kd{0};
+// Feedforward angular speed PID
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kp{10};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_ki{1};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kd{0};
+
+// ============================================================================
+// Corrector pose PID gains (QUADPID_FEEDFORWARD - direct branch)
+// Used when feedforward profile is invalidated to reach target position
+// ============================================================================
+
+// Corrector linear pose PID (used when linear profile is invalidated)
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_kp{0.2};
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_ki{0};
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_kd{0};
+// Corrector angular pose PID (used when angular profile is invalidated)
+// Also used for heading maintenance during MOVE_TO_POSITION
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_kp{0.3};
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_kd{0};
+
 // Linear threshold
 constexpr float linear_threshold = 5;
 // Angular threshold
@@ -81,6 +118,27 @@ inline Parameter<float, NonNegative> linear_speed_pid_integral_limit{max_speed_m
 // Angular speed PID integral limit
 inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_deg_per_s /
                                                                       angular_speed_pid_ki.get()};
+
+// Feedforward linear pose PID integral limit
+// Limit = max_speed / ki to prevent integral windup
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_integral_limit{
+    max_speed_mm_per_s / feedforward_linear_pose_pid_ki.get()};
+// Feedforward angular pose PID integral limit
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
+// Feedforward linear speed PID integral limit
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_integral_limit{
+    max_speed_mm_per_s / feedforward_linear_speed_pid_ki.get()};
+// Feedforward angular speed PID integral limit
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_integral_limit{
+    max_speed_deg_per_s / feedforward_angular_speed_pid_ki.get()};
+
+// Corrector linear pose PID integral limit
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
+// Corrector angular pose PID integral limit
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
 
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = false;

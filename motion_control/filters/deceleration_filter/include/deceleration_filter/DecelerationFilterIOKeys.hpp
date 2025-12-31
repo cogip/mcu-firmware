@@ -23,6 +23,8 @@ struct DecelerationFilterIOKeys
     etl::string_view pose_error;    ///< key for position error (distance to target)
     etl::string_view current_speed; ///< key for measured current speed
     etl::string_view target_speed;  ///< key for target speed (will be modified)
+    etl::string_view
+        output_speed; ///< key for output speed (optional, if set writes final value here)
 };
 
 } // namespace motion_control

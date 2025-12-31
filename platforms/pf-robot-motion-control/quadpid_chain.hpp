@@ -67,7 +67,9 @@ inline cogip::motion_control::PoseStraightFilter
 inline cogip::motion_control::DecelerationFilterIOKeys linear_deceleration_filter_io_keys = {
     .pose_error = "linear_pose_error",
     .current_speed = "linear_current_speed",
-    .target_speed = "linear_target_speed"};
+    .target_speed = "linear_target_speed",
+    .output_speed = "" // Not used, target_speed is modified in-place
+};
 
 inline cogip::motion_control::DecelerationFilterParameters
     linear_deceleration_filter_parameters(platform_max_dec_linear_mm_per_period2);
@@ -79,7 +81,9 @@ inline cogip::motion_control::DecelerationFilter
 inline cogip::motion_control::DecelerationFilterIOKeys angular_deceleration_filter_io_keys = {
     .pose_error = "angular_pose_error",
     .current_speed = "angular_current_speed",
-    .target_speed = "angular_target_speed"};
+    .target_speed = "angular_target_speed",
+    .output_speed = "" // Not used, target_speed is modified in-place
+};
 
 inline cogip::motion_control::DecelerationFilterParameters
     angular_deceleration_filter_parameters(platform_max_dec_angular_deg_per_period2);

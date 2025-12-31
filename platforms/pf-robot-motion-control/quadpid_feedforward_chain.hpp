@@ -10,16 +10,32 @@
 
 #pragma once
 
+#include "acceleration_filter/AccelerationFilter.hpp"
+#include "acceleration_filter/AccelerationFilterIOKeys.hpp"
+#include "acceleration_filter/AccelerationFilterParameters.hpp"
 #include "anti_blocking_controller/AntiBlockingController.hpp"
 #include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "app_conf.hpp"
+#include "conditional_switch_meta_controller/ConditionalSwitchMetaController.hpp"
+#include "deceleration_filter/DecelerationFilter.hpp"
+#include "deceleration_filter/DecelerationFilterIOKeys.hpp"
+#include "deceleration_filter/DecelerationFilterParameters.hpp"
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_control_common/ThrottledController.hpp"
+#include "parameter/Parameter.hpp"
+#include "pid/PID.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
+#include "pose_pid_controller/PosePIDController.hpp"
+#include "pose_pid_controller/PosePIDControllerIOKeys.hpp"
+#include "pose_pid_controller/PosePIDControllerParameters.hpp"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
 #include "quadpid_chain.hpp"
+#include "speed_limit_filter/SpeedLimitFilter.hpp"
+#include "speed_limit_filter/SpeedLimitFilterIOKeys.hpp"
+#include "speed_limit_filter/SpeedLimitFilterParameters.hpp"
+#include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 #include "target_change_detector/TargetChangeDetector.hpp"
 
 namespace cogip {
@@ -37,11 +53,173 @@ inline cogip::motion_control::PoseStraightFilter
                          quadpid_chain::pose_straight_filter_parameters);
 
 // ============================================================================
-// Pose loop meta controllers (ProfileFeedforward + PosePID + Combiner)
+// Pose loop meta controllers (ProfileFeedforward + ConditionalSwitch + Combiner)
 // ============================================================================
 
-inline cogip::motion_control::MetaController<3> linear_pose_loop_meta_controller;
-inline cogip::motion_control::MetaController<3> angular_pose_loop_meta_controller;
+// Linear dominant PosePIDController (strong gain for active tracking)
+inline cogip::motion_control::PosePIDControllerParameters
+    linear_feedforward_pose_controller_parameters{
+        &cogip::pf::motion_control::feedforward_linear_pose_pid};
+
+inline constexpr cogip::motion_control::PosePIDControllerIOKeys
+    linear_feedforward_pose_controller_keys = {.position_error = "linear_tracking_error",
+                                               .current_speed = "linear_current_speed",
+                                               .target_speed = "dummy_target_speed",
+                                               .disable_filter = "dummy_disable",
+                                               .pose_reached = "dummy_pose_reached",
+                                               .speed_order = "linear_feedback_correction"};
+
+inline cogip::motion_control::PosePIDController linear_feedforward_pose_controller{
+    linear_feedforward_pose_controller_keys, linear_feedforward_pose_controller_parameters};
+
+// Linear position corrector PID (uses corrector-specific coefficients from robot*_conf.hpp)
+// Separate from QUADPID chain to allow independent tuning
+inline cogip::pid::PIDParameters linear_position_corrector_pid_params{
+    corrector_linear_pose_pid_kp, corrector_linear_pose_pid_ki, corrector_linear_pose_pid_kd,
+    corrector_linear_pose_pid_integral_limit};
+inline cogip::pid::PID linear_position_corrector_pid{linear_position_corrector_pid_params};
+
+// Linear position corrector controller (uses corrector PID for position correction)
+// When profile is invalidated, outputs directly to speed_order
+// Uses pose_error (real distance to target) not tracking_error (profile following error)
+inline cogip::motion_control::PosePIDControllerParameters linear_position_corrector_params{
+    &linear_position_corrector_pid};
+
+inline constexpr cogip::motion_control::PosePIDControllerIOKeys linear_position_corrector_keys = {
+    .position_error = "linear_pose_error", // Real error to target, not tracking error
+    .current_speed = "linear_current_speed",
+    .target_speed = "dummy_target_speed",
+    .disable_filter = "dummy_disable",
+    .pose_reached = "dummy_pose_reached",
+    .speed_order = "linear_speed_order" // Output directly to speed_order for direct mode
+};
+
+inline cogip::motion_control::PosePIDController linear_position_corrector{
+    linear_position_corrector_keys, linear_position_corrector_params};
+
+// Linear corrector AccelerationFilter (limits speed increase rate)
+inline cogip::motion_control::AccelerationFilterIOKeys linear_corrector_accel_keys = {
+    .target_speed = "linear_speed_order", .output_speed = "linear_speed_order"};
+
+inline cogip::motion_control::AccelerationFilterParameters linear_corrector_accel_params{
+    platform_max_acc_linear_mm_per_period2,
+    platform_min_speed_linear_mm_per_period // min_speed: guaranteed startup speed
+};
+
+inline cogip::motion_control::AccelerationFilter linear_corrector_accel{
+    linear_corrector_accel_keys, linear_corrector_accel_params, "lin"};
+
+// Linear corrector DecelerationFilter (limits speed based on braking distance)
+inline cogip::motion_control::DecelerationFilterIOKeys linear_corrector_decel_keys = {
+    .pose_error = "linear_pose_error",
+    .current_speed = "linear_current_speed",
+    .target_speed = "linear_speed_order",
+    .output_speed = "linear_speed_order"};
+
+inline cogip::motion_control::DecelerationFilterParameters linear_corrector_decel_params{
+    platform_max_dec_linear_mm_per_period2};
+
+inline cogip::motion_control::DecelerationFilter linear_corrector_decel{
+    linear_corrector_decel_keys, linear_corrector_decel_params};
+
+// MetaController for feedforward mode: PosePID → feedback_correction, then Combiner → speed_order
+// This chain is used when invalidate_profile=false (feedforward active)
+inline cogip::motion_control::MetaController<2> linear_feedforward_chain;
+
+// MetaController for direct mode: PosePID → AccelerationFilter → DecelerationFilter → speed_order
+// This chain is used when invalidate_profile=true (no feedforward)
+inline cogip::motion_control::MetaController<3> linear_direct_chain;
+
+// Linear pose switch: switches between feedforward chain and direct chain
+// Condition: linear_invalidate_profile
+//   - true  → direct mode (position corrector outputs to speed_order)
+//   - false → feedforward mode (tracker + combiner)
+inline cogip::motion_control::ConditionalSwitchMetaController linear_pose_switch{
+    "linear_invalidate_profile", &linear_direct_chain, &linear_feedforward_chain};
+
+// Angular dominant PosePIDController (strong gain for active tracking)
+inline constexpr cogip::motion_control::PosePIDControllerIOKeys
+    angular_feedforward_pose_controller_keys = {.position_error = "angular_tracking_error",
+                                                .current_speed = "angular_current_speed",
+                                                .target_speed = "dummy_target_speed",
+                                                .disable_filter = "dummy_disable",
+                                                .pose_reached = "dummy_pose_reached",
+                                                .speed_order = "angular_feedback_correction"};
+
+inline cogip::motion_control::PosePIDControllerParameters
+    angular_feedforward_pose_controller_parameters{
+        &cogip::pf::motion_control::feedforward_angular_pose_pid};
+
+inline cogip::motion_control::PosePIDController angular_feedforward_pose_controller{
+    angular_feedforward_pose_controller_keys, angular_feedforward_pose_controller_parameters};
+
+// Angular position corrector PID (uses corrector-specific coefficients from robot*_conf.hpp)
+// Separate from QUADPID chain to allow independent tuning
+inline cogip::pid::PIDParameters angular_position_corrector_pid_params{
+    corrector_angular_pose_pid_kp, corrector_angular_pose_pid_ki, corrector_angular_pose_pid_kd,
+    corrector_angular_pose_pid_integral_limit};
+inline cogip::pid::PID angular_position_corrector_pid{angular_position_corrector_pid_params};
+
+// Angular position corrector controller
+// When profile is invalidated, outputs to SpeedLimitFilter
+// Uses pose_error (real angle to target) not tracking_error (profile following error)
+inline constexpr cogip::motion_control::PosePIDControllerIOKeys angular_position_corrector_keys = {
+    .position_error = "angular_pose_error", // Real error to target, not tracking error
+    .current_speed = "angular_current_speed",
+    .target_speed = "dummy_target_speed",
+    .disable_filter = "dummy_disable",
+    .pose_reached = "dummy_pose_reached",
+    .speed_order = "angular_speed_order" // Output directly to speed_order for direct mode
+};
+
+inline cogip::motion_control::PosePIDControllerParameters angular_position_corrector_params{
+    &angular_position_corrector_pid};
+
+inline cogip::motion_control::PosePIDController angular_position_corrector{
+    angular_position_corrector_keys, angular_position_corrector_params};
+
+// Angular corrector AccelerationFilter (limits speed increase rate)
+inline cogip::motion_control::AccelerationFilterIOKeys angular_corrector_accel_keys = {
+    .target_speed = "angular_speed_order", .output_speed = "angular_speed_order"};
+
+inline cogip::motion_control::AccelerationFilterParameters angular_corrector_accel_params{
+    platform_max_acc_angular_deg_per_period2,
+    platform_min_speed_angular_deg_per_period // min_speed: guaranteed startup speed
+};
+
+inline cogip::motion_control::AccelerationFilter angular_corrector_accel{
+    angular_corrector_accel_keys, angular_corrector_accel_params, "ang"};
+
+// Angular corrector DecelerationFilter (limits speed based on braking distance)
+inline cogip::motion_control::DecelerationFilterIOKeys angular_corrector_decel_keys = {
+    .pose_error = "angular_pose_error",
+    .current_speed = "angular_current_speed",
+    .target_speed = "angular_speed_order",
+    .output_speed = "angular_speed_order"};
+
+inline cogip::motion_control::DecelerationFilterParameters angular_corrector_decel_params{
+    platform_max_dec_angular_deg_per_period2};
+
+inline cogip::motion_control::DecelerationFilter angular_corrector_decel{
+    angular_corrector_decel_keys, angular_corrector_decel_params};
+
+// MetaController for feedforward mode: PosePID → feedback_correction, then Combiner → speed_order
+// This chain is used when invalidate_profile=false (feedforward active)
+inline cogip::motion_control::MetaController<2> angular_feedforward_chain;
+
+// MetaController for direct mode: PosePID → AccelerationFilter → DecelerationFilter → speed_order
+// This chain is used when invalidate_profile=true (no feedforward)
+inline cogip::motion_control::MetaController<3> angular_direct_chain;
+
+// Angular pose switch: switches between feedforward chain and direct chain
+// Condition: angular_invalidate_profile
+//   - true  → direct mode (position corrector outputs to speed_order)
+//   - false → feedforward mode (tracker + combiner)
+inline cogip::motion_control::ConditionalSwitchMetaController angular_pose_switch{
+    "angular_invalidate_profile", &angular_direct_chain, &angular_feedforward_chain};
+
+inline cogip::motion_control::MetaController<2> linear_pose_loop_meta_controller;
+inline cogip::motion_control::MetaController<2> angular_pose_loop_meta_controller;
 
 // PolarParallel for pose loop (linear + angular in parallel)
 inline cogip::motion_control::PolarParallelMetaController pose_loop_polar_parallel_meta_controller;
@@ -59,6 +237,16 @@ inline cogip::motion_control::ThrottledController
 inline cogip::motion_control::MetaController<2> linear_speed_loop_meta_controller;
 inline cogip::motion_control::MetaController<2> angular_speed_loop_meta_controller;
 
+// ============================================================================
+// SpeedPIDController parameters (use feedforward PIDs)
+// ============================================================================
+
+inline cogip::motion_control::SpeedPIDControllerParameters
+    linear_speed_controller_parameters(&cogip::pf::motion_control::feedforward_linear_speed_pid);
+
+inline cogip::motion_control::SpeedPIDControllerParameters
+    angular_speed_controller_parameters(&cogip::pf::motion_control::feedforward_angular_speed_pid);
+
 // PolarParallel for speed loop (linear + angular in parallel)
 inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;
 
@@ -71,7 +259,6 @@ inline cogip::motion_control::TargetChangeDetectorIOKeys target_change_detector_
     .target_y = "target_pose_y",
     .target_O = "target_pose_O",
     .new_target = "new_target",
-    .current_state = "",
     .trigger_state = 0};
 
 inline cogip::motion_control::TargetChangeDetectorParameters target_change_detector_parameters;

@@ -5,21 +5,26 @@
 
 /// @file
 /// @brief Angular speed chain controller instances for speed PID tuning
-/// @details Simplified chain that generates a trapezoidal velocity profile
-///          and feeds it to the speed PID controller.
-///          Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController ->
-///          TuningPoseReachedFilter
+/// @details Chain that generates a trapezoidal velocity profile and uses
+///          feedforward + PID feedback for speed control.
+///          Chain: PoseErrorFilter -> ProfileFeedforwardController ->
+///                 SpeedPIDController -> FeedforwardCombinerController ->
+///                 TuningPoseReachedFilter
 
 #pragma once
 
 #include "app_conf.hpp"
+#include "feedforward_combiner_controller/FeedforwardCombinerController.hpp"
+#include "feedforward_combiner_controller/FeedforwardCombinerControllerIOKeys.hpp"
+#include "feedforward_combiner_controller/FeedforwardCombinerControllerParameters.hpp"
+#include "motion_control.hpp"
 #include "pose_error_filter/PoseErrorFilter.hpp"
 #include "pose_error_filter/PoseErrorFilterIOKeys.hpp"
 #include "pose_error_filter/PoseErrorFilterParameters.hpp"
 #include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
-#include "quadpid_chain.hpp"
+#include "quadpid_feedforward_chain.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
-#include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
+#include "speed_pid_controller/SpeedPIDControllerIOKeys.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilter.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilterIOKeys.hpp"
 
@@ -60,7 +65,7 @@ inline cogip::motion_control::ProfileFeedforwardControllerIOKeys profile_feedfor
     .current_speed = "angular_current_speed",
     .recompute_profile = "angular_speed_recompute_profile",
     .invalidate_profile = "",
-    .feedforward_velocity = "angular_speed_order", // Direct to speed PID
+    .feedforward_velocity = "angular_feedforward_velocity", // To Combiner
     .tracking_error = "angular_speed_tracking_error",
     .profile_complete = "angular_speed_profile_complete"};
 
@@ -75,12 +80,35 @@ inline cogip::motion_control::ProfileFeedforwardController
     profile_feedforward_controller(profile_feedforward_io_keys, profile_feedforward_parameters);
 
 // ============================================================================
-// SpeedPIDController
+// SpeedPIDController (computes feedback correction)
 // ============================================================================
 
+/// IO keys for speed PID: reads feedforward velocity, outputs feedback correction
+inline cogip::motion_control::SpeedPIDControllerIOKeys speed_pid_io_keys = {
+    .speed_order = "angular_feedforward_velocity", // Input from ProfileFeedforwardController
+    .current_speed = "angular_current_speed",
+    .speed_command = "angular_speed_feedback"}; // Output to Combiner (feedback correction)
+
 inline cogip::motion_control::SpeedPIDController
-    speed_controller(cogip::motion_control::angular_speed_pid_controller_io_keys_default,
-                     quadpid_chain::angular_speed_controller_parameters);
+    speed_controller(speed_pid_io_keys, feedforward_chain::angular_speed_controller_parameters);
+
+// ============================================================================
+// FeedforwardCombinerController (feedforward + feedback)
+// ============================================================================
+
+/// IO keys: combines feedforward velocity + PID feedback correction
+/// speed_order = feedforward_velocity (setpoint from profile)
+/// speed_command = feedforward_velocity + feedback (sent to motors)
+inline cogip::motion_control::FeedforwardCombinerControllerIOKeys combiner_io_keys = {
+    .feedforward_velocity = "angular_feedforward_velocity",
+    .feedback_correction = "angular_speed_feedback",
+    .speed_order = "angular_speed_order",      // Setpoint for telemetry
+    .speed_command = "angular_speed_command"}; // Output for motors (feedforward + feedback)
+
+inline cogip::motion_control::FeedforwardCombinerControllerParameters combiner_parameters;
+
+inline cogip::motion_control::FeedforwardCombinerController
+    feedforward_combiner_controller(combiner_io_keys, combiner_parameters);
 
 // ============================================================================
 // TuningPoseReachedFilter for signaling pose_reached when profile completes

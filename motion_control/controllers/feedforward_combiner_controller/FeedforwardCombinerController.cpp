@@ -45,20 +45,21 @@ void FeedforwardCombinerController::execute(ControllersIO& io)
             "FeedforwardCombinerController: feedback_correction not available, using 0.0\n");
     }
 
-    // Combine: speed_command = feedforward + feedback
-    float speed_command = feedforward_velocity + feedback_correction;
+    // Combine: speed_order = feedforward + feedback
+    float speed_order = feedforward_velocity + feedback_correction;
 
-    DEBUG("Combiner: feedforward_velocity=%.2f + feedback_correction=%.2f = speed_command=%.2f\n",
-          feedforward_velocity, feedback_correction, speed_command);
+    DEBUG("Combiner: feedforward_velocity=%.2f + feedback_correction=%.2f = speed_order=%.2f\n",
+          feedforward_velocity, feedback_correction, speed_order);
 
-    // Write speed order output (setpoint = feedforward_velocity)
+    // Write speed order output (feedforward + feedback correction)
+    // This goes to SpeedPID which will produce speed_command
     if (!keys_.speed_order.empty()) {
-        io.set(keys_.speed_order, feedforward_velocity);
+        io.set(keys_.speed_order, speed_order);
     }
 
-    // Write speed command output (for motors = feedforward + feedback)
+    // Write speed command output (same value, alternative key name)
     if (!keys_.speed_command.empty()) {
-        io.set(keys_.speed_command, speed_command);
+        io.set(keys_.speed_command, speed_order);
     }
 }
 
