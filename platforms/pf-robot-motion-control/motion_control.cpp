@@ -461,6 +461,8 @@ pf_quadpid_feedforward_meta_controller_init(void)
     feedforward_chain::linear_direct_chain.add_controller(
         &feedforward_chain::linear_corrector_accel);
     feedforward_chain::linear_direct_chain.add_controller(
+        &feedforward_chain::linear_corrector_speed_limit);
+    feedforward_chain::linear_direct_chain.add_controller(
         &feedforward_chain::linear_corrector_decel);
 
     // =========================================================================
@@ -477,6 +479,8 @@ pf_quadpid_feedforward_meta_controller_init(void)
         &feedforward_chain::angular_position_corrector);
     feedforward_chain::angular_direct_chain.add_controller(
         &feedforward_chain::angular_corrector_accel);
+    feedforward_chain::angular_direct_chain.add_controller(
+        &feedforward_chain::angular_corrector_speed_limit);
     feedforward_chain::angular_direct_chain.add_controller(
         &feedforward_chain::angular_corrector_decel);
 

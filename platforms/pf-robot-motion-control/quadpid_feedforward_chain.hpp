@@ -122,13 +122,23 @@ inline cogip::motion_control::DecelerationFilterParameters linear_corrector_dece
 inline cogip::motion_control::DecelerationFilter linear_corrector_decel{
     linear_corrector_decel_keys, linear_corrector_decel_params};
 
+// Linear corrector SpeedLimitFilter (clamps min/max speed)
+inline cogip::motion_control::SpeedLimitFilterIOKeys linear_corrector_speed_limit_keys = {
+    .target_speed = "linear_speed_order", .output_speed = "linear_speed_order"};
+
+inline cogip::motion_control::SpeedLimitFilterParameters linear_corrector_speed_limit_params{
+    platform_min_speed_linear_mm_per_period, platform_max_speed_linear_mm_per_period};
+
+inline cogip::motion_control::SpeedLimitFilter linear_corrector_speed_limit{
+    linear_corrector_speed_limit_keys, linear_corrector_speed_limit_params, "lin"};
+
 // MetaController for feedforward mode: PosePID → feedback_correction, then Combiner → speed_order
 // This chain is used when invalidate_profile=false (feedforward active)
 inline cogip::motion_control::MetaController<2> linear_feedforward_chain;
 
 // MetaController for direct mode: PosePID → AccelerationFilter → DecelerationFilter → speed_order
 // This chain is used when invalidate_profile=true (no feedforward)
-inline cogip::motion_control::MetaController<3> linear_direct_chain;
+inline cogip::motion_control::MetaController<4> linear_direct_chain;
 
 // Linear pose switch: switches between feedforward chain and direct chain
 // Condition: linear_invalidate_profile
@@ -203,13 +213,23 @@ inline cogip::motion_control::DecelerationFilterParameters angular_corrector_dec
 inline cogip::motion_control::DecelerationFilter angular_corrector_decel{
     angular_corrector_decel_keys, angular_corrector_decel_params};
 
+// Angular corrector SpeedLimitFilter (clamps min/max angular speed)
+inline cogip::motion_control::SpeedLimitFilterIOKeys angular_corrector_speed_limit_keys = {
+    .target_speed = "angular_speed_order", .output_speed = "angular_speed_order"};
+
+inline cogip::motion_control::SpeedLimitFilterParameters angular_corrector_speed_limit_params{
+    platform_min_speed_angular_deg_per_period, platform_max_speed_angular_deg_per_period};
+
+inline cogip::motion_control::SpeedLimitFilter angular_corrector_speed_limit{
+    angular_corrector_speed_limit_keys, angular_corrector_speed_limit_params, "ang"};
+
 // MetaController for feedforward mode: PosePID → feedback_correction, then Combiner → speed_order
 // This chain is used when invalidate_profile=false (feedforward active)
 inline cogip::motion_control::MetaController<2> angular_feedforward_chain;
 
 // MetaController for direct mode: PosePID → AccelerationFilter → DecelerationFilter → speed_order
 // This chain is used when invalidate_profile=true (no feedforward)
-inline cogip::motion_control::MetaController<3> angular_direct_chain;
+inline cogip::motion_control::MetaController<4> angular_direct_chain;
 
 // Angular pose switch: switches between feedforward chain and direct chain
 // Condition: angular_invalidate_profile
