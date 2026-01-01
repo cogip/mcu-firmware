@@ -21,13 +21,11 @@ namespace motion_control {
 ///        The application must supply the correct literals at runtime.
 struct SpeedFilterIOKeys
 {
-    etl::string_view speed_order;       ///< key for commanded speed before filtering
-    etl::string_view current_speed;     ///< key for measured current speed
-    etl::string_view target_speed;      ///< key for raw speed setpoint
-    etl::string_view speed_filter_flag; ///< key for flag disabling filtering
-    etl::string_view speed_error;       ///< key for computed speed error (filtered)
-
-    etl::string_view pose_reached; ///< key for incoming pose‐reached status
+    etl::string_view speed_order;   ///< key for commanded speed before filtering
+    etl::string_view current_speed; ///< key for measured current speed
+    etl::string_view target_speed;  ///< key for raw speed setpoint
+    etl::string_view speed_error;   ///< key for computed speed error (filtered)
+    etl::string_view bypass_filter; ///< key for bypass flag (optional, skip accel limiting if true)
 };
 } // namespace motion_control
 

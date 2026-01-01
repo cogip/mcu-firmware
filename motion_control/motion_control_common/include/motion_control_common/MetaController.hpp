@@ -22,6 +22,7 @@
 #include "BaseMetaController.hpp"
 #include "ControllersIO.hpp"
 #include "etl/deque.h"
+#include "etl/string.h"
 
 namespace cogip {
 namespace motion_control {
@@ -38,6 +39,54 @@ namespace motion_control {
 template <size_t NB_CONTROLLERS> class MetaController : public BaseMetaController
 {
   public:
+    /// Constructor
+    /// @param name Optional instance name for identification
+    explicit MetaController(etl::string_view name = "") : BaseMetaController(name) {}
+
+    /// @brief Get the type name of this controller
+    /// @return Type name string
+    const char* type_name() const override
+    {
+        return "MetaController";
+    }
+
+    /// @brief Dump the controller hierarchy to stdout as ASCII tree
+    /// @param indent Current indentation level
+    /// @param is_last Whether this is the last child at current level
+    /// @param prefix Prefix string for tree drawing
+    /// @param counter Execution order counter (passed to children, not used for meta)
+    void dump(int indent = 0, bool is_last = true, const char* prefix = "",
+              int* counter = nullptr) const override
+    {
+        // Print tree branch for this meta controller
+        if (indent > 0) {
+            printf("%s%s", prefix, is_last ? "└── " : "├── ");
+        }
+
+        // Print type and name (no execution number for meta controllers)
+        if (name_.empty()) {
+            printf("%s\n", type_name());
+        } else {
+            printf("%s: %.*s\n", type_name(), static_cast<int>(name_.size()), name_.data());
+        }
+
+        // Build new prefix for children
+        etl::string<128> new_prefix;
+        new_prefix.append(prefix);
+        new_prefix.append(is_last ? "    " : "│   ");
+
+        // Dump children
+        size_t count = controllers_.size();
+        size_t index = 0;
+        for (const auto* controller : controllers_) {
+            if (controller) {
+                bool child_is_last = (index == count - 1);
+                controller->dump(indent + 1, child_is_last, new_prefix.c_str(), counter);
+            }
+            index++;
+        }
+    }
+
     /// @brief Run every controller in the chain, passing along the same
     /// ControllersIO.
     /// @param io Shared IO object containing inputs/outputs for all controllers.

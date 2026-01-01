@@ -10,6 +10,8 @@
 /// @author     Eric Courtois <eric.courtois@gmail.com>
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
+#pragma once
+
 // Project includes
 #include "SpeedPIDControllerIOKeys.hpp"
 #include "SpeedPIDControllerParameters.hpp"
@@ -28,10 +30,18 @@ class SpeedPIDController : public Controller<SpeedPIDControllerIOKeys, SpeedPIDC
     /// @brief Constructor.
     /// @param keys       Reference to IO key names.
     /// @param parameters Reference to PID parameters.
+    /// @param name       Optional instance name for identification.
     explicit SpeedPIDController(const SpeedPIDControllerIOKeys& keys,
-                                const SpeedPIDControllerParameters& parameters)
-        : Controller<SpeedPIDControllerIOKeys, SpeedPIDControllerParameters>(keys, parameters)
+                                const SpeedPIDControllerParameters& parameters,
+                                etl::string_view name = "")
+        : Controller<SpeedPIDControllerIOKeys, SpeedPIDControllerParameters>(keys, parameters, name)
     {
+    }
+
+    /// @brief Get the type name of this controller
+    const char* type_name() const override
+    {
+        return "SpeedPIDController";
     }
 
     /// @brief Read speed error, compute speed command.
