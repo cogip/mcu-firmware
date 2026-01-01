@@ -22,11 +22,11 @@
 #endif
 
 #ifndef CANPB_INPUT_MESSAGE_LENGTH_MAX
-#define CANPB_INPUT_MESSAGE_LENGTH_MAX 1024 ///< max incoming message length
+#define CANPB_INPUT_MESSAGE_LENGTH_MAX 64 ///< max incoming message length (CAN FD payload max)
 #endif
 
 #ifndef CANPB_OUTPUT_MESSAGE_LENGTH_MAX
-#define CANPB_OUTPUT_MESSAGE_LENGTH_MAX (4 * 1024) ///< max outgoing message length
+#define CANPB_OUTPUT_MESSAGE_LENGTH_MAX 64 ///< max outgoing message length (CAN FD payload max)
 #endif
 
 #ifndef CANPB_MAX_HANDLERS
