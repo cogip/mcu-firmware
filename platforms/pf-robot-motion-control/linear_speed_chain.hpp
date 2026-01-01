@@ -31,7 +31,7 @@
 namespace cogip {
 namespace pf {
 namespace motion_control {
-namespace linear_speed_chain {
+namespace linear_speed_tuning_chain {
 
 // ============================================================================
 // PoseErrorFilter for computing distance to target
@@ -90,7 +90,8 @@ inline cogip::motion_control::SpeedPIDControllerIOKeys speed_pid_io_keys = {
     .speed_command = "linear_speed_feedback"}; // Output to Combiner (feedback correction)
 
 inline cogip::motion_control::SpeedPIDController
-    speed_controller(speed_pid_io_keys, feedforward_chain::linear_speed_controller_parameters);
+    speed_controller(speed_pid_io_keys,
+                     quadpid_feedforward_chain::linear_speed_controller_parameters);
 
 // ============================================================================
 // FeedforwardCombinerController (feedforward + feedback)
@@ -120,7 +121,14 @@ inline cogip::motion_control::TuningPoseReachedFilterIOKeys tuning_pose_reached_
 inline cogip::motion_control::TuningPoseReachedFilter
     tuning_pose_reached_filter(tuning_pose_reached_filter_io_keys);
 
-} // namespace linear_speed_chain
+// ============================================================================
+// Chain initialization function
+// ============================================================================
+
+/// Initialize linear speed tuning chain meta controller
+cogip::motion_control::MetaController<6>* init();
+
+} // namespace linear_speed_tuning_chain
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip

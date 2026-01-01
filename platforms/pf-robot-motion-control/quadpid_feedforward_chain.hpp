@@ -20,6 +20,9 @@
 #include "deceleration_filter/DecelerationFilter.hpp"
 #include "deceleration_filter/DecelerationFilterIOKeys.hpp"
 #include "deceleration_filter/DecelerationFilterParameters.hpp"
+#include "feedforward_combiner_controller/FeedforwardCombinerController.hpp"
+#include "feedforward_combiner_controller/FeedforwardCombinerControllerIOKeys.hpp"
+#include "feedforward_combiner_controller/FeedforwardCombinerControllerParameters.hpp"
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_control_common/ThrottledController.hpp"
@@ -31,6 +34,9 @@
 #include "pose_pid_controller/PosePIDControllerParameters.hpp"
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
+#include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
+#include "profile_feedforward_controller/ProfileFeedforwardControllerIOKeys.hpp"
+#include "profile_feedforward_controller/ProfileFeedforwardControllerParameters.hpp"
 #include "quadpid_chain.hpp"
 #include "speed_limit_filter/SpeedLimitFilter.hpp"
 #include "speed_limit_filter/SpeedLimitFilterIOKeys.hpp"
@@ -41,7 +47,17 @@
 namespace cogip {
 namespace pf {
 namespace motion_control {
-namespace feedforward_chain {
+namespace quadpid_feedforward_chain {
+
+// ============================================================================
+// Local PIDs (independent from QUADPID chain)
+// ============================================================================
+
+// PID parameters for feedforward chain
+extern cogip::pid::PID feedforward_linear_pose_pid;
+extern cogip::pid::PID feedforward_linear_speed_pid;
+extern cogip::pid::PID feedforward_angular_pose_pid;
+extern cogip::pid::PID feedforward_angular_speed_pid;
 
 // ============================================================================
 // PoseStraightFilter (separate instance - cannot be shared between chains)
@@ -58,8 +74,7 @@ inline cogip::motion_control::PoseStraightFilter
 
 // Linear dominant PosePIDController (strong gain for active tracking)
 inline cogip::motion_control::PosePIDControllerParameters
-    linear_feedforward_pose_controller_parameters{
-        &cogip::pf::motion_control::feedforward_linear_pose_pid};
+    linear_feedforward_pose_controller_parameters{&feedforward_linear_pose_pid};
 
 inline constexpr cogip::motion_control::PosePIDControllerIOKeys
     linear_feedforward_pose_controller_keys = {.position_error = "linear_tracking_error",
@@ -71,6 +86,71 @@ inline constexpr cogip::motion_control::PosePIDControllerIOKeys
 
 inline cogip::motion_control::PosePIDController linear_feedforward_pose_controller{
     linear_feedforward_pose_controller_keys, linear_feedforward_pose_controller_parameters};
+
+// ============================================================================
+// ProfileFeedforwardController instances
+// ============================================================================
+
+/// Linear ProfileFeedforwardController IO keys
+extern cogip::motion_control::ProfileFeedforwardControllerIOKeys linear_profile_feedforward_io_keys;
+
+/// Linear ProfileFeedforwardController parameters
+extern cogip::motion_control::ProfileFeedforwardControllerParameters
+    linear_profile_feedforward_parameters;
+
+/// Linear ProfileFeedforwardController
+extern cogip::motion_control::ProfileFeedforwardController linear_profile_feedforward_controller;
+
+/// Angular ProfileFeedforwardController IO keys
+extern cogip::motion_control::ProfileFeedforwardControllerIOKeys
+    angular_profile_feedforward_io_keys;
+
+/// Angular ProfileFeedforwardController parameters
+extern cogip::motion_control::ProfileFeedforwardControllerParameters
+    angular_profile_feedforward_parameters;
+
+/// Angular ProfileFeedforwardController
+extern cogip::motion_control::ProfileFeedforwardController angular_profile_feedforward_controller;
+
+// ============================================================================
+// FeedforwardCombinerController instances
+// ============================================================================
+
+/// Linear FeedforwardCombinerController IO keys
+extern cogip::motion_control::FeedforwardCombinerControllerIOKeys
+    linear_feedforward_combiner_io_keys;
+
+/// Linear FeedforwardCombinerController parameters
+extern cogip::motion_control::FeedforwardCombinerControllerParameters
+    linear_feedforward_combiner_parameters;
+
+/// Linear FeedforwardCombinerController
+extern cogip::motion_control::FeedforwardCombinerController linear_feedforward_combiner_controller;
+
+/// Angular FeedforwardCombinerController IO keys
+extern cogip::motion_control::FeedforwardCombinerControllerIOKeys
+    angular_feedforward_combiner_io_keys;
+
+/// Angular FeedforwardCombinerController parameters
+extern cogip::motion_control::FeedforwardCombinerControllerParameters
+    angular_feedforward_combiner_parameters;
+
+/// Angular FeedforwardCombinerController
+extern cogip::motion_control::FeedforwardCombinerController angular_feedforward_combiner_controller;
+
+// ============================================================================
+// SpeedPIDController instances
+// ============================================================================
+
+/// Linear SpeedPIDController
+extern cogip::motion_control::SpeedPIDController linear_feedforward_speed_controller;
+
+/// Angular SpeedPIDController
+extern cogip::motion_control::SpeedPIDController angular_feedforward_speed_controller;
+
+// ============================================================================
+// Angular dominant PosePIDController (strong gain for active tracking)
+// ============================================================================
 
 // Linear position corrector PID (uses corrector-specific coefficients from robot*_conf.hpp)
 // Separate from QUADPID chain to allow independent tuning
@@ -157,8 +237,7 @@ inline constexpr cogip::motion_control::PosePIDControllerIOKeys
                                                 .speed_order = "angular_feedback_correction"};
 
 inline cogip::motion_control::PosePIDControllerParameters
-    angular_feedforward_pose_controller_parameters{
-        &cogip::pf::motion_control::feedforward_angular_pose_pid};
+    angular_feedforward_pose_controller_parameters{&feedforward_angular_pose_pid};
 
 inline cogip::motion_control::PosePIDController angular_feedforward_pose_controller{
     angular_feedforward_pose_controller_keys, angular_feedforward_pose_controller_parameters};
@@ -262,10 +341,10 @@ inline cogip::motion_control::MetaController<2> angular_speed_loop_meta_controll
 // ============================================================================
 
 inline cogip::motion_control::SpeedPIDControllerParameters
-    linear_speed_controller_parameters(&cogip::pf::motion_control::feedforward_linear_speed_pid);
+    linear_speed_controller_parameters(&feedforward_linear_speed_pid);
 
 inline cogip::motion_control::SpeedPIDControllerParameters
-    angular_speed_controller_parameters(&cogip::pf::motion_control::feedforward_angular_speed_pid);
+    angular_speed_controller_parameters(&feedforward_angular_speed_pid);
 
 // PolarParallel for speed loop (linear + angular in parallel)
 inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;
@@ -322,7 +401,23 @@ inline cogip::motion_control::AntiBlockingController
     angular_anti_blocking_controller(angular_anti_blocking_io_keys,
                                      angular_anti_blocking_parameters);
 
-} // namespace feedforward_chain
+// ============================================================================
+// QuadPIDMetaController for feedforward chain
+// ============================================================================
+
+extern cogip::motion_control::QuadPIDMetaController quadpid_feedforward_meta_controller;
+
+// ============================================================================
+// Chain initialization and restore functions
+// ============================================================================
+
+/// Initialize feedforward chain meta controller
+cogip::motion_control::QuadPIDMetaController* init();
+
+/// Restore feedforward chain to original configuration
+void restore();
+
+} // namespace quadpid_feedforward_chain
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip

@@ -34,7 +34,7 @@
 namespace cogip {
 namespace pf {
 namespace motion_control {
-namespace angular_pose_chain {
+namespace angular_pose_tuning_chain {
 
 // ============================================================================
 // PoseErrorFilter for computing angle difference to target
@@ -126,8 +126,8 @@ inline cogip::motion_control::SpeedPIDControllerIOKeys speed_pid_io_keys = {
     .current_speed = "angular_current_speed",
     .speed_command = "angular_speed_command"};
 
-inline cogip::motion_control::SpeedPIDControllerParameters
-    speed_controller_parameters(&cogip::pf::motion_control::feedforward_angular_speed_pid);
+inline cogip::motion_control::SpeedPIDControllerParameters speed_controller_parameters(
+    &cogip::pf::motion_control::quadpid_feedforward_chain::feedforward_angular_speed_pid);
 
 inline cogip::motion_control::SpeedPIDController speed_controller(speed_pid_io_keys,
                                                                   speed_controller_parameters);
@@ -142,7 +142,14 @@ inline cogip::motion_control::TuningPoseReachedFilterIOKeys tuning_pose_reached_
 inline cogip::motion_control::TuningPoseReachedFilter
     tuning_pose_reached_filter(tuning_pose_reached_filter_io_keys);
 
-} // namespace angular_pose_chain
+// ============================================================================
+// Chain initialization function
+// ============================================================================
+
+/// Initialize angular pose tuning chain meta controller
+cogip::motion_control::MetaController<7>* init();
+
+} // namespace angular_pose_tuning_chain
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip

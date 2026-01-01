@@ -32,20 +32,21 @@
 #include "tuning_pose_reached_filter/TuningPoseReachedFilterIOKeys.hpp"
 
 // Import IO keys from the individual chains (for consistency)
-#include "angular_pose_chain.hpp"
-#include "linear_pose_chain.hpp"
+#include "angular_pose_tuning_chain.hpp"
+#include "linear_pose_tuning_chain.hpp"
+#include "quadpid_feedforward_chain.hpp"
 
 namespace cogip {
 namespace pf {
 namespace motion_control {
 
-// Forward declare PIDs from motion_control.cpp
-extern cogip::pid::PID feedforward_linear_pose_pid;
-extern cogip::pid::PID feedforward_linear_speed_pid;
-extern cogip::pid::PID feedforward_angular_pose_pid;
-extern cogip::pid::PID feedforward_angular_speed_pid;
+// Use feedforward chain PIDs
+using quadpid_feedforward_chain::feedforward_angular_pose_pid;
+using quadpid_feedforward_chain::feedforward_angular_speed_pid;
+using quadpid_feedforward_chain::feedforward_linear_pose_pid;
+using quadpid_feedforward_chain::feedforward_linear_speed_pid;
 
-namespace pose_tuning_chain {
+namespace pose_test_chain {
 
 // ============================================================================
 // LINEAR POSE LOOP - Dedicated instances
@@ -201,7 +202,14 @@ inline cogip::motion_control::TuningPoseReachedFilterIOKeys tuning_pose_reached_
 inline cogip::motion_control::TuningPoseReachedFilter
     tuning_pose_reached_filter(tuning_pose_reached_filter_io_keys);
 
-} // namespace pose_tuning_chain
+// ============================================================================
+// Chain initialization function
+// ============================================================================
+
+/// Initialize pose test chain meta controller
+cogip::motion_control::MetaController<5>* init();
+
+} // namespace pose_test_chain
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip
