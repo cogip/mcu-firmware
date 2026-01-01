@@ -43,7 +43,7 @@ void AccelerationFilter::execute(ControllersIO& io)
     float acceleration = parameters_.acceleration();
     float min_speed = parameters_.min_speed();
 
-    float abs_previous_speed = etl::absolute(previous_output_speed_);
+    float abs_previous_speed = etl::absolute(previous_speed_order_);
     float abs_speed_order = etl::absolute(speed_order);
 
     // (previously used for verbose logging)
@@ -66,7 +66,7 @@ void AccelerationFilter::execute(ControllersIO& io)
     // snap to ±min_speed based on acceleration direction (like SpeedFilter)
     float abs_output = etl::absolute(speed_order);
     if (abs_output > 0.0f && abs_output < min_speed) {
-        float acceleration_direction = speed_order - previous_output_speed_;
+        float acceleration_direction = speed_order - previous_speed_order_;
         if (acceleration_direction > 0.0f) {
             speed_order = min_speed;
         } else if (acceleration_direction < 0.0f) {
@@ -77,7 +77,7 @@ void AccelerationFilter::execute(ControllersIO& io)
     // Verbose logs removed to reduce log spam in production.
 
     // Save output speed for next cycle
-    previous_output_speed_ = speed_order;
+    previous_speed_order_ = speed_order;
 
     // Write filtered speed_order back
     io.set(keys_.target_speed, speed_order);
