@@ -417,6 +417,20 @@ cogip::motion_control::QuadPIDMetaController* init();
 /// Restore feedforward chain to original configuration
 void restore();
 
+/// Reset feedforward chain state (acceleration filters and PIDs)
+inline void reset()
+{
+    // Reset acceleration filters
+    linear_corrector_accel.reset();
+    angular_corrector_accel.reset();
+
+    // Reset PIDs
+    feedforward_linear_speed_pid.reset();
+    feedforward_angular_speed_pid.reset();
+    feedforward_linear_pose_pid.reset();
+    feedforward_angular_pose_pid.reset();
+}
+
 } // namespace quadpid_feedforward_chain
 } // namespace motion_control
 } // namespace pf

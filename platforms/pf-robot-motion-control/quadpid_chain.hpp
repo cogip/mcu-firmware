@@ -226,6 +226,23 @@ inline cogip::motion_control::AntiBlockingController
 
 inline cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
 
+// ============================================================================
+// Chain reset function
+// ============================================================================
+
+/// Reset quadpid chain state (speed filters and PIDs)
+inline void reset()
+{
+    // Reset speed filters
+    linear_speed_filter.reset_previous_speed_order();
+    angular_speed_filter.reset_previous_speed_order();
+
+    // Reset speed PIDs (pose PIDs don't need reset as they only have Kp)
+    // PIDs are declared in parent namespace cogip::pf::motion_control
+    cogip::pf::motion_control::linear_speed_pid.reset();
+    cogip::pf::motion_control::angular_speed_pid.reset();
+}
+
 } // namespace quadpid_chain
 } // namespace motion_control
 } // namespace pf

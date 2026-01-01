@@ -116,18 +116,6 @@ PID angular_pose_pid(angular_pose_pid_parameters);
 // Angular speed PID controller (extern declared in quadpid_chain.hpp)
 PID angular_speed_pid(angular_speed_pid_parameters);
 
-static void reset_speed_pids()
-{
-    // QUADPID chain PIDs
-    angular_speed_pid.reset();
-    linear_speed_pid.reset();
-    // Feedforward chain PIDs
-    quadpid_feedforward_chain::feedforward_linear_speed_pid.reset();
-    quadpid_feedforward_chain::feedforward_angular_speed_pid.reset();
-    quadpid_feedforward_chain::feedforward_linear_pose_pid.reset();
-    quadpid_feedforward_chain::feedforward_angular_pose_pid.reset();
-}
-
 // ============================================================================
 // telemetry controller
 // ============================================================================
@@ -430,10 +418,6 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             } else {
                 pf_get_canpb().send_message(pose_reached_uuid);
             }
-
-            // Reset previous speed orders
-            quadpid_chain::linear_speed_filter.reset_previous_speed_order();
-            quadpid_chain::angular_speed_filter.reset_previous_speed_order();
         }
 
         break;
@@ -459,10 +443,6 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             quadpid_chain::pose_straight_filter.force_finished_state();
             quadpid_feedforward_chain::pose_straight_filter.force_finished_state();
 
-            // Reset previous speed orders
-            quadpid_chain::linear_speed_filter.reset_previous_speed_order();
-            quadpid_chain::angular_speed_filter.reset_previous_speed_order();
-
             LOG_WARNING("BLOCKED bypassed\n");
 
             pf_get_canpb().send_message(pose_reached_uuid);
@@ -475,10 +455,6 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             // finished state (reset both chains as only one is active at a time)
             quadpid_chain::pose_straight_filter.force_finished_state();
             quadpid_feedforward_chain::pose_straight_filter.force_finished_state();
-
-            // Reset previous speed orders
-            quadpid_chain::linear_speed_filter.reset_previous_speed_order();
-            quadpid_chain::angular_speed_filter.reset_previous_speed_order();
 
             LOG_WARNING("BLOCKED\n");
 
@@ -494,12 +470,20 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         break;
     }
 
-    // Reset speed PIDs if a pose has been reached (intermediate, blocked or
-    // final). Pose PIDs do not need to be reset as they only have Kp (no sum of
-    // error).
+    // Reset filters and PIDs if state changed and is not moving
     if (previous_target_pose_status != state &&
         state != cogip::motion_control::target_pose_status_t::moving) {
-        reset_speed_pids();
+        switch (current_controller_id) {
+        case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
+            quadpid_chain::reset();
+            break;
+        case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_FEEDFORWARD):
+            quadpid_feedforward_chain::reset();
+            break;
+        default:
+            // Other chains don't have stateful filters to reset
+            break;
+        }
     }
 
     // Backup target pose status flag to avoid flooding protobuf serial bus on
@@ -581,7 +565,7 @@ void pf_send_encoder_telemetry(void)
 void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(0, 0));
-    reset_speed_pids();
+
     // Reset both chains as only one is active at a time
     quadpid_chain::pose_straight_filter.force_finished_state();
     quadpid_feedforward_chain::pose_straight_filter.force_finished_state();
@@ -591,12 +575,17 @@ void pf_handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(0, 0));
 
-    // Reset previous speed orders
-    quadpid_chain::angular_speed_filter.reset_previous_speed_order();
-    quadpid_chain::linear_speed_filter.reset_previous_speed_order();
-
-    // Reset PIDs
-    reset_speed_pids();
+    // Reset filters according to current controller
+    switch (current_controller_id) {
+    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
+        quadpid_chain::reset();
+        break;
+    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_FEEDFORWARD):
+        quadpid_feedforward_chain::reset();
+        break;
+    default:
+        break;
+    }
 
     // Force position filter finished state (reset both chains as only one is active at a time)
     quadpid_chain::pose_straight_filter.force_finished_state();
@@ -692,11 +681,17 @@ void pf_start_motion_control(void)
 
 void pf_motion_control_reset(void)
 {
-    // Reset previous speed orders
-    quadpid_chain::angular_speed_filter.reset_previous_speed_order();
-    quadpid_chain::linear_speed_filter.reset_previous_speed_order();
-    // Reset PIDs
-    reset_speed_pids();
+    // Reset filters according to current controller
+    switch (current_controller_id) {
+    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
+        quadpid_chain::reset();
+        break;
+    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_FEEDFORWARD):
+        quadpid_feedforward_chain::reset();
+        break;
+    default:
+        break;
+    }
 
     // Reset pose straight filter state (reset both chains as only one is active at a time)
     quadpid_chain::pose_straight_filter.reset_current_state();
