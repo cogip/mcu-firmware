@@ -117,11 +117,6 @@ void PoseStraightFilter::execute(ControllersIO& io)
     // Persist direction choice when switching to MOVE_TO_POSITION state
     static bool force_can_reverse = false;
     static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
-    // Reference orientation saved when entering MOVE_TO_POSITION for heading maintenance
-    static float reference_orientation = 0.0f;
-    // Initial direction sign: +1 for forward, -1 for backward
-    // Saved when entering MOVE_TO_POSITION to maintain consistent direction
-    static float initial_direction_sign = 1.0f;
 
     // Recompute profile signals - set to true only on specific state transitions
     bool linear_recompute_profile = false;
@@ -129,10 +124,8 @@ void PoseStraightFilter::execute(ControllersIO& io)
     bool angular_recompute_profile = false;
     bool angular_invalidate_profile = false;
 
-    // Static variables for ROTATE_TO_FINAL_ANGLE oscillation detection
-    // Declared here so they can be reset on target change
-    static float prev_angular_error = 0.0f;
-    static bool first_entry = true;
+    // Static variable for FINISHED logging (reset on new target)
+    static bool logged_finished = false;
 
     if ((target_pose_x != prev_target.x()) || (target_pose_y != prev_target.y()) ||
         (target_pose_O != prev_target.O())) {
@@ -140,9 +133,8 @@ void PoseStraightFilter::execute(ControllersIO& io)
         prev_target = target_pose;
         // Reset state machine to initial state on new target
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
-        // Reset ROTATE_TO_FINAL_ANGLE oscillation detection variables
-        prev_angular_error = 0.0f;
-        first_entry = true;
+        // Reset FINISHED logging flag
+        logged_finished = false;
         // New external target -> recompute angular profile for initial rotation
         angular_recompute_profile = true;
         // Invalidate linear profile - will be recomputed when entering MOVE_TO_POSITION
@@ -172,17 +164,12 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     // Force can_reverse to true once motion has started (only for bidirectional mode)
     // For backward_only mode, we must keep must_reverse active
-    if (force_can_reverse && motion_dir == cogip::path::motion_direction::bidirectional) {
+    if (force_can_reverse) {
         can_reverse = true;
     }
 
     // Compute pose error as polar difference
     cogip_defs::Polar pos_err = target_pose - current_pose;
-
-    // Store raw angle before any reverse operation for overshoot detection
-    // For backward motion: |raw_ang| ≈ 180° means robot is behind target (correct)
-    //                      |raw_ang| < 135° means robot has crossed/overshot target
-    const float raw_angular_error = pos_err.angle();
 
     DEBUG("pos_err BEFORE reverse: dist=%.2f ang=%.2f\n", static_cast<double>(pos_err.distance()),
           static_cast<double>(pos_err.angle()));
@@ -193,15 +180,18 @@ void PoseStraightFilter::execute(ControllersIO& io)
     // - For backward_only (must_reverse): always reverse to get negative distance (backward motion)
     //   The angle after reverse will be the optimal heading (away from target)
     // - For bidirectional (can_reverse): reverse only if |angle| > 90° (shorter rotation path)
-    if (must_reverse) {
+    if (must_reverse || (can_reverse && (etl::absolute(pos_err.angle()) > 90.0f))) {
         // Always reverse for backward_only mode - ensures negative distance
         DEBUG("Reverse error as must_reverse (backward_only mode)\n");
         pos_err.reverse();
-    } else if (can_reverse && etl::absolute(pos_err.angle()) > 90.0f) {
-        // Target is behind and we can choose -> reverse to go backward (shorter rotation)
-        DEBUG("Reverse error as can reverse (angle > 90)\n");
-        pos_err.reverse();
     }
+    /*else if (can_reverse) {
+        if (etl::absolute(pos_err.angle()) > 90.0f) {
+            // Target is behind and we can choose -> reverse to go backward (shorter rotation)
+            DEBUG("Reverse error as can reverse (angle > 90)\n");
+            pos_err.reverse();
+        }
+    }*/
 
     DEBUG("pos_err AFTER reverse: dist=%.2f ang=%.2f\n", static_cast<double>(pos_err.distance()),
           static_cast<double>(pos_err.angle()));
@@ -227,95 +217,60 @@ void PoseStraightFilter::execute(ControllersIO& io)
         DEBUG("ROTATE_TO_DIRECTION\n");
         // Keep linear profile invalidated during initial rotation
         linear_invalidate_profile = true;
-        // Force linear target speed to 0 during initial rotation
-        target_speed.set_distance(0.0f);
         if (absolute_angular_pose_error > angular_intermediate_threshold) {
             // Still rotating to face target direction
+            // Force linear error to 0 during rotation (no linear correction)
+            pos_err.set_distance(0.0f);
         } else {
-            // Save the initial direction sign for use during MOVE_TO_POSITION
-            // This determines if we started going forward (+1) or backward (-1)
-            initial_direction_sign = (pos_err.distance() >= 0) ? 1.0f : -1.0f;
-            // Linear speed comes from feedforward profile, not from here
-            target_speed.set_distance(0.0f);
             force_can_reverse = true;
             current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
-            // Save the TARGET direction (current orientation + remaining angular error) as
-            // reference This is the ideal heading the robot should maintain during linear motion
-            reference_orientation = limit_angle_deg(current_pose_O + pos_err.angle());
-            // Initialize overshoot detection: target is in front if going forward, behind if
-            // backward
-            target_is_in_front_ = (initial_direction_sign > 0);
+            // Reset speed PIDs on transition to MOVE_TO_POSITION
+            io.set(keys_.linear_speed_pid_reset, true);
+            io.set(keys_.angular_speed_pid_reset, true);
             // Transition to MOVE_TO_POSITION -> recompute linear profile and invalidate angular
             // profile
             linear_recompute_profile = true;
             angular_invalidate_profile = true;
-            DEBUG(
-                "Transition to MOVE_TO_POSITION, reference_orientation=%.2f (cur=%.2f + err=%.2f), "
-                "initial_direction_sign=%.0f, requesting linear profile recompute\n",
-                static_cast<double>(reference_orientation), static_cast<double>(current_pose_O),
-                static_cast<double>(pos_err.angle()), static_cast<double>(initial_direction_sign));
+            DEBUG("Transition to MOVE_TO_POSITION, (cur=%.2f + err=%.2f), "
+                  "requesting linear profile recompute\n",
+                  static_cast<double>(current_pose_O), static_cast<double>(pos_err.angle()));
         }
         break;
 
     case PoseStraightFilterState::MOVE_TO_POSITION: {
-        // During MOVE_TO_POSITION, the robot is BIDIRECTIONAL regardless of initial motion_dir.
-        // This allows natural correction if the robot overshoots the target.
-        //
-        // The linear error sign convention must match how the profile was generated:
-        // - If we started FORWARD (initial_direction_sign = +1):
-        //   - Target in front (|raw_ang| < 90°) → positive error (keep going forward)
-        //   - Target behind (|raw_ang| > 90°) → negative error (need to go backward)
-        // - If we started BACKWARD (initial_direction_sign = -1):
-        //   - Target behind (|raw_ang| > 90°) → negative error (keep going backward)
-        //   - Target in front (|raw_ang| < 90°) → positive error (need to go forward)
-
-        // Get raw distance (always positive)
+        // Bidirectional mode: dynamically adjust direction based on target position
+        // Recalculate raw polar error to determine if target is in front or behind
         cogip_defs::Polar raw_pos_err = target_pose - current_pose;
         float raw_distance = raw_pos_err.distance();
+        float raw_angle = raw_pos_err.angle();
 
-        // Determine if target is in front or behind based on raw angle
-        // Target in front: |raw_angle| < 90°
-        // Target behind: |raw_angle| > 90°
-        bool target_is_in_front = (etl::absolute(raw_angular_error) < 90.0f);
+        // Target is in front if |angle| < 90°, behind otherwise
+        bool target_is_in_front = (etl::absolute(raw_angle) < 90.0f);
 
-        // Detect overshoot: if target_is_in_front changes during MOVE_TO_POSITION,
-        // the robot crossed the target. target_is_in_front_ is initialized
-        // when entering MOVE_TO_POSITION state (in ROTATE_TO_DIRECTION transition).
-        bool overshoot_detected = (target_is_in_front != target_is_in_front_);
-        target_is_in_front_ = target_is_in_front;
-
-        // Compute linear error based on target direction:
-        // - Target in front (|raw_ang| < 90°): positive error → robot should go forward
-        // - Target behind (|raw_ang| > 90°): negative error → robot should go backward
-        //
-        // This sign convention works for both forward and backward initial motion:
-        // - Forward start: target in front → positive → keep going forward ✓
-        // - Backward start: target behind → negative → keep going backward ✓
-        // - Overshoot: sign flips naturally, allowing correction in opposite direction
-        //
-        // The signed error is used by both ProfileFeedforwardController (for profile
-        // generation and tracking) and PosePIDController (for feedback correction).
+        // Set linear error sign: positive if going forward, negative if going backward
         float linear_error = target_is_in_front ? raw_distance : -raw_distance;
-
-        // Update pos_err with the bidirectional linear error
         pos_err.set_distance(linear_error);
 
-        // Maintain heading by tracking the reference orientation
-        float heading_error = limit_angle_deg(reference_orientation - current_pose_O);
+        // Set angular error to point towards (or away from) target
+        float heading_error;
+        if (target_is_in_front) {
+            // Going forward: face the target
+            heading_error = raw_angle;
+        } else {
+            // Going backward: face away from target
+            heading_error = limit_angle_deg(raw_angle + 180.0f);
+        }
         pos_err.set_angle(heading_error);
 
         // Keep angular profile invalidated during entire MOVE_TO_POSITION state
         angular_invalidate_profile = true;
 
-        DEBUG("MOVE_TO_POSITION: lin_err=%.2f heading_err=%.2f (ref=%.2f cur=%.2f) raw_ang=%.2f "
-              "init_dir=%.0f\n",
-              static_cast<double>(linear_error), static_cast<double>(heading_error),
-              static_cast<double>(reference_orientation), static_cast<double>(current_pose_O),
-              static_cast<double>(raw_angular_error), static_cast<double>(initial_direction_sign));
-
-        // Transition when close enough to target OR overshoot detected
-        if (raw_distance <= linear_threshold || overshoot_detected) {
+        // Transition when close enough to target
+        if (raw_distance <= linear_threshold) {
             current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+            // Reset speed PIDs on transition to ROTATE_TO_FINAL_ANGLE
+            io.set(keys_.linear_speed_pid_reset, true);
+            io.set(keys_.angular_speed_pid_reset, true);
             // Transition to ROTATE_TO_FINAL_ANGLE -> recompute angular profile and invalidate
             // linear profile
             angular_recompute_profile = true;
@@ -332,50 +287,88 @@ void PoseStraightFilter::execute(ControllersIO& io)
         }
     } break;
 
-    case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
+    case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE: {
         DEBUG("ROTATE_TO_FINAL_ANGLE\n");
-        {
-            // Keep linear profile invalidated during final rotation
-            linear_invalidate_profile = true;
-            // Force linear target speed to 0 during final rotation
-            target_speed.set_distance(0.0f);
+        // Keep linear profile invalidated during final rotation
+        linear_invalidate_profile = true;
 
-            if (!parameters_.bypass_final_orientation()) {
-                pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
-            } else {
-                pos_err.set_angle(0.0f);
-            }
-
-            float current_angular_error = pos_err.angle();
-
-            // Detect completion conditions:
-            // 1. Sign change: angular error crosses zero (prev and current have opposite signs)
-            //    This indicates oscillation around the target angle - we're close enough
-            // 2. Within threshold: angular error is small enough to consider target reached
-            // Note: first_entry check prevents false positive on first iteration
-            bool sign_changed = !first_entry && (prev_angular_error * current_angular_error < 0.0f);
-            bool within_threshold = etl::absolute(current_angular_error) <= angular_threshold;
-
-            if (within_threshold || sign_changed) {
-                // Target angle reached - move to FINISHED state
-                current_state_ = PoseStraightFilterState::FINISHED;
-                first_entry = true;
-            } else {
-                // Continue rotating - save current error for next iteration's oscillation detection
-                prev_angular_error = current_angular_error;
-                first_entry = false;
-            }
+        // Compute final angle error (to target orientation, not travel direction)
+        float final_angle_error;
+        if (!parameters_.bypass_final_orientation()) {
+            final_angle_error = limit_angle_deg(target_pose_O - current_pose_O);
+        } else {
+            final_angle_error = 0.0f;
         }
-        break;
+        pos_err.set_angle(final_angle_error);
+
+        // Anti-drift correction during final rotation
+        // Project position error onto robot's longitudinal axis to compensate for rotation-induced
+        // drift This keeps the robot at the target position without interfering with angular
+        // convergence
+        float pos_error_longitudinal = compute_longitudinal_error(
+            current_pose_x, current_pose_y, current_pose_O, target_pose_x, target_pose_y);
+
+        // Use projected error for weak linear correction (no target speed, only position holding)
+        pos_err.set_distance(-pos_error_longitudinal);
+
+        DEBUG("ROTATE_TO_FINAL_ANGLE: final_ang=%.2f pos_drift=%.2f (threshold=%.2f)\n",
+              static_cast<double>(final_angle_error), static_cast<double>(pos_error_longitudinal),
+              static_cast<double>(angular_threshold));
+
+        if (etl::absolute(final_angle_error) > angular_threshold) {
+            // Still rotating to final orientation with anti-drift correction active
+            DEBUG("ROTATE_TO_FINAL_ANGLE: still rotating\n");
+        } else {
+            // Rotation complete - move to FINISHED
+            current_state_ = PoseStraightFilterState::FINISHED;
+            // Reset speed PIDs on transition to FINISHED
+            io.set(keys_.linear_speed_pid_reset, true);
+            io.set(keys_.angular_speed_pid_reset, true);
+            LOG_WARNING("ROTATE_TO_FINAL_ANGLE: rotation complete (ang=%.2f° <= threshold %.2f°)\n",
+                        static_cast<double>(final_angle_error),
+                        static_cast<double>(angular_threshold));
+        }
+    } break;
 
     case PoseStraightFilterState::FINISHED:
         DEBUG("FINISHED\n");
-        // Force target speeds to 0 to prevent any motion
-        target_speed.set_distance(0.0f);
-        target_speed.set_angle(0.0f);
         // Keep profiles invalidated in FINISHED state
         linear_invalidate_profile = true;
         angular_invalidate_profile = true;
+
+        // Maintain position and orientation control in FINISHED state
+        // Project position error onto robot's longitudinal axis (same as ROTATE_TO_FINAL_ANGLE)
+        {
+            float pos_error_longitudinal = compute_longitudinal_error(
+                current_pose_x, current_pose_y, current_pose_O, target_pose_x, target_pose_y);
+            pos_err.set_distance(-pos_error_longitudinal);
+        }
+
+        // Maintain final orientation
+        {
+            float final_angle_error;
+            if (!parameters_.bypass_final_orientation()) {
+                final_angle_error = limit_angle_deg(target_pose_O - current_pose_O);
+            } else {
+                final_angle_error = 0.0f;
+            }
+            pos_err.set_angle(final_angle_error);
+        }
+
+        // Log final position error for debugging (only once per target)
+        if (!logged_finished) {
+            cogip_defs::Polar final_err = target_pose - current_pose;
+            LOG_INFO("POSE_REACHED: linear_err=%.2f ang_err=%.2f final_ang_err=%.2f (cur: "
+                     "%.1f,%.1f,%.1f -> tgt: "
+                     "%.1f,%.1f,%.1f)\n",
+                     static_cast<double>(final_err.distance()),
+                     static_cast<double>(final_err.angle()),
+                     static_cast<double>(limit_angle_deg(target_pose_O - current_pose_O)),
+                     static_cast<double>(current_pose_x), static_cast<double>(current_pose_y),
+                     static_cast<double>(current_pose_O), static_cast<double>(target_pose_x),
+                     static_cast<double>(target_pose_y), static_cast<double>(target_pose_O));
+            logged_finished = true;
+        }
         break;
     }
 

@@ -40,7 +40,7 @@ class AccelerationFilter : public Controller<AccelerationFilterIOKeys, Accelerat
                                 etl::string_view name = "")
         : Controller<AccelerationFilterIOKeys, AccelerationFilterParameters>(keys, parameters,
                                                                              name),
-          previous_output_speed_(0.0f)
+          previous_speed_order_(0.0f)
     {
     }
 
@@ -56,11 +56,11 @@ class AccelerationFilter : public Controller<AccelerationFilterIOKeys, Accelerat
     /// Reset the filter state (previous output speed).
     void reset()
     {
-        previous_output_speed_ = 0.0f;
+        previous_speed_order_ = 0.0f;
     }
 
   private:
-    float previous_output_speed_; ///< Previous cycle's output speed for acceleration calculation
+    float previous_speed_order_; ///< Previous cycle's speed order for acceleration calculation
 };
 
 } // namespace motion_control

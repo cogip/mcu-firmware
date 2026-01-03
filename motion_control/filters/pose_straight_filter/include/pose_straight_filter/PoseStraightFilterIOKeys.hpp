@@ -52,6 +52,8 @@ struct PoseStraightFilterIOKeys
     etl::string_view angular_recompute_profile;  ///< key to signal angular profile recomputation
     etl::string_view angular_invalidate_profile; ///< key to signal angular profile invalidation (on
                                                  ///< MOVE_TO_POSITION entry)
+    etl::string_view linear_speed_pid_reset;     ///< key to trigger linear speed PID reset
+    etl::string_view angular_speed_pid_reset;    ///< key to trigger angular speed PID reset
 };
 
 } // namespace motion_control

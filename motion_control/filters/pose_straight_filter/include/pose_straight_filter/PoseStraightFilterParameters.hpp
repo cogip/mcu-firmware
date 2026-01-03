@@ -27,15 +27,12 @@ class PoseStraightFilterParameters
         float angular_intermediate_threshold = 0.0, ///< [in]  see angular_threshold_
         float angular_deceleration = 0.0,           ///< [in]  see angular_deceleration_threshold_
         float linear_deceleration = 0.0,            ///< [in]  see linear_deceleration_threshold_
-        bool bypass_final_orientation = false,      ///< [in] bypass final orientation
-        float linear_overshoot_threshold = 90.0 ///< [in]  see linear_overshoot_threshold_ (unused
-                                                ///< with bidirectional MOVE_TO_POSITION)
+        bool bypass_final_orientation = false       ///< [in] bypass final orientation
         )
         : angular_threshold_(angular_threshold), linear_threshold_(linear_threshold),
           angular_intermediate_threshold_(angular_intermediate_threshold),
           angular_deceleration_(angular_deceleration), linear_deceleration_(linear_deceleration),
-          bypass_final_orientation_(bypass_final_orientation),
-          linear_overshoot_threshold_(linear_overshoot_threshold){};
+          bypass_final_orientation_(bypass_final_orientation){};
 
     /// Get angular threshold
     /// return angular threshold
@@ -127,13 +124,6 @@ class PoseStraightFilterParameters
         bypass_final_orientation_ = false;
     };
 
-    /// Get linear overshoot threshold
-    /// return Linear overshoot threshold in degrees
-    float linear_overshoot_threshold() const
-    {
-        return linear_overshoot_threshold_;
-    };
-
   private:
     /// the robot turns on itself until the angle error is lower than this
     /// threshold
@@ -155,11 +145,6 @@ class PoseStraightFilterParameters
 
     /// bypass final orientation
     bool bypass_final_orientation_;
-
-    /// Angle change threshold (degrees) to detect linear overshoot.
-    /// When the robot overshoots its target, the angle to target flips by ~180°.
-    /// If the angle change between cycles exceeds this threshold, overshoot is detected.
-    float linear_overshoot_threshold_;
 };
 
 } // namespace motion_control
