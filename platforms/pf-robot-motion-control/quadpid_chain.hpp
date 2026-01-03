@@ -159,7 +159,8 @@ inline cogip::motion_control::SpeedPIDController
 // ============================================================================
 
 inline cogip::motion_control::ThrottledController
-    throttled_pose_loop_controllers(&pose_loop_meta_controller, pose_controllers_throttle_divider);
+    throttled_pose_loop_controllers(&pose_loop_meta_controller,
+                                    quadpid_pose_controllers_throttle_divider);
 
 // ============================================================================
 // Passthrough controllers (for test modes)
