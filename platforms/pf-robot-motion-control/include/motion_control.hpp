@@ -126,12 +126,6 @@ void pf_send_pb_state(void);
 /// Send encoder telemetry data
 void pf_send_encoder_telemetry(void);
 
-/// Feedforward PIDs (for tuning chains)
-extern cogip::pid::PID feedforward_linear_speed_pid;
-extern cogip::pid::PID feedforward_angular_speed_pid;
-extern cogip::pid::PID feedforward_linear_pose_pid;
-extern cogip::pid::PID feedforward_angular_pose_pid;
-
 } // namespace motion_control
 
 } // namespace pf
