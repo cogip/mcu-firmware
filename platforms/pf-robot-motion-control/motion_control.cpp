@@ -41,6 +41,9 @@
 #include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 #include "target_change_detector/TargetChangeDetector.hpp"
+#include "telemetry_controller/TelemetryController.hpp"
+#include "telemetry_controller/TelemetryControllerIOKeysDefault.hpp"
+#include "telemetry_controller/TelemetryControllerParameters.hpp"
 
 #include "angular_speed_chain.hpp"
 #include "linear_speed_chain.hpp"
@@ -261,6 +264,28 @@ static cogip::motion_control::SpeedPIDController angular_feedforward_speed_contr
 /// PolarParallelMetaController for feedforward chain
 static cogip::motion_control::PolarParallelMetaController
     polar_parallel_feedforward_meta_controller;
+
+// ============================================================================
+// telemetry controller
+// ============================================================================
+
+/// Telemetry controller parameters
+static cogip::motion_control::TelemetryControllerParameters telemetry_controller_parameters;
+
+/// pose TelemetryController
+static cogip::motion_control::TelemetryController
+    pose_telemetry_controller(cogip::motion_control::linear_telemetry_controller_io_keys_default,
+                              telemetry_controller_parameters);
+
+/// Linear TelemetryController
+static cogip::motion_control::TelemetryController
+    linear_telemetry_controller(cogip::motion_control::linear_telemetry_controller_io_keys_default,
+                                telemetry_controller_parameters);
+
+/// Angular TelemetryController
+static cogip::motion_control::TelemetryController angular_telemetry_controller(
+    cogip::motion_control::angular_telemetry_controller_io_keys_default,
+    telemetry_controller_parameters);
 
 /// Encoders
 static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
