@@ -645,18 +645,21 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_FEEDFORWARD):
         LOG_INFO("Change to controller: QUADPID_FEEDFORWARD\n");
         pf_quadpid_feedforward_meta_controller_restore();
+        quadpid_feedforward_meta_controller.add_controller(&pose_telemetry_controller);
         pf_motion_control_platform_engine.set_controller(&quadpid_feedforward_meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
     case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TUNING):
         LOG_INFO("Change to controller: LINEAR_SPEED_TUNING\n");
+        linear_speed_tuning_meta_controller.add_controller(&linear_telemetry_controller);
         pf_motion_control_platform_engine.set_controller(&linear_speed_tuning_meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(true);
         break;
 
     case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TUNING):
         LOG_INFO("Change to controller: ANGULAR_SPEED_TUNING\n");
+        angular_speed_tuning_meta_controller.add_controller(&angular_telemetry_controller);
         pf_motion_control_platform_engine.set_controller(&angular_speed_tuning_meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(true);
         break;
