@@ -133,6 +133,9 @@ void PoseStraightFilter::execute(ControllersIO& io)
         prev_target = target_pose;
         // Reset state machine to initial state on new target
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
+        // Capture current position as reference for position holder during ROTATE_TO_DIRECTION
+        rotate_to_direction_ref_x_ = current_pose_x;
+        rotate_to_direction_ref_y_ = current_pose_y;
         // Reset FINISHED logging flag
         logged_finished = false;
         // New external target -> recompute angular profile for initial rotation
@@ -213,14 +216,26 @@ void PoseStraightFilter::execute(ControllersIO& io)
     }
 
     switch (current_state_) {
-    case PoseStraightFilterState::ROTATE_TO_DIRECTION:
+    case PoseStraightFilterState::ROTATE_TO_DIRECTION: {
         DEBUG("ROTATE_TO_DIRECTION\n");
         // Keep linear profile invalidated during initial rotation
         linear_invalidate_profile = true;
+        
+        // Position holder: maintain position where robot entered ROTATE_TO_DIRECTION state
+        // Project position error onto robot's longitudinal axis for drift compensation
+        float pos_error_longitudinal = compute_longitudinal_error(
+            current_pose_x, current_pose_y, current_pose_O,
+            rotate_to_direction_ref_x_, rotate_to_direction_ref_y_);
+        pos_err.set_distance(-pos_error_longitudinal);
+        
+        // Apply position holder speed ratio to target_speed (0.2% of nominal speed)
+        target_speed.set_distance(target_speed.distance() * parameters_.linear_pose_holder_speed_ratio());
+        
         if (absolute_angular_pose_error > angular_intermediate_threshold) {
-            // Still rotating to face target direction
-            // Force linear error to 0 during rotation (no linear correction)
-            pos_err.set_distance(0.0f);
+            // Still rotating to face target direction with position holding active
+            DEBUG("ROTATE_TO_DIRECTION: still rotating (ang_err=%.2f pos_drift=%.2f)\n",
+                  static_cast<double>(absolute_angular_pose_error),
+                  static_cast<double>(pos_err.distance()));
         } else {
             force_can_reverse = true;
             current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
@@ -235,7 +250,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
                   "requesting linear profile recompute\n",
                   static_cast<double>(current_pose_O), static_cast<double>(pos_err.angle()));
         }
-        break;
+    } break;
 
     case PoseStraightFilterState::MOVE_TO_POSITION: {
         // Bidirectional mode: dynamically adjust direction based on target position
@@ -310,6 +325,9 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
         // Use projected error for weak linear correction (no target speed, only position holding)
         pos_err.set_distance(-pos_error_longitudinal);
+
+        // Apply position holder speed ratio to target_speed (0.2% of nominal speed)
+        target_speed.set_distance(target_speed.distance() * parameters_.linear_pose_holder_speed_ratio());
 
         DEBUG("ROTATE_TO_FINAL_ANGLE: final_ang=%.2f pos_drift=%.2f (threshold=%.2f)\n",
               static_cast<double>(final_angle_error), static_cast<double>(pos_error_longitudinal),

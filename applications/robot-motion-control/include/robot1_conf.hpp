@@ -73,8 +73,17 @@ inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kd{0};
 // Used when feedforward profile is invalidated to reach target position
 // ============================================================================
 
-// Corrector linear pose PID (used when linear profile is invalidated)
-inline Parameter<float, NonNegative> corrector_linear_pose_pid_kp{0.2};
+// Position holder parameters for drift compensation during ROTATE_TO_FINAL_ANGLE
+// Very low-gain proportional controller to compensate XY drift without integrator
+// Design: max speed at reference drift = 0.2% of max_speed (4 mm/s at 30mm drift)
+// Calculation: kp = max_speed * speed_ratio / error_ref = 2000 * 0.002 / 30 = 0.133
+constexpr float linear_pose_holder_error_ref_mm = 30.0f;        ///< Reference drift distance (mm)
+constexpr float linear_pose_holder_speed_ratio = 0.002f;        ///< Speed ratio (0.2% of max_speed_mm_per_s)
+constexpr float linear_pose_holder_kp = 2000.0f * linear_pose_holder_speed_ratio / 
+                                    linear_pose_holder_error_ref_mm;  ///< Kp = 0.133 mm/s per mm
+
+// Corrector linear pose PID (position holder when linear profile is invalidated)
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_kp{linear_pose_holder_kp};
 inline Parameter<float, NonNegative> corrector_linear_pose_pid_ki{0};
 inline Parameter<float, NonNegative> corrector_linear_pose_pid_kd{0};
 // Corrector angular pose PID (used when angular profile is invalidated)
