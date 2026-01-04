@@ -745,8 +745,8 @@ void pf_init_motion_control(void)
     pf_angular_pose_tuning_meta_controller = pf_angular_pose_tuning_meta_controller_init();
     pf_pose_test_meta_controller = pf_pose_test_meta_controller_init();
 
-    // Associate default controller (QUADPID) to the engine
-    pf_motion_control_platform_engine.set_controller(pf_quadpid_meta_controller);
+    // Associate default controller (QUADPID_FEEDFORWARD) to the engine
+    pf_motion_control_platform_engine.set_controller(pf_quadpid_feedforward_meta_controller_init);
     pf_motion_control_platform_engine.dump_pipeline();
 
     // Set timeout for speed only loops as no pose has to be reached
