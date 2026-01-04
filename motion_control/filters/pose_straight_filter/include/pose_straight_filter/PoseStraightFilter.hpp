@@ -76,6 +76,10 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
 
   private:
     PoseStraightFilterState current_state_;
+    
+    // Position holder reference for ROTATE_TO_DIRECTION
+    float rotate_to_direction_ref_x_ = 0.0f;  ///< Reference X position when entering ROTATE_TO_DIRECTION
+    float rotate_to_direction_ref_y_ = 0.0f;  ///< Reference Y position when entering ROTATE_TO_DIRECTION
 
     /// @brief Calculate longitudinal position error projected onto robot's axis
     /// @param current_x Current X position

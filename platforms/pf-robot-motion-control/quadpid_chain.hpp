@@ -54,7 +54,8 @@ namespace quadpid_chain {
 
 inline cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters(
     angular_threshold, linear_threshold, angular_intermediate_threshold,
-    platform_max_dec_angular_deg_per_period2, platform_max_dec_linear_mm_per_period2);
+    platform_max_dec_angular_deg_per_period2, platform_max_dec_linear_mm_per_period2,
+    false, linear_pose_holder_speed_ratio);
 
 inline cogip::motion_control::PoseStraightFilter
     pose_straight_filter(cogip::motion_control::pose_straight_filter_io_keys_default,

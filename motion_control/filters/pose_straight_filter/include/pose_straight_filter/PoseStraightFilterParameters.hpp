@@ -27,12 +27,14 @@ class PoseStraightFilterParameters
         float angular_intermediate_threshold = 0.0, ///< [in]  see angular_threshold_
         float angular_deceleration = 0.0,           ///< [in]  see angular_deceleration_threshold_
         float linear_deceleration = 0.0,            ///< [in]  see linear_deceleration_threshold_
-        bool bypass_final_orientation = false       ///< [in] bypass final orientation
+        bool bypass_final_orientation = false,      ///< [in] bypass final orientation
+        float linear_pose_holder_speed_ratio = 0.002f  ///< [in] linear pose holder speed ratio
         )
         : angular_threshold_(angular_threshold), linear_threshold_(linear_threshold),
           angular_intermediate_threshold_(angular_intermediate_threshold),
           angular_deceleration_(angular_deceleration), linear_deceleration_(linear_deceleration),
-          bypass_final_orientation_(bypass_final_orientation){};
+          bypass_final_orientation_(bypass_final_orientation),
+          linear_pose_holder_speed_ratio_(linear_pose_holder_speed_ratio){};
 
     /// Get angular threshold
     /// return angular threshold
@@ -124,6 +126,13 @@ class PoseStraightFilterParameters
         bypass_final_orientation_ = false;
     };
 
+    /// Get position holder speed ratio
+    /// return position holder speed ratio
+    float linear_pose_holder_speed_ratio() const
+    {
+        return linear_pose_holder_speed_ratio_;
+    };
+
   private:
     /// the robot turns on itself until the angle error is lower than this
     /// threshold
@@ -145,6 +154,9 @@ class PoseStraightFilterParameters
 
     /// bypass final orientation
     bool bypass_final_orientation_;
+
+    /// linear pose holder speed ratio (applied to target_speed during ROTATE states)
+    float linear_pose_holder_speed_ratio_;
 };
 
 } // namespace motion_control
