@@ -376,7 +376,7 @@ inline cogip::motion_control::AntiBlockingControllerIOKeys linear_anti_blocking_
     .pose_reached = "pose_reached"};
 
 inline cogip::motion_control::AntiBlockingControllerParameters
-    linear_anti_blocking_parameters(true, // enabled
+    linear_anti_blocking_parameters(false, // disabled by default
                                     platform_linear_anti_blocking_speed_threshold_mm_per_period,
                                     platform_linear_anti_blocking_error_threshold_mm_per_period,
                                     platform_linear_anti_blocking_blocked_cycles_nb_threshold);
