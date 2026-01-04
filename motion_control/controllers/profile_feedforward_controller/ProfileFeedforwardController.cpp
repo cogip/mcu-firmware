@@ -131,7 +131,6 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
                         target_distance);
             io.set(keys_.feedforward_velocity, 0.0f);
             io.set(keys_.tracking_error, 0.0f);
-            io.set(keys_.recompute_profile, false); // Clear flag even on failure
             if (!keys_.profile_complete.empty()) {
                 io.set(keys_.profile_complete, false);
             }
@@ -144,9 +143,6 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
 
         // Reset period counter
         period_ = 0;
-
-        // Clear recompute flag to prevent regenerating the profile every cycle
-        io.set(keys_.recompute_profile, false);
     }
 
     // Check if profile is complete
