@@ -12,6 +12,17 @@ void SpeedPIDController::execute(ControllersIO& io)
 {
     DEBUG("Start SpeedPIDController\n");
 
+    // Check if reset is requested
+    if (auto opt = io.get_as<bool>(keys_.reset)) {
+        if (*opt) {
+            // Reset the PID (clears integral term)
+            this->parameters_.pid()->reset();
+            // Clear the reset flag
+            io.set(keys_.reset, false);
+            DEBUG("PID reset triggered via IO key %s\n", keys_.reset.data());
+        }
+    }
+
     // Read speed order (default to 0.0f if missing)
     float speed_order = 0.0f;
     if (auto opt = io.get_as<float>(keys_.speed_order)) {

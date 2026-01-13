@@ -28,6 +28,10 @@ void TelemetryController::execute(ControllersIO& io)
         telemetry::Telemetry::send<int64_t>("linear_current_speed"_key_hash,
                                             static_cast<int64_t>(*opt));
     }
+    if (auto opt = io.get_as<float>("linear_speed_command")) {
+        telemetry::Telemetry::send<int64_t>("linear_speed_command"_key_hash,
+                                            static_cast<int64_t>(*opt));
+    }
 
     // Angular telemetry
     if (auto opt = io.get_as<float>("angular_speed_order")) {
@@ -40,6 +44,10 @@ void TelemetryController::execute(ControllersIO& io)
     }
     if (auto opt = io.get_as<float>("angular_current_speed")) {
         telemetry::Telemetry::send<int64_t>("angular_current_speed"_key_hash,
+                                            static_cast<int64_t>(*opt));
+    }
+    if (auto opt = io.get_as<float>("angular_speed_command")) {
+        telemetry::Telemetry::send<int64_t>("angular_speed_command"_key_hash,
                                             static_cast<int64_t>(*opt));
     }
 

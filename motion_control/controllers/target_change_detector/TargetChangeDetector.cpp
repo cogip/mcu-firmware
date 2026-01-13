@@ -36,91 +36,67 @@ void TargetChangeDetector::execute(ControllersIO& io)
 
     bool trigger_new_target = false;
 
-    // Check for state transition mode (if current_state key is configured)
-    bool state_transition_mode = !keys_.current_state.empty();
-
-    if (state_transition_mode) {
-        // State transition mode: trigger when entering the specified state
-        int current_state = -1;
-        if (auto opt = io.get_as<int>(keys_.current_state)) {
-            current_state = *opt;
+    // Target change mode: trigger when target coordinates change
+    float current_target_x = 0.0f;
+    bool has_target_x = !keys_.target_x.empty();
+    if (has_target_x) {
+        if (auto opt = io.get_as<float>(keys_.target_x)) {
+            current_target_x = *opt;
         } else {
-            LOG_WARNING("TargetChangeDetector: current_state not available\n");
+            LOG_WARNING("TargetChangeDetector: target_x not available\n");
             io.set(keys_.new_target, false);
             return;
         }
+    }
 
-        // Trigger on transition TO the trigger_state
-        if (current_state == keys_.trigger_state && previous_state_ != keys_.trigger_state) {
-            DEBUG("TargetChangeDetector: state transition to %d, triggering new target\n",
-                  keys_.trigger_state);
-            trigger_new_target = true;
+    float current_target_y = 0.0f;
+    bool has_target_y = !keys_.target_y.empty();
+    if (has_target_y) {
+        if (auto opt = io.get_as<float>(keys_.target_y)) {
+            current_target_y = *opt;
+        } else {
+            LOG_WARNING("TargetChangeDetector: target_y not available\n");
+            io.set(keys_.new_target, false);
+            return;
         }
+    }
 
-        previous_state_ = current_state;
+    float current_target_O = 0.0f;
+    bool has_target_O = !keys_.target_O.empty();
+    if (has_target_O) {
+        if (auto opt = io.get_as<float>(keys_.target_O)) {
+            current_target_O = *opt;
+        } else {
+            LOG_WARNING("TargetChangeDetector: target_O not available\n");
+            io.set(keys_.new_target, false);
+            return;
+        }
+    }
+
+    // On first run, always trigger new target
+    if (first_run_) {
+        DEBUG("TargetChangeDetector: first run, triggering new target\n");
+        trigger_new_target = true;
+        previous_target_x_ = current_target_x;
+        previous_target_y_ = current_target_y;
+        previous_target_O_ = current_target_O;
+        first_run_ = false;
     } else {
-        // Target change mode: trigger when target coordinates change
-        float current_target_x = 0.0f;
-        bool has_target_x = !keys_.target_x.empty();
-        if (has_target_x) {
-            if (auto opt = io.get_as<float>(keys_.target_x)) {
-                current_target_x = *opt;
-            } else {
-                LOG_WARNING("TargetChangeDetector: target_x not available\n");
-                io.set(keys_.new_target, false);
-                return;
-            }
-        }
+        // Check if target has changed (cast to int for 1-unit threshold comparison)
+        bool target_changed =
+            (has_target_x &&
+             (static_cast<int>(current_target_x) != static_cast<int>(previous_target_x_))) ||
+            (has_target_y &&
+             (static_cast<int>(current_target_y) != static_cast<int>(previous_target_y_))) ||
+            (has_target_O &&
+             (static_cast<int>(current_target_O) != static_cast<int>(previous_target_O_)));
 
-        float current_target_y = 0.0f;
-        bool has_target_y = !keys_.target_y.empty();
-        if (has_target_y) {
-            if (auto opt = io.get_as<float>(keys_.target_y)) {
-                current_target_y = *opt;
-            } else {
-                LOG_WARNING("TargetChangeDetector: target_y not available\n");
-                io.set(keys_.new_target, false);
-                return;
-            }
-        }
-
-        float current_target_O = 0.0f;
-        bool has_target_O = !keys_.target_O.empty();
-        if (has_target_O) {
-            if (auto opt = io.get_as<float>(keys_.target_O)) {
-                current_target_O = *opt;
-            } else {
-                LOG_WARNING("TargetChangeDetector: target_O not available\n");
-                io.set(keys_.new_target, false);
-                return;
-            }
-        }
-
-        // On first run, always trigger new target
-        if (first_run_) {
-            DEBUG("TargetChangeDetector: first run, triggering new target\n");
+        if (target_changed) {
+            DEBUG("TargetChangeDetector: target changed\n");
             trigger_new_target = true;
             previous_target_x_ = current_target_x;
             previous_target_y_ = current_target_y;
             previous_target_O_ = current_target_O;
-            first_run_ = false;
-        } else {
-            // Check if target has changed (cast to int for 1-unit threshold comparison)
-            bool target_changed =
-                (has_target_x &&
-                 (static_cast<int>(current_target_x) != static_cast<int>(previous_target_x_))) ||
-                (has_target_y &&
-                 (static_cast<int>(current_target_y) != static_cast<int>(previous_target_y_))) ||
-                (has_target_O &&
-                 (static_cast<int>(current_target_O) != static_cast<int>(previous_target_O_)));
-
-            if (target_changed) {
-                DEBUG("TargetChangeDetector: target changed\n");
-                trigger_new_target = true;
-                previous_target_x_ = current_target_x;
-                previous_target_y_ = current_target_y;
-                previous_target_O_ = current_target_O;
-            }
         }
     }
 

@@ -23,6 +23,7 @@ struct SpeedPIDControllerIOKeys
     etl::string_view speed_order;   ///< e.g. "speed_order"
     etl::string_view current_speed; ///< e.g. "current_speed"
     etl::string_view speed_command; ///< e.g. "speed_command"
+    etl::string_view reset;         ///< e.g. "reset" - triggers PID reset when true
 };
 
 } // namespace motion_control
