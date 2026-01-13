@@ -30,8 +30,8 @@ namespace motion_control {
 /// ControllersIO.
 /// @details If any ParamKey gets written by ≥2 top‐level controllers, prints a
 /// warning.
-/// @tparam NB_CONTROLLERS Maximum number of sub-controllers.
-template <size_t NB_CONTROLLERS>
+/// @tparam NB_CONTROLLERS Maximum number of sub-controllers (default: METACONTROLLER_DEFAULT_SIZE).
+template <size_t NB_CONTROLLERS = METACONTROLLER_DEFAULT_SIZE>
 class ParallelMetaController : public MetaController<NB_CONTROLLERS>
 {
   public:

@@ -24,19 +24,26 @@
 #include "etl/deque.h"
 #include "etl/string.h"
 
+/// Default maximum number of controllers in a MetaController chain
+#ifndef METACONTROLLER_DEFAULT_SIZE
+#define METACONTROLLER_DEFAULT_SIZE 10
+#endif
+
 namespace cogip {
 namespace motion_control {
 
 /// @brief Container of sub-controllers executed in sequence, sharing a single
 /// ControllersIO.
 ///
-/// Each sub-controller’s execute(ControllersIO& io) is called in order, using
+/// Each sub-controller's execute(ControllersIO& io) is called in order, using
 /// the same ControllersIO instance. No checks on input/output sizes are
 /// performed—it's up to the sub-controllers (and the engine) to agree on which
 /// keys to read/write.
 ///
-/// @tparam NB_CONTROLLERS Maximum number of controllers in the chain.
-template <size_t NB_CONTROLLERS> class MetaController : public BaseMetaController
+/// @tparam NB_CONTROLLERS Maximum number of controllers in the chain (default:
+/// METACONTROLLER_DEFAULT_SIZE).
+template <size_t NB_CONTROLLERS = METACONTROLLER_DEFAULT_SIZE>
+class MetaController : public BaseMetaController
 {
   public:
     /// Constructor
