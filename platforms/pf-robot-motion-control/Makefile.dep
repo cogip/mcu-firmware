@@ -23,10 +23,13 @@ USEMODULE += utils
 
 # Controllers
 USEMODULE += reset_controller
+USEMODULE += acceleration_filter
 USEMODULE += anti_blocking_controller
+USEMODULE += conditional_switch_meta_controller
 USEMODULE += deceleration_filter
 USEMODULE += feedforward_combiner_controller
 USEMODULE += passthrough_pose_pid_controller
+USEMODULE += speed_limit_filter
 USEMODULE += pose_error_filter
 USEMODULE += profile_feedforward_controller
 USEMODULE += quadpid_meta_controller
