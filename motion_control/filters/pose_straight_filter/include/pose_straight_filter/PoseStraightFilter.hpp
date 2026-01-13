@@ -76,7 +76,44 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
 
   private:
     PoseStraightFilterState current_state_;
-    bool target_is_in_front_ = true; ///< Track if target is in front for overshoot detection
+
+    /// @brief Handle ROTATE_TO_DIRECTION state
+    void rotate_to_direction(ControllersIO& io, cogip_defs::Polar& pos_err,
+                             const cogip_defs::Pose& current_pose,
+                             const cogip_defs::Pose& start_pose, bool& force_can_reverse,
+                             bool& linear_recompute_profile, bool& angular_recompute_profile);
+
+    /// @brief Handle MOVE_TO_POSITION state
+    void move_to_position(ControllersIO& io, cogip_defs::Polar& pos_err,
+                          const cogip_defs::Pose& current_pose, cogip_defs::Pose& target_pose,
+                          bool& linear_recompute_profile, bool& angular_recompute_profile);
+
+    /// @brief Handle ROTATE_TO_FINAL_ANGLE state
+    void rotate_to_final_angle(ControllersIO& io, cogip_defs::Polar& pos_err,
+                               const cogip_defs::Pose& current_pose,
+                               const cogip_defs::Pose& target_pose, bool& linear_recompute_profile,
+                               bool& angular_recompute_profile);
+
+    /// @brief Handle FINISHED state
+    void finished(cogip_defs::Polar& pos_err, const cogip_defs::Pose& current_pose,
+                  cogip_defs::Pose& target_pose, bool& logged_finished);
+
+    /// @brief Calculate longitudinal position error projected onto robot's axis
+    /// @param current_x Current X position
+    /// @param current_y Current Y position
+    /// @param current_angle_deg Current orientation in degrees
+    /// @param target_x Target X position
+    /// @param target_y Target Y position
+    /// @return Longitudinal error (positive = robot is ahead of target)
+    inline float compute_longitudinal_error(float current_x, float current_y,
+                                            float current_angle_deg, float target_x,
+                                            float target_y) const
+    {
+        float dx = current_x - target_x;
+        float dy = current_y - target_y;
+        float current_angle_rad = DEG2RAD(current_angle_deg);
+        return dx * std::cos(current_angle_rad) + dy * std::sin(current_angle_rad);
+    }
 };
 
 } // namespace motion_control
