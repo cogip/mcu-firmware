@@ -22,17 +22,18 @@ namespace motion_control {
 
 /// @brief Meta-controller combining four PID controllers.
 ///
-/// This class manages up to three sub-controllers:
+/// This class manages up to four sub-controllers:
 /// - one dedicated to resetting IO values at each cycle,
 /// - one dedicated to position filtering if needed,
 /// - one dedicated to coordinating dual PID control (position and speed)
-///   for both linear and angular motion.
-class QuadPIDMetaController : public MetaController<3>
+///   for both linear and angular motion,
+/// - one dedicated to telemetry.
+class QuadPIDMetaController : public MetaController<>
 {
   public:
     /// Constructor
     /// @param name Optional instance name for identification
-    explicit QuadPIDMetaController(etl::string_view name = "") : MetaController<3>(name) {}
+    explicit QuadPIDMetaController(etl::string_view name = "") : MetaController<>(name) {}
 
     /// @brief Get the type name of this controller
     const char* type_name() const override

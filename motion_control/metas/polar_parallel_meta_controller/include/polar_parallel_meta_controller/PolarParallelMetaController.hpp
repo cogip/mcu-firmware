@@ -24,13 +24,13 @@ namespace motion_control {
 ///
 /// This class executes two dual PID controllers (position and speed)
 /// pseudo simultaneously for controlling both linear and angular motion.
-class PolarParallelMetaController : public ParallelMetaController<2>
+class PolarParallelMetaController : public ParallelMetaController<>
 {
   public:
     /// Constructor
     /// @param name Optional instance name for identification
     explicit PolarParallelMetaController(etl::string_view name = "")
-        : ParallelMetaController<2>(name)
+        : ParallelMetaController<>(name)
     {
     }
 
