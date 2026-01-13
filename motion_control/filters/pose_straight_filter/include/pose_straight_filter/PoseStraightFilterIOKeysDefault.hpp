@@ -47,7 +47,9 @@ static const PoseStraightFilterIOKeys pose_straight_filter_io_keys_default = {
     .linear_recompute_profile = "linear_recompute_profile",
     .linear_invalidate_profile = "linear_invalidate_profile",
     .angular_recompute_profile = "angular_recompute_profile",
-    .angular_invalidate_profile = "angular_invalidate_profile"};
+    .angular_invalidate_profile = "angular_invalidate_profile",
+    .linear_speed_pid_reset = "linear_speed_pid_reset",
+    .angular_speed_pid_reset = "angular_speed_pid_reset"};
 
 } // namespace motion_control
 

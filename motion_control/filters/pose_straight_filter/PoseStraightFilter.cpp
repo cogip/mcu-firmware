@@ -117,36 +117,32 @@ void PoseStraightFilter::execute(ControllersIO& io)
     // Persist direction choice when switching to MOVE_TO_POSITION state
     static bool force_can_reverse = false;
     static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
-    // Reference orientation saved when entering MOVE_TO_POSITION for heading maintenance
-    static float reference_orientation = 0.0f;
-    // Initial direction sign: +1 for forward, -1 for backward
-    // Saved when entering MOVE_TO_POSITION to maintain consistent direction
-    static float initial_direction_sign = 1.0f;
+    static cogip_defs::Pose start_pose(INT32_MAX, INT32_MAX, INT32_MAX);
 
     // Recompute profile signals - set to true only on specific state transitions
     bool linear_recompute_profile = false;
-    bool linear_invalidate_profile = false;
     bool angular_recompute_profile = false;
-    bool angular_invalidate_profile = false;
 
-    // Static variables for ROTATE_TO_FINAL_ANGLE oscillation detection
-    // Declared here so they can be reset on target change
-    static float prev_angular_error = 0.0f;
-    static bool first_entry = true;
+    // Static variable for FINISHED logging (reset on new target)
+    static bool logged_finished = false;
 
     if ((target_pose_x != prev_target.x()) || (target_pose_y != prev_target.y()) ||
         (target_pose_O != prev_target.O())) {
         force_can_reverse = false;
         prev_target = target_pose;
+        start_pose = current_pose;
         // Reset state machine to initial state on new target
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
-        // Reset ROTATE_TO_FINAL_ANGLE oscillation detection variables
-        prev_angular_error = 0.0f;
-        first_entry = true;
+        // Reset FINISHED logging flag
+        logged_finished = false;
         // New external target -> recompute angular profile for initial rotation
         angular_recompute_profile = true;
         // Invalidate linear profile - will be recomputed when entering MOVE_TO_POSITION
-        linear_invalidate_profile = true;
+        linear_recompute_profile = true;
+
+        // Reset speed PIDs on new target
+        io.set(keys_.linear_speed_pid_reset, true);
+        io.set(keys_.angular_speed_pid_reset, true);
         DEBUG("New target detected, reset state to ROTATE_TO_DIRECTION\n");
     }
 
@@ -172,17 +168,12 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     // Force can_reverse to true once motion has started (only for bidirectional mode)
     // For backward_only mode, we must keep must_reverse active
-    if (force_can_reverse && motion_dir == cogip::path::motion_direction::bidirectional) {
+    if (force_can_reverse) {
         can_reverse = true;
     }
 
     // Compute pose error as polar difference
     cogip_defs::Polar pos_err = target_pose - current_pose;
-
-    // Store raw angle before any reverse operation for overshoot detection
-    // For backward motion: |raw_ang| ≈ 180° means robot is behind target (correct)
-    //                      |raw_ang| < 135° means robot has crossed/overshot target
-    const float raw_angular_error = pos_err.angle();
 
     DEBUG("pos_err BEFORE reverse: dist=%.2f ang=%.2f\n", static_cast<double>(pos_err.distance()),
           static_cast<double>(pos_err.angle()));
@@ -193,13 +184,9 @@ void PoseStraightFilter::execute(ControllersIO& io)
     // - For backward_only (must_reverse): always reverse to get negative distance (backward motion)
     //   The angle after reverse will be the optimal heading (away from target)
     // - For bidirectional (can_reverse): reverse only if |angle| > 90° (shorter rotation path)
-    if (must_reverse) {
+    if (must_reverse || (can_reverse && (etl::absolute(pos_err.angle()) > 90.0f))) {
         // Always reverse for backward_only mode - ensures negative distance
         DEBUG("Reverse error as must_reverse (backward_only mode)\n");
-        pos_err.reverse();
-    } else if (can_reverse && etl::absolute(pos_err.angle()) > 90.0f) {
-        // Target is behind and we can choose -> reverse to go backward (shorter rotation)
-        DEBUG("Reverse error as can reverse (angle > 90)\n");
         pos_err.reverse();
     }
 
@@ -210,178 +197,40 @@ void PoseStraightFilter::execute(ControllersIO& io)
     bool no_linear_limit_flag = false;
 
     const float linear_threshold = parameters_.linear_threshold();
-    const float angular_threshold = parameters_.angular_threshold();
-    const float angular_intermediate_threshold = parameters_.angular_intermediate_threshold();
 
     const float absolute_linear_pose_error = etl::absolute(pos_err.distance());
-    const float absolute_angular_pose_error = etl::absolute(pos_err.angle());
 
-    // State transitions
+    // State transitions - ensure we only move forward, never backward
+    // Early transition from ROTATE_TO_DIRECTION if already close enough to target position
     if ((current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION) &&
         (absolute_linear_pose_error <= linear_threshold)) {
         current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+        angular_recompute_profile = true;
+        linear_recompute_profile = true;
+        LOG_INFO("Early transition to ROTATE_TO_FINAL_ANGLE (already at position, linear_err=%.2f "
+                 "<= threshold %.2f)\n",
+                 static_cast<double>(absolute_linear_pose_error),
+                 static_cast<double>(linear_threshold));
     }
 
-    switch (current_state_) {
-    case PoseStraightFilterState::ROTATE_TO_DIRECTION:
-        DEBUG("ROTATE_TO_DIRECTION\n");
-        // Keep linear profile invalidated during initial rotation
-        linear_invalidate_profile = true;
-        // Force linear target speed to 0 during initial rotation
-        target_speed.set_distance(0.0f);
-        if (absolute_angular_pose_error > angular_intermediate_threshold) {
-            // Still rotating to face target direction
-        } else {
-            // Save the initial direction sign for use during MOVE_TO_POSITION
-            // This determines if we started going forward (+1) or backward (-1)
-            initial_direction_sign = (pos_err.distance() >= 0) ? 1.0f : -1.0f;
-            // Linear speed comes from feedforward profile, not from here
-            target_speed.set_distance(0.0f);
-            force_can_reverse = true;
-            current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
-            // Save the TARGET direction (current orientation + remaining angular error) as
-            // reference This is the ideal heading the robot should maintain during linear motion
-            reference_orientation = limit_angle_deg(current_pose_O + pos_err.angle());
-            // Initialize overshoot detection: target is in front if going forward, behind if
-            // backward
-            target_is_in_front_ = (initial_direction_sign > 0);
-            // Transition to MOVE_TO_POSITION -> recompute linear profile and invalidate angular
-            // profile
-            linear_recompute_profile = true;
-            angular_invalidate_profile = true;
-            DEBUG(
-                "Transition to MOVE_TO_POSITION, reference_orientation=%.2f (cur=%.2f + err=%.2f), "
-                "initial_direction_sign=%.0f, requesting linear profile recompute\n",
-                static_cast<double>(reference_orientation), static_cast<double>(current_pose_O),
-                static_cast<double>(pos_err.angle()), static_cast<double>(initial_direction_sign));
-        }
-        break;
-
-    case PoseStraightFilterState::MOVE_TO_POSITION: {
-        // During MOVE_TO_POSITION, the robot is BIDIRECTIONAL regardless of initial motion_dir.
-        // This allows natural correction if the robot overshoots the target.
-        //
-        // The linear error sign convention must match how the profile was generated:
-        // - If we started FORWARD (initial_direction_sign = +1):
-        //   - Target in front (|raw_ang| < 90°) → positive error (keep going forward)
-        //   - Target behind (|raw_ang| > 90°) → negative error (need to go backward)
-        // - If we started BACKWARD (initial_direction_sign = -1):
-        //   - Target behind (|raw_ang| > 90°) → negative error (keep going backward)
-        //   - Target in front (|raw_ang| < 90°) → positive error (need to go forward)
-
-        // Get raw distance (always positive)
-        cogip_defs::Polar raw_pos_err = target_pose - current_pose;
-        float raw_distance = raw_pos_err.distance();
-
-        // Determine if target is in front or behind based on raw angle
-        // Target in front: |raw_angle| < 90°
-        // Target behind: |raw_angle| > 90°
-        bool target_is_in_front = (etl::absolute(raw_angular_error) < 90.0f);
-
-        // Detect overshoot: if target_is_in_front changes during MOVE_TO_POSITION,
-        // the robot crossed the target. target_is_in_front_ is initialized
-        // when entering MOVE_TO_POSITION state (in ROTATE_TO_DIRECTION transition).
-        bool overshoot_detected = (target_is_in_front != target_is_in_front_);
-        target_is_in_front_ = target_is_in_front;
-
-        // Compute linear error based on target direction:
-        // - Target in front (|raw_ang| < 90°): positive error → robot should go forward
-        // - Target behind (|raw_ang| > 90°): negative error → robot should go backward
-        //
-        // This sign convention works for both forward and backward initial motion:
-        // - Forward start: target in front → positive → keep going forward ✓
-        // - Backward start: target behind → negative → keep going backward ✓
-        // - Overshoot: sign flips naturally, allowing correction in opposite direction
-        //
-        // The signed error is used by both ProfileFeedforwardController (for profile
-        // generation and tracking) and PosePIDController (for feedback correction).
-        float linear_error = target_is_in_front ? raw_distance : -raw_distance;
-
-        // Update pos_err with the bidirectional linear error
-        pos_err.set_distance(linear_error);
-
-        // Maintain heading by tracking the reference orientation
-        float heading_error = limit_angle_deg(reference_orientation - current_pose_O);
-        pos_err.set_angle(heading_error);
-
-        // Keep angular profile invalidated during entire MOVE_TO_POSITION state
-        angular_invalidate_profile = true;
-
-        DEBUG("MOVE_TO_POSITION: lin_err=%.2f heading_err=%.2f (ref=%.2f cur=%.2f) raw_ang=%.2f "
-              "init_dir=%.0f\n",
-              static_cast<double>(linear_error), static_cast<double>(heading_error),
-              static_cast<double>(reference_orientation), static_cast<double>(current_pose_O),
-              static_cast<double>(raw_angular_error), static_cast<double>(initial_direction_sign));
-
-        // Transition when close enough to target OR overshoot detected
-        if (raw_distance <= linear_threshold || overshoot_detected) {
-            current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
-            // Transition to ROTATE_TO_FINAL_ANGLE -> recompute angular profile and invalidate
-            // linear profile
-            angular_recompute_profile = true;
-            linear_invalidate_profile = true;
-            // IMPORTANT: Clear angular_invalidate_profile so recompute takes effect
-            angular_invalidate_profile = false;
-            // Update angular error to final angle error (not heading error)
-            if (!parameters_.bypass_final_orientation()) {
-                pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
-            } else {
-                pos_err.set_angle(0.0f);
-            }
-            DEBUG("Transition to ROTATE_TO_FINAL_ANGLE, requesting angular profile recompute\n");
-        }
-    } break;
-
-    case PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE:
-        DEBUG("ROTATE_TO_FINAL_ANGLE\n");
-        {
-            // Keep linear profile invalidated during final rotation
-            linear_invalidate_profile = true;
-            // Force linear target speed to 0 during final rotation
-            target_speed.set_distance(0.0f);
-
-            if (!parameters_.bypass_final_orientation()) {
-                pos_err.set_angle(limit_angle_deg(target_pose_O - current_pose_O));
-            } else {
-                pos_err.set_angle(0.0f);
-            }
-
-            float current_angular_error = pos_err.angle();
-
-            // Detect completion conditions:
-            // 1. Sign change: angular error crosses zero (prev and current have opposite signs)
-            //    This indicates oscillation around the target angle - we're close enough
-            // 2. Within threshold: angular error is small enough to consider target reached
-            // Note: first_entry check prevents false positive on first iteration
-            bool sign_changed = !first_entry && (prev_angular_error * current_angular_error < 0.0f);
-            bool within_threshold = etl::absolute(current_angular_error) <= angular_threshold;
-
-            if (within_threshold || sign_changed) {
-                // Target angle reached - move to FINISHED state
-                current_state_ = PoseStraightFilterState::FINISHED;
-                first_entry = true;
-            } else {
-                // Continue rotating - save current error for next iteration's oscillation detection
-                prev_angular_error = current_angular_error;
-                first_entry = false;
-            }
-        }
-        break;
-
-    case PoseStraightFilterState::FINISHED:
-        DEBUG("FINISHED\n");
-        // Force target speeds to 0 to prevent any motion
-        target_speed.set_distance(0.0f);
-        target_speed.set_angle(0.0f);
-        // Keep profiles invalidated in FINISHED state
-        linear_invalidate_profile = true;
-        angular_invalidate_profile = true;
-        break;
+    if (current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION) {
+        rotate_to_direction(io, pos_err, current_pose, start_pose, force_can_reverse,
+                            linear_recompute_profile, angular_recompute_profile);
     }
 
-    // Note: Deceleration is handled by the feedforward profile controllers
-    // which generate trapezoidal velocity profiles. No additional deceleration
-    // logic is needed here.
+    if (current_state_ == PoseStraightFilterState::MOVE_TO_POSITION) {
+        move_to_position(io, pos_err, current_pose, target_pose, linear_recompute_profile,
+                         angular_recompute_profile);
+    }
+
+    if (current_state_ == PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE) {
+        rotate_to_final_angle(io, pos_err, current_pose, target_pose, linear_recompute_profile,
+                              angular_recompute_profile);
+    }
+
+    if (current_state_ == PoseStraightFilterState::FINISHED) {
+        finished(pos_err, current_pose, target_pose, logged_finished);
+    }
 
     // Write linear pose error
     io.set(keys_.linear_pose_error, pos_err.distance());
@@ -422,23 +271,189 @@ void PoseStraightFilter::execute(ControllersIO& io)
             DEBUG("Emitting linear_recompute_profile=true\n");
         }
     }
-    if (!keys_.linear_invalidate_profile.empty()) {
-        io.set(keys_.linear_invalidate_profile, linear_invalidate_profile);
-        if (linear_invalidate_profile) {
-            DEBUG("Emitting linear_invalidate_profile=true\n");
-        }
-    }
     if (!keys_.angular_recompute_profile.empty()) {
         io.set(keys_.angular_recompute_profile, angular_recompute_profile);
         if (angular_recompute_profile) {
             DEBUG("Emitting angular_recompute_profile=true\n");
         }
     }
-    if (!keys_.angular_invalidate_profile.empty()) {
-        io.set(keys_.angular_invalidate_profile, angular_invalidate_profile);
-        if (angular_invalidate_profile) {
-            DEBUG("Emitting angular_invalidate_profile=true\n");
+}
+
+void PoseStraightFilter::rotate_to_direction(ControllersIO& io, cogip_defs::Polar& pos_err,
+                                             const cogip_defs::Pose& current_pose,
+                                             const cogip_defs::Pose& start_pose,
+                                             bool& force_can_reverse,
+                                             bool& linear_recompute_profile,
+                                             bool& angular_recompute_profile)
+{
+    DEBUG("ROTATE_TO_DIRECTION\n");
+
+    const float angular_intermediate_threshold = parameters_.angular_intermediate_threshold();
+
+    // Track previous angular error for continuity enforcement
+    static float previous_angular_pose_error = 0.0f;
+
+    // Reset continuity tracking when angular profile is recomputed
+    if (angular_recompute_profile) {
+        previous_angular_pose_error = 0.0f;
+    }
+
+    // Apply continuity enforcement to existing angular error (avoids 360° jumps at ±180° boundary)
+    float raw_angular_error =
+        enforce_angle_continuity_deg(pos_err.angle(), previous_angular_pose_error);
+    pos_err.set_angle(raw_angular_error);
+
+    const float absolute_angular_pose_error = etl::absolute(raw_angular_error);
+
+    if (absolute_angular_pose_error > angular_intermediate_threshold) {
+        // Anti-drift correction during initial rotation
+        float pos_error_longitudinal = compute_longitudinal_error(
+            current_pose.x(), current_pose.y(), current_pose.O(), start_pose.x(), start_pose.y());
+        pos_err.set_distance(-pos_error_longitudinal);
+    } else {
+        force_can_reverse = true;
+        current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
+        // Reset speed PIDs on transition to MOVE_TO_POSITION
+        io.set(keys_.linear_speed_pid_reset, true);
+        io.set(keys_.angular_speed_pid_reset, true);
+        // Transition to MOVE_TO_POSITION -> recompute profiles
+        linear_recompute_profile = true;
+        angular_recompute_profile = true;
+        LOG_INFO("Transition to MOVE_TO_POSITION, (cur=%.2f + err=%.2f), "
+                 "requesting angular and linear profile recompute\n",
+                 static_cast<double>(current_pose.O()), static_cast<double>(pos_err.angle()));
+    }
+}
+
+void PoseStraightFilter::move_to_position(ControllersIO& io, cogip_defs::Polar& pos_err,
+                                          const cogip_defs::Pose& current_pose,
+                                          cogip_defs::Pose& target_pose,
+                                          bool& linear_recompute_profile,
+                                          bool& angular_recompute_profile)
+{
+    DEBUG("MOVE_TO_POSITION\n");
+
+    const float linear_threshold = parameters_.linear_threshold();
+
+    // Bidirectional mode: dynamically adjust direction based on target position
+    cogip_defs::Polar raw_pos_err = target_pose - current_pose;
+    float raw_distance = raw_pos_err.distance();
+    float raw_angle = raw_pos_err.angle();
+
+    // Target is in front if |angle| < 90°, behind otherwise
+    bool target_is_in_front = (etl::absolute(raw_angle) < 90.0f);
+
+    // Set linear error sign: positive if going forward, negative if going backward
+    float linear_error = target_is_in_front ? raw_distance : -raw_distance;
+    pos_err.set_distance(linear_error);
+
+    // Set angular error to point towards (or away from) target
+    float heading_error;
+    if (target_is_in_front) {
+        heading_error = raw_angle;
+    } else {
+        heading_error = limit_angle_deg(raw_angle + 180.0f);
+    }
+    pos_err.set_angle(heading_error);
+
+    // Transition when close enough to target
+    if (raw_distance <= linear_threshold) {
+        current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+        // Reset speed PIDs on transition to ROTATE_TO_FINAL_ANGLE
+        io.set(keys_.linear_speed_pid_reset, true);
+        io.set(keys_.angular_speed_pid_reset, true);
+        // Transition to ROTATE_TO_FINAL_ANGLE -> recompute profiles
+        angular_recompute_profile = true;
+        linear_recompute_profile = true;
+
+        LOG_INFO("Transition to ROTATE_TO_FINAL_ANGLE, requesting linear and angular profiles "
+                 "recompute\n");
+    }
+}
+
+void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Polar& pos_err,
+                                               const cogip_defs::Pose& current_pose,
+                                               const cogip_defs::Pose& target_pose,
+                                               bool& linear_recompute_profile,
+                                               bool& angular_recompute_profile)
+{
+    DEBUG("ROTATE_TO_FINAL_ANGLE\n");
+
+    const float angular_threshold = parameters_.angular_threshold();
+
+    // Compute final angle error (to target orientation, not travel direction)
+    float final_angle_error;
+    if (!parameters_.bypass_final_orientation()) {
+
+        // Track previous angular error for continuity enforcement
+        static float previous_angular_pose_error = 0.0f;
+
+        // On first iteration, compute and normalize angle difference with limit_angle_deg
+        // (not angular_error_deg which uses atan2 and may choose wrong direction)
+        // On subsequent iterations, use continuity enforcement to avoid 360° jumps
+        if (angular_recompute_profile) {
+            final_angle_error = limit_angle_deg(target_pose.O() - current_pose.O());
+            previous_angular_pose_error = final_angle_error;
+        } else {
+            float raw_error = limit_angle_deg(target_pose.O() - current_pose.O());
+            final_angle_error =
+                enforce_angle_continuity_deg(raw_error, previous_angular_pose_error);
+            previous_angular_pose_error = final_angle_error;
         }
+    } else {
+        final_angle_error = 0.0f;
+    }
+    pos_err.set_angle(final_angle_error);
+
+    // Anti-drift correction during final rotation
+    float pos_error_longitudinal = compute_longitudinal_error(
+        current_pose.x(), current_pose.y(), current_pose.O(), target_pose.x(), target_pose.y());
+    pos_err.set_distance(-pos_error_longitudinal);
+
+    if (etl::absolute(final_angle_error) > angular_threshold) {
+        // Still rotating to final orientation with anti-drift correction active
+    } else {
+        linear_recompute_profile = true;
+        angular_recompute_profile = true;
+        // Rotation complete - move to FINISHED
+        current_state_ = PoseStraightFilterState::FINISHED;
+        // Reset speed PIDs on transition to FINISHED
+        io.set(keys_.linear_speed_pid_reset, true);
+        io.set(keys_.angular_speed_pid_reset, true);
+    }
+}
+
+void PoseStraightFilter::finished(cogip_defs::Polar& pos_err, const cogip_defs::Pose& current_pose,
+                                  cogip_defs::Pose& target_pose, bool& logged_finished)
+{
+    DEBUG("FINISHED\n");
+
+    // Maintain position and orientation control in FINISHED state
+    float pos_error_longitudinal = compute_longitudinal_error(
+        current_pose.x(), current_pose.y(), current_pose.O(), target_pose.x(), target_pose.y());
+    pos_err.set_distance(-pos_error_longitudinal);
+
+    // Maintain final orientation
+    float final_angle_error;
+    if (!parameters_.bypass_final_orientation()) {
+        final_angle_error = limit_angle_deg(target_pose.O() - current_pose.O());
+    } else {
+        final_angle_error = 0.0f;
+    }
+    pos_err.set_angle(final_angle_error);
+
+    // Log final position error for debugging (only once per target)
+    if (!logged_finished) {
+        cogip_defs::Polar final_err = target_pose - current_pose;
+        LOG_INFO("POSE_REACHED: linear_err=%.2f ang_err=%.2f final_ang_err=%.2f (cur: "
+                 "%.1f,%.1f,%.1f -> tgt: "
+                 "%.1f,%.1f,%.1f)\n",
+                 static_cast<double>(final_err.distance()), static_cast<double>(final_err.angle()),
+                 static_cast<double>(limit_angle_deg(target_pose.O() - current_pose.O())),
+                 static_cast<double>(current_pose.x()), static_cast<double>(current_pose.y()),
+                 static_cast<double>(current_pose.O()), static_cast<double>(target_pose.x()),
+                 static_cast<double>(target_pose.y()), static_cast<double>(target_pose.O()));
+        logged_finished = true;
     }
 }
 

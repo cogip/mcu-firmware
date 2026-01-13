@@ -23,6 +23,8 @@ struct TuningPoseReachedFilterIOKeys
     etl::string_view
         profile_complete; ///< key for profile complete input (from ProfileFeedforwardController)
     etl::string_view pose_reached; ///< key for pose reached status output
+    etl::string_view pose_error;   ///< key for pose error input (optional, for threshold mode)
+    float pose_threshold = 0.0f;   ///< threshold for pose_reached (if pose_error is configured)
 };
 
 } // namespace motion_control
