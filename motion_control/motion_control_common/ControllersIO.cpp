@@ -3,6 +3,9 @@
 #include "etl/fnv_1.h"
 #include "log.h"
 
+#define ENABLE_DEBUG 0
+#include <debug.h>
+
 namespace cogip {
 
 namespace motion_control {
@@ -61,7 +64,7 @@ OptionalValue ControllersIO::get(KeyType key) const
     ParamKey h = hash_key(key);
     auto it = data_.find(h);
     if (it == data_.end()) {
-        LOG_ERROR("Error key not found %.*s\n", static_cast<int>(key.size()), key.data());
+        DEBUG("Error key not found %.*s\n", static_cast<int>(key.size()), key.data());
     }
     return (it != data_.end()) ? OptionalValue{it->second} : OptionalValue{};
 }
