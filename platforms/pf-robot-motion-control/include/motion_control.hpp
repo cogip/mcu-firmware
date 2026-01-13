@@ -1,9 +1,8 @@
+#pragma once
+
 // Project includes
 #include "app_conf.hpp"
-#include "pid/PID.hpp"
 #include "platform.hpp"
-#include "platform_engine/PlatformEngine.hpp"
-#include "quadpid_meta_controller/QuadPIDMetaController.hpp"
 
 namespace cogip {
 
@@ -33,9 +32,6 @@ constexpr uint16_t motion_control_thread_period_ms = 20; ///< controller thread 
 
 /// Throttle divider for QUADPID pose loop controllers (execute every N cycles)
 constexpr uint16_t quadpid_pose_controllers_throttle_divider = 1;
-
-/// Throttle divider for QUADPID_FEEDFORWARD pose loop controllers (execute every N cycles)
-constexpr uint16_t feedforward_pose_controllers_throttle_divider = 5;
 
 /// @name Acceleration and speed profiles
 /// @{
@@ -107,7 +103,7 @@ void pf_init_motion_control(void);
 void pf_start_motion_control(void);
 
 /// Reset all motion control components
-void pf_motion_control_reset(void);
+void pf_motion_control_reset_controllers(void);
 
 /// Make motion control engine thread loop disabled
 void pf_disable_motion_control();
