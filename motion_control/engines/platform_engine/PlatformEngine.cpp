@@ -57,7 +57,7 @@ void PlatformEngine::prepare_inputs()
     io_.set("motion_direction", target_pose_.get_motion_direction());
 
     // Initialize pose_reached to moving (will be updated by PoseStraightFilter)
-    io_.set("pose_reached", target_pose_status_t::moving);
+    io_.set("pose_reached", pose_reached_);
 
     // Initialize speed commands to 0 (will be updated by SpeedPIDController)
     io_.set("linear_speed_command", 0.0f);
@@ -92,12 +92,10 @@ void PlatformEngine::process_outputs()
 
     cogip_defs::Polar command(0, 0);
 
-    if (pose_reached_ == target_pose_status_t::moving) {
-        DEBUG("Start process_outputs()\n");
-        command.set_distance(io_.get_as<float>("linear_speed_command").value());
-        command.set_angle(io_.get_as<float>("angular_speed_command").value());
-        DEBUG("End process_outputs()\n");
-    }
+    DEBUG("Start process_outputs()\n");
+    command.set_distance(io_.get_as<float>("linear_speed_command").value());
+    command.set_angle(io_.get_as<float>("angular_speed_command").value());
+    DEBUG("End process_outputs()\n");
 
     // Set robot polar velocity order
     drive_contoller_.set_polar_velocity(command);
