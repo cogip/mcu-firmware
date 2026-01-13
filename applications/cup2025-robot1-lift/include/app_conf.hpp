@@ -13,7 +13,9 @@
 #include "motor/MotorDriverDRV8873.hpp"
 #include "motor/MotorRIOT.hpp"
 #include "odometer/OdometerEncoder.hpp"
+#include "parameter/Parameter.hpp"
 #include "pf_positional_actuators.hpp"
+#include "pid/PIDParameters.hpp"
 #include "trigonometry.h"
 
 // Package includes
@@ -36,18 +38,24 @@ namespace actuators {
 #define QDEC_LIFT_POLARITY -1
 
 // Motor lift pose PID
-constexpr float motor_lift_pose_pid_kp = .2;
-constexpr float motor_lift_pose_pid_ki = 0;
-constexpr float motor_lift_pose_pid_kd = 0;
-// Motor lift speed PID
-constexpr float motor_lift_speed_pid_kp = 15;
-constexpr float motor_lift_speed_pid_ki = 7.5;
-constexpr float motor_lift_speed_pid_kd = 0;
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kp{
+    .2f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_ki{
+    0.f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kd{
+    0.f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
+    motor_lift_pose_pid_integral_limit{static_cast<float>(etl::numeric_limits<int16_t>::max())};
 
-// Motor lift pose PID integral limit
-constexpr float motor_lift_pose_pid_integral_limit = etl::numeric_limits<int16_t>::max();
-// Motor lift speed PID integral limit
-constexpr float motor_lift_speed_pid_integral_limit = 500 / motor_lift_speed_pid_ki;
+// Motor lift speed PID
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_kp{
+    15.f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_ki{
+    7.5f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_kd{
+    0.f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
+    motor_lift_speed_pid_integral_limit{500.f / 7.5f};
 
 // Motor lift threshold
 constexpr float motor_lift_threshold = 0.1;
@@ -134,15 +142,23 @@ constexpr uint32_t blocked_cycles_threshold = 7; ///< Max consecutive cycles bel
 constexpr gpio_t lower_limit_switch_pin = GPIO_PIN(PORT_A, 6); ///< Lower end-stop pin
 constexpr gpio_t upper_limit_switch_pin = GPIO_PIN(PORT_A, 4); ///< Upper end-stop pin
 
+/// @brief Motor Lift pose PID parameters
+inline cogip::pid::PIDParameters motor_lift_pose_pid_params(motor_lift_pose_pid_kp,
+                                                            motor_lift_pose_pid_ki,
+                                                            motor_lift_pose_pid_kd,
+                                                            motor_lift_pose_pid_integral_limit);
+
 /// @brief Motor Lift pose PID controller
-static cogip::pid::PID motor_lift_pose_pid(motor_lift_pose_pid_kp, motor_lift_pose_pid_ki,
-                                           motor_lift_pose_pid_kd,
-                                           motor_lift_pose_pid_integral_limit);
+inline cogip::pid::PID motor_lift_pose_pid(motor_lift_pose_pid_params);
+
+/// @brief Motor Lift speed PID parameters
+inline cogip::pid::PIDParameters motor_lift_speed_pid_params(motor_lift_speed_pid_kp,
+                                                             motor_lift_speed_pid_ki,
+                                                             motor_lift_speed_pid_kd,
+                                                             motor_lift_speed_pid_integral_limit);
 
 /// @brief Motor Lift speed PID controller
-static cogip::pid::PID motor_lift_speed_pid(motor_lift_speed_pid_kp, motor_lift_speed_pid_ki,
-                                            motor_lift_speed_pid_kd,
-                                            motor_lift_speed_pid_integral_limit);
+inline cogip::pid::PID motor_lift_speed_pid(motor_lift_speed_pid_params);
 
 /// @brief Motor Lift MotorPoseFilterParameters
 static cogip::motion_control::MotorPoseFilterParameters
