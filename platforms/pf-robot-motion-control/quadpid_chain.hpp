@@ -15,6 +15,7 @@
 #include "deceleration_filter/DecelerationFilter.hpp"
 #include "deceleration_filter/DecelerationFilterIOKeys.hpp"
 #include "deceleration_filter/DecelerationFilterParameters.hpp"
+#include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_control_common/ThrottledController.hpp"
 #include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
@@ -40,13 +41,34 @@ namespace cogip {
 namespace pf {
 namespace motion_control {
 
-// PIDs are declared extern here and defined in motion_control.cpp
-extern cogip::pid::PID linear_pose_pid;
-extern cogip::pid::PID linear_speed_pid;
-extern cogip::pid::PID angular_pose_pid;
-extern cogip::pid::PID angular_speed_pid;
-
 namespace quadpid_chain {
+
+// ============================================================================
+// PID definitions for QUADPID chain
+// ============================================================================
+
+inline cogip::pid::PIDParameters linear_pose_pid_parameters(linear_pose_pid_kp, linear_pose_pid_ki,
+                                                            linear_pose_pid_kd,
+                                                            linear_pose_pid_integral_limit);
+inline cogip::pid::PID linear_pose_pid(linear_pose_pid_parameters);
+
+inline cogip::pid::PIDParameters linear_speed_pid_parameters(linear_speed_pid_kp,
+                                                             linear_speed_pid_ki,
+                                                             linear_speed_pid_kd,
+                                                             linear_speed_pid_integral_limit);
+inline cogip::pid::PID linear_speed_pid(linear_speed_pid_parameters);
+
+inline cogip::pid::PIDParameters angular_pose_pid_parameters(angular_pose_pid_kp,
+                                                             angular_pose_pid_ki,
+                                                             angular_pose_pid_kd,
+                                                             angular_pose_pid_integral_limit);
+inline cogip::pid::PID angular_pose_pid(angular_pose_pid_parameters);
+
+inline cogip::pid::PIDParameters angular_speed_pid_parameters(angular_speed_pid_kp,
+                                                              angular_speed_pid_ki,
+                                                              angular_speed_pid_kd,
+                                                              angular_speed_pid_integral_limit);
+inline cogip::pid::PID angular_speed_pid(angular_speed_pid_parameters);
 
 // ============================================================================
 // PoseStraightFilter
@@ -67,7 +89,9 @@ inline cogip::motion_control::PoseStraightFilter
 inline cogip::motion_control::DecelerationFilterIOKeys linear_deceleration_filter_io_keys = {
     .pose_error = "linear_pose_error",
     .current_speed = "linear_current_speed",
-    .target_speed = "linear_target_speed"};
+    .target_speed = "linear_target_speed",
+    .output_speed = "" // Not used, target_speed is modified in-place
+};
 
 inline cogip::motion_control::DecelerationFilterParameters
     linear_deceleration_filter_parameters(platform_max_dec_linear_mm_per_period2);
@@ -79,7 +103,9 @@ inline cogip::motion_control::DecelerationFilter
 inline cogip::motion_control::DecelerationFilterIOKeys angular_deceleration_filter_io_keys = {
     .pose_error = "angular_pose_error",
     .current_speed = "angular_current_speed",
-    .target_speed = "angular_target_speed"};
+    .target_speed = "angular_target_speed",
+    .output_speed = "" // Not used, target_speed is modified in-place
+};
 
 inline cogip::motion_control::DecelerationFilterParameters
     angular_deceleration_filter_parameters(platform_max_dec_angular_deg_per_period2);
@@ -92,7 +118,7 @@ inline cogip::motion_control::DecelerationFilter
 // MetaControllers
 // ============================================================================
 
-inline cogip::motion_control::MetaController<4> pose_loop_meta_controller;
+inline cogip::motion_control::MetaController<> pose_loop_meta_controller;
 inline cogip::motion_control::PolarParallelMetaController pose_loop_polar_parallel_meta_controller;
 inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;
 
@@ -100,11 +126,11 @@ inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_paral
 // Linear chain
 // ============================================================================
 
-inline cogip::motion_control::MetaController<1> linear_pose_loop_meta_controller;
-inline cogip::motion_control::MetaController<3> linear_speed_loop_meta_controller;
+inline cogip::motion_control::MetaController<> linear_pose_loop_meta_controller;
+inline cogip::motion_control::MetaController<> linear_speed_loop_meta_controller;
 
 inline cogip::motion_control::PosePIDControllerParameters
-    linear_pose_controller_parameters(&cogip::pf::motion_control::linear_pose_pid);
+    linear_pose_controller_parameters(&linear_pose_pid);
 
 inline cogip::motion_control::PosePIDController
     linear_pose_controller(cogip::motion_control::linear_pose_pid_controller_io_keys_default,
@@ -119,7 +145,7 @@ inline cogip::motion_control::SpeedFilter
                         linear_speed_filter_parameters);
 
 inline cogip::motion_control::SpeedPIDControllerParameters
-    linear_speed_controller_parameters(&cogip::pf::motion_control::linear_speed_pid);
+    linear_speed_controller_parameters(&linear_speed_pid);
 
 inline cogip::motion_control::SpeedPIDController
     linear_speed_controller(cogip::motion_control::linear_speed_pid_controller_io_keys_default,
@@ -129,11 +155,11 @@ inline cogip::motion_control::SpeedPIDController
 // Angular chain
 // ============================================================================
 
-inline cogip::motion_control::MetaController<1> angular_pose_loop_meta_controller;
-inline cogip::motion_control::MetaController<3> angular_speed_loop_meta_controller;
+inline cogip::motion_control::MetaController<> angular_pose_loop_meta_controller;
+inline cogip::motion_control::MetaController<> angular_speed_loop_meta_controller;
 
 inline cogip::motion_control::PosePIDControllerParameters
-    angular_pose_controller_parameters(&cogip::pf::motion_control::angular_pose_pid);
+    angular_pose_controller_parameters(&angular_pose_pid);
 
 inline cogip::motion_control::PosePIDController
     angular_pose_controller(cogip::motion_control::angular_pose_pid_controller_io_keys_default,
@@ -148,7 +174,7 @@ inline cogip::motion_control::SpeedFilter
                          angular_speed_filter_parameters);
 
 inline cogip::motion_control::SpeedPIDControllerParameters
-    angular_speed_controller_parameters(&cogip::pf::motion_control::angular_speed_pid);
+    angular_speed_controller_parameters(&angular_speed_pid);
 
 inline cogip::motion_control::SpeedPIDController
     angular_speed_controller(cogip::motion_control::angular_speed_pid_controller_io_keys_default,
@@ -221,6 +247,29 @@ inline cogip::motion_control::AntiBlockingController
 // ============================================================================
 
 inline cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
+
+// ============================================================================
+// Chain initialization function
+// ============================================================================
+
+/// Initialize quadpid chain meta controller
+cogip::motion_control::QuadPIDMetaController* init();
+
+// ============================================================================
+// Chain reset function
+// ============================================================================
+
+/// Reset quadpid chain state (speed filters and PIDs)
+inline void reset()
+{
+    // Reset speed filters
+    linear_speed_filter.reset_previous_speed_order();
+    angular_speed_filter.reset_previous_speed_order();
+
+    // Reset speed PIDs (pose PIDs don't need reset as they only have Kp)
+    linear_speed_pid.reset();
+    angular_speed_pid.reset();
+}
 
 } // namespace quadpid_chain
 } // namespace motion_control
