@@ -136,6 +136,8 @@ class ThreadStatus : public StatusBase<PB_ThreadStatus<SYSMON_THREADSTATUS_NAME_
 void display_heap_status();
 /// Display each thread status
 void display_threads_status();
+/// Update threads and heap status (call before display if sysmon thread is not started)
+void update_status();
 /// Start system monitoring thread
 void sysmon_start();
 

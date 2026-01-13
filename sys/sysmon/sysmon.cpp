@@ -163,6 +163,12 @@ void display_threads_status(void)
     }
 }
 
+void update_status(void)
+{
+    _update_heap_status();
+    _update_threads_status();
+}
+
 #ifdef MODULE_CANPB
 void register_canpb(cogip::canpb::CanProtobuf* canpb_ptr)
 {
