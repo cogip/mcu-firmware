@@ -1,0 +1,2 @@
+USEMODULE_INCLUDES_acceleration_filter := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_acceleration_filter)
