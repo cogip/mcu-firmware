@@ -2,9 +2,7 @@
 
 // Project includes
 #include "app_conf.hpp"
-#include "pid/PID.hpp"
 #include "platform.hpp"
-#include "platform_engine/PlatformEngine.hpp"
 
 namespace cogip {
 

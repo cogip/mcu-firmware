@@ -159,6 +159,12 @@ inline cogip::motion_control::TuningPoseReachedFilter
     tuning_pose_reached_filter(tuning_pose_reached_filter_io_keys);
 
 // ============================================================================
+// Meta controller
+// ============================================================================
+
+inline cogip::motion_control::MetaController<> meta_controller;
+
+// ============================================================================
 // Chain initialization function
 // ============================================================================
 

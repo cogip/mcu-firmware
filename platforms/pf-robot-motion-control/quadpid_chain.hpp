@@ -15,6 +15,7 @@
 #include "deceleration_filter/DecelerationFilter.hpp"
 #include "deceleration_filter/DecelerationFilterIOKeys.hpp"
 #include "deceleration_filter/DecelerationFilterParameters.hpp"
+#include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_control_common/ThrottledController.hpp"
 #include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
@@ -246,6 +247,13 @@ inline cogip::motion_control::AntiBlockingController
 // ============================================================================
 
 inline cogip::motion_control::QuadPIDMetaController quadpid_meta_controller;
+
+// ============================================================================
+// Chain initialization function
+// ============================================================================
+
+/// Initialize quadpid chain meta controller
+cogip::motion_control::QuadPIDMetaController* init();
 
 // ============================================================================
 // Chain reset function

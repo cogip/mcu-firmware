@@ -32,8 +32,6 @@ namespace pose_test_chain {
 
 static cogip::motion_control::TelemetryControllerParameters telemetry_controller_parameters;
 
-static cogip::motion_control::MetaController<> meta_controller;
-
 static cogip::motion_control::TelemetryController
     linear_telemetry_controller(cogip::motion_control::linear_telemetry_controller_io_keys_default,
                                 telemetry_controller_parameters);

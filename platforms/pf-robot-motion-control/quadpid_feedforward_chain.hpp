@@ -365,14 +365,11 @@ inline cogip::motion_control::TelemetryController
 inline cogip::motion_control::QuadPIDMetaController quadpid_feedforward_meta_controller;
 
 // ============================================================================
-// Chain initialization and restore functions
+// Chain initialization function
 // ============================================================================
 
 /// Initialize feedforward chain meta controller
 cogip::motion_control::QuadPIDMetaController* init();
-
-/// Restore feedforward chain to original configuration
-void restore();
 
 /// Reset feedforward chain state (stateful filters and PIDs)
 inline void reset()

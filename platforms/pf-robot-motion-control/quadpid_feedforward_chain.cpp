@@ -90,29 +90,6 @@ cogip::motion_control::QuadPIDMetaController* init()
     return &quadpid_feedforward_meta_controller;
 }
 
-// ============================================================================
-// Chain restore
-// ============================================================================
-
-void restore()
-{
-    // Linear feedforward profile parameters
-    linear_profile_feedforward_parameters.set_max_speed(platform_max_speed_linear_mm_per_period);
-    linear_profile_feedforward_parameters.set_acceleration(platform_max_acc_linear_mm_per_period2);
-    linear_profile_feedforward_parameters.set_deceleration(platform_max_dec_linear_mm_per_period2);
-
-    // Angular feedforward profile parameters
-    angular_profile_feedforward_parameters.set_max_speed(platform_max_speed_angular_deg_per_period);
-    angular_profile_feedforward_parameters.set_acceleration(
-        platform_max_acc_angular_deg_per_period2);
-    angular_profile_feedforward_parameters.set_deceleration(
-        platform_max_dec_angular_deg_per_period2);
-
-    // Feedforward speed PID controller parameters
-    linear_feedforward_speed_controller_parameters.set_pid(&feedforward_linear_speed_pid);
-    angular_feedforward_speed_controller_parameters.set_pid(&feedforward_angular_speed_pid);
-}
-
 } // namespace quadpid_feedforward_chain
 } // namespace motion_control
 } // namespace pf

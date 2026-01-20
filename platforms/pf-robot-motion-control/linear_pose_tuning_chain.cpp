@@ -27,8 +27,6 @@ namespace linear_pose_tuning_chain {
 
 static cogip::motion_control::TelemetryControllerParameters telemetry_controller_parameters;
 
-static cogip::motion_control::MetaController<> meta_controller;
-
 static cogip::motion_control::TelemetryController
     telemetry_controller(cogip::motion_control::linear_telemetry_controller_io_keys_default,
                          telemetry_controller_parameters);
