@@ -207,9 +207,12 @@ void PoseStraightFilter::execute(ControllersIO& io)
         current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
         angular_recompute_profile = true;
         linear_recompute_profile = true;
+        LOG_INFO("Early transition to ROTATE_TO_FINAL_ANGLE (already at position, linear_err=%.2f "
+                 "<= threshold %.2f)\n",
+                 static_cast<double>(absolute_linear_pose_error),
+                 static_cast<double>(linear_threshold));
     }
 
-    // Delegate to state-specific methods
     if (current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION) {
         rotate_to_direction(io, pos_err, current_pose, start_pose, force_can_reverse,
                             linear_recompute_profile, angular_recompute_profile);
@@ -378,20 +381,25 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
 
     const float angular_threshold = parameters_.angular_threshold();
 
-    // Track previous angular error for continuity enforcement
-    static float previous_angular_pose_error = 0.0f;
-
-    // Reset continuity tracking when angular profile is recomputed
-    if (angular_recompute_profile) {
-        previous_angular_pose_error = 0.0f;
-    }
-
     // Compute final angle error (to target orientation, not travel direction)
     float final_angle_error;
     if (!parameters_.bypass_final_orientation()) {
-        // Calculate angular error with continuity enforcement (avoids 360° jumps at ±180° boundary)
-        final_angle_error = angular_error_with_continuity_deg(target_pose.O(), current_pose.O(),
-                                                              previous_angular_pose_error);
+
+        // Track previous angular error for continuity enforcement
+        static float previous_angular_pose_error = 0.0f;
+
+        // On first iteration, compute and normalize angle difference with limit_angle_deg
+        // (not angular_error_deg which uses atan2 and may choose wrong direction)
+        // On subsequent iterations, use continuity enforcement to avoid 360° jumps
+        if (angular_recompute_profile) {
+            final_angle_error = limit_angle_deg(target_pose.O() - current_pose.O());
+            previous_angular_pose_error = final_angle_error;
+        } else {
+            float raw_error = limit_angle_deg(target_pose.O() - current_pose.O());
+            final_angle_error =
+                enforce_angle_continuity_deg(raw_error, previous_angular_pose_error);
+            previous_angular_pose_error = final_angle_error;
+        }
     } else {
         final_angle_error = 0.0f;
     }
@@ -404,7 +412,6 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
 
     if (etl::absolute(final_angle_error) > angular_threshold) {
         // Still rotating to final orientation with anti-drift correction active
-        DEBUG("ROTATE_TO_FINAL_ANGLE: still rotating\n");
     } else {
         linear_recompute_profile = true;
         angular_recompute_profile = true;
@@ -413,8 +420,6 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
         // Reset speed PIDs on transition to FINISHED
         io.set(keys_.linear_speed_pid_reset, true);
         io.set(keys_.angular_speed_pid_reset, true);
-        LOG_INFO("ROTATE_TO_FINAL_ANGLE: rotation complete (ang=%.2f° <= threshold %.2f°)\n",
-                 static_cast<double>(final_angle_error), static_cast<double>(angular_threshold));
     }
 }
 

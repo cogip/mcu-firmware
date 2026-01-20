@@ -15,8 +15,11 @@
 // Project includes
 #include "PoseStraightFilterIOKeys.hpp"
 #include "PoseStraightFilterParameters.hpp"
+#include "cogip_defs/Polar.hpp"
+#include "cogip_defs/Pose.hpp"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
+#include "trigonometry.h"
 
 namespace cogip {
 
