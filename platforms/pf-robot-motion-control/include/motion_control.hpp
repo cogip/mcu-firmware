@@ -105,7 +105,7 @@ void pf_init_motion_control(void);
 void pf_start_motion_control(void);
 
 /// Reset all motion control components
-void pf_motion_control_reset(void);
+void pf_motion_control_reset_controllers(void);
 
 /// Make motion control engine thread loop disabled
 void pf_disable_motion_control();

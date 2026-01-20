@@ -248,61 +248,6 @@ pf_quadpid_feedforward_meta_controller_init(void)
     return quadpid_feedforward_chain::init();
 }
 
-// ============================================================================
-// Linear Speed Tuning chain
-// ============================================================================
-
-/// Initialize platform Linear Speed Tuning meta controller
-/// Return initialized meta controller
-static cogip::motion_control::MetaController<>* pf_linear_speed_tuning_meta_controller_init(void)
-{
-    return linear_speed_tuning_chain::init();
-}
-
-// ============================================================================
-// Angular Speed Tuning chain
-// ============================================================================
-
-/// Initialize platform Angular Speed Tuning meta controller
-/// Return initialized meta controller
-static cogip::motion_control::MetaController<>* pf_angular_speed_tuning_meta_controller_init(void)
-{
-    return angular_speed_tuning_chain::init();
-}
-
-// ============================================================================
-// Linear Pose Tuning chain
-// ============================================================================
-
-/// Initialize platform Linear Pose Tuning meta controller
-/// Return initialized meta controller
-static cogip::motion_control::MetaController<>* pf_linear_pose_tuning_meta_controller_init(void)
-{
-    return linear_pose_tuning_chain::init();
-}
-
-// ============================================================================
-// Angular Pose Tuning chain
-// ============================================================================
-
-/// Initialize platform Angular Pose Tuning meta controller
-/// Return initialized meta controller
-static cogip::motion_control::MetaController<>* pf_angular_pose_tuning_meta_controller_init(void)
-{
-    return angular_pose_tuning_chain::init();
-}
-
-// ============================================================================
-// Pose Test chain (combined linear + angular)
-// ============================================================================
-
-/// Initialize platform Pose Test meta controller
-/// Return initialized meta controller
-static cogip::motion_control::MetaController<>* pf_pose_test_meta_controller_init(void)
-{
-    return pose_test_chain::init();
-}
-
 /// Restore platform QuadPID Feedforward meta controller to its original
 /// configuration.
 static void pf_quadpid_feedforward_meta_controller_restore(void)
@@ -620,17 +565,11 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     // Deal with the first pose in the list
     pf_motion_control_platform_engine.set_target_pose(target_pose);
 
-    // New target pose, the robot is moving
     pf_motion_control_platform_engine.set_pose_reached(
         cogip::motion_control::target_pose_status_t::moving);
 
-    // CRITICAL: Disable motion control BEFORE reset to stop control loop
-    // Otherwise localization continues updating during reset
     pf_motion_control_platform_engine.disable();
-
-    pf_motion_control_reset();
-
-    // Re-enable motion control after clean reset
+    pf_motion_control_reset_controllers();
     pf_motion_control_platform_engine.enable();
 }
 
@@ -667,7 +606,7 @@ void pf_start_motion_control(void)
     pf_motion_control_platform_engine.start_thread();
 }
 
-void pf_motion_control_reset(void)
+void pf_motion_control_reset_controllers(void)
 {
     // Log pose before reset
     const auto& pose_before = localization.pose();
@@ -676,6 +615,8 @@ void pf_motion_control_reset(void)
              static_cast<double>(pose_before.O()));
 
     // Reset filters according to current controller
+    // Note: chain::reset() resets PIDs and filters but NOT PoseStraightFilter state machine
+    // The state machine must manage its own transitions based on pose errors
     switch (current_controller_id) {
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
         quadpid_chain::reset();
@@ -686,10 +627,6 @@ void pf_motion_control_reset(void)
     default:
         break;
     }
-
-    // Reset pose straight filter state (reset both chains as only one is active at a time)
-    quadpid_chain::pose_straight_filter.reset_current_state();
-    quadpid_feedforward_chain::pose_straight_filter.reset_current_state();
 
     // Log pose after reset
     const auto& pose_after = localization.pose();
@@ -743,11 +680,11 @@ void pf_init_motion_control(void)
     // Init controllers
     pf_quadpid_meta_controller = pf_quadpid_meta_controller_init();
     auto* pf_quadpid_feedforward_meta_controller = pf_quadpid_feedforward_meta_controller_init();
-    pf_linear_speed_tuning_meta_controller = pf_linear_speed_tuning_meta_controller_init();
-    pf_angular_speed_tuning_meta_controller = pf_angular_speed_tuning_meta_controller_init();
-    pf_linear_pose_tuning_meta_controller = pf_linear_pose_tuning_meta_controller_init();
-    pf_angular_pose_tuning_meta_controller = pf_angular_pose_tuning_meta_controller_init();
-    pf_pose_test_meta_controller = pf_pose_test_meta_controller_init();
+    pf_linear_speed_tuning_meta_controller = linear_speed_tuning_chain::init();
+    pf_angular_speed_tuning_meta_controller = angular_speed_tuning_chain::init();
+    pf_linear_pose_tuning_meta_controller = linear_pose_tuning_chain::init();
+    pf_angular_pose_tuning_meta_controller = angular_pose_tuning_chain::init();
+    pf_pose_test_meta_controller = pose_test_chain::init();
 
     // Associate default controller (QUADPID_FEEDFORWARD) to the engine
     pf_motion_control_platform_engine.set_controller(pf_quadpid_feedforward_meta_controller);
