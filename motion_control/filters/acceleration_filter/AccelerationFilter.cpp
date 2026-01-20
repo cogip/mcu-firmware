@@ -46,8 +46,6 @@ void AccelerationFilter::execute(ControllersIO& io)
     float abs_previous_speed = etl::absolute(previous_speed_order_);
     float abs_speed_order = etl::absolute(speed_order);
 
-    // (previously used for verbose logging)
-
     // If speed order is greater than previous output speed, limit the increase
     if (abs_speed_order > abs_previous_speed) {
         // Maximum allowed speed = previous_speed + acceleration (per period)
@@ -73,8 +71,6 @@ void AccelerationFilter::execute(ControllersIO& io)
             speed_order = -min_speed;
         }
     }
-
-    // Verbose logs removed to reduce log spam in production.
 
     // Save output speed for next cycle
     previous_speed_order_ = speed_order;
