@@ -94,6 +94,17 @@ class MetaController : public BaseMetaController
         }
     }
 
+    /// @brief Reset all controllers in the chain.
+    /// Called when changing target to reinitialize all internal states.
+    void reset() override
+    {
+        for (auto* controller : controllers_) {
+            if (controller) {
+                controller->reset();
+            }
+        }
+    }
+
     /// @brief Run every controller in the chain, passing along the same
     /// ControllersIO.
     /// @param io Shared IO object containing inputs/outputs for all controllers.
