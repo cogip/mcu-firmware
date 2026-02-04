@@ -32,6 +32,7 @@ static const PoseStraightFilterIOKeys pose_straight_filter_io_keys_default = {
     .target_linear_speed = "linear_target_speed",
     .target_angular_speed = "angular_target_speed",
     .motion_direction = "motion_direction",
+    .bypass_final_orientation = "bypass_final_orientation",
 
     // Output keys
     .linear_pose_error = "linear_pose_error",
@@ -49,7 +50,9 @@ static const PoseStraightFilterIOKeys pose_straight_filter_io_keys_default = {
     .angular_recompute_profile = "angular_recompute_profile",
     .angular_invalidate_profile = "angular_invalidate_profile",
     .linear_speed_pid_reset = "linear_speed_pid_reset",
-    .angular_speed_pid_reset = "angular_speed_pid_reset"};
+    .angular_speed_pid_reset = "angular_speed_pid_reset",
+    .linear_pose_pid_reset = "linear_pose_pid_reset",
+    .angular_pose_pid_reset = "angular_pose_pid_reset"};
 
 } // namespace motion_control
 
