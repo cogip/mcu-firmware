@@ -4,8 +4,8 @@
 // directory for more details.
 
 /// @file
-/// @brief Feedforward chain controller instances
-/// @details Controllers that need separate instances for the feedforward chain
+/// @brief Tracker chain controller instances
+/// @details Controllers that need separate instances for the tracker chain
 ///          (cannot be shared with QuadPID chain due to meta-controller ownership).
 
 #pragma once
@@ -20,9 +20,6 @@
 #include "deceleration_filter/DecelerationFilter.hpp"
 #include "deceleration_filter/DecelerationFilterIOKeys.hpp"
 #include "deceleration_filter/DecelerationFilterParameters.hpp"
-#include "feedforward_combiner_controller/FeedforwardCombinerController.hpp"
-#include "feedforward_combiner_controller/FeedforwardCombinerControllerIOKeys.hpp"
-#include "feedforward_combiner_controller/FeedforwardCombinerControllerParameters.hpp"
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "parameter/Parameter.hpp"
@@ -37,9 +34,9 @@
 #include "pose_straight_filter/PoseStraightFilter.hpp"
 #include "pose_straight_filter/PoseStraightFilterIOKeysDefault.hpp"
 #include "pose_straight_filter/PoseStraightFilterParameters.hpp"
-#include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
-#include "profile_feedforward_controller/ProfileFeedforwardControllerIOKeys.hpp"
-#include "profile_feedforward_controller/ProfileFeedforwardControllerParameters.hpp"
+#include "profile_tracker_controller/ProfileTrackerController.hpp"
+#include "profile_tracker_controller/ProfileTrackerControllerIOKeys.hpp"
+#include "profile_tracker_controller/ProfileTrackerControllerParameters.hpp"
 #include "quadpid_meta_controller/QuadPIDMetaController.hpp"
 #include "speed_limit_filter/SpeedLimitFilter.hpp"
 #include "speed_limit_filter/SpeedLimitFilterIOKeys.hpp"
@@ -51,38 +48,45 @@
 #include "telemetry_controller/TelemetryController.hpp"
 #include "telemetry_controller/TelemetryControllerIOKeysDefault.hpp"
 #include "telemetry_controller/TelemetryControllerParameters.hpp"
+#include "tracker_combiner_controller/TrackerCombinerController.hpp"
+#include "tracker_combiner_controller/TrackerCombinerControllerIOKeys.hpp"
+#include "tracker_combiner_controller/TrackerCombinerControllerParameters.hpp"
 
 namespace cogip {
 namespace pf {
 namespace motion_control {
-namespace quadpid_feedforward_chain {
+namespace quadpid_tracker_chain {
 
 // ============================================================================
 // Local PIDs (independent from QUADPID chain)
 // ============================================================================
 
-// PID parameters for feedforward chain
-inline cogip::pid::PIDParameters feedforward_linear_pose_pid_parameters(
-    feedforward_linear_pose_pid_kp, feedforward_linear_pose_pid_ki, feedforward_linear_pose_pid_kd,
-    feedforward_linear_pose_pid_integral_limit);
+// PID parameters for tracker chain
+inline cogip::pid::PIDParameters
+    tracker_linear_pose_pid_parameters(tracker_linear_pose_pid_kp, tracker_linear_pose_pid_ki,
+                                       tracker_linear_pose_pid_kd,
+                                       tracker_linear_pose_pid_integral_limit);
 
-inline cogip::pid::PIDParameters feedforward_linear_speed_pid_parameters(
-    feedforward_linear_speed_pid_kp, feedforward_linear_speed_pid_ki,
-    feedforward_linear_speed_pid_kd, feedforward_linear_speed_pid_integral_limit);
+inline cogip::pid::PIDParameters
+    tracker_linear_speed_pid_parameters(tracker_linear_speed_pid_kp, tracker_linear_speed_pid_ki,
+                                        tracker_linear_speed_pid_kd,
+                                        tracker_linear_speed_pid_integral_limit);
 
-inline cogip::pid::PIDParameters feedforward_angular_pose_pid_parameters(
-    feedforward_angular_pose_pid_kp, feedforward_angular_pose_pid_ki,
-    feedforward_angular_pose_pid_kd, feedforward_angular_pose_pid_integral_limit);
+inline cogip::pid::PIDParameters
+    tracker_angular_pose_pid_parameters(tracker_angular_pose_pid_kp, tracker_angular_pose_pid_ki,
+                                        tracker_angular_pose_pid_kd,
+                                        tracker_angular_pose_pid_integral_limit);
 
-inline cogip::pid::PIDParameters feedforward_angular_speed_pid_parameters(
-    feedforward_angular_speed_pid_kp, feedforward_angular_speed_pid_ki,
-    feedforward_angular_speed_pid_kd, feedforward_angular_speed_pid_integral_limit);
+inline cogip::pid::PIDParameters
+    tracker_angular_speed_pid_parameters(tracker_angular_speed_pid_kp, tracker_angular_speed_pid_ki,
+                                         tracker_angular_speed_pid_kd,
+                                         tracker_angular_speed_pid_integral_limit);
 
 // PID instances
-inline cogip::pid::PID feedforward_linear_pose_pid(feedforward_linear_pose_pid_parameters);
-inline cogip::pid::PID feedforward_linear_speed_pid(feedforward_linear_speed_pid_parameters);
-inline cogip::pid::PID feedforward_angular_pose_pid(feedforward_angular_pose_pid_parameters);
-inline cogip::pid::PID feedforward_angular_speed_pid(feedforward_angular_speed_pid_parameters);
+inline cogip::pid::PID tracker_linear_pose_pid(tracker_linear_pose_pid_parameters);
+inline cogip::pid::PID tracker_linear_speed_pid(tracker_linear_speed_pid_parameters);
+inline cogip::pid::PID tracker_angular_pose_pid(tracker_angular_pose_pid_parameters);
+inline cogip::pid::PID tracker_angular_speed_pid(tracker_angular_speed_pid_parameters);
 
 // ============================================================================
 // PathManagerFilter
@@ -114,7 +118,7 @@ inline cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_
     angular_threshold, linear_threshold, angular_intermediate_threshold,
     platform_max_dec_angular_deg_per_period2, platform_max_dec_linear_mm_per_period2,
     false, // bypass_final_orientation
-    true   // use_angle_continuity (required for ProfileFeedforward)
+    true   // use_angle_continuity (required for ProfileTracker)
 );
 
 inline cogip::motion_control::PoseStraightFilter
@@ -122,164 +126,161 @@ inline cogip::motion_control::PoseStraightFilter
                          pose_straight_filter_parameters);
 
 // ============================================================================
-// Pose loop meta controllers (ProfileFeedforward + ConditionalSwitch + Combiner)
+// Pose loop meta controllers (ProfileTracker + ConditionalSwitch + Combiner)
 // ============================================================================
 
 // Linear dominant PosePIDController (strong gain for active tracking)
-inline cogip::motion_control::PosePIDControllerParameters
-    linear_feedforward_pose_controller_parameters{&feedforward_linear_pose_pid};
+inline cogip::motion_control::PosePIDControllerParameters linear_tracker_pose_controller_parameters{
+    &tracker_linear_pose_pid};
 
 inline constexpr cogip::motion_control::PosePIDControllerIOKeys
-    linear_feedforward_pose_controller_keys = {.position_error = "linear_tracking_error",
-                                               .current_speed = "linear_current_speed",
-                                               .target_speed = "dummy_target_speed",
-                                               .disable_filter = "dummy_disable",
-                                               .pose_reached = "dummy_pose_reached",
-                                               .speed_order = "linear_feedback_correction",
-                                               .reset = "linear_pose_pid_reset"};
+    linear_tracker_pose_controller_keys = {.position_error = "linear_tracking_error",
+                                           .current_speed = "linear_current_speed",
+                                           .target_speed = "dummy_target_speed",
+                                           .disable_filter = "dummy_disable",
+                                           .pose_reached = "dummy_pose_reached",
+                                           .speed_order = "linear_feedback_correction",
+                                           .reset = "linear_pose_pid_reset"};
 
-inline cogip::motion_control::PosePIDController linear_feedforward_pose_controller{
-    linear_feedforward_pose_controller_keys, linear_feedforward_pose_controller_parameters};
+inline cogip::motion_control::PosePIDController linear_tracker_pose_controller{
+    linear_tracker_pose_controller_keys, linear_tracker_pose_controller_parameters};
 
 // ============================================================================
-// ProfileFeedforwardController instances
+// ProfileTrackerController instances
 // ============================================================================
 
-/// Linear ProfileFeedforwardController IO keys
+/// Linear ProfileTrackerController IO keys
 /// Note: current_speed uses speed_order (not measured speed) so the profile
 /// continues from commanded velocity when regenerating mid-motion
-inline cogip::motion_control::ProfileFeedforwardControllerIOKeys
-    linear_profile_feedforward_io_keys = {
-        .pose_error = "linear_pose_error",
-        .current_speed = "linear_speed_order",
-        .recompute_profile = "linear_recompute_profile",
-        .feedforward_velocity = "linear_feedforward_velocity",
-        .tracking_error = "linear_tracking_error",
-        .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
+inline cogip::motion_control::ProfileTrackerControllerIOKeys linear_profile_tracker_io_keys = {
+    .pose_error = "linear_pose_error",
+    .current_speed = "linear_speed_order",
+    .recompute_profile = "linear_recompute_profile",
+    .tracker_velocity = "linear_tracker_velocity",
+    .tracking_error = "linear_tracking_error",
+    .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
 
-/// Linear ProfileFeedforwardController parameters
-inline cogip::motion_control::ProfileFeedforwardControllerParameters
-    linear_profile_feedforward_parameters(platform_max_speed_linear_mm_per_period, // max_speed
-                                          platform_max_acc_linear_mm_per_period2,  // acceleration
-                                          platform_max_dec_linear_mm_per_period2,  // deceleration
-                                          true, // must_stop_at_end
-                                          1     // period_increment
+/// Linear ProfileTrackerController parameters
+inline cogip::motion_control::ProfileTrackerControllerParameters
+    linear_profile_tracker_parameters(platform_max_speed_linear_mm_per_period, // max_speed
+                                      platform_max_acc_linear_mm_per_period2,  // acceleration
+                                      platform_max_dec_linear_mm_per_period2,  // deceleration
+                                      true,                                    // must_stop_at_end
+                                      1                                        // period_increment
     );
 
-/// Linear ProfileFeedforwardController
-inline cogip::motion_control::ProfileFeedforwardController
-    linear_profile_feedforward_controller(linear_profile_feedforward_io_keys,
-                                          linear_profile_feedforward_parameters);
+/// Linear ProfileTrackerController
+inline cogip::motion_control::ProfileTrackerController
+    linear_profile_tracker_controller(linear_profile_tracker_io_keys,
+                                      linear_profile_tracker_parameters);
 
-/// Angular ProfileFeedforwardController IO keys
+/// Angular ProfileTrackerController IO keys
 /// Note: current_speed uses speed_order (not measured speed) so the profile
 /// continues from commanded velocity when regenerating mid-motion
-inline cogip::motion_control::ProfileFeedforwardControllerIOKeys
-    angular_profile_feedforward_io_keys = {
-        .pose_error = "angular_pose_error",
-        .current_speed = "angular_speed_order",
-        .recompute_profile = "angular_recompute_profile",
-        .feedforward_velocity = "angular_feedforward_velocity",
-        .tracking_error = "angular_tracking_error",
-        .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
+inline cogip::motion_control::ProfileTrackerControllerIOKeys angular_profile_tracker_io_keys = {
+    .pose_error = "angular_pose_error",
+    .current_speed = "angular_speed_order",
+    .recompute_profile = "angular_recompute_profile",
+    .tracker_velocity = "angular_tracker_velocity",
+    .tracking_error = "angular_tracking_error",
+    .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
 
-/// Angular ProfileFeedforwardController parameters
-inline cogip::motion_control::ProfileFeedforwardControllerParameters
-    angular_profile_feedforward_parameters(
-        platform_max_speed_angular_deg_per_period, // max_speed
-        platform_max_acc_angular_deg_per_period2,  // acceleration
-        platform_max_dec_angular_deg_per_period2,  // deceleration (same as acc for angular)
-        true,                                      // must_stop_at_end
-        1                                          // period_increment
-    );
+/// Angular ProfileTrackerController parameters
+inline cogip::motion_control::ProfileTrackerControllerParameters angular_profile_tracker_parameters(
+    platform_max_speed_angular_deg_per_period, // max_speed
+    platform_max_acc_angular_deg_per_period2,  // acceleration
+    platform_max_dec_angular_deg_per_period2,  // deceleration (same as acc for angular)
+    true,                                      // must_stop_at_end
+    1                                          // period_increment
+);
 
-/// Angular ProfileFeedforwardController
-inline cogip::motion_control::ProfileFeedforwardController
-    angular_profile_feedforward_controller(angular_profile_feedforward_io_keys,
-                                           angular_profile_feedforward_parameters);
+/// Angular ProfileTrackerController
+inline cogip::motion_control::ProfileTrackerController
+    angular_profile_tracker_controller(angular_profile_tracker_io_keys,
+                                       angular_profile_tracker_parameters);
 
 // ============================================================================
-// FeedforwardCombinerController instances
+// TrackerCombinerController instances
 // ============================================================================
 
-/// Linear FeedforwardCombinerController IO keys (position tracker)
+/// Linear TrackerCombinerController IO keys (position tracker)
 /// Outputs speed_order only (not speed_command) - speed combiner will produce speed_command
-inline cogip::motion_control::FeedforwardCombinerControllerIOKeys
-    linear_feedforward_combiner_io_keys = {.feedforward_velocity = "linear_feedforward_velocity",
-                                           .feedback_correction = "linear_feedback_correction",
-                                           .speed_order = "linear_speed_order",
-                                           .speed_command = ""}; // Speed combiner will handle this
+inline cogip::motion_control::TrackerCombinerControllerIOKeys linear_tracker_combiner_io_keys = {
+    .tracker_velocity = "linear_tracker_velocity",
+    .feedback_correction = "linear_feedback_correction",
+    .speed_order = "linear_speed_order",
+    .speed_command = ""}; // Speed combiner will handle this
 
-/// Linear FeedforwardCombinerController parameters
-inline cogip::motion_control::FeedforwardCombinerControllerParameters
-    linear_feedforward_combiner_parameters;
+/// Linear TrackerCombinerController parameters
+inline cogip::motion_control::TrackerCombinerControllerParameters
+    linear_tracker_combiner_parameters;
 
-/// Linear FeedforwardCombinerController
-inline cogip::motion_control::FeedforwardCombinerController
-    linear_feedforward_combiner_controller(linear_feedforward_combiner_io_keys,
-                                           linear_feedforward_combiner_parameters);
+/// Linear TrackerCombinerController
+inline cogip::motion_control::TrackerCombinerController
+    linear_tracker_combiner_controller(linear_tracker_combiner_io_keys,
+                                       linear_tracker_combiner_parameters);
 
-/// Angular FeedforwardCombinerController IO keys (position tracker)
+/// Angular TrackerCombinerController IO keys (position tracker)
 /// Outputs speed_order only (not speed_command) - speed combiner will produce speed_command
-inline cogip::motion_control::FeedforwardCombinerControllerIOKeys
-    angular_feedforward_combiner_io_keys = {.feedforward_velocity = "angular_feedforward_velocity",
-                                            .feedback_correction = "angular_feedback_correction",
-                                            .speed_order = "angular_speed_order",
-                                            .speed_command = ""}; // Speed combiner will handle this
+inline cogip::motion_control::TrackerCombinerControllerIOKeys angular_tracker_combiner_io_keys = {
+    .tracker_velocity = "angular_tracker_velocity",
+    .feedback_correction = "angular_feedback_correction",
+    .speed_order = "angular_speed_order",
+    .speed_command = ""}; // Speed combiner will handle this
 
-/// Angular FeedforwardCombinerController parameters
-inline cogip::motion_control::FeedforwardCombinerControllerParameters
-    angular_feedforward_combiner_parameters;
+/// Angular TrackerCombinerController parameters
+inline cogip::motion_control::TrackerCombinerControllerParameters
+    angular_tracker_combiner_parameters;
 
-/// Angular FeedforwardCombinerController
-inline cogip::motion_control::FeedforwardCombinerController
-    angular_feedforward_combiner_controller(angular_feedforward_combiner_io_keys,
-                                            angular_feedforward_combiner_parameters);
+/// Angular TrackerCombinerController
+inline cogip::motion_control::TrackerCombinerController
+    angular_tracker_combiner_controller(angular_tracker_combiner_io_keys,
+                                        angular_tracker_combiner_parameters);
 
 // ============================================================================
-// SpeedPIDController parameters (use local feedforward PIDs)
+// SpeedPIDController parameters (use local tracker PIDs)
 // ============================================================================
 
-/// Linear SpeedPIDController parameters (points to feedforward_linear_speed_pid)
+/// Linear SpeedPIDController parameters (points to tracker_linear_speed_pid)
 inline cogip::motion_control::SpeedPIDControllerParameters
-    linear_feedforward_speed_controller_parameters(&feedforward_linear_speed_pid);
+    linear_tracker_speed_controller_parameters(&tracker_linear_speed_pid);
 
-/// Angular SpeedPIDController parameters (points to feedforward_angular_speed_pid)
+/// Angular SpeedPIDController parameters (points to tracker_angular_speed_pid)
 inline cogip::motion_control::SpeedPIDControllerParameters
-    angular_feedforward_speed_controller_parameters(&feedforward_angular_speed_pid);
+    angular_tracker_speed_controller_parameters(&tracker_angular_speed_pid);
 
 // ============================================================================
 // SpeedPIDController instances
 // ============================================================================
 
-/// Linear SpeedPIDController (uses local feedforward PID)
-inline cogip::motion_control::SpeedPIDController linear_feedforward_speed_controller(
+/// Linear SpeedPIDController (uses local tracker PID)
+inline cogip::motion_control::SpeedPIDController linear_tracker_speed_controller(
     cogip::motion_control::linear_speed_pid_controller_io_keys_default,
-    linear_feedforward_speed_controller_parameters);
+    linear_tracker_speed_controller_parameters);
 
-/// Angular SpeedPIDController (uses local feedforward PID)
-inline cogip::motion_control::SpeedPIDController angular_feedforward_speed_controller(
+/// Angular SpeedPIDController (uses local tracker PID)
+inline cogip::motion_control::SpeedPIDController angular_tracker_speed_controller(
     cogip::motion_control::angular_speed_pid_controller_io_keys_default,
-    angular_feedforward_speed_controller_parameters);
+    angular_tracker_speed_controller_parameters);
 
 // ============================================================================
-// Linear feedforward chain SpeedPIDController
+// Linear tracker chain SpeedPIDController
 // ============================================================================
 
-// Linear feedforward chain SpeedPIDController (uses feedforward PIDs)
-inline cogip::motion_control::SpeedPIDControllerParameters linear_feedforward_chain_speed_params{
-    &feedforward_linear_speed_pid};
+// Linear tracker chain SpeedPIDController (uses tracker PIDs)
+inline cogip::motion_control::SpeedPIDControllerParameters linear_tracker_chain_speed_params{
+    &tracker_linear_speed_pid};
 
-inline cogip::motion_control::SpeedPIDController linear_feedforward_chain_speed{
+inline cogip::motion_control::SpeedPIDController linear_tracker_chain_speed{
     cogip::motion_control::linear_speed_pid_controller_io_keys_default,
-    linear_feedforward_chain_speed_params};
+    linear_tracker_chain_speed_params};
 
 // ============================================================================
-// Linear feedforward chain MetaController
+// Linear tracker chain MetaController
 // ============================================================================
 
-// Feedforward chain: PosePID → feedback_correction, Combiner → SpeedPID
-inline cogip::motion_control::MetaController<> linear_feedforward_chain;
+// Tracker chain: PosePID → feedback_correction, Combiner → SpeedPID
+inline cogip::motion_control::MetaController<> linear_tracker_chain;
 
 // ============================================================================
 // Angular PosePIDController (tracking error correction)
@@ -287,38 +288,38 @@ inline cogip::motion_control::MetaController<> linear_feedforward_chain;
 
 // Angular dominant PosePIDController (strong gain for active tracking)
 inline constexpr cogip::motion_control::PosePIDControllerIOKeys
-    angular_feedforward_pose_controller_keys = {.position_error = "angular_tracking_error",
-                                                .current_speed = "angular_current_speed",
-                                                .target_speed = "dummy_target_speed",
-                                                .disable_filter = "dummy_disable",
-                                                .pose_reached = "dummy_pose_reached",
-                                                .speed_order = "angular_feedback_correction",
-                                                .reset = "angular_pose_pid_reset"};
+    angular_tracker_pose_controller_keys = {.position_error = "angular_tracking_error",
+                                            .current_speed = "angular_current_speed",
+                                            .target_speed = "dummy_target_speed",
+                                            .disable_filter = "dummy_disable",
+                                            .pose_reached = "dummy_pose_reached",
+                                            .speed_order = "angular_feedback_correction",
+                                            .reset = "angular_pose_pid_reset"};
 
 inline cogip::motion_control::PosePIDControllerParameters
-    angular_feedforward_pose_controller_parameters{&feedforward_angular_pose_pid};
+    angular_tracker_pose_controller_parameters{&tracker_angular_pose_pid};
 
-inline cogip::motion_control::PosePIDController angular_feedforward_pose_controller{
-    angular_feedforward_pose_controller_keys, angular_feedforward_pose_controller_parameters};
+inline cogip::motion_control::PosePIDController angular_tracker_pose_controller{
+    angular_tracker_pose_controller_keys, angular_tracker_pose_controller_parameters};
 
 // ============================================================================
-// Angular feedforward chain SpeedPIDController
+// Angular tracker chain SpeedPIDController
 // ============================================================================
 
-// Angular feedforward chain SpeedPIDController (uses feedforward PIDs)
-inline cogip::motion_control::SpeedPIDControllerParameters angular_feedforward_chain_speed_params{
-    &feedforward_angular_speed_pid};
+// Angular tracker chain SpeedPIDController (uses tracker PIDs)
+inline cogip::motion_control::SpeedPIDControllerParameters angular_tracker_chain_speed_params{
+    &tracker_angular_speed_pid};
 
-inline cogip::motion_control::SpeedPIDController angular_feedforward_chain_speed{
+inline cogip::motion_control::SpeedPIDController angular_tracker_chain_speed{
     cogip::motion_control::angular_speed_pid_controller_io_keys_default,
-    angular_feedforward_chain_speed_params};
+    angular_tracker_chain_speed_params};
 
 // ============================================================================
-// Angular feedforward chain MetaController
+// Angular tracker chain MetaController
 // ============================================================================
 
-// Feedforward chain: PosePID → feedback_correction, Combiner → SpeedPID
-inline cogip::motion_control::MetaController<> angular_feedforward_chain;
+// Tracker chain: PosePID → feedback_correction, Combiner → SpeedPID
+inline cogip::motion_control::MetaController<> angular_tracker_chain;
 
 inline cogip::motion_control::MetaController<> linear_pose_loop_meta_controller;
 inline cogip::motion_control::MetaController<> angular_pose_loop_meta_controller;
@@ -440,31 +441,31 @@ inline cogip::motion_control::TelemetryController
                               telemetry_controller_parameters);
 
 // ============================================================================
-// QuadPIDMetaController for feedforward chain
+// QuadPIDMetaController for tracker chain
 // ============================================================================
 
-inline cogip::motion_control::QuadPIDMetaController quadpid_feedforward_meta_controller;
+inline cogip::motion_control::QuadPIDMetaController quadpid_tracker_meta_controller;
 
 // ============================================================================
 // Chain initialization function
 // ============================================================================
 
-/// Initialize feedforward chain meta controller
+/// Initialize tracker chain meta controller
 cogip::motion_control::QuadPIDMetaController* init();
 
-/// Reset feedforward chain state (all controllers via cascade)
+/// Reset tracker chain state (all controllers via cascade)
 inline void reset()
 {
     // Reset all controllers via meta controller cascade
     // This will call reset() on each controller, which resets:
     // - PoseStraightFilter: state machine, prev_target, angular error tracking
-    // - ProfileFeedforwardController: profile invalidation, period counter
+    // - ProfileTrackerController: profile invalidation, period counter
     // - PosePIDController: PID integral term
     // - SpeedPIDController: PID integral term
-    quadpid_feedforward_meta_controller.reset();
+    quadpid_tracker_meta_controller.reset();
 }
 
-} // namespace quadpid_feedforward_chain
+} // namespace quadpid_tracker_chain
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip

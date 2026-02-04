@@ -6,26 +6,26 @@
 /// @file
 /// @brief Linear speed chain controller instances for speed PID tuning
 /// @details Chain that generates a trapezoidal velocity profile and uses
-///          feedforward + PID feedback for speed control.
-///          Chain: PoseErrorFilter -> ProfileFeedforwardController ->
-///                 SpeedPIDController -> FeedforwardCombinerController ->
+///          tracker + PID feedback for speed control.
+///          Chain: PoseErrorFilter -> ProfileTrackerController ->
+///                 SpeedPIDController -> TrackerCombinerController ->
 ///                 TuningPoseReachedFilter
 
 #pragma once
 
 #include "app_conf.hpp"
-#include "feedforward_combiner_controller/FeedforwardCombinerController.hpp"
-#include "feedforward_combiner_controller/FeedforwardCombinerControllerIOKeys.hpp"
-#include "feedforward_combiner_controller/FeedforwardCombinerControllerParameters.hpp"
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "pose_error_filter/PoseErrorFilter.hpp"
 #include "pose_error_filter/PoseErrorFilterIOKeys.hpp"
 #include "pose_error_filter/PoseErrorFilterParameters.hpp"
-#include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
+#include "profile_tracker_controller/ProfileTrackerController.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeys.hpp"
 #include "target_change_detector/TargetChangeDetector.hpp"
+#include "tracker_combiner_controller/TrackerCombinerController.hpp"
+#include "tracker_combiner_controller/TrackerCombinerControllerIOKeys.hpp"
+#include "tracker_combiner_controller/TrackerCombinerControllerParameters.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilter.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilterIOKeys.hpp"
 
@@ -85,35 +85,35 @@ inline cogip::motion_control::PoseErrorFilter pose_error_filter(pose_error_filte
                                                                 pose_error_filter_parameters);
 
 // ============================================================================
-// ProfileFeedforwardController for velocity profile generation
+// ProfileTrackerController for velocity profile generation
 // ============================================================================
 
-/// IO keys: pose_error triggers the profile, feedforward_velocity is the output
-inline cogip::motion_control::ProfileFeedforwardControllerIOKeys profile_feedforward_io_keys = {
+/// IO keys: pose_error triggers the profile, tracker_velocity is the output
+inline cogip::motion_control::ProfileTrackerControllerIOKeys profile_tracker_io_keys = {
     .pose_error = "linear_pose_error",
     .current_speed = "linear_current_speed",
     .recompute_profile = "linear_speed_recompute_profile",
-    .feedforward_velocity = "linear_feedforward_velocity", // To Combiner
+    .tracker_velocity = "linear_tracker_velocity", // To Combiner
     .tracking_error = "linear_speed_tracking_error",
     .profile_complete = "linear_speed_profile_complete"};
 
-inline cogip::motion_control::ProfileFeedforwardControllerParameters
-    profile_feedforward_parameters(platform_max_speed_linear_mm_per_period, // max_speed
-                                   platform_max_acc_linear_mm_per_period2,  // acceleration
-                                   platform_max_dec_linear_mm_per_period2,  // deceleration
-                                   true                                     // must_stop_at_end
+inline cogip::motion_control::ProfileTrackerControllerParameters
+    profile_tracker_parameters(platform_max_speed_linear_mm_per_period, // max_speed
+                               platform_max_acc_linear_mm_per_period2,  // acceleration
+                               platform_max_dec_linear_mm_per_period2,  // deceleration
+                               true                                     // must_stop_at_end
     );
 
-inline cogip::motion_control::ProfileFeedforwardController
-    profile_feedforward_controller(profile_feedforward_io_keys, profile_feedforward_parameters);
+inline cogip::motion_control::ProfileTrackerController
+    profile_tracker_controller(profile_tracker_io_keys, profile_tracker_parameters);
 
 // ============================================================================
 // SpeedPIDController (computes feedback correction)
 // ============================================================================
 
-/// IO keys for speed PID: reads feedforward velocity, outputs feedback correction
+/// IO keys for speed PID: reads tracker velocity, outputs feedback correction
 inline cogip::motion_control::SpeedPIDControllerIOKeys speed_pid_io_keys = {
-    .speed_order = "linear_feedforward_velocity", // Input from ProfileFeedforwardController
+    .speed_order = "linear_tracker_velocity", // Input from ProfileTrackerController
     .current_speed = "linear_current_speed",
     .speed_command = "linear_speed_feedback"}; // Output to Combiner (feedback correction)
 
@@ -121,22 +121,22 @@ inline cogip::motion_control::SpeedPIDController
     speed_controller(speed_pid_io_keys, linear_speed_tuning_controller_parameters);
 
 // ============================================================================
-// FeedforwardCombinerController (feedforward + feedback)
+// TrackerCombinerController (tracker + feedback)
 // ============================================================================
 
-/// IO keys: combines feedforward velocity + PID feedback correction
-/// speed_order = feedforward_velocity (setpoint from profile)
-/// speed_command = feedforward_velocity + feedback (sent to motors)
-inline cogip::motion_control::FeedforwardCombinerControllerIOKeys combiner_io_keys = {
-    .feedforward_velocity = "linear_feedforward_velocity",
+/// IO keys: combines tracker velocity + PID feedback correction
+/// speed_order = tracker_velocity (setpoint from profile)
+/// speed_command = tracker_velocity + feedback (sent to motors)
+inline cogip::motion_control::TrackerCombinerControllerIOKeys combiner_io_keys = {
+    .tracker_velocity = "linear_tracker_velocity",
     .feedback_correction = "linear_speed_feedback",
     .speed_order = "linear_speed_order",      // Setpoint for telemetry
-    .speed_command = "linear_speed_command"}; // Output for motors (feedforward + feedback)
+    .speed_command = "linear_speed_command"}; // Output for motors (tracker + feedback)
 
-inline cogip::motion_control::FeedforwardCombinerControllerParameters combiner_parameters;
+inline cogip::motion_control::TrackerCombinerControllerParameters combiner_parameters;
 
-inline cogip::motion_control::FeedforwardCombinerController
-    feedforward_combiner_controller(combiner_io_keys, combiner_parameters);
+inline cogip::motion_control::TrackerCombinerController
+    tracker_combiner_controller(combiner_io_keys, combiner_parameters);
 
 // ============================================================================
 // TuningPoseReachedFilter for signaling pose_reached when profile completes

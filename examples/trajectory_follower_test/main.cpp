@@ -6,9 +6,9 @@
 /**
  * @brief Test application for TrajectoryFollowerController
  *
- * This example demonstrates a trajectory follower with feedforward + feedback control.
+ * This example demonstrates a trajectory follower with tracker + feedback control.
  * It simulates a robot moving from 0 to 1000mm with:
- * - Feedforward: pre-computed trapezoidal velocity profile
+ * - Tracker: pre-computed trapezoidal velocity profile
  * - Feedback: PID correction for position tracking errors
  */
 
@@ -118,7 +118,7 @@ bool run_test(const char* test_name, double target_distance, double max_speed, d
     std::cout << "-------|---------------|----------------------|-------------|---------------|----"
                  "---------------\n";
 
-    // Simulation loop with feedforward + feedback
+    // Simulation loop with tracker + feedback
     double distance_threshold = 1.0; // mm
     bool target_reached = false;
     for (uint32_t period = 0; period <= total_periods + 10; period++) {
@@ -136,8 +136,8 @@ bool run_test(const char* test_name, double target_distance, double max_speed, d
             break;
         }
 
-        // Compute feedforward velocity from profile
-        double feedforward_velocity = profile.compute_theoretical_velocity(period);
+        // Compute tracker velocity from profile
+        double tracker_velocity = profile.compute_theoretical_velocity(period);
 
         // Compute theoretical remaining distance from profile
         double theoretical_remaining = profile.compute_theoretical_remaining_distance(period);
@@ -148,8 +148,8 @@ bool run_test(const char* test_name, double target_distance, double max_speed, d
         // Compute feedback correction via PID
         double feedback_correction = pid.compute(position_error);
 
-        // Final velocity command: feedforward + feedback
-        double velocity_command = feedforward_velocity + feedback_correction;
+        // Final velocity command: tracker + feedback
+        double velocity_command = tracker_velocity + feedback_correction;
 
         // Update robot simulator
         robot.update(velocity_command);
@@ -157,7 +157,7 @@ bool run_test(const char* test_name, double target_distance, double max_speed, d
         // Print every 10 periods (or every period for short profiles)
         if (period % 10 == 0 || total_periods <= 20) {
             printf("%6u | %13.2f | %20.2f | %11.2f | %13.2f | %17.2f\n", period, robot.position(),
-                   robot.velocity(), feedforward_velocity, feedback_correction, actual_remaining);
+                   robot.velocity(), tracker_velocity, feedback_correction, actual_remaining);
         }
     }
 

@@ -20,8 +20,8 @@ void TelemetryController::execute(ControllersIO& io)
         telemetry::Telemetry::send<int64_t>("linear_speed_order"_key_hash,
                                             static_cast<int64_t>(*opt));
     }
-    if (auto opt = io.get_as<float>("linear_feedforward_velocity")) {
-        telemetry::Telemetry::send<int64_t>("linear_feedforward_velocity"_key_hash,
+    if (auto opt = io.get_as<float>("linear_tracker_velocity")) {
+        telemetry::Telemetry::send<int64_t>("linear_tracker_velocity"_key_hash,
                                             static_cast<int64_t>(*opt));
     }
     if (auto opt = io.get_as<float>("linear_current_speed")) {
@@ -38,8 +38,8 @@ void TelemetryController::execute(ControllersIO& io)
         telemetry::Telemetry::send<int64_t>("angular_speed_order"_key_hash,
                                             static_cast<int64_t>(*opt));
     }
-    if (auto opt = io.get_as<float>("angular_feedforward_velocity")) {
-        telemetry::Telemetry::send<int64_t>("angular_feedforward_velocity"_key_hash,
+    if (auto opt = io.get_as<float>("angular_tracker_velocity")) {
+        telemetry::Telemetry::send<int64_t>("angular_tracker_velocity"_key_hash,
                                             static_cast<int64_t>(*opt));
     }
     if (auto opt = io.get_as<float>("angular_current_speed")) {

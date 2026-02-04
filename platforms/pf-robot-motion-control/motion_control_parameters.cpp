@@ -69,21 +69,21 @@ static const ParameterHandlerType::Registry registry = {
     {ENCODER_WHEELS_RESOLUTION_KEY, encoder_wheels_resolution_pulses},
     /// PID parameters
     // Linear pose PID
-    {LINEAR_POSE_PID_KP_KEY, feedforward_linear_pose_pid_kp},
-    {LINEAR_POSE_PID_KI_KEY, feedforward_linear_pose_pid_ki},
-    {LINEAR_POSE_PID_KD_KEY, feedforward_linear_pose_pid_kd},
+    {LINEAR_POSE_PID_KP_KEY, tracker_linear_pose_pid_kp},
+    {LINEAR_POSE_PID_KI_KEY, tracker_linear_pose_pid_ki},
+    {LINEAR_POSE_PID_KD_KEY, tracker_linear_pose_pid_kd},
     // Angular pose PID
-    {ANGULAR_POSE_PID_KP_KEY, feedforward_angular_pose_pid_kp},
-    {ANGULAR_POSE_PID_KI_KEY, feedforward_angular_pose_pid_ki},
-    {ANGULAR_POSE_PID_KD_KEY, feedforward_angular_pose_pid_kd},
+    {ANGULAR_POSE_PID_KP_KEY, tracker_angular_pose_pid_kp},
+    {ANGULAR_POSE_PID_KI_KEY, tracker_angular_pose_pid_ki},
+    {ANGULAR_POSE_PID_KD_KEY, tracker_angular_pose_pid_kd},
     // Linear speed PID
-    {LINEAR_SPEED_PID_KP_KEY, feedforward_linear_speed_pid_kp},
-    {LINEAR_SPEED_PID_KI_KEY, feedforward_linear_speed_pid_ki},
-    {LINEAR_SPEED_PID_KD_KEY, feedforward_linear_speed_pid_kd},
+    {LINEAR_SPEED_PID_KP_KEY, tracker_linear_speed_pid_kp},
+    {LINEAR_SPEED_PID_KI_KEY, tracker_linear_speed_pid_ki},
+    {LINEAR_SPEED_PID_KD_KEY, tracker_linear_speed_pid_kd},
     // Angular speed PID
-    {ANGULAR_SPEED_PID_KP_KEY, feedforward_angular_speed_pid_kp},
-    {ANGULAR_SPEED_PID_KI_KEY, feedforward_angular_speed_pid_ki},
-    {ANGULAR_SPEED_PID_KD_KEY, feedforward_angular_speed_pid_kd},
+    {ANGULAR_SPEED_PID_KP_KEY, tracker_angular_speed_pid_kp},
+    {ANGULAR_SPEED_PID_KI_KEY, tracker_angular_speed_pid_ki},
+    {ANGULAR_SPEED_PID_KD_KEY, tracker_angular_speed_pid_kd},
 };
 
 static ParameterHandlerType parameter_handler(registry);

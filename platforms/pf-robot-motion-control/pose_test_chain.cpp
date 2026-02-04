@@ -16,7 +16,7 @@
 #include "pose_pid_controller/PosePIDController.hpp"
 #include "pose_pid_controller/PosePIDControllerIOKeys.hpp"
 #include "pose_pid_controller/PosePIDControllerParameters.hpp"
-#include "quadpid_feedforward_chain.hpp"
+#include "quadpid_tracker_chain.hpp"
 #include "telemetry_controller/TelemetryController.hpp"
 #include "telemetry_controller/TelemetryControllerIOKeysDefault.hpp"
 #include "telemetry_controller/TelemetryControllerParameters.hpp"
@@ -80,22 +80,21 @@ static cogip::motion_control::PosePIDController
     angular_pose_controller(angular_pose_io_keys, angular_pose_controller_parameters);
 
 // ============================================================================
-// Separate instances of ProfileFeedforward and Combiner for pose_test_chain
-// (cannot share with quadpid_feedforward_chain - controller ownership)
+// Separate instances of ProfileTracker and Combiner for pose_test_chain
+// (cannot share with quadpid_tracker_chain - controller ownership)
 // ============================================================================
 
-// ProfileFeedforward for pose test (separate instance)
-static cogip::motion_control::ProfileFeedforwardControllerIOKeys
-    pose_test_linear_profile_feedforward_io_keys{
-        .pose_error = "linear_pose_error",
-        .current_speed = "linear_current_speed",
-        .recompute_profile = "linear_pose_recompute_profile",
-        .feedforward_velocity = "linear_feedforward_velocity",
-        .tracking_error = "linear_tracking_error",
-        .profile_complete = "linear_profile_complete"};
+// ProfileTracker for pose test (separate instance)
+static cogip::motion_control::ProfileTrackerControllerIOKeys
+    pose_test_linear_profile_tracker_io_keys{.pose_error = "linear_pose_error",
+                                             .current_speed = "linear_current_speed",
+                                             .recompute_profile = "linear_pose_recompute_profile",
+                                             .tracker_velocity = "linear_tracker_velocity",
+                                             .tracking_error = "linear_tracking_error",
+                                             .profile_complete = "linear_profile_complete"};
 
-static cogip::motion_control::ProfileFeedforwardControllerParameters
-    pose_test_linear_profile_feedforward_parameters(
+static cogip::motion_control::ProfileTrackerControllerParameters
+    pose_test_linear_profile_tracker_parameters(
         platform_max_speed_linear_mm_per_period, // max_speed
         platform_max_acc_linear_mm_per_period2,  // acceleration
         platform_max_dec_linear_mm_per_period2,  // deceleration
@@ -103,26 +102,23 @@ static cogip::motion_control::ProfileFeedforwardControllerParameters
         1                                        // period_increment
     );
 
-static cogip::motion_control::ProfileFeedforwardController
-    pose_test_linear_profile_feedforward_controller(
-        pose_test_linear_profile_feedforward_io_keys,
-        pose_test_linear_profile_feedforward_parameters);
+static cogip::motion_control::ProfileTrackerController
+    pose_test_linear_profile_tracker_controller(pose_test_linear_profile_tracker_io_keys,
+                                                pose_test_linear_profile_tracker_parameters);
 
-// FeedforwardCombiner for pose test (separate instance)
-static cogip::motion_control::FeedforwardCombinerControllerIOKeys
-    pose_test_linear_feedforward_combiner_io_keys{
-        .feedforward_velocity = "linear_feedforward_velocity",
-        .feedback_correction = "linear_feedback_correction",
-        .speed_order = "linear_speed_order",
-        .speed_command = "linear_speed_command"};
+// TrackerCombiner for pose test (separate instance)
+static cogip::motion_control::TrackerCombinerControllerIOKeys
+    pose_test_linear_tracker_combiner_io_keys{.tracker_velocity = "linear_tracker_velocity",
+                                              .feedback_correction = "linear_feedback_correction",
+                                              .speed_order = "linear_speed_order",
+                                              .speed_command = "linear_speed_command"};
 
-static cogip::motion_control::FeedforwardCombinerControllerParameters
-    pose_test_linear_feedforward_combiner_parameters;
+static cogip::motion_control::TrackerCombinerControllerParameters
+    pose_test_linear_tracker_combiner_parameters;
 
-static cogip::motion_control::FeedforwardCombinerController
-    pose_test_linear_feedforward_combiner_controller(
-        pose_test_linear_feedforward_combiner_io_keys,
-        pose_test_linear_feedforward_combiner_parameters);
+static cogip::motion_control::TrackerCombinerController
+    pose_test_linear_tracker_combiner_controller(pose_test_linear_tracker_combiner_io_keys,
+                                                 pose_test_linear_tracker_combiner_parameters);
 
 // ============================================================================
 // Initialization function
@@ -130,15 +126,13 @@ static cogip::motion_control::FeedforwardCombinerController
 
 cogip::motion_control::MetaController<>* init()
 {
-    // Linear pose loop: TargetChangeDetector -> PoseErrorFilter -> ProfileFeedforward ->
+    // Linear pose loop: TargetChangeDetector -> PoseErrorFilter -> ProfileTracker ->
     // PosePID -> Combiner
     linear_pose_loop_meta_controller.add_controller(&linear_target_change_detector);
     linear_pose_loop_meta_controller.add_controller(&linear_pose_error_filter);
-    linear_pose_loop_meta_controller.add_controller(
-        &pose_test_linear_profile_feedforward_controller);
+    linear_pose_loop_meta_controller.add_controller(&pose_test_linear_profile_tracker_controller);
     linear_pose_loop_meta_controller.add_controller(&linear_pose_controller);
-    linear_pose_loop_meta_controller.add_controller(
-        &pose_test_linear_feedforward_combiner_controller);
+    linear_pose_loop_meta_controller.add_controller(&pose_test_linear_tracker_combiner_controller);
 
     // Angular pose loop (simplified): TargetChangeDetector -> PoseErrorFilter -> PosePID (P-only)
     angular_pose_loop_meta_controller.add_controller(&angular_target_change_detector);

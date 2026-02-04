@@ -262,7 +262,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
     }
     io.set(keys_.pose_reached, reached);
 
-    // Write current state for feedforward profile triggering
+    // Write current state for tracker profile triggering
     io.set(keys_.current_state, static_cast<int>(current_state_));
 
     // Write profile recompute signals (only if keys are configured)
@@ -297,7 +297,7 @@ void PoseStraightFilter::rotate_to_direction(ControllersIO& io, cogip_defs::Pola
         if (angular_recompute_profile) {
             prev_angular_error_rotate_ = pos_err.angle();
         }
-        // Apply continuity enforcement (avoids 360° jumps at ±180° boundary for ProfileFeedforward)
+        // Apply continuity enforcement (avoids 360° jumps at ±180° boundary for ProfileTracker)
         raw_angular_error =
             enforce_angle_continuity_deg(pos_err.angle(), prev_angular_error_rotate_);
     } else {
@@ -392,7 +392,7 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
     if (!bypass_final_orientation_) {
         float raw_error = limit_angle_deg(target_pose.O() - current_pose.O());
         if (parameters_.use_angle_continuity()) {
-            // Use continuity enforcement to avoid 360° jumps (for ProfileFeedforward)
+            // Use continuity enforcement to avoid 360° jumps (for ProfileTracker)
             if (angular_recompute_profile) {
                 prev_angular_error_final_ = raw_error;
             }

@@ -4,15 +4,15 @@
 // directory for more details.
 
 /**
- * @brief Test application for Feedforward Chain
+ * @brief Test application for Tracker Chain
  *
- * This example demonstrates the complete feedforward + feedback control chain:
+ * This example demonstrates the complete tracker + feedback control chain:
  *
- * ProfileFeedforwardController → generates feedforward + tracking_error
+ * ProfileTrackerController → generates tracker + tracking_error
  *             ↓
  * PosePIDController → correction from tracking_error
  *             ↓
- * FeedforwardCombinerController → combines feedforward + correction
+ * TrackerCombinerController → combines tracker + correction
  *
  * Simulates a robot moving from 0 to 1000mm with trapezoidal profile.
  */
@@ -20,17 +20,17 @@
 #include <cstdio>
 #include <iostream>
 
-#include "feedforward_combiner_controller/FeedforwardCombinerController.hpp"
 #include "motion_control_common/ControllersIO.hpp"
-#include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
+#include "profile_tracker_controller/ProfileTrackerController.hpp"
+#include "tracker_combiner_controller/TrackerCombinerController.hpp"
 
 using cogip::motion_control::ControllersIO;
-using cogip::motion_control::FeedforwardCombinerController;
-using cogip::motion_control::FeedforwardCombinerControllerIOKeys;
-using cogip::motion_control::FeedforwardCombinerControllerParameters;
-using cogip::motion_control::ProfileFeedforwardController;
-using cogip::motion_control::ProfileFeedforwardControllerIOKeys;
-using cogip::motion_control::ProfileFeedforwardControllerParameters;
+using cogip::motion_control::ProfileTrackerController;
+using cogip::motion_control::ProfileTrackerControllerIOKeys;
+using cogip::motion_control::ProfileTrackerControllerParameters;
+using cogip::motion_control::TrackerCombinerController;
+using cogip::motion_control::TrackerCombinerControllerIOKeys;
+using cogip::motion_control::TrackerCombinerControllerParameters;
 
 // Simple PID class for testing (no protobuf dependencies)
 class SimplePID
@@ -108,30 +108,29 @@ class RobotSimulator
 int main(void)
 {
     std::cout << "===========================================\n";
-    std::cout << "   Feedforward Chain Test\n";
+    std::cout << "   Tracker Chain Test\n";
     std::cout << "===========================================\n\n";
 
     // Create ControllersIO
     ControllersIO io;
 
     // ========================================================================
-    // CONTROLLER 1: ProfileFeedforwardController
+    // CONTROLLER 1: ProfileTrackerController
     // ========================================================================
-    ProfileFeedforwardControllerIOKeys profile_keys = {
-        .pose_error = "linear_pose_error",
-        .current_speed = "current_linear_speed",
-        .recompute_profile = "recompute_profile",
-        .feedforward_velocity = "linear_feedforward_velocity",
-        .tracking_error = "linear_tracking_error",
-        .profile_complete = "linear_profile_complete"};
+    ProfileTrackerControllerIOKeys profile_keys = {.pose_error = "linear_pose_error",
+                                                   .current_speed = "current_linear_speed",
+                                                   .recompute_profile = "recompute_profile",
+                                                   .tracker_velocity = "linear_tracker_velocity",
+                                                   .tracking_error = "linear_tracking_error",
+                                                   .profile_complete = "linear_profile_complete"};
 
-    ProfileFeedforwardControllerParameters profile_params(10.0, // max_speed (mm/period)
-                                                          1.0,  // acceleration (mm/period²)
-                                                          1.0,  // deceleration (mm/period²)
-                                                          true  // must_stop_at_end
+    ProfileTrackerControllerParameters profile_params(10.0, // max_speed (mm/period)
+                                                      1.0,  // acceleration (mm/period²)
+                                                      1.0,  // deceleration (mm/period²)
+                                                      true  // must_stop_at_end
     );
 
-    ProfileFeedforwardController profile_controller(profile_keys, profile_params);
+    ProfileTrackerController profile_controller(profile_keys, profile_params);
 
     // ========================================================================
     // CONTROLLER 2: SimplePID (for tracking error correction)
@@ -140,16 +139,16 @@ int main(void)
     SimplePID pid(0.1, 0.0, 0.0); // P controller
 
     // ========================================================================
-    // CONTROLLER 3: FeedforwardCombinerController
+    // CONTROLLER 3: TrackerCombinerController
     // ========================================================================
-    FeedforwardCombinerControllerIOKeys combiner_keys = {
-        .feedforward_velocity = "linear_feedforward_velocity",
-        .feedback_correction = "linear_feedback_correction",
-        .speed_order = "linear_speed_order"};
+    TrackerCombinerControllerIOKeys combiner_keys = {.tracker_velocity = "linear_tracker_velocity",
+                                                     .feedback_correction =
+                                                         "linear_feedback_correction",
+                                                     .speed_order = "linear_speed_order"};
 
-    FeedforwardCombinerControllerParameters combiner_params;
+    TrackerCombinerControllerParameters combiner_params;
 
-    FeedforwardCombinerController combiner_controller(combiner_keys, combiner_params);
+    TrackerCombinerController combiner_controller(combiner_keys, combiner_params);
 
     // ========================================================================
     // Robot Simulator
@@ -182,7 +181,7 @@ int main(void)
         io.set("linear_pose_error", robot.remaining_distance());
         io.set("current_linear_speed", robot.velocity());
 
-        // STEP 1: ProfileFeedforwardController
+        // STEP 1: ProfileTrackerController
         profile_controller.execute(io);
 
         // STEP 2: PID on tracking error (manual, since we use SimplePID)
@@ -193,7 +192,7 @@ int main(void)
         double feedback_correction = pid.compute(tracking_error);
         io.set("linear_feedback_correction", feedback_correction);
 
-        // STEP 3: FeedforwardCombinerController
+        // STEP 3: TrackerCombinerController
         combiner_controller.execute(io);
 
         // Read final velocity command
@@ -204,7 +203,7 @@ int main(void)
 
         // Read intermediate values for display
         double ff_velocity = 0.0;
-        if (auto opt = io.get_as<double>("linear_feedforward_velocity")) {
+        if (auto opt = io.get_as<double>("linear_tracker_velocity")) {
             ff_velocity = *opt;
         }
 

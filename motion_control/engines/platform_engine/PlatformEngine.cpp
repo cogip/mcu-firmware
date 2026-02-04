@@ -78,7 +78,7 @@ void PlatformEngine::prepare_inputs()
     io_.set("linear_speed_command", 0.0f);
     io_.set("angular_speed_command", 0.0f);
 
-    // Initialize speed orders to 0 (will be updated by PosePIDController or FeedforwardCombiner)
+    // Initialize speed orders to 0 (will be updated by PosePIDController or TrackerCombiner)
     io_.set("linear_speed_order", 0.0f);
     io_.set("angular_speed_order", 0.0f);
 
