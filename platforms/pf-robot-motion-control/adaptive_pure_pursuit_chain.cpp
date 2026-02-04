@@ -21,10 +21,10 @@ namespace adaptive_pure_pursuit_chain {
 cogip::motion_control::QuadPIDMetaController* init()
 {
     // Angular pose loop meta controller for ROTATING_TO_FINAL state
-    // (ProfileFeedforward → PosePID → Combiner)
-    angular_pose_loop_meta_controller.add_controller(&angular_profile_feedforward_controller);
+    // (ProfileTracker → PosePID → Combiner)
+    angular_pose_loop_meta_controller.add_controller(&angular_profile_tracker_controller);
     angular_pose_loop_meta_controller.add_controller(&angular_pose_pid_controller);
-    angular_pose_loop_meta_controller.add_controller(&angular_feedforward_combiner_controller);
+    angular_pose_loop_meta_controller.add_controller(&angular_tracker_combiner_controller);
 
     // noop_controller does nothing (for FOLLOWING_PATH state)
 

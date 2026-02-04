@@ -212,8 +212,8 @@ uint32_t TrapezoidalProfile::generate_optimal_profile(float initial_velocity, fl
 
             if (decel_only_distance >= abs_distance) {
                 // Can't stop in time - the stopping distance is greater than target distance
-                // Don't generate a feedforward profile; let PID handle this case
-                // This prevents overshoot from feedforward when we're going too fast
+                // Don't generate a tracker profile; let PID handle this case
+                // This prevents overshoot from tracker when we're going too fast
                 DEBUG("Cannot stop in time: v0=%.2f, decel_dist=%.2f > abs_dist=%.2f, using "
                       "PID-only\n",
                       v0, decel_only_distance, abs_distance);

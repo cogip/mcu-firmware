@@ -166,7 +166,7 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
             state_ = State::FOLLOWING_PATH;
             first_rotating_cycle_ = true; // Reset for potential ROTATING_TO_FINAL later
         } else {
-            // Output angular pose error for ProfileFeedforward (pose loop)
+            // Output angular pose error for ProfileTracker (pose loop)
             if (!keys_.angular_pose_error.empty()) {
                 io.set(keys_.angular_pose_error, angular_error);
             }
@@ -248,7 +248,7 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
             return;
         }
 
-        // Output angular pose error for ProfileFeedforward (pose loop)
+        // Output angular pose error for ProfileTracker (pose loop)
         if (!keys_.angular_pose_error.empty()) {
             io.set(keys_.angular_pose_error, angular_error);
         }

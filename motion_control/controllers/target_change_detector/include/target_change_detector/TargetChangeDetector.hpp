@@ -25,7 +25,7 @@ namespace motion_control {
 ///
 /// This controller detects when the target pose changes significantly and sets
 /// a flag to trigger profile regeneration in downstream controllers like
-/// ProfileFeedforwardController.
+/// ProfileTrackerController.
 ///
 /// **Workflow:**
 /// - Read current target pose from IO
@@ -34,7 +34,7 @@ namespace motion_control {
 /// - Store current target for next comparison
 ///
 /// **Usage:**
-/// Place this controller before ProfileFeedforwardController in the chain.
+/// Place this controller before ProfileTrackerController in the chain.
 ///
 /// @code
 /// // Example chain:
@@ -42,7 +42,7 @@ namespace motion_control {
 ///                     ↓
 /// TargetChangeDetector → outputs new_target flag
 ///                     ↓
-/// ProfileFeedforwardController → uses new_target to regenerate profile
+/// ProfileTrackerController → uses new_target to regenerate profile
 /// @endcode
 class TargetChangeDetector
     : public Controller<TargetChangeDetectorIOKeys, TargetChangeDetectorParameters>

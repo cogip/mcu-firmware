@@ -3,10 +3,10 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-/// @ingroup    profile_feedforward_controller Profile Feedforward controller parameters
+/// @ingroup    profile_tracker_controller Profile Tracker controller parameters
 /// @{
 /// @file
-/// @brief      Profile Feedforward controller parameters
+/// @brief      Profile Tracker controller parameters
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
 #pragma once
@@ -15,12 +15,12 @@ namespace cogip {
 
 namespace motion_control {
 
-/// Profile Feedforward controller parameters
-class ProfileFeedforwardControllerParameters
+/// Profile Tracker controller parameters
+class ProfileTrackerControllerParameters
 {
   public:
     /// Constructor
-    explicit ProfileFeedforwardControllerParameters(
+    explicit ProfileTrackerControllerParameters(
         float max_speed = 10.0f,      ///< [in] Maximum speed (mm/period or rad/period)
         float acceleration = 1.0f,    ///< [in] Acceleration (mm/period² or rad/period²)
         float deceleration = 1.0f,    ///< [in] Deceleration (mm/period² or rad/period²)

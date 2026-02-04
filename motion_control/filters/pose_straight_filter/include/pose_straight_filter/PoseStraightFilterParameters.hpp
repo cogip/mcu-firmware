@@ -166,7 +166,7 @@ class PoseStraightFilterParameters
     /// bypass final orientation
     bool bypass_final_orientation_;
 
-    /// use angle continuity enforcement (for ProfileFeedforward)
+    /// use angle continuity enforcement (for ProfileTracker)
     bool use_angle_continuity_;
 };
 

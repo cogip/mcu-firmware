@@ -41,7 +41,7 @@ struct AdaptivePurePursuitControllerIOKeys
     etl::string_view is_intermediate; ///< key for intermediate waypoint flag output
 
     // Output keys for rotation states (pose loop)
-    etl::string_view angular_pose_error; ///< key for angular pose error (for ProfileFeedforward)
+    etl::string_view angular_pose_error;        ///< key for angular pose error (for ProfileTracker)
     etl::string_view recompute_angular_profile; ///< key to trigger angular profile recomputation
     etl::string_view
         rotating_in_place; ///< key for rotation flag (ROTATING_TO_DIRECTION or ROTATING_TO_FINAL)

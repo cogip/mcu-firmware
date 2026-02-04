@@ -3,10 +3,10 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-/// @ingroup    profile_feedforward_controller
+/// @ingroup    profile_tracker_controller
 /// @{
 /// @file
-/// @brief      Profile Feedforward controller implementation
+/// @brief      Profile Tracker controller implementation
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
 // System includes
@@ -15,7 +15,7 @@
 
 // Project includes
 #include "log.h"
-#include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
+#include "profile_tracker_controller/ProfileTrackerController.hpp"
 
 #define ENABLE_DEBUG 0
 #include <debug.h>
@@ -24,18 +24,18 @@ namespace cogip {
 
 namespace motion_control {
 
-ProfileFeedforwardController::ProfileFeedforwardController(
-    const ProfileFeedforwardControllerIOKeys& keys,
-    const ProfileFeedforwardControllerParameters& parameters, etl::string_view name)
-    : Controller<ProfileFeedforwardControllerIOKeys, ProfileFeedforwardControllerParameters>(
+ProfileTrackerController::ProfileTrackerController(
+    const ProfileTrackerControllerIOKeys& keys,
+    const ProfileTrackerControllerParameters& parameters, etl::string_view name)
+    : Controller<ProfileTrackerControllerIOKeys, ProfileTrackerControllerParameters>(
           keys, parameters, name),
       profile_(), period_(0)
 {
 }
 
-void ProfileFeedforwardController::execute(ControllersIO& io)
+void ProfileTrackerController::execute(ControllersIO& io)
 {
-    DEBUG("Execute ProfileFeedforwardController [%s]\n", keys_.pose_error.data());
+    DEBUG("Execute ProfileTrackerController [%s]\n", keys_.pose_error.data());
 
     // Check if profile recomputation requested (from PoseStraightFilter state transitions)
     bool recompute_profile = false;
@@ -44,7 +44,7 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
     }
 
     // If profile is not initialized, output pose_error as tracking_error
-    // This allows position control without feedforward when no profile is running
+    // This allows position control without tracker when no profile is running
     // Skip this if recompute is requested (recompute takes priority)
     if (!recompute_profile && !profile_.is_initialized()) {
         // Read pose error for tracking
@@ -52,8 +52,8 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
         if (auto opt = io.get_as<float>(keys_.pose_error)) {
             pose_error = *opt;
         }
-        // No feedforward velocity when profile is invalidated
-        io.set(keys_.feedforward_velocity, 0.0f);
+        // No tracker velocity when profile is invalidated
+        io.set(keys_.tracker_velocity, 0.0f);
         // Use pose_error as tracking_error for position control
         io.set(keys_.tracking_error, pose_error);
         // Profile not running, so not complete
@@ -70,8 +70,8 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
     if (auto opt = io.get_as<float>(keys_.pose_error)) {
         pose_error = *opt;
     } else {
-        LOG_ERROR("ProfileFeedforwardController: pose_error not available\n");
-        io.set(keys_.feedforward_velocity, 0.0f);
+        LOG_ERROR("ProfileTrackerController: pose_error not available\n");
+        io.set(keys_.tracker_velocity, 0.0f);
         io.set(keys_.tracking_error, 0.0f);
         if (!keys_.profile_complete.empty()) {
             io.set(keys_.profile_complete, false);
@@ -104,9 +104,9 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
             parameters_.max_speed(), parameters_.must_stop_at_end());
 
         if (total_periods == 0) {
-            LOG_WARNING("ProfileFeedforwardController: No profile generated (distance=%.2f)\n",
+            LOG_WARNING("ProfileTrackerController: No profile generated (distance=%.2f)\n",
                         target_distance);
-            io.set(keys_.feedforward_velocity, 0.0f);
+            io.set(keys_.tracker_velocity, 0.0f);
             io.set(keys_.tracking_error, 0.0f);
             if (!keys_.profile_complete.empty()) {
                 io.set(keys_.profile_complete, false);
@@ -137,7 +137,7 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
 
         if (total_periods == 0) {
             // Can't generate profile - fall back to PID-only
-            io.set(keys_.feedforward_velocity, 0.0f);
+            io.set(keys_.tracker_velocity, 0.0f);
             io.set(keys_.tracking_error, pose_error);
             if (!keys_.profile_complete.empty()) {
                 io.set(keys_.profile_complete, false);
@@ -163,20 +163,20 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
 
     // When profile is complete, continue with PID-only control using pose_error
     // Don't invalidate - let the state machine handle the transition
-    // The feedforward velocity is 0 (profile done), but tracking_error = pose_error
+    // The tracker velocity is 0 (profile done), but tracking_error = pose_error
     // allows the PID to finish bringing the robot to target
     // NOTE: Use pose_error directly WITHOUT direction_sign_ because pose_error
     // from PoseStraightFilter is already properly signed (negative for backward motion)
     if (profile_complete) {
-        io.set(keys_.feedforward_velocity, 0.0f);
+        io.set(keys_.tracker_velocity, 0.0f);
         io.set(keys_.tracking_error, pose_error);
         DEBUG("[%s] Profile complete: PID-only control with tracking_error=%.2f\n",
               keys_.pose_error.data(), pose_error);
         return;
     }
 
-    // Compute feedforward velocity from profile (signed - negative for backward movement)
-    float feedforward_velocity = profile_.compute_theoretical_velocity(period_);
+    // Compute tracker velocity from profile (signed - negative for backward movement)
+    float tracker_velocity = profile_.compute_theoretical_velocity(period_);
 
     // Compute theoretical remaining distance from profile (signed)
     float theoretical_remaining = profile_.compute_theoretical_remaining_distance(period_);
@@ -186,13 +186,13 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
     // backward) If actual < theoretical: we are ahead of schedule
     float tracking_error = pose_error - theoretical_remaining;
 
-    DEBUG("[%s] Period %" PRIu32 ": feedforward_velocity=%.2f, pose_error=%.2f, "
+    DEBUG("[%s] Period %" PRIu32 ": tracker_velocity=%.2f, pose_error=%.2f, "
           "theoretical_remaining=%.2f, tracking_error=%.2f\n",
-          keys_.pose_error.data(), period_, feedforward_velocity, pose_error, theoretical_remaining,
+          keys_.pose_error.data(), period_, tracker_velocity, pose_error, theoretical_remaining,
           tracking_error);
 
     // Write outputs
-    io.set(keys_.feedforward_velocity, feedforward_velocity);
+    io.set(keys_.tracker_velocity, tracker_velocity);
     io.set(keys_.tracking_error, tracking_error);
 
     // Increment period counter (by period_increment for throttled controllers)
