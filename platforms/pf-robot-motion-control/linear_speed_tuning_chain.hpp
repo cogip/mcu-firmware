@@ -95,7 +95,8 @@ inline cogip::motion_control::ProfileTrackerControllerIOKeys profile_tracker_io_
     .recompute_profile = "linear_speed_recompute_profile",
     .tracker_velocity = "linear_tracker_velocity", // To Combiner
     .tracking_error = "linear_speed_tracking_error",
-    .profile_complete = "linear_speed_profile_complete"};
+    .profile_complete = "linear_speed_profile_complete",
+    .target_speed = ""}; // Not used in tuning mode
 
 inline cogip::motion_control::ProfileTrackerControllerParameters
     profile_tracker_parameters(platform_max_speed_linear_mm_per_period, // max_speed

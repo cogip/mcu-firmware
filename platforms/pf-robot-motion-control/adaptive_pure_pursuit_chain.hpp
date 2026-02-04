@@ -146,7 +146,8 @@ inline cogip::motion_control::ProfileTrackerControllerIOKeys angular_profile_tra
     .recompute_profile = "recompute_angular_profile",
     .tracker_velocity = "angular_tracker_velocity",
     .tracking_error = "angular_tracking_error",
-    .profile_complete = ""}; // Not used
+    .profile_complete = "", // Not used
+    .target_speed = "angular_target_speed"};
 
 // Angular ProfileTrackerController parameters
 inline cogip::motion_control::ProfileTrackerControllerParameters

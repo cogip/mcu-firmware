@@ -107,7 +107,8 @@ inline cogip::motion_control::ProfileTrackerControllerIOKeys linear_profile_trac
     .recompute_profile = "linear_pose_recompute_profile",
     .tracker_velocity = "linear_tracker_velocity",
     .tracking_error = "linear_pose_tracking_error",
-    .profile_complete = "linear_pose_profile_complete"};
+    .profile_complete = "linear_pose_profile_complete",
+    .target_speed = ""}; // Not used in pose test mode
 
 inline cogip::motion_control::ProfileTrackerControllerParameters
     linear_profile_tracker_parameters(platform_max_speed_linear_mm_per_period,
@@ -187,7 +188,8 @@ inline cogip::motion_control::ProfileTrackerControllerIOKeys angular_profile_tra
     .recompute_profile = "angular_pose_recompute_profile",
     .tracker_velocity = "angular_tracker_velocity",
     .tracking_error = "angular_pose_tracking_error",
-    .profile_complete = "angular_pose_profile_complete"};
+    .profile_complete = "angular_pose_profile_complete",
+    .target_speed = ""}; // Not used in pose test mode
 
 inline cogip::motion_control::ProfileTrackerControllerParameters
     angular_profile_tracker_parameters(platform_max_speed_angular_deg_per_period,
