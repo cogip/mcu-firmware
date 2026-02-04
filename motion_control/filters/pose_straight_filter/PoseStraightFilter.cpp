@@ -114,27 +114,33 @@ void PoseStraightFilter::execute(ControllersIO& io)
                     keys_.motion_direction.data());
     }
 
-    // Persist direction choice when switching to MOVE_TO_POSITION state
-    static bool force_can_reverse = false;
-    static cogip_defs::Pose prev_target(INT32_MAX, INT32_MAX, INT32_MAX);
-    static cogip_defs::Pose start_pose(INT32_MAX, INT32_MAX, INT32_MAX);
+    // Read bypass_final_orientation from IO (set by PathManagerFilter)
+    // Fall back to parameters if key is empty or not set in IO
+    if (!keys_.bypass_final_orientation.empty()) {
+        if (auto opt = io.get_as<bool>(keys_.bypass_final_orientation)) {
+            bypass_final_orientation_ = *opt;
+        }
+        // If not in IO yet, keep previous value (default false)
+    } else {
+        // If no IO key configured, fall back to parameters
+        bypass_final_orientation_ = parameters_.bypass_final_orientation();
+    }
 
     // Recompute profile signals - set to true only on specific state transitions
     bool linear_recompute_profile = false;
     bool angular_recompute_profile = false;
 
-    // Static variable for FINISHED logging (reset on new target)
-    static bool logged_finished = false;
-
-    if ((target_pose_x != prev_target.x()) || (target_pose_y != prev_target.y()) ||
-        (target_pose_O != prev_target.O())) {
-        force_can_reverse = false;
-        prev_target = target_pose;
-        start_pose = current_pose;
+    if ((target_pose_x != prev_target_.x()) || (target_pose_y != prev_target_.y()) ||
+        (target_pose_O != prev_target_.O())) {
+        prev_target_ = target_pose;
+        start_pose_ = current_pose;
         // Reset state machine to initial state on new target
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
         // Reset FINISHED logging flag
-        logged_finished = false;
+        logged_finished_ = false;
+        // Reset angular error tracking
+        prev_angular_error_rotate_ = 0.0f;
+        prev_angular_error_final_ = 0.0f;
         // New external target -> recompute angular profile for initial rotation
         angular_recompute_profile = true;
         // Invalidate linear profile - will be recomputed when entering MOVE_TO_POSITION
@@ -143,33 +149,30 @@ void PoseStraightFilter::execute(ControllersIO& io)
         // Reset speed PIDs on new target
         io.set(keys_.linear_speed_pid_reset, true);
         io.set(keys_.angular_speed_pid_reset, true);
-        DEBUG("New target detected, reset state to ROTATE_TO_DIRECTION\n");
-    }
+        io.set(keys_.linear_pose_pid_reset, true);
+        io.set(keys_.angular_pose_pid_reset, true);
 
-    // Apply motion direction constraints
-    bool can_reverse = false;
-    bool must_reverse = false;
-
-    switch (motion_dir) {
-    case cogip::path::motion_direction::bidirectional:
-        // Allow optimal choice: reverse if angle > 90°
-        can_reverse = true;
-        break;
-    case cogip::path::motion_direction::forward_only:
-        // Never reverse
-        break;
-    case cogip::path::motion_direction::backward_only:
-        // Always reverse
-        must_reverse = true;
-        break;
-    default:
-        LOG_ERROR("ERROR: motion direction invalid - should never happen\n");
-    }
-
-    // Force can_reverse to true once motion has started (only for bidirectional mode)
-    // For backward_only mode, we must keep must_reverse active
-    if (force_can_reverse) {
-        can_reverse = true;
+        // Lock reverse decision for this waypoint based on motion direction and initial angle
+        // This prevents instability when angle is close to 90°
+        cogip_defs::Polar initial_err = target_pose - current_pose;
+        switch (motion_dir) {
+        case cogip::path::motion_direction::forward_only:
+            // Never reverse
+            locked_reverse_ = false;
+            break;
+        case cogip::path::motion_direction::backward_only:
+            // Always reverse
+            locked_reverse_ = true;
+            break;
+        case cogip::path::motion_direction::bidirectional:
+        default:
+            // Optimal choice: reverse if |angle| > 90° (decided once, locked for this waypoint)
+            locked_reverse_ = (etl::absolute(initial_err.angle()) > 90.0f);
+            break;
+        }
+        DEBUG("New waypoint: locked_reverse_=%d (initial_angle=%.2f, motion_dir=%d)\n",
+              locked_reverse_, static_cast<double>(initial_err.angle()),
+              static_cast<int>(motion_dir));
     }
 
     // Compute pose error as polar difference
@@ -177,16 +180,11 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     DEBUG("pos_err BEFORE reverse: dist=%.2f ang=%.2f\n", static_cast<double>(pos_err.distance()),
           static_cast<double>(pos_err.angle()));
-    DEBUG("motion_dir=%d can_reverse=%d must_reverse=%d\n", static_cast<int>(motion_dir),
-          can_reverse, must_reverse);
+    DEBUG("locked_reverse_=%d\n", locked_reverse_);
 
-    // Apply direction based on motion mode:
-    // - For backward_only (must_reverse): always reverse to get negative distance (backward motion)
-    //   The angle after reverse will be the optimal heading (away from target)
-    // - For bidirectional (can_reverse): reverse only if |angle| > 90° (shorter rotation path)
-    if (must_reverse || (can_reverse && (etl::absolute(pos_err.angle()) > 90.0f))) {
-        // Always reverse for backward_only mode - ensures negative distance
-        DEBUG("Reverse error as must_reverse (backward_only mode)\n");
+    // Apply locked reverse decision (stable for the entire waypoint)
+    if (locked_reverse_) {
+        DEBUG("Applying reverse (locked decision)\n");
         pos_err.reverse();
     }
 
@@ -207,15 +205,15 @@ void PoseStraightFilter::execute(ControllersIO& io)
         current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
         angular_recompute_profile = true;
         linear_recompute_profile = true;
-        LOG_INFO("Early transition to ROTATE_TO_FINAL_ANGLE (already at position, linear_err=%.2f "
-                 "<= threshold %.2f)\n",
-                 static_cast<double>(absolute_linear_pose_error),
-                 static_cast<double>(linear_threshold));
+        DEBUG("Early transition to ROTATE_TO_FINAL_ANGLE (already at position, linear_err=%.2f "
+              "<= threshold %.2f)\n",
+              static_cast<double>(absolute_linear_pose_error),
+              static_cast<double>(linear_threshold));
     }
 
     if (current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION) {
-        rotate_to_direction(io, pos_err, current_pose, start_pose, force_can_reverse,
-                            linear_recompute_profile, angular_recompute_profile);
+        rotate_to_direction(io, pos_err, current_pose, start_pose_, linear_recompute_profile,
+                            angular_recompute_profile);
     }
 
     if (current_state_ == PoseStraightFilterState::MOVE_TO_POSITION) {
@@ -229,7 +227,7 @@ void PoseStraightFilter::execute(ControllersIO& io)
     }
 
     if (current_state_ == PoseStraightFilterState::FINISHED) {
-        finished(pos_err, current_pose, target_pose, logged_finished);
+        finished(pos_err, current_pose, target_pose);
     }
 
     // Write linear pose error
@@ -256,9 +254,12 @@ void PoseStraightFilter::execute(ControllersIO& io)
     io.set(keys_.angular_speed_filter_flag, no_angular_limit_flag);
 
     // Write updated pose reached status
-    target_pose_status_t reached = (current_state_ == PoseStraightFilterState::FINISHED)
-                                       ? target_pose_status_t::reached
-                                       : target_pose_status_t::moving;
+    target_pose_status_t reached;
+    if (current_state_ == PoseStraightFilterState::FINISHED) {
+        reached = target_pose_status_t::reached;
+    } else {
+        reached = target_pose_status_t::moving;
+    }
     io.set(keys_.pose_reached, reached);
 
     // Write current state for feedforward profile triggering
@@ -282,7 +283,6 @@ void PoseStraightFilter::execute(ControllersIO& io)
 void PoseStraightFilter::rotate_to_direction(ControllersIO& io, cogip_defs::Polar& pos_err,
                                              const cogip_defs::Pose& current_pose,
                                              const cogip_defs::Pose& start_pose,
-                                             bool& force_can_reverse,
                                              bool& linear_recompute_profile,
                                              bool& angular_recompute_profile)
 {
@@ -290,17 +290,20 @@ void PoseStraightFilter::rotate_to_direction(ControllersIO& io, cogip_defs::Pola
 
     const float angular_intermediate_threshold = parameters_.angular_intermediate_threshold();
 
-    // Track previous angular error for continuity enforcement
-    static float previous_angular_pose_error = 0.0f;
-
-    // Reset continuity tracking when angular profile is recomputed
-    if (angular_recompute_profile) {
-        previous_angular_pose_error = 0.0f;
+    // Apply angle normalization (continuity enforcement or simple limit)
+    float raw_angular_error;
+    if (parameters_.use_angle_continuity()) {
+        // Reset continuity tracking when angular profile is recomputed
+        if (angular_recompute_profile) {
+            prev_angular_error_rotate_ = pos_err.angle();
+        }
+        // Apply continuity enforcement (avoids 360° jumps at ±180° boundary for ProfileFeedforward)
+        raw_angular_error =
+            enforce_angle_continuity_deg(pos_err.angle(), prev_angular_error_rotate_);
+    } else {
+        // Simple limit to [-180, 180] (for direct PID control)
+        raw_angular_error = limit_angle_deg(pos_err.angle());
     }
-
-    // Apply continuity enforcement to existing angular error (avoids 360° jumps at ±180° boundary)
-    float raw_angular_error =
-        enforce_angle_continuity_deg(pos_err.angle(), previous_angular_pose_error);
     pos_err.set_angle(raw_angular_error);
 
     const float absolute_angular_pose_error = etl::absolute(raw_angular_error);
@@ -311,17 +314,18 @@ void PoseStraightFilter::rotate_to_direction(ControllersIO& io, cogip_defs::Pola
             current_pose.x(), current_pose.y(), current_pose.O(), start_pose.x(), start_pose.y());
         pos_err.set_distance(-pos_error_longitudinal);
     } else {
-        force_can_reverse = true;
         current_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
         // Reset speed PIDs on transition to MOVE_TO_POSITION
         io.set(keys_.linear_speed_pid_reset, true);
         io.set(keys_.angular_speed_pid_reset, true);
+        io.set(keys_.linear_pose_pid_reset, true);
+        io.set(keys_.angular_pose_pid_reset, true);
         // Transition to MOVE_TO_POSITION -> recompute profiles
         linear_recompute_profile = true;
         angular_recompute_profile = true;
-        LOG_INFO("Transition to MOVE_TO_POSITION, (cur=%.2f + err=%.2f), "
-                 "requesting angular and linear profile recompute\n",
-                 static_cast<double>(current_pose.O()), static_cast<double>(pos_err.angle()));
+        DEBUG("Transition to MOVE_TO_POSITION, (cur=%.2f + err=%.2f), "
+              "requesting angular and linear profile recompute\n",
+              static_cast<double>(current_pose.O()), static_cast<double>(pos_err.angle()));
     }
 }
 
@@ -362,12 +366,14 @@ void PoseStraightFilter::move_to_position(ControllersIO& io, cogip_defs::Polar& 
         // Reset speed PIDs on transition to ROTATE_TO_FINAL_ANGLE
         io.set(keys_.linear_speed_pid_reset, true);
         io.set(keys_.angular_speed_pid_reset, true);
+        io.set(keys_.linear_pose_pid_reset, true);
+        io.set(keys_.angular_pose_pid_reset, true);
         // Transition to ROTATE_TO_FINAL_ANGLE -> recompute profiles
         angular_recompute_profile = true;
         linear_recompute_profile = true;
 
-        LOG_INFO("Transition to ROTATE_TO_FINAL_ANGLE, requesting linear and angular profiles "
-                 "recompute\n");
+        DEBUG("Transition to ROTATE_TO_FINAL_ANGLE, requesting linear and angular profiles "
+              "recompute\n");
     }
 }
 
@@ -383,22 +389,17 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
 
     // Compute final angle error (to target orientation, not travel direction)
     float final_angle_error;
-    if (!parameters_.bypass_final_orientation()) {
-
-        // Track previous angular error for continuity enforcement
-        static float previous_angular_pose_error = 0.0f;
-
-        // On first iteration, compute and normalize angle difference with limit_angle_deg
-        // (not angular_error_deg which uses atan2 and may choose wrong direction)
-        // On subsequent iterations, use continuity enforcement to avoid 360° jumps
-        if (angular_recompute_profile) {
-            final_angle_error = limit_angle_deg(target_pose.O() - current_pose.O());
-            previous_angular_pose_error = final_angle_error;
+    if (!bypass_final_orientation_) {
+        float raw_error = limit_angle_deg(target_pose.O() - current_pose.O());
+        if (parameters_.use_angle_continuity()) {
+            // Use continuity enforcement to avoid 360° jumps (for ProfileFeedforward)
+            if (angular_recompute_profile) {
+                prev_angular_error_final_ = raw_error;
+            }
+            final_angle_error = enforce_angle_continuity_deg(raw_error, prev_angular_error_final_);
         } else {
-            float raw_error = limit_angle_deg(target_pose.O() - current_pose.O());
-            final_angle_error =
-                enforce_angle_continuity_deg(raw_error, previous_angular_pose_error);
-            previous_angular_pose_error = final_angle_error;
+            // Simple limit (for direct PID control)
+            final_angle_error = raw_error;
         }
     } else {
         final_angle_error = 0.0f;
@@ -420,11 +421,13 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
         // Reset speed PIDs on transition to FINISHED
         io.set(keys_.linear_speed_pid_reset, true);
         io.set(keys_.angular_speed_pid_reset, true);
+        io.set(keys_.linear_pose_pid_reset, true);
+        io.set(keys_.angular_pose_pid_reset, true);
     }
 }
 
 void PoseStraightFilter::finished(cogip_defs::Polar& pos_err, const cogip_defs::Pose& current_pose,
-                                  cogip_defs::Pose& target_pose, bool& logged_finished)
+                                  cogip_defs::Pose& target_pose)
 {
     DEBUG("FINISHED\n");
 
@@ -435,7 +438,7 @@ void PoseStraightFilter::finished(cogip_defs::Polar& pos_err, const cogip_defs::
 
     // Maintain final orientation
     float final_angle_error;
-    if (!parameters_.bypass_final_orientation()) {
+    if (!bypass_final_orientation_) {
         final_angle_error = limit_angle_deg(target_pose.O() - current_pose.O());
     } else {
         final_angle_error = 0.0f;
@@ -443,17 +446,17 @@ void PoseStraightFilter::finished(cogip_defs::Polar& pos_err, const cogip_defs::
     pos_err.set_angle(final_angle_error);
 
     // Log final position error for debugging (only once per target)
-    if (!logged_finished) {
+    if (!logged_finished_) {
         cogip_defs::Polar final_err = target_pose - current_pose;
-        LOG_INFO("POSE_REACHED: linear_err=%.2f ang_err=%.2f final_ang_err=%.2f (cur: "
-                 "%.1f,%.1f,%.1f -> tgt: "
-                 "%.1f,%.1f,%.1f)\n",
-                 static_cast<double>(final_err.distance()), static_cast<double>(final_err.angle()),
-                 static_cast<double>(limit_angle_deg(target_pose.O() - current_pose.O())),
-                 static_cast<double>(current_pose.x()), static_cast<double>(current_pose.y()),
-                 static_cast<double>(current_pose.O()), static_cast<double>(target_pose.x()),
-                 static_cast<double>(target_pose.y()), static_cast<double>(target_pose.O()));
-        logged_finished = true;
+        DEBUG("POSE_REACHED: linear_err=%.2f ang_err=%.2f final_ang_err=%.2f (cur: "
+              "%.1f,%.1f,%.1f -> tgt: "
+              "%.1f,%.1f,%.1f)\n",
+              static_cast<double>(final_err.distance()), static_cast<double>(final_err.angle()),
+              static_cast<double>(limit_angle_deg(target_pose.O() - current_pose.O())),
+              static_cast<double>(current_pose.x()), static_cast<double>(current_pose.y()),
+              static_cast<double>(current_pose.O()), static_cast<double>(target_pose.x()),
+              static_cast<double>(target_pose.y()), static_cast<double>(target_pose.O()));
+        logged_finished_ = true;
     }
 }
 

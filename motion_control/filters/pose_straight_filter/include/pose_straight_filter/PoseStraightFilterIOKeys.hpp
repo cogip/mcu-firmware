@@ -21,17 +21,19 @@ namespace motion_control {
 struct PoseStraightFilterIOKeys
 {
     // Input keys
-    etl::string_view current_pose_x;        ///< key for first coordinate of current pose
-    etl::string_view current_pose_y;        ///< key for second coordinate of current pose
-    etl::string_view current_pose_O;        ///< key for orientation of current pose
-    etl::string_view target_pose_x;         ///< key for first coordinate of target pose
-    etl::string_view target_pose_y;         ///< key for second coordinate of target pose
-    etl::string_view target_pose_O;         ///< key for orientation of target pose
-    etl::string_view current_linear_speed;  ///< key for linear component of current speed
-    etl::string_view current_angular_speed; ///< key for angular component of current speed
-    etl::string_view target_linear_speed;   ///< key for linear component of target speed
-    etl::string_view target_angular_speed;  ///< key for angular component of target speed
-    etl::string_view motion_direction;      ///< key for motion direction mode
+    etl::string_view current_pose_x;           ///< key for first coordinate of current pose
+    etl::string_view current_pose_y;           ///< key for second coordinate of current pose
+    etl::string_view current_pose_O;           ///< key for orientation of current pose
+    etl::string_view target_pose_x;            ///< key for first coordinate of target pose
+    etl::string_view target_pose_y;            ///< key for second coordinate of target pose
+    etl::string_view target_pose_O;            ///< key for orientation of target pose
+    etl::string_view current_linear_speed;     ///< key for linear component of current speed
+    etl::string_view current_angular_speed;    ///< key for angular component of current speed
+    etl::string_view target_linear_speed;      ///< key for linear component of target speed
+    etl::string_view target_angular_speed;     ///< key for angular component of target speed
+    etl::string_view motion_direction;         ///< key for motion direction mode
+    etl::string_view bypass_final_orientation; ///< key for bypass final orientation flag (from
+                                               ///< PathManagerFilter)
 
     // Output keys
     etl::string_view linear_pose_error;         ///< key for linear distance to target
@@ -54,6 +56,8 @@ struct PoseStraightFilterIOKeys
                                                  ///< MOVE_TO_POSITION entry)
     etl::string_view linear_speed_pid_reset;     ///< key to trigger linear speed PID reset
     etl::string_view angular_speed_pid_reset;    ///< key to trigger angular speed PID reset
+    etl::string_view linear_pose_pid_reset;      ///< key to trigger linear pose PID reset
+    etl::string_view angular_pose_pid_reset;     ///< key to trigger angular pose PID reset
 };
 
 } // namespace motion_control
