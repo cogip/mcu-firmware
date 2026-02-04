@@ -106,7 +106,8 @@ void PlatformEngine::process_outputs()
     auto io_pose_reached = io_.get_as<target_pose_status_t>("pose_reached");
 
     if (io_pose_reached && (*io_pose_reached == target_pose_status_t::reached ||
-                            *io_pose_reached == target_pose_status_t::intermediate_reached)) {
+                            *io_pose_reached == target_pose_status_t::intermediate_reached ||
+                            *io_pose_reached == target_pose_status_t::blocked)) {
         pose_reached_ = *io_pose_reached;
     } else if (!timeout_enable_) {
         // No timeout mode: use IO value directly
