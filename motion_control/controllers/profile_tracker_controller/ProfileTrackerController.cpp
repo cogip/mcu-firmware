@@ -13,6 +13,9 @@
 #include <cstdio>
 #include <inttypes.h>
 
+// ETL includes
+#include "etl/algorithm.h"
+
 // Project includes
 #include "log.h"
 #include "profile_tracker_controller/ProfileTrackerController.hpp"
@@ -85,6 +88,16 @@ void ProfileTrackerController::execute(ControllersIO& io)
         current_speed = *opt;
     }
 
+    // Get effective max speed: use target_speed from IO if available, otherwise use parameter
+    float max_speed = parameters_.max_speed();
+    if (!keys_.target_speed.empty()) {
+        if (auto opt = io.get_as<float>(keys_.target_speed)) {
+            // Use the minimum of parameter max and target speed from path
+            max_speed = etl::min(max_speed, *opt);
+            DEBUG("[%s] Using target_speed from IO: %.2f\n", keys_.pose_error.data(), max_speed);
+        }
+    }
+
     // Generate new profile if requested (triggered by PoseStraightFilter state transitions)
     if (recompute_profile) {
         // When recompute is triggered, we start a new segment from rest (previous segment
@@ -101,7 +114,7 @@ void ProfileTrackerController::execute(ControllersIO& io)
         // Generate optimal profile with signed distance (TrapezoidalProfile handles direction)
         uint32_t total_periods = profile_.generate_optimal_profile(
             initial_speed, target_distance, parameters_.acceleration(), parameters_.deceleration(),
-            parameters_.max_speed(), parameters_.must_stop_at_end());
+            max_speed, parameters_.must_stop_at_end());
 
         if (total_periods == 0) {
             LOG_WARNING("ProfileTrackerController: No profile generated (distance=%.2f)\n",
@@ -133,7 +146,7 @@ void ProfileTrackerController::execute(ControllersIO& io)
         // Regenerate profile for the new direction
         uint32_t total_periods = profile_.generate_optimal_profile(
             current_speed, pose_error, parameters_.acceleration(), parameters_.deceleration(),
-            parameters_.max_speed(), parameters_.must_stop_at_end());
+            max_speed, parameters_.must_stop_at_end());
 
         if (total_periods == 0) {
             // Can't generate profile - fall back to PID-only

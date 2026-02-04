@@ -158,7 +158,8 @@ inline cogip::motion_control::ProfileTrackerControllerIOKeys linear_profile_trac
     .recompute_profile = "linear_recompute_profile",
     .tracker_velocity = "linear_tracker_velocity",
     .tracking_error = "linear_tracking_error",
-    .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
+    .profile_complete = "", // Not used, PoseStraightFilter handles pose_reached
+    .target_speed = "linear_target_speed"};
 
 /// Linear ProfileTrackerController parameters
 inline cogip::motion_control::ProfileTrackerControllerParameters
@@ -183,7 +184,8 @@ inline cogip::motion_control::ProfileTrackerControllerIOKeys angular_profile_tra
     .recompute_profile = "angular_recompute_profile",
     .tracker_velocity = "angular_tracker_velocity",
     .tracking_error = "angular_tracking_error",
-    .profile_complete = ""}; // Not used, PoseStraightFilter handles pose_reached
+    .profile_complete = "", // Not used, PoseStraightFilter handles pose_reached
+    .target_speed = "angular_target_speed"};
 
 /// Angular ProfileTrackerController parameters
 inline cogip::motion_control::ProfileTrackerControllerParameters angular_profile_tracker_parameters(

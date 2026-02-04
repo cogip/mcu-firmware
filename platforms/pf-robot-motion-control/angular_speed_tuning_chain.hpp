@@ -95,7 +95,8 @@ inline cogip::motion_control::ProfileTrackerControllerIOKeys profile_tracker_io_
     .recompute_profile = "angular_speed_recompute_profile",
     .tracker_velocity = "angular_tracker_velocity", // To Combiner
     .tracking_error = "angular_speed_tracking_error",
-    .profile_complete = "angular_speed_profile_complete"};
+    .profile_complete = "angular_speed_profile_complete",
+    .target_speed = ""}; // Not used in tuning mode
 
 inline cogip::motion_control::ProfileTrackerControllerParameters
     profile_tracker_parameters(platform_max_speed_angular_deg_per_period, // max_speed

@@ -122,7 +122,8 @@ int main(void)
                                                    .recompute_profile = "recompute_profile",
                                                    .tracker_velocity = "linear_tracker_velocity",
                                                    .tracking_error = "linear_tracking_error",
-                                                   .profile_complete = "linear_profile_complete"};
+                                                   .profile_complete = "linear_profile_complete",
+                                                   .target_speed = ""};
 
     ProfileTrackerControllerParameters profile_params(10.0, // max_speed (mm/period)
                                                       1.0,  // acceleration (mm/period²)

@@ -35,6 +35,7 @@ struct ProfileTrackerControllerIOKeys
     etl::string_view tracker_velocity;  ///< e.g. "linear_tracker_velocity" (output)
     etl::string_view tracking_error;    ///< e.g. "linear_tracking_error" (output)
     etl::string_view profile_complete;  ///< e.g. "linear_profile_complete" (output, optional)
+    etl::string_view target_speed;      ///< e.g. "linear_target_speed" (optional, from path)
 };
 
 } // namespace motion_control
