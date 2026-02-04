@@ -19,7 +19,7 @@ void SpeedPIDController::execute(ControllersIO& io)
             this->parameters_.pid()->reset();
             // Clear the reset flag
             io.set(keys_.reset, false);
-            DEBUG("PID reset triggered via IO key %s\n", keys_.reset.data());
+            DEBUG("[SpeedPID %s] reset via IO key\n", keys_.reset.data());
         }
     }
 
