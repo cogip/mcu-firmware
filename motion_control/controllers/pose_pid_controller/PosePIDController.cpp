@@ -22,6 +22,21 @@ void PosePIDController::execute(ControllersIO& io)
 {
     DEBUG("Execute PosePIDController\n");
 
+    // Check if reset is requested (if key is configured)
+    if (!keys_.reset.empty()) {
+        if (auto opt = io.get_as<bool>(keys_.reset)) {
+            if (*opt) {
+                // Reset the PID (clears integral term)
+                if (this->parameters_.pid()) {
+                    this->parameters_.pid()->reset();
+                }
+                // Clear the reset flag
+                io.set(keys_.reset, false);
+                DEBUG("[PosePID %s] reset via IO key\n", keys_.reset.data());
+            }
+        }
+    }
+
     // Read position error (default to 0.0f if missing)
     float position_error = 0.0f;
     if (auto opt_err = io.get_as<float>(keys_.position_error)) {
