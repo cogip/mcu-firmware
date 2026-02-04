@@ -39,17 +39,21 @@ namespace quadpid_feedforward_chain {
 cogip::motion_control::QuadPIDMetaController* init()
 {
     // =========================================================================
-    // Linear feedforward chain: PosePID → feedback_correction, Combiner → SpeedPID
+    // Linear feedforward chain: PosePID → Combiner → SafetyFilters → SpeedPID
     // =========================================================================
     linear_feedforward_chain.add_controller(&linear_feedforward_pose_controller);
     linear_feedforward_chain.add_controller(&linear_feedforward_combiner_controller);
+    linear_feedforward_chain.add_controller(&linear_speed_limit_filter);
+    linear_feedforward_chain.add_controller(&linear_acceleration_filter);
     linear_feedforward_chain.add_controller(&linear_feedforward_chain_speed);
 
     // =========================================================================
-    // Angular feedforward chain: PosePID → feedback_correction, Combiner → SpeedPID
+    // Angular feedforward chain: PosePID → Combiner → SafetyFilters → SpeedPID
     // =========================================================================
     angular_feedforward_chain.add_controller(&angular_feedforward_pose_controller);
     angular_feedforward_chain.add_controller(&angular_feedforward_combiner_controller);
+    angular_feedforward_chain.add_controller(&angular_speed_limit_filter);
+    angular_feedforward_chain.add_controller(&angular_acceleration_filter);
     angular_feedforward_chain.add_controller(&angular_feedforward_chain_speed);
 
     // =========================================================================
@@ -73,8 +77,10 @@ cogip::motion_control::QuadPIDMetaController* init()
 
     // =========================================================================
     // QuadPIDFeedforwardMetaController:
-    // PoseStraightFilter (full rate) -> Pose loops -> AntiBlocking
+    // PathManagerFilter -> PoseStraightFilter -> Pose loops -> AntiBlocking
+    // (Safety filters are now inside feedforward chains, before SpeedPID)
     // =========================================================================
+    quadpid_feedforward_meta_controller.add_controller(&path_manager_filter);
     quadpid_feedforward_meta_controller.add_controller(&pose_straight_filter);
     quadpid_feedforward_meta_controller.add_controller(&pose_loop_polar_parallel_meta_controller);
 

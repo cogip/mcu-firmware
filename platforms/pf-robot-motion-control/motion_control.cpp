@@ -3,6 +3,9 @@
 #include "periph/qdec.h"
 #include <inttypes.h>
 
+#define ENABLE_DEBUG 0
+#include <debug.h>
+
 // Project includes
 #include "app.hpp"
 #include "app_conf.hpp"
@@ -16,10 +19,12 @@
 #include "motion_motors_params.hpp"
 #include "motor/MotorDriverDRV8873.hpp"
 #include "motor/MotorRIOT.hpp"
+#include "path/Path.hpp"
 #include "path/Pose.hpp"
 #include "platform.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
+#include "adaptive_pure_pursuit_chain.hpp"
 #include "angular_pose_tuning_chain.hpp"
 #include "angular_speed_tuning_chain.hpp"
 #include "linear_pose_tuning_chain.hpp"
@@ -148,6 +153,13 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_timeout_enable(true);
         break;
 
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        LOG_INFO("Change to controller: ADAPTIVE_PURE_PURSUIT\n");
+        pf_motion_control_platform_engine.set_controller(
+            &adaptive_pure_pursuit_chain::meta_controller);
+        pf_motion_control_platform_engine.set_timeout_enable(false);
+        break;
+
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
     default:
         LOG_INFO("Change to controller: QUADPID\n");
@@ -172,19 +184,31 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         break;
 
     case cogip::motion_control::target_pose_status_t::reached:
-        // Send message in case of final pose reached only.
+        // Send message when pose is reached
+        // Note: Path advancement is handled by PathManagerFilter in the control loop.
+        // This callback only sends CAN messages.
         if (previous_target_pose_status != state) {
-            if (pf_motion_control_platform_engine.target_pose().is_intermediate()) {
+            // Read is_intermediate from IO (set by PathManagerFilter, PurePursuit, or
+            // PlatformEngine)
+            bool is_intermediate = false;
+            if (auto opt = pf_motion_control_platform_engine.io().get_as<bool>("is_intermediate")) {
+                is_intermediate = *opt;
+            }
+
+            if (is_intermediate) {
                 pf_get_canpb().send_message(intermediate_pose_reached_uuid);
             } else {
                 pf_get_canpb().send_message(pose_reached_uuid);
+
+                // Read path_complete from IO (set by PathManagerFilter or PurePursuit)
+                if (auto opt =
+                        pf_motion_control_platform_engine.io().get_as<bool>("path_complete")) {
+                    if (*opt) {
+                        pf_get_canpb().send_message(path_complete_uuid);
+                    }
+                }
             }
         }
-
-        break;
-
-    case cogip::motion_control::target_pose_status_t::intermediate_reached:
-        // Do nothing on intermediate pose
         break;
 
     case cogip::motion_control::target_pose_status_t::blocked:
@@ -362,7 +386,7 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     PB_PathPose pb_path_target_pose;
     EmbeddedProto::Error error = pb_path_target_pose.deserialize(buffer);
     if (error != EmbeddedProto::Error::NO_ERRORS) {
-        LOG_ERROR("Pose to reach: Protobuf deserialization error: %d\n", static_cast<int>(error));
+        DEBUG("Pose to reach: Protobuf deserialization error: %d\n", static_cast<int>(error));
         return;
     }
 
@@ -373,6 +397,11 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     LOG_INFO("New target pose: x=%.2f, y=%.2f, O=%.2f\n", static_cast<double>(target_pose.x()),
              static_cast<double>(target_pose.y()), static_cast<double>(target_pose.O()));
 
+    // Use path manager for backward compatibility: reset + add + start
+    cogip::path::Path::instance().reset();
+    cogip::path::Path::instance().add_point(target_pose);
+    cogip::path::Path::instance().start();
+
     // Target speed
     target_speed.set_distance(
         (platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
@@ -382,11 +411,6 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     LOG_INFO("Target speed: linear=%.2f mm/period, angular=%.2f deg/period\n",
              static_cast<double>(target_speed.distance()),
              static_cast<double>(target_speed.angle()));
-
-    // Set final orientation bypassing
-    target_pose.bypass_final_orientation()
-        ? quadpid_chain::pose_straight_filter_parameters.bypass_final_orientation_on()
-        : quadpid_chain::pose_straight_filter_parameters.bypass_final_orientation_off();
 
     // Set target speed for passthrough controllers
     quadpid_chain::passthrough_linear_pose_controller_parameters.set_target_speed(
@@ -439,6 +463,88 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
     LOG_INFO("[START_POSE] Localization updated and robot marked as stationary\n");
 }
 
+void pf_handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    LOG_INFO("[PATH_RESET] Clearing path\n");
+    cogip::path::Path::instance().reset();
+}
+
+void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer)
+{
+    // Retrieve pose from protobuf message
+    PB_PathPose pb_path_pose;
+    EmbeddedProto::Error error = pb_path_pose.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("[PATH_ADD_POINT] Protobuf deserialization error: %d\n", static_cast<int>(error));
+        return;
+    }
+
+    if (cogip::path::Path::instance().add_point_from_pb(pb_path_pose)) {
+        const auto* added =
+            cogip::path::Path::instance().waypoint_at(cogip::path::Path::instance().size() - 1);
+        if (added) {
+            LOG_INFO("[PATH_ADD_POINT] Added waypoint %u: x=%.1f, y=%.1f, O=%.1f\n",
+                     static_cast<unsigned>(cogip::path::Path::instance().size()),
+                     static_cast<double>(added->x()), static_cast<double>(added->y()),
+                     static_cast<double>(added->O()));
+        }
+    } else {
+        LOG_ERROR("[PATH_ADD_POINT] Path full, cannot add waypoint\n");
+    }
+}
+
+void pf_handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    LOG_INFO("[PATH_START] Starting path execution with %u waypoints\n",
+             static_cast<unsigned>(cogip::path::Path::instance().size()));
+
+    if (cogip::path::Path::instance().empty()) {
+        LOG_WARNING("[PATH_START] Path is empty, nothing to do\n");
+        return;
+    }
+
+    cogip::path::Path::instance().start();
+
+    // Get first target pose from path
+    const cogip::path::Pose* first_pose = cogip::path::Path::instance().current_pose();
+    if (first_pose) {
+        target_pose = *first_pose;
+
+        // Target speed
+        target_speed.set_distance(
+            (platform_max_speed_linear_mm_per_period * target_pose.max_speed_ratio_linear()) / 100);
+        target_speed.set_angle(
+            (platform_max_speed_angular_deg_per_period * target_pose.max_speed_ratio_angular()) /
+            100);
+        pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+        // Set target speed for passthrough controllers
+        quadpid_chain::passthrough_linear_pose_controller_parameters.set_target_speed(
+            target_speed.distance());
+        quadpid_chain::passthrough_angular_pose_controller_parameters.set_target_speed(
+            target_speed.angle());
+
+        if (target_pose.timeout_ms()) {
+            pf_motion_control_platform_engine.set_timeout_enable(true);
+            pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms());
+        } else {
+            pf_motion_control_platform_engine.set_timeout_enable(false);
+        }
+
+        // Set target pose on engine
+        pf_motion_control_platform_engine.set_target_pose(target_pose);
+
+        // Reset pose_reached to moving (also clears IO to avoid stale signals)
+        pf_motion_control_platform_engine.reset_pose_reached();
+
+        // Reset controllers for new path
+        pf_motion_control_reset_controllers();
+
+        // Ensure engine is enabled
+        pf_motion_control_platform_engine.enable();
+    }
+}
+
 void pf_start_motion_control(void)
 {
     // Start engine thread
@@ -462,6 +568,9 @@ void pf_motion_control_reset_controllers(void)
         break;
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_FEEDFORWARD):
         quadpid_feedforward_chain::reset();
+        break;
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        adaptive_pure_pursuit_chain::reset();
         break;
     default:
         break;
@@ -519,6 +628,7 @@ void pf_init_motion_control(void)
     // Init controllers
     quadpid_chain::init();
     quadpid_feedforward_chain::init();
+    adaptive_pure_pursuit_chain::init();
     linear_speed_tuning_chain::init();
     angular_speed_tuning_chain::init();
     linear_pose_tuning_chain::init();

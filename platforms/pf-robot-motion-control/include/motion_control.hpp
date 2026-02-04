@@ -96,6 +96,15 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer);
 /// Get start pose from protobuf message
 void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer);
 
+/// Reset the path (clear all waypoints)
+void pf_handle_path_reset(cogip::canpb::ReadBuffer& buffer);
+
+/// Add a waypoint to the path
+void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer);
+
+/// Start path execution
+void pf_handle_path_start(cogip::canpb::ReadBuffer& buffer);
+
 /// Initialize motion control
 void pf_init_motion_control(void);
 

@@ -29,6 +29,7 @@
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeys.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
+#include "target_change_detector/TargetChangeDetector.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilter.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilterIOKeys.hpp"
 
@@ -64,8 +65,23 @@ inline cogip::pid::PID pose_test_angular_speed_pid(pose_test_angular_speed_pid_p
 
 // ============================================================================
 // LINEAR POSE LOOP - Dedicated instances
-// PoseErrorFilter -> ProfileFeedforward -> PosePID -> Combiner
+// TargetChangeDetector -> PoseErrorFilter -> ProfileFeedforward -> PosePID -> Combiner
 // ============================================================================
+
+// TargetChangeDetector for linear
+inline cogip::motion_control::TargetChangeDetectorIOKeys linear_target_change_detector_io_keys = {
+    .target_x = "target_pose_x",
+    .target_y = "target_pose_y",
+    .target_O = "",
+    .new_target = "linear_pose_recompute_profile",
+    .trigger_state = 0};
+
+inline cogip::motion_control::TargetChangeDetectorParameters
+    linear_target_change_detector_parameters;
+
+inline cogip::motion_control::TargetChangeDetector
+    linear_target_change_detector(linear_target_change_detector_io_keys,
+                                  linear_target_change_detector_parameters);
 
 // PoseErrorFilter for linear
 inline cogip::motion_control::PoseErrorFilterIOKeys linear_pose_error_filter_io_keys = {
@@ -76,7 +92,7 @@ inline cogip::motion_control::PoseErrorFilterIOKeys linear_pose_error_filter_io_
     .current_y = "current_pose_y",
     .current_O = "current_pose_O",
     .pose_error = "linear_pose_error",
-    .recompute = "linear_pose_recompute_profile"};
+    .new_target = "linear_pose_recompute_profile"};
 
 inline cogip::motion_control::PoseErrorFilterParameters
     linear_pose_error_filter_parameters(cogip::motion_control::PoseErrorFilterMode::LINEAR, 0.0f);
@@ -128,8 +144,23 @@ inline cogip::motion_control::SpeedPIDController
 
 // ============================================================================
 // ANGULAR POSE LOOP - Dedicated instances
-// PoseErrorFilter -> ProfileFeedforward -> PosePID -> Combiner
+// TargetChangeDetector -> PoseErrorFilter -> PosePID (simplified)
 // ============================================================================
+
+// TargetChangeDetector for angular
+inline cogip::motion_control::TargetChangeDetectorIOKeys angular_target_change_detector_io_keys = {
+    .target_x = "",
+    .target_y = "",
+    .target_O = "target_pose_O",
+    .new_target = "angular_pose_recompute_profile",
+    .trigger_state = 0};
+
+inline cogip::motion_control::TargetChangeDetectorParameters
+    angular_target_change_detector_parameters;
+
+inline cogip::motion_control::TargetChangeDetector
+    angular_target_change_detector(angular_target_change_detector_io_keys,
+                                   angular_target_change_detector_parameters);
 
 // PoseErrorFilter for angular
 inline cogip::motion_control::PoseErrorFilterIOKeys angular_pose_error_filter_io_keys = {
@@ -140,7 +171,7 @@ inline cogip::motion_control::PoseErrorFilterIOKeys angular_pose_error_filter_io
     .current_y = "",
     .current_O = "current_pose_O",
     .pose_error = "angular_pose_error",
-    .recompute = "angular_pose_recompute_profile"};
+    .new_target = "angular_pose_recompute_profile"};
 
 inline cogip::motion_control::PoseErrorFilterParameters
     angular_pose_error_filter_parameters(cogip::motion_control::PoseErrorFilterMode::ANGULAR, 0.0f);
@@ -195,9 +226,10 @@ inline cogip::motion_control::SpeedPIDController
 // Meta controllers
 // ============================================================================
 
-inline cogip::motion_control::MetaController<4> linear_pose_loop_meta_controller;
-inline cogip::motion_control::MetaController<2>
-    angular_pose_loop_meta_controller; // Simplified: PoseErrorFilter + PosePID only
+inline cogip::motion_control::MetaController<5> linear_pose_loop_meta_controller;
+inline cogip::motion_control::MetaController<3>
+    angular_pose_loop_meta_controller; // Simplified: TargetChangeDetector + PoseErrorFilter +
+                                       // PosePID
 inline cogip::motion_control::PolarParallelMetaController pose_loop_polar_parallel_meta_controller;
 
 inline cogip::motion_control::MetaController<1> linear_speed_meta_controller;

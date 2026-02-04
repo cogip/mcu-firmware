@@ -21,6 +21,9 @@
 #include "passthrough_pose_pid_controller/PassthroughPosePIDController.hpp"
 #include "passthrough_pose_pid_controller/PassthroughPosePIDControllerIOKeysDefault.hpp"
 #include "passthrough_pose_pid_controller/PassthroughPosePIDControllerParameters.hpp"
+#include "path_manager_filter/PathManagerFilter.hpp"
+#include "path_manager_filter/PathManagerFilterIOKeys.hpp"
+#include "path_manager_filter/PathManagerFilterParameters.hpp"
 #include "pid/PID.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
@@ -71,12 +74,36 @@ inline cogip::pid::PIDParameters angular_speed_pid_parameters(angular_speed_pid_
 inline cogip::pid::PID angular_speed_pid(angular_speed_pid_parameters);
 
 // ============================================================================
+// PathManagerFilter
+// ============================================================================
+
+inline constexpr cogip::motion_control::PathManagerFilterIOKeys path_manager_filter_io_keys = {
+    .pose_reached = "pose_reached",
+    .target_pose_x = "target_pose_x",
+    .target_pose_y = "target_pose_y",
+    .target_pose_O = "target_pose_O",
+    .new_target = "new_target",
+    .path_complete = "path_complete",
+    .path_index = "path_index",
+    .bypass_final_orientation = "bypass_final_orientation",
+    .motion_direction = "motion_direction",
+    .is_intermediate = "is_intermediate"};
+
+inline cogip::motion_control::PathManagerFilterParameters path_manager_filter_parameters;
+
+inline cogip::motion_control::PathManagerFilter path_manager_filter(path_manager_filter_io_keys,
+                                                                    path_manager_filter_parameters);
+
+// ============================================================================
 // PoseStraightFilter
 // ============================================================================
 
 inline cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters(
     angular_threshold, linear_threshold, angular_intermediate_threshold,
-    platform_max_dec_angular_deg_per_period2, platform_max_dec_linear_mm_per_period2);
+    platform_max_dec_angular_deg_per_period2, platform_max_dec_linear_mm_per_period2,
+    false, // bypass_final_orientation
+    false  // use_angle_continuity (not needed for direct PID control)
+);
 
 inline cogip::motion_control::PoseStraightFilter
     pose_straight_filter(cogip::motion_control::pose_straight_filter_io_keys_default,
@@ -259,16 +286,15 @@ cogip::motion_control::QuadPIDMetaController* init();
 // Chain reset function
 // ============================================================================
 
-/// Reset quadpid chain state (speed filters and PIDs)
+/// Reset quadpid chain state (all controllers via cascade)
 inline void reset()
 {
-    // Reset speed filters
-    linear_speed_filter.reset_previous_speed_order();
-    angular_speed_filter.reset_previous_speed_order();
-
-    // Reset speed PIDs (pose PIDs don't need reset as they only have Kp)
-    linear_speed_pid.reset();
-    angular_speed_pid.reset();
+    // Reset all controllers via meta controller cascade
+    // This will call reset() on each controller, which resets:
+    // - PoseStraightFilter: state machine, prev_target, angular error tracking
+    // - SpeedFilter: previous speed order
+    // - SpeedPIDController: PID integral term
+    quadpid_meta_controller.reset();
 }
 
 } // namespace quadpid_chain

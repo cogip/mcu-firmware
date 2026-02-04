@@ -25,6 +25,7 @@
 #include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeys.hpp"
+#include "target_change_detector/TargetChangeDetector.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilter.hpp"
 #include "tuning_pose_reached_filter/TuningPoseReachedFilterIOKeys.hpp"
 
@@ -46,6 +47,22 @@ inline cogip::motion_control::SpeedPIDControllerParameters
     angular_speed_tuning_controller_parameters(&angular_speed_tuning_pid);
 
 // ============================================================================
+// TargetChangeDetector for detecting target changes
+// ============================================================================
+
+inline cogip::motion_control::TargetChangeDetectorIOKeys target_change_detector_io_keys = {
+    .target_x = "",
+    .target_y = "",
+    .target_O = "target_pose_O",
+    .new_target = "angular_speed_recompute_profile",
+    .trigger_state = 0};
+
+inline cogip::motion_control::TargetChangeDetectorParameters target_change_detector_parameters;
+
+inline cogip::motion_control::TargetChangeDetector
+    target_change_detector(target_change_detector_io_keys, target_change_detector_parameters);
+
+// ============================================================================
 // PoseErrorFilter for computing angle difference to target
 // ============================================================================
 
@@ -57,7 +74,7 @@ inline cogip::motion_control::PoseErrorFilterIOKeys pose_error_filter_io_keys = 
     .current_y = "", // Not used in ANGULAR mode
     .current_O = "current_pose_O",
     .pose_error = "angular_pose_error",
-    .recompute = "angular_speed_recompute_profile"};
+    .new_target = "angular_speed_recompute_profile"};
 
 inline cogip::motion_control::PoseErrorFilterParameters pose_error_filter_parameters(
     cogip::motion_control::PoseErrorFilterMode::ANGULAR,
