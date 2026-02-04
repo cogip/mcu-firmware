@@ -2,109 +2,75 @@ name: Compilation Workflow
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
-
-  compilation:
-
+  check-commits:
     runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Check commit messages
+      run: tools/check-branch-commits.sh ${{ github.event.pull_request.base.sha }}
+
+  check-codingrules:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install tools
+      run: sudo apt-get update && sudo apt-get install -y uncrustify cppcheck
+    - name: Check coding rules
+      run: make check-codingrules
+
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        board: [cogip-board, cogip-native]
 
     env:
-      RIOTBASE: ${GITHUB_WORKSPACE}/RIOT
+      RIOTBASE: ${{ github.workspace }}/RIOT
 
     steps:
     - name: Setup git
       run: |
         git config --global user.email "cogip35@gmail.com"
         git config --global user.name "COGIP"
+
     - name: Clone mcu-firmware
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: 'mcu-firmware'
+
     - name: Clone RIOT
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: 'cogip/RIOT'
         ref: 'cogip_master'
         path: 'RIOT'
+
     - name: Install toolchain
       run: |
-        # use apt-spy2 to select closest apt mirror,
-        # which helps avoid connectivity issues in Azure;
-        # see https://github.com/actions/virtual-environments/issues/675
-        sudo gem install apt-spy2
-        sudo apt-spy2 check
-        sudo apt-spy2 fix --commit
-        # end of apt-spy2 workaround
         sudo apt-get update
-        sudo apt-get install -qq build-essential gcc-multilib g++-multilib gcc-arm-none-eabi libnewlib-arm-none-eabi uncrustify protobuf-compiler quilt cppcheck libc6-dev
-        gcc --version
-        arm-none-eabi-gcc --version
+        sudo apt-get install -y build-essential gcc-multilib g++-multilib \
+          gcc-arm-none-eabi libnewlib-arm-none-eabi protobuf-compiler quilt
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: 'pip'
+        cache-dependency-path: mcu-firmware/requirements.txt
+
     - name: Install Python packages
-      run: |
-        sudo apt-get install -qq python3-pip
-        cd mcu-firmware
-        python3 -m venv venv
-        source venv/bin/activate
-        python3 -m pip install -r requirements.txt
-        deactivate
+      run: pip install -r mcu-firmware/requirements.txt
+
     - name: Apply RIOT patches
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make riot-patches
-        deactivate
-    - name: Compile
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make
-        deactivate
-    - name: Distclean
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make distclean -j
-        deactivate
-    - name: Re-compile (check successive builds)
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make -j
-        make -j
-        deactivate
-    - name: Compile - Native board
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make BOARD=cogip-native
-        deactivate
-    - name: Distclean
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make distclean -j
-        deactivate
-    - name: Re-compile (check successive builds) - Native board
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make -j BOARD=cogip-native
-        make -j BOARD=cogip-native
-        deactivate
-    - name: Clean all (distclean + git clean)
-      run: |
-        cd mcu-firmware
-        source venv/bin/activate
-        make distclean -j
-        git clean -dxf
-        deactivate
-    - name: Check coding rules
-      run: |
-        cd mcu-firmware
-        make check-codingrules
+      run: make -C mcu-firmware riot-patches
+
+    - name: Build
+      run: make -j$(nproc) -C mcu-firmware BOARD=${{ matrix.board }}
