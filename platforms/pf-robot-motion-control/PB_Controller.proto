@@ -9,6 +9,7 @@ enum PB_ControllerEnum {
     LINEAR_POSE_TUNING = 5;
     ANGULAR_POSE_TUNING = 6;
     LINEAR_POSE_TEST = 7;
+    ADAPTIVE_PURE_PURSUIT = 8;
 }
 
 message PB_Controller {

@@ -84,6 +84,13 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period =
     1000;
 /// @}
 
+/// @name Pure Pursuit parameters (values from robot config, see robot*_conf.hpp for details)
+/// @{
+constexpr float platform_pure_pursuit_min_lookahead_mm = pure_pursuit_min_lookahead_mm;
+constexpr float platform_pure_pursuit_max_lookahead_mm = pure_pursuit_max_lookahead_mm;
+constexpr float platform_pure_pursuit_lookahead_speed_ratio = pure_pursuit_lookahead_speed_ratio;
+/// @}
+
 /// Handle brake signal to stop the robot
 void pf_handle_brake(cogip::canpb::ReadBuffer& buffer);
 
