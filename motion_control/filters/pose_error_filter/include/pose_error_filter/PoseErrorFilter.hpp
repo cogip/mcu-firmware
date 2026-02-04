@@ -35,8 +35,7 @@ class PoseErrorFilter : public Controller<PoseErrorFilterIOKeys, PoseErrorFilter
     /// @brief Constructor.
     explicit PoseErrorFilter(const PoseErrorFilterIOKeys& keys,
                              PoseErrorFilterParameters& parameters, etl::string_view name = "")
-        : Controller<PoseErrorFilterIOKeys, PoseErrorFilterParameters>(keys, parameters, name),
-          prev_target_x_(0.0f), prev_target_y_(0.0f), prev_target_O_(0.0f), first_run_(true)
+        : Controller<PoseErrorFilterIOKeys, PoseErrorFilterParameters>(keys, parameters, name)
     {
     }
 
@@ -53,19 +52,12 @@ class PoseErrorFilter : public Controller<PoseErrorFilterIOKeys, PoseErrorFilter
     /// Execute linear mode: compute Euclidean distance.
     /// @param io Controllers IO
     /// @param[out] pose_error Computed pose error
-    /// @param[out] target_changed True if target changed
-    void execute_linear(ControllersIO& io, float& pose_error, bool& target_changed);
+    void execute_linear(ControllersIO& io, float& pose_error);
 
     /// Execute angular mode: compute angle difference.
     /// @param io Controllers IO
     /// @param[out] pose_error Computed pose error
-    /// @param[out] target_changed True if target changed
-    void execute_angular(ControllersIO& io, float& pose_error, bool& target_changed);
-
-    float prev_target_x_; ///< Previous target X for change detection
-    float prev_target_y_; ///< Previous target Y for change detection
-    float prev_target_O_; ///< Previous target O for change detection
-    bool first_run_;      ///< First run flag
+    void execute_angular(ControllersIO& io, float& pose_error);
 };
 
 } // namespace motion_control
