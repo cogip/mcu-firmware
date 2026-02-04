@@ -14,6 +14,7 @@
 // Project includes
 #include "ProfileFeedforwardControllerIOKeys.hpp"
 #include "ProfileFeedforwardControllerParameters.hpp"
+#include "log.h"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
 #include "motion_control_common/TrapezoidalProfile.hpp"
@@ -66,6 +67,14 @@ class ProfileFeedforwardController
     const char* type_name() const override
     {
         return "ProfileFeedforwardController";
+    }
+
+    /// @brief Reset internal state for new target
+    /// Called when changing target to reinitialize profile and period counter.
+    void reset() override
+    {
+        profile_.reset();
+        period_ = 0;
     }
 
     /// @brief Execute profile feedforward computation

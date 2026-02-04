@@ -101,11 +101,11 @@ class TrapezoidalProfile
 
     /**
      * @brief Get total number of periods for the trajectory
-     * @return Total periods (acceleration + plateau + deceleration)
+     * @return Total periods (reverse_decel + acceleration + plateau + deceleration)
      */
     uint32_t total_periods() const
     {
-        return accel_periods_ + plateau_periods_ + decel_periods_;
+        return reverse_decel_periods_ + accel_periods_ + plateau_periods_ + decel_periods_;
     }
 
     /**
@@ -202,17 +202,22 @@ class TrapezoidalProfile
     static float compute_triangular_peak_velocity(float distance, float v0, float vf, float accel,
                                                   float decel);
 
-    float initial_velocity_ = 0.0f; ///< Starting velocity
+    float initial_velocity_ = 0.0f; ///< Starting velocity (signed, can be opposite to target)
+    float v0_for_accel_ =
+        0.0f; ///< Velocity at start of accel phase (0 if reverse_decel, else projected initial)
     float plateau_velocity_ = 0.0f; ///< Plateau velocity (may be < max_speed)
     float target_distance_ = 0.0f;  ///< Total distance to cover
     float final_velocity_ = 0.0f;   ///< Final velocity (0 if must_stop_at_end)
 
-    uint32_t accel_periods_ = 0;   ///< Number of periods for acceleration phase
-    uint32_t plateau_periods_ = 0; ///< Number of periods for constant velocity phase
-    uint32_t decel_periods_ = 0;   ///< Number of periods for deceleration phase
+    uint32_t reverse_decel_periods_ = 0; ///< Periods to decel from opposite direction to 0
+    uint32_t accel_periods_ = 0;         ///< Number of periods for acceleration phase
+    uint32_t plateau_periods_ = 0;       ///< Number of periods for constant velocity phase
+    uint32_t decel_periods_ = 0;         ///< Number of periods for deceleration phase
 
     float acceleration_ = 0.0f; ///< Acceleration rate used
     float deceleration_ = 0.0f; ///< Deceleration rate used
+    float initial_phase_accel_ =
+        0.0f; ///< Signed accel for first phase (+a if speeding up, -d if slowing down)
 
     bool initialized_ = false; ///< Profile has been computed
 };
