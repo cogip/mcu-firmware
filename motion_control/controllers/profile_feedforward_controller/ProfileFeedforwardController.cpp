@@ -13,9 +13,6 @@
 #include <cstdio>
 #include <inttypes.h>
 
-// ETL includes
-#include "etl/absolute.h"
-
 // Project includes
 #include "log.h"
 #include "profile_feedforward_controller/ProfileFeedforwardController.hpp"
@@ -82,29 +79,28 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
         return;
     }
 
+    // Read current speed (keep sign for proper profile generation)
+    float current_speed = 0.0f;
+    if (auto opt = io.get_as<float>(keys_.current_speed)) {
+        current_speed = *opt;
+    }
+
     // Generate new profile if requested (triggered by PoseStraightFilter state transitions)
     if (recompute_profile) {
-        DEBUG("ProfileFeedforward[%s]: RECOMPUTE requested, pose_error=%.2f\n",
-              keys_.pose_error.data(), static_cast<double>(pose_error));
+        // When recompute is triggered, we start a new segment from rest (previous segment
+        // should have stopped with must_stop_at_end=true). Using measured speed here would
+        // cause erratic behavior if there's noise/vibration in the measurement.
+        float initial_speed = 0.0f;
+
+        DEBUG("[ProfileFF %s] RECOMPUTE pose_error=%.2f initial_speed=%.2f\n",
+              keys_.pose_error.data(), static_cast<double>(pose_error),
+              static_cast<double>(initial_speed));
         // Use pose error as target distance (signed - TrapezoidalProfile handles direction)
         float target_distance = pose_error;
 
-        // Read current speed (use absolute value, clamped to max_speed)
-        float current_speed = 0.0f;
-        if (auto opt = io.get_as<float>(keys_.current_speed)) {
-            current_speed = etl::absolute(*opt);
-            // Clamp to max_speed to prevent corrupted odometry from creating invalid profiles
-            if (current_speed > parameters_.max_speed()) {
-                LOG_WARNING(
-                    "ProfileFeedforwardController: current_speed %.2f clamped to max %.2f\n",
-                    current_speed, parameters_.max_speed());
-                current_speed = parameters_.max_speed();
-            }
-        }
-
         // Generate optimal profile with signed distance (TrapezoidalProfile handles direction)
         uint32_t total_periods = profile_.generate_optimal_profile(
-            current_speed, target_distance, parameters_.acceleration(), parameters_.deceleration(),
+            initial_speed, target_distance, parameters_.acceleration(), parameters_.deceleration(),
             parameters_.max_speed(), parameters_.must_stop_at_end());
 
         if (total_periods == 0) {
@@ -123,6 +119,37 @@ void ProfileFeedforwardController::execute(ControllersIO& io)
               keys_.pose_error.data(), total_periods, target_distance);
 
         // Reset period counter
+        period_ = 0;
+    }
+
+    // Check if pose_error sign changed vs profile target (e.g., motion_dir changed between cycles)
+    // If signs are opposite, regenerate profile for the new direction
+    float profile_target = profile_.target_distance();
+    if ((pose_error > 0.0f && profile_target < 0.0f) ||
+        (pose_error < 0.0f && profile_target > 0.0f)) {
+        DEBUG("[%s] Sign mismatch: pose_error=%.2f vs profile_target=%.2f, regenerating profile\n",
+              keys_.pose_error.data(), pose_error, profile_target);
+
+        // Regenerate profile for the new direction
+        uint32_t total_periods = profile_.generate_optimal_profile(
+            current_speed, pose_error, parameters_.acceleration(), parameters_.deceleration(),
+            parameters_.max_speed(), parameters_.must_stop_at_end());
+
+        if (total_periods == 0) {
+            // Can't generate profile - fall back to PID-only
+            io.set(keys_.feedforward_velocity, 0.0f);
+            io.set(keys_.tracking_error, pose_error);
+            if (!keys_.profile_complete.empty()) {
+                io.set(keys_.profile_complete, false);
+            }
+            profile_.reset();
+            return;
+        }
+
+        DEBUG("[%s] Regenerated profile: %" PRIu32 " periods, distance=%.2f\n",
+              keys_.pose_error.data(), total_periods, pose_error);
+
+        // Reset period counter for new profile
         period_ = 0;
     }
 
