@@ -43,6 +43,13 @@ class SpeedFilter : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
         return "SpeedFilter";
     }
 
+    /// @brief Reset internal state for new target
+    /// Called when changing target to reinitialize filter state.
+    void reset() override
+    {
+        previous_speed_order_ = 0.0f;
+    }
+
     /// @brief Apply acceleration and speed limits, and compute speed error.
     /// @param io Shared ControllersIO containing inputs and receiving outputs.
     void execute(ControllersIO& io) override;
@@ -51,12 +58,6 @@ class SpeedFilter : public Controller<SpeedFilterIOKeys, SpeedFilterParameters>
     float previous_speed_order() const
     {
         return previous_speed_order_;
-    }
-
-    /// @brief Reset filtered speed to zero.
-    void reset_previous_speed_order()
-    {
-        previous_speed_order_ = 0.0f;
     }
 
   protected:

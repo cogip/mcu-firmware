@@ -54,7 +54,7 @@ class AccelerationFilter : public Controller<AccelerationFilterIOKeys, Accelerat
     void execute(ControllersIO& io) override;
 
     /// Reset the filter state (previous output speed).
-    void reset()
+    void reset() override
     {
         previous_speed_order_ = 0.0f;
     }

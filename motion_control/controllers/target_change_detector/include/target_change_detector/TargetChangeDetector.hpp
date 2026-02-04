@@ -62,6 +62,13 @@ class TargetChangeDetector
         return "TargetChangeDetector";
     }
 
+    /// @brief Reset internal state for new target
+    /// Called when changing target to reinitialize detection state.
+    void reset() override
+    {
+        first_run_ = true;
+    }
+
     /// @brief Execute target change detection
     ///
     /// 1. Read current target pose from IO
