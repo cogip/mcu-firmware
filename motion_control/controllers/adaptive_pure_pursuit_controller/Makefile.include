@@ -1,0 +1,2 @@
+USEMODULE_INCLUDES_adaptive_pure_pursuit_controller := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_adaptive_pure_pursuit_controller)

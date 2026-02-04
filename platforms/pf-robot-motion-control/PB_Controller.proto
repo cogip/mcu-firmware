@@ -4,6 +4,7 @@ enum PB_ControllerEnum {
     QUADPID = 0;
     QUADPID_TRACKER = 1;
     TRACKER_SPEED_TUNING = 2;
+    ADAPTIVE_PURE_PURSUIT = 3;
 }
 
 message PB_Controller {

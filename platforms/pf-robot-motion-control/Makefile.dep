@@ -24,6 +24,7 @@ USEMODULE += utils
 # Controllers
 USEMODULE += reset_controller
 USEMODULE += acceleration_filter
+USEMODULE += adaptive_pure_pursuit_controller
 USEMODULE += anti_blocking_controller
 USEMODULE += conditional_switch_meta_controller
 USEMODULE += deceleration_filter

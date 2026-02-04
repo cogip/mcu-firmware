@@ -128,6 +128,13 @@ constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
 constexpr float speed_clamp_ratio = 1.2f;
 constexpr float acceleration_clamp_ratio = 1.2f;
 
+// Pure pursuit parameters
+constexpr float pure_pursuit_min_lookahead_mm = 100.0f;     ///< Minimum lookahead distance (mm)
+constexpr float pure_pursuit_max_lookahead_mm = 300.0f;     ///< Maximum lookahead distance (mm)
+constexpr float pure_pursuit_lookahead_speed_ratio = 10.0f; ///< Ratio to adapt lookahead to speed
+constexpr float pure_pursuit_initial_rotation_threshold_deg =
+    45.0f; ///< Threshold for initial rotation (deg)
+
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = true;
 // Angular antiblocking
@@ -159,17 +166,3 @@ inline Parameter<float, NonNegative> tracker_linear_speed_pid_integral_limit{
 // Tracker angular speed PID integral limit
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
     max_speed_deg_per_s / tracker_angular_speed_pid_ki.get()};
-
-// Corrector linear pose PID integral limit
-inline Parameter<float, NonNegative> corrector_linear_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
-// Corrector angular pose PID integral limit
-inline Parameter<float, NonNegative> corrector_angular_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
-
-// Corrector linear speed PID integral limit
-inline Parameter<float, NonNegative> corrector_linear_speed_pid_integral_limit{
-    max_speed_mm_per_s / corrector_linear_speed_pid_ki.get()};
-// Corrector angular speed PID integral limit
-inline Parameter<float, NonNegative> corrector_angular_speed_pid_integral_limit{
-    max_speed_deg_per_s / corrector_angular_speed_pid_ki.get()};

@@ -1,0 +1,3 @@
+USEMODULE += motion_control_common
+USEMODULE += path
+USEMODULE += pose_straight_filter
