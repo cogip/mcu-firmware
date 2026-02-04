@@ -15,7 +15,10 @@
  */
 
 #include <cstdio>
+#include <inttypes.h>
 #include <iostream>
+
+#include "etl/algorithm.h"
 
 #include "motion_control_common/TrapezoidalProfile.hpp"
 
@@ -41,10 +44,10 @@ void print_profile(const TrapezoidalProfile& profile, const char* test_name)
 
     uint32_t total = profile.total_periods();
     // Print first 10 periods
-    for (uint32_t period = 0; period <= std::min(10u, total); period++) {
+    for (uint32_t period = 0; period <= etl::min(static_cast<uint32_t>(10), total); period++) {
         double velocity = profile.compute_theoretical_velocity(period);
         double remaining = profile.compute_theoretical_remaining_distance(period);
-        printf("%6u | %20.2f | %22.2f\n", period, velocity, remaining);
+        printf("%6" PRIu32 " | %20.2f | %22.2f\n", period, velocity, remaining);
     }
 
     // Print around middle
@@ -54,7 +57,7 @@ void print_profile(const TrapezoidalProfile& profile, const char* test_name)
         for (uint32_t period = mid - 2; period <= mid + 2; period++) {
             double velocity = profile.compute_theoretical_velocity(period);
             double remaining = profile.compute_theoretical_remaining_distance(period);
-            printf("%6u | %20.2f | %22.2f\n", period, velocity, remaining);
+            printf("%6" PRIu32 " | %20.2f | %22.2f\n", period, velocity, remaining);
         }
     }
 
@@ -64,7 +67,7 @@ void print_profile(const TrapezoidalProfile& profile, const char* test_name)
         for (uint32_t period = total - 5; period <= total; period++) {
             double velocity = profile.compute_theoretical_velocity(period);
             double remaining = profile.compute_theoretical_remaining_distance(period);
-            printf("%6u | %20.2f | %22.2f\n", period, velocity, remaining);
+            printf("%6" PRIu32 " | %20.2f | %22.2f\n", period, velocity, remaining);
         }
     }
 

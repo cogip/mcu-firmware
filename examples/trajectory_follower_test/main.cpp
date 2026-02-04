@@ -13,6 +13,7 @@
  */
 
 #include <cstdio>
+#include <inttypes.h>
 #include <iostream>
 
 #include "motion_control_common/ControllersIO.hpp"
@@ -127,8 +128,8 @@ bool run_test(const char* test_name, double target_distance, double max_speed, d
 
         // Check if target reached
         if (std::abs(actual_remaining) < distance_threshold) {
-            printf("%6u | %13.2f | %20.2f |      -      |       -       | %17.2f\n", period,
-                   robot.position(), robot.velocity(), actual_remaining);
+            printf("%6" PRIu32 " | %13.2f | %20.2f |      -      |       -       | %17.2f\n",
+                   period, robot.position(), robot.velocity(), actual_remaining);
             std::cout << "\nTarget reached at period " << period << "!\n";
             std::cout << "Final position: " << robot.position() << " mm\n";
             std::cout << "Final velocity: " << robot.velocity() << " mm/period\n";
@@ -156,8 +157,9 @@ bool run_test(const char* test_name, double target_distance, double max_speed, d
 
         // Print every 10 periods (or every period for short profiles)
         if (period % 10 == 0 || total_periods <= 20) {
-            printf("%6u | %13.2f | %20.2f | %11.2f | %13.2f | %17.2f\n", period, robot.position(),
-                   robot.velocity(), tracker_velocity, feedback_correction, actual_remaining);
+            printf("%6" PRIu32 " | %13.2f | %20.2f | %11.2f | %13.2f | %17.2f\n", period,
+                   robot.position(), robot.velocity(), tracker_velocity, feedback_correction,
+                   actual_remaining);
         }
     }
 
