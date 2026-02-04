@@ -86,13 +86,13 @@ static cogip::motion_control::PosePIDController
 
 // ProfileFeedforward for pose test (separate instance)
 static cogip::motion_control::ProfileFeedforwardControllerIOKeys
-    pose_test_linear_profile_feedforward_io_keys{.pose_error = "linear_pose_error",
-                                                 .current_speed = "linear_current_speed",
-                                                 .recompute_profile = "linear_recompute_profile",
-                                                 .feedforward_velocity =
-                                                     "linear_feedforward_velocity",
-                                                 .tracking_error = "linear_tracking_error",
-                                                 .profile_complete = "linear_profile_complete"};
+    pose_test_linear_profile_feedforward_io_keys{
+        .pose_error = "linear_pose_error",
+        .current_speed = "linear_current_speed",
+        .recompute_profile = "linear_pose_recompute_profile",
+        .feedforward_velocity = "linear_feedforward_velocity",
+        .tracking_error = "linear_tracking_error",
+        .profile_complete = "linear_profile_complete"};
 
 static cogip::motion_control::ProfileFeedforwardControllerParameters
     pose_test_linear_profile_feedforward_parameters(
@@ -130,7 +130,9 @@ static cogip::motion_control::FeedforwardCombinerController
 
 cogip::motion_control::MetaController<>* init()
 {
-    // Linear pose loop: PoseErrorFilter -> ProfileFeedforward -> PosePID -> Combiner
+    // Linear pose loop: TargetChangeDetector -> PoseErrorFilter -> ProfileFeedforward ->
+    // PosePID -> Combiner
+    linear_pose_loop_meta_controller.add_controller(&linear_target_change_detector);
     linear_pose_loop_meta_controller.add_controller(&linear_pose_error_filter);
     linear_pose_loop_meta_controller.add_controller(
         &pose_test_linear_profile_feedforward_controller);
@@ -138,7 +140,8 @@ cogip::motion_control::MetaController<>* init()
     linear_pose_loop_meta_controller.add_controller(
         &pose_test_linear_feedforward_combiner_controller);
 
-    // Angular pose loop (simplified): PoseErrorFilter -> PosePID (P-only)
+    // Angular pose loop (simplified): TargetChangeDetector -> PoseErrorFilter -> PosePID (P-only)
+    angular_pose_loop_meta_controller.add_controller(&angular_target_change_detector);
     angular_pose_loop_meta_controller.add_controller(&angular_pose_error_filter);
     angular_pose_loop_meta_controller.add_controller(&angular_pose_controller);
 

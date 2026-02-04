@@ -26,6 +26,9 @@
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "parameter/Parameter.hpp"
+#include "path_manager_filter/PathManagerFilter.hpp"
+#include "path_manager_filter/PathManagerFilterIOKeys.hpp"
+#include "path_manager_filter/PathManagerFilterParameters.hpp"
 #include "pid/PID.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
@@ -82,13 +85,37 @@ inline cogip::pid::PID feedforward_angular_pose_pid(feedforward_angular_pose_pid
 inline cogip::pid::PID feedforward_angular_speed_pid(feedforward_angular_speed_pid_parameters);
 
 // ============================================================================
+// PathManagerFilter
+// ============================================================================
+
+inline constexpr cogip::motion_control::PathManagerFilterIOKeys path_manager_filter_io_keys = {
+    .pose_reached = "pose_reached",
+    .target_pose_x = "target_pose_x",
+    .target_pose_y = "target_pose_y",
+    .target_pose_O = "target_pose_O",
+    .new_target = "new_target",
+    .path_complete = "path_complete",
+    .path_index = "path_index",
+    .bypass_final_orientation = "bypass_final_orientation",
+    .motion_direction = "motion_direction",
+    .is_intermediate = "is_intermediate"};
+
+inline cogip::motion_control::PathManagerFilterParameters path_manager_filter_parameters;
+
+inline cogip::motion_control::PathManagerFilter path_manager_filter(path_manager_filter_io_keys,
+                                                                    path_manager_filter_parameters);
+
+// ============================================================================
 // PoseStraightFilter (separate instance with its own parameters)
 // ============================================================================
 
 /// Local parameters for PoseStraightFilter (independent from quadpid_chain)
 inline cogip::motion_control::PoseStraightFilterParameters pose_straight_filter_parameters(
     angular_threshold, linear_threshold, angular_intermediate_threshold,
-    platform_max_dec_angular_deg_per_period2, platform_max_dec_linear_mm_per_period2);
+    platform_max_dec_angular_deg_per_period2, platform_max_dec_linear_mm_per_period2,
+    false, // bypass_final_orientation
+    true   // use_angle_continuity (required for ProfileFeedforward)
+);
 
 inline cogip::motion_control::PoseStraightFilter
     pose_straight_filter(cogip::motion_control::pose_straight_filter_io_keys_default,
@@ -108,7 +135,8 @@ inline constexpr cogip::motion_control::PosePIDControllerIOKeys
                                                .target_speed = "dummy_target_speed",
                                                .disable_filter = "dummy_disable",
                                                .pose_reached = "dummy_pose_reached",
-                                               .speed_order = "linear_feedback_correction"};
+                                               .speed_order = "linear_feedback_correction",
+                                               .reset = "linear_pose_pid_reset"};
 
 inline cogip::motion_control::PosePIDController linear_feedforward_pose_controller{
     linear_feedforward_pose_controller_keys, linear_feedforward_pose_controller_parameters};
@@ -118,10 +146,12 @@ inline cogip::motion_control::PosePIDController linear_feedforward_pose_controll
 // ============================================================================
 
 /// Linear ProfileFeedforwardController IO keys
+/// Note: current_speed uses speed_order (not measured speed) so the profile
+/// continues from commanded velocity when regenerating mid-motion
 inline cogip::motion_control::ProfileFeedforwardControllerIOKeys
     linear_profile_feedforward_io_keys = {
         .pose_error = "linear_pose_error",
-        .current_speed = "linear_current_speed",
+        .current_speed = "linear_speed_order",
         .recompute_profile = "linear_recompute_profile",
         .feedforward_velocity = "linear_feedforward_velocity",
         .tracking_error = "linear_tracking_error",
@@ -142,10 +172,12 @@ inline cogip::motion_control::ProfileFeedforwardController
                                           linear_profile_feedforward_parameters);
 
 /// Angular ProfileFeedforwardController IO keys
+/// Note: current_speed uses speed_order (not measured speed) so the profile
+/// continues from commanded velocity when regenerating mid-motion
 inline cogip::motion_control::ProfileFeedforwardControllerIOKeys
     angular_profile_feedforward_io_keys = {
         .pose_error = "angular_pose_error",
-        .current_speed = "angular_current_speed",
+        .current_speed = "angular_speed_order",
         .recompute_profile = "angular_recompute_profile",
         .feedforward_velocity = "angular_feedforward_velocity",
         .tracking_error = "angular_tracking_error",
@@ -260,7 +292,8 @@ inline constexpr cogip::motion_control::PosePIDControllerIOKeys
                                                 .target_speed = "dummy_target_speed",
                                                 .disable_filter = "dummy_disable",
                                                 .pose_reached = "dummy_pose_reached",
-                                                .speed_order = "angular_feedback_correction"};
+                                                .speed_order = "angular_feedback_correction",
+                                                .reset = "angular_pose_pid_reset"};
 
 inline cogip::motion_control::PosePIDControllerParameters
     angular_feedforward_pose_controller_parameters{&feedforward_angular_pose_pid};
@@ -323,7 +356,7 @@ inline cogip::motion_control::AntiBlockingControllerIOKeys linear_anti_blocking_
     .pose_reached = "pose_reached"};
 
 inline cogip::motion_control::AntiBlockingControllerParameters
-    linear_anti_blocking_parameters(false, // disabled by default
+    linear_anti_blocking_parameters(true, // enabled
                                     platform_linear_anti_blocking_speed_threshold_mm_per_period,
                                     platform_linear_anti_blocking_error_threshold_mm_per_period,
                                     platform_linear_anti_blocking_blocked_cycles_nb_threshold);
@@ -349,6 +382,54 @@ inline cogip::motion_control::AntiBlockingController
                                      angular_anti_blocking_parameters);
 
 // ============================================================================
+// Speed limit filters (safety clamp at ratio × max)
+// ============================================================================
+
+inline cogip::motion_control::SpeedLimitFilterIOKeys linear_speed_limit_io_keys = {
+    .target_speed = "linear_speed_order", .output_speed = ""};
+
+inline cogip::motion_control::SpeedLimitFilterParameters
+linear_speed_limit_parameters(platform_min_speed_linear_mm_per_period,
+                              platform_max_speed_linear_mm_per_period* speed_clamp_ratio);
+
+inline cogip::motion_control::SpeedLimitFilter
+    linear_speed_limit_filter(linear_speed_limit_io_keys, linear_speed_limit_parameters);
+
+inline cogip::motion_control::SpeedLimitFilterIOKeys angular_speed_limit_io_keys = {
+    .target_speed = "angular_speed_order", .output_speed = ""};
+
+inline cogip::motion_control::SpeedLimitFilterParameters
+angular_speed_limit_parameters(platform_min_speed_angular_deg_per_period,
+                               platform_max_speed_angular_deg_per_period* speed_clamp_ratio);
+
+inline cogip::motion_control::SpeedLimitFilter
+    angular_speed_limit_filter(angular_speed_limit_io_keys, angular_speed_limit_parameters);
+
+// ============================================================================
+// Acceleration filters (safety clamp at ratio × max)
+// ============================================================================
+
+inline cogip::motion_control::AccelerationFilterIOKeys linear_acceleration_io_keys = {
+    .target_speed = "linear_speed_order"};
+
+inline cogip::motion_control::AccelerationFilterParameters
+linear_acceleration_parameters(platform_max_acc_linear_mm_per_period2* acceleration_clamp_ratio,
+                               platform_min_speed_linear_mm_per_period);
+
+inline cogip::motion_control::AccelerationFilter
+    linear_acceleration_filter(linear_acceleration_io_keys, linear_acceleration_parameters);
+
+inline cogip::motion_control::AccelerationFilterIOKeys angular_acceleration_io_keys = {
+    .target_speed = "angular_speed_order"};
+
+inline cogip::motion_control::AccelerationFilterParameters
+angular_acceleration_parameters(platform_max_acc_angular_deg_per_period2* acceleration_clamp_ratio,
+                                platform_min_speed_angular_deg_per_period);
+
+inline cogip::motion_control::AccelerationFilter
+    angular_acceleration_filter(angular_acceleration_io_keys, angular_acceleration_parameters);
+
+// ============================================================================
 // Telemetry controller
 // ============================================================================
 
@@ -371,18 +452,16 @@ inline cogip::motion_control::QuadPIDMetaController quadpid_feedforward_meta_con
 /// Initialize feedforward chain meta controller
 cogip::motion_control::QuadPIDMetaController* init();
 
-/// Reset feedforward chain state (stateful filters and PIDs)
+/// Reset feedforward chain state (all controllers via cascade)
 inline void reset()
 {
-    // Reset feedforward PIDs (clear integral terms)
-    feedforward_linear_speed_pid.reset();
-    feedforward_angular_speed_pid.reset();
-    feedforward_linear_pose_pid.reset();
-    feedforward_angular_pose_pid.reset();
-
-    // Note: PoseStraightFilter, ProfileFeedforwardController, DecelerationFilter,
-    // and SpeedLimitFilter don't have reset() methods as they are either stateless
-    // or reset automatically on new targets
+    // Reset all controllers via meta controller cascade
+    // This will call reset() on each controller, which resets:
+    // - PoseStraightFilter: state machine, prev_target, angular error tracking
+    // - ProfileFeedforwardController: profile invalidation, period counter
+    // - PosePIDController: PID integral term
+    // - SpeedPIDController: PID integral term
+    quadpid_feedforward_meta_controller.reset();
 }
 
 } // namespace quadpid_feedforward_chain
