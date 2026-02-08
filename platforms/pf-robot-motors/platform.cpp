@@ -8,6 +8,7 @@
 
 /* Platform includes */
 #include "pf_actuators.hpp"
+#include "pf_parameters.hpp"
 
 /// Start game message handler
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
@@ -46,6 +47,7 @@ void pf_init(void)
     }
 
     cogip::pf::actuators::init();
+    cogip::pf::parameters::init();
 }
 
 void pf_init_tasks(void)
