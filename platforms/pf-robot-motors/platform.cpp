@@ -8,6 +8,7 @@
 
 /* Platform includes */
 #include "pf_actuators.hpp"
+#include "pf_parameters.hpp"
 
 /* Protobuf includes */
 #include "PB_EmergencyStop.hpp"
@@ -67,6 +68,7 @@ void pf_init(void)
     }
 
     cogip::pf::actuators::init();
+    cogip::pf::parameters::init();
 }
 
 void pf_init_tasks(void)
