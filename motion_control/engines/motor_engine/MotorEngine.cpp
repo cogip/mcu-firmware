@@ -1,4 +1,5 @@
 // RIOT includes
+#include <periph/gpio.h>
 #include <ztimer.h>
 
 // System includes
@@ -85,6 +86,11 @@ void MotorEngine::prepare_inputs()
 
 void MotorEngine::process_outputs()
 {
+    // Continuously clear motor driver overload fault if pin is configured
+    if (clear_overload_pin_ != GPIO_UNDEF) {
+        gpio_clear(clear_overload_pin_);
+    }
+
     // If timeout is enabled, pose_reached_ has been set by the engine itself, do
     // not override it.
     if (pose_reached_ != target_pose_status_t::timeout) {
