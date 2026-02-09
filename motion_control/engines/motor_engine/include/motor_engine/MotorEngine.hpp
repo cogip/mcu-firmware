@@ -87,6 +87,9 @@ class MotorEngine : public BaseControllerEngine
     /// Motor target distance
     float target_distance_;
 
+    /// Flag indicating a new target was set (for profile tracker recomputation)
+    bool new_target_;
+
     /// Motor
     motor::MotorInterface& motor_;
 
