@@ -17,11 +17,14 @@
 #include "Actuator.hpp"
 #include "motor/MotorInterface.hpp"
 #include "odometer/OdometerInterface.hpp"
-// Motion control
+// Motion control - Classic chain
 #include "motor_pose_filter/MotorPoseFilterParameters.hpp"
 #include "pose_pid_controller/PosePIDControllerParameters.hpp"
 #include "speed_filter/SpeedFilterParameters.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
+// Motion control - Tracker chain
+#include "profile_tracker_controller/ProfileTrackerControllerParameters.hpp"
+#include "tracker_combiner_controller/TrackerCombinerControllerParameters.hpp"
 
 namespace cogip {
 namespace actuators {
@@ -32,6 +35,8 @@ namespace positional_actuators {
 /// @details
 ///   Gathers all necessary parameters to configure and instantiate a Motor,
 ///   including control, filtering, timeout, and hardware interface options.
+///
+///   For DUALPID_TRACKER mode, additional tracker parameters must be provided.
 struct MotorParameters
 {
     /// @brief Motor identifier (enum used internally to differentiate motors).
@@ -49,6 +54,8 @@ struct MotorParameters
     gpio_t clear_overload_pin = GPIO_UNDEF;
 
     /// @brief Parameters for the PosePIDController (position control).
+    /// @details Used in both DUALPID and DUALPID_TRACKER modes.
+    ///          In DUALPID_TRACKER mode, this controls tracking error correction.
     motion_control::PosePIDControllerParameters& pose_controller_parameters;
 
     /// @brief Parameters for the SpeedPIDController (speed control).
@@ -59,6 +66,8 @@ struct MotorParameters
     motion_control::MotorPoseFilterParameters& motor_pose_filter_parameters;
 
     /// @brief Parameters for the SpeedFilter (used to smooth and limit speed).
+    /// @details Only used in DUALPID mode. In DUALPID_TRACKER mode, the profile
+    ///          tracker handles acceleration/deceleration limits.
     motion_control::SpeedFilterParameters& speed_filter_parameters;
 
     /// @brief Period of the motor engine thread, in milliseconds.
@@ -69,6 +78,21 @@ struct MotorParameters
 
     /// @brief Reference to the odometer interface.
     localization::OdometerInterface& odometer;
+
+    // =========================================================================
+    // Tracker chain parameters (only used in DUALPID_TRACKER mode)
+    // =========================================================================
+
+    /// @brief Parameters for the ProfileTrackerController.
+    /// @details Only used in DUALPID_TRACKER mode. Defines max speed, acceleration,
+    ///          and deceleration for the trapezoidal velocity profile.
+    ///          If nullptr, DUALPID mode will be used.
+    motion_control::ProfileTrackerControllerParameters* profile_tracker_parameters = nullptr;
+
+    /// @brief Parameters for the TrackerCombinerController.
+    /// @details Only used in DUALPID_TRACKER mode.
+    ///          If nullptr, default parameters will be used.
+    motion_control::TrackerCombinerControllerParameters* tracker_combiner_parameters = nullptr;
 };
 
 } // namespace positional_actuators
