@@ -93,11 +93,6 @@ void Lift::actuate(int32_t command)
 
     LOG_INFO("Move lift to clamped command %" PRIi32 "\n", clamped);
 
-    // Pulse the clear_overload pin to release any motor driver fault
-    gpio_clear(params_.motor_params.clear_overload_pin);
-    ztimer_sleep(ZTIMER_MSEC, 10);
-    gpio_set(params_.motor_params.clear_overload_pin);
-
     Motor::actuate(clamped);
 }
 
@@ -120,7 +115,7 @@ void Lift::at_lower_limit()
     if (gpio_read(params_.lower_limit_switch_pin)) {
         LOG_INFO("Lower limit switch pressed\n");
         set_current_distance(params_.lower_limit_mm);
-        stop();
+        actuate(params_.lower_limit_mm);
     } else {
         LOG_INFO("Lower limit switch released\n");
     }
@@ -132,7 +127,7 @@ void Lift::at_upper_limit()
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
         set_current_distance(params_.upper_limit_mm);
-        stop();
+        actuate(params_.upper_limit_mm);
     } else {
         LOG_INFO("Upper limit switch released\n");
     }
