@@ -28,7 +28,7 @@ static const motor_driver_params_t actuators_motors_params = {
                 .gpio_enable = GPIO_PIN(PORT_A, 10),
                 .gpio_dir0 = GPIO_PIN(PORT_C, 6),
                 .gpio_brake = GPIO_PIN(PORT_C, 8),
-                .gpio_dir_reverse = 1,
+                .gpio_dir_reverse = 0,
             },
         },
     .motor_set_post_cb = nullptr};

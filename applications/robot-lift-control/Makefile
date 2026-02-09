@@ -1,6 +1,10 @@
-APPLICATION = cup2025-robot1-lift
+APPLICATION = robot-lift-control
 
 BOARD ?= cogip-board
+
+# Lift identifier (1-5)
+LIFT_ID ?= 1
+CFLAGS += -DLIFT_ID=$(LIFT_ID)
 
 # Platform
 USEMODULE += pf-robot-motors
