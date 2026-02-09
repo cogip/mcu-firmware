@@ -179,11 +179,8 @@ static cogip::localization::OdometerEncoder lift_motor_odometer(lift_motor_odome
 
 /// @brief Create lift motor parameters with the given actuator ID
 /// @param actuator_id The actuator ID for CAN protobuf messages
-/// @param use_tracker_chain If true, use DUALPID_TRACKER mode with profile tracker
-/// @note When use_tracker_chain is true, the profile_tracker_parameters pointer is set,
-///       enabling the Motor to use the tracker chain instead of the classic DualPID chain.
 inline cogip::actuators::positional_actuators::MotorParameters
-make_lift_motor_params(cogip::actuators::Enum actuator_id, bool use_tracker_chain = true)
+make_lift_motor_params(cogip::actuators::Enum actuator_id)
 {
     return {
         /* id                           */ actuator_id,
@@ -197,8 +194,7 @@ make_lift_motor_params(cogip::actuators::Enum actuator_id, bool use_tracker_chai
         /* engine_thread_timeout_ms_    */ lift_control::control_period_ms,
         /* motor                        */ lift_motor,
         /* odometer                     */ lift_motor_odometer,
-        /* profile_tracker_params       */
-            use_tracker_chain ? &motor_lift_profile_tracker_parameters : nullptr,
+        /* profile_tracker_params       */ &motor_lift_profile_tracker_parameters,
         /* tracker_combiner_params      */ nullptr // Use default parameters
     };
 }

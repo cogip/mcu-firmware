@@ -93,11 +93,6 @@ void Lift::actuate(int32_t command)
 
     LOG_INFO("Move lift to clamped command %" PRIi32 "\n", clamped);
 
-    // Pulse the clear_overload pin to release any motor driver fault
-    gpio_clear(params_.motor_params.clear_overload_pin);
-    ztimer_sleep(ZTIMER_MSEC, 10);
-    gpio_set(params_.motor_params.clear_overload_pin);
-
     Motor::actuate(clamped);
 }
 

@@ -95,9 +95,10 @@ Motor::Motor(const MotorParameters& motor_parameters, MotorControlMode mode)
         LOG_ERROR("Odometer init failed\n");
     }
 
-    // Ensure overload flag is cleared at startup
+    // Configure overload pin and pass it to the engine for periodic clearing
     gpio_init(params_.clear_overload_pin, GPIO_OUT);
     gpio_clear(params_.clear_overload_pin);
+    motor_engine_.set_clear_overload_pin(params_.clear_overload_pin);
 
     // Start disabled and spin up the control thread
     disable();
