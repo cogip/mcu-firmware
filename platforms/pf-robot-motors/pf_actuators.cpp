@@ -18,6 +18,9 @@
 
 #include "PB_Actuators.hpp"
 
+#define ENABLE_DEBUG 1
+#include <debug.h>
+
 namespace cogip {
 namespace pf {
 namespace actuators {
@@ -37,14 +40,18 @@ void disable_all()
 /// Handle Protobuf actuator command message.
 static void _handle_command(cogip::canpb::ReadBuffer& buffer)
 {
+    LOG_INFO("_handle_command: received CAN message\n");
     static PB_ActuatorCommand pb_command;
     pb_command.clear();
     pb_command.deserialize(buffer);
+    LOG_INFO("_handle_command: has_positional_actuator=%d\n", pb_command.has_positional_actuator());
     if (pb_command.has_positional_actuator()) {
         const PB_PositionalActuatorCommand& pb_positional_actuator_command =
             pb_command.get_positional_actuator();
         cogip::actuators::Enum id =
             cogip::actuators::Enum{(uint8_t)pb_positional_actuator_command.id()};
+        LOG_INFO("_handle_command: actuator id=%" PRIu8 ", contains=%d\n", static_cast<uint8_t>(id),
+                 positional_actuators::contains(id));
         if (positional_actuators::contains(id)) {
             // Negative timeout is not possible
             int32_t timeout_ms = pb_positional_actuator_command.timeout();
@@ -87,6 +94,7 @@ void init()
                                    canpb::message_handler_t::create<_handle_command>());
     canpb.register_message_handler(init_uuid,
                                    canpb::message_handler_t::create<_handle_actuators_init>());
+    LOG_INFO("pf_actuators::init: registered handler for command_uuid=0x%04lX\n", command_uuid);
 }
 
 } // namespace actuators

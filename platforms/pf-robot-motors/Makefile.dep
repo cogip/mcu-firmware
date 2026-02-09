@@ -19,14 +19,20 @@ USEMODULE += utils
 USEMODULE += encoder
 USEMODULE += motor
 USEMODULE += localization
+USEMODULE += parameter_handler
 
-# Controllers
+# Controllers - Classic DualPID chain
 USEMODULE += dualpid_meta_controller
 USEMODULE += motor_engine
 USEMODULE += motor_pose_filter
 USEMODULE += pose_pid_controller
 USEMODULE += speed_pid_controller
 USEMODULE += speed_filter
+
+# Controllers - DualPID Tracker chain (feedforward + feedback)
+USEMODULE += motion_control_common
+USEMODULE += profile_tracker_controller
+USEMODULE += tracker_combiner_controller
 
 # Board features required
 FEATURES_REQUIRED += periph_pwm
