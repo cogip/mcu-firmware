@@ -8,7 +8,8 @@ enum PB_ActuatorsTypeEnum
 
 enum PB_PositionalActuatorEnum
 {
-    MOTOR_LIFT = 0;
+    MOTOR_LIFT_1 = 0;
+    MOTOR_LIFT_2 = 1;
 }
 
 enum PB_BoolSensorEnum

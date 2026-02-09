@@ -90,14 +90,20 @@ static ParameterHandlerType parameter_handler(registry);
 
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer)
 {
-    PB_ParameterGetResponse response = parameter_handler.handle_get(buffer);
-    pf_get_canpb().send_message(parameter_get_response_uuid, &response);
+    auto response = parameter_handler.handle_get(buffer);
+    // Only respond if this board owns the parameter
+    if (response.has_value()) {
+        pf_get_canpb().send_message(parameter_get_response_uuid, &response.value());
+    }
 }
 
 void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer)
 {
-    PB_ParameterSetResponse response = parameter_handler.handle_set(buffer);
-    pf_get_canpb().send_message(parameter_set_response_uuid, &response);
+    auto response = parameter_handler.handle_set(buffer);
+    // Only respond if this board owns the parameter
+    if (response.has_value()) {
+        pf_get_canpb().send_message(parameter_set_response_uuid, &response.value());
+    }
 }
 
 } // namespace motion_control
