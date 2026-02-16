@@ -27,11 +27,13 @@ USEMODULE += acceleration_filter
 USEMODULE += anti_blocking_controller
 USEMODULE += conditional_switch_meta_controller
 USEMODULE += deceleration_filter
-USEMODULE += feedforward_combiner_controller
+USEMODULE += tracker_combiner_controller
 USEMODULE += passthrough_pose_pid_controller
+USEMODULE += path_manager_filter
 USEMODULE += speed_limit_filter
 USEMODULE += pose_error_filter
-USEMODULE += profile_feedforward_controller
+USEMODULE += pose_pid_controller
+USEMODULE += profile_tracker_controller
 USEMODULE += quadpid_meta_controller
 USEMODULE += platform_engine
 USEMODULE += pose_straight_filter
@@ -39,6 +41,7 @@ USEMODULE += speed_filter
 USEMODULE += target_change_detector
 USEMODULE += telemetry_controller
 USEMODULE += tuning_pose_reached_filter
+USEMODULE += adaptive_pure_pursuit_controller
 
 # Board features required
 FEATURES_REQUIRED += periph_qdec

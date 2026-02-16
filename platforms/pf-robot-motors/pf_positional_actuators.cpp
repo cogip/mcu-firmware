@@ -19,6 +19,9 @@
 #include "etl/pool.h"
 #include "log.h"
 
+#define ENABLE_DEBUG 1
+#include <debug.h>
+
 // RIOT includes
 #include <event.h>
 #include <motor_driver.h>
@@ -78,6 +81,8 @@ void init_sequence(void)
 int create_lift(cogip::actuators::Enum id,
                 const cogip::actuators::positional_actuators::LiftParameters& lift_params)
 {
+    LOG_INFO("create_lift: creating lift with id=%" PRIu8 "\n", static_cast<uint8_t>(id));
+
     // Create Lift
     _positional_actuators[id] = _lifts_pool.create(lift_params);
 
@@ -87,6 +92,8 @@ int create_lift(cogip::actuators::Enum id,
     }
 
     _positional_actuators[id]->enable();
+
+    LOG_INFO("create_lift: lift created, map size=%zu\n", _positional_actuators.size());
 
     return 0;
 }
@@ -102,7 +109,10 @@ void init(void)
 
 bool contains(cogip::actuators::Enum id)
 {
-    return _positional_actuators.contains(id);
+    bool result = _positional_actuators.contains(id);
+    LOG_INFO("contains: id=%" PRIu8 ", result=%d, map_size=%zu\n", static_cast<uint8_t>(id), result,
+             _positional_actuators.size());
+    return result;
 }
 
 cogip::actuators::positional_actuators::PositionalActuator& get(cogip::actuators::Enum id)

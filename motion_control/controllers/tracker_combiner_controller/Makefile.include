@@ -1,0 +1,5 @@
+USEMODULE_INCLUDES_tracker_combiner_controller := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_tracker_combiner_controller)
+
+PROTOBUF_PATH_tracker_combiner_controller := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_tracker_combiner_controller)

@@ -19,7 +19,7 @@ void SpeedPIDController::execute(ControllersIO& io)
             this->parameters_.pid()->reset();
             // Clear the reset flag
             io.set(keys_.reset, false);
-            DEBUG("PID reset triggered via IO key %s\n", keys_.reset.data());
+            DEBUG("[SpeedPID %s] reset via IO key\n", keys_.reset.data());
         }
     }
 
@@ -50,7 +50,9 @@ void SpeedPIDController::execute(ControllersIO& io)
     // Write speed command
     io.set(keys_.speed_command, speed_command);
 
-    DEBUG("End SpeedPIDController\n");
+    DEBUG("SpeedPID: order=%.2f cur=%.2f err=%.2f cmd=%.2f\n", static_cast<double>(speed_order),
+          static_cast<double>(current_speed), static_cast<double>(speed_error),
+          static_cast<double>(speed_command));
 }
 
 } // namespace motion_control

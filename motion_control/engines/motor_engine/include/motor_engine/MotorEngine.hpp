@@ -13,6 +13,9 @@
 
 #pragma once
 
+// RIOT includes
+#include <periph/gpio.h>
+
 // Project includes
 #include "etl/delegate.h"
 #include "motion_control_common/BaseControllerEngine.hpp"
@@ -74,6 +77,14 @@ class MotorEngine : public BaseControllerEngine
     void set_target_distance(const float target_distance ///< [in]   new target distance
     );
 
+    /// Set GPIO pin used to clear motor driver overload fault.
+    /// When set, the pin is driven low at every control period to
+    /// continuously reset any overload condition.
+    void set_clear_overload_pin(gpio_t pin)
+    {
+        clear_overload_pin_ = pin;
+    }
+
   private:
     /// Prepare controller inputs from motor functions.
     void prepare_inputs();
@@ -87,11 +98,17 @@ class MotorEngine : public BaseControllerEngine
     /// Motor target distance
     float target_distance_;
 
+    /// Flag indicating a new target was set (for profile tracker recomputation)
+    bool new_target_;
+
     /// Motor
     motor::MotorInterface& motor_;
 
     /// EncoderInterface
     localization::OdometerInterface& odometer_;
+
+    /// GPIO pin to clear motor driver overload (GPIO_UNDEF if unused)
+    gpio_t clear_overload_pin_ = GPIO_UNDEF;
 };
 
 } // namespace motion_control

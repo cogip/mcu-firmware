@@ -61,8 +61,8 @@ void MotorPoseFilter::execute(ControllersIO& io)
 
     // Read pose reached status (default to moving if missing)
     target_pose_status_t pose_reached = target_pose_status_t::moving;
-    if (auto opt = io.get_as<float>(keys_.pose_reached)) {
-        pose_reached = static_cast<target_pose_status_t>(static_cast<int>(*opt));
+    if (auto opt = io.get_as<target_pose_status_t>(keys_.pose_reached)) {
+        pose_reached = *opt;
     } else {
         LOG_WARNING("WARNING: %s is not available, using default value %d\n",
                     keys_.pose_reached.data(), static_cast<int>(pose_reached));
@@ -103,6 +103,10 @@ void MotorPoseFilter::execute(ControllersIO& io)
 
     // Write updated pose reached status
     io.set(keys_.pose_reached_out, pose_reached);
+
+    DEBUG("MotorPoseFilter: cur=%.2f tgt=%.2f err=%.2f spd=%.2f\n",
+          static_cast<double>(current_pose), static_cast<double>(target_pose),
+          static_cast<double>(position_error), static_cast<double>(target_speed));
 }
 
 } // namespace motion_control

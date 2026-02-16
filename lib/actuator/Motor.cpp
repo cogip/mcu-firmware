@@ -4,44 +4,85 @@
 // directory for more details.
 
 #include "actuator/Motor.hpp"
+#include "actuator/MotorIOKeys.hpp"
 #include "actuator/PositionalActuator.hpp"
 #include "board.h"
 #include "log.h"
-#include "motor_pose_filter/MotorPoseFilterIOKeysDefault.hpp"
-#include "pose_pid_controller/PosePIDControllerIOKeysDefault.hpp"
-#include "speed_filter/SpeedFilterIOKeysDefault.hpp"
-#include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 #include <inttypes.h>
 
 namespace cogip {
 namespace actuators {
 namespace positional_actuators {
 
+// Default parameters for tracker chain (used if not provided in MotorParameters)
+static motion_control::ProfileTrackerControllerParameters
+    default_profile_tracker_params(10.0f, // max_speed (mm/period)
+                                   1.0f,  // acceleration (mm/period²)
+                                   1.0f,  // deceleration (mm/period²)
+                                   true,  // must_stop_at_end
+                                   1      // period_increment
+    );
+
+static motion_control::TrackerCombinerControllerParameters default_tracker_combiner_params;
+
 /// @brief Construct a Motor by unpacking the static parameters and starting the
 /// control thread.
 /// @param motor_parameters  Reference to a `MotorParameters` in static storage.
-Motor::Motor(const MotorParameters& motor_parameters)
+/// @param mode Control mode (DUALPID or DUALPID_TRACKER)
+Motor::Motor(const MotorParameters& motor_parameters, MotorControlMode mode)
     : PositionalActuator(motor_parameters.id, motor_parameters.default_timeout_ms,
                          motor_parameters.send_state_cb),
-      params_(motor_parameters),
-      distance_controller_(motion_control::linear_pose_pid_controller_io_keys_default,
+      params_(motor_parameters), control_mode_(mode),
+      // Classic DualPID chain controllers
+      distance_controller_(actuators::motor_pose_pid_io_keys,
                            motor_parameters.pose_controller_parameters),
-      speed_controller_(motion_control::linear_speed_pid_controller_io_keys_default,
+      speed_controller_(actuators::motor_speed_pid_io_keys,
                         motor_parameters.speed_controller_parameters),
-      motor_distance_filter_(motion_control::motor_pose_filter_io_keys_default,
+      motor_distance_filter_(actuators::motor_pose_filter_io_keys,
                              motor_parameters.motor_pose_filter_parameters),
-      speed_filter_(motion_control::linear_speed_filter_io_keys_default,
+      speed_filter_(actuators::motor_speed_filter_io_keys,
                     motor_parameters.speed_filter_parameters),
+      // Tracker chain controllers
+      profile_tracker_controller_(actuators::motor_profile_tracker_io_keys,
+                                  motor_parameters.profile_tracker_parameters
+                                      ? *motor_parameters.profile_tracker_parameters
+                                      : default_profile_tracker_params),
+      tracker_pose_controller_(actuators::motor_tracker_pose_pid_io_keys,
+                               motor_parameters.pose_controller_parameters),
+      tracker_combiner_controller_(actuators::motor_tracker_combiner_io_keys,
+                                   motor_parameters.tracker_combiner_parameters
+                                       ? *motor_parameters.tracker_combiner_parameters
+                                       : default_tracker_combiner_params),
+      tracker_speed_controller_(actuators::motor_tracker_speed_pid_io_keys,
+                                motor_parameters.speed_controller_parameters),
+      tracker_motor_distance_filter_(actuators::motor_tracker_pose_filter_io_keys,
+                                     motor_parameters.motor_pose_filter_parameters),
+      // Motor engine
       motor_engine_(motor_parameters.motor, motor_parameters.odometer,
                     motor_parameters.engine_thread_period_ms)
 {
-    // Build the cascade: MotorPoseFilter → PosePID → SpeedFilter → SpeedPID
-    dualpid_meta_controller_.add_controller(&motor_distance_filter_);
-    dualpid_meta_controller_.add_controller(&distance_controller_);
-    dualpid_meta_controller_.add_controller(&speed_filter_);
-    dualpid_meta_controller_.add_controller(&speed_controller_);
+    if (control_mode_ == MotorControlMode::DUALPID_TRACKER) {
+        // Build tracker chain: MotorPoseFilter → ProfileTracker → PosePID → Combiner → SpeedPID
+        tracker_meta_controller_.add_controller(&tracker_motor_distance_filter_);
+        tracker_meta_controller_.add_controller(&profile_tracker_controller_);
+        tracker_meta_controller_.add_controller(&tracker_pose_controller_);
+        tracker_meta_controller_.add_controller(&tracker_combiner_controller_);
+        tracker_meta_controller_.add_controller(&tracker_speed_controller_);
 
-    motor_engine_.set_controller(&dualpid_meta_controller_);
+        motor_engine_.set_controller(&tracker_meta_controller_);
+
+        LOG_INFO("Motor using DUALPID_TRACKER control mode\n");
+    } else {
+        // Build classic cascade: MotorPoseFilter → PosePID → SpeedFilter → SpeedPID
+        dualpid_meta_controller_.add_controller(&motor_distance_filter_);
+        dualpid_meta_controller_.add_controller(&distance_controller_);
+        dualpid_meta_controller_.add_controller(&speed_filter_);
+        dualpid_meta_controller_.add_controller(&speed_controller_);
+
+        motor_engine_.set_controller(&dualpid_meta_controller_);
+
+        LOG_INFO("Motor using DUALPID control mode\n");
+    }
 
     // Init motor
     int ret = params_.motor.init();
@@ -54,9 +95,10 @@ Motor::Motor(const MotorParameters& motor_parameters)
         LOG_ERROR("Odometer init failed\n");
     }
 
-    // Ensure overload flag is cleared at startup
+    // Configure overload pin and pass it to the engine for periodic clearing
     gpio_init(params_.clear_overload_pin, GPIO_OUT);
     gpio_clear(params_.clear_overload_pin);
+    motor_engine_.set_clear_overload_pin(params_.clear_overload_pin);
 
     // Start disabled and spin up the control thread
     disable();
@@ -86,9 +128,15 @@ void Motor::actuate(int32_t command)
              static_cast<double>(motor_engine_.get_current_distance_from_odometer()));
 
     // Reset filters/PIDs on a new command
-    distance_controller_.parameters().pid()->reset();
-    speed_controller_.parameters().pid()->reset();
-    speed_filter_.reset_previous_speed_order();
+    if (control_mode_ == MotorControlMode::DUALPID_TRACKER) {
+        tracker_pose_controller_.parameters().pid()->reset();
+        tracker_speed_controller_.parameters().pid()->reset();
+        profile_tracker_controller_.reset();
+    } else {
+        distance_controller_.parameters().pid()->reset();
+        speed_controller_.parameters().pid()->reset();
+        speed_filter_.reset();
+    }
 
     // Apply new target distance
     command_ = command;
@@ -119,16 +167,28 @@ void Motor::actuate(int32_t command)
 
 float Motor::get_target_speed_percentage() const
 {
-    return params_.speed_filter_parameters.max_speed() == 0.0f
-               ? 0.0f
-               : (motor_engine_.target_speed() / params_.speed_filter_parameters.max_speed()) *
-                     100.0f;
+    if (control_mode_ == MotorControlMode::DUALPID_TRACKER) {
+        // For tracker mode, use profile tracker max speed
+        float max_speed = profile_tracker_controller_.parameters().max_speed();
+        return max_speed == 0.0f ? 0.0f : (motor_engine_.target_speed() / max_speed) * 100.0f;
+    } else {
+        return params_.speed_filter_parameters.max_speed() == 0.0f
+                   ? 0.0f
+                   : (motor_engine_.target_speed() / params_.speed_filter_parameters.max_speed()) *
+                         100.0f;
+    }
 }
 
 void Motor::set_target_speed_percent(float percentage)
 {
-    motor_engine_.set_target_speed((percentage / 100.0f) *
-                                   params_.speed_filter_parameters.max_speed());
+    if (control_mode_ == MotorControlMode::DUALPID_TRACKER) {
+        // For tracker mode, use profile tracker max speed
+        float max_speed = profile_tracker_controller_.parameters().max_speed();
+        motor_engine_.set_target_speed((percentage / 100.0f) * max_speed);
+    } else {
+        motor_engine_.set_target_speed((percentage / 100.0f) *
+                                       params_.speed_filter_parameters.max_speed());
+    }
 }
 
 float Motor::get_current_distance() const

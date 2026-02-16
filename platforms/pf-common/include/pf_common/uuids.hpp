@@ -43,6 +43,10 @@ constexpr canpb::uuid_t brake_uuid = 0x1007;
 constexpr canpb::uuid_t controller_uuid = 0x1008;
 constexpr canpb::uuid_t blocked_uuid = 0x1009;
 constexpr canpb::uuid_t intermediate_pose_reached_uuid = 0x100A;
+constexpr canpb::uuid_t path_reset_uuid = 0x100D;
+constexpr canpb::uuid_t path_add_point_uuid = 0x100E;
+constexpr canpb::uuid_t path_start_uuid = 0x100F;
+constexpr canpb::uuid_t path_complete_uuid = 0x1010;
 /** @} */
 
 /**

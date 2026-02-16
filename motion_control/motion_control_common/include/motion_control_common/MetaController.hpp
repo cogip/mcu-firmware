@@ -16,8 +16,6 @@
 #include "log.h"
 #include <inttypes.h>
 
-#include <debug.h>
-
 // Project includes
 #include "BaseMetaController.hpp"
 #include "ControllersIO.hpp"
@@ -94,6 +92,17 @@ class MetaController : public BaseMetaController
         }
     }
 
+    /// @brief Reset all controllers in the chain.
+    /// Called when changing target to reinitialize all internal states.
+    void reset() override
+    {
+        for (auto* controller : controllers_) {
+            if (controller) {
+                controller->reset();
+            }
+        }
+    }
+
     /// @brief Run every controller in the chain, passing along the same
     /// ControllersIO.
     /// @param io Shared IO object containing inputs/outputs for all controllers.
@@ -103,9 +112,6 @@ class MetaController : public BaseMetaController
             LOG_ERROR("Error: no controller in MetaController\n");
             return;
         }
-
-        DEBUG("Execute MetaController of %" PRIu32 " controllers\n",
-              static_cast<uint32_t>(controllers_.size()));
 
         size_t index = 0;
         for (auto* controller : controllers_) {

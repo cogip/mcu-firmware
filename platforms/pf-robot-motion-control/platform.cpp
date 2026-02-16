@@ -18,6 +18,9 @@ static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_pose_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_pose_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_path_add_point([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
@@ -51,6 +54,12 @@ void pf_init(void)
                                        cogip::canpb::message_handler_t::create<_handle_pose_order>());
         canpb.register_message_handler(pose_start_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_pose_start>());
+        canpb.register_message_handler(path_reset_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_path_reset>());
+        canpb.register_message_handler(path_add_point_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_path_add_point>());
+        canpb.register_message_handler(path_start_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_path_start>());
         canpb.register_message_handler(parameter_get_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_parameter_get>());
         canpb.register_message_handler(parameter_set_uuid,
@@ -115,6 +124,24 @@ static void _handle_pose_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer
 static void _handle_pose_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     cogip::pf::motion_control::pf_handle_start_pose(buffer);
+}
+
+/// Path reset message handler
+static void _handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_handle_path_reset(buffer);
+}
+
+/// Path add point message handler
+static void _handle_path_add_point([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_handle_path_add_point(buffer);
+}
+
+/// Path start message handler
+static void _handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_handle_path_start(buffer);
 }
 
 /// Parameter get message handler

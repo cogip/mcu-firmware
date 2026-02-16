@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <thread.h>
 
-#define ENABLE_DEBUG 0
+#define ENABLE_DEBUG 1
 #include <debug.h>
 
 namespace cogip {
@@ -32,15 +32,31 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift)
         return -ENODEV;
 
     mutex_lock(&mutex_);
-    // Initialize pin interrupt on falling edges with pulldown
-    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) !=
-        0) {
-        LOG_ERROR("Failed to init pin %p\n", reinterpret_cast<void*>(pin));
+
+    // Check if already registered
+    if (gpio_to_event_.find(pin) != gpio_to_event_.end()) {
+        LOG_INFO("GPIO %p already registered, updating callback\n", reinterpret_cast<void*>(pin));
+        callbacks_[pin] = lift;
+        mutex_unlock(&mutex_);
+        return 0;
+    }
+
+    // Read initial state before configuring interrupt
+    gpio_init(pin, GPIO_IN_PU);
+    int initial_state = gpio_read(pin);
+    LOG_INFO("GPIO %p initial state (with pull-up): %d\n", reinterpret_cast<void*>(pin),
+             initial_state);
+
+    // Initialize pin interrupt on both edges to catch any transition
+    int ret = gpio_init_int(pin, GPIO_IN_PU, GPIO_BOTH, isr_callback, reinterpret_cast<void*>(pin));
+    if (ret != 0) {
+        LOG_ERROR("Failed to init pin %p, error: %d\n", reinterpret_cast<void*>(pin), ret);
 
         mutex_unlock(&mutex_);
 
         return -EIO;
     }
+    LOG_INFO("GPIO %p interrupt configured successfully\n", reinterpret_cast<void*>(pin));
 
     // Allocate a new event from the pool
     event_t* evt = event_pool_.create();
@@ -58,14 +74,6 @@ int LiftsLimitSwitchesManager::register_gpio(gpio_t pin, Lift* lift)
     gpio_to_event_[pin] = evt;
     event_to_gpio_[evt] = pin;
     callbacks_[pin] = lift;
-
-    // Initialize pin interrupt on falling edges with pulldown
-    if (gpio_init_int(pin, GPIO_IN, GPIO_FALLING, isr_callback, reinterpret_cast<void*>(pin)) !=
-        0) {
-        LOG_ERROR("Failed to init pin %p\n", reinterpret_cast<void*>(pin));
-
-        return -EIO;
-    }
 
     LOG_INFO("GPIO %p registered\n", reinterpret_cast<void*>(pin));
 
