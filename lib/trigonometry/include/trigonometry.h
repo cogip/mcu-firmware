@@ -62,6 +62,60 @@ inline float limit_angle_deg(float O)
     return inrange(O, -180, 180);
 }
 
+/// @brief Continuous angular error in degrees
+///
+/// Computes the shortest signed angular difference between target and current
+/// using atan2(sin Δ, cos Δ) to avoid discontinuities at ±180°.
+///
+/// @param target_deg Target angle in degrees
+/// @param current_deg Current angle in degrees
+/// @return Signed angular error in degrees, continuous
+inline float angular_error_deg(float target_deg, float current_deg)
+{
+    float delta_rad = DEG2RAD(target_deg - current_deg);
+    return RAD2DEG(std::atan2(std::sin(delta_rad), std::cos(delta_rad)));
+}
+
+/// @brief Enforce angle continuity by detecting 360° jumps
+///
+/// Applies continuity enforcement to an existing angle value to prevent
+/// 360° discontinuities when crossing the ±180° boundary.
+///
+/// @param angle Current angle in degrees
+/// @param previous_angle Previous angle in degrees (updated by this function)
+/// @return Angle with continuity preserved
+inline float enforce_angle_continuity_deg(float angle, float& previous_angle)
+{
+    float corrected_angle = angle;
+
+    // Detect and correct 360° jumps
+    if (corrected_angle - previous_angle > 180.0f) {
+        corrected_angle -= 360.0f;
+    } else if (corrected_angle - previous_angle < -180.0f) {
+        corrected_angle += 360.0f;
+    }
+
+    previous_angle = corrected_angle;
+    return corrected_angle;
+}
+
+/// @brief Continuous angular error with jump detection
+///
+/// Computes angular error with continuity enforcement to prevent 360° jumps
+/// when crossing the ±180° boundary. Compares with previous error to detect
+/// and correct discontinuities.
+///
+/// @param target_deg Target angle in degrees
+/// @param current_deg Current angle in degrees
+/// @param previous_error Previous angular error in degrees (updated by this function)
+/// @return Signed angular error in degrees with continuity preserved
+inline float angular_error_with_continuity_deg(float target_deg, float current_deg,
+                                               float& previous_error)
+{
+    float raw_error = angular_error_deg(target_deg, current_deg);
+    return enforce_angle_continuity_deg(raw_error, previous_error);
+}
+
 #ifdef __cplusplus
 }
 #endif

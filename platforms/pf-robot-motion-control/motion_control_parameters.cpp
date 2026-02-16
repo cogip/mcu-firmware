@@ -35,6 +35,24 @@ constexpr uint32_t RIGHT_WHEEL_DIAMETER_KEY = "right_wheel_diameter_mm"_key_hash
 constexpr uint32_t ENCODER_WHEELS_DISTANCE_KEY = "encoder_wheels_distance_mm"_key_hash;
 constexpr uint32_t ENCODER_WHEELS_RESOLUTION_KEY = "encoder_wheels_resolution_pulses"_key_hash;
 
+// PID parameters keys
+// Linear pose PID
+constexpr uint32_t LINEAR_POSE_PID_KP_KEY = "linear_pose_pid_kp"_key_hash;
+constexpr uint32_t LINEAR_POSE_PID_KI_KEY = "linear_pose_pid_ki"_key_hash;
+constexpr uint32_t LINEAR_POSE_PID_KD_KEY = "linear_pose_pid_kd"_key_hash;
+// Angular pose PID
+constexpr uint32_t ANGULAR_POSE_PID_KP_KEY = "angular_pose_pid_kp"_key_hash;
+constexpr uint32_t ANGULAR_POSE_PID_KI_KEY = "angular_pose_pid_ki"_key_hash;
+constexpr uint32_t ANGULAR_POSE_PID_KD_KEY = "angular_pose_pid_kd"_key_hash;
+// Linear speed PID
+constexpr uint32_t LINEAR_SPEED_PID_KP_KEY = "linear_speed_pid_kp"_key_hash;
+constexpr uint32_t LINEAR_SPEED_PID_KI_KEY = "linear_speed_pid_ki"_key_hash;
+constexpr uint32_t LINEAR_SPEED_PID_KD_KEY = "linear_speed_pid_kd"_key_hash;
+// Angular speed PID
+constexpr uint32_t ANGULAR_SPEED_PID_KP_KEY = "angular_speed_pid_kp"_key_hash;
+constexpr uint32_t ANGULAR_SPEED_PID_KI_KEY = "angular_speed_pid_ki"_key_hash;
+constexpr uint32_t ANGULAR_SPEED_PID_KD_KEY = "angular_speed_pid_kd"_key_hash;
+
 // Parameter handler type
 using ParameterHandlerType = parameter_handler::ParameterHandler<MAX_PARAMETERS_NUMBER>;
 
@@ -49,6 +67,23 @@ static const ParameterHandlerType::Registry registry = {
     {RIGHT_WHEEL_DIAMETER_KEY, right_encoder_wheels_diameter_mm},
     {ENCODER_WHEELS_DISTANCE_KEY, encoder_wheels_distance_mm},
     {ENCODER_WHEELS_RESOLUTION_KEY, encoder_wheels_resolution_pulses},
+    /// PID parameters
+    // Linear pose PID
+    {LINEAR_POSE_PID_KP_KEY, feedforward_linear_pose_pid_kp},
+    {LINEAR_POSE_PID_KI_KEY, feedforward_linear_pose_pid_ki},
+    {LINEAR_POSE_PID_KD_KEY, feedforward_linear_pose_pid_kd},
+    // Angular pose PID
+    {ANGULAR_POSE_PID_KP_KEY, feedforward_angular_pose_pid_kp},
+    {ANGULAR_POSE_PID_KI_KEY, feedforward_angular_pose_pid_ki},
+    {ANGULAR_POSE_PID_KD_KEY, feedforward_angular_pose_pid_kd},
+    // Linear speed PID
+    {LINEAR_SPEED_PID_KP_KEY, feedforward_linear_speed_pid_kp},
+    {LINEAR_SPEED_PID_KI_KEY, feedforward_linear_speed_pid_ki},
+    {LINEAR_SPEED_PID_KD_KEY, feedforward_linear_speed_pid_kd},
+    // Angular speed PID
+    {ANGULAR_SPEED_PID_KP_KEY, feedforward_angular_speed_pid_kp},
+    {ANGULAR_SPEED_PID_KI_KEY, feedforward_angular_speed_pid_ki},
+    {ANGULAR_SPEED_PID_KD_KEY, feedforward_angular_speed_pid_kd},
 };
 
 static ParameterHandlerType parameter_handler(registry);

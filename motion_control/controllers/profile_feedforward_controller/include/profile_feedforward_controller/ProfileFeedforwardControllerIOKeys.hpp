@@ -25,18 +25,16 @@ namespace motion_control {
 ///
 /// Profile lifecycle is controlled by:
 /// - recompute_profile: triggers generation of a new profile
-/// - invalidate_profile: marks the current profile as invalid (optional)
 struct ProfileFeedforwardControllerIOKeys
 {
     etl::string_view pose_error;    ///< e.g. "linear_pose_error" (distance remaining, input from
                                     ///< PoseStraightFilter)
     etl::string_view current_speed; ///< e.g. "current_linear_speed"
-    etl::string_view recompute_profile;  ///< e.g. "linear_recompute_profile" (flag to regenerate
-                                         ///< profile, from PoseStraightFilter)
-    etl::string_view invalidate_profile; ///< e.g. "angular_invalidate_profile" (flag to invalidate
-                                         ///< current profile, optional)
+    etl::string_view recompute_profile;    ///< e.g. "linear_recompute_profile" (flag to regenerate
+                                           ///< profile, from PoseStraightFilter)
     etl::string_view feedforward_velocity; ///< e.g. "linear_feedforward_velocity" (output)
     etl::string_view tracking_error;       ///< e.g. "linear_tracking_error" (output)
+    etl::string_view profile_complete;     ///< e.g. "linear_profile_complete" (output, optional)
 };
 
 } // namespace motion_control

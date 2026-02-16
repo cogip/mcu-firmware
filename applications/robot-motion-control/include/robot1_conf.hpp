@@ -29,30 +29,82 @@ inline Parameter<float> right_encoder_wheels_diameter_mm{47.792104995747586};
 inline Parameter<float> encoder_wheels_distance_mm{275.7117596881151};
 inline Parameter<float, ReadOnly> encoder_wheels_resolution_pulses{4096 * 4};
 
-// Linear pose PID
-constexpr float linear_pose_pid_kp = 0.2;
-constexpr float linear_pose_pid_ki = 0;
-constexpr float linear_pose_pid_kd = 0;
-// Angular pose PID
-constexpr float angular_pose_pid_kp = 0.3;
-constexpr float angular_pose_pid_ki = 0;
-constexpr float angular_pose_pid_kd = 0;
-// Linear speed PID
-constexpr float linear_speed_pid_kp = 3.;
-constexpr float linear_speed_pid_ki = 0.8;
-constexpr float linear_speed_pid_kd = 0;
-// Angular speed PID
-constexpr float angular_speed_pid_kp = 5.5;
-constexpr float angular_speed_pid_ki = 0.6;
-constexpr float angular_speed_pid_kd = 0;
+// Linear pose PID (QUADPID chain)
+inline Parameter<float, NonNegative> linear_pose_pid_kp{0.2};
+inline Parameter<float, NonNegative> linear_pose_pid_ki{0};
+inline Parameter<float, NonNegative> linear_pose_pid_kd{0};
+// Angular pose PID (QUADPID chain)
+inline Parameter<float, NonNegative> angular_pose_pid_kp{0.1};
+inline Parameter<float, NonNegative> angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> angular_pose_pid_kd{0};
+// Linear speed PID (QUADPID chain)
+inline Parameter<float, NonNegative> linear_speed_pid_kp{3.};
+inline Parameter<float, NonNegative> linear_speed_pid_ki{0.8};
+inline Parameter<float, NonNegative> linear_speed_pid_kd{0};
+// Angular speed PID (QUADPID chain)
+inline Parameter<float, NonNegative> angular_speed_pid_kp{5.5};
+inline Parameter<float, NonNegative> angular_speed_pid_ki{0.6};
+inline Parameter<float, NonNegative> angular_speed_pid_kd{0};
+
+// ============================================================================
+// Feedforward chain PID gains (QUADPID_FEEDFORWARD)
+// ============================================================================
+
+// Feedforward linear pose PID (tracker during MOVE_TO_POSITION)
+// Ki helps eliminate steady-state error when feedforward profile ends
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kp{0.1};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_ki{0.0};
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kd{0};
+// Feedforward angular pose PID (tracker during ROTATE states)
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kp{0.3};
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kd{0};
+// Feedforward linear speed PID
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kp{3};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_ki{0.8};
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kd{0};
+// Feedforward angular speed PID
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kp{5.5};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_ki{0.6};
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kd{0};
+
+// ============================================================================
+// Corrector pose PID gains (QUADPID_FEEDFORWARD - direct branch)
+// Used when feedforward profile is invalidated to reach target position
+// ============================================================================
+
+// Corrector linear pose PID (used when linear profile is invalidated)
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_kp{0.2};
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_ki{0};
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_kd{0};
+// Corrector angular pose PID (used when angular profile is invalidated)
+// Also used for heading maintenance during MOVE_TO_POSITION
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_kp{0.1};
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_kd{0};
+
+// ============================================================================
+// Corrector speed PID gains (QUADPID_FEEDFORWARD - direct branch)
+// Used in speed loop when profile is invalidated (separate from feedforward PIDs)
+// ============================================================================
+
+// Corrector linear speed PID (used in direct mode speed loop)
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_kp{3};
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_ki{0.8};
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_kd{0};
+
+// Corrector angular speed PID (used in direct mode speed loop)
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_kp{5};
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_ki{0.6};
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_kd{0};
 
 // Linear threshold
-constexpr float linear_threshold = 1;
+constexpr float linear_threshold = 2;
 // Angular threshold
-constexpr float angular_threshold = 2;
+constexpr float angular_threshold = 1;
 // Angular intermediate threshold (when the robot turns on itself to go straight
 // to its destination)
-constexpr float angular_intermediate_threshold = 20;
+constexpr float angular_intermediate_threshold = 1;
 
 // Linear anti-blocking
 constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 12.5;
@@ -76,10 +128,42 @@ constexpr bool platform_linear_antiblocking = true;
 constexpr bool angular_antiblocking = false;
 
 // Linear pose PID integral limit
-constexpr float linear_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+inline Parameter<float, NonNegative> linear_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
 // Angular pose PID integral limit
-constexpr float angular_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+inline Parameter<float, NonNegative> angular_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
 // Linear speed PID integral limit
-constexpr float linear_speed_pid_integral_limit = max_speed_mm_per_s / linear_speed_pid_ki;
+inline Parameter<float, NonNegative> linear_speed_pid_integral_limit{max_speed_mm_per_s /
+                                                                     linear_speed_pid_ki.get()};
 // Angular speed PID integral limit
-constexpr float angular_speed_pid_integral_limit = max_speed_deg_per_s / angular_speed_pid_ki;
+inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_deg_per_s /
+                                                                      angular_speed_pid_ki.get()};
+
+// Feedforward linear pose PID integral limit
+// Limit = max_speed / ki to prevent integral windup
+inline Parameter<float, NonNegative> feedforward_linear_pose_pid_integral_limit{
+    max_speed_mm_per_s / feedforward_linear_pose_pid_ki.get()};
+// Feedforward angular pose PID integral limit
+inline Parameter<float, NonNegative> feedforward_angular_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
+// Feedforward linear speed PID integral limit
+inline Parameter<float, NonNegative> feedforward_linear_speed_pid_integral_limit{
+    max_speed_mm_per_s / feedforward_linear_speed_pid_ki.get()};
+// Feedforward angular speed PID integral limit
+inline Parameter<float, NonNegative> feedforward_angular_speed_pid_integral_limit{
+    max_speed_deg_per_s / feedforward_angular_speed_pid_ki.get()};
+
+// Corrector linear pose PID integral limit
+inline Parameter<float, NonNegative> corrector_linear_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
+// Corrector angular pose PID integral limit
+inline Parameter<float, NonNegative> corrector_angular_pose_pid_integral_limit{
+    etl::numeric_limits<uint16_t>::max()};
+
+// Corrector linear speed PID integral limit
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_integral_limit{
+    max_speed_mm_per_s / corrector_linear_speed_pid_ki.get()};
+// Corrector angular speed PID integral limit
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_integral_limit{
+    max_speed_deg_per_s / corrector_angular_speed_pid_ki.get()};

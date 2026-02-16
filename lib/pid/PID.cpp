@@ -10,22 +10,31 @@ float PID::compute(float error)
 {
     float p, i, d;
 
-    // Integral term is the error sum
-    integral_term_ += error;
+    // Anti-windup: conditional integration
+    // Only integrate if:
+    // - Error pushes integral toward zero (opposite signs), OR
+    // - Integral hasn't reached the limit yet
+    float limit = parameters_.integral_term_limit.get();
+    bool error_reduces_integral = (error * integral_term_) <= 0;
+    bool integral_below_limit = (integral_term_ < limit) && (integral_term_ > -limit);
 
-    // Integral limitation
-    integral_term_ = etl::min(integral_term_, integral_term_limit_);
-    integral_term_ = etl::max(integral_term_, -integral_term_limit_);
+    if (error_reduces_integral || integral_below_limit) {
+        integral_term_ += error;
+
+        // Clamp integral to limits
+        integral_term_ = etl::min(integral_term_, limit);
+        integral_term_ = etl::max(integral_term_, -limit);
+    }
 
     // Proportional
-    p = error * kp_;
+    p = error * parameters_.kp.get();
 
     // Integral
-    i = integral_term_ * ki_;
+    i = integral_term_ * parameters_.ki.get();
 
     // Derivative
     d = error - previous_error_;
-    d *= kd_;
+    d *= parameters_.kd.get();
 
     // Backup previous error
     previous_error_ = error;

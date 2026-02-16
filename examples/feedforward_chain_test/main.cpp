@@ -117,13 +117,13 @@ int main(void)
     // ========================================================================
     // CONTROLLER 1: ProfileFeedforwardController
     // ========================================================================
-    ProfileFeedforwardControllerIOKeys profile_keys = {.pose_error = "linear_pose_error",
-                                                       .current_speed = "current_linear_speed",
-                                                       .recompute_profile = "recompute_profile",
-                                                       .invalidate_profile = "",
-                                                       .feedforward_velocity =
-                                                           "linear_feedforward_velocity",
-                                                       .tracking_error = "linear_tracking_error"};
+    ProfileFeedforwardControllerIOKeys profile_keys = {
+        .pose_error = "linear_pose_error",
+        .current_speed = "current_linear_speed",
+        .recompute_profile = "recompute_profile",
+        .feedforward_velocity = "linear_feedforward_velocity",
+        .tracking_error = "linear_tracking_error",
+        .profile_complete = "linear_profile_complete"};
 
     ProfileFeedforwardControllerParameters profile_params(10.0, // max_speed (mm/period)
                                                           1.0,  // acceleration (mm/period²)

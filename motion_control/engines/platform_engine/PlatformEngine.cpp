@@ -57,7 +57,7 @@ void PlatformEngine::prepare_inputs()
     io_.set("motion_direction", target_pose_.get_motion_direction());
 
     // Initialize pose_reached to moving (will be updated by PoseStraightFilter)
-    io_.set("pose_reached", target_pose_status_t::moving);
+    io_.set("pose_reached", pose_reached_);
 
     // Initialize speed commands to 0 (will be updated by SpeedPIDController)
     io_.set("linear_speed_command", 0.0f);
@@ -78,20 +78,24 @@ void PlatformEngine::prepare_inputs()
 
 void PlatformEngine::process_outputs()
 {
-    // If timeout is enabled, pose_reached_ has been set by the engine itself, do
-    // not override it.
-    if (!timeout_enable_) {
-        pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
+    // Check pose_reached from IO (set by controllers like PoseErrorFilter or PoseStraightFilter)
+    auto io_pose_reached = io_.get_as<target_pose_status_t>("pose_reached");
+    if (io_pose_reached && *io_pose_reached == target_pose_status_t::reached) {
+        // Target reached - use this regardless of timeout mode
+        pose_reached_ = target_pose_status_t::reached;
+    } else if (!timeout_enable_) {
+        // No timeout mode: use IO value directly
+        pose_reached_ = io_pose_reached.value_or(target_pose_status_t::moving);
     }
+    // If timeout is enabled and not reached: pose_reached_ keeps its current value
+    // (either 'moving' or 'timeout' set by the engine)
 
     cogip_defs::Polar command(0, 0);
 
-    if (pose_reached_ == target_pose_status_t::moving) {
-        DEBUG("Start process_outputs()\n");
-        command.set_distance(io_.get_as<float>("linear_speed_command").value());
-        command.set_angle(io_.get_as<float>("angular_speed_command").value());
-        DEBUG("End process_outputs()\n");
-    }
+    DEBUG("Start process_outputs()\n");
+    command.set_distance(io_.get_as<float>("linear_speed_command").value());
+    command.set_angle(io_.get_as<float>("angular_speed_command").value());
+    DEBUG("End process_outputs()\n");
 
     // Set robot polar velocity order
     drive_contoller_.set_polar_velocity(command);
