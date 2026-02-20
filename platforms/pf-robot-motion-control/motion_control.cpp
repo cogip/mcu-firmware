@@ -223,14 +223,7 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             pf_motion_control_platform_engine.set_pose_reached(
                 cogip::motion_control::target_pose_status_t::reached);
 
-            // As pose is reached, pose straight filter state machine is in finished
-            // state (reset both chains as only one is active at a time)
-            quadpid_chain::pose_straight_filter.force_finished_state();
-            quadpid_tracker_chain::pose_straight_filter.force_finished_state();
-
             LOG_WARNING("BLOCKED bypassed\n");
-
-            pf_get_canpb().send_message(pose_reached_uuid);
         } else {
             // Stop motors
             left_motor.set_speed(0);
