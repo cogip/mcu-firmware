@@ -15,6 +15,7 @@
 // Project includes
 #include "PosePIDControllerIOKeys.hpp"
 #include "PosePIDControllerParameters.hpp"
+#include "log.h"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
 
@@ -42,6 +43,15 @@ class PosePIDController : public Controller<PosePIDControllerIOKeys, PosePIDCont
     const char* type_name() const override
     {
         return "PosePIDController";
+    }
+
+    /// @brief Reset internal state for new target
+    /// Called when changing target to reinitialize PID state.
+    void reset() override
+    {
+        if (parameters_.pid()) {
+            parameters_.pid()->reset();
+        }
     }
 
     /// @brief Read position error via keys_.position_error,

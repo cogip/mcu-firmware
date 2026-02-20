@@ -95,6 +95,13 @@ class BaseControllerEngine
         pose_reached_ = pose_reached;
     };
 
+    /// Reset pose reached to moving (also clears IO to avoid stale signals)
+    void reset_pose_reached()
+    {
+        pose_reached_ = target_pose_status_t::moving;
+        io_.set("pose_reached", pose_reached_);
+    };
+
     /// Set current cycle
     void set_current_cycle(uint32_t current_cycle ///< [in]   new current cycle
     )

@@ -26,6 +26,7 @@ struct PosePIDControllerIOKeys
     etl::string_view disable_filter; ///< e.g. "disable_speed_filter"
     etl::string_view pose_reached;   ///< e.g. "pose_reached"
     etl::string_view speed_order;    ///< e.g. "speed_order"
+    etl::string_view reset;          ///< e.g. "linear_pose_pid_reset" - triggers PID reset
 };
 
 } // namespace motion_control

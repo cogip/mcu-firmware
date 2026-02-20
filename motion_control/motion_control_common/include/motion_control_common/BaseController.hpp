@@ -43,6 +43,11 @@ class BaseController
     /// @param io Controllers input/output datas shared accross controllers
     virtual void execute(ControllersIO& io) = 0;
 
+    /// Reset controller internal state
+    /// Called when changing target to reinitialize all internal states.
+    /// Default implementation does nothing - override in controllers with internal state.
+    virtual void reset() {}
+
     /// Get the type name of this controller (class name)
     /// @return Type name string
     virtual const char* type_name() const

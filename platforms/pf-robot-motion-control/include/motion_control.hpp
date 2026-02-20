@@ -84,6 +84,13 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period =
     1000;
 /// @}
 
+/// @name Pure Pursuit parameters (values from robot config, see robot*_conf.hpp for details)
+/// @{
+constexpr float platform_pure_pursuit_min_lookahead_mm = pure_pursuit_min_lookahead_mm;
+constexpr float platform_pure_pursuit_max_lookahead_mm = pure_pursuit_max_lookahead_mm;
+constexpr float platform_pure_pursuit_lookahead_speed_ratio = pure_pursuit_lookahead_speed_ratio;
+/// @}
+
 /// Handle brake signal to stop the robot
 void pf_handle_brake(cogip::canpb::ReadBuffer& buffer);
 
@@ -95,6 +102,15 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer);
 
 /// Get start pose from protobuf message
 void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer);
+
+/// Reset the path (clear all waypoints)
+void pf_handle_path_reset(cogip::canpb::ReadBuffer& buffer);
+
+/// Add a waypoint to the path
+void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer);
+
+/// Start path execution
+void pf_handle_path_start(cogip::canpb::ReadBuffer& buffer);
 
 /// Initialize motion control
 void pf_init_motion_control(void);

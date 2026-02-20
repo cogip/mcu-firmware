@@ -27,12 +27,14 @@ class PoseStraightFilterParameters
         float angular_intermediate_threshold = 0.0, ///< [in]  see angular_threshold_
         float angular_deceleration = 0.0,           ///< [in]  see angular_deceleration_threshold_
         float linear_deceleration = 0.0,            ///< [in]  see linear_deceleration_threshold_
-        bool bypass_final_orientation = false       ///< [in] bypass final orientation
+        bool bypass_final_orientation = false,      ///< [in] bypass final orientation
+        bool use_angle_continuity = false           ///< [in] use angle continuity enforcement
         )
         : angular_threshold_(angular_threshold), linear_threshold_(linear_threshold),
           angular_intermediate_threshold_(angular_intermediate_threshold),
           angular_deceleration_(angular_deceleration), linear_deceleration_(linear_deceleration),
-          bypass_final_orientation_(bypass_final_orientation){};
+          bypass_final_orientation_(bypass_final_orientation),
+          use_angle_continuity_(use_angle_continuity){};
 
     /// Get angular threshold
     /// return angular threshold
@@ -124,6 +126,24 @@ class PoseStraightFilterParameters
         bypass_final_orientation_ = false;
     };
 
+    /// Return angle continuity mode
+    bool use_angle_continuity() const
+    {
+        return use_angle_continuity_;
+    };
+
+    /// Enable angle continuity enforcement
+    void use_angle_continuity_on()
+    {
+        use_angle_continuity_ = true;
+    };
+
+    /// Disable angle continuity enforcement
+    void use_angle_continuity_off()
+    {
+        use_angle_continuity_ = false;
+    };
+
   private:
     /// the robot turns on itself until the angle error is lower than this
     /// threshold
@@ -145,6 +165,9 @@ class PoseStraightFilterParameters
 
     /// bypass final orientation
     bool bypass_final_orientation_;
+
+    /// use angle continuity enforcement (for ProfileTracker)
+    bool use_angle_continuity_;
 };
 
 } // namespace motion_control

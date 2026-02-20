@@ -3,10 +3,10 @@
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
-/// @ingroup    feedforward_combiner_controller Feedforward Combiner controller parameters
+/// @ingroup    tracker_combiner_controller Tracker Combiner controller parameters
 /// @{
 /// @file
-/// @brief      Feedforward Combiner controller parameters
+/// @brief      Tracker Combiner controller parameters
 /// @author     Gilles DOFFE <g.doffe@gmail.com>
 
 #pragma once
@@ -15,12 +15,12 @@ namespace cogip {
 
 namespace motion_control {
 
-/// Feedforward Combiner controller parameters (empty, but kept for consistency)
-class FeedforwardCombinerControllerParameters
+/// Tracker Combiner controller parameters (empty, but kept for consistency)
+class TrackerCombinerControllerParameters
 {
   public:
     /// Constructor
-    explicit FeedforwardCombinerControllerParameters() {}
+    explicit TrackerCombinerControllerParameters() {}
 };
 
 } // namespace motion_control

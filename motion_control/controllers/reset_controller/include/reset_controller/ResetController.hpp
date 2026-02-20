@@ -64,7 +64,6 @@ class ResetController : public BaseController
     /// @param io Shared ControllersIO to reset values in
     void execute(ControllersIO& io) override
     {
-        LOG_INFO("ResetController: executing\n");
         for (const auto& kv : keys_values_) {
             io.set(kv.key, kv.value);
         }

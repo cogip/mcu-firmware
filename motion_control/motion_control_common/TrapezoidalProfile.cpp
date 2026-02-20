@@ -24,15 +24,19 @@ namespace motion_control {
 
 void TrapezoidalProfile::reset_to_stationary(float velocity)
 {
-    initial_velocity_ = velocity;
-    plateau_velocity_ = velocity;
+    (void)velocity; // Unused - stationary means stopped
+    initial_velocity_ = 0.0f;
+    v0_for_accel_ = 0.0f;
+    plateau_velocity_ = 0.0f;
     target_distance_ = 0.0f;
-    final_velocity_ = velocity;
+    final_velocity_ = 0.0f;
+    reverse_decel_periods_ = 0;
     accel_periods_ = 0;
     plateau_periods_ = 0;
     decel_periods_ = 0;
     acceleration_ = 0.0f;
     deceleration_ = 0.0f;
+    initial_phase_accel_ = 0.0f;
     initialized_ = true;
 }
 
@@ -87,6 +91,7 @@ uint32_t TrapezoidalProfile::generate_optimal_profile(float initial_velocity, fl
 {
     // Reset state
     initialized_ = false;
+    reverse_decel_periods_ = 0;
 
     // Validate inputs
     if (etl::absolute(target_distance) < 1e-6f) {
@@ -113,10 +118,36 @@ uint32_t TrapezoidalProfile::generate_optimal_profile(float initial_velocity, fl
     float abs_distance = etl::absolute(target_distance);
     float signed_max_speed = max_speed * direction;
 
-    // Ensure initial velocity has correct sign
-    float v0 = initial_velocity * direction;
-    if (v0 < 0.0f) {
-        v0 = 0.0f; // Cannot start with negative velocity in movement direction
+    // Check if initial velocity is in opposite direction to target
+    // v0_signed is positive if same direction as target, negative if opposite
+    float v0_signed = initial_velocity * direction;
+    float v0 = 0.0f;
+
+    if (v0_signed < 0.0f) {
+        // Initial velocity is in opposite direction - need to decelerate to 0 first
+        float abs_initial_velocity = etl::absolute(initial_velocity);
+        reverse_decel_periods_ = compute_accel_periods(abs_initial_velocity, 0.0f, deceleration);
+
+        // Distance traveled during reverse deceleration (in the WRONG direction)
+        // This distance is subtracted from target (we're moving away from it)
+        float reverse_decel_distance =
+            compute_discrete_distance(abs_initial_velocity, -deceleration, reverse_decel_periods_);
+
+        // Effective distance is increased because we moved away from target
+        abs_distance += reverse_decel_distance;
+
+        DEBUG("Reverse decel: initial_vel=%.2f, reverse_periods=%lu, reverse_dist=%.2f, "
+              "new_abs_dist=%.2f\n",
+              initial_velocity, (unsigned long)reverse_decel_periods_, reverse_decel_distance,
+              abs_distance);
+
+        // After reverse deceleration, we start from v0 = 0
+        v0 = 0.0f;
+        v0_for_accel_ = 0.0f;
+    } else {
+        // Initial velocity is in same direction (or zero) - use it directly
+        v0 = v0_signed;
+        v0_for_accel_ = v0_signed;
     }
 
     // Calculate distances needed for acceleration and deceleration
@@ -132,6 +163,10 @@ uint32_t TrapezoidalProfile::generate_optimal_profile(float initial_velocity, fl
         accel_periods_ = compute_accel_periods(v0, plateau_velocity_, acceleration);
         decel_periods_ =
             compute_accel_periods(plateau_velocity_, final_velocity_ * direction, deceleration);
+
+        // In trapezoidal profile, we always accelerate from v0 to max_speed
+        // (v0 < max_speed by definition since we can reach max_speed)
+        initial_phase_accel_ = acceleration_;
 
         DEBUG("Trapezoidal profile: accel_dist=%.2f, decel_dist=%.2f, abs_dist=%.2f, "
               "plateau_vel=%.2f\n",
@@ -152,22 +187,56 @@ uint32_t TrapezoidalProfile::generate_optimal_profile(float initial_velocity, fl
                 ? static_cast<uint32_t>(etl::max(0.0f, plateau_distance / abs_plateau_velocity))
                 : 0;
     } else {
-        // Triangular profile: cannot reach max_speed
+        // Cannot reach max_speed - need triangular or deceleration-only profile
         float v_peak = compute_triangular_peak_velocity(abs_distance, v0, final_velocity_,
-                                                        acceleration_, deceleration_) *
-                       direction;
+                                                        acceleration_, deceleration_);
 
-        plateau_velocity_ = v_peak;
-        plateau_periods_ = 0; // No plateau in triangular profile
+        if (v0 <= v_peak) {
+            // Standard triangular profile: accelerate to v_peak, then decelerate
+            plateau_velocity_ = v_peak * direction;
+            plateau_periods_ = 0;
+            initial_phase_accel_ = acceleration_;
+            accel_periods_ = compute_accel_periods(v0, v_peak, acceleration);
+            decel_periods_ = compute_accel_periods(v_peak, final_velocity_, deceleration);
 
-        accel_periods_ = compute_accel_periods(v0, plateau_velocity_, acceleration);
-        decel_periods_ =
-            compute_accel_periods(plateau_velocity_, final_velocity_ * direction, deceleration);
+            DEBUG(
+                "Triangular profile: v_peak=%.2f, v0=%.2f, accel_periods=%lu, decel_periods=%lu\n",
+                v_peak, v0, (unsigned long)accel_periods_, (unsigned long)decel_periods_);
+        } else {
+            // v0 > v_peak: We're already going faster than the triangular peak
+            // This means we need a "deceleration-only" or "plateau + deceleration" profile
+            // The triangular formula doesn't apply here - use v0 as our plateau
 
-        DEBUG("Triangular profile: v_peak=%.2f, accel=%.4f, decel=%.4f, accel_periods=%lu, "
-              "decel_periods=%lu\n",
-              v_peak, acceleration_, deceleration_, (unsigned long)accel_periods_,
-              (unsigned long)decel_periods_);
+            // Distance needed to decelerate from v0 to final_velocity
+            float decel_only_distance = compute_accel_distance(v0, final_velocity_, deceleration);
+
+            if (decel_only_distance >= abs_distance) {
+                // Can't stop in time - the stopping distance is greater than target distance
+                // Don't generate a tracker profile; let PID handle this case
+                // This prevents overshoot from tracker when we're going too fast
+                DEBUG("Cannot stop in time: v0=%.2f, decel_dist=%.2f > abs_dist=%.2f, using "
+                      "PID-only\n",
+                      v0, decel_only_distance, abs_distance);
+                reset_to_stationary(initial_velocity);
+                return 0;
+            } else {
+                // We have extra distance - cruise at v0 first, then decelerate
+                plateau_velocity_ = v0 * direction;
+                accel_periods_ = 0;
+                initial_phase_accel_ = 0.0f;
+                decel_periods_ = compute_accel_periods(v0, final_velocity_, deceleration);
+
+                // Compute actual decel distance and remaining plateau distance
+                float actual_decel_distance =
+                    compute_discrete_distance(v0, -deceleration_, decel_periods_);
+                float plateau_distance = abs_distance - actual_decel_distance;
+                plateau_periods_ =
+                    (v0 != 0.0f) ? static_cast<uint32_t>(etl::max(0.0f, plateau_distance / v0)) : 0;
+
+                DEBUG("Plateau+decel profile: v0=%.2f, plateau_periods=%lu, decel_periods=%lu\n",
+                      v0, (unsigned long)plateau_periods_, (unsigned long)decel_periods_);
+            }
+        }
     }
 
     initialized_ = true;
@@ -186,17 +255,26 @@ float TrapezoidalProfile::compute_theoretical_velocity(uint32_t period) const
     // Direction is determined by plateau_velocity sign
     float direction = (plateau_velocity_ >= 0.0f) ? 1.0f : -1.0f;
 
-    if (period < accel_periods_) {
-        // Acceleration phase: v(t) = v0 + direction*a*t
-        velocity = initial_velocity_ + (direction * acceleration_ * period);
-        phase = "accel";
-    } else if (period < (accel_periods_ + plateau_periods_)) {
+    if (period < reverse_decel_periods_) {
+        // Reverse deceleration phase: decelerating from initial_velocity (wrong direction) to 0
+        // v(t) = initial_velocity - sign(initial_velocity) * deceleration * t
+        float initial_sign = (initial_velocity_ >= 0.0f) ? 1.0f : -1.0f;
+        velocity = initial_velocity_ - (initial_sign * deceleration_ * period);
+        phase = "reverse_decel";
+    } else if (period < (reverse_decel_periods_ + accel_periods_)) {
+        // Initial phase: may be acceleration or deceleration depending on v0 vs v_peak
+        // v0_for_accel_ is 0 after reverse_decel, or initial velocity magnitude in target direction
+        // initial_phase_accel_ is positive for acceleration, negative for deceleration
+        uint32_t accel_period = period - reverse_decel_periods_;
+        velocity = (direction * v0_for_accel_) + (direction * initial_phase_accel_ * accel_period);
+        phase = (initial_phase_accel_ >= 0.0f) ? "accel" : "initial_decel";
+    } else if (period < (reverse_decel_periods_ + accel_periods_ + plateau_periods_)) {
         // Plateau phase: constant velocity
         velocity = plateau_velocity_;
         phase = "plateau";
     } else if (period < total_periods()) {
         // Deceleration phase: v(t) = v_plateau - direction*d*(t - t_plateau)
-        uint32_t decel_period = period - accel_periods_ - plateau_periods_;
+        uint32_t decel_period = period - reverse_decel_periods_ - accel_periods_ - plateau_periods_;
         velocity = plateau_velocity_ - (direction * deceleration_ * decel_period);
         phase = "decel";
     } else {
@@ -205,10 +283,11 @@ float TrapezoidalProfile::compute_theoretical_velocity(uint32_t period) const
         phase = "done";
     }
 
-    DEBUG("TrapezoidalProfile: period=%lu, phase=%s, velocity=%.2f, accel_periods=%lu, "
-          "plateau_periods=%lu, decel_periods=%lu\n",
-          (unsigned long)period, phase, velocity, (unsigned long)accel_periods_,
-          (unsigned long)plateau_periods_, (unsigned long)decel_periods_);
+    DEBUG("TrapezoidalProfile: period=%lu, phase=%s, velocity=%.2f, reverse_decel=%lu, "
+          "accel=%lu, plateau=%lu, decel=%lu\n",
+          (unsigned long)period, phase, velocity, (unsigned long)reverse_decel_periods_,
+          (unsigned long)accel_periods_, (unsigned long)plateau_periods_,
+          (unsigned long)decel_periods_);
 
     return velocity;
 }
@@ -225,24 +304,39 @@ float TrapezoidalProfile::compute_theoretical_remaining_distance(uint32_t period
     // Calculate distance already traveled up to this period
     float distance_traveled = 0.0f;
 
-    // Acceleration phase contribution
-    if (period > 0) {
-        uint32_t accel_contribution = etl::min(period, accel_periods_);
+    // Reverse deceleration phase contribution (moving AWAY from target)
+    if (period > 0 && reverse_decel_periods_ > 0) {
+        uint32_t reverse_contribution = etl::min(period, reverse_decel_periods_);
+        // During reverse decel, we're moving in the direction of initial_velocity (opposite to
+        // target) Distance = v0*t - 0.5*d*t² (decelerating from v0 towards 0)
+        float initial_sign = (initial_velocity_ >= 0.0f) ? 1.0f : -1.0f;
         distance_traveled +=
-            initial_velocity_ * accel_contribution +
-            direction * 0.5f * acceleration_ * accel_contribution * accel_contribution;
+            initial_velocity_ * reverse_contribution -
+            initial_sign * 0.5f * deceleration_ * reverse_contribution * reverse_contribution;
+    }
+
+    // Initial phase contribution (starting from v0_for_accel_)
+    // May be acceleration or deceleration depending on initial_phase_accel_ sign
+    if (period > reverse_decel_periods_) {
+        uint32_t accel_contribution = etl::min(period - reverse_decel_periods_, accel_periods_);
+        // v(t) = direction * (v0_for_accel + initial_phase_accel*t)
+        // distance = direction * (v0*t + 0.5*initial_phase_accel*t²)
+        distance_traveled +=
+            direction * (v0_for_accel_ * accel_contribution +
+                         0.5f * initial_phase_accel_ * accel_contribution * accel_contribution);
     }
 
     // Plateau phase contribution
-    if (period > accel_periods_) {
-        uint32_t plateau_contribution = etl::min(period - accel_periods_, plateau_periods_);
+    if (period > (reverse_decel_periods_ + accel_periods_)) {
+        uint32_t plateau_contribution =
+            etl::min(period - reverse_decel_periods_ - accel_periods_, plateau_periods_);
         distance_traveled += plateau_velocity_ * plateau_contribution;
     }
 
     // Deceleration phase contribution
-    if (period > (accel_periods_ + plateau_periods_)) {
-        uint32_t decel_contribution =
-            etl::min(period - accel_periods_ - plateau_periods_, decel_periods_);
+    if (period > (reverse_decel_periods_ + accel_periods_ + plateau_periods_)) {
+        uint32_t decel_contribution = etl::min(
+            period - reverse_decel_periods_ - accel_periods_ - plateau_periods_, decel_periods_);
         distance_traveled +=
             plateau_velocity_ * decel_contribution -
             direction * 0.5f * deceleration_ * decel_contribution * decel_contribution;

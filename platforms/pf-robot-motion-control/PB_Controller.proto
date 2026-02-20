@@ -3,12 +3,13 @@ syntax = "proto3";
 enum PB_ControllerEnum {
     QUADPID = 0;
     LINEAR_POSE_DISABLED = 1;
-    QUADPID_FEEDFORWARD = 2;
+    QUADPID_TRACKER = 2;
     LINEAR_SPEED_TUNING = 3;
     ANGULAR_SPEED_TUNING = 4;
     LINEAR_POSE_TUNING = 5;
     ANGULAR_POSE_TUNING = 6;
     LINEAR_POSE_TEST = 7;
+    ADAPTIVE_PURE_PURSUIT = 8;
 }
 
 message PB_Controller {
