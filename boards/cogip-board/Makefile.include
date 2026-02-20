@@ -9,3 +9,6 @@ include $(RIOTMAKE)/boards/stm32.inc.mk
 
 # Set onboard transceiver loop delay
 CFLAGS += -DCONFIG_FDCAN_DEVICE_TRANSCEIVER_LOOP_DELAY=130
+
+# CAN-FD bootloader needs 16KB (default cortexm is 4KB, too small for CAN stack)
+RIOTBOOT_LEN ?= 0x4000
