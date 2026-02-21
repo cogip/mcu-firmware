@@ -104,6 +104,7 @@ void PlatformEngine::process_outputs()
 
     // Check pose_reached from IO (set by controllers like PoseErrorFilter or PoseStraightFilter)
     auto io_pose_reached = io_.get_as<target_pose_status_t>("pose_reached");
+    auto prev_pose_reached = pose_reached_;
 
     if (io_pose_reached && (*io_pose_reached == target_pose_status_t::reached ||
                             *io_pose_reached == target_pose_status_t::intermediate_reached ||
@@ -115,6 +116,16 @@ void PlatformEngine::process_outputs()
     }
     // If timeout is enabled and not reached: pose_reached_ keeps its current value
     // (either 'moving' or 'timeout' set by the engine)
+
+    // Log pose_reached transitions
+    if (pose_reached_ != prev_pose_reached) {
+        const auto& cur = localization_.pose();
+        LOG_INFO("pose_reached=%d cur=(%.1f,%.1f,%.1f) tgt=(%.1f,%.1f,%.1f)\n",
+                 static_cast<int>(pose_reached_), static_cast<double>(cur.x()),
+                 static_cast<double>(cur.y()), static_cast<double>(cur.O()),
+                 static_cast<double>(target_pose_.x()), static_cast<double>(target_pose_.y()),
+                 static_cast<double>(target_pose_.O()));
+    }
 
     cogip_defs::Polar command(0, 0);
 
