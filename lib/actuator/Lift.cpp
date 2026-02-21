@@ -38,34 +38,25 @@ void Lift::init()
                   static_cast<uint8_t>(id_));
     }
 
-    // Homing sequence: move to lower, then upper end-stop at lower speed
+    // Homing: move down to calibrate zero position
+    initializing_ = true;
     set_target_speed_percent(params_.init_speed_percentage);
 
-    int upper_state = gpio_read(params_.upper_limit_switch_pin);
     int lower_state = gpio_read(params_.lower_limit_switch_pin);
-    LOG_INFO("Lift init: upper_switch=%d, lower_switch=%d\n", upper_state, lower_state);
-
-    // Note: switches are active-high (read 1 when pressed, 0 when not pressed)
-    // This is inverted from typical NO switches with pull-up
+    LOG_INFO("Lift init: lower_switch=%d\n", lower_state);
 
     constexpr uint32_t init_timeout_ms = 2000;
 
-    if (!upper_state) {
-        LOG_INFO("Moving to upper limit (%d mm)...\n", static_cast<int>(params_.upper_limit_mm));
-        actuate_timeout(params_.upper_limit_mm, init_timeout_ms);
-        ztimer_sleep(ZTIMER_MSEC, init_timeout_ms);
-        LOG_INFO("Upper limit reached or timeout\n");
-    } else {
-        LOG_INFO("Already at upper limit, setting distance to %d mm\n",
-                 static_cast<int>(params_.upper_limit_mm));
-        set_current_distance(params_.upper_limit_mm);
-    }
-
-    lower_state = gpio_read(params_.lower_limit_switch_pin);
     if (!lower_state) {
         LOG_INFO("Moving to lower limit (%d mm)...\n", static_cast<int>(params_.lower_limit_mm));
         actuate_timeout(params_.lower_limit_mm, init_timeout_ms);
         ztimer_sleep(ZTIMER_MSEC, init_timeout_ms);
+        // If lower limit was not reached, disable motor to prevent
+        // violent movement on power restore (e.g. after emergency stop)
+        if (!gpio_read(params_.lower_limit_switch_pin)) {
+            LOG_INFO("Init timeout, disabling motor\n");
+            disable();
+        }
         LOG_INFO("Lower limit reached or timeout\n");
     } else {
         LOG_INFO("Already at lower limit, setting distance to %d mm\n",
@@ -73,6 +64,7 @@ void Lift::init()
         set_current_distance(params_.lower_limit_mm);
     }
 
+    initializing_ = false;
     LOG_INFO("Lift init complete\n");
 }
 
@@ -112,7 +104,9 @@ void Lift::at_lower_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.lower_limit_switch_pin)) {
         LOG_INFO("Lower limit switch pressed\n");
-        set_current_distance(params_.lower_limit_mm);
+        if (initializing_) {
+            set_current_distance(params_.lower_limit_mm);
+        }
         actuate(params_.lower_limit_mm);
     } else {
         LOG_INFO("Lower limit switch released\n");
@@ -124,7 +118,6 @@ void Lift::at_upper_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
-        set_current_distance(params_.upper_limit_mm);
         actuate(params_.upper_limit_mm);
     } else {
         LOG_INFO("Upper limit switch released\n");
