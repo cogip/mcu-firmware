@@ -48,6 +48,8 @@ void Lift::init()
     constexpr uint32_t init_timeout_ms = 2000;
 
     if (!lower_state) {
+        // Force current position to upper limit so the motor moves down
+        set_current_distance(params_.upper_limit_mm);
         LOG_INFO("Moving to lower limit (%d mm)...\n", static_cast<int>(params_.lower_limit_mm));
         actuate_timeout(params_.lower_limit_mm, init_timeout_ms);
         ztimer_sleep(ZTIMER_MSEC, init_timeout_ms);
@@ -108,6 +110,7 @@ void Lift::at_lower_limit()
             set_current_distance(params_.lower_limit_mm);
         }
         actuate(params_.lower_limit_mm);
+        motor_engine_.set_timeout_enable(false);
     } else {
         LOG_INFO("Lower limit switch released\n");
     }
@@ -119,6 +122,7 @@ void Lift::at_upper_limit()
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
         actuate(params_.upper_limit_mm);
+        motor_engine_.set_timeout_enable(false);
     } else {
         LOG_INFO("Upper limit switch released\n");
     }
