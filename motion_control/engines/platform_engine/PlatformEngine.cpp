@@ -117,8 +117,21 @@ void PlatformEngine::process_outputs()
     // If timeout is enabled and not reached: pose_reached_ keeps its current value
     // (either 'moving' or 'timeout' set by the engine)
 
+    // Detect case where a new target was processed and immediately reached FINISHED
+    // in the same cycle (pose_reached_ stays 'reached' with no visible transition).
+    // Force a moving→reached transition so the planner sees the new reached event.
+    bool force_moving_transition = false;
+    if (pose_reached_ == prev_pose_reached &&
+        (pose_reached_ == target_pose_status_t::reached ||
+         pose_reached_ == target_pose_status_t::intermediate_reached)) {
+        auto new_target = io_.get_as<bool>("new_target");
+        if (new_target && *new_target) {
+            force_moving_transition = true;
+        }
+    }
+
     // Log pose_reached transitions
-    if (pose_reached_ != prev_pose_reached) {
+    if (pose_reached_ != prev_pose_reached || force_moving_transition) {
         const auto& cur = localization_.pose();
         LOG_INFO("pose_reached=%d cur=(%.1f,%.1f,%.1f) tgt=(%.1f,%.1f,%.1f)\n",
                  static_cast<int>(pose_reached_), static_cast<double>(cur.x()),
@@ -136,6 +149,11 @@ void PlatformEngine::process_outputs()
 
     // Set robot polar velocity order
     drive_contoller_.set_polar_velocity(command);
+
+    // If new target reached immediately, dispatch moving first then reached
+    if (force_moving_transition) {
+        pose_reached_cb_(target_pose_status_t::moving);
+    }
 
     // Dispatch pose reached state
     pose_reached_cb_(pose_reached_);
