@@ -96,33 +96,30 @@ void MotorEngine::process_outputs()
     if (pose_reached_ != target_pose_status_t::timeout) {
         pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
     } else {
-        LOG_ERROR("MotorEngine timed out, disable.\n");
+        LOG_ERROR("MotorEngine timed out, hold. current=%.2f target=%.2f\n",
+                  static_cast<double>(odometer_.distance_mm()),
+                  static_cast<double>(target_distance_));
 
-        // Disable engine
-        enable_ = false;
-
-        // Disable motor
-        motor_.disable();
-
-        return;
+        // Hold current position: set target to where we are and let the control loop maintain it
+        target_distance_ = odometer_.distance_mm();
+        timeout_enable_ = false;
+        pose_reached_ = target_pose_status_t::moving;
     }
 
     if (pose_reached_ == target_pose_status_t::blocked) {
-        LOG_ERROR("MotorEngine blocked, disable.\n");
+        LOG_ERROR("MotorEngine blocked, hold. current=%.2f target=%.2f\n",
+                  static_cast<double>(odometer_.distance_mm()),
+                  static_cast<double>(target_distance_));
 
-        // Disable engine
-        enable_ = false;
-
-        // Disable motor
-        motor_.disable();
-
-        return;
+        // Hold current position: set target to where we are and let the control loop maintain it
+        target_distance_ = odometer_.distance_mm();
+        timeout_enable_ = false;
+        pose_reached_ = target_pose_status_t::moving;
     }
 
     // Disable the timeout as we want to hold the position
     if ((pose_reached_ == target_pose_status_t::reached) && (timeout_enable_ == true)) {
-        // Reset timeout cycles counter
-        timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+        timeout_enable_ = false;
     }
 
     float command = io_.get_as<float>("speed_command").value();
