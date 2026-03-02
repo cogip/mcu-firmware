@@ -292,6 +292,53 @@ float TrapezoidalProfile::compute_theoretical_velocity(uint32_t period) const
     return velocity;
 }
 
+float TrapezoidalProfile::compute_distance_for_duration(float target_speed, float acceleration,
+                                                        float deceleration, uint32_t total_periods,
+                                                        bool must_stop_at_end)
+{
+    if (target_speed <= 0.0f || acceleration <= 0.0f || total_periods == 0) {
+        return 0.0f;
+    }
+
+    float t_periods = static_cast<float>(total_periods);
+    float t_accel = target_speed / acceleration;
+
+    if (!must_stop_at_end) {
+        // Profile: accel ramp -> plateau (no deceleration)
+        if (t_accel >= t_periods) {
+            // Duration too short to reach target speed: only accelerating
+            return 0.5f * acceleration * t_periods * t_periods;
+        }
+        // Normal case: accel ramp + plateau
+        float d_accel = 0.5f * acceleration * t_accel * t_accel;
+        float d_plateau = target_speed * (t_periods - t_accel);
+        return d_accel + d_plateau;
+    }
+
+    // must_stop_at_end: accel ramp -> plateau -> decel ramp
+    if (deceleration <= 0.0f) {
+        return 0.0f;
+    }
+
+    float t_decel = target_speed / deceleration;
+
+    if ((t_accel + t_decel) >= t_periods) {
+        // Duration too short for full trapezoid: triangular profile
+        // Use kinematic approach: t_a + t_d = total, v = a*t_a = d*t_d
+        // t_a = v/a, t_d = v/d -> v/a + v/d = t -> v = t*a*d/(a+d)
+        float v_peak_actual =
+            t_periods * acceleration * deceleration / (acceleration + deceleration);
+        float t_a = v_peak_actual / acceleration;
+        return 0.5f * v_peak_actual * t_a + 0.5f * v_peak_actual * (t_periods - t_a);
+    }
+
+    // Full trapezoid
+    float d_accel = 0.5f * acceleration * t_accel * t_accel;
+    float d_decel = 0.5f * deceleration * t_decel * t_decel;
+    float d_plateau = target_speed * (t_periods - t_accel - t_decel);
+    return d_accel + d_plateau + d_decel;
+}
+
 float TrapezoidalProfile::compute_theoretical_remaining_distance(uint32_t period) const
 {
     if (!initialized_) {
