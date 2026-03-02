@@ -24,13 +24,9 @@
 #include "platform.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
-#include "angular_pose_tuning_chain.hpp"
-#include "angular_speed_tuning_chain.hpp"
-#include "linear_pose_tuning_chain.hpp"
-#include "linear_speed_tuning_chain.hpp"
-#include "pose_test_chain.hpp"
 #include "quadpid_chain.hpp"
 #include "quadpid_tracker_chain.hpp"
+#include "tracker_speed_tuning_chain.hpp"
 
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
@@ -119,37 +115,10 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TUNING):
-        LOG_INFO("Change to controller: LINEAR_SPEED_TUNING\n");
+    case static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING):
+        LOG_INFO("Change to controller: TRACKER_SPEED_TUNING\n");
         pf_motion_control_platform_engine.set_controller(
-            &linear_speed_tuning_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TUNING):
-        LOG_INFO("Change to controller: ANGULAR_SPEED_TUNING\n");
-        pf_motion_control_platform_engine.set_controller(
-            &angular_speed_tuning_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_POSE_TUNING):
-        LOG_INFO("Change to controller: LINEAR_POSE_TUNING\n");
-        pf_motion_control_platform_engine.set_controller(
-            &linear_pose_tuning_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_POSE_TUNING):
-        LOG_INFO("Change to controller: ANGULAR_POSE_TUNING\n");
-        pf_motion_control_platform_engine.set_controller(
-            &angular_pose_tuning_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_POSE_TEST):
-        LOG_INFO("Change to controller: LINEAR_POSE_TEST\n");
-        pf_motion_control_platform_engine.set_controller(&pose_test_chain::meta_controller);
+            &tracker_speed_tuning_chain::meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(true);
         break;
 
@@ -427,8 +396,7 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
 void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer)
 {
     // Only allowed when a speed tuning chain is active
-    if (current_controller_id != static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TUNING) &&
-        current_controller_id != static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TUNING)) {
+    if (current_controller_id != static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING)) {
         LOG_ERROR("Speed order rejected: active controller is not a speed tuning chain\n");
         return;
     }
@@ -660,11 +628,7 @@ void pf_init_motion_control(void)
     // Init controllers
     quadpid_chain::init();
     quadpid_tracker_chain::init();
-    linear_speed_tuning_chain::init();
-    angular_speed_tuning_chain::init();
-    linear_pose_tuning_chain::init();
-    angular_pose_tuning_chain::init();
-    pose_test_chain::init();
+    tracker_speed_tuning_chain::init();
 
     // Associate default controller (QUADPID_TRACKER) to the engine
     pf_motion_control_platform_engine.set_controller(

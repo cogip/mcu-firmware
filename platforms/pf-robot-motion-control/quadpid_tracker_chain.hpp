@@ -437,8 +437,10 @@ inline cogip::motion_control::AccelerationFilter
 // Telemetry controller
 // ============================================================================
 
-inline cogip::motion_control::TelemetryControllerParameters linear_telemetry_controller_parameters;
-inline cogip::motion_control::TelemetryControllerParameters angular_telemetry_controller_parameters;
+inline cogip::motion_control::TelemetryControllerParameters linear_telemetry_controller_parameters{
+    .loop_period_ms = motion_control_thread_period_ms};
+inline cogip::motion_control::TelemetryControllerParameters angular_telemetry_controller_parameters{
+    .loop_period_ms = motion_control_thread_period_ms};
 
 inline cogip::motion_control::TelemetryController
     linear_telemetry_controller(cogip::motion_control::linear_telemetry_controller_io_keys_default,
