@@ -30,7 +30,7 @@
 #endif
 
 #ifndef CANPB_MAX_HANDLERS
-#define CANPB_MAX_HANDLERS 16 ///< max numbers of registered message handlers
+#define CANPB_MAX_HANDLERS 32 ///< max numbers of registered message handlers
 #endif
 
 /// @}
