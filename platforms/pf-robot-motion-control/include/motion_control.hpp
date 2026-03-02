@@ -97,6 +97,9 @@ void pf_handle_game_end(cogip::canpb::ReadBuffer& buffer);
 /// Get pose to reach from protobuf message
 void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer);
 
+/// Handle speed order for speed PID tuning (requires active speed tuning chain)
+void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer);
+
 /// Get start pose from protobuf message
 void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer);
 

@@ -34,6 +34,7 @@ USEMODULE += speed_limit_filter
 USEMODULE += pose_error_filter
 USEMODULE += pose_pid_controller
 USEMODULE += profile_tracker_controller
+USEMODULE += speed_tuning_profile_controller
 USEMODULE += quadpid_meta_controller
 USEMODULE += platform_engine
 USEMODULE += pose_straight_filter

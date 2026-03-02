@@ -34,6 +34,7 @@
 
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
+#include "PB_SpeedOrder.hpp"
 #include "PB_State.hpp"
 #include "telemetry/Telemetry.hpp"
 
@@ -420,6 +421,54 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
 
     pf_motion_control_platform_engine.disable();
     pf_motion_control_reset_controllers();
+    pf_motion_control_platform_engine.enable();
+}
+
+void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer)
+{
+    // Only allowed when a speed tuning chain is active
+    if (current_controller_id != static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TUNING) &&
+        current_controller_id != static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TUNING)) {
+        LOG_ERROR("Speed order rejected: active controller is not a speed tuning chain\n");
+        return;
+    }
+
+    PB_SpeedOrder pb_speed_order;
+    EmbeddedProto::Error error = pb_speed_order.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Speed order: Protobuf deserialization error: %d\n", static_cast<int>(error));
+        return;
+    }
+
+    float linear_speed_mm_s = static_cast<float>(pb_speed_order.linear_speed_mm_s());
+    float angular_speed_deg_s = static_cast<float>(pb_speed_order.angular_speed_deg_s());
+    uint32_t duration_ms = pb_speed_order.duration_ms();
+    if (duration_ms == 0) {
+        LOG_ERROR("Speed order: duration_ms is 0, ignoring order\n");
+        return;
+    }
+
+    LOG_INFO("Speed order: linear=%.1f mm/s, angular=%.1f deg/s, duration=%" PRIu32 " ms\n",
+             static_cast<double>(linear_speed_mm_s), static_cast<double>(angular_speed_deg_s),
+             duration_ms);
+
+    // Set target speed (signed, convert from /s to /period).
+    // The sign carries the direction for ProfileTrackerController in duration mode.
+    target_speed.set_distance(
+        X_SEC_TO_X_PERIOD(linear_speed_mm_s, motion_control_thread_period_ms));
+    target_speed.set_angle(X_SEC_TO_X_PERIOD(angular_speed_deg_s, motion_control_thread_period_ms));
+    pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+    // Always enable timeout for speed orders
+    pf_motion_control_platform_engine.set_timeout_enable(true);
+    pf_motion_control_platform_engine.set_timeout_ms(duration_ms);
+
+    pf_motion_control_platform_engine.set_pose_reached(
+        cogip::motion_control::target_pose_status_t::moving);
+
+    pf_motion_control_platform_engine.disable();
+    pf_motion_control_reset_controllers();
+
     pf_motion_control_platform_engine.enable();
 }
 
