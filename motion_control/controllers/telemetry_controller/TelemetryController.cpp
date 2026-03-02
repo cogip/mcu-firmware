@@ -13,17 +13,22 @@ void TelemetryController::execute(ControllersIO& io)
 {
     DEBUG("Start TelemetryController\n");
 
+    const float period_to_sec = 1000.0f / parameters_.loop_period_ms;
+
     if (auto opt = io.get_as<float>(keys_.speed_order)) {
-        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.speed_order), *opt);
+        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.speed_order),
+                                          *opt * period_to_sec);
     }
     if (auto opt = io.get_as<float>(keys_.tracker_velocity)) {
-        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.tracker_velocity), *opt);
+        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.tracker_velocity),
+                                          *opt * period_to_sec);
     }
     if (auto opt = io.get_as<float>(keys_.current_speed)) {
-        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.current_speed), *opt);
+        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.current_speed),
+                                          *opt * period_to_sec);
     }
-    if (auto opt = io.get_as<float>(keys_.speed_command)) {
-        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.speed_command), *opt);
+    if (auto opt = io.get_as<float>(keys_.pose_error)) {
+        telemetry::Telemetry::send<float>(cogip::utils::hash_key(keys_.pose_error), *opt);
     }
 
     DEBUG("End TelemetryController\n");

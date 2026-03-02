@@ -22,8 +22,8 @@ struct TelemetryControllerIOKeys
 {
     etl::string_view speed_order;      ///< e.g. "speed_order"
     etl::string_view current_speed;    ///< e.g. "current_speed"
-    etl::string_view speed_command;    ///< e.g. "speed_command"
     etl::string_view tracker_velocity; ///< e.g. "tracker_velocity"
+    etl::string_view pose_error;       ///< e.g. "linear_pose_error"
 };
 
 } // namespace motion_control
