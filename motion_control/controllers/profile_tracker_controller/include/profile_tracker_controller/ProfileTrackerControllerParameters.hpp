@@ -26,10 +26,13 @@ class ProfileTrackerControllerParameters
         float deceleration = 1.0f,    ///< [in] Deceleration (mm/period² or rad/period²)
         bool must_stop_at_end = true, ///< [in] Stop at target (true) or continue (false)
         uint16_t period_increment =
-            1 ///< [in] Period increment per execute (for throttled controllers)
+            1, ///< [in] Period increment per execute (for throttled controllers)
+        bool speed_mode =
+            false ///< [in] Speed mode: use target_speed + duration_periods instead of pose_error
         )
         : max_speed_(max_speed), acceleration_(acceleration), deceleration_(deceleration),
-          must_stop_at_end_(must_stop_at_end), period_increment_(period_increment)
+          must_stop_at_end_(must_stop_at_end), period_increment_(period_increment),
+          speed_mode_(speed_mode)
     {
     }
 
@@ -93,12 +96,25 @@ class ProfileTrackerControllerParameters
         period_increment_ = period_increment;
     }
 
+    /// Get speed mode flag
+    bool speed_mode() const
+    {
+        return speed_mode_;
+    }
+
+    /// Set speed mode flag
+    void set_speed_mode(bool speed_mode)
+    {
+        speed_mode_ = speed_mode;
+    }
+
   private:
     float max_speed_;           ///< Maximum velocity limit
     float acceleration_;        ///< Maximum acceleration
     float deceleration_;        ///< Maximum deceleration
     bool must_stop_at_end_;     ///< Stop at end or continue
     uint16_t period_increment_; ///< Period increment per execute (for throttling)
+    bool speed_mode_;           ///< Use target_speed + duration instead of pose_error
 };
 
 } // namespace motion_control
