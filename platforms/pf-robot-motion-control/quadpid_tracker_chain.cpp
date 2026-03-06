@@ -90,8 +90,9 @@ cogip::motion_control::QuadPIDMetaController* init()
     speed_loop_polar_parallel_meta_controller.add_controller(&angular_anti_blocking_controller);
     quadpid_tracker_meta_controller.add_controller(&speed_loop_polar_parallel_meta_controller);
 
-    // Add telemetry controller for pose data
-    quadpid_tracker_meta_controller.add_controller(&pose_telemetry_controller);
+    // Add telemetry controllers for pose data
+    quadpid_tracker_meta_controller.add_controller(&linear_telemetry_controller);
+    quadpid_tracker_meta_controller.add_controller(&angular_telemetry_controller);
 
     return &quadpid_tracker_meta_controller;
 }

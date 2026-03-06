@@ -436,11 +436,16 @@ inline cogip::motion_control::AccelerationFilter
 // Telemetry controller
 // ============================================================================
 
-inline cogip::motion_control::TelemetryControllerParameters telemetry_controller_parameters;
+inline cogip::motion_control::TelemetryControllerParameters linear_telemetry_controller_parameters;
+inline cogip::motion_control::TelemetryControllerParameters angular_telemetry_controller_parameters;
 
 inline cogip::motion_control::TelemetryController
-    pose_telemetry_controller(cogip::motion_control::linear_telemetry_controller_io_keys_default,
-                              telemetry_controller_parameters);
+    linear_telemetry_controller(cogip::motion_control::linear_telemetry_controller_io_keys_default,
+                                linear_telemetry_controller_parameters);
+
+inline cogip::motion_control::TelemetryController angular_telemetry_controller(
+    cogip::motion_control::angular_telemetry_controller_io_keys_default,
+    angular_telemetry_controller_parameters);
 
 // ============================================================================
 // QuadPIDMetaController for tracker chain

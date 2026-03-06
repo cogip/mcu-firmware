@@ -168,6 +168,8 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         break;
     }
 
+    // Reset pose_reached to avoid stale blocked/reached state from previous chain
+    pf_motion_control_platform_engine.reset_pose_reached();
     pf_motion_control_platform_engine.set_current_cycle(0);
     pf_motion_control_platform_engine.dump_pipeline();
 }
@@ -634,8 +636,7 @@ void pf_init_motion_control(void)
     pf_motion_control_platform_engine.dump_pipeline();
 
     // Set timeout for speed only loops as no pose has to be reached
-    pf_motion_control_platform_engine.set_timeout_ms(motion_control_pid_tuning_period_ms /
-                                                     motion_control_thread_period_ms);
+    pf_motion_control_platform_engine.set_timeout_ms(motion_control_pid_tuning_period_ms);
 
     // Register new pids config
     pf_get_canpb().register_message_handler(
