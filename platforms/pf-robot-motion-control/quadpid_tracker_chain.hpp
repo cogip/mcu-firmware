@@ -337,16 +337,13 @@ inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_paral
 // TargetChangeDetector (separate instance - cannot be shared between chains)
 // ============================================================================
 
-inline cogip::motion_control::TargetChangeDetectorIOKeys target_change_detector_io_keys = {
-    .target_x = "target_pose_x",
-    .target_y = "target_pose_y",
-    .target_O = "target_pose_O",
-    .new_target = "new_target",
-    .trigger_state = 0};
+inline cogip::motion_control::TargetChangeDetectorIOKeys<3> target_change_detector_io_keys = {
+    .watched_keys = {"target_pose_x", "target_pose_y", "target_pose_O"},
+    .new_target = "new_target"};
 
 inline cogip::motion_control::TargetChangeDetectorParameters target_change_detector_parameters;
 
-inline cogip::motion_control::TargetChangeDetector
+inline cogip::motion_control::TargetChangeDetector<3>
     target_change_detector(target_change_detector_io_keys, target_change_detector_parameters);
 
 // ============================================================================
