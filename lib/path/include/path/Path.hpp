@@ -33,10 +33,6 @@ class Path
     /// Container type for waypoints
     using PathContainer = etl::vector<Pose, MAX_WAYPOINTS>;
 
-    /// @brief Get the singleton instance.
-    /// @return Reference to the unique Path instance
-    static Path& instance();
-
     /// @brief Constructor.
     Path();
 

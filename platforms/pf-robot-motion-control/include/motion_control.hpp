@@ -2,6 +2,7 @@
 
 // Project includes
 #include "app_conf.hpp"
+#include "path/Path.hpp"
 #include "platform.hpp"
 
 namespace cogip {
@@ -29,6 +30,9 @@ enum class PidEnum : pid_id_t {
 constexpr auto PID_COUNT = __LINE__ - START_LINE - 3;
 
 constexpr uint16_t motion_control_thread_period_ms = 20; ///< controller thread loop period
+
+/// Path instance for waypoint navigation
+inline cogip::path::Path motion_control_path;
 
 /// Throttle divider for QUADPID pose loop controllers (execute every N cycles)
 constexpr uint16_t quadpid_pose_controllers_throttle_divider = 1;

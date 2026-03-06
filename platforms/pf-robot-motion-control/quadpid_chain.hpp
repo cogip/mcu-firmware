@@ -92,7 +92,8 @@ inline constexpr cogip::motion_control::PathManagerFilterIOKeys path_manager_fil
 inline cogip::motion_control::PathManagerFilterParameters path_manager_filter_parameters;
 
 inline cogip::motion_control::PathManagerFilter path_manager_filter(path_manager_filter_io_keys,
-                                                                    path_manager_filter_parameters);
+                                                                    path_manager_filter_parameters,
+                                                                    motion_control_path);
 
 // ============================================================================
 // PoseStraightFilter

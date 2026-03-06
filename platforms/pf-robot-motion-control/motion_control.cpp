@@ -92,7 +92,7 @@ static cogip::drive_controller::DifferentialDriveController
 static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state);
 // Motion control engine
 static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
-    localization, drive_controller, cogip::path::Path::instance(),
+    localization, drive_controller, motion_control_path,
     cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
     motion_control_thread_period_ms);
 
@@ -385,9 +385,9 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
              static_cast<double>(target_pose.y()), static_cast<double>(target_pose.O()));
 
     // Use path manager for backward compatibility: reset + add + start
-    cogip::path::Path::instance().reset();
-    cogip::path::Path::instance().add_point(target_pose);
-    cogip::path::Path::instance().start();
+    motion_control_path.reset();
+    motion_control_path.add_point(target_pose);
+    motion_control_path.start();
 
     // Target speed
     target_speed.set_distance(
@@ -453,7 +453,7 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
 void pf_handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     LOG_INFO("[PATH_RESET] Clearing path\n");
-    cogip::path::Path::instance().reset();
+    motion_control_path.reset();
 }
 
 void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer)
@@ -466,12 +466,11 @@ void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer)
         return;
     }
 
-    if (cogip::path::Path::instance().add_point_from_pb(pb_path_pose)) {
-        const auto* added =
-            cogip::path::Path::instance().waypoint_at(cogip::path::Path::instance().size() - 1);
+    if (motion_control_path.add_point_from_pb(pb_path_pose)) {
+        const auto* added = motion_control_path.waypoint_at(motion_control_path.size() - 1);
         if (added) {
             LOG_INFO("[PATH_ADD_POINT] Added waypoint %u: x=%.1f, y=%.1f, O=%.1f\n",
-                     static_cast<unsigned>(cogip::path::Path::instance().size()),
+                     static_cast<unsigned>(motion_control_path.size()),
                      static_cast<double>(added->x()), static_cast<double>(added->y()),
                      static_cast<double>(added->O()));
         }
@@ -483,17 +482,17 @@ void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer)
 void pf_handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     LOG_INFO("[PATH_START] Starting path execution with %u waypoints\n",
-             static_cast<unsigned>(cogip::path::Path::instance().size()));
+             static_cast<unsigned>(motion_control_path.size()));
 
-    if (cogip::path::Path::instance().empty()) {
+    if (motion_control_path.empty()) {
         LOG_WARNING("[PATH_START] Path is empty, nothing to do\n");
         return;
     }
 
-    cogip::path::Path::instance().start();
+    motion_control_path.start();
 
     // Get first target pose from path
-    const cogip::path::Pose* first_pose = cogip::path::Path::instance().current_pose();
+    const cogip::path::Pose* first_pose = motion_control_path.current_pose();
     if (first_pose) {
         target_pose = *first_pose;
 

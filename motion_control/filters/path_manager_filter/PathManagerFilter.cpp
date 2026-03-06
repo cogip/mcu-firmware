@@ -11,7 +11,6 @@
 
 #include "path_manager_filter/PathManagerFilter.hpp"
 #include "motion_control_common/BaseMetaController.hpp"
-#include "path/Path.hpp"
 
 #define ENABLE_DEBUG 0
 #include <debug.h>
@@ -25,8 +24,7 @@ void PathManagerFilter::execute(ControllersIO& io)
 {
     DEBUG("PathManagerFilter::execute\n");
 
-    // Get path singleton
-    path::Path& path = path::Path::instance();
+    path::Path& path = path_;
 
     // If not started or path is empty, do nothing
     if (!path.is_started() || path.empty()) {

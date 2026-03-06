@@ -15,12 +15,6 @@ namespace cogip {
 
 namespace path {
 
-Path& Path::instance()
-{
-    static Path instance;
-    return instance;
-}
-
 Path::Path() : current_index_(0), started_(false) {}
 
 void Path::reset()

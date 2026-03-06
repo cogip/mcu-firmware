@@ -41,8 +41,10 @@ class PathManagerFilter : public Controller<PathManagerFilterIOKeys, PathManager
   public:
     /// @brief Constructor.
     explicit PathManagerFilter(const PathManagerFilterIOKeys& keys,
-                               PathManagerFilterParameters& parameters, etl::string_view name = "")
-        : Controller<PathManagerFilterIOKeys, PathManagerFilterParameters>(keys, parameters, name)
+                               PathManagerFilterParameters& parameters, path::Path& path,
+                               etl::string_view name = "")
+        : Controller<PathManagerFilterIOKeys, PathManagerFilterParameters>(keys, parameters, name),
+          path_(path)
     {
     }
 
@@ -54,6 +56,9 @@ class PathManagerFilter : public Controller<PathManagerFilterIOKeys, PathManager
 
     /// Execute the path manager filter.
     void execute(ControllersIO& io) override;
+
+  private:
+    path::Path& path_; ///< Path reference for waypoint navigation
 };
 
 } // namespace motion_control
