@@ -36,8 +36,102 @@ ProfileTrackerController::ProfileTrackerController(
 {
 }
 
+bool ProfileTrackerController::generate_profile(float target_distance, float initial_speed,
+                                                float max_speed, bool must_stop)
+{
+    uint32_t total_periods = profile_.generate_optimal_profile(
+        initial_speed, target_distance, parameters_.acceleration(), parameters_.deceleration(),
+        max_speed, must_stop);
+
+    if (total_periods == 0) {
+        LOG_WARNING("ProfileTrackerController: No profile generated (distance=%.2f)\n",
+                    target_distance);
+        profile_.reset();
+        return false;
+    }
+
+    period_ = 0;
+    return true;
+}
+
+void ProfileTrackerController::execute_speed_mode(ControllersIO& io)
+{
+    DEBUG("Execute ProfileTrackerController [speed_mode]\n");
+
+    // Check if profile recomputation requested
+    bool recompute_profile = false;
+    if (auto opt = io.get_as<bool>(keys_.recompute_profile)) {
+        recompute_profile = *opt;
+    }
+
+    if (recompute_profile) {
+        // Read signed target speed
+        float target_speed_signed = 0.0f;
+        if (auto opt = io.get_as<float>(keys_.target_speed)) {
+            target_speed_signed = *opt;
+        }
+
+        // Read duration in periods
+        uint32_t duration = 0;
+        if (auto opt = io.get_as<int>(keys_.duration_periods)) {
+            duration = static_cast<uint32_t>(*opt);
+        }
+
+        if (duration == 0 || target_speed_signed == 0.0f) {
+            DEBUG("[speed_mode] No profile: duration=%" PRIu32 " speed=%.2f\n", duration,
+                  target_speed_signed);
+            io.set(keys_.tracker_velocity, 0.0f);
+            profile_.reset();
+            return;
+        }
+
+        float max_speed = etl::min(parameters_.max_speed(), etl::absolute(target_speed_signed));
+        float direction = (target_speed_signed >= 0.0f) ? 1.0f : -1.0f;
+
+        // Compute distance from speed + duration (accounts for accel/decel ramps)
+        float target_distance = direction * TrapezoidalProfile::compute_distance_for_duration(
+                                                max_speed, parameters_.acceleration(),
+                                                parameters_.deceleration(), duration, true);
+
+        DEBUG("[speed_mode] RECOMPUTE: speed=%.2f duration=%" PRIu32 " distance=%.2f\n", max_speed,
+              duration, target_distance);
+
+        if (!generate_profile(target_distance, 0.0f, max_speed, true)) {
+            io.set(keys_.tracker_velocity, 0.0f);
+            return;
+        }
+
+        DEBUG("[speed_mode] Generated profile: %" PRIu32 " periods\n", profile_.total_periods());
+    }
+
+    if (!profile_.is_initialized()) {
+        io.set(keys_.tracker_velocity, 0.0f);
+        return;
+    }
+
+    // Profile complete
+    if (period_ >= profile_.total_periods()) {
+        io.set(keys_.tracker_velocity, 0.0f);
+        DEBUG("[speed_mode] Profile complete\n");
+        return;
+    }
+
+    // Compute velocity from trapezoidal profile
+    float velocity = profile_.compute_theoretical_velocity(period_);
+
+    DEBUG("[speed_mode] Period %" PRIu32 ": velocity=%.2f\n", period_, velocity);
+
+    io.set(keys_.tracker_velocity, velocity);
+    period_ += parameters_.period_increment();
+}
+
 void ProfileTrackerController::execute(ControllersIO& io)
 {
+    if (parameters_.speed_mode()) {
+        execute_speed_mode(io);
+        return;
+    }
+
     DEBUG("Execute ProfileTrackerController [%s]\n", keys_.pose_error.data());
 
     // Check if profile recomputation requested (from PoseStraightFilter state transitions)
@@ -100,39 +194,22 @@ void ProfileTrackerController::execute(ControllersIO& io)
 
     // Generate new profile if requested (triggered by PoseStraightFilter state transitions)
     if (recompute_profile) {
-        // When recompute is triggered, we start a new segment from rest (previous segment
-        // should have stopped with must_stop_at_end=true). Using measured speed here would
-        // cause erratic behavior if there's noise/vibration in the measurement.
-        float initial_speed = 0.0f;
-
-        DEBUG("[ProfileFF %s] RECOMPUTE pose_error=%.2f initial_speed=%.2f\n",
+        DEBUG("[ProfileFF %s] RECOMPUTE pose_error=%.2f current_speed=%.2f\n",
               keys_.pose_error.data(), static_cast<double>(pose_error),
-              static_cast<double>(initial_speed));
-        // Use pose error as target distance (signed - TrapezoidalProfile handles direction)
-        float target_distance = pose_error;
+              static_cast<double>(current_speed));
 
-        // Generate optimal profile with signed distance (TrapezoidalProfile handles direction)
-        uint32_t total_periods = profile_.generate_optimal_profile(
-            initial_speed, target_distance, parameters_.acceleration(), parameters_.deceleration(),
-            max_speed, parameters_.must_stop_at_end());
-
-        if (total_periods == 0) {
-            LOG_WARNING("ProfileTrackerController: No profile generated (distance=%.2f)\n",
-                        target_distance);
+        if (!generate_profile(pose_error, current_speed, max_speed,
+                              parameters_.must_stop_at_end())) {
             io.set(keys_.tracker_velocity, 0.0f);
             io.set(keys_.tracking_error, 0.0f);
             if (!keys_.profile_complete.empty()) {
                 io.set(keys_.profile_complete, false);
             }
-            profile_.reset();
             return;
         }
 
         DEBUG("[%s] Generated profile: %" PRIu32 " periods, distance=%.2f\n",
-              keys_.pose_error.data(), total_periods, target_distance);
-
-        // Reset period counter
-        period_ = 0;
+              keys_.pose_error.data(), profile_.total_periods(), pose_error);
     }
 
     // Check if pose_error sign changed vs profile target (e.g., motion_dir changed between cycles)
@@ -143,27 +220,19 @@ void ProfileTrackerController::execute(ControllersIO& io)
         DEBUG("[%s] Sign mismatch: pose_error=%.2f vs profile_target=%.2f, regenerating profile\n",
               keys_.pose_error.data(), pose_error, profile_target);
 
-        // Regenerate profile for the new direction
-        uint32_t total_periods = profile_.generate_optimal_profile(
-            current_speed, pose_error, parameters_.acceleration(), parameters_.deceleration(),
-            max_speed, parameters_.must_stop_at_end());
-
-        if (total_periods == 0) {
+        if (!generate_profile(pose_error, current_speed, max_speed,
+                              parameters_.must_stop_at_end())) {
             // Can't generate profile - fall back to PID-only
             io.set(keys_.tracker_velocity, 0.0f);
             io.set(keys_.tracking_error, pose_error);
             if (!keys_.profile_complete.empty()) {
                 io.set(keys_.profile_complete, false);
             }
-            profile_.reset();
             return;
         }
 
         DEBUG("[%s] Regenerated profile: %" PRIu32 " periods, distance=%.2f\n",
-              keys_.pose_error.data(), total_periods, pose_error);
-
-        // Reset period counter for new profile
-        period_ = 0;
+              keys_.pose_error.data(), profile_.total_periods(), pose_error);
     }
 
     // Check if profile is complete
