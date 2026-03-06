@@ -109,8 +109,8 @@ class BaseControllerEngine
         current_cycle_ = current_cycle;
     };
 
-    /// Set timeout cycle number
-    void set_timeout_ms(uint32_t timeout_ms ///< [in]   timeout in cycles
+    /// Set timeout in milliseconds
+    void set_timeout_ms(uint32_t timeout_ms ///< [in]   timeout in milliseconds
     )
     {
         timeout_ms_ = timeout_ms;
@@ -121,6 +121,9 @@ class BaseControllerEngine
     )
     {
         timeout_enable_ = timeout_enable;
+        if (timeout_enable) {
+            timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+        }
     };
 
     /// Get ControllersIO reference
