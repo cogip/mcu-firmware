@@ -24,7 +24,6 @@
 #include "platform.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
-#include "adaptive_pure_pursuit_chain.hpp"
 #include "angular_pose_tuning_chain.hpp"
 #include "angular_speed_tuning_chain.hpp"
 #include "linear_pose_tuning_chain.hpp"
@@ -151,13 +150,6 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         LOG_INFO("Change to controller: LINEAR_POSE_TEST\n");
         pf_motion_control_platform_engine.set_controller(&pose_test_chain::meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
-        LOG_INFO("Change to controller: ADAPTIVE_PURE_PURSUIT\n");
-        pf_motion_control_platform_engine.set_controller(
-            &adaptive_pure_pursuit_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
@@ -564,9 +556,6 @@ void pf_motion_control_reset_controllers(void)
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
         quadpid_tracker_chain::reset();
         break;
-    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
-        adaptive_pure_pursuit_chain::reset();
-        break;
     default:
         break;
     }
@@ -623,7 +612,6 @@ void pf_init_motion_control(void)
     // Init controllers
     quadpid_chain::init();
     quadpid_tracker_chain::init();
-    adaptive_pure_pursuit_chain::init();
     linear_speed_tuning_chain::init();
     angular_speed_tuning_chain::init();
     linear_pose_tuning_chain::init();

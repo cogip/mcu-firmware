@@ -126,15 +126,6 @@ constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
 constexpr float speed_clamp_ratio = 1.2f;
 constexpr float acceleration_clamp_ratio = 1.2f;
 
-/// @name Pure Pursuit lookahead parameters
-/// @{
-constexpr float pure_pursuit_min_lookahead_mm = 220.0f;
-constexpr float pure_pursuit_max_lookahead_mm = 420.0f;
-constexpr float pure_pursuit_lookahead_speed_ratio = 5.0f;
-/// Initial rotation threshold (deg) - tolerance for ROTATING_TO_DIRECTION state
-constexpr float pure_pursuit_initial_rotation_threshold_deg = 5.0f;
-/// @}
-
 // Linear pose PID integral limit
 inline Parameter<float, NonNegative> linear_pose_pid_integral_limit{
     etl::numeric_limits<float>::max()};
