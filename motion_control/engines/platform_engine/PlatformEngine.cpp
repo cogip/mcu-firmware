@@ -10,7 +10,6 @@
 #include "thread/thread.hpp"
 
 #include "log.h"
-#include "path/Path.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
 #define ENABLE_DEBUG 0
@@ -22,9 +21,10 @@ namespace motion_control {
 
 PlatformEngine::PlatformEngine(localization::LocalizationInterface& localization,
                                drive_controller::DriveControllerInterface& drive_contoller,
-                               pose_reached_cb_t pose_reached_cb, uint32_t engine_thread_period_ms)
+                               path::Path& path, pose_reached_cb_t pose_reached_cb,
+                               uint32_t engine_thread_period_ms)
     : BaseControllerEngine(engine_thread_period_ms), localization_(localization),
-      drive_contoller_(drive_contoller), pose_reached_cb_(pose_reached_cb)
+      drive_contoller_(drive_contoller), path_(path), pose_reached_cb_(pose_reached_cb)
 {
 }
 
@@ -42,7 +42,7 @@ void PlatformEngine::prepare_inputs()
     io_.set("current_pose_O", localization_.pose().O());
 
     // Get path singleton reference once
-    const path::Path& path = path::Path::instance();
+    const path::Path& path = path_;
 
     // Target pose - only set from target_pose_ when path is not active
     // When path is active, PathManagerFilter sets target_pose from current waypoint
@@ -94,7 +94,7 @@ void PlatformEngine::process_outputs()
 {
     // Sync target_pose_ with current path waypoint to keep it up-to-date
     // This ensures target_pose_ reflects the current target including is_intermediate flag
-    const path::Path& path = path::Path::instance();
+    const path::Path& path = path_;
     if (path.is_started() && !path.empty()) {
         const path::Pose* current_waypoint = path.current_pose();
         if (current_waypoint) {

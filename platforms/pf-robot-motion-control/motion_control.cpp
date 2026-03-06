@@ -92,7 +92,7 @@ static cogip::drive_controller::DifferentialDriveController
 static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state);
 // Motion control engine
 static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
-    localization, drive_controller,
+    localization, drive_controller, cogip::path::Path::instance(),
     cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
     motion_control_thread_period_ms);
 
