@@ -83,6 +83,21 @@ inline Parameter<float, NonNegative> corrector_angular_pose_pid_kp{0.3};
 inline Parameter<float, NonNegative> corrector_angular_pose_pid_ki{0};
 inline Parameter<float, NonNegative> corrector_angular_pose_pid_kd{0};
 
+// ============================================================================
+// Corrector speed PID gains (QUADPID_TRACKER - direct branch)
+// Used in speed loop when profile is invalidated (separate from tracker PIDs)
+// ============================================================================
+
+// Corrector linear speed PID (used in direct mode speed loop)
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_kp{5};
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_ki{0.3};
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_kd{0};
+
+// Corrector angular speed PID (used in direct mode speed loop)
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_kp{10};
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_ki{1};
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_kd{0};
+
 // Linear threshold
 constexpr float linear_threshold = 5;
 // Angular threshold
@@ -105,6 +120,21 @@ constexpr float min_speed_deg_per_s = 20;  ///< Maximum speed (deg/s)
 constexpr float max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
 constexpr float max_acc_deg_per_s2 = 180;  ///< Maximum acceleration (deg/s²)
 constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
+
+/// Safety clamp ratio for speed/acceleration filters
+/// The filters clamp at ratio × nominal max to catch runaway values
+/// while allowing normal operation with some margin
+constexpr float speed_clamp_ratio = 1.2f;
+constexpr float acceleration_clamp_ratio = 1.2f;
+
+/// @name Pure Pursuit lookahead parameters
+/// @{
+constexpr float pure_pursuit_min_lookahead_mm = 220.0f;
+constexpr float pure_pursuit_max_lookahead_mm = 420.0f;
+constexpr float pure_pursuit_lookahead_speed_ratio = 5.0f;
+/// Initial rotation threshold (deg) - tolerance for ROTATING_TO_DIRECTION state
+constexpr float pure_pursuit_initial_rotation_threshold_deg = 5.0f;
+/// @}
 
 // Linear pose PID integral limit
 inline Parameter<float, NonNegative> linear_pose_pid_integral_limit{
@@ -139,6 +169,13 @@ inline Parameter<float, NonNegative> corrector_linear_pose_pid_integral_limit{
 // Corrector angular pose PID integral limit
 inline Parameter<float, NonNegative> corrector_angular_pose_pid_integral_limit{
     etl::numeric_limits<uint16_t>::max()};
+
+// Corrector linear speed PID integral limit
+inline Parameter<float, NonNegative> corrector_linear_speed_pid_integral_limit{
+    max_speed_mm_per_s / corrector_linear_speed_pid_ki.get()};
+// Corrector angular speed PID integral limit
+inline Parameter<float, NonNegative> corrector_angular_speed_pid_integral_limit{
+    max_speed_deg_per_s / corrector_angular_speed_pid_ki.get()};
 
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = false;
