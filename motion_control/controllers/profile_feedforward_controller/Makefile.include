@@ -1,5 +1,0 @@
-USEMODULE_INCLUDES_profile_feedforward_controller := $(LAST_MAKEFILEDIR)/include
-USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_profile_feedforward_controller)
-
-PROTOBUF_PATH_profile_feedforward_controller := $(LAST_MAKEFILEDIR)
-PROTOBUF_PATH += $(PROTOBUF_PATH_profile_feedforward_controller)

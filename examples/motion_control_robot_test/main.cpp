@@ -20,6 +20,7 @@
 #include "motor/MotorDriverDRV8873.hpp"
 #include "motor/MotorRIOT.hpp"
 #include "parameter/Parameter.hpp"
+#include "path/Path.hpp"
 #include "pid/PID.hpp"
 #include "pid/PIDParameters.hpp"
 #include "platform_engine/PlatformEngine.hpp"
@@ -104,9 +105,12 @@ pf_pose_reached_cb([[maybe_unused]] const cogip::motion_control::target_pose_sta
 
 static constexpr uint32_t motion_control_thread_period_ms = 20;
 
+// Path for waypoint navigation
+static cogip::path::Path path;
+
 // Motion control engine
 static cogip::motion_control::PlatformEngine motion_control_platform_engine(
-    localization, drive_controller,
+    localization, drive_controller, path,
     cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
     motion_control_thread_period_ms);
 

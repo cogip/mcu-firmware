@@ -49,7 +49,7 @@ void CanProtobuf::message_reader()
 
         // Check a handler corresponding to the uuid is registered
         if (message_handlers_.count(uuid) != 1) {
-            LOG_ERROR("Unknown message uuid: 0x%" PRIx32 "\n", static_cast<uint32_t>(uuid));
+            DEBUG("Unknown message uuid: 0x%" PRIx32 "\n", static_cast<uint32_t>(uuid));
             continue;
         }
         DEBUG("receive message uuid: 0x%" PRIx32 "\n", static_cast<uint32_t>(uuid));

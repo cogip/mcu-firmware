@@ -20,6 +20,7 @@
 #include "etl/delegate.h"
 #include "localization/LocalizationInterface.hpp"
 #include "motion_control_common/BaseControllerEngine.hpp"
+#include "path/Path.hpp"
 #include "path/Pose.hpp"
 
 namespace cogip {
@@ -38,6 +39,7 @@ class PlatformEngine : public BaseControllerEngine
         localization::LocalizationInterface& localization, ///< [in] Robot localization reference
         drive_controller::DriveControllerInterface&
             drive_contoller,               ///< [in] Robot drive controller
+        path::Path& path,                  ///< [in] Path for waypoint navigation
         pose_reached_cb_t pose_reached_cb, ///< [in] Callback to send pose reached
                                            ///< state from last controller
         uint32_t engine_thread_period_ms   ///< [in] Motion control enginethread period
@@ -110,6 +112,9 @@ class PlatformEngine : public BaseControllerEngine
 
     /// Robot drive controller
     drive_controller::DriveControllerInterface& drive_contoller_;
+
+    /// Path for waypoint navigation
+    path::Path& path_;
 
     /// Pose reached callback
     pose_reached_cb_t pose_reached_cb_;

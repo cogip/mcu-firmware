@@ -47,30 +47,30 @@ inline Parameter<float, NonNegative> angular_speed_pid_ki{0.6};
 inline Parameter<float, NonNegative> angular_speed_pid_kd{0};
 
 // ============================================================================
-// Feedforward chain PID gains (QUADPID_FEEDFORWARD)
+// Tracker chain PID gains (QUADPID_TRACKER)
 // ============================================================================
 
-// Feedforward linear pose PID (tracker during MOVE_TO_POSITION)
-// Ki helps eliminate steady-state error when feedforward profile ends
-inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kp{0.1};
-inline Parameter<float, NonNegative> feedforward_linear_pose_pid_ki{0.0};
-inline Parameter<float, NonNegative> feedforward_linear_pose_pid_kd{0};
-// Feedforward angular pose PID (tracker during ROTATE states)
-inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kp{0.3};
-inline Parameter<float, NonNegative> feedforward_angular_pose_pid_ki{0};
-inline Parameter<float, NonNegative> feedforward_angular_pose_pid_kd{0};
-// Feedforward linear speed PID
-inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kp{3};
-inline Parameter<float, NonNegative> feedforward_linear_speed_pid_ki{0.8};
-inline Parameter<float, NonNegative> feedforward_linear_speed_pid_kd{0};
-// Feedforward angular speed PID
-inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kp{5.5};
-inline Parameter<float, NonNegative> feedforward_angular_speed_pid_ki{0.6};
-inline Parameter<float, NonNegative> feedforward_angular_speed_pid_kd{0};
+// Tracker linear pose PID (tracker during MOVE_TO_POSITION)
+// Ki helps eliminate steady-state error when tracker profile ends
+inline Parameter<float, NonNegative> tracker_linear_pose_pid_kp{0.1};
+inline Parameter<float, NonNegative> tracker_linear_pose_pid_ki{0.0};
+inline Parameter<float, NonNegative> tracker_linear_pose_pid_kd{0};
+// Tracker angular pose PID (tracker during ROTATE states)
+inline Parameter<float, NonNegative> tracker_angular_pose_pid_kp{0.3};
+inline Parameter<float, NonNegative> tracker_angular_pose_pid_ki{0};
+inline Parameter<float, NonNegative> tracker_angular_pose_pid_kd{0};
+// Tracker linear speed PID
+inline Parameter<float, NonNegative> tracker_linear_speed_pid_kp{3};
+inline Parameter<float, NonNegative> tracker_linear_speed_pid_ki{0.8};
+inline Parameter<float, NonNegative> tracker_linear_speed_pid_kd{0};
+// Tracker angular speed PID
+inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{5.5};
+inline Parameter<float, NonNegative> tracker_angular_speed_pid_ki{0.6};
+inline Parameter<float, NonNegative> tracker_angular_speed_pid_kd{0};
 
 // ============================================================================
-// Corrector pose PID gains (QUADPID_FEEDFORWARD - direct branch)
-// Used when feedforward profile is invalidated to reach target position
+// Corrector pose PID gains (QUADPID_TRACKER - direct branch)
+// Used when tracker profile is invalidated to reach target position
 // ============================================================================
 
 // Corrector linear pose PID (used when linear profile is invalidated)
@@ -84,8 +84,8 @@ inline Parameter<float, NonNegative> corrector_angular_pose_pid_ki{0};
 inline Parameter<float, NonNegative> corrector_angular_pose_pid_kd{0};
 
 // ============================================================================
-// Corrector speed PID gains (QUADPID_FEEDFORWARD - direct branch)
-// Used in speed loop when profile is invalidated (separate from feedforward PIDs)
+// Corrector speed PID gains (QUADPID_TRACKER - direct branch)
+// Used in speed loop when profile is invalidated (separate from tracker PIDs)
 // ============================================================================
 
 // Corrector linear speed PID (used in direct mode speed loop)
@@ -112,15 +112,21 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
 
 // Speeds and accelerations/decelerations limits
-constexpr float min_speed_mm_per_s = 0;    ///< Minimum speed (mm/s)
-constexpr float max_speed_mm_per_s = 2000; ///< Maximum speed (mm/s)
-constexpr float max_acc_mm_per_s2 = 500.0; ///< Maximum acceleration (mm/s²)
-constexpr float max_dec_mm_per_s2 = 500.0; ///< Maximum deceleration (mm/s²)
+constexpr float min_speed_mm_per_s = 0;     ///< Minimum speed (mm/s)
+constexpr float max_speed_mm_per_s = 2000;  ///< Maximum speed (mm/s)
+constexpr float max_acc_mm_per_s2 = 1200.0; ///< Maximum acceleration (mm/s²)
+constexpr float max_dec_mm_per_s2 = 500.0;  ///< Maximum deceleration (mm/s²)
 
-constexpr float min_speed_deg_per_s = 0;   ///< Maximum speed (deg/s)
+constexpr float min_speed_deg_per_s = 0;   ///< Minimum speed (deg/s)
 constexpr float max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
-constexpr float max_acc_deg_per_s2 = 360;  ///< Maximum acceleration (deg/s²)
+constexpr float max_acc_deg_per_s2 = 720;  ///< Maximum acceleration (deg/s²)
 constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
+
+/// Safety clamp ratio for speed/acceleration filters
+/// The filters clamp at ratio × nominal max to catch runaway values
+/// while allowing normal operation with some margin
+constexpr float speed_clamp_ratio = 1.2f;
+constexpr float acceleration_clamp_ratio = 1.2f;
 
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = true;
@@ -140,19 +146,19 @@ inline Parameter<float, NonNegative> linear_speed_pid_integral_limit{max_speed_m
 inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_deg_per_s /
                                                                       angular_speed_pid_ki.get()};
 
-// Feedforward linear pose PID integral limit
+// Tracker linear pose PID integral limit
 // Limit = max_speed / ki to prevent integral windup
-inline Parameter<float, NonNegative> feedforward_linear_pose_pid_integral_limit{
-    max_speed_mm_per_s / feedforward_linear_pose_pid_ki.get()};
-// Feedforward angular pose PID integral limit
-inline Parameter<float, NonNegative> feedforward_angular_pose_pid_integral_limit{
+inline Parameter<float, NonNegative> tracker_linear_pose_pid_integral_limit{
+    max_speed_mm_per_s / tracker_linear_pose_pid_ki.get()};
+// Tracker angular pose PID integral limit
+inline Parameter<float, NonNegative> tracker_angular_pose_pid_integral_limit{
     etl::numeric_limits<uint16_t>::max()};
-// Feedforward linear speed PID integral limit
-inline Parameter<float, NonNegative> feedforward_linear_speed_pid_integral_limit{
-    max_speed_mm_per_s / feedforward_linear_speed_pid_ki.get()};
-// Feedforward angular speed PID integral limit
-inline Parameter<float, NonNegative> feedforward_angular_speed_pid_integral_limit{
-    max_speed_deg_per_s / feedforward_angular_speed_pid_ki.get()};
+// Tracker linear speed PID integral limit
+inline Parameter<float, NonNegative> tracker_linear_speed_pid_integral_limit{
+    max_speed_mm_per_s / tracker_linear_speed_pid_ki.get()};
+// Tracker angular speed PID integral limit
+inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
+    max_speed_deg_per_s / tracker_angular_speed_pid_ki.get()};
 
 // Corrector linear pose PID integral limit
 inline Parameter<float, NonNegative> corrector_linear_pose_pid_integral_limit{

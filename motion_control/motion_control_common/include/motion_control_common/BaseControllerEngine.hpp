@@ -95,6 +95,13 @@ class BaseControllerEngine
         pose_reached_ = pose_reached;
     };
 
+    /// Reset pose reached to moving (also clears IO to avoid stale signals)
+    void reset_pose_reached()
+    {
+        pose_reached_ = target_pose_status_t::moving;
+        io_.set("pose_reached", pose_reached_);
+    };
+
     /// Set current cycle
     void set_current_cycle(uint32_t current_cycle ///< [in]   new current cycle
     )
@@ -102,8 +109,8 @@ class BaseControllerEngine
         current_cycle_ = current_cycle;
     };
 
-    /// Set timeout cycle number
-    void set_timeout_ms(uint32_t timeout_ms ///< [in]   timeout in cycles
+    /// Set timeout in milliseconds
+    void set_timeout_ms(uint32_t timeout_ms ///< [in]   timeout in milliseconds
     )
     {
         timeout_ms_ = timeout_ms;
@@ -114,6 +121,9 @@ class BaseControllerEngine
     )
     {
         timeout_enable_ = timeout_enable;
+        if (timeout_enable) {
+            timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+        }
     };
 
     /// Get ControllersIO reference

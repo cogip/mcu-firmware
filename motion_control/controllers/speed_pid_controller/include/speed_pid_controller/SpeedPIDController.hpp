@@ -15,6 +15,7 @@
 // Project includes
 #include "SpeedPIDControllerIOKeys.hpp"
 #include "SpeedPIDControllerParameters.hpp"
+#include "log.h"
 #include "motion_control_common/Controller.hpp"
 #include "motion_control_common/ControllersIO.hpp"
 
@@ -42,6 +43,15 @@ class SpeedPIDController : public Controller<SpeedPIDControllerIOKeys, SpeedPIDC
     const char* type_name() const override
     {
         return "SpeedPIDController";
+    }
+
+    /// @brief Reset internal state for new target
+    /// Called when changing target to reinitialize PID state.
+    void reset() override
+    {
+        if (parameters_.pid()) {
+            parameters_.pid()->reset();
+        }
     }
 
     /// @brief Read speed error, compute speed command.

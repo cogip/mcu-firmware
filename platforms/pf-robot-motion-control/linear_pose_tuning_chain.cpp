@@ -11,7 +11,7 @@
 #include "motion_control_common/MetaController.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
 #include "pose_pid_controller/PosePIDControllerParameters.hpp"
-#include "quadpid_feedforward_chain.hpp"
+#include "quadpid_tracker_chain.hpp"
 #include "telemetry_controller/TelemetryController.hpp"
 #include "telemetry_controller/TelemetryControllerIOKeysDefault.hpp"
 #include "telemetry_controller/TelemetryControllerParameters.hpp"
@@ -32,7 +32,7 @@ static cogip::motion_control::TelemetryController
                          telemetry_controller_parameters);
 
 static cogip::motion_control::PosePIDControllerParameters
-    pose_controller_parameters(&quadpid_feedforward_chain::feedforward_linear_pose_pid);
+    pose_controller_parameters(&quadpid_tracker_chain::tracker_linear_pose_pid);
 
 static cogip::motion_control::PosePIDController pose_controller(pose_pid_io_keys,
                                                                 pose_controller_parameters);
@@ -43,13 +43,14 @@ static cogip::motion_control::PosePIDController pose_controller(pose_pid_io_keys
 
 cogip::motion_control::MetaController<>* init()
 {
-    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> PosePIDController ->
-    // FeedforwardCombinerController -> SpeedPIDController -> TuningPoseReachedFilter ->
-    // TelemetryController
+    // Chain: TargetChangeDetector -> PoseErrorFilter -> ProfileTrackerController ->
+    // PosePIDController -> TrackerCombinerController -> SpeedPIDController ->
+    // TuningPoseReachedFilter -> TelemetryController
+    meta_controller.add_controller(&target_change_detector);
     meta_controller.add_controller(&pose_error_filter);
-    meta_controller.add_controller(&profile_feedforward_controller);
+    meta_controller.add_controller(&profile_tracker_controller);
     meta_controller.add_controller(&pose_controller);
-    meta_controller.add_controller(&feedforward_combiner_controller);
+    meta_controller.add_controller(&tracker_combiner_controller);
     meta_controller.add_controller(&speed_controller);
     meta_controller.add_controller(&tuning_pose_reached_filter);
     meta_controller.add_controller(&telemetry_controller);

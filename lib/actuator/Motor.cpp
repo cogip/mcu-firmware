@@ -88,7 +88,7 @@ void Motor::actuate(int32_t command)
     // Reset filters/PIDs on a new command
     distance_controller_.parameters().pid()->reset();
     speed_controller_.parameters().pid()->reset();
-    speed_filter_.reset_previous_speed_order();
+    speed_filter_.reset();
 
     // Apply new target distance
     command_ = command;

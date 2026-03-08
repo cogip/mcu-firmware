@@ -24,7 +24,7 @@ namespace cogip {
 
 namespace motion_control {
 
-void PoseErrorFilter::execute_linear(ControllersIO& io, float& pose_error, bool& target_changed)
+void PoseErrorFilter::execute_linear(ControllersIO& io, float& pose_error)
 {
     // Read target position
     float target_x = 0.0f;
@@ -48,14 +48,6 @@ void PoseErrorFilter::execute_linear(ControllersIO& io, float& pose_error, bool&
     }
     if (auto opt = io.get_as<float>(keys_.current_O)) {
         current_O = *opt;
-    }
-
-    // Detect target change
-    if (first_run_ || target_x != prev_target_x_ || target_y != prev_target_y_) {
-        target_changed = true;
-        prev_target_x_ = target_x;
-        prev_target_y_ = target_y;
-        first_run_ = false;
     }
 
     // Compute Euclidean distance
@@ -82,7 +74,7 @@ void PoseErrorFilter::execute_linear(ControllersIO& io, float& pose_error, bool&
           static_cast<double>(current_O), static_cast<double>(pose_error));
 }
 
-void PoseErrorFilter::execute_angular(ControllersIO& io, float& pose_error, bool& target_changed)
+void PoseErrorFilter::execute_angular(ControllersIO& io, float& pose_error)
 {
     // Read target orientation
     float target_O = 0.0f;
@@ -94,13 +86,6 @@ void PoseErrorFilter::execute_angular(ControllersIO& io, float& pose_error, bool
     float current_O = 0.0f;
     if (auto opt = io.get_as<float>(keys_.current_O)) {
         current_O = *opt;
-    }
-
-    // Detect target change
-    if (first_run_ || target_O != prev_target_O_) {
-        target_changed = true;
-        prev_target_O_ = target_O;
-        first_run_ = false;
     }
 
     // Compute angle difference (limited to [-180, 180])
@@ -116,20 +101,21 @@ void PoseErrorFilter::execute(ControllersIO& io)
     DEBUG("Execute PoseErrorFilter\n");
 
     float pose_error = 0.0f;
-    bool target_changed = false;
 
     if (parameters_.mode() == PoseErrorFilterMode::LINEAR) {
-        execute_linear(io, pose_error, target_changed);
+        execute_linear(io, pose_error);
     } else {
-        execute_angular(io, pose_error, target_changed);
+        execute_angular(io, pose_error);
     }
 
     // Write pose error output
     io.set(keys_.pose_error, pose_error);
 
-    // Set recompute flag if target changed
-    if (target_changed && !keys_.recompute.empty()) {
-        io.set(keys_.recompute, true);
+    // Pass through new_target flag from TargetChangeDetector
+    if (!keys_.new_target.empty()) {
+        if (auto opt = io.get_as<bool>(keys_.new_target)) {
+            DEBUG("PoseErrorFilter: new_target=%d\n", *opt);
+        }
     }
 }
 

@@ -28,7 +28,7 @@ struct PoseErrorFilterIOKeys
     etl::string_view current_O; ///< key for current orientation (linear mode for direction, angular
                                 ///< mode for error)
     etl::string_view pose_error; ///< key for computed pose error output
-    etl::string_view recompute;  ///< key for recompute flag (set to true on new target)
+    etl::string_view new_target; ///< key for new target flag (read from TargetChangeDetector)
 };
 
 } // namespace motion_control

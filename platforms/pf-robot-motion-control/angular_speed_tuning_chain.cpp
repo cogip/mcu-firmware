@@ -34,12 +34,14 @@ static cogip::motion_control::TelemetryController
 
 cogip::motion_control::MetaController<>* init()
 {
-    // Chain: PoseErrorFilter -> ProfileFeedforwardController -> SpeedPIDController ->
-    // FeedforwardCombinerController -> TuningPoseReachedFilter -> TelemetryController
+    // Chain: TargetChangeDetector -> PoseErrorFilter -> ProfileTrackerController ->
+    // SpeedPIDController -> TrackerCombinerController -> TuningPoseReachedFilter ->
+    // TelemetryController
+    meta_controller.add_controller(&target_change_detector);
     meta_controller.add_controller(&pose_error_filter);
-    meta_controller.add_controller(&profile_feedforward_controller);
+    meta_controller.add_controller(&profile_tracker_controller);
     meta_controller.add_controller(&speed_controller);
-    meta_controller.add_controller(&feedforward_combiner_controller);
+    meta_controller.add_controller(&tracker_combiner_controller);
     meta_controller.add_controller(&tuning_pose_reached_filter);
     meta_controller.add_controller(&telemetry_controller);
 

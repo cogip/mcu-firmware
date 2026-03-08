@@ -20,10 +20,10 @@ namespace motion_control {
 /// @brief Bundle of ControllersIO key names for a TelemetryController.
 struct TelemetryControllerIOKeys
 {
-    etl::string_view speed_order;          ///< e.g. "speed_order"
-    etl::string_view current_speed;        ///< e.g. "current_speed"
-    etl::string_view speed_command;        ///< e.g. "speed_command"
-    etl::string_view feedforward_velocity; ///< e.g. "feedforward_velocity"
+    etl::string_view speed_order;      ///< e.g. "speed_order"
+    etl::string_view current_speed;    ///< e.g. "current_speed"
+    etl::string_view speed_command;    ///< e.g. "speed_command"
+    etl::string_view tracker_velocity; ///< e.g. "tracker_velocity"
 };
 
 } // namespace motion_control
