@@ -24,6 +24,7 @@
 #include "platform.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
+#include "adaptive_pure_pursuit_chain.hpp"
 #include "quadpid_chain.hpp"
 #include "quadpid_tracker_chain.hpp"
 #include "tracker_speed_tuning_chain.hpp"
@@ -120,6 +121,13 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_controller(
             &tracker_speed_tuning_chain::meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(true);
+        break;
+
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        LOG_INFO("Change to controller: ADAPTIVE_PURE_PURSUIT\n");
+        pf_motion_control_platform_engine.set_controller(
+            &adaptive_pure_pursuit_chain::meta_controller);
+        pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
@@ -635,6 +643,7 @@ void pf_init_motion_control(void)
     quadpid_chain::init();
     quadpid_tracker_chain::init();
     tracker_speed_tuning_chain::init();
+    adaptive_pure_pursuit_chain::init();
 
     // Associate default controller (QUADPID_TRACKER) to the engine
     pf_motion_control_platform_engine.set_controller(
