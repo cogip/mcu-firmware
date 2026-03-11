@@ -458,13 +458,14 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
 
     pf_motion_control_platform_engine.set_current_pose(pose);
     pf_motion_control_platform_engine.set_target_pose(pose);
-    // New start pose, the robot is not moving
-    pf_motion_control_platform_engine.set_pose_reached(
-        cogip::motion_control::target_pose_status_t::reached);
 
+    // Setting a new start pose invalidates any current path
+    motion_control_path.stop();
+
+    pf_motion_control_platform_engine.reset_pose_reached();
     pf_motion_control_platform_engine.set_current_cycle(0);
 
-    LOG_INFO("[START_POSE] Localization updated and robot marked as stationary\n");
+    LOG_INFO("[START_POSE] Localization updated, path stopped\n");
 }
 
 void pf_handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
@@ -506,6 +507,14 @@ void pf_handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
         return;
     }
 
+    // Disable engine to prevent race: without this, the engine thread could
+    // run between path start and pose_reached reset, see the stale 'reached'
+    // value, and skip the first waypoint via PathManagerFilter.
+    pf_motion_control_platform_engine.disable();
+
+    // Reset pose_reached before starting the path to avoid stale 'reached'
+    pf_motion_control_platform_engine.reset_pose_reached();
+
     motion_control_path.start();
 
     // Get first target pose from path
@@ -537,15 +546,12 @@ void pf_handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
         // Set target pose on engine
         pf_motion_control_platform_engine.set_target_pose(target_pose);
 
-        // Reset pose_reached to moving (also clears IO to avoid stale signals)
-        pf_motion_control_platform_engine.reset_pose_reached();
-
         // Reset controllers for new path
         pf_motion_control_reset_controllers();
-
-        // Ensure engine is enabled
-        pf_motion_control_platform_engine.enable();
     }
+
+    // Re-enable engine
+    pf_motion_control_platform_engine.enable();
 }
 
 void pf_start_motion_control(void)
