@@ -16,6 +16,9 @@
 
 #include "drive_controller/DifferentialDriveController.hpp"
 
+#define ENABLE_DEBUG 0
+#include <debug.h>
+
 namespace cogip {
 
 namespace drive_controller {
@@ -60,12 +63,18 @@ int DifferentialDriveController::set_polar_velocity(cogip_defs::Polar& command)
             (right_motor_speed_percent < 0 ? -1 : 1) * parameters_.min_speed_percentage();
     }
 
+    // Clamp motor speed
+    float left_clamped = etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(),
+                                    parameters_.max_speed_percentage());
+    float right_clamped = etl::clamp(right_motor_speed_percent, -parameters_.max_speed_percentage(),
+                                     parameters_.max_speed_percentage());
+
+    DEBUG("[DiffDrive] left=%.1f%% right=%.1f%% (pre-clamp: %.1f%% %.1f%%)\n", left_clamped,
+          right_clamped, left_motor_speed_percent, right_motor_speed_percent);
+
     // Apply motor speed
-    left_motor_.set_speed(etl::clamp(left_motor_speed_percent, -parameters_.max_speed_percentage(),
-                                     parameters_.max_speed_percentage()));
-    right_motor_.set_speed(etl::clamp(right_motor_speed_percent,
-                                      -parameters_.max_speed_percentage(),
-                                      parameters_.max_speed_percentage()));
+    left_motor_.set_speed(left_clamped);
+    right_motor_.set_speed(right_clamped);
 
     return 0;
 }
