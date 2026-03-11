@@ -81,6 +81,7 @@ cogip::motion_control::QuadPIDMetaController* init()
     // (Safety filters are now inside tracker chains, before SpeedPID)
     // =========================================================================
     quadpid_tracker_meta_controller.add_controller(&path_manager_filter);
+    quadpid_tracker_meta_controller.add_controller(&target_change_detector);
     quadpid_tracker_meta_controller.add_controller(&pose_straight_filter);
     quadpid_tracker_meta_controller.add_controller(&pose_loop_polar_parallel_meta_controller);
 

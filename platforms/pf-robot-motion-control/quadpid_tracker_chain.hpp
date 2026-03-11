@@ -334,7 +334,7 @@ inline cogip::motion_control::PolarParallelMetaController pose_loop_polar_parall
 inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_parallel_meta_controller;
 
 // ============================================================================
-// TargetChangeDetector (separate instance - cannot be shared between chains)
+// TargetChangeDetector
 // ============================================================================
 
 inline cogip::motion_control::TargetChangeDetectorIOKeys<3> target_change_detector_io_keys = {
