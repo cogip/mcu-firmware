@@ -150,8 +150,18 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
         io.set(keys_.is_intermediate, last_wp->is_intermediate());
     }
 
-    // Compute distance to goal (used for profile generation and goal detection)
+    // Compute distance to goal along path (used for speed profile / deceleration).
+    // Note: this uses current_segment_param_ which tracks the LOOKAHEAD position
+    // on the segment, not the robot's position. It underestimates remaining distance.
     float distance_to_goal = compute_distance_to_goal(path, robot_pose);
+
+    // Compute euclidean distance from robot to last waypoint.
+    // Used for pose_reached detection on the last segment because distance_to_goal
+    // reaches zero when the lookahead hits the segment end, while the robot is still
+    // behind by the lookahead distance.
+    float dx_goal = last_wp->x() - current_x;
+    float dy_goal = last_wp->y() - current_y;
+    float euclidean_distance_to_goal = std::sqrt(dx_goal * dx_goal + dy_goal * dy_goal);
 
     // Handle ROTATING_TO_DIRECTION state (initial rotation to face travel direction)
     if (state_ == State::ROTATING_TO_DIRECTION) {
@@ -194,10 +204,16 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
         }
     }
 
+    // Check if we are on the last segment. Used for pose_reached detection
+    // and deceleration: on the last segment we use euclidean distance to the
+    // goal instead of path-based distance (which tracks the lookahead, not
+    // the robot). On earlier segments, euclidean distance to the last waypoint
+    // can be misleading (e.g., ~0 at the start of a closed-loop path).
+    bool on_last_segment = (current_segment_index_ >= path.waypoints().size() - 2);
+
     // State machine for path completion
     if (state_ == State::FOLLOWING_PATH) {
-        // Check if position is reached
-        if (distance_to_goal < parameters_.linear_threshold()) {
+        if (on_last_segment && euclidean_distance_to_goal < parameters_.linear_threshold()) {
             if (bypass_final_orientation) {
                 // Skip final rotation, path complete
                 DEBUG("[PP] Position reached, bypass final orientation\n");
@@ -368,10 +384,13 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
     float curvature = 2.0f * sin_alpha / chord;
     float abs_curvature = etl::absolute(curvature);
 
-    // Compute linear speed based on distance (trapezoidal profile)
     // Deceleration constraint: v = sqrt(2 * decel * distance)
+    // Use euclidean distance on the last segment (path-based distance underestimates
+    // because it tracks the lookahead position). On other segments, use path distance
+    // to avoid the closed-loop issue (euclidean to last WP can be ~0 at start).
+    float decel_distance = on_last_segment ? euclidean_distance_to_goal : distance_to_goal;
     float max_speed_for_decel =
-        std::sqrt(2.0f * parameters_.linear_deceleration() * distance_to_goal);
+        std::sqrt(2.0f * parameters_.linear_deceleration() * decel_distance);
 
     // Curvature constraint: v_max = ω_max / |κ|
     // Ensures angular speed (ω = v × κ) doesn't exceed max_angular_speed
@@ -465,8 +484,12 @@ bool AdaptivePurePursuitController::find_lookahead_point(const path::Path& path,
         current_segment_param_ = 0.0f;
     }
 
-    // Single loop to find lookahead point
-    for (size_t i = current_segment_index_; i < waypoints.size(); i++) {
+    // Search current and next segment only. Allowing unbounded lookahead across
+    // all segments causes the robot to shortcut on closed-loop paths (e.g., a
+    // rectangle returning to start) because geometrically distant segments can
+    // be spatially close to the robot.
+    size_t max_segment = etl::min(current_segment_index_ + 2, waypoints.size());
+    for (size_t i = current_segment_index_; i < max_segment; i++) {
         float p1x, p1y, p2x, p2y;
 
         if (i == 0) {
