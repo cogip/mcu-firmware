@@ -376,8 +376,8 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
         target_speed.angle());
 
     if (target_pose.timeout_ms()) {
-        pf_motion_control_platform_engine.set_timeout_enable(true);
         pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms());
+        pf_motion_control_platform_engine.set_timeout_enable(true);
     } else {
         pf_motion_control_platform_engine.set_timeout_enable(false);
     }
@@ -427,15 +427,17 @@ void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer)
     target_speed.set_angle(X_SEC_TO_X_PERIOD(angular_speed_deg_s, motion_control_thread_period_ms));
     pf_motion_control_platform_engine.set_target_speed(target_speed);
 
-    // Always enable timeout for speed orders
-    pf_motion_control_platform_engine.set_timeout_enable(true);
-    pf_motion_control_platform_engine.set_timeout_ms(duration_ms);
-
     pf_motion_control_platform_engine.set_pose_reached(
         cogip::motion_control::target_pose_status_t::moving);
 
     pf_motion_control_platform_engine.disable();
     pf_motion_control_reset_controllers();
+
+    // Set timeout after disable so the engine loop cannot decrement the counter
+    // before we re-enable. Set duration before enabling so the counter is computed
+    // from the correct value.
+    pf_motion_control_platform_engine.set_timeout_ms(duration_ms);
+    pf_motion_control_platform_engine.set_timeout_enable(true);
 
     pf_motion_control_platform_engine.enable();
 }
