@@ -230,8 +230,10 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
             quadpid_tracker_chain::reset();
             break;
+        case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+            adaptive_pure_pursuit_chain::reset();
+            break;
         default:
-            // Other chains don't have stateful filters to reset
             break;
         }
     }
@@ -332,6 +334,9 @@ void pf_handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
         break;
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
         quadpid_tracker_chain::reset();
+        break;
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        adaptive_pure_pursuit_chain::reset();
         break;
     default:
         break;
@@ -585,6 +590,9 @@ void pf_motion_control_reset_controllers(void)
         break;
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
         quadpid_tracker_chain::reset();
+        break;
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        adaptive_pure_pursuit_chain::reset();
         break;
     default:
         break;
