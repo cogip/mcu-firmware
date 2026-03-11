@@ -94,7 +94,8 @@ void init()
                                    canpb::message_handler_t::create<_handle_command>());
     canpb.register_message_handler(init_uuid,
                                    canpb::message_handler_t::create<_handle_actuators_init>());
-    LOG_INFO("pf_actuators::init: registered handler for command_uuid=0x%04lX\n", command_uuid);
+    LOG_INFO("pf_actuators::init: registered handler for command_uuid=0x%04" PRIX32 "\n",
+             command_uuid);
 }
 
 } // namespace actuators

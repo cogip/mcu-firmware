@@ -223,7 +223,7 @@ make_lift_motor_params(cogip::actuators::Enum actuator_id, bool use_tracker_chai
         /* motor                        */ lift_motor,
         /* odometer                     */ lift_motor_odometer,
         /* profile_tracker_params       */
-            use_tracker_chain ? &motor_lift_profile_tracker_parameters : nullptr,
+        use_tracker_chain ? &motor_lift_profile_tracker_parameters : nullptr,
         /* tracker_combiner_params      */ nullptr, // Use default parameters
         /* acceleration_filter_params   */ &motor_lift_acceleration_filter_parameters,
         /* speed_limit_filter_params    */ &motor_lift_speed_limit_parameters,
