@@ -134,6 +134,8 @@ constexpr float pure_pursuit_max_lookahead_mm = 300.0f;     ///< Maximum lookahe
 constexpr float pure_pursuit_lookahead_speed_ratio = 10.0f; ///< Ratio to adapt lookahead to speed
 constexpr float pure_pursuit_initial_rotation_threshold_deg =
     45.0f; ///< Threshold for initial rotation (deg)
+constexpr float pure_pursuit_corner_deceleration_mm_per_s2 =
+    250.0f; ///< Deceleration for corner anticipation (mm/s²)
 
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = true;

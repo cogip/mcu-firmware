@@ -102,7 +102,8 @@ inline cogip::motion_control::AdaptivePurePursuitControllerParameters pure_pursu
     pure_pursuit_initial_rotation_threshold_deg, // initial_rotation_threshold
     platform_max_acc_linear_mm_per_period2,      // linear_acceleration
     platform_max_dec_linear_mm_per_period2,      // linear_deceleration
-    platform_max_dec_angular_deg_per_period2     // angular_deceleration
+    platform_max_dec_angular_deg_per_period2,    // angular_deceleration
+    platform_pure_pursuit_corner_deceleration_mm_per_period2 // corner_deceleration
 );
 
 inline cogip::motion_control::AdaptivePurePursuitController

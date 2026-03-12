@@ -31,13 +31,14 @@ class AdaptivePurePursuitControllerParameters
     /// @param linear_acceleration          Linear acceleration (mm/period²)
     /// @param linear_deceleration          Linear deceleration (mm/period²)
     /// @param angular_deceleration         Angular deceleration (deg/period²)
+    /// @param corner_deceleration          Deceleration for corner anticipation (mm/period²)
     explicit AdaptivePurePursuitControllerParameters(
         float min_lookahead_distance = 100.0f, float max_lookahead_distance = 300.0f,
         float lookahead_speed_ratio = 10.0f, float max_linear_speed = 10.0f,
         float max_angular_speed = 5.0f, float linear_threshold = 10.0f,
         float angular_threshold = 2.0f, float initial_rotation_threshold = 45.0f,
         float linear_acceleration = 0.1f, float linear_deceleration = 0.1f,
-        float angular_deceleration = 0.1f)
+        float angular_deceleration = 0.1f, float corner_deceleration = 0.05f)
         : min_lookahead_distance_(min_lookahead_distance),
           max_lookahead_distance_(max_lookahead_distance),
           lookahead_speed_ratio_(lookahead_speed_ratio), max_linear_speed_(max_linear_speed),
@@ -45,7 +46,7 @@ class AdaptivePurePursuitControllerParameters
           angular_threshold_(angular_threshold),
           initial_rotation_threshold_(initial_rotation_threshold),
           linear_acceleration_(linear_acceleration), linear_deceleration_(linear_deceleration),
-          angular_deceleration_(angular_deceleration)
+          angular_deceleration_(angular_deceleration), corner_deceleration_(corner_deceleration)
     {
     }
 
@@ -181,6 +182,18 @@ class AdaptivePurePursuitControllerParameters
         angular_deceleration_ = value;
     }
 
+    /// @brief Get corner deceleration.
+    float corner_deceleration() const
+    {
+        return corner_deceleration_;
+    }
+
+    /// @brief Set corner deceleration.
+    void set_corner_deceleration(float value)
+    {
+        corner_deceleration_ = value;
+    }
+
   private:
     float min_lookahead_distance_;     ///< Minimum lookahead distance (mm)
     float max_lookahead_distance_;     ///< Maximum lookahead distance (mm)
@@ -193,6 +206,7 @@ class AdaptivePurePursuitControllerParameters
     float linear_acceleration_;        ///< Linear acceleration (mm/period²)
     float linear_deceleration_;        ///< Linear deceleration (mm/period²)
     float angular_deceleration_;       ///< Angular deceleration (deg/period²)
+    float corner_deceleration_;        ///< Deceleration for corner anticipation (mm/period²)
 };
 
 } // namespace motion_control

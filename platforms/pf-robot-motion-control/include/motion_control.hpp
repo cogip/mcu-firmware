@@ -93,6 +93,8 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period =
 constexpr float platform_pure_pursuit_min_lookahead_mm = pure_pursuit_min_lookahead_mm;
 constexpr float platform_pure_pursuit_max_lookahead_mm = pure_pursuit_max_lookahead_mm;
 constexpr float platform_pure_pursuit_lookahead_speed_ratio = pure_pursuit_lookahead_speed_ratio;
+constexpr float platform_pure_pursuit_corner_deceleration_mm_per_period2 = X_SEC2_TO_X_PERIOD2(
+    pure_pursuit_corner_deceleration_mm_per_s2, motion_control_thread_period_ms);
 /// @}
 
 /// Handle brake signal to stop the robot

@@ -142,11 +142,18 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
     // Get final orientation and bypass_final_orientation from LAST waypoint
     // PP follows the entire path continuously, so we only care about the final destination
     const path::Pose* last_wp = path.waypoint_at(path.size() - 1);
-    float target_orientation = last_wp ? last_wp->O() : current_O;
-    bool bypass_final_orientation = last_wp ? last_wp->bypass_final_orientation() : false;
+    if (!last_wp) {
+        LOG_ERROR("[PP] No valid waypoint, stopping\n");
+        io.set(keys_.linear_speed_order, 0.0f);
+        io.set(keys_.angular_speed_order, 0.0f);
+        io.set(keys_.pose_reached, target_pose_status_t::moving);
+        return;
+    }
+    float target_orientation = last_wp->O();
+    bool bypass_final_orientation = last_wp->bypass_final_orientation();
 
     // Write is_intermediate from last waypoint (PP follows entire path to end)
-    if (!keys_.is_intermediate.empty() && last_wp) {
+    if (!keys_.is_intermediate.empty()) {
         io.set(keys_.is_intermediate, last_wp->is_intermediate());
     }
 
@@ -296,18 +303,9 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
 
     if (!found) {
         // Fallback: use last waypoint as lookahead
-        if (last_wp) {
-            lookahead_x = last_wp->x();
-            lookahead_y = last_wp->y();
-            DEBUG("[PP] No intersection found, using last WP as lookahead\n");
-        } else {
-            // No valid waypoint, stop
-            LOG_ERROR("[PP] No valid waypoint, stopping\n");
-            io.set(keys_.linear_speed_order, 0.0f);
-            io.set(keys_.angular_speed_order, 0.0f);
-            io.set(keys_.pose_reached, target_pose_status_t::moving);
-            return;
-        }
+        lookahead_x = last_wp->x();
+        lookahead_y = last_wp->y();
+        DEBUG("[PP] No intersection found, using last WP as lookahead\n");
     }
 
     // Compute angle to lookahead point (in robot frame)
@@ -400,9 +398,59 @@ void AdaptivePurePursuitController::execute(ControllersIO& io)
         max_speed_for_curvature = omega_max_rad / abs_curvature;
     }
 
+    // Corner anticipation: decelerate before the next waypoint so the robot
+    // arrives at the corner slow enough to handle the turn.
+    // Compute the angle between the current segment and the next one to
+    // determine the corner severity, then apply v = sqrt(v_corner² + 2*a*d).
+    float max_speed_for_corner = parameters_.max_linear_speed();
+    {
+        const auto& waypoints = path.waypoints();
+        size_t next_wp_idx = current_segment_index_;
+        if (next_wp_idx < waypoints.size() && next_wp_idx + 1 < waypoints.size()) {
+            // Compute distance from robot to next waypoint (the corner)
+            float dx_wp = waypoints[next_wp_idx].x() - current_x;
+            float dy_wp = waypoints[next_wp_idx].y() - current_y;
+            float dist_to_corner = std::sqrt(dx_wp * dx_wp + dy_wp * dy_wp);
+
+            // Compute turning angle at the corner
+            float seg1_dx = waypoints[next_wp_idx].x() -
+                            (next_wp_idx > 0 ? waypoints[next_wp_idx - 1].x() : current_x);
+            float seg1_dy = waypoints[next_wp_idx].y() -
+                            (next_wp_idx > 0 ? waypoints[next_wp_idx - 1].y() : current_y);
+            float seg2_dx = waypoints[next_wp_idx + 1].x() - waypoints[next_wp_idx].x();
+            float seg2_dy = waypoints[next_wp_idx + 1].y() - waypoints[next_wp_idx].y();
+
+            float seg1_len = std::sqrt(seg1_dx * seg1_dx + seg1_dy * seg1_dy);
+            float seg2_len = std::sqrt(seg2_dx * seg2_dx + seg2_dy * seg2_dy);
+
+            if (seg1_len > 1e-3f && seg2_len > 1e-3f) {
+                // Dot product gives cos(angle) between segments
+                // cos_angle = 1 → straight, 0 → 90° turn, -1 → U-turn
+                float cos_angle = (seg1_dx * seg2_dx + seg1_dy * seg2_dy) / (seg1_len * seg2_len);
+                cos_angle = etl::clamp(cos_angle, -1.0f, 1.0f);
+
+                // Corner speed: scale max speed by how straight the corner is.
+                // Straight (cos=1) → full speed, 90° (cos=0) → half speed,
+                // U-turn (cos=-1) → min speed.
+                float straightness = (1.0f + cos_angle) * 0.5f;
+                float v_corner = parameters_.min_lookahead_distance() *
+                                 parameters_.linear_deceleration() * straightness;
+                v_corner = etl::clamp(v_corner, parameters_.linear_deceleration(),
+                                      parameters_.max_linear_speed());
+
+                // Decelerate to reach v_corner at the corner:
+                // v² = v_corner² + 2 * decel * distance
+                max_speed_for_corner =
+                    std::sqrt(v_corner * v_corner +
+                              2.0f * parameters_.corner_deceleration() * dist_to_corner);
+            }
+        }
+    }
+
     // Target speed is minimum of all constraints
     float target_speed = etl::min(parameters_.max_linear_speed(), max_speed_for_decel);
     target_speed = etl::min(target_speed, max_speed_for_curvature);
+    target_speed = etl::min(target_speed, max_speed_for_corner);
 
     // Acceleration constraint: limit speed increase per cycle
     float linear_speed;
