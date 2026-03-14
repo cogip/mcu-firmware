@@ -17,6 +17,7 @@ static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer
 static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_pose_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_speed_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_pose_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_path_add_point([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
@@ -52,6 +53,8 @@ void pf_init(void)
                                        cogip::canpb::message_handler_t::create<_handle_brake>());
         canpb.register_message_handler(pose_order_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_pose_order>());
+        canpb.register_message_handler(speed_order_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_speed_order>());
         canpb.register_message_handler(pose_start_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_pose_start>());
         canpb.register_message_handler(path_reset_uuid,
@@ -118,6 +121,12 @@ static void _handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 static void _handle_pose_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     cogip::pf::motion_control::pf_handle_target_pose(buffer);
+}
+
+/// Speed order message handler (speed PID tuning)
+static void _handle_speed_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_handle_speed_order(buffer);
 }
 
 /// Pose start message handler

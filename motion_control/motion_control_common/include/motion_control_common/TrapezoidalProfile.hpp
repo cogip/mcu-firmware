@@ -156,6 +156,25 @@ class TrapezoidalProfile
         initialized_ = false;
     }
 
+    /**
+     * @brief Compute the distance covered by a trapezoidal profile for a given duration
+     *
+     * Computes the total distance that would be traveled when accelerating from
+     * rest to target_speed and cruising for the specified duration.
+     * Useful for generating a profile from a speed command and duration
+     * (e.g., speed PID tuning).
+     *
+     * @param target_speed Target plateau speed (positive magnitude, units/period)
+     * @param acceleration Acceleration rate (positive, units/period²)
+     * @param deceleration Deceleration rate (positive, units/period²), unused if !must_stop_at_end
+     * @param total_periods Total duration in periods
+     * @param must_stop_at_end If true, includes deceleration phase in the distance
+     * @return Distance (positive magnitude)
+     */
+    static float compute_distance_for_duration(float target_speed, float acceleration,
+                                               float deceleration, uint32_t total_periods,
+                                               bool must_stop_at_end);
+
   private:
     /**
      * @brief Reset profile to stationary state (no movement)

@@ -88,6 +88,15 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period =
     1000;
 /// @}
 
+/// @name Pure Pursuit parameters (values from robot config, see robot*_conf.hpp for details)
+/// @{
+constexpr float platform_pure_pursuit_min_lookahead_mm = pure_pursuit_min_lookahead_mm;
+constexpr float platform_pure_pursuit_max_lookahead_mm = pure_pursuit_max_lookahead_mm;
+constexpr float platform_pure_pursuit_lookahead_speed_ratio = pure_pursuit_lookahead_speed_ratio;
+constexpr float platform_pure_pursuit_corner_deceleration_mm_per_period2 = X_SEC2_TO_X_PERIOD2(
+    pure_pursuit_corner_deceleration_mm_per_s2, motion_control_thread_period_ms);
+/// @}
+
 /// Handle brake signal to stop the robot
 void pf_handle_brake(cogip::canpb::ReadBuffer& buffer);
 
@@ -96,6 +105,9 @@ void pf_handle_game_end(cogip::canpb::ReadBuffer& buffer);
 
 /// Get pose to reach from protobuf message
 void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer);
+
+/// Handle speed order for speed PID tuning (requires active speed tuning chain)
+void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer);
 
 /// Get start pose from protobuf message
 void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer);

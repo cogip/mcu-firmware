@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <etl/array.h>
 #include <etl/string_view.h>
 
 namespace cogip {
@@ -19,17 +20,15 @@ namespace motion_control {
 
 /// @brief Bundle of ControllersIO key names for TargetChangeDetector.
 ///
-/// This controller detects when the target pose changes and sets a flag
-/// to trigger profile regeneration in downstream controllers.
-/// Uses target_x, target_y, and target_O to detect pose changes.
-/// Set any key to empty string to skip that coordinate.
-struct TargetChangeDetectorIOKeys
+/// This controller detects when any of the watched IO keys changes and sets
+/// a flag to trigger profile regeneration in downstream controllers.
+/// Set any watched key to empty string to skip it.
+///
+/// @tparam MAX_KEYS Maximum number of IO keys to watch (default 4)
+template <size_t MAX_KEYS = 4> struct TargetChangeDetectorIOKeys
 {
-    etl::string_view target_x;   ///< e.g. "target_pose_x" (X coordinate, empty to skip)
-    etl::string_view target_y;   ///< e.g. "target_pose_y" (Y coordinate, empty to skip)
-    etl::string_view target_O;   ///< e.g. "target_pose_O" (orientation, empty to skip)
-    etl::string_view new_target; ///< e.g. "new_target" (output flag)
-    int trigger_state;           ///< State value that triggers new_target (e.g. MOVE_TO_POSITION=1)
+    etl::array<etl::string_view, MAX_KEYS> watched_keys = {}; ///< IO keys to watch (empty to skip)
+    etl::string_view new_target;                              ///< e.g. "new_target" (output flag)
 };
 
 } // namespace motion_control

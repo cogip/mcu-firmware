@@ -76,6 +76,10 @@ void BaseControllerEngine::thread_loop()
                 LOG_ERROR("Engine timed out\n");
 
                 enable_ = false;
+
+                // Zero out speed orders before processing outputs
+                io_.set("linear_speed_command", 0.0f);
+                io_.set("angular_speed_command", 0.0f);
             }
 
             // Process controller outputs

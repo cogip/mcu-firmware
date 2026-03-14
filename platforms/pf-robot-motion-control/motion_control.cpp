@@ -24,16 +24,14 @@
 #include "platform.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
-#include "angular_pose_tuning_chain.hpp"
-#include "angular_speed_tuning_chain.hpp"
-#include "linear_pose_tuning_chain.hpp"
-#include "linear_speed_tuning_chain.hpp"
-#include "pose_test_chain.hpp"
+#include "adaptive_pure_pursuit_chain.hpp"
 #include "quadpid_chain.hpp"
 #include "quadpid_tracker_chain.hpp"
+#include "tracker_speed_tuning_chain.hpp"
 
 #include "PB_Controller.hpp"
 #include "PB_PathPose.hpp"
+#include "PB_SpeedOrder.hpp"
 #include "PB_State.hpp"
 #include "telemetry/Telemetry.hpp"
 
@@ -118,38 +116,18 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_SPEED_TUNING):
-        LOG_INFO("Change to controller: LINEAR_SPEED_TUNING\n");
+    case static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING):
+        LOG_INFO("Change to controller: TRACKER_SPEED_TUNING\n");
         pf_motion_control_platform_engine.set_controller(
-            &linear_speed_tuning_chain::meta_controller);
+            &tracker_speed_tuning_chain::meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(true);
         break;
 
-    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_SPEED_TUNING):
-        LOG_INFO("Change to controller: ANGULAR_SPEED_TUNING\n");
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        LOG_INFO("Change to controller: ADAPTIVE_PURE_PURSUIT\n");
         pf_motion_control_platform_engine.set_controller(
-            &angular_speed_tuning_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_POSE_TUNING):
-        LOG_INFO("Change to controller: LINEAR_POSE_TUNING\n");
-        pf_motion_control_platform_engine.set_controller(
-            &linear_pose_tuning_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::ANGULAR_POSE_TUNING):
-        LOG_INFO("Change to controller: ANGULAR_POSE_TUNING\n");
-        pf_motion_control_platform_engine.set_controller(
-            &angular_pose_tuning_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
-        break;
-
-    case static_cast<uint32_t>(PB_ControllerEnum::LINEAR_POSE_TEST):
-        LOG_INFO("Change to controller: LINEAR_POSE_TEST\n");
-        pf_motion_control_platform_engine.set_controller(&pose_test_chain::meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(true);
+            &adaptive_pure_pursuit_chain::meta_controller);
+        pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
 
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
@@ -252,8 +230,10 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
             quadpid_tracker_chain::reset();
             break;
+        case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+            adaptive_pure_pursuit_chain::reset();
+            break;
         default:
-            // Other chains don't have stateful filters to reset
             break;
         }
     }
@@ -355,6 +335,9 @@ void pf_handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
         quadpid_tracker_chain::reset();
         break;
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        adaptive_pure_pursuit_chain::reset();
+        break;
     default:
         break;
     }
@@ -423,6 +406,53 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     pf_motion_control_platform_engine.enable();
 }
 
+void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer)
+{
+    // Only allowed when a speed tuning chain is active
+    if (current_controller_id != static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING)) {
+        LOG_ERROR("Speed order rejected: active controller is not a speed tuning chain\n");
+        return;
+    }
+
+    PB_SpeedOrder pb_speed_order;
+    EmbeddedProto::Error error = pb_speed_order.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Speed order: Protobuf deserialization error: %d\n", static_cast<int>(error));
+        return;
+    }
+
+    float linear_speed_mm_s = static_cast<float>(pb_speed_order.linear_speed_mm_s());
+    float angular_speed_deg_s = static_cast<float>(pb_speed_order.angular_speed_deg_s());
+    uint32_t duration_ms = pb_speed_order.duration_ms();
+    if (duration_ms == 0) {
+        LOG_ERROR("Speed order: duration_ms is 0, ignoring order\n");
+        return;
+    }
+
+    LOG_INFO("Speed order: linear=%.1f mm/s, angular=%.1f deg/s, duration=%" PRIu32 " ms\n",
+             static_cast<double>(linear_speed_mm_s), static_cast<double>(angular_speed_deg_s),
+             duration_ms);
+
+    // Set target speed (signed, convert from /s to /period).
+    // The sign carries the direction for ProfileTrackerController in duration mode.
+    target_speed.set_distance(
+        X_SEC_TO_X_PERIOD(linear_speed_mm_s, motion_control_thread_period_ms));
+    target_speed.set_angle(X_SEC_TO_X_PERIOD(angular_speed_deg_s, motion_control_thread_period_ms));
+    pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+    // Always enable timeout for speed orders
+    pf_motion_control_platform_engine.set_timeout_enable(true);
+    pf_motion_control_platform_engine.set_timeout_ms(duration_ms);
+
+    pf_motion_control_platform_engine.set_pose_reached(
+        cogip::motion_control::target_pose_status_t::moving);
+
+    pf_motion_control_platform_engine.disable();
+    pf_motion_control_reset_controllers();
+
+    pf_motion_control_platform_engine.enable();
+}
+
 void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
 {
     PB_PathPose pb_start_pose;
@@ -441,13 +471,14 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
 
     pf_motion_control_platform_engine.set_current_pose(pose);
     pf_motion_control_platform_engine.set_target_pose(pose);
-    // New start pose, the robot is not moving
-    pf_motion_control_platform_engine.set_pose_reached(
-        cogip::motion_control::target_pose_status_t::reached);
 
+    // Setting a new start pose invalidates any current path
+    motion_control_path.stop();
+
+    pf_motion_control_platform_engine.reset_pose_reached();
     pf_motion_control_platform_engine.set_current_cycle(0);
 
-    LOG_INFO("[START_POSE] Localization updated and robot marked as stationary\n");
+    LOG_INFO("[START_POSE] Localization updated, path stopped\n");
 }
 
 void pf_handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
@@ -489,6 +520,14 @@ void pf_handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
         return;
     }
 
+    // Disable engine to prevent race: without this, the engine thread could
+    // run between path start and pose_reached reset, see the stale 'reached'
+    // value, and skip the first waypoint via PathManagerFilter.
+    pf_motion_control_platform_engine.disable();
+
+    // Reset pose_reached before starting the path to avoid stale 'reached'
+    pf_motion_control_platform_engine.reset_pose_reached();
+
     motion_control_path.start();
 
     // Get first target pose from path
@@ -520,15 +559,12 @@ void pf_handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
         // Set target pose on engine
         pf_motion_control_platform_engine.set_target_pose(target_pose);
 
-        // Reset pose_reached to moving (also clears IO to avoid stale signals)
-        pf_motion_control_platform_engine.reset_pose_reached();
-
         // Reset controllers for new path
         pf_motion_control_reset_controllers();
-
-        // Ensure engine is enabled
-        pf_motion_control_platform_engine.enable();
     }
+
+    // Re-enable engine
+    pf_motion_control_platform_engine.enable();
 }
 
 void pf_start_motion_control(void)
@@ -554,6 +590,9 @@ void pf_motion_control_reset_controllers(void)
         break;
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
         quadpid_tracker_chain::reset();
+        break;
+    case static_cast<uint32_t>(PB_ControllerEnum::ADAPTIVE_PURE_PURSUIT):
+        adaptive_pure_pursuit_chain::reset();
         break;
     default:
         break;
@@ -611,11 +650,8 @@ void pf_init_motion_control(void)
     // Init controllers
     quadpid_chain::init();
     quadpid_tracker_chain::init();
-    linear_speed_tuning_chain::init();
-    angular_speed_tuning_chain::init();
-    linear_pose_tuning_chain::init();
-    angular_pose_tuning_chain::init();
-    pose_test_chain::init();
+    tracker_speed_tuning_chain::init();
+    adaptive_pure_pursuit_chain::init();
 
     // Associate default controller (QUADPID_TRACKER) to the engine
     pf_motion_control_platform_engine.set_controller(

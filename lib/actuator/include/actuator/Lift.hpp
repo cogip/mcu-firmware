@@ -50,6 +50,9 @@ class Lift : public Motor
     /// Reference to the static configuration parameters for this lift actuator.
     const LiftParameters& params_;
 
+    /// True while the homing sequence is running (init only).
+    bool initializing_ = false;
+
     /// @brief Handle action when the lower end-stop is active.
     void at_lower_limit();
 

@@ -8,8 +8,9 @@ namespace app {
 
 void app_init(void)
 {
-    cogip::pf::actuators::positional_actuators::create_lift(cogip::actuators::Enum::MOTOR_LIFT,
+    cogip::pf::actuators::positional_actuators::create_lift(actuators::LIFT_ACTUATOR_ID,
                                                             actuators::lift_params);
+    cogip::pf::actuators::positional_actuators::init_sequence();
 }
 
 } // namespace app

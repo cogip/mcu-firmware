@@ -1,4 +1,5 @@
 // RIOT includes
+#include <periph/gpio.h>
 #include <ztimer.h>
 
 // System includes
@@ -12,6 +13,9 @@
 #include "log.h"
 #include "motor_engine/MotorEngine.hpp"
 
+#define ENABLE_DEBUG 0
+#include <debug.h>
+
 namespace cogip {
 
 namespace motion_control {
@@ -19,7 +23,7 @@ namespace motion_control {
 MotorEngine::MotorEngine(motor::MotorInterface& motor, localization::OdometerInterface& odometer,
                          uint32_t engine_thread_period_ms)
     : BaseControllerEngine(engine_thread_period_ms), target_speed_(0), target_distance_(0),
-      motor_(motor), odometer_(odometer)
+      new_target_(false), motor_(motor), odometer_(odometer)
 {
 }
 
@@ -40,6 +44,12 @@ void MotorEngine::set_target_distance(const float target_distance)
 
     // Reset the pose reached flag
     pose_reached_ = target_pose_status_t::moving;
+
+    // Set new target flag for profile tracker recomputation
+    new_target_ = true;
+
+    // Reset previous pose reached for log deduplication
+    previous_pose_reached_ = target_pose_status_t::moving;
 
     mutex_unlock(&mutex_);
 }
@@ -66,46 +76,70 @@ void MotorEngine::prepare_inputs()
 
         // Position reached flag
         io_.set("pose_reached", target_pose_status_t::moving);
+
+        // New target flag for profile tracker recomputation
+        io_.set("new_target", new_target_);
+        // Clear the flag after writing to IO (one-shot)
+        new_target_ = false;
+
+        DEBUG("MotorEngine: pos=%.2f tgt=%.2f spd=%.2f\n", static_cast<double>(current_distance),
+              static_cast<double>(target_distance_), static_cast<double>(current_speed));
     }
 };
 
 void MotorEngine::process_outputs()
 {
+    // Continuously clear motor driver overload fault if pin is configured
+    if (clear_overload_pin_ != GPIO_UNDEF) {
+        gpio_clear(clear_overload_pin_);
+    }
+
     // If timeout is enabled, pose_reached_ has been set by the engine itself, do
     // not override it.
     if (pose_reached_ != target_pose_status_t::timeout) {
         pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
     } else {
-        LOG_ERROR("MotorEngine timed out, disable.\n");
+        LOG_ERROR("MotorEngine timed out, hold. current=%.2f target=%.2f\n",
+                  static_cast<double>(odometer_.distance_mm()),
+                  static_cast<double>(target_distance_));
 
-        // Disable engine
-        enable_ = false;
-
-        // Disable motor
-        motor_.disable();
-
-        return;
+        // Hold current position: set target to where we are and let the control loop maintain it
+        target_distance_ = odometer_.distance_mm();
+        timeout_enable_ = false;
+        pose_reached_ = target_pose_status_t::moving;
     }
 
     if (pose_reached_ == target_pose_status_t::blocked) {
-        LOG_ERROR("MotorEngine blocked, disable.\n");
+        LOG_ERROR("MotorEngine blocked, hold. current=%.2f target=%.2f\n",
+                  static_cast<double>(odometer_.distance_mm()),
+                  static_cast<double>(target_distance_));
 
-        // Disable engine
-        enable_ = false;
-
-        // Disable motor
-        motor_.disable();
-
-        return;
+        // Hold current position: set target to where we are and let the control loop maintain it
+        target_distance_ = odometer_.distance_mm();
+        timeout_enable_ = false;
+        pose_reached_ = target_pose_status_t::moving;
     }
+
+    // Notify once per target when pose is first reached
+    if (pose_reached_ == target_pose_status_t::reached &&
+        previous_pose_reached_ != target_pose_status_t::reached) {
+        LOG_INFO("MotorEngine: pose reached, current=%.2f target=%.2f\n",
+                 static_cast<double>(odometer_.distance_mm()),
+                 static_cast<double>(target_distance_));
+        if (pose_reached_cb_.is_valid()) {
+            pose_reached_cb_();
+        }
+    }
+    previous_pose_reached_ = pose_reached_;
 
     // Disable the timeout as we want to hold the position
     if ((pose_reached_ == target_pose_status_t::reached) && (timeout_enable_ == true)) {
-        // Reset timeout cycles counter
-        timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+        timeout_enable_ = false;
     }
 
     float command = io_.get_as<float>("speed_command").value();
+
+    DEBUG("MotorEngine output: speed_command=%.2f\n", static_cast<double>(command));
 
     motor_.set_speed(command);
 };

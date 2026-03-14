@@ -123,6 +123,7 @@ class BaseControllerEngine
         timeout_enable_ = timeout_enable;
         if (timeout_enable) {
             timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+            io_.set("timeout_duration_period", static_cast<int>(timeout_cycle_counter_));
         }
     };
 

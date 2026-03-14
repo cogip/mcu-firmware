@@ -39,6 +39,9 @@
 #include "speed_pid_controller/SpeedPIDController.hpp"
 #include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
+#include "target_change_detector/TargetChangeDetector.hpp"
+#include "target_change_detector/TargetChangeDetectorIOKeys.hpp"
+#include "target_change_detector/TargetChangeDetectorParameters.hpp"
 
 namespace cogip {
 namespace pf {
@@ -94,6 +97,19 @@ inline cogip::motion_control::PathManagerFilterParameters path_manager_filter_pa
 inline cogip::motion_control::PathManagerFilter path_manager_filter(path_manager_filter_io_keys,
                                                                     path_manager_filter_parameters,
                                                                     motion_control_path);
+
+// ============================================================================
+// TargetChangeDetector (separate instance - cannot be shared between chains)
+// ============================================================================
+
+inline cogip::motion_control::TargetChangeDetectorIOKeys<3> target_change_detector_io_keys = {
+    .watched_keys = {"target_pose_x", "target_pose_y", "target_pose_O"},
+    .new_target = "new_target"};
+
+inline cogip::motion_control::TargetChangeDetectorParameters target_change_detector_parameters;
+
+inline cogip::motion_control::TargetChangeDetector<3>
+    target_change_detector(target_change_detector_io_keys, target_change_detector_parameters);
 
 // ============================================================================
 // PoseStraightFilter
