@@ -85,6 +85,12 @@ class MotorEngine : public BaseControllerEngine
         clear_overload_pin_ = pin;
     }
 
+    /// Set callback invoked once when the target pose is first reached.
+    void set_pose_reached_cb(etl::delegate<void()> cb)
+    {
+        pose_reached_cb_ = cb;
+    }
+
   private:
     /// Prepare controller inputs from motor functions.
     void prepare_inputs();
@@ -109,6 +115,12 @@ class MotorEngine : public BaseControllerEngine
 
     /// GPIO pin to clear motor driver overload (GPIO_UNDEF if unused)
     gpio_t clear_overload_pin_ = GPIO_UNDEF;
+
+    /// Stores the pose_reached status from the previous target to notify only once
+    target_pose_status_t previous_pose_reached_ = target_pose_status_t::moving;
+
+    /// Callback invoked once when pose is first reached for current target
+    etl::delegate<void()> pose_reached_cb_;
 };
 
 } // namespace motion_control

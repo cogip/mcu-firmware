@@ -48,6 +48,9 @@ void MotorEngine::set_target_distance(const float target_distance)
     // Set new target flag for profile tracker recomputation
     new_target_ = true;
 
+    // Reset previous pose reached for log deduplication
+    previous_pose_reached_ = target_pose_status_t::moving;
+
     mutex_unlock(&mutex_);
 }
 
@@ -116,6 +119,18 @@ void MotorEngine::process_outputs()
         timeout_enable_ = false;
         pose_reached_ = target_pose_status_t::moving;
     }
+
+    // Notify once per target when pose is first reached
+    if (pose_reached_ == target_pose_status_t::reached &&
+        previous_pose_reached_ != target_pose_status_t::reached) {
+        LOG_INFO("MotorEngine: pose reached, current=%.2f target=%.2f\n",
+                 static_cast<double>(odometer_.distance_mm()),
+                 static_cast<double>(target_distance_));
+        if (pose_reached_cb_.is_valid()) {
+            pose_reached_cb_();
+        }
+    }
+    previous_pose_reached_ = pose_reached_;
 
     // Disable the timeout as we want to hold the position
     if ((pose_reached_ == target_pose_status_t::reached) && (timeout_enable_ == true)) {
