@@ -21,7 +21,7 @@ find_exclude=$(echo $find_exclude | tr -s ' ')
 
 echo "=== CLANG-FORMAT CHECK ==="
 
-FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \)" )
+FILES_TO_CHECK=$( sh -c "find . \( $find_exclude \) -a \( -name '*.c' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \)" )
 for FILE in ${FILES_TO_CHECK}; do
     if [ -z "$apply" ]; then
         clang-format $FILE | diff --color -u $FILE -
@@ -39,7 +39,7 @@ done
 
 echo "=== CPPCHECK CHECK ==="
 
-FILES_TO_CHECK=$( sh -c "find \( $find_exclude \) -a \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' \)" )
+FILES_TO_CHECK=$( sh -c "find . \( $find_exclude \) -a \( -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' \)" )
 cppcheck --std=c++17 --enable=style,performance,portability --force --error-exitcode=2 --quiet -j 1 \
     --check-level=exhaustive \
     --template="{file}:{line}: {severity} ({id}): {message}"         \
