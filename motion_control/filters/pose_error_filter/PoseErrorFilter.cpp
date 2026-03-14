@@ -12,6 +12,8 @@
 // System includes
 #include <cmath>
 
+#include "etl/absolute.h"
+
 // Project includes
 #include "log.h"
 #include "pose_error_filter/PoseErrorFilter.hpp"
@@ -57,12 +59,12 @@ void PoseErrorFilter::execute_linear(ControllersIO& io, float& pose_error)
 
     // Determine direction (bidirectional: choose optimal direction)
     // Compute angle from robot to target
-    float angle_to_target = std::atan2(dy, dx) * 180.0f / static_cast<float>(M_PI);
+    float angle_to_target = std::atan2(dy, dx) * 180.0f / etl::math::pi;
     // Compute angle difference with current heading
     float angle_diff = limit_angle_deg(angle_to_target - current_O);
 
     // If target is behind (|angle_diff| > 90°), go backward (negative distance)
-    if (std::fabs(angle_diff) > 90.0f) {
+    if (etl::absolute(angle_diff) > 90.0f) {
         pose_error = -distance;
     } else {
         pose_error = distance;

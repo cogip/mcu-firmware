@@ -304,7 +304,7 @@ void pf_send_encoder_telemetry(void)
     cogip::telemetry::Telemetry::send<int64_t>("encoder_right"_key_hash, right_encoder.counter());
 }
 
-void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+void pf_handle_brake([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
 {
     pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(0, 0));
 
@@ -313,7 +313,7 @@ void pf_handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
     quadpid_tracker_chain::pose_straight_filter.force_finished_state();
 }
 
-void pf_handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+void pf_handle_game_end([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
 {
     pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(0, 0));
 
@@ -470,7 +470,7 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
     LOG_INFO("[START_POSE] Localization updated, path stopped\n");
 }
 
-void pf_handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+void pf_handle_path_reset([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
 {
     LOG_INFO("[PATH_RESET] Clearing path\n");
     motion_control_path.reset();
@@ -499,7 +499,7 @@ void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer)
     }
 }
 
-void pf_handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+void pf_handle_path_start([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
 {
     LOG_INFO("[PATH_START] Starting path execution with %u waypoints\n",
              static_cast<unsigned>(motion_control_path.size()));
