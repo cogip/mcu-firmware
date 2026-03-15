@@ -580,6 +580,9 @@ void pf_motion_control_reset_controllers(void)
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
         quadpid_tracker_chain::reset();
         break;
+    case static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING):
+        tracker_speed_tuning_chain::meta_controller.reset();
+        break;
     default:
         break;
     }
