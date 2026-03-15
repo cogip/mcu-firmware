@@ -92,6 +92,14 @@ void PlatformEngine::prepare_inputs()
 
 void PlatformEngine::process_outputs()
 {
+    // On timeout, stop motors immediately and notify platform
+    if (pose_reached_ == target_pose_status_t::timeout) {
+        cogip_defs::Polar zero_command(0, 0);
+        drive_contoller_.set_polar_velocity(zero_command);
+        pose_reached_cb_(pose_reached_);
+        return;
+    }
+
     // Sync target_pose_ with current path waypoint to keep it up-to-date
     // This ensures target_pose_ reflects the current target including is_intermediate flag
     const path::Path& path = path_;

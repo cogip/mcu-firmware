@@ -76,6 +76,9 @@ inline float angular_error_deg(float target_deg, float current_deg)
     return RAD2DEG(std::atan2(std::sin(delta_rad), std::cos(delta_rad)));
 }
 
+#ifdef __cplusplus
+} // extern "C"
+
 /// @brief Enforce angle continuity by detecting 360° jumps
 ///
 /// Applies continuity enforcement to an existing angle value to prevent
@@ -114,8 +117,5 @@ inline float angular_error_with_continuity_deg(float target_deg, float current_d
 {
     float raw_error = angular_error_deg(target_deg, current_deg);
     return enforce_angle_continuity_deg(raw_error, previous_error);
-}
-
-#ifdef __cplusplus
 }
 #endif

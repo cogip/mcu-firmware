@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace cogip {
 
 namespace motion_control {
@@ -18,6 +20,7 @@ namespace motion_control {
 /// Telemetry controller parameters
 struct TelemetryControllerParameters
 {
+    uint32_t loop_period_ms; ///< Motion control loop period (ms), for unit conversion
 };
 
 } // namespace motion_control

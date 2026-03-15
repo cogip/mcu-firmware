@@ -92,6 +92,14 @@ class ProfileTrackerController
     void execute(ControllersIO& io) override;
 
   private:
+    /// @brief Execute speed mode (target_speed + duration_periods)
+    void execute_speed_mode(ControllersIO& io);
+
+    /// @brief Generate a trapezoidal profile and reset period counter
+    /// @return true if profile was generated, false if generation failed
+    bool generate_profile(float target_distance, float initial_speed, float max_speed,
+                          bool must_stop);
+
     TrapezoidalProfile profile_; ///< Trapezoidal velocity profile generator
     uint32_t period_;            ///< Current period counter
 };

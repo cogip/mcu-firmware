@@ -89,25 +89,28 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period =
 /// @}
 
 /// Handle brake signal to stop the robot
-void pf_handle_brake(cogip::canpb::ReadBuffer& buffer);
+void pf_handle_brake(const cogip::canpb::ReadBuffer& buffer);
 
 /// Handle game end signal to stop the robot
-void pf_handle_game_end(cogip::canpb::ReadBuffer& buffer);
+void pf_handle_game_end(const cogip::canpb::ReadBuffer& buffer);
 
 /// Get pose to reach from protobuf message
 void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer);
+
+/// Handle speed order for speed PID tuning (requires active speed tuning chain)
+void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer);
 
 /// Get start pose from protobuf message
 void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer);
 
 /// Reset the path (clear all waypoints)
-void pf_handle_path_reset(cogip::canpb::ReadBuffer& buffer);
+void pf_handle_path_reset(const cogip::canpb::ReadBuffer& buffer);
 
 /// Add a waypoint to the path
 void pf_handle_path_add_point(cogip::canpb::ReadBuffer& buffer);
 
 /// Start path execution
-void pf_handle_path_start(cogip::canpb::ReadBuffer& buffer);
+void pf_handle_path_start(const cogip::canpb::ReadBuffer& buffer);
 
 /// Initialize motion control
 void pf_init_motion_control(void);

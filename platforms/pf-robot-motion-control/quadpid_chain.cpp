@@ -56,8 +56,10 @@ cogip::motion_control::QuadPIDMetaController* init()
     speed_loop_polar_parallel_meta_controller.add_controller(&angular_speed_loop_meta_controller);
 
     // QuadPIDMetaController:
-    // PathManagerFilter -> ThrottledController(pose_loop_meta_controller, 10) -> Speed loop
+    // PathManagerFilter -> TargetChangeDetector -> ThrottledController(pose_loop_meta_controller,
+    // 10) -> Speed loop
     quadpid_meta_controller.add_controller(&path_manager_filter);
+    quadpid_meta_controller.add_controller(&target_change_detector);
     quadpid_meta_controller.add_controller(&throttled_pose_loop_controllers);
     quadpid_meta_controller.add_controller(&speed_loop_polar_parallel_meta_controller);
 

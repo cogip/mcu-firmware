@@ -67,36 +67,6 @@ inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{13};
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_ki{1};
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_kd{0};
 
-// ============================================================================
-// Corrector pose PID gains (QUADPID_TRACKER - direct branch)
-// Used when tracker profile is invalidated to reach target position
-// ============================================================================
-
-// Corrector linear pose PID (used when linear profile is invalidated)
-inline Parameter<float, NonNegative> corrector_linear_pose_pid_kp{1};
-inline Parameter<float, NonNegative> corrector_linear_pose_pid_ki{0};
-inline Parameter<float, NonNegative> corrector_linear_pose_pid_kd{0};
-// Corrector angular pose PID (used when angular profile is invalidated)
-// Also used for heading maintenance during MOVE_TO_POSITION
-inline Parameter<float, NonNegative> corrector_angular_pose_pid_kp{1};
-inline Parameter<float, NonNegative> corrector_angular_pose_pid_ki{0};
-inline Parameter<float, NonNegative> corrector_angular_pose_pid_kd{0};
-
-// ============================================================================
-// Corrector speed PID gains (QUADPID_TRACKER - direct branch)
-// Used in speed loop when profile is invalidated (separate from tracker PIDs)
-// ============================================================================
-
-// Corrector linear speed PID (used in direct mode speed loop)
-inline Parameter<float, NonNegative> corrector_linear_speed_pid_kp{10};
-inline Parameter<float, NonNegative> corrector_linear_speed_pid_ki{1};
-inline Parameter<float, NonNegative> corrector_linear_speed_pid_kd{0};
-
-// Corrector angular speed PID (used in direct mode speed loop)
-inline Parameter<float, NonNegative> corrector_angular_speed_pid_kp{13};
-inline Parameter<float, NonNegative> corrector_angular_speed_pid_ki{1};
-inline Parameter<float, NonNegative> corrector_angular_speed_pid_kd{0};
-
 // Linear threshold
 constexpr float linear_threshold = 5;
 // Angular threshold
@@ -105,7 +75,6 @@ constexpr float angular_threshold = 5;
 // to its destination)
 constexpr float angular_intermediate_threshold = 5;
 
-// TODO:
 constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 12.5;
 constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
@@ -151,20 +120,6 @@ inline Parameter<float, NonNegative> tracker_linear_speed_pid_integral_limit{
 // Tracker angular speed PID integral limit
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
     max_speed_deg_per_s / tracker_angular_speed_pid_ki.get()};
-
-// Corrector linear pose PID integral limit
-inline Parameter<float, NonNegative> corrector_linear_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
-// Corrector angular pose PID integral limit
-inline Parameter<float, NonNegative> corrector_angular_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
-
-// Corrector linear speed PID integral limit
-inline Parameter<float, NonNegative> corrector_linear_speed_pid_integral_limit{
-    max_speed_mm_per_s / corrector_linear_speed_pid_ki.get()};
-// Corrector angular speed PID integral limit
-inline Parameter<float, NonNegative> corrector_angular_speed_pid_integral_limit{
-    max_speed_deg_per_s / corrector_angular_speed_pid_ki.get()};
 
 // Linear antiblocking
 constexpr bool platform_linear_antiblocking = false;
