@@ -27,6 +27,7 @@
 #include "canpb/ReadBuffer.hpp"
 
 // Import protobuf messages (generated files will be in the build directory)
+#include "PB_EmergencyStop.hpp"
 #include "PB_PowerSupply.hpp"
 
 namespace cogip {

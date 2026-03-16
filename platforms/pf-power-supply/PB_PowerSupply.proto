@@ -7,10 +7,6 @@ message PB_PowerRailsStatus {
     bool pxVx_pgood = 4;       // Variable voltage power good status (true = OK, false = fault)
 }
 
-message PB_EmergencyStopStatus {
-    bool emergency_stop = 1;   // Emergency stop button status (true = released, false = engaged)
-}
-
 message PB_PowerSourceStatus {
     bool battery_valid = 1;    // Battery validity status (true = connected, false = disconnected)
     bool dc_supply_valid = 2;  // DC supply validity status (true = connected, false = disconnected)
