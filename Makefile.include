@@ -51,6 +51,15 @@ CXXEXFLAGS += -std=c++17
 CXXEXFLAGS += -Wno-pedantic
 CXXEXFLAGS += -Wno-cast-align
 
+# MCU firmware version: <application>@<branch-name>-g<short-sha>[-dirty]
+MCU_FW_GIT_VERSION := $(shell git describe --long --tags --always --dirty --all | sed -E -e 's/^(heads|tags)\///' -e 's/^remotes\/origin\///' -e 's/\//-/g')
+MCU_FW_BUILD_VERSION ?= $(MCU_FW_GIT_VERSION)
+CFLAGS += -DMCU_FIRMWARE_BUILD_VERSION_STRING=\"$(MCU_FW_BUILD_VERSION)\"
+
+.PHONY: print-build-fw-version
+print-build-fw-version:
+	@echo "$(MCU_FW_BUILD_VERSION)"
+
 # Export mcu-firmware global variables
 include $(MCUFIRMWAREBASE)/makefiles/global_vars.mk.inc
 
