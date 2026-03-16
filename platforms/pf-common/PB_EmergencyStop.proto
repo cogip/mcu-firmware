@@ -1,5 +1,5 @@
 syntax = "proto3";
 
 message PB_EmergencyStopStatus {
-    bool emergency_stop = 1;   // Emergency stop button status (true = released, false = engaged)
+    bool emergency_stop_engaged = 1;   // Emergency stop status (true = engaged, false = released)
 }

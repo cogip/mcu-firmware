@@ -164,7 +164,7 @@ void send_emergency_stop_status(void)
     PB_EmergencyStopStatus pb_status;
 
     mutex_lock(&_gpio_states_mutex);
-    pb_status.set_emergency_stop(gpio_states_.emergency_stop);
+    pb_status.set_emergency_stop_engaged(!gpio_states_.emergency_stop);
     mutex_unlock(&_gpio_states_mutex);
 
     // Send message
