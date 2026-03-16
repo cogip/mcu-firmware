@@ -14,6 +14,7 @@
 #include <msg.h>
 #include <mutex.h>
 #include <thread.h>
+#include <ztimer.h>
 
 // Platform includes
 #include "pf_power_supply.hpp"
@@ -51,6 +52,10 @@ struct gpio_info_t
     bool& state_ref;        ///< Reference to the boolean state variable
     const char* name;       ///< Human-readable name for logging
 };
+
+/// Emergency stop periodic send period in milliseconds (configured via Kconfig)
+static constexpr uint32_t _emergency_stop_send_period_msec =
+    CONFIG_POWER_SUPPLY_EMERGENCY_STOP_SEND_PERIOD_MSEC;
 
 /// GPIOs handler thread stack
 static char _gpio_handling_thread_stack[THREAD_STACKSIZE_DEFAULT];
@@ -252,41 +257,57 @@ static void* _gpio_handling_thread([[maybe_unused]] void* args)
     }
 
     while (1) {
-        // Wait for messages from GPIO ISR callbacks
-        msg_receive(&msg);
+        // Wait for messages from GPIO ISR callbacks with timeout for periodic emergency stop
+        // sending
+        int ret = ztimer_msg_receive_timeout(ZTIMER_MSEC, &msg, _emergency_stop_send_period_msec);
+        if (ret >= 0) {
+            // GPIO change message received, handle it
+            gpio_index_t gpio_index = (gpio_index_t)msg.type;
 
-        // Handle GPIO change based on message type (gpio_index_t)
-        gpio_index_t gpio_index = (gpio_index_t)msg.type;
+            if (gpio_index < _gpio_infos_count) {
+                // Update the state by reading the GPIO with mutex protection
+                bool new_state = _gpio_infos[gpio_index].gpio.read();
 
-        if (gpio_index < _gpio_infos_count) {
-            // Update the state by reading the GPIO with mutex protection
-            bool new_state = _gpio_infos[gpio_index].gpio.read();
+                mutex_lock(&_gpio_states_mutex);
+                _gpio_infos[gpio_index].state_ref = new_state;
+                mutex_unlock(&_gpio_states_mutex);
 
-            mutex_lock(&_gpio_states_mutex);
-            _gpio_infos[gpio_index].state_ref = new_state;
-            mutex_unlock(&_gpio_states_mutex);
+                // Sending can events based on GPIO type
+                switch (gpio_index) {
+                case GPIO_INDEX_BATTERY_VALID_N:
+                case GPIO_INDEX_DC_SUPPLY_VALID_N:
+                    send_power_source_status();
+                    break;
+                case GPIO_INDEX_EMERGENCY_STOP:
+                    send_emergency_stop_status();
+                    break;
+                case GPIO_INDEX_P3V3_PGOOD:
+                case GPIO_INDEX_P5V0_PGOOD:
+                case GPIO_INDEX_P7V5_PGOOD:
+                case GPIO_INDEX_PxVx_PGOOD:
+                    send_power_rails_status();
+                    break;
+                default:
+                    break;
+                }
 
-            // Sending can events based on GPIO type
-            switch (gpio_index) {
-            case GPIO_INDEX_BATTERY_VALID_N:
-            case GPIO_INDEX_DC_SUPPLY_VALID_N:
-                send_power_source_status();
-                break;
-            case GPIO_INDEX_EMERGENCY_STOP:
-                send_emergency_stop_status();
-                break;
-            case GPIO_INDEX_P3V3_PGOOD:
-            case GPIO_INDEX_P5V0_PGOOD:
-            case GPIO_INDEX_P7V5_PGOOD:
-            case GPIO_INDEX_PxVx_PGOOD:
-                send_power_rails_status();
-                break;
-            default:
-                break;
+                // Display the state change for this specific GPIO
+                display_gpio_state(gpio_index, new_state, _gpio_infos[gpio_index].name);
             }
+        }
 
-            // Display the state change for this specific GPIO
-            display_gpio_state(gpio_index, new_state, _gpio_infos[gpio_index].name);
+        // Periodically resend fault statuses when a fault condition is active
+        mutex_lock(&_gpio_states_mutex);
+        bool emergency_stop_engaged = !gpio_states_.emergency_stop;
+        bool power_rail_fault = (!gpio_states_.p3V3_pgood || !gpio_states_.p5V0_pgood ||
+                                 !gpio_states_.p7V5_pgood || !gpio_states_.pxVx_pgood);
+        mutex_unlock(&_gpio_states_mutex);
+
+        if (emergency_stop_engaged) {
+            send_emergency_stop_status();
+        }
+        if (power_rail_fault) {
+            send_power_rails_status();
         }
     }
 
