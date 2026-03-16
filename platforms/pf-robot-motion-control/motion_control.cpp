@@ -325,6 +325,9 @@ void pf_handle_game_end([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
     case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
         quadpid_tracker_chain::reset();
         break;
+    case static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING):
+        tracker_speed_tuning_chain::meta_controller.reset();
+        break;
     default:
         break;
     }
