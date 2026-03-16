@@ -193,8 +193,8 @@ static void _handle_emergency_stop(cogip::canpb::ReadBuffer& buffer)
                   static_cast<int>(error));
         return;
     }
-    if (!pb_status.get_emergency_stop()) {
-        // Emergency stop engaged - reset like game_end
+
+    if (pb_status.get_emergency_stop_engaged()) {
         cogip::pf::motion_control::pf_handle_game_end(buffer);
     }
 }

@@ -9,6 +9,9 @@
 /* Platform includes */
 #include "pf_actuators.hpp"
 
+/* Protobuf includes */
+#include "PB_EmergencyStop.hpp"
+
 /// Start game message handler
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
@@ -21,10 +24,25 @@ static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer
     cogip::pf::actuators::enable_all();
 }
 
-/// Start threading sending actuators state.
+/// End game message handler
 static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     cogip::pf::actuators::disable_all();
+}
+
+/// Emergency stop status message handler
+static void _handle_emergency_stop(cogip::canpb::ReadBuffer& buffer)
+{
+    PB_EmergencyStopStatus pb_status;
+    EmbeddedProto::Error error = pb_status.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Emergency stop status: Protobuf deserialization error: %d\n",
+                  static_cast<int>(error));
+        return;
+    }
+    if (pb_status.get_emergency_stop_engaged()) {
+        cogip::pf::actuators::disable_all();
+    }
 }
 
 void pf_init(void)
@@ -43,6 +61,9 @@ void pf_init(void)
             game_start_uuid, cogip::canpb::message_handler_t::create<_handle_game_start>());
         canpb.register_message_handler(game_end_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_game_end>());
+        canpb.register_message_handler(
+            emergency_stop_status_uuid,
+            cogip::canpb::message_handler_t::create<_handle_emergency_stop>());
     }
 
     cogip::pf::actuators::init();
