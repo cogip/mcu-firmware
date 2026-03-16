@@ -1,8 +1,12 @@
 #include "app.hpp"
 #include "platform.hpp"
 
+#include "log.h"
+
 int main(void)
 {
+    LOG_INFO("FW version: %s\n", MCU_FIRMWARE_BUILD_VERSION_STRING);
+
     pf_init();
     app_init();
 
