@@ -54,6 +54,21 @@ class ParameterBase
     /// Declared const because consumers typically keep read-only
     /// references to parameters they poll.
     virtual void clear_changed() const = 0;
+
+    /// @brief Load value from persistent storage (if a storage policy is present)
+    /// @return true if a value was successfully loaded and passed validation
+    /// @note Default implementation returns true (no storage means nothing to load).
+    virtual bool load()
+    {
+        return true;
+    }
+
+    /// @brief Erase persisted value and restore the compile-time default in memory
+    /// @note Clears the persisted storage (if a storage policy is present), then restores
+    ///       the initial value captured at construction, re-applies validation/commit
+    ///       policies and marks the parameter as changed so consumers pick it up.
+    ///       Default implementation is a no-op (parameters without a default cannot reset).
+    virtual void reset() {}
 };
 
 /// @brief Typed interface for polymorphic parameter manipulation

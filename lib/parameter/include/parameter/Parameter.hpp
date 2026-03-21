@@ -58,7 +58,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
 
   public:
     /// @brief Default constructor - initializes with invalid state
-    Parameter() : value_{}, valid_(false), changed_(true), mutex_(MUTEX_INIT)
+    Parameter() : value_{}, default_value_{}, valid_(false), changed_(true), mutex_(MUTEX_INIT)
     {
         mutex_init(&mutex_);
     }
@@ -66,7 +66,8 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     /// @brief Constructor with initial value
     /// @param initial_value The initial value (will be processed through all policies)
     explicit Parameter(const T& initial_value)
-        : value_(initial_value), valid_(false), changed_(true), mutex_(MUTEX_INIT)
+        : value_(initial_value), default_value_(initial_value), valid_(false), changed_(true),
+          mutex_(MUTEX_INIT)
     {
         mutex_init(&mutex_);
         valid_ = combined_on_set<T, Policies...>(value_);
@@ -77,15 +78,21 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     /// @return true if value was set successfully (all policies returned true)
     bool set(const T& value) override
     {
-        mutex_lock(&mutex_);
         T temp = value;
+
+        mutex_lock(&mutex_);
         valid_ = combined_on_set<T, Policies...>(temp);
         if (valid_) {
             value_ = temp;
             changed_ = true;
         }
+        const bool result = valid_;
         mutex_unlock(&mutex_);
-        return valid_;
+
+        if (result) {
+            combined_on_commit<T, Policies...>(temp);
+        }
+        return result;
     }
 
     /// @brief Check whether the value has changed since the last clear_changed().
@@ -102,6 +109,45 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     {
         mutex_lock(&mutex_);
         changed_ = false;
+        mutex_unlock(&mutex_);
+    }
+
+    /// @brief Load value from persistent storage and re-validate
+    /// @return true if load succeeded (or no storage policy exists)
+    /// @note If flash contains a value that fails validation, the default is kept
+    ///       and load returns false. If no storage policy or no stored value,
+    ///       the default is kept and load returns true.
+    bool load() override
+    {
+        mutex_lock(&mutex_);
+        T temp = value_;
+        bool result = true;
+        if (combined_on_init<T, Policies...>(temp)) {
+            // A value was read from flash — validate it
+            if (combined_on_set<T, Policies...>(temp)) {
+                value_ = temp;
+                valid_ = true;
+            } else {
+                // Flash value rejected by validation, keep default
+                result = false;
+            }
+        }
+        // No storage policy or no stored value → keep default (success)
+        mutex_unlock(&mutex_);
+        return result;
+    }
+
+    /// @brief Erase persisted value and restore the compile-time default in memory
+    /// @note Fires the storage policy's on_clear hook (erases the flash entry),
+    ///       restores the value captured at construction, re-applies validation /
+    ///       commit policies and marks the parameter as changed.
+    void reset() override
+    {
+        mutex_lock(&mutex_);
+        combined_on_clear<Policies...>();
+        value_ = default_value_;
+        valid_ = combined_on_set<T, Policies...>(value_);
+        changed_ = true;
         mutex_unlock(&mutex_);
     }
 
@@ -214,6 +260,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
 
   private:
     T value_;               ///< Parameter value
+    const T default_value_; ///< Compile-time default captured at construction, used by reset()
     bool valid_;            ///< Validity flag
     mutable bool changed_;  ///< True if value was (re)set since the last clear_changed()
     mutable mutex_t mutex_; ///< Mutex for thread-safe access
