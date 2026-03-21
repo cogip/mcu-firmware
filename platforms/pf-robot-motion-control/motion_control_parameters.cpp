@@ -74,6 +74,19 @@ static const ParameterHandlerType::Registry registry = {
     {TRACKER_ANGULAR_SPEED_PID_KP_KEY, tracker_angular_speed_pid_kp},
     {TRACKER_ANGULAR_SPEED_PID_KI_KEY, tracker_angular_speed_pid_ki},
     {TRACKER_ANGULAR_SPEED_PID_KD_KEY, tracker_angular_speed_pid_kd},
+    /// Pose straight filter thresholds
+    {LINEAR_THRESHOLD_KEY, param_linear_threshold},
+    {ANGULAR_THRESHOLD_KEY, param_angular_threshold},
+    {ANGULAR_INTERMEDIATE_THRESHOLD_KEY, param_angular_intermediate_threshold},
+    /// Speed and acceleration limits
+    {MIN_SPEED_LINEAR_KEY, param_min_speed_linear},
+    {MAX_SPEED_LINEAR_KEY, param_max_speed_linear},
+    {MAX_ACC_LINEAR_KEY, param_max_acc_linear},
+    {MAX_DEC_LINEAR_KEY, param_max_dec_linear},
+    {MIN_SPEED_ANGULAR_KEY, param_min_speed_angular},
+    {MAX_SPEED_ANGULAR_KEY, param_max_speed_angular},
+    {MAX_ACC_ANGULAR_KEY, param_max_acc_angular},
+    {MAX_DEC_ANGULAR_KEY, param_max_dec_angular},
 };
 
 static ParameterHandlerType parameter_handler(registry);
