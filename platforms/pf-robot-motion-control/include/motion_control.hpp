@@ -1,7 +1,7 @@
 #pragma once
 
 // Project includes
-#include "app_conf.hpp"
+#include "motion_control_parameters.hpp"
 #include "path/Path.hpp"
 #include "platform.hpp"
 
