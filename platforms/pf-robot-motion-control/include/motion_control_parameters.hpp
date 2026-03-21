@@ -16,6 +16,7 @@
 #include "KeyHash.hpp"
 #include "app_conf.hpp"
 #include "canpb/ReadBuffer.hpp"
+#include "parameter/ConversionPolicies.hpp"
 #include "parameter/Parameter.hpp"
 #include "parameter/StoragePolicies.hpp"
 
@@ -51,6 +52,21 @@ constexpr uint32_t ANGULAR_SPEED_PID_KP_KEY = "angular_speed_pid_kp"_key_hash;
 constexpr uint32_t ANGULAR_SPEED_PID_KI_KEY = "angular_speed_pid_ki"_key_hash;
 constexpr uint32_t ANGULAR_SPEED_PID_KD_KEY = "angular_speed_pid_kd"_key_hash;
 
+// Pose straight filter thresholds
+constexpr uint32_t LINEAR_THRESHOLD_KEY = "linear_threshold"_key_hash;
+constexpr uint32_t ANGULAR_THRESHOLD_KEY = "angular_threshold"_key_hash;
+constexpr uint32_t ANGULAR_INTERMEDIATE_THRESHOLD_KEY = "angular_intermediate_threshold"_key_hash;
+
+// Speed and acceleration limits
+constexpr uint32_t MIN_SPEED_LINEAR_KEY = "min_speed_linear"_key_hash;
+constexpr uint32_t MAX_SPEED_LINEAR_KEY = "max_speed_linear"_key_hash;
+constexpr uint32_t MAX_ACC_LINEAR_KEY = "max_acc_linear"_key_hash;
+constexpr uint32_t MAX_DEC_LINEAR_KEY = "max_dec_linear"_key_hash;
+constexpr uint32_t MIN_SPEED_ANGULAR_KEY = "min_speed_angular"_key_hash;
+constexpr uint32_t MAX_SPEED_ANGULAR_KEY = "max_speed_angular"_key_hash;
+constexpr uint32_t MAX_ACC_ANGULAR_KEY = "max_acc_angular"_key_hash;
+constexpr uint32_t MAX_DEC_ANGULAR_KEY = "max_dec_angular"_key_hash;
+
 // Tracker linear pose PID
 constexpr uint32_t TRACKER_LINEAR_POSE_PID_KP_KEY = "tracker_linear_pose_pid_kp"_key_hash;
 constexpr uint32_t TRACKER_LINEAR_POSE_PID_KI_KEY = "tracker_linear_pose_pid_ki"_key_hash;
@@ -67,6 +83,63 @@ constexpr uint32_t TRACKER_LINEAR_SPEED_PID_KD_KEY = "tracker_linear_speed_pid_k
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KP_KEY = "tracker_angular_speed_pid_kp"_key_hash;
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KI_KEY = "tracker_angular_speed_pid_ki"_key_hash;
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KD_KEY = "tracker_angular_speed_pid_kd"_key_hash;
+
+// ============================================================================
+// Unit conversion macros and control loop period
+// ============================================================================
+
+/// Conversion macro from speed in x/s to x/period (eg. mm/s or rad/s)
+#define X_SEC_TO_X_PERIOD(speed, period) (((speed) * (period)) / 1000.0)
+/// Conversion macro from acceleration in x/s² to x/period² (eg. mm/s² or rad/s²)
+#define X_SEC2_TO_X_PERIOD2(acc, period) ((acc) * (((period) * (period)) / (1000.0 * 1000.0)))
+
+namespace cogip {
+namespace pf {
+namespace motion_control {
+
+constexpr uint16_t motion_control_thread_period_ms = 20; ///< controller thread loop period
+
+/// @name Platform speed/acceleration constexpr (per-period units, derived from app_conf.hpp)
+/// @{
+constexpr float platform_max_acc_linear_mm_per_period2 =
+    X_SEC2_TO_X_PERIOD2(max_acc_mm_per_s2, motion_control_thread_period_ms);
+constexpr float platform_max_dec_linear_mm_per_period2 =
+    X_SEC2_TO_X_PERIOD2(max_dec_mm_per_s2, motion_control_thread_period_ms);
+constexpr float platform_min_speed_linear_mm_per_period =
+    X_SEC_TO_X_PERIOD(min_speed_mm_per_s, motion_control_thread_period_ms);
+constexpr float platform_max_speed_linear_mm_per_period =
+    X_SEC_TO_X_PERIOD(max_speed_mm_per_s, motion_control_thread_period_ms);
+constexpr float platform_low_speed_linear_mm_per_period =
+    (platform_max_speed_linear_mm_per_period / 4);
+constexpr float platform_normal_speed_linear_mm_per_period =
+    (platform_max_speed_linear_mm_per_period / 2);
+
+constexpr float platform_max_acc_angular_deg_per_period2 =
+    X_SEC2_TO_X_PERIOD2(max_acc_deg_per_s2, motion_control_thread_period_ms);
+constexpr float platform_max_dec_angular_deg_per_period2 =
+    X_SEC2_TO_X_PERIOD2(max_dec_deg_per_s2, motion_control_thread_period_ms);
+constexpr float platform_min_speed_angular_deg_per_period =
+    X_SEC_TO_X_PERIOD(min_speed_deg_per_s, motion_control_thread_period_ms);
+constexpr float platform_max_speed_angular_deg_per_period =
+    X_SEC_TO_X_PERIOD(max_speed_deg_per_s, motion_control_thread_period_ms);
+constexpr float platform_low_speed_angular_deg_per_period =
+    (platform_max_speed_angular_deg_per_period / 4);
+constexpr float platform_normal_speed_angular_deg_per_period =
+    (platform_max_speed_angular_deg_per_period / 2);
+
+constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_period =
+    (motion_control_thread_period_ms * platform_linear_anti_blocking_speed_threshold_mm_per_s) /
+    1000;
+constexpr double platform_linear_anti_blocking_error_threshold_mm_per_period =
+    (motion_control_thread_period_ms * platform_linear_anti_blocking_error_threshold_mm_per_s) /
+    1000;
+/// @}
+
+} // namespace motion_control
+} // namespace pf
+} // namespace cogip
+
+using namespace cogip::pf::motion_control;
 
 // ============================================================================
 // Parameter objects (default values from robot-specific app_conf.hpp)
@@ -127,6 +200,23 @@ inline Parameter<float, NonNegative> tracker_linear_pose_pid_integral_limit{defa
 inline Parameter<float, NonNegative> tracker_angular_pose_pid_integral_limit{default_tracker_angular_pose_pid_integral_limit};
 inline Parameter<float, NonNegative> tracker_linear_speed_pid_integral_limit{default_tracker_linear_speed_pid_integral_limit};
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{default_tracker_angular_speed_pid_integral_limit};
+
+// Pose straight filter thresholds (absolute units: mm, deg)
+inline Parameter<float, Clamp<1, 10>, WithFlashStorage<LINEAR_THRESHOLD_KEY>> param_linear_threshold{linear_threshold};
+inline Parameter<float, Clamp<1, 5>, WithFlashStorage<ANGULAR_THRESHOLD_KEY>> param_angular_threshold{angular_threshold};
+inline Parameter<float, Clamp<1, 5>, WithFlashStorage<ANGULAR_INTERMEDIATE_THRESHOLD_KEY>> param_angular_intermediate_threshold{angular_intermediate_threshold};
+
+// Speed limits (internal: /period, protobuf: /s)
+inline Parameter<float, NonNegative, SpeedConversion<motion_control_thread_period_ms>> param_min_speed_linear{platform_min_speed_linear_mm_per_period};
+inline Parameter<float, NonNegative, SpeedConversion<motion_control_thread_period_ms>> param_max_speed_linear{platform_max_speed_linear_mm_per_period};
+inline Parameter<float, NonNegative, SpeedConversion<motion_control_thread_period_ms>> param_min_speed_angular{platform_min_speed_angular_deg_per_period};
+inline Parameter<float, NonNegative, SpeedConversion<motion_control_thread_period_ms>> param_max_speed_angular{platform_max_speed_angular_deg_per_period};
+
+// Acceleration/deceleration limits (internal: /period², protobuf: /s²)
+inline Parameter<float, NonNegative, AccelerationConversion<motion_control_thread_period_ms>> param_max_acc_linear{platform_max_acc_linear_mm_per_period2};
+inline Parameter<float, NonNegative, AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_linear{platform_max_dec_linear_mm_per_period2};
+inline Parameter<float, NonNegative, AccelerationConversion<motion_control_thread_period_ms>> param_max_acc_angular{platform_max_acc_angular_deg_per_period2};
+inline Parameter<float, NonNegative, AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_angular{platform_max_dec_angular_deg_per_period2};
 // clang-format on
 // ============================================================================
 // Parameter registry handlers (canpb)
