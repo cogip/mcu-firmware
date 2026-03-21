@@ -16,7 +16,9 @@
 #include "etl/array.h"
 #include "etl/map.h"
 #include "etl/string.h"
+#include "flash_kv_storage/FlashKVStorage.hpp"
 #include "parameter/Parameter.hpp"
+#include "parameter/StoragePolicies.hpp"
 
 using namespace cogip::parameter;
 using cogip::utils::operator"" _key_hash;
@@ -38,7 +40,7 @@ static Parameter<float> left_encoder_wheels_diameter_mm{47.8};
 static Parameter<float> right_encoder_wheels_diameter_mm{47.8};
 static Parameter<float> encoder_wheels_distance_mm{275};
 static Parameter<float> encoder_wheels_resolution_pulses{4096 * 4};
-static Parameter<float, WithBounds<0, 500>> max_angular_velocity_deg_s{180.0}; // With validation: 0-500°/s
+static Parameter<float, WithBounds<0, 500>, WithFlashStorage<KEY_MAX_ANGULAR_VELOCITY>> max_angular_velocity_deg_s{180.0}; // With validation + flash persistence
 static Parameter<bool> enable_logging{true};
 
 /// @brief Parameter registry mapping key hashes to parameter references
@@ -95,6 +97,18 @@ localizationParameters parameters(left_encoder_wheels_diameter_mm, right_encoder
 /// @return Always returns 0
 int main(void)
 {
+    // Initialize persistent storage (must happen before load() calls)
+    LOG_INFO("max_angular_velocity before load: %.1f\n", max_angular_velocity_deg_s.get());
+    if (cogip::flash_kv_storage::FlashKVStorage::instance().init() == 0) {
+        LOG_INFO("FlashKVStorage initialized successfully\n");
+        // Reload persistent parameters from flash
+        max_angular_velocity_deg_s.load();
+        LOG_INFO("max_angular_velocity after load: %.1f\n", max_angular_velocity_deg_s.get());
+    } else {
+        LOG_INFO("FlashKVStorage initialization failed\n");
+    }
+    LOG_INFO("\n");
+
     // clang-format off
     LOG_INFO("=== Compile-time Key Hashing ===\n");
     LOG_INFO("- 'left_wheel_diameter'_key_hash:  0x%08" PRIx32 "\n", KEY_LEFT_WHEEL_DIAMETER);
@@ -193,6 +207,41 @@ int main(void)
     LOG_INFO("- parameters.left_encoder_wheels_diameter_mm: %.2f mm\n",
              parameters.left_encoder_wheels_diameter_mm.get());
     LOG_INFO("\n");
+
+    // clang-format off
+    LOG_INFO("=== Flash Persistence (WithFlashStorage policy) ===\n");
+    LOG_INFO("- max_angular_velocity current value: %.1f (valid: %s)\n",
+             max_angular_velocity_deg_s.get(),
+             max_angular_velocity_deg_s.isValid() ? "yes" : "no");
+
+    // Set a new valid value (should be persisted to flash)
+    if (max_angular_velocity_deg_s.set(250.0f)) {
+        LOG_INFO("- Set max_angular_velocity to 250.0: SUCCESS (saved to flash)\n");
+    } else {
+        LOG_INFO("- Set max_angular_velocity to 250.0: FAILED\n");
+    }
+
+    // Try out-of-bounds value (should be rejected, flash NOT updated)
+    if (max_angular_velocity_deg_s.set(600.0f)) {
+        LOG_INFO("- Set max_angular_velocity to 600.0: SUCCESS\n");
+    } else {
+        LOG_INFO("- Set max_angular_velocity to 600.0: FAILED (exceeds upper bound 500, flash NOT updated)\n");
+    }
+    LOG_INFO("- max_angular_velocity after tests: %.1f\n", max_angular_velocity_deg_s.get());
+
+    // Verify persistence by reading back from flash directly
+    float readback = 0.0f;
+    int ret = cogip::flash_kv_storage::FlashKVStorage::instance().load(KEY_MAX_ANGULAR_VELOCITY,
+                                                                       readback);
+    if (ret == 0) {
+        LOG_INFO("- Flash readback: %.1f (matches current value: %s)\n", readback,
+                 (readback == max_angular_velocity_deg_s.get()) ? "yes" : "no");
+    } else {
+        LOG_INFO("- Flash readback: FAILED (no data in flash)\n");
+    }
+
+    LOG_INFO("\n");
+    // clang-format on
 
     // Protobuf conversion demonstration - Generic approach using registry
     // Shows how to build ParameterGetResponse messages (for CAN communication)
