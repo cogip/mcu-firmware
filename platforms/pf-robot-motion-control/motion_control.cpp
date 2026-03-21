@@ -622,6 +622,9 @@ void pf_enable_motion_control()
 
 void pf_init_motion_control(void)
 {
+    // Load parameters from flash persistent storage
+    pf_load_parameters();
+
     // Init motors
     left_motor.init();
     right_motor.init();
