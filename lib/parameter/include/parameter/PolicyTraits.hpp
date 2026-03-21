@@ -112,7 +112,7 @@ struct has_on_clear<Policy, etl::void_t<decltype(Policy::on_clear())>> : etl::tr
 {
 };
 
-/// @brief Invoke on_clear on a single policy (erase from persistent storage)
+/// @brief Invoke on_clear on a single policy (erase persisted value)
 /// @tparam Policy The policy type
 template <typename Policy> void invoke_on_clear()
 {
@@ -192,7 +192,7 @@ template <typename T, typename... Policies> bool combined_on_init(T& value)
     return (detail::invoke_on_init<Policies, T>(value) || ...);
 }
 
-/// @brief Fire on_clear on all policies (erase from persistent storage, fire-and-forget)
+/// @brief Fire on_clear on all policies (erase persisted value, fire-and-forget)
 /// @tparam Policies The policy types to apply
 template <typename... Policies> void combined_on_clear()
 {
