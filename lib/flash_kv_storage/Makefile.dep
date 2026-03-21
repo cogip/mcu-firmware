@@ -1,0 +1,3 @@
+USEMODULE += flashdb_kvdb
+USEMODULE += flashdb_mtd
+USEMODULE += core_mutex
