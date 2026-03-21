@@ -82,9 +82,35 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         valid_ = combined_on_set<T, Policies...>(temp);
         if (valid_) {
             value_ = temp;
+            combined_on_commit<T, Policies...>(value_);
         }
         mutex_unlock(&mutex_);
         return valid_;
+    }
+
+    /// @brief Load value from persistent storage and re-validate
+    /// @return true if load succeeded (or no storage policy exists)
+    /// @note If flash contains a value that fails validation, the default is kept
+    ///       and load returns false. If no storage policy or no stored value,
+    ///       the default is kept and load returns true.
+    bool load() override
+    {
+        mutex_lock(&mutex_);
+        T temp = value_;
+        bool result = true;
+        if (combined_on_init<T, Policies...>(temp)) {
+            // A value was read from flash — validate it
+            if (combined_on_set<T, Policies...>(temp)) {
+                value_ = temp;
+                valid_ = true;
+            } else {
+                // Flash value rejected by validation, keep default
+                result = false;
+            }
+        }
+        // No storage policy or no stored value → keep default (success)
+        mutex_unlock(&mutex_);
+        return result;
     }
 
     /// @brief Get the current parameter value
