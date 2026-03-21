@@ -165,37 +165,36 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     /// message.
     bool pb_copy(PB_ParameterValue& message) const override
     {
-        bool result = false;
-
         mutex_lock(&mutex_);
-        if constexpr (etl::is_same<T, float>::value) {
-            message.set_float_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, double>::value) {
-            message.set_double_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, int32_t>::value) {
-            message.set_int32_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, uint32_t>::value) {
-            message.set_uint32_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, int64_t>::value) {
-            message.set_int64_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, uint64_t>::value) {
-            message.set_uint64_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, bool>::value) {
-            message.set_bool_value(value_);
-            result = true;
-        } else {
-            // Unsupported type (should never happen due to Parameter static_assert)
-            result = false;
-        }
+        T copy = value_;
         mutex_unlock(&mutex_);
 
-        return result;
+        combined_on_pb_copy<T, Policies...>(copy);
+
+        if constexpr (etl::is_same<T, float>::value) {
+            message.set_float_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, double>::value) {
+            message.set_double_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, int32_t>::value) {
+            message.set_int32_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, uint32_t>::value) {
+            message.set_uint32_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, int64_t>::value) {
+            message.set_int64_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, uint64_t>::value) {
+            message.set_uint64_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, bool>::value) {
+            message.set_bool_value(copy);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /// @brief Convert parameter from protobuf PB_ParameterValue message
@@ -233,6 +232,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         }
 
         if (success) {
+            combined_on_pb_read<T, Policies...>(new_value);
             return set(new_value); // Apply validation (set() is already mutex-protected)
         }
         return false;

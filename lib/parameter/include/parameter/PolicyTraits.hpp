@@ -101,6 +101,44 @@ template <typename Policy, typename T> bool invoke_on_init(T& value)
     }
 }
 
+/// @brief Type trait to detect if Policy has on_pb_read(T&) method
+template <typename Policy, typename T, typename = void> struct has_on_pb_read : etl::false_type
+{
+};
+
+template <typename Policy, typename T>
+struct has_on_pb_read<Policy, T, etl::void_t<decltype(Policy::on_pb_read(etl::declval<T&>()))>>
+    : etl::true_type
+{
+};
+
+/// @brief Type trait to detect if Policy has on_pb_copy(T&) method
+template <typename Policy, typename T, typename = void> struct has_on_pb_copy : etl::false_type
+{
+};
+
+template <typename Policy, typename T>
+struct has_on_pb_copy<Policy, T, etl::void_t<decltype(Policy::on_pb_copy(etl::declval<T&>()))>>
+    : etl::true_type
+{
+};
+
+/// @brief Invoke on_pb_read on a single policy (convert user units to internal units)
+template <typename Policy, typename T> void invoke_on_pb_read(T& value)
+{
+    if constexpr (has_on_pb_read<Policy, T>::value) {
+        Policy::on_pb_read(value);
+    }
+}
+
+/// @brief Invoke on_pb_copy on a single policy (convert internal units to user units)
+template <typename Policy, typename T> void invoke_on_pb_copy(T& value)
+{
+    if constexpr (has_on_pb_copy<Policy, T>::value) {
+        Policy::on_pb_copy(value);
+    }
+}
+
 } // namespace detail
 
 /// @brief Combine on_set from all policies using AND semantics
@@ -132,6 +170,24 @@ template <typename T, typename... Policies> void combined_on_commit(const T& val
 template <typename T, typename... Policies> bool combined_on_init(T& value)
 {
     return (detail::invoke_on_init<Policies, T>(value) || ...);
+}
+
+/// @brief Apply on_pb_read from all policies (convert user units to internal units)
+/// @tparam T The parameter value type
+/// @tparam Policies The policy types to apply
+/// @param value Reference to value (modified by conversion policies)
+template <typename T, typename... Policies> void combined_on_pb_read(T& value)
+{
+    (detail::invoke_on_pb_read<Policies, T>(value), ...);
+}
+
+/// @brief Apply on_pb_copy from all policies (convert internal units to user units)
+/// @tparam T The parameter value type
+/// @tparam Policies The policy types to apply
+/// @param value Reference to value (modified by conversion policies)
+template <typename T, typename... Policies> void combined_on_pb_copy(T& value)
+{
+    (detail::invoke_on_pb_copy<Policies, T>(value), ...);
 }
 
 } // namespace parameter
