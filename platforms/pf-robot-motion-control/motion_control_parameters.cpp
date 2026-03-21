@@ -8,8 +8,6 @@
 
 // Project includes
 #include "motion_control_parameters.hpp"
-#include "KeyHash.hpp"
-#include "app_conf.hpp"
 #include "parameter_handler/ParameterHandler.hpp"
 #include "platform.hpp"
 
@@ -17,47 +15,8 @@ namespace cogip {
 namespace pf {
 namespace motion_control {
 
-using namespace cogip::parameter;
-using cogip::utils::operator"" _key_hash;
-
-/// @brief Parameter key hashes for identification
-///
-/// @note Each parameter is identified by a unique 32-bit hash computed from its string key.
-
 /// Maximum number of parameters in the registry
 constexpr size_t MAX_PARAMETERS_NUMBER = 32;
-
-/// Odometry parameters keys
-constexpr uint32_t QDEC_LEFT_POLARITY_KEY = "qdec_left_polarity"_key_hash;
-constexpr uint32_t QDEC_RIGHT_POLARITY_KEY = "qdec_right_polarity"_key_hash;
-constexpr uint32_t LEFT_WHEEL_DIAMETER_KEY = "left_wheel_diameter_mm"_key_hash;
-constexpr uint32_t RIGHT_WHEEL_DIAMETER_KEY = "right_wheel_diameter_mm"_key_hash;
-constexpr uint32_t ENCODER_WHEELS_DISTANCE_KEY = "encoder_wheels_distance_mm"_key_hash;
-constexpr uint32_t ENCODER_WHEELS_RESOLUTION_KEY = "encoder_wheels_resolution_pulses"_key_hash;
-
-// PID parameters keys
-// Linear pose PID
-constexpr uint32_t LINEAR_POSE_PID_KP_KEY = "linear_pose_pid_kp"_key_hash;
-constexpr uint32_t LINEAR_POSE_PID_KI_KEY = "linear_pose_pid_ki"_key_hash;
-constexpr uint32_t LINEAR_POSE_PID_KD_KEY = "linear_pose_pid_kd"_key_hash;
-// Angular pose PID
-constexpr uint32_t ANGULAR_POSE_PID_KP_KEY = "angular_pose_pid_kp"_key_hash;
-constexpr uint32_t ANGULAR_POSE_PID_KI_KEY = "angular_pose_pid_ki"_key_hash;
-constexpr uint32_t ANGULAR_POSE_PID_KD_KEY = "angular_pose_pid_kd"_key_hash;
-// Linear speed PID
-constexpr uint32_t LINEAR_SPEED_PID_KP_KEY = "linear_speed_pid_kp"_key_hash;
-constexpr uint32_t LINEAR_SPEED_PID_KI_KEY = "linear_speed_pid_ki"_key_hash;
-constexpr uint32_t LINEAR_SPEED_PID_KD_KEY = "linear_speed_pid_kd"_key_hash;
-// Angular speed PID
-constexpr uint32_t ANGULAR_SPEED_PID_KP_KEY = "angular_speed_pid_kp"_key_hash;
-constexpr uint32_t ANGULAR_SPEED_PID_KI_KEY = "angular_speed_pid_ki"_key_hash;
-constexpr uint32_t ANGULAR_SPEED_PID_KD_KEY = "angular_speed_pid_kd"_key_hash;
-
-#ifdef ROBOT_HAS_OTOS
-// OTOS localization calibration scalars
-constexpr uint32_t OTOS_LINEAR_SCALAR_KEY = "otos_linear_scalar"_key_hash;
-constexpr uint32_t OTOS_ANGULAR_SCALAR_KEY = "otos_angular_scalar"_key_hash;
-#endif
 
 // Parameter handler type
 using ParameterHandlerType = parameter_handler::ParameterHandler<MAX_PARAMETERS_NUMBER>;
@@ -90,31 +49,20 @@ static const ParameterHandlerType::Registry registry = {
     {ANGULAR_SPEED_PID_KP_KEY, tracker_angular_speed_pid_kp},
     {ANGULAR_SPEED_PID_KI_KEY, tracker_angular_speed_pid_ki},
     {ANGULAR_SPEED_PID_KD_KEY, tracker_angular_speed_pid_kd},
-#ifdef ROBOT_HAS_OTOS
-    /// OTOS localization calibration scalars
-    {OTOS_LINEAR_SCALAR_KEY, otos_linear_scalar},
-    {OTOS_ANGULAR_SCALAR_KEY, otos_angular_scalar},
-#endif
 };
 
 static ParameterHandlerType parameter_handler(registry);
 
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer)
 {
-    auto response = parameter_handler.handle_get(buffer);
-    // Only respond if this board owns the parameter
-    if (response.has_value()) {
-        pf_get_canpb().send_message(parameter_get_response_uuid, &response.value());
-    }
+    PB_ParameterGetResponse response = parameter_handler.handle_get(buffer);
+    pf_get_canpb().send_message(parameter_get_response_uuid, &response);
 }
 
 void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer)
 {
-    auto response = parameter_handler.handle_set(buffer);
-    // Only respond if this board owns the parameter
-    if (response.has_value()) {
-        pf_get_canpb().send_message(parameter_set_response_uuid, &response.value());
-    }
+    PB_ParameterSetResponse response = parameter_handler.handle_set(buffer);
+    pf_get_canpb().send_message(parameter_set_response_uuid, &response);
 }
 
 } // namespace motion_control
