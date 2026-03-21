@@ -8,7 +8,6 @@
 
 // Project includes
 #include "app.hpp"
-#include "app_conf.hpp"
 #include "board.h"
 #include "drive_controller/DifferentialDriveController.hpp"
 #include "drive_controller/DifferentialDriveControllerParameters.hpp"
