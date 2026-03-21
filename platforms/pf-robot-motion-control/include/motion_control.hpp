@@ -17,18 +17,6 @@ namespace motion_control {
 /// rad/s²)
 #define X_SEC2_TO_X_PERIOD2(acc, period) ((acc) * (((period) * (period)) / (1000.0 * 1000.0)))
 
-typedef uint8_t pid_id_t;
-
-/// PID ids
-constexpr auto START_LINE = __LINE__;
-enum class PidEnum : pid_id_t {
-    LINEAR_POSE_PID = 1,
-    ANGULAR_POSE_PID = 2,
-    LINEAR_SPEED_PID = 3,
-    ANGULAR_SPEED_PID = 4
-};
-constexpr auto PID_COUNT = __LINE__ - START_LINE - 3;
-
 constexpr uint16_t motion_control_thread_period_ms = 20; ///< controller thread loop period
 
 /// Path instance for waypoint navigation
