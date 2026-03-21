@@ -15,7 +15,6 @@
 #include "acceleration_filter/AccelerationFilterParameters.hpp"
 #include "anti_blocking_controller/AntiBlockingController.hpp"
 #include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
-#include "app_conf.hpp"
 #include "conditional_switch_meta_controller/ConditionalSwitchMetaController.hpp"
 #include "deceleration_filter/DecelerationFilter.hpp"
 #include "deceleration_filter/DecelerationFilterIOKeys.hpp"
