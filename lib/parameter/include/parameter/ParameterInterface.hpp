@@ -54,6 +54,14 @@ class ParameterBase
     /// Declared const because consumers typically keep read-only
     /// references to parameters they poll.
     virtual void clear_changed() const = 0;
+
+    /// @brief Load value from persistent storage (if a storage policy is present)
+    /// @return true if a value was successfully loaded and passed validation
+    /// @note Default implementation returns true (no storage means nothing to load).
+    virtual bool load()
+    {
+        return true;
+    }
 };
 
 /// @brief Typed interface for polymorphic parameter manipulation
