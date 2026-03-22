@@ -1,0 +1,10 @@
+menu "Power Supply Configuration"
+
+config POWER_SUPPLY_EMERGENCY_STOP_SEND_PERIOD_MSEC
+    int "Emergency stop periodic send period in milliseconds"
+    default 100
+    help
+      Period in milliseconds for periodically sending the emergency stop
+      status message over CAN when the emergency stop is engaged.
+
+endmenu
