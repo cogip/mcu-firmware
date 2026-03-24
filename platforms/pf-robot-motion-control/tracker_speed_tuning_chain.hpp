@@ -13,7 +13,6 @@
 
 #pragma once
 
-#include "app_conf.hpp"
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"

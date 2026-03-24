@@ -21,6 +21,12 @@
 #include "board.h"
 #include <stdio.h>
 
+#include "mtd_conf.h"
+
+/* Instantiate the flashpage MTD device for settings storage */
+static mtd_flashpage_t mtd_settings = MTD_SETTINGS_INIT_VAL;
+MTD_XFA_ADD(mtd_settings, 0);
+
 /**
  * Start of the heap
  */

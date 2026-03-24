@@ -8,7 +8,6 @@
 
 // Project includes
 #include "app.hpp"
-#include "app_conf.hpp"
 #include "board.h"
 #include "drive_controller/DifferentialDriveController.hpp"
 #include "drive_controller/DifferentialDriveControllerParameters.hpp"
@@ -623,6 +622,9 @@ void pf_enable_motion_control()
 
 void pf_init_motion_control(void)
 {
+    // Load parameters from flash persistent storage
+    pf_load_parameters();
+
     // Init motors
     left_motor.init();
     right_motor.init();

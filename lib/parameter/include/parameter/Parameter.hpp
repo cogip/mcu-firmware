@@ -82,9 +82,35 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         valid_ = combined_on_set<T, Policies...>(temp);
         if (valid_) {
             value_ = temp;
+            combined_on_commit<T, Policies...>(value_);
         }
         mutex_unlock(&mutex_);
         return valid_;
+    }
+
+    /// @brief Load value from persistent storage and re-validate
+    /// @return true if load succeeded (or no storage policy exists)
+    /// @note If flash contains a value that fails validation, the default is kept
+    ///       and load returns false. If no storage policy or no stored value,
+    ///       the default is kept and load returns true.
+    bool load() override
+    {
+        mutex_lock(&mutex_);
+        T temp = value_;
+        bool result = true;
+        if (combined_on_init<T, Policies...>(temp)) {
+            // A value was read from flash — validate it
+            if (combined_on_set<T, Policies...>(temp)) {
+                value_ = temp;
+                valid_ = true;
+            } else {
+                // Flash value rejected by validation, keep default
+                result = false;
+            }
+        }
+        // No storage policy or no stored value → keep default (success)
+        mutex_unlock(&mutex_);
+        return result;
     }
 
     /// @brief Get the current parameter value
@@ -121,37 +147,36 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     /// message.
     bool pb_copy(PB_ParameterValue& message) const override
     {
-        bool result = false;
-
         mutex_lock(&mutex_);
-        if constexpr (etl::is_same<T, float>::value) {
-            message.set_float_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, double>::value) {
-            message.set_double_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, int32_t>::value) {
-            message.set_int32_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, uint32_t>::value) {
-            message.set_uint32_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, int64_t>::value) {
-            message.set_int64_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, uint64_t>::value) {
-            message.set_uint64_value(value_);
-            result = true;
-        } else if constexpr (etl::is_same<T, bool>::value) {
-            message.set_bool_value(value_);
-            result = true;
-        } else {
-            // Unsupported type (should never happen due to Parameter static_assert)
-            result = false;
-        }
+        T copy = value_;
         mutex_unlock(&mutex_);
 
-        return result;
+        combined_on_pb_copy<T, Policies...>(copy);
+
+        if constexpr (etl::is_same<T, float>::value) {
+            message.set_float_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, double>::value) {
+            message.set_double_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, int32_t>::value) {
+            message.set_int32_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, uint32_t>::value) {
+            message.set_uint32_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, int64_t>::value) {
+            message.set_int64_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, uint64_t>::value) {
+            message.set_uint64_value(copy);
+            return true;
+        } else if constexpr (etl::is_same<T, bool>::value) {
+            message.set_bool_value(copy);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /// @brief Convert parameter from protobuf PB_ParameterValue message
@@ -189,6 +214,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         }
 
         if (success) {
+            combined_on_pb_read<T, Policies...>(new_value);
             return set(new_value); // Apply validation (set() is already mutex-protected)
         }
         return false;

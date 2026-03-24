@@ -33,6 +33,35 @@ struct has_on_set<Policy, T, etl::void_t<decltype(Policy::on_set(etl::declval<T&
 {
 };
 
+/// @brief Type trait to detect if Policy has on_commit(const T&) method
+/// @tparam Policy The policy type to check
+/// @tparam T The parameter value type
+template <typename Policy, typename T, typename = void> struct has_on_commit : etl::false_type
+{
+};
+
+/// @brief Specialization when Policy::on_commit(const T&) is valid
+template <typename Policy, typename T>
+struct has_on_commit<Policy, T,
+                     etl::void_t<decltype(Policy::on_commit(etl::declval<const T&>()))>>
+    : etl::true_type
+{
+};
+
+/// @brief Type trait to detect if Policy has on_init(T&) method
+/// @tparam Policy The policy type to check
+/// @tparam T The parameter value type
+template <typename Policy, typename T, typename = void> struct has_on_init : etl::false_type
+{
+};
+
+/// @brief Specialization when Policy::on_init(T&) is valid
+template <typename Policy, typename T>
+struct has_on_init<Policy, T, etl::void_t<decltype(Policy::on_init(etl::declval<T&>()))>>
+    : etl::true_type
+{
+};
+
 /// @brief Invoke on_set on a single policy
 /// @tparam Policy The policy type
 /// @tparam T The parameter value type
@@ -44,6 +73,69 @@ template <typename Policy, typename T> bool invoke_on_set(T& value)
         return Policy::on_set(value);
     } else {
         return true;
+    }
+}
+
+/// @brief Invoke on_commit on a single policy (post-validation persistence)
+/// @tparam Policy The policy type
+/// @tparam T The parameter value type
+/// @param value The validated value to persist
+template <typename Policy, typename T> void invoke_on_commit(const T& value)
+{
+    if constexpr (has_on_commit<Policy, T>::value) {
+        Policy::on_commit(value);
+    }
+}
+
+/// @brief Invoke on_init on a single policy (load from persistent storage)
+/// @tparam Policy The policy type
+/// @tparam T The parameter value type
+/// @param value Reference to value (overwritten if policy loads a stored value)
+/// @return true if value was loaded, false otherwise
+template <typename Policy, typename T> bool invoke_on_init(T& value)
+{
+    if constexpr (has_on_init<Policy, T>::value) {
+        return Policy::on_init(value);
+    } else {
+        return false;
+    }
+}
+
+/// @brief Type trait to detect if Policy has on_pb_read(T&) method
+template <typename Policy, typename T, typename = void> struct has_on_pb_read : etl::false_type
+{
+};
+
+template <typename Policy, typename T>
+struct has_on_pb_read<Policy, T, etl::void_t<decltype(Policy::on_pb_read(etl::declval<T&>()))>>
+    : etl::true_type
+{
+};
+
+/// @brief Type trait to detect if Policy has on_pb_copy(T&) method
+template <typename Policy, typename T, typename = void> struct has_on_pb_copy : etl::false_type
+{
+};
+
+template <typename Policy, typename T>
+struct has_on_pb_copy<Policy, T, etl::void_t<decltype(Policy::on_pb_copy(etl::declval<T&>()))>>
+    : etl::true_type
+{
+};
+
+/// @brief Invoke on_pb_read on a single policy (convert user units to internal units)
+template <typename Policy, typename T> void invoke_on_pb_read(T& value)
+{
+    if constexpr (has_on_pb_read<Policy, T>::value) {
+        Policy::on_pb_read(value);
+    }
+}
+
+/// @brief Invoke on_pb_copy on a single policy (convert internal units to user units)
+template <typename Policy, typename T> void invoke_on_pb_copy(T& value)
+{
+    if constexpr (has_on_pb_copy<Policy, T>::value) {
+        Policy::on_pb_copy(value);
     }
 }
 
@@ -59,6 +151,43 @@ template <typename Policy, typename T> bool invoke_on_set(T& value)
 template <typename T, typename... Policies> bool combined_on_set(T& value)
 {
     return (detail::invoke_on_set<Policies, T>(value) && ...);
+}
+
+/// @brief Fire on_commit on all policies (post-validation, fire-and-forget)
+/// @tparam T The parameter value type
+/// @tparam Policies The policy types to apply
+/// @param value The validated value to persist
+template <typename T, typename... Policies> void combined_on_commit(const T& value)
+{
+    (detail::invoke_on_commit<Policies, T>(value), ...);
+}
+
+/// @brief Try on_init on all policies using OR semantics (first load wins)
+/// @tparam T The parameter value type
+/// @tparam Policies The policy types to apply
+/// @param value Reference to value (overwritten by first policy that loads successfully)
+/// @return true if any policy loaded a value
+template <typename T, typename... Policies> bool combined_on_init(T& value)
+{
+    return (detail::invoke_on_init<Policies, T>(value) || ...);
+}
+
+/// @brief Apply on_pb_read from all policies (convert user units to internal units)
+/// @tparam T The parameter value type
+/// @tparam Policies The policy types to apply
+/// @param value Reference to value (modified by conversion policies)
+template <typename T, typename... Policies> void combined_on_pb_read(T& value)
+{
+    (detail::invoke_on_pb_read<Policies, T>(value), ...);
+}
+
+/// @brief Apply on_pb_copy from all policies (convert internal units to user units)
+/// @tparam T The parameter value type
+/// @tparam Policies The policy types to apply
+/// @param value Reference to value (modified by conversion policies)
+template <typename T, typename... Policies> void combined_on_pb_copy(T& value)
+{
+    (detail::invoke_on_pb_copy<Policies, T>(value), ...);
 }
 
 } // namespace parameter

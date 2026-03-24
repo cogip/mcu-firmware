@@ -30,6 +30,7 @@
 #include "cfg_rtt_default.h"
 #include "cfg_timer_tim2.h"
 #include "clk_conf.h"
+#include "mtd_conf.h"
 #include "periph_cpu.h"
 
 #ifdef __cplusplus
@@ -87,7 +88,9 @@ static const pwm_conf_t pwm_config[] = {
          {/* Left motor PWM */
           {.pin = GPIO_PIN(PORT_A, 8), .cc_chan = 0},
           /* Right motor PWM */
-          {.pin = GPIO_PIN(PORT_A, 9), .cc_chan = 1}},
+          {.pin = GPIO_PIN(PORT_A, 9), .cc_chan = 1},
+          {.pin = GPIO_UNDEF, .cc_chan = 0},
+          {.pin = GPIO_UNDEF, .cc_chan = 0}},
      .af = GPIO_AF6,
      .bus = APB2},
 };

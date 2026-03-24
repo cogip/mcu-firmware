@@ -13,3 +13,10 @@ ifneq (,$(filter periph_can,$(FEATURES_USED)))
 endif
 
 USEMODULE += native_drivers
+
+# FlashDB modules
+USEMODULE += flashdb_kvdb          # Key-Value database module
+USEMODULE += flashdb_mtd           # MTD backend for FlashDB
+
+# MTD(Memory Technology Device) driver
+USEMODULE += mtd_emulated # Use emulated MTD in RAM for native

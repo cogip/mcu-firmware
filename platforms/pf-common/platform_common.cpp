@@ -16,6 +16,7 @@
 #include "ztimer.h"
 
 // Project includes
+#include "flash_kv_storage/FlashKVStorage.hpp"
 #include "pf_common/platform_common.hpp"
 #include "pf_common/uuids.hpp"
 
@@ -113,6 +114,13 @@ int pf_init(copilot_callback_t on_connect, copilot_callback_t on_disconnect)
     // Store custom callbacks
     on_copilot_connected_callback = on_connect;
     on_copilot_disconnected_callback = on_disconnect;
+
+    // Initialize flash key-value storage
+    int flash_res = flash_kv_storage::FlashKVStorage::instance().init();
+    if (flash_res) {
+        LOG_ERROR("Flash KV storage initialization failed, error: %d\n", flash_res);
+        return flash_res;
+    }
 
     // Initialize CAN with default filter
     int canpb_res = canpb.init(&canpb_filter);
