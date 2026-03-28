@@ -3,14 +3,10 @@
 #include "etl/math_constants.h"
 #include <cmath>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846 /* pi */
-#endif
-
 #define square(__x) (__x * __x)
 
-#define RAD2DEG(a) ((a * 180.0) / M_PI)
-#define DEG2RAD(a) ((a * M_PI) / 180.0)
+#define RAD2DEG(a) ((a * 180.0) / etl::math::pi)
+#define DEG2RAD(a) ((a * etl::math::pi) / 180.0)
 
 #ifdef __cplusplus
 extern "C" {
