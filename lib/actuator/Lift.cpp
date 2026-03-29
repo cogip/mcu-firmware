@@ -83,8 +83,15 @@ void Lift::actuate(int32_t command)
                             : (command > params_.upper_limit_mm) ? params_.upper_limit_mm
                                                                  : command;
 
+    if (clamped == last_command_ &&
+        motor_engine_.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
+        LOG_INFO("Lift already at command %" PRIi32 ", skipping\n", clamped);
+        return;
+    }
+
     LOG_INFO("Move lift to clamped command %" PRIi32 "\n", clamped);
 
+    last_command_ = clamped;
     Motor::actuate(clamped);
 }
 

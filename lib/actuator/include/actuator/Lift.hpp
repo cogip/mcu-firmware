@@ -11,6 +11,9 @@
 
 #pragma once
 
+// System includes
+#include <climits>
+
 // Project includes
 #include "actuator/LiftParameters.hpp"
 #include "actuator/Motor.hpp"
@@ -52,6 +55,9 @@ class Lift : public Motor
 
     /// True while the homing sequence is running (init only).
     bool initializing_ = false;
+
+    /// Last commanded position (after clamping), used to skip redundant actuate calls.
+    int32_t last_command_ = INT32_MIN;
 
     /// @brief Handle action when the lower end-stop is active.
     void at_lower_limit();
