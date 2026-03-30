@@ -27,6 +27,7 @@ namespace pf_common {
 
 // Static variables
 static bool copilot_connected = false;
+static bool emergency_stop_engaged = false;
 static copilot_callback_t on_copilot_connected_callback;
 static copilot_callback_t on_copilot_disconnected_callback;
 static emergency_stop_callback_t on_emergency_stop_callback;
@@ -114,11 +115,16 @@ static void handle_emergency_stop(canpb::ReadBuffer& buffer)
         return;
     }
 
-    if (pb_status.get_emergency_stop_engaged()) {
+    bool engaged = pb_status.get_emergency_stop_engaged();
+    if (engaged && !emergency_stop_engaged) {
+        LOG_WARNING("Emergency stop ENGAGED\n");
         if (on_emergency_stop_callback) {
             on_emergency_stop_callback();
         }
+    } else if (!engaged && emergency_stop_engaged) {
+        LOG_WARNING("Emergency stop RELEASED\n");
     }
+    emergency_stop_engaged = engaged;
 }
 
 bool is_copilot_connected()
