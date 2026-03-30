@@ -40,6 +40,10 @@ void disable_all()
 /// Handle Protobuf actuator command message.
 static void _handle_command(cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("Actuator command rejected: emergency stop latched\n");
+        return;
+    }
     LOG_INFO("_handle_command: received CAN message\n");
     static PB_ActuatorCommand pb_command;
     pb_command.clear();
@@ -82,6 +86,11 @@ static void _handle_command(cogip::canpb::ReadBuffer& buffer)
 /// Actuators initialization message handler
 static void _handle_actuators_init([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    cogip::pf_common::clear_emergency_stop();
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("Actuator init rejected: emergency stop button still engaged\n");
+        return;
+    }
     positional_actuators::init_sequence();
 }
 
