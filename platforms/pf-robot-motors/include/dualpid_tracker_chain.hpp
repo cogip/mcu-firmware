@@ -12,6 +12,9 @@
 
 #pragma once
 
+#include "anti_blocking_controller/AntiBlockingController.hpp"
+#include "anti_blocking_controller/AntiBlockingControllerIOKeys.hpp"
+#include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "pid/PID.hpp"
 #include "pid/PIDParameters.hpp"
@@ -87,6 +90,16 @@ inline constexpr cogip::motion_control::SpeedPIDControllerIOKeys tracker_speed_p
     .reset = "" ///< No reset key
 };
 
+/// @brief IO keys for AntiBlockingController
+/// @details
+///   - Reads: speed_order, current_speed
+///   - Writes: speed_error, pose_reached (set to blocked when detected)
+inline constexpr cogip::motion_control::AntiBlockingControllerIOKeys anti_blocking_io_keys = {
+    .speed_order = "speed_order",
+    .current_speed = "current_speed",
+    .speed_error = "speed_error",
+    .pose_reached = "pose_reached"};
+
 // ============================================================================
 // Controller Parameters Structure
 // ============================================================================
@@ -108,6 +121,9 @@ struct DualPIDTrackerChainParameters
 
     /// @brief Deceleration (mm/period²)
     float deceleration_mm_per_period2;
+
+    /// @brief Anti-blocking parameters
+    cogip::motion_control::AntiBlockingControllerParameters anti_blocking_params;
 };
 
 // ============================================================================
@@ -131,6 +147,9 @@ struct DualPIDTrackerChain
     /// @brief Speed PID controller - velocity control loop
     cogip::motion_control::SpeedPIDController speed_pid;
 
+    /// @brief Anti-blocking controller - detects motor stall
+    cogip::motion_control::AntiBlockingController anti_blocking;
+
     /// @brief Meta controller chaining all controllers
     cogip::motion_control::MetaController<> meta_controller;
 
@@ -141,6 +160,7 @@ struct DualPIDTrackerChain
         meta_controller.add_controller(&pose_pid);
         meta_controller.add_controller(&combiner);
         meta_controller.add_controller(&speed_pid);
+        meta_controller.add_controller(&anti_blocking);
     }
 
     /// @brief Reset all controllers in the chain
@@ -188,6 +208,8 @@ inline DualPIDTrackerChain create_chain(const DualPIDTrackerChainParameters& par
                                                                      combiner_params),
         .speed_pid =
             cogip::motion_control::SpeedPIDController(tracker_speed_pid_io_keys, speed_pid_params),
+        .anti_blocking = cogip::motion_control::AntiBlockingController(anti_blocking_io_keys,
+                                                                       params.anti_blocking_params),
         .meta_controller = {}};
 
     // Initialize the chain

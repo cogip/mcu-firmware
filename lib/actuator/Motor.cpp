@@ -86,6 +86,11 @@ Motor::Motor(const MotorParameters& motor_parameters, MotorControlMode mode)
             tracker_meta_controller_.add_controller(&tracker_acceleration_filter_.value());
         }
         tracker_meta_controller_.add_controller(&tracker_speed_controller_);
+        if (motor_parameters.anti_blocking_parameters) {
+            anti_blocking_controller_.emplace(actuators::motor_tracker_anti_blocking_io_keys,
+                                              *motor_parameters.anti_blocking_parameters);
+            tracker_meta_controller_.add_controller(&anti_blocking_controller_.value());
+        }
 
         motor_engine_.set_controller(&tracker_meta_controller_);
 

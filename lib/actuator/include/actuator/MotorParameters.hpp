@@ -27,6 +27,7 @@
 #include "tracker_combiner_controller/TrackerCombinerControllerParameters.hpp"
 // Motion control - Safety filters
 #include "acceleration_filter/AccelerationFilterParameters.hpp"
+#include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "deceleration_filter/DecelerationFilterParameters.hpp"
 #include "speed_limit_filter/SpeedLimitFilterParameters.hpp"
 
@@ -112,6 +113,11 @@ struct MotorParameters
     /// @details Only used in DUALPID_TRACKER mode. If non-null, a DecelerationFilter
     ///          is inserted to reduce speed based on remaining distance to target.
     motion_control::DecelerationFilterParameters* deceleration_filter_parameters = nullptr;
+
+    /// @brief Parameters for the AntiBlockingController.
+    /// @details If non-null, an AntiBlockingController is appended after SpeedPID
+    ///          to detect motor stalls and set pose_reached to blocked.
+    motion_control::AntiBlockingControllerParameters* anti_blocking_parameters = nullptr;
 };
 
 } // namespace positional_actuators

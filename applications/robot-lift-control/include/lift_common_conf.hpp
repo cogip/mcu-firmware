@@ -10,6 +10,7 @@
 #include "actuator/MotorParameters.hpp"
 #include "actuator/PositionalActuator.hpp"
 #include "actuators_motors_params.hpp"
+#include "anti_blocking_controller/AntiBlockingControllerParameters.hpp"
 #include "deceleration_filter/DecelerationFilterParameters.hpp"
 #include "encoder/EncoderQDEC.hpp"
 #include "motor/MotorDriverDRV8873.hpp"
@@ -102,15 +103,17 @@ constexpr float acceleration_clamp_ratio = 1.2f;
 constexpr float deceleration_clamp_ratio = 1.2f;
 } // namespace lift_limits
 
-/// @brief Anti-blocking filter thresholds.
+/// @brief Anti-blocking controller thresholds.
+/// @details Ratios aligned with motion control platform:
+///   speed_threshold ≈ 5% of max_speed, error_threshold ≈ 20% of max_speed
 namespace lift_anti_blocking {
-constexpr float speed_threshold_mm_per_s = 200.0;
-constexpr float error_threshold_mm_per_s = 15.0f;
+constexpr float speed_threshold_mm_per_s = 12.5f;
+constexpr float error_threshold_mm_per_s = 50.0f;
 constexpr float speed_threshold_mm_per_period =
     speed_threshold_mm_per_s * lift_control::control_period_ms / 1000.0f;
 constexpr float error_threshold_mm_per_period =
     error_threshold_mm_per_s * lift_control::control_period_ms / 1000.0f;
-constexpr uint32_t blocked_cycles_threshold = 7;
+constexpr uint16_t blocked_cycles_threshold = 50;
 } // namespace lift_anti_blocking
 
 /// @brief Limit switch GPIO pins.
@@ -163,6 +166,13 @@ static cogip::motion_control::ProfileTrackerControllerParameters
         true,                                         // must_stop_at_end
         1                                             // period_increment
     );
+
+/// @brief Motor Lift AntiBlockingControllerParameters.
+static cogip::motion_control::AntiBlockingControllerParameters
+    motor_lift_anti_blocking_parameters(true, // enabled
+                                        lift_anti_blocking::speed_threshold_mm_per_period,
+                                        lift_anti_blocking::error_threshold_mm_per_period,
+                                        lift_anti_blocking::blocked_cycles_threshold);
 
 /// @brief Motor Lift SpeedLimitFilter parameters (safety clamp at ratio × max).
 static cogip::motion_control::SpeedLimitFilterParameters motor_lift_speed_limit_parameters(
@@ -228,6 +238,7 @@ make_lift_motor_params(cogip::actuators::Enum actuator_id, bool use_tracker_chai
         /* acceleration_filter_params   */ &motor_lift_acceleration_filter_parameters,
         /* speed_limit_filter_params    */ &motor_lift_speed_limit_parameters,
         /* deceleration_filter_params   */ &motor_lift_deceleration_filter_parameters,
+        /* anti_blocking_params         */ &motor_lift_anti_blocking_parameters,
     };
 }
 

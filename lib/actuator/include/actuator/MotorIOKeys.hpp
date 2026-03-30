@@ -21,6 +21,7 @@
 #pragma once
 
 #include "acceleration_filter/AccelerationFilterIOKeys.hpp"
+#include "anti_blocking_controller/AntiBlockingControllerIOKeys.hpp"
 #include "deceleration_filter/DecelerationFilterIOKeys.hpp"
 #include "motor_pose_filter/MotorPoseFilterIOKeys.hpp"
 #include "pose_pid_controller/PosePIDControllerIOKeys.hpp"
@@ -175,6 +176,20 @@ static const motion_control::DecelerationFilterIOKeys motor_tracker_deceleration
     .current_speed = "current_speed",
     .target_speed = "speed_order",
     .output_speed = ""};
+
+// ============================================================================
+// Anti-Blocking Controller IO Keys
+// ============================================================================
+
+/// @brief IO keys for AntiBlockingController in tracker chain
+/// @details
+///   - Reads: speed_order, current_speed
+///   - Writes: speed_error, pose_reached (set to blocked when detected)
+static const motion_control::AntiBlockingControllerIOKeys motor_tracker_anti_blocking_io_keys = {
+    .speed_order = "speed_order",
+    .current_speed = "current_speed",
+    .speed_error = "speed_error",
+    .pose_reached = "pose_reached"};
 
 } // namespace actuators
 } // namespace cogip

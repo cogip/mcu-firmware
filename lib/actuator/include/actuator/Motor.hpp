@@ -28,6 +28,7 @@
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 // Motion control - Tracker chain (feedforward + feedback)
 #include "acceleration_filter/AccelerationFilter.hpp"
+#include "anti_blocking_controller/AntiBlockingController.hpp"
 #include "deceleration_filter/DecelerationFilter.hpp"
 #include "etl/optional.h"
 #include "motion_control_common/MetaController.hpp"
@@ -165,6 +166,9 @@ class Motor : public PositionalActuator
 
     /// Deceleration filter - reduces speed based on remaining distance (tracker chain, optional).
     etl::optional<motion_control::DecelerationFilter> tracker_deceleration_filter_;
+
+    /// Anti-blocking controller - detects motor stall (optional).
+    etl::optional<motion_control::AntiBlockingController> anti_blocking_controller_;
 
     // =========================================================================
     // Common components
