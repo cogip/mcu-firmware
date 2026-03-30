@@ -86,7 +86,7 @@ class MotorEngine : public BaseControllerEngine
     }
 
     /// Set callback invoked once when the target pose is first reached.
-    void set_pose_reached_cb(etl::delegate<void()> cb)
+    void set_pose_reached_cb(etl::delegate<void(target_pose_status_t)> cb)
     {
         pose_reached_cb_ = cb;
     }
@@ -119,8 +119,8 @@ class MotorEngine : public BaseControllerEngine
     /// Stores the pose_reached status from the previous target to notify only once
     target_pose_status_t previous_pose_reached_ = target_pose_status_t::moving;
 
-    /// Callback invoked once when pose is first reached for current target
-    etl::delegate<void()> pose_reached_cb_;
+    /// Callback invoked on pose status transitions (reached, blocked, timeout)
+    etl::delegate<void(target_pose_status_t)> pose_reached_cb_;
 };
 
 } // namespace motion_control

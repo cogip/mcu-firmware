@@ -27,7 +27,7 @@ void PositionalActuator::actuate_timeout(int32_t command, uint32_t timeout_ms)
 void PositionalActuator::pb_copy(PB_PositionalActuator& pb_positional_actuator) const
 {
     pb_positional_actuator.set_id(static_cast<PB_PositionalActuatorEnum>(id_));
-    pb_positional_actuator.set_state(PB_PositionalActuatorStateEnum::REACHED);
+    pb_positional_actuator.set_state(static_cast<PB_PositionalActuatorStateEnum>(state_));
     pb_positional_actuator.set_position(command_);
 }
 

@@ -123,6 +123,11 @@ Motor::Motor(const MotorParameters& motor_parameters, MotorControlMode mode)
     gpio_clear(params_.clear_overload_pin);
     motor_engine_.set_clear_overload_pin(params_.clear_overload_pin);
 
+    // Register state change callback for pose status reporting
+    motor_engine_.set_pose_reached_cb(
+        etl::delegate<void(
+            motion_control::target_pose_status_t)>::create<Motor, &Motor::on_state_change>(*this));
+
     // Start disabled and spin up the control thread
     disable();
     motor_engine_.start_thread();
@@ -225,6 +230,24 @@ float Motor::get_current_distance() const
 void Motor::set_current_distance(float distance)
 {
     motor_engine_.set_current_distance_to_odometer(distance);
+}
+
+void Motor::on_state_change(motion_control::target_pose_status_t state)
+{
+    switch (state) {
+    case motion_control::target_pose_status_t::reached:
+        set_state(PB_PositionalActuatorStateEnum::REACHED);
+        break;
+    case motion_control::target_pose_status_t::blocked:
+        set_state(PB_PositionalActuatorStateEnum::BLOCKED);
+        break;
+    case motion_control::target_pose_status_t::timeout:
+        set_state(PB_PositionalActuatorStateEnum::TIMEOUT);
+        break;
+    default:
+        return;
+    }
+    send_state();
 }
 
 } // namespace positional_actuators

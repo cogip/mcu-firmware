@@ -80,9 +80,19 @@ class PositionalActuator : public Actuator
     /// @param pb_positional_actuator  Protobuf message to populate.
     void pb_copy(PB_PositionalActuator& pb_positional_actuator) const;
 
+    /// @brief Set the actuator state.
+    /// @param state New state value.
+    void set_state(PB_PositionalActuatorStateEnum state)
+    {
+        state_ = state;
+    }
+
   protected:
     /// Current actuator command as a duty cycle percentage.
     int32_t command_;
+
+    /// Current actuator state for protobuf reporting.
+    PB_PositionalActuatorStateEnum state_ = PB_PositionalActuatorStateEnum::REACHED;
 
     /// Remaining timeout in milliseconds (decrements each thread period).
     uint32_t timeout_ms_;

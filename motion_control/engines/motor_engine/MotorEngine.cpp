@@ -103,6 +103,11 @@ void MotorEngine::process_outputs()
                   static_cast<double>(odometer_.distance_mm()),
                   static_cast<double>(target_distance_));
 
+        if (previous_pose_reached_ != target_pose_status_t::timeout &&
+            pose_reached_cb_.is_valid()) {
+            pose_reached_cb_(target_pose_status_t::timeout);
+        }
+
         // Hold current position: set target to where we are and let the control loop maintain it
         target_distance_ = odometer_.distance_mm();
         timeout_enable_ = false;
@@ -113,6 +118,11 @@ void MotorEngine::process_outputs()
         LOG_ERROR("MotorEngine blocked, hold. current=%.2f target=%.2f\n",
                   static_cast<double>(odometer_.distance_mm()),
                   static_cast<double>(target_distance_));
+
+        if (previous_pose_reached_ != target_pose_status_t::blocked &&
+            pose_reached_cb_.is_valid()) {
+            pose_reached_cb_(target_pose_status_t::blocked);
+        }
 
         // Hold current position: set target to where we are and let the control loop maintain it
         target_distance_ = odometer_.distance_mm();
@@ -127,7 +137,7 @@ void MotorEngine::process_outputs()
                  static_cast<double>(odometer_.distance_mm()),
                  static_cast<double>(target_distance_));
         if (pose_reached_cb_.is_valid()) {
-            pose_reached_cb_();
+            pose_reached_cb_(target_pose_status_t::reached);
         }
     }
     previous_pose_reached_ = pose_reached_;
