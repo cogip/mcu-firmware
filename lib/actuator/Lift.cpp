@@ -83,8 +83,7 @@ void Lift::actuate(int32_t command)
                             : (command > params_.upper_limit_mm) ? params_.upper_limit_mm
                                                                  : command;
 
-    if (clamped == last_command_ &&
-        motor_engine_.pose_reached() == cogip::motion_control::target_pose_status_t::reached) {
+    if (clamped == last_command_) {
         LOG_INFO("Lift already at command %" PRIi32 ", skipping\n", clamped);
         return;
     }
@@ -106,6 +105,15 @@ void Lift::at_limits(gpio_t pin)
     } else {
         LOG_ERROR("Pin not handled by this lift\n");
     }
+}
+
+void Lift::on_state_change(motion_control::target_pose_status_t state)
+{
+    if (state == motion_control::target_pose_status_t::blocked ||
+        state == motion_control::target_pose_status_t::timeout) {
+        last_command_ = INT32_MIN;
+    }
+    Motor::on_state_change(state);
 }
 
 void Lift::at_lower_limit()

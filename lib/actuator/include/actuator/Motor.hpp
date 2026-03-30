@@ -112,7 +112,7 @@ class Motor : public PositionalActuator
 
   protected:
     /// @brief Callback invoked by MotorEngine on pose status transitions.
-    void on_state_change(motion_control::target_pose_status_t state);
+    virtual void on_state_change(motion_control::target_pose_status_t state);
 
     /// Reference to the static parameter set.
     const MotorParameters& params_;
