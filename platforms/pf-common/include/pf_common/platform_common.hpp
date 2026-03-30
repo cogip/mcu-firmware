@@ -29,6 +29,13 @@ using emergency_stop_callback_t = etl::delegate<void()>;
 /// @return true if copilot is connected, false otherwise
 bool is_copilot_connected();
 
+/// @brief Get emergency stop engaged status
+/// @return true if emergency stop is engaged, false otherwise
+bool is_emergency_stop_latched();
+
+/// @brief Clear the emergency stop latch (call on game_reset)
+void clear_emergency_stop();
+
 /// @brief Returns the platform's CAN Protobuf instance
 /// @return Reference to the CanProtobuf instance
 canpb::CanProtobuf& get_canpb();

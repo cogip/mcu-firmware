@@ -96,12 +96,17 @@ void pf_init_tasks(void)
 /// Start game message handler
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("game_start rejected: emergency stop latched\n");
+        return;
+    }
     cogip::pf::motion_control::pf_enable_motion_control();
 }
 
 /// Reset game message handler
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    cogip::pf_common::clear_emergency_stop();
     cogip::pf::motion_control::pf_disable_motion_control();
 
     cogip::pf::motion_control::pf_motion_control_reset_controllers();
@@ -122,18 +127,30 @@ static void _handle_brake([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 /// Pose order message handler
 static void _handle_pose_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("pose_order rejected: emergency stop latched\n");
+        return;
+    }
     cogip::pf::motion_control::pf_handle_target_pose(buffer);
 }
 
 /// Speed order message handler (speed PID tuning)
 static void _handle_speed_order([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("speed_order rejected: emergency stop latched\n");
+        return;
+    }
     cogip::pf::motion_control::pf_handle_speed_order(buffer);
 }
 
 /// Pose start message handler
 static void _handle_pose_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("pose_start rejected: emergency stop latched\n");
+        return;
+    }
     cogip::pf::motion_control::pf_handle_start_pose(buffer);
 }
 
@@ -152,6 +169,10 @@ static void _handle_path_add_point([[maybe_unused]] cogip::canpb::ReadBuffer& bu
 /// Path start message handler
 static void _handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("path_start rejected: emergency stop latched\n");
+        return;
+    }
     cogip::pf::motion_control::pf_handle_path_start(buffer);
 }
 

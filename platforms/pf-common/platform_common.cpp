@@ -27,7 +27,8 @@ namespace pf_common {
 
 // Static variables
 static bool copilot_connected = false;
-static bool emergency_stop_engaged = false;
+static bool emergency_stop_latched = false;  ///< Latched: stays true until cleared by game_reset
+static bool emergency_stop_physical = false; ///< Tracks actual button state for edge detection
 static copilot_callback_t on_copilot_connected_callback;
 static copilot_callback_t on_copilot_disconnected_callback;
 static emergency_stop_callback_t on_emergency_stop_callback;
@@ -116,20 +117,38 @@ static void handle_emergency_stop(canpb::ReadBuffer& buffer)
     }
 
     bool engaged = pb_status.get_emergency_stop_engaged();
-    if (engaged && !emergency_stop_engaged) {
+    if (engaged && !emergency_stop_physical) {
         LOG_WARNING("Emergency stop ENGAGED\n");
+        emergency_stop_latched = true;
         if (on_emergency_stop_callback) {
             on_emergency_stop_callback();
         }
-    } else if (!engaged && emergency_stop_engaged) {
-        LOG_WARNING("Emergency stop RELEASED\n");
+    } else if (!engaged && emergency_stop_physical) {
+        LOG_WARNING("Emergency stop RELEASED (still latched until game_reset)\n");
     }
-    emergency_stop_engaged = engaged;
+    emergency_stop_physical = engaged;
 }
 
 bool is_copilot_connected()
 {
     return copilot_connected;
+}
+
+bool is_emergency_stop_latched()
+{
+    return emergency_stop_latched;
+}
+
+void clear_emergency_stop()
+{
+    if (emergency_stop_latched) {
+        if (emergency_stop_physical) {
+            LOG_WARNING("Emergency stop latch NOT cleared: button still engaged\n");
+        } else {
+            LOG_WARNING("Emergency stop latch CLEARED\n");
+            emergency_stop_latched = false;
+        }
+    }
 }
 
 canpb::CanProtobuf& get_canpb()

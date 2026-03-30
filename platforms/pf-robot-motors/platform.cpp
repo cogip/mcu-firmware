@@ -13,12 +13,17 @@
 /// Start game message handler
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("game_start rejected: emergency stop latched\n");
+        return;
+    }
     cogip::pf::actuators::enable_all();
 }
 
 /// Reset game message handler
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    cogip::pf_common::clear_emergency_stop();
     cogip::pf::actuators::enable_all();
 }
 
