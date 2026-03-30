@@ -9,9 +9,6 @@
 #include "platform.hpp"
 #include "telemetry/Telemetry.hpp"
 
-/* Protobuf includes */
-#include "PB_EmergencyStop.hpp"
-
 /* Platform includes */
 #include "trace_utils.hpp"
 
@@ -29,7 +26,7 @@ static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buf
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
-static void _handle_emergency_stop(cogip::canpb::ReadBuffer& buffer);
+static void _on_emergency_stop();
 
 bool pf_trace_on(void)
 {
@@ -39,7 +36,8 @@ bool pf_trace_on(void)
 void pf_init(void)
 {
     /* Initialize common platform (CAN, heartbeat, copilot handlers) */
-    int ret = cogip::pf_common::pf_init();
+    int ret = cogip::pf_common::pf_init(
+        {}, {}, cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
     if (ret) {
         LOG_ERROR("Common platform initialization failed, error: %d\n", ret);
     } else {
@@ -75,8 +73,6 @@ void pf_init(void)
                                        cogip::canpb::message_handler_t::create<_handle_telemetry_enable>());
         canpb.register_message_handler(telemetry_disable_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_telemetry_disable>());
-        canpb.register_message_handler(emergency_stop_status_uuid,
-                                       cogip::canpb::message_handler_t::create<_handle_emergency_stop>());
         // clang-format on
 
         // Initialize telemetry
@@ -183,18 +179,9 @@ static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer&
     cogip::telemetry::Telemetry::disable();
 }
 
-/// Emergency stop status message handler
-static void _handle_emergency_stop(cogip::canpb::ReadBuffer& buffer)
+/// Emergency stop callback
+static void _on_emergency_stop()
 {
-    PB_EmergencyStopStatus pb_status;
-    EmbeddedProto::Error error = pb_status.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        LOG_ERROR("Emergency stop status: Protobuf deserialization error: %d\n",
-                  static_cast<int>(error));
-        return;
-    }
-
-    if (pb_status.get_emergency_stop_engaged()) {
-        cogip::pf::motion_control::pf_handle_game_end(buffer);
-    }
+    cogip::pf::motion_control::pf_disable_motion_control();
+    cogip::pf::motion_control::pf_motion_control_reset_controllers();
 }

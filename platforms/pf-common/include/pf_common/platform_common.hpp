@@ -22,6 +22,9 @@ namespace pf_common {
 /// Prototype for copilot connection callbacks
 using copilot_callback_t = etl::delegate<void(canpb::ReadBuffer&)>;
 
+/// Prototype for emergency stop callback
+using emergency_stop_callback_t = etl::delegate<void()>;
+
 /// @brief Get copilot connected status
 /// @return true if copilot is connected, false otherwise
 bool is_copilot_connected();
@@ -33,9 +36,11 @@ canpb::CanProtobuf& get_canpb();
 /// @brief Initialize common platform components (CAN, heartbeat)
 /// @param[in] on_copilot_connected Optional callback when copilot connects
 /// @param[in] on_copilot_disconnected Optional callback when copilot disconnects
+/// @param[in] on_emergency_stop Optional callback when emergency stop is engaged
 /// @return 0 on success, error code otherwise
 int pf_init(copilot_callback_t on_copilot_connected = copilot_callback_t(),
-            copilot_callback_t on_copilot_disconnected = copilot_callback_t());
+            copilot_callback_t on_copilot_disconnected = copilot_callback_t(),
+            emergency_stop_callback_t on_emergency_stop = emergency_stop_callback_t());
 
 /// @brief Start common platform threads (heartbeat, CAN reader)
 void pf_init_tasks();
