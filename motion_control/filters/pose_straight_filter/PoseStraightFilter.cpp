@@ -286,7 +286,10 @@ void PoseStraightFilter::rotate_to_direction(ControllersIO& io, cogip_defs::Pola
                                              bool& linear_recompute_profile,
                                              bool& angular_recompute_profile)
 {
-    DEBUG("ROTATE_TO_DIRECTION\n");
+    if (previous_logged_state_ != PoseStraightFilterState::ROTATE_TO_DIRECTION) {
+        LOG_INFO("PoseStraightFilter: ROTATE_TO_DIRECTION\n");
+        previous_logged_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
+    }
 
     const float angular_intermediate_threshold = parameters_.angular_intermediate_threshold();
 
@@ -335,7 +338,10 @@ void PoseStraightFilter::move_to_position(ControllersIO& io, cogip_defs::Polar& 
                                           bool& linear_recompute_profile,
                                           bool& angular_recompute_profile)
 {
-    DEBUG("MOVE_TO_POSITION\n");
+    if (previous_logged_state_ != PoseStraightFilterState::MOVE_TO_POSITION) {
+        LOG_INFO("PoseStraightFilter: MOVE_TO_POSITION\n");
+        previous_logged_state_ = PoseStraightFilterState::MOVE_TO_POSITION;
+    }
 
     const float linear_threshold = parameters_.linear_threshold();
 
@@ -383,7 +389,10 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
                                                bool& linear_recompute_profile,
                                                bool& angular_recompute_profile)
 {
-    DEBUG("ROTATE_TO_FINAL_ANGLE\n");
+    if (previous_logged_state_ != PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE) {
+        LOG_INFO("PoseStraightFilter: ROTATE_TO_FINAL_ANGLE\n");
+        previous_logged_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+    }
 
     const float angular_threshold = parameters_.angular_threshold();
 
@@ -429,7 +438,10 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
 void PoseStraightFilter::finished(cogip_defs::Polar& pos_err, const cogip_defs::Pose& current_pose,
                                   cogip_defs::Pose& target_pose)
 {
-    DEBUG("FINISHED\n");
+    if (previous_logged_state_ != PoseStraightFilterState::FINISHED) {
+        LOG_INFO("PoseStraightFilter: FINISHED\n");
+        previous_logged_state_ = PoseStraightFilterState::FINISHED;
+    }
 
     // Maintain position and orientation control in FINISHED state
     float pos_error_longitudinal = compute_longitudinal_error(
