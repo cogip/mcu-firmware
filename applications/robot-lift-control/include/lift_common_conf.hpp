@@ -32,7 +32,7 @@ namespace actuators {
 
 // Motor lift pose PID
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kp{
-    0.2f};
+    0.5f};
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_ki{
     0.f};
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kd{
@@ -48,7 +48,7 @@ inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_l
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_kd{
     0.f};
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_speed_pid_integral_limit{500.f / 7.5f};
+    motor_lift_speed_pid_integral_limit{static_cast<float>(etl::numeric_limits<int16_t>::max())};
 
 // Motor lift threshold
 constexpr float motor_lift_threshold = 1.0;
@@ -81,7 +81,7 @@ constexpr float period2_div_1000 =
 namespace lift_limits {
 constexpr float min_speed_m_s = 0.0f;
 constexpr float max_init_speed_m_s = 0.1f;
-constexpr float max_speed_m_s = 0.25f;
+constexpr float max_speed_m_s = 0.4f;
 constexpr float max_acceleration_m_s2 = 1.f;
 constexpr float max_deceleration_m_s2 = 2.f;
 
