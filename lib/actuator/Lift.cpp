@@ -136,7 +136,7 @@ void Lift::at_upper_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
-        actuate(params_.upper_limit_mm);
+        motor_engine_.set_target_speed(0);
         motor_engine_.set_timeout_enable(false);
     } else {
         LOG_INFO("Upper limit switch released\n");
