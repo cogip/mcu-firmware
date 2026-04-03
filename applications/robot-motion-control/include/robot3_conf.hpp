@@ -66,7 +66,7 @@ constexpr float default_tracker_angular_speed_pid_kd = 0;
 // Linear threshold
 constexpr float linear_threshold = 5;
 // Angular threshold
-constexpr float angular_threshold = 5;
+constexpr float angular_threshold = 1;
 // Angular intermediate threshold (when the robot turns on itself to go straight
 // to its destination)
 constexpr float angular_intermediate_threshold = 5;
@@ -75,15 +75,15 @@ constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 12.5;
 constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
 
-constexpr float min_speed_mm_per_s = 0;      ///< Minimum speed (mm/s)
-constexpr float max_speed_mm_per_s = 1000.0; ///< Maximum speed (mm/s)
-constexpr float max_acc_mm_per_s2 = 750.0;   ///< Maximum acceleration (mm/s²)
-constexpr float max_dec_mm_per_s2 = 1000.0;  ///< Maximum deceleration (mm/s²)
+constexpr float min_speed_mm_per_s = 0;     ///< Minimum speed (mm/s)
+constexpr float max_speed_mm_per_s = 750.0; ///< Maximum speed (mm/s)
+constexpr float max_acc_mm_per_s2 = 500.0;  ///< Maximum acceleration (mm/s²)
+constexpr float max_dec_mm_per_s2 = 500.0;  ///< Maximum deceleration (mm/s²)
 
-constexpr float min_speed_deg_per_s = 20;  ///< Maximum speed (deg/s)
+constexpr float min_speed_deg_per_s = 0;   ///< Maximum speed (deg/s)
 constexpr float max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
 constexpr float max_acc_deg_per_s2 = 180;  ///< Maximum acceleration (deg/s²)
-constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
+constexpr float max_dec_deg_per_s2 = 90;   ///< Maximum deceleration (deg/s²)
 
 /// Safety clamp ratio for speed/acceleration filters
 /// The filters clamp at ratio × nominal max to catch runaway values

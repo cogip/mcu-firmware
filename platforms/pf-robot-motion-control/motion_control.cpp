@@ -23,8 +23,7 @@
 #include "platform.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
-#include "quadpid_chain.hpp"
-#include "quadpid_tracker_chain.hpp"
+#include "purepursuit_chain.hpp"
 #include "tracker_speed_tuning_chain.hpp"
 
 #include "PB_Controller.hpp"
@@ -107,13 +106,6 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
     // Change controller
     current_controller_id = static_cast<uint32_t>(pb_controller.id());
     switch (static_cast<uint32_t>(pb_controller.id())) {
-    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
-        LOG_INFO("Change to controller: QUADPID_TRACKER\n");
-        pf_motion_control_platform_engine.set_controller(
-            &quadpid_tracker_chain::quadpid_tracker_meta_controller);
-        pf_motion_control_platform_engine.set_timeout_enable(false);
-        break;
-
     case static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING):
         LOG_INFO("Change to controller: TRACKER_SPEED_TUNING\n");
         pf_motion_control_platform_engine.set_controller(
@@ -121,10 +113,11 @@ static void _handle_set_controller(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_timeout_enable(true);
         break;
 
-    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
+    case static_cast<uint32_t>(PB_ControllerEnum::PUREPURSUIT):
     default:
-        LOG_INFO("Change to controller: QUADPID\n");
-        pf_motion_control_platform_engine.set_controller(&quadpid_chain::quadpid_meta_controller);
+        LOG_INFO("Change to controller: PUREPURSUIT\n");
+        pf_motion_control_platform_engine.set_controller(
+            &purepursuit_chain::pose_loop_meta_controller);
         pf_motion_control_platform_engine.set_timeout_enable(false);
         break;
     }
@@ -192,11 +185,6 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
             left_motor.set_speed(0);
             right_motor.set_speed(0);
 
-            // As motors are stopped, pose straight filter state machine is in
-            // finished state (reset both chains as only one is active at a time)
-            quadpid_chain::pose_straight_filter.force_finished_state();
-            quadpid_tracker_chain::pose_straight_filter.force_finished_state();
-
             LOG_WARNING("BLOCKED\n");
 
             if (previous_target_pose_status !=
@@ -215,14 +203,10 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
     if (previous_target_pose_status != state &&
         state != cogip::motion_control::target_pose_status_t::moving) {
         switch (current_controller_id) {
-        case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
-            quadpid_chain::reset();
-            break;
-        case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
-            quadpid_tracker_chain::reset();
+        case static_cast<uint32_t>(PB_ControllerEnum::PUREPURSUIT):
+            purepursuit_chain::pose_loop_meta_controller.reset();
             break;
         default:
-            // Other chains don't have stateful filters to reset
             break;
         }
     }
@@ -306,10 +290,6 @@ void pf_send_encoder_telemetry(void)
 void pf_handle_brake([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
 {
     pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(0, 0));
-
-    // Reset both chains as only one is active at a time
-    quadpid_chain::pose_straight_filter.force_finished_state();
-    quadpid_tracker_chain::pose_straight_filter.force_finished_state();
 }
 
 void pf_handle_game_end([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
@@ -318,19 +298,15 @@ void pf_handle_game_end([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
 
     // Reset filters according to current controller
     switch (current_controller_id) {
-    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
-        quadpid_chain::reset();
+    case static_cast<uint32_t>(PB_ControllerEnum::PUREPURSUIT):
+        purepursuit_chain::pose_loop_meta_controller.reset();
         break;
-    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
-        quadpid_tracker_chain::reset();
+    case static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING):
+        tracker_speed_tuning_chain::meta_controller.reset();
         break;
     default:
         break;
     }
-
-    // Force position filter finished state (reset both chains as only one is active at a time)
-    quadpid_chain::pose_straight_filter.force_finished_state();
-    quadpid_tracker_chain::pose_straight_filter.force_finished_state();
 
     // Disable motion control to avoid new motion
     pf_disable_motion_control();
@@ -367,12 +343,6 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     LOG_INFO("Target speed: linear=%.2f mm/period, angular=%.2f deg/period\n",
              static_cast<double>(target_speed.distance()),
              static_cast<double>(target_speed.angle()));
-
-    // Set target speed for passthrough controllers
-    quadpid_chain::passthrough_linear_pose_controller_parameters.set_target_speed(
-        target_speed.distance());
-    quadpid_chain::passthrough_angular_pose_controller_parameters.set_target_speed(
-        target_speed.angle());
 
     if (target_pose.timeout_ms()) {
         pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms());
@@ -531,12 +501,6 @@ void pf_handle_path_start([[maybe_unused]] const cogip::canpb::ReadBuffer& buffe
             100);
         pf_motion_control_platform_engine.set_target_speed(target_speed);
 
-        // Set target speed for passthrough controllers
-        quadpid_chain::passthrough_linear_pose_controller_parameters.set_target_speed(
-            target_speed.distance());
-        quadpid_chain::passthrough_angular_pose_controller_parameters.set_target_speed(
-            target_speed.angle());
-
         if (target_pose.timeout_ms()) {
             pf_motion_control_platform_engine.set_timeout_enable(true);
             pf_motion_control_platform_engine.set_timeout_ms(target_pose.timeout_ms());
@@ -570,14 +534,9 @@ void pf_motion_control_reset_controllers(void)
              static_cast<double>(pose_before.O()));
 
     // Reset filters according to current controller
-    // Note: chain::reset() resets PIDs and filters but NOT PoseStraightFilter state machine
-    // The state machine must manage its own transitions based on pose errors
     switch (current_controller_id) {
-    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
-        quadpid_chain::reset();
-        break;
-    case static_cast<uint32_t>(PB_ControllerEnum::QUADPID_TRACKER):
-        quadpid_tracker_chain::reset();
+    case static_cast<uint32_t>(PB_ControllerEnum::PUREPURSUIT):
+        purepursuit_chain::pose_loop_meta_controller.reset();
         break;
     case static_cast<uint32_t>(PB_ControllerEnum::TRACKER_SPEED_TUNING):
         tracker_speed_tuning_chain::meta_controller.reset();
@@ -639,13 +598,12 @@ void pf_init_motion_control(void)
     }
 
     // Init controllers
-    quadpid_chain::init();
-    quadpid_tracker_chain::init();
+    purepursuit_chain::init();
     tracker_speed_tuning_chain::init();
 
-    // Associate default controller (QUADPID_TRACKER) to the engine
+    // Associate default controller (PUREPURSUIT) to the engine
     pf_motion_control_platform_engine.set_controller(
-        &quadpid_tracker_chain::quadpid_tracker_meta_controller);
+        &purepursuit_chain::pose_loop_meta_controller);
     pf_motion_control_platform_engine.dump_pipeline();
 
     // Set timeout for speed only loops as no pose has to be reached

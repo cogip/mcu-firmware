@@ -39,6 +39,10 @@ USEMODULE += pose_straight_filter
 USEMODULE += speed_filter
 USEMODULE += target_change_detector
 USEMODULE += telemetry_controller
+USEMODULE += purepursuit_controller
+USEMODULE += speed_pid_controller
+USEMODULE += speed_ramp_filter
+USEMODULE += polar_parallel_meta_controller
 
 # Board features required
 FEATURES_REQUIRED += periph_qdec

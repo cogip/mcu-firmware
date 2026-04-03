@@ -229,6 +229,9 @@ namespace motion_control {
 /// @brief Load all parameters from flash persistent storage
 void pf_load_parameters();
 
+/// @brief Erase all parameters from flash persistent storage
+void pf_erase_all_parameters();
+
 /// @brief Handle parameter get request from canpb
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer);
 
