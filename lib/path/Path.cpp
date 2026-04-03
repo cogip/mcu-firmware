@@ -33,6 +33,15 @@ bool Path::add_point(const Pose& pose)
     return true;
 }
 
+bool Path::insert_front(const Pose& pose)
+{
+    if (waypoints_.full()) {
+        return false;
+    }
+    waypoints_.insert(waypoints_.begin(), pose);
+    return true;
+}
+
 bool Path::add_point_from_pb(const PB_PathPose& pb_pose)
 {
     Pose pose;

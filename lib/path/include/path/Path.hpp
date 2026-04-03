@@ -44,6 +44,11 @@ class Path
     /// @return true if added successfully, false if path is full
     bool add_point(const Pose& pose);
 
+    /// @brief Insert a waypoint at the front of the path.
+    /// @param pose The waypoint to insert
+    /// @return true if inserted successfully, false if path is full
+    bool insert_front(const Pose& pose);
+
     /// @brief Add a waypoint from a Protobuf message.
     /// @param pb_pose The Protobuf message to read
     /// @return true if added successfully, false if path is full

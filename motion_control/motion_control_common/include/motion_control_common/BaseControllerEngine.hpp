@@ -102,6 +102,14 @@ class BaseControllerEngine
         io_.set("pose_reached", pose_reached_);
     };
 
+    /// Reset the active controller chain (cascades to all sub-controllers via MetaController::reset).
+    void reset()
+    {
+        if (controller_) {
+            controller_->reset();
+        }
+    };
+
     /// Set current cycle
     void set_current_cycle(uint32_t current_cycle ///< [in]   new current cycle
     )

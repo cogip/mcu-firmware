@@ -62,8 +62,6 @@ class PurePursuitController
 
     bool find_lookahead_point();
     void find_projection_point();
-    bool circle_segment_intersection(float p1x, float p1y, float p2x, float p2y, float cx, float cy,
-                                     float r, float& ix, float& iy, float& t_out) const;
     float compute_distance_to_goal() const;
 
     float getDirection() const;

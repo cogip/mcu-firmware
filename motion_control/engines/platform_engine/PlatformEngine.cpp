@@ -41,6 +41,10 @@ void PlatformEngine::prepare_inputs()
     io_.set("current_pose_y", localization_.pose().y());
     io_.set("current_pose_O", localization_.pose().O());
 
+    // Current speed
+    io_.set("linear_current_speed", localization_.delta_polar_pose().distance());
+    io_.set("angular_current_speed", localization_.delta_polar_pose().angle());
+
     // Get path singleton reference once
     const path::Path& path = path_;
 
@@ -51,10 +55,6 @@ void PlatformEngine::prepare_inputs()
         io_.set("target_pose_y", target_pose_.y());
         io_.set("target_pose_O", target_pose_.O());
     }
-
-    // Current speed
-    io_.set("linear_current_speed", localization_.delta_polar_pose().distance());
-    io_.set("angular_current_speed", localization_.delta_polar_pose().angle());
 
     // Target speed
     io_.set("linear_target_speed", target_speed_.distance());

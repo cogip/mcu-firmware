@@ -2,8 +2,9 @@ syntax = "proto3";
 
 enum PB_ControllerEnum {
     QUADPID = 0;
-    QUADPID_TRACKER = 1;
+    QUADPID_TRACKER = 3;
     TRACKER_SPEED_TUNING = 2;
+    PUREPURSUIT = 1;
 }
 
 message PB_Controller {

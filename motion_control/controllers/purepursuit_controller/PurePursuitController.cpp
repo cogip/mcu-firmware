@@ -34,6 +34,8 @@ void PurePursuitController::reset()
 
     current_segment_index_ = 0;
     current_segment_param_ = 0.0f;
+    carrot_x_ = 0.0f;
+    carrot_y_ = 0.0f;
     pose_reached_ = target_pose_status_t::reached;
 
     state_ = State::WAITING_FOR_PATH;
@@ -60,11 +62,26 @@ void PurePursuitController::execute(ControllersIO& io)
 
     // Internal state machine
     switch (state_) {
+    case State::ROTATING_TO_INITIAL:
+        // Compute carrot to know which direction to face
+        if (!find_lookahead_point()) {
+            find_projection_point();
+        }
+        if (computeInitialHeadingOrders()) {
+            LOG_INFO("[PP] Initial rotation done, switching to FOLLOWING_PATH heading=%.1f°\n",
+                     RAD2DEG(current_h_));
+            state_ = State::FOLLOWING_PATH;
+            reset = true;
+        }
+        break;
+
     case State::FOLLOWING_PATH:
         // Try to find a lookahead point on the path, fallback to projection
         if (!find_lookahead_point()) {
             LOG_WARNING("[PP] No lookahead intersection, falling back to projection\n");
-            find_projection_point();
+            // find_projection_point();
+            reset = true;
+            break;
         }
 
         // Compute path following orders
@@ -86,19 +103,6 @@ void PurePursuitController::execute(ControllersIO& io)
             reset = true;
             pose_reached_ = target_pose_status_t::reached;
             path_.stop();
-        }
-        break;
-
-    case State::ROTATING_TO_INITIAL:
-        // Compute carrot to know which direction to face
-        if (!find_lookahead_point()) {
-            find_projection_point();
-        }
-        if (computeInitialHeadingOrders()) {
-            LOG_INFO("[PP] Initial rotation done, switching to FOLLOWING_PATH heading=%.1f°\n",
-                     RAD2DEG(current_h_));
-            state_ = State::FOLLOWING_PATH;
-            reset = true;
         }
         break;
 
@@ -190,7 +194,7 @@ bool PurePursuitController::computePathOrders()
     // When traveling on the path, we slow down the robot if its orientation is
     // farther than it should. The following is an empiric but continuous formula.
     if (std::cos(delta) > 0.0f) {
-        linear_speed_order_ *= (1.0f + std::cos(2.0f * delta)) / 2.0f;
+        linear_speed_order_ *= (1.0f + std::cos(4.0f * delta)) / 2.0f;
     } else {
         linear_speed_order_ *= 0.0f;
     }
@@ -282,81 +286,60 @@ bool PurePursuitController::find_lookahead_point()
     const size_t n = waypoints.size();
     const float lookahead_d = parameters().lookahead_distance.get();
 
-    // Search all remaining segments from the current one onward.
-    // Segment i = waypoints[i] -> waypoints[i+1] for i < n-1
-    // Segment n-1 = virtual extension from waypoints[n-1] in direction O()
-    for (size_t i = current_segment_index_; i < n; i++) {
-        if (i < n - 1) {
-            // Normal segment from waypoints[i] to waypoints[i+1]
-            float p1x = waypoints[i].x();
-            float p1y = waypoints[i].y();
-            float p2x = waypoints[i + 1].x();
-            float p2y = waypoints[i + 1].y();
+    // Find the intersection between a circle of radius lookahead_d centered on
+    // the robot and the path. Iterates real segments in order, stops at first
+    // hit. When the last real segment is overshot, the carrot is clamped onto
+    // the final waypoint (Nav2 regulated pure pursuit style).
+    for (size_t i = current_segment_index_; i + 1 < n; i++) {
+        const float dx = current_x_ - waypoints[i].x();
+        const float dy = current_y_ - waypoints[i].y();
+        const float edgedx = waypoints[i + 1].x() - waypoints[i].x();
+        const float edgedy = waypoints[i + 1].y() - waypoints[i].y();
+        const float edgeLength = std::sqrt(edgedx * edgedx + edgedy * edgedy);
 
-            float ix, iy, t_int;
-            if (circle_segment_intersection(p1x, p1y, p2x, p2y, current_x_, current_y_, lookahead_d,
-                                            ix, iy, t_int)) {
-                if (i > current_segment_index_ || t_int >= current_segment_param_) {
-                    current_segment_index_ = i;
-                    current_segment_param_ = t_int;
-                    carrot_x_ = ix;
-                    carrot_y_ = iy;
-                    return true;
-                }
-            }
-        } else {
-            // Virtual segment: ray from last waypoint continuing the direction
-            // of the last real segment (second-to-last -> last waypoint).
-            float edgedx, edgedy;
-            if (n >= 2) {
-                edgedx = waypoints[i].x() - waypoints[i - 1].x();
-                edgedy = waypoints[i].y() - waypoints[i - 1].y();
-                float len = std::sqrt(edgedx * edgedx + edgedy * edgedy);
-                if (len > 0.0f) {
-                    edgedx /= len;
-                    edgedy /= len;
-                }
-            } else {
-                float angle = static_cast<float>(DEG2RAD(waypoints[i].O()));
-                edgedx = std::cos(angle);
-                edgedy = std::sin(angle);
-            }
-
-            float dx = current_x_ - waypoints[i].x();
-            float dy = current_y_ - waypoints[i].y();
-
-            float h = etl::absolute(edgedx * dy - edgedy * dx);
-            if (lookahead_d < h) {
-                continue;
-            }
-
-            float t = edgedx * dx + edgedy * dy;
-            float t2 = t + std::sqrt(lookahead_d * lookahead_d - h * h);
-            float t1 = t - std::sqrt(lookahead_d * lookahead_d - h * h);
-
-            if (t2 < 0.0f) {
-                continue;
-            }
-            if (t1 > 1.0f) {
-                continue;
-            }
-
-            const float final_lookahead_d = parameters().final_lookahead_distance.get();
-            // edgeLength = 1.0 for virtual segment, matches m_lookAheadBis / edgeLength
-            if (t2 > 1.0f + final_lookahead_d) {
-                t2 = 1.0f + final_lookahead_d;
-            }
-
-            if (i > current_segment_index_ || t2 >= current_segment_param_) {
-                current_segment_index_ = i;
-                current_segment_param_ = t2;
-                carrot_x_ = waypoints[i].x() + t2 * edgedx;
-                carrot_y_ = waypoints[i].y() + t2 * edgedy;
-            }
-            return true;
+        // h = distance between the robot and the line supporting this segment
+        const float h = etl::absolute(edgedx * dy - edgedy * dx) / edgeLength;
+        if (lookahead_d < h) {
+            continue;
         }
+
+        // t = projection of robot onto the segment, normalized by edge length
+        const float t = (edgedx * dx + edgedy * dy) / (edgeLength * edgeLength);
+
+        // t2 = the forward intersection point of the circle with the line
+        const float half_chord = std::sqrt(lookahead_d * lookahead_d - h * h) / edgeLength;
+        const float t2 = t + half_chord;
+
+        if (t2 < 0.0f) {
+            continue;
+        }
+        if (t2 > 1.0f) {
+            if (i + 2 == n) {
+                // Last real segment overshot: clamp carrot to final waypoint.
+                current_segment_index_ = n - 1;
+                current_segment_param_ = 0.0f;
+                carrot_x_ = waypoints[n - 1].x();
+                carrot_y_ = waypoints[n - 1].y();
+                return true;
+            }
+            continue;
+        }
+
+        if (i > current_segment_index_ || t2 > current_segment_param_) {
+            current_segment_index_ = i;
+            current_segment_param_ = t2;
+            carrot_x_ = waypoints[i].x() + t2 * edgedx;
+            carrot_y_ = waypoints[i].y() + t2 * edgedy;
+        }
+        return true;
     }
 
+    // All real segments exhausted: keep carrot on the final waypoint.
+    if (current_segment_index_ >= n - 1) {
+        carrot_x_ = waypoints[n - 1].x();
+        carrot_y_ = waypoints[n - 1].y();
+        return true;
+    }
     return false;
 }
 
@@ -427,60 +410,6 @@ void PurePursuitController::find_projection_point()
         carrot_x_ = waypoints[idx].x() + t * edgedx;
         carrot_y_ = waypoints[idx].y() + t * edgedy;
     }
-}
-
-bool PurePursuitController::circle_segment_intersection(float p1x, float p1y, float p2x, float p2y,
-                                                        float cx, float cy, float r, float& ix,
-                                                        float& iy, float& t_out) const
-{
-    // Vector from p1 to p2
-    float dx = p2x - p1x;
-    float dy = p2y - p1y;
-
-    // Vector from p1 to circle center
-    float fx = p1x - cx;
-    float fy = p1y - cy;
-
-    // Quadratic equation coefficients: at^2 + bt + c = 0
-    float a = dx * dx + dy * dy;
-    float b = 2.0f * (fx * dx + fy * dy);
-    float c = fx * fx + fy * fy - r * r;
-
-    float discriminant = b * b - 4.0f * a * c;
-
-    if (discriminant < 0.0f || a < 1e-6f) {
-        // No intersection or degenerate segment
-        return false;
-    }
-
-    discriminant = std::sqrt(discriminant);
-
-    // Two solutions: t1 and t2
-    float t1 = (-b - discriminant) / (2.0f * a);
-    float t2 = (-b + discriminant) / (2.0f * a);
-
-    // We want the intersection that is:
-    // 1. On the segment (0 <= t <= 1)
-    // 2. Furthest along the path (largest t value, closest to p2)
-    // If both intersections are valid, we take the one ahead (t2)
-
-    // Check t2 first (further along segment)
-    if (t2 >= 0.0f && t2 <= 1.0f) {
-        ix = p1x + t2 * dx;
-        iy = p1y + t2 * dy;
-        t_out = t2;
-        return true;
-    }
-
-    // Check t1
-    if (t1 >= 0.0f && t1 <= 1.0f) {
-        ix = p1x + t1 * dx;
-        iy = p1y + t1 * dy;
-        t_out = t1;
-        return true;
-    }
-
-    return false;
 }
 
 float PurePursuitController::compute_distance_to_goal() const

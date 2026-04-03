@@ -10,6 +10,7 @@
 #include "log.h"
 
 // Project includes
+#include "flash_kv_storage/FlashKVStorage.hpp"
 #include "motion_control_parameters.hpp"
 #include "parameter_handler/ParameterHandler.hpp"
 #include "platform.hpp"
@@ -88,6 +89,8 @@ static ParameterHandlerType parameter_handler(registry);
 
 void pf_load_parameters()
 {
+    pf_erase_all_parameters();
+
     for (auto& entry : registry) {
         if (!entry.second.load()) {
             LOG_WARNING("Parameter 0x%08" PRIx32 ": flash load failed, using default\n",
@@ -95,6 +98,18 @@ void pf_load_parameters()
         }
     }
     LOG_INFO("All parameters loaded (%u entries)\n", static_cast<unsigned>(registry.size()));
+}
+
+void pf_erase_all_parameters()
+{
+    auto& flash = flash_kv_storage::FlashKVStorage::instance();
+    for (auto& entry : registry) {
+        if (flash.del(entry.first) < 0) {
+            LOG_WARNING("Parameter 0x%08" PRIx32 ": flash erase failed\n", entry.first);
+        }
+    }
+    LOG_INFO("All parameters erased from flash (%u entries)\n",
+             static_cast<unsigned>(registry.size()));
 }
 
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer)
