@@ -8,19 +8,22 @@
 
 /* Platform includes */
 #include "pf_actuators.hpp"
-
-/* Protobuf includes */
-#include "PB_EmergencyStop.hpp"
+#include "pf_parameters.hpp"
 
 /// Start game message handler
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    if (cogip::pf_common::is_emergency_stop_latched()) {
+        LOG_WARNING("game_start rejected: emergency stop latched\n");
+        return;
+    }
     cogip::pf::actuators::enable_all();
 }
 
 /// Reset game message handler
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
+    cogip::pf_common::clear_emergency_stop();
     cogip::pf::actuators::enable_all();
 }
 
@@ -30,25 +33,17 @@ static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
     cogip::pf::actuators::disable_all();
 }
 
-/// Emergency stop status message handler
-static void _handle_emergency_stop(cogip::canpb::ReadBuffer& buffer)
+/// Emergency stop callback
+static void _on_emergency_stop()
 {
-    PB_EmergencyStopStatus pb_status;
-    EmbeddedProto::Error error = pb_status.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        LOG_ERROR("Emergency stop status: Protobuf deserialization error: %d\n",
-                  static_cast<int>(error));
-        return;
-    }
-    if (pb_status.get_emergency_stop_engaged()) {
-        cogip::pf::actuators::disable_all();
-    }
+    cogip::pf::actuators::disable_all();
 }
 
 void pf_init(void)
 {
     /* Initialize common platform (CAN, heartbeat, copilot handlers) */
-    int ret = cogip::pf_common::pf_init();
+    int ret = cogip::pf_common::pf_init(
+        {}, {}, cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
     if (ret) {
         LOG_ERROR("Common platform initialization failed, error: %d\n", ret);
     } else {
@@ -61,12 +56,10 @@ void pf_init(void)
             game_start_uuid, cogip::canpb::message_handler_t::create<_handle_game_start>());
         canpb.register_message_handler(game_end_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_game_end>());
-        canpb.register_message_handler(
-            emergency_stop_status_uuid,
-            cogip::canpb::message_handler_t::create<_handle_emergency_stop>());
     }
 
     cogip::pf::actuators::init();
+    cogip::pf::parameters::init();
 }
 
 void pf_init_tasks(void)

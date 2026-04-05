@@ -14,7 +14,15 @@ namespace cogip {
 namespace actuators {
 namespace positional_actuators {
 
-Lift::Lift(const LiftParameters& params) : Motor(params.motor_params), params_(params) {}
+Lift::Lift(const LiftParameters& params)
+    : Motor(params.motor_params,
+            // Use DUALPID_TRACKER mode if profile_tracker_parameters is set
+            params.motor_params.profile_tracker_parameters != nullptr
+                ? MotorControlMode::DUALPID_TRACKER
+                : MotorControlMode::DUALPID),
+      params_(params)
+{
+}
 
 void Lift::init()
 {
@@ -30,32 +38,36 @@ void Lift::init()
                   static_cast<uint8_t>(id_));
     }
 
-    // Homing sequence: move to lower, then upper end-stop at lower speed
+    // Homing: move down to calibrate zero position
+    initializing_ = true;
     set_target_speed_percent(params_.init_speed_percentage);
 
-    if (gpio_read(params_.upper_limit_switch_pin)) {
-        actuate(params_.upper_limit_mm);
-        ztimer_sleep(ZTIMER_MSEC, motor_engine_.timeout_ms());
-    } else {
+    int lower_state = gpio_read(params_.lower_limit_switch_pin);
+    LOG_INFO("Lift init: lower_switch=%d\n", lower_state);
+
+    constexpr uint32_t init_timeout_ms = 2000;
+
+    if (!lower_state) {
+        // Force current position to upper limit so the motor moves down
         set_current_distance(params_.upper_limit_mm);
-    }
-    if (gpio_read(params_.lower_limit_switch_pin)) {
-        actuate(params_.lower_limit_mm);
-        ztimer_sleep(ZTIMER_MSEC, motor_engine_.timeout_ms());
+        LOG_INFO("Moving to lower limit (%d mm)...\n", static_cast<int>(params_.lower_limit_mm));
+        actuate_timeout(params_.lower_limit_mm, init_timeout_ms);
+        ztimer_sleep(ZTIMER_MSEC, init_timeout_ms);
+        // If lower limit was not reached, disable motor to prevent
+        // violent movement on power restore (e.g. after emergency stop)
+        if (!gpio_read(params_.lower_limit_switch_pin)) {
+            LOG_INFO("Init timeout, disabling motor\n");
+            disable();
+        }
+        LOG_INFO("Lower limit reached or timeout\n");
     } else {
+        LOG_INFO("Already at lower limit, setting distance to %d mm\n",
+                 static_cast<int>(params_.lower_limit_mm));
         set_current_distance(params_.lower_limit_mm);
     }
 
-    ret = LiftsLimitSwitchesManager::instance().unregister_gpio(params_.lower_limit_switch_pin);
-    if (ret) {
-        LOG_ERROR("Lower switch pin for lift %" PRIu8 " unregistering failed\n",
-                  static_cast<uint8_t>(id_));
-    }
-    ret = LiftsLimitSwitchesManager::instance().unregister_gpio(params_.upper_limit_switch_pin);
-    if (ret) {
-        LOG_ERROR("Upper switch pin for lift %" PRIu8 " unregistering failed\n",
-                  static_cast<uint8_t>(id_));
-    }
+    initializing_ = false;
+    LOG_INFO("Lift init complete\n");
 }
 
 void Lift::stop()
@@ -71,16 +83,14 @@ void Lift::actuate(int32_t command)
                             : (command > params_.upper_limit_mm) ? params_.upper_limit_mm
                                                                  : command;
 
-    LOG_INFO("Move lift to clamped command %" PRIi32 "\n", clamped);
-
-    if (clamped >= motor_engine_.get_current_distance_from_odometer()) {
-        gpio_clear(params_.motor_params.clear_overload_pin);
-    } else {
-        gpio_clear(params_.motor_params.clear_overload_pin);
-        ztimer_sleep(ZTIMER_MSEC, 10);
-        gpio_set(params_.motor_params.clear_overload_pin);
+    if (clamped == last_command_) {
+        LOG_INFO("Lift already at command %" PRIi32 ", skipping\n", clamped);
+        return;
     }
 
+    LOG_INFO("Move lift to clamped command %" PRIi32 "\n", clamped);
+
+    last_command_ = clamped;
     Motor::actuate(clamped);
 }
 
@@ -97,16 +107,40 @@ void Lift::at_limits(gpio_t pin)
     }
 }
 
+void Lift::on_state_change(motion_control::target_pose_status_t state)
+{
+    if (state == motion_control::target_pose_status_t::blocked ||
+        state == motion_control::target_pose_status_t::timeout) {
+        last_command_ = INT32_MIN;
+    }
+    Motor::on_state_change(state);
+}
+
 void Lift::at_lower_limit()
 {
-    LOG_INFO("Lower limit switch triggered\n");
-    set_current_distance(params_.lower_limit_mm);
+    // Only react when switch is pressed (reads 1 with active-high logic)
+    if (gpio_read(params_.lower_limit_switch_pin)) {
+        LOG_INFO("Lower limit switch pressed\n");
+        if (initializing_) {
+            set_current_distance(params_.lower_limit_mm);
+        }
+        actuate(params_.lower_limit_mm);
+        motor_engine_.set_timeout_enable(false);
+    } else {
+        LOG_INFO("Lower limit switch released\n");
+    }
 }
 
 void Lift::at_upper_limit()
 {
-    LOG_INFO("Upper limit switch triggered\n");
-    set_current_distance(params_.upper_limit_mm);
+    // Only react when switch is pressed (reads 1 with active-high logic)
+    if (gpio_read(params_.upper_limit_switch_pin)) {
+        LOG_INFO("Upper limit switch pressed\n");
+        motor_engine_.set_target_speed(0);
+        motor_engine_.set_timeout_enable(false);
+    } else {
+        LOG_INFO("Upper limit switch released\n");
+    }
 }
 
 } // namespace positional_actuators

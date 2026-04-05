@@ -12,6 +12,10 @@ boards := $(foreach dir,$(wildcard boards/*),$(subst boards/, , $(dir)))
 # RIOT-OS patches targets
 include $(MCUFIRMWAREBASE)/makefiles/riot-patches.mk.inc
 
+# Disable top-level parallelism to avoid race conditions on shared resources
+# (packages, kconfiglib). Each application is already built with -j$(nproc).
+.NOTPARALLEL:
+
 .PHONY: all clean distclean doc docman doclatex docclean help world
 .PHONY: distclean-riot-patches riot-patches
 .PHONY: $(apps) $(examples)

@@ -19,13 +19,19 @@
 #include "pf_common/platform_common.hpp"
 #include "pf_common/uuids.hpp"
 
+// Protobuf includes
+#include "PB_EmergencyStop.hpp"
+
 namespace cogip {
 namespace pf_common {
 
 // Static variables
 static bool copilot_connected = false;
+static bool emergency_stop_latched = false;  ///< Latched: stays true until cleared by game_reset
+static bool emergency_stop_physical = false; ///< Tracks actual button state for edge detection
 static copilot_callback_t on_copilot_connected_callback;
 static copilot_callback_t on_copilot_disconnected_callback;
+static emergency_stop_callback_t on_emergency_stop_callback;
 
 // canpb CAN device
 static canpb::CanProtobuf canpb(0);
@@ -98,9 +104,51 @@ static void* _heartbeat_thread(void* args)
     return nullptr;
 }
 
+/// @brief Default handler for emergency stop status message (private)
+/// @param[in] buffer ReadBuffer containing the message
+static void handle_emergency_stop(canpb::ReadBuffer& buffer)
+{
+    PB_EmergencyStopStatus pb_status;
+    EmbeddedProto::Error error = pb_status.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Emergency stop status: Protobuf deserialization error: %d\n",
+                  static_cast<int>(error));
+        return;
+    }
+
+    bool engaged = pb_status.get_emergency_stop_engaged();
+    if (engaged && !emergency_stop_physical) {
+        LOG_WARNING("Emergency stop ENGAGED\n");
+        emergency_stop_latched = true;
+        if (on_emergency_stop_callback) {
+            on_emergency_stop_callback();
+        }
+    } else if (!engaged && emergency_stop_physical) {
+        LOG_WARNING("Emergency stop RELEASED (still latched until game_reset)\n");
+    }
+    emergency_stop_physical = engaged;
+}
+
 bool is_copilot_connected()
 {
     return copilot_connected;
+}
+
+bool is_emergency_stop_latched()
+{
+    return emergency_stop_latched;
+}
+
+void clear_emergency_stop()
+{
+    if (emergency_stop_latched) {
+        if (emergency_stop_physical) {
+            LOG_WARNING("Emergency stop latch NOT cleared: button still engaged\n");
+        } else {
+            LOG_WARNING("Emergency stop latch CLEARED\n");
+            emergency_stop_latched = false;
+        }
+    }
 }
 
 canpb::CanProtobuf& get_canpb()
@@ -108,11 +156,13 @@ canpb::CanProtobuf& get_canpb()
     return canpb;
 }
 
-int pf_init(copilot_callback_t on_connect, copilot_callback_t on_disconnect)
+int pf_init(copilot_callback_t on_connect, copilot_callback_t on_disconnect,
+            emergency_stop_callback_t on_emergency_stop)
 {
     // Store custom callbacks
     on_copilot_connected_callback = on_connect;
     on_copilot_disconnected_callback = on_disconnect;
+    on_emergency_stop_callback = on_emergency_stop;
 
     // Initialize CAN with default filter
     int canpb_res = canpb.init(&canpb_filter);
@@ -126,6 +176,8 @@ int pf_init(copilot_callback_t on_connect, copilot_callback_t on_disconnect)
                                    canpb::message_handler_t::create<handle_copilot_connected>());
     canpb.register_message_handler(copilot_disconnected_uuid,
                                    canpb::message_handler_t::create<handle_copilot_disconnected>());
+    canpb.register_message_handler(emergency_stop_status_uuid,
+                                   canpb::message_handler_t::create<handle_emergency_stop>());
 
     return 0;
 }

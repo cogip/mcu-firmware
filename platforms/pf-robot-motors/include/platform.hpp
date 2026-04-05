@@ -26,8 +26,6 @@
 using cogip::pf_common::game_end_uuid;
 using cogip::pf_common::game_reset_uuid;
 using cogip::pf_common::game_start_uuid;
-// Power Supply: 0x5000 - 0x5FFF
-using cogip::pf_common::emergency_stop_status_uuid;
 /// @}
 
 /// @brief Initialize all platform threads

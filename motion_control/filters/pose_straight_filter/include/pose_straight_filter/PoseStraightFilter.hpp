@@ -104,6 +104,7 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
 
   private:
     PoseStraightFilterState current_state_;
+    PoseStraightFilterState previous_logged_state_ = PoseStraightFilterState::FINISHED;
     cogip_defs::Pose prev_target_;          ///< Previous target for change detection
     cogip_defs::Pose start_pose_;           ///< Start pose for anti-drift correction
     bool logged_finished_;                  ///< Flag to log FINISHED only once per target

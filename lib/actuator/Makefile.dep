@@ -1,3 +1,4 @@
 # Firmware modules
+USEMODULE += anti_blocking_controller
 USEMODULE += encoder
 USEMODULE += motor

@@ -11,6 +11,9 @@
 
 #pragma once
 
+// System includes
+#include <climits>
+
 // Project includes
 #include "actuator/LiftParameters.hpp"
 #include "actuator/Motor.hpp"
@@ -46,9 +49,19 @@ class Lift : public Motor
     /// @param pin GPIO pin identifier for the triggered limit switch.
     void at_limits(gpio_t pin);
 
+  protected:
+    /// @brief Reset last command on blocked/timeout so the same target can be retried.
+    void on_state_change(motion_control::target_pose_status_t state) override;
+
   private:
     /// Reference to the static configuration parameters for this lift actuator.
     const LiftParameters& params_;
+
+    /// True while the homing sequence is running (init only).
+    bool initializing_ = false;
+
+    /// Last commanded position (after clamping), used to skip redundant actuate calls.
+    int32_t last_command_ = INT32_MIN;
 
     /// @brief Handle action when the lower end-stop is active.
     void at_lower_limit();
