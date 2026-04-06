@@ -1,0 +1,2 @@
+USEMODULE += otos
+USEMODULE += localization
