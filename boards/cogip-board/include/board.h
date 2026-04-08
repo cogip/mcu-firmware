@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    boards_cogip-board COGIP 20234
+ * @defgroup    boards_cogip-board COGIP 2024
  * @ingroup     boards_cogip-board
  * @brief       Support for the COGIP 2024
  * @{

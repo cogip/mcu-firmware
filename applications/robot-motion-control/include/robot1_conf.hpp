@@ -1,18 +1,14 @@
 #pragma once
 
-// Project includes
 #include "etl/numeric.h"
-#include "parameter/Parameter.hpp"
-
-using namespace cogip::parameter;
 
 /* Motion motors */
 #define MOTOR_LEFT 1
 #define MOTOR_RIGHT 0
 
 /* Quadrature decoding polarity */
-inline Parameter<float, ReadOnly> qdec_left_polarity{1.0};
-inline Parameter<float, ReadOnly> qdec_right_polarity{-1.0};
+constexpr float default_qdec_left_polarity = 1.0;
+constexpr float default_qdec_right_polarity = -1.0;
 
 /// Motors properties
 constexpr float motor_wheels_diameter_mm = 50.8;
@@ -24,27 +20,27 @@ constexpr float min_motor_speed_percent = 10;
 constexpr float max_motor_speed_percent = 100;
 
 /// Encoders Parameters
-inline Parameter<float> left_encoder_wheels_diameter_mm{47.64768795921133};
-inline Parameter<float> right_encoder_wheels_diameter_mm{47.792104995747586};
-inline Parameter<float> encoder_wheels_distance_mm{275.7117596881151};
-inline Parameter<float, ReadOnly> encoder_wheels_resolution_pulses{4096 * 4};
+constexpr float default_left_encoder_wheels_diameter_mm = 47.64768795921133;
+constexpr float default_right_encoder_wheels_diameter_mm = 47.792104995747586;
+constexpr float default_encoder_wheels_distance_mm = 275.7117596881151;
+constexpr float default_encoder_wheels_resolution_pulses = 4096 * 4;
 
 // Linear pose PID (QUADPID chain)
-inline Parameter<float, NonNegative> linear_pose_pid_kp{0.2};
-inline Parameter<float, NonNegative> linear_pose_pid_ki{0};
-inline Parameter<float, NonNegative> linear_pose_pid_kd{0};
+constexpr float default_linear_pose_pid_kp = 0.2;
+constexpr float default_linear_pose_pid_ki = 0;
+constexpr float default_linear_pose_pid_kd = 0;
 // Angular pose PID (QUADPID chain)
-inline Parameter<float, NonNegative> angular_pose_pid_kp{0.1};
-inline Parameter<float, NonNegative> angular_pose_pid_ki{0};
-inline Parameter<float, NonNegative> angular_pose_pid_kd{0};
+constexpr float default_angular_pose_pid_kp = 0.1;
+constexpr float default_angular_pose_pid_ki = 0;
+constexpr float default_angular_pose_pid_kd = 0;
 // Linear speed PID (QUADPID chain)
-inline Parameter<float, NonNegative> linear_speed_pid_kp{3.};
-inline Parameter<float, NonNegative> linear_speed_pid_ki{0.8};
-inline Parameter<float, NonNegative> linear_speed_pid_kd{0};
+constexpr float default_linear_speed_pid_kp = 3.;
+constexpr float default_linear_speed_pid_ki = 0.8;
+constexpr float default_linear_speed_pid_kd = 0;
 // Angular speed PID (QUADPID chain)
-inline Parameter<float, NonNegative> angular_speed_pid_kp{5.5};
-inline Parameter<float, NonNegative> angular_speed_pid_ki{0.6};
-inline Parameter<float, NonNegative> angular_speed_pid_kd{0};
+constexpr float default_angular_speed_pid_kp = 5.5;
+constexpr float default_angular_speed_pid_ki = 0.6;
+constexpr float default_angular_speed_pid_kd = 0;
 
 // ============================================================================
 // Tracker chain PID gains (QUADPID_TRACKER)
@@ -52,21 +48,21 @@ inline Parameter<float, NonNegative> angular_speed_pid_kd{0};
 
 // Tracker linear pose PID (tracker during MOVE_TO_POSITION)
 // Ki helps eliminate steady-state error when tracker profile ends
-inline Parameter<float, NonNegative> tracker_linear_pose_pid_kp{0.1};
-inline Parameter<float, NonNegative> tracker_linear_pose_pid_ki{0.0};
-inline Parameter<float, NonNegative> tracker_linear_pose_pid_kd{0};
+constexpr float default_tracker_linear_pose_pid_kp = 0.1;
+constexpr float default_tracker_linear_pose_pid_ki = 0.0;
+constexpr float default_tracker_linear_pose_pid_kd = 0;
 // Tracker angular pose PID (tracker during ROTATE states)
-inline Parameter<float, NonNegative> tracker_angular_pose_pid_kp{0.3};
-inline Parameter<float, NonNegative> tracker_angular_pose_pid_ki{0};
-inline Parameter<float, NonNegative> tracker_angular_pose_pid_kd{0};
+constexpr float default_tracker_angular_pose_pid_kp = 0.3;
+constexpr float default_tracker_angular_pose_pid_ki = 0;
+constexpr float default_tracker_angular_pose_pid_kd = 0;
 // Tracker linear speed PID
-inline Parameter<float, NonNegative> tracker_linear_speed_pid_kp{3};
-inline Parameter<float, NonNegative> tracker_linear_speed_pid_ki{0.8};
-inline Parameter<float, NonNegative> tracker_linear_speed_pid_kd{0};
+constexpr float default_tracker_linear_speed_pid_kp = 3;
+constexpr float default_tracker_linear_speed_pid_ki = 0.8;
+constexpr float default_tracker_linear_speed_pid_kd = 0;
 // Tracker angular speed PID
-inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{5.5};
-inline Parameter<float, NonNegative> tracker_angular_speed_pid_ki{0.6};
-inline Parameter<float, NonNegative> tracker_angular_speed_pid_kd{0};
+constexpr float default_tracker_angular_speed_pid_kp = 5.5;
+constexpr float default_tracker_angular_speed_pid_ki = 0.6;
+constexpr float default_tracker_angular_speed_pid_kd = 0;
 
 // Linear threshold
 constexpr float linear_threshold = 2;
@@ -103,29 +99,28 @@ constexpr bool platform_linear_antiblocking = true;
 // Angular antiblocking
 constexpr bool angular_antiblocking = false;
 
-// Linear pose PID integral limit
-inline Parameter<float, NonNegative> linear_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
-// Angular pose PID integral limit
-inline Parameter<float, NonNegative> angular_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
-// Linear speed PID integral limit
-inline Parameter<float, NonNegative> linear_speed_pid_integral_limit{max_speed_mm_per_s /
-                                                                     linear_speed_pid_ki.get()};
-// Angular speed PID integral limit
-inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_deg_per_s /
-                                                                      angular_speed_pid_ki.get()};
+// PID integral limits (use float max when ki == 0 to avoid constexpr div-by-zero)
+constexpr float default_linear_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+constexpr float default_angular_pose_pid_integral_limit = etl::numeric_limits<uint16_t>::max();
+constexpr float default_linear_speed_pid_integral_limit =
+    (default_linear_speed_pid_ki != 0) ? (max_speed_mm_per_s / default_linear_speed_pid_ki)
+                                       : (etl::numeric_limits<float>::max());
+constexpr float default_angular_speed_pid_integral_limit =
+    (default_angular_speed_pid_ki != 0) ? (max_speed_deg_per_s / default_angular_speed_pid_ki)
+                                        : (etl::numeric_limits<float>::max());
 
-// Tracker linear pose PID integral limit
-// Limit = max_speed / ki to prevent integral windup
-inline Parameter<float, NonNegative> tracker_linear_pose_pid_integral_limit{
-    max_speed_mm_per_s / tracker_linear_pose_pid_ki.get()};
-// Tracker angular pose PID integral limit
-inline Parameter<float, NonNegative> tracker_angular_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
-// Tracker linear speed PID integral limit
-inline Parameter<float, NonNegative> tracker_linear_speed_pid_integral_limit{
-    max_speed_mm_per_s / tracker_linear_speed_pid_ki.get()};
-// Tracker angular speed PID integral limit
-inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
-    max_speed_deg_per_s / tracker_angular_speed_pid_ki.get()};
+// Tracker PID integral limits
+constexpr float default_tracker_linear_pose_pid_integral_limit =
+    (default_tracker_linear_pose_pid_ki != 0)
+        ? (max_speed_mm_per_s / default_tracker_linear_pose_pid_ki)
+        : (etl::numeric_limits<float>::max());
+constexpr float default_tracker_angular_pose_pid_integral_limit =
+    etl::numeric_limits<uint16_t>::max();
+constexpr float default_tracker_linear_speed_pid_integral_limit =
+    (default_tracker_linear_speed_pid_ki != 0)
+        ? (max_speed_mm_per_s / default_tracker_linear_speed_pid_ki)
+        : (etl::numeric_limits<float>::max());
+constexpr float default_tracker_angular_speed_pid_integral_limit =
+    (default_tracker_angular_speed_pid_ki != 0)
+        ? (max_speed_deg_per_s / default_tracker_angular_speed_pid_ki)
+        : (etl::numeric_limits<float>::max());

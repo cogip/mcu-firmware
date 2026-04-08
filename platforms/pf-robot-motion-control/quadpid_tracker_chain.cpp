@@ -10,7 +10,6 @@
 
 #include "quadpid_tracker_chain.hpp"
 
-#include "app_conf.hpp"
 #include "parameter/Parameter.hpp"
 #include "pid/PID.hpp"
 #include "pid/PIDParameters.hpp"
