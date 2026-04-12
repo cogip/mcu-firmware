@@ -41,5 +41,11 @@ USEMODULE += target_change_detector
 USEMODULE += telemetry_controller
 
 # Board features required
-FEATURES_REQUIRED += periph_qdec
 FEATURES_REQUIRED += periph_pwm
+
+# OTOS localization support for robots using optical tracking
+ifneq (,$(filter 2,$(ROBOT_ID)))
+  USEMODULE += localization_otos
+else
+  FEATURES_REQUIRED += periph_qdec
+endif
