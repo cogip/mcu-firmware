@@ -121,9 +121,7 @@ void Lift::at_lower_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.lower_limit_switch_pin)) {
         LOG_INFO("Lower limit switch pressed\n");
-        if (initializing_) {
-            set_current_distance(params_.lower_limit_mm);
-        }
+        set_current_distance(params_.lower_limit_mm);
         actuate(params_.lower_limit_mm);
         motor_engine_.set_timeout_enable(false);
     } else {
