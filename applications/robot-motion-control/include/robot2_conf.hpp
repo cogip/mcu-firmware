@@ -1,10 +1,9 @@
 #pragma once
 
 // Project includes
-#include "board.h"
-#include "encoder/EncoderQDEC.hpp"
 #include "etl/numeric.h"
-#include "localization/LocalizationDifferential.hpp"
+#include "localization/LocalizationOTOS.hpp"
+#include "otos/OTOS.hpp"
 #include "parameter/Parameter.hpp"
 
 using namespace cogip::parameter;
@@ -18,10 +17,13 @@ inline Parameter<float, ReadOnly> qdec_left_polarity{1.0};
 inline Parameter<float, ReadOnly> qdec_right_polarity{-1.0};
 
 /// Motors properties
-constexpr float motor_wheels_diameter_mm = 50.8;
-constexpr float motor_wheels_distance_mm = 172;
-constexpr float left_motor_constant = 3.703;
-constexpr float right_motor_constant = 3.703;
+constexpr float motor_wheels_diameter_mm = 60.0;
+constexpr float motor_wheels_distance_mm = 131;
+// GA32Y-31ZY: 8000 RPM no-load motor, 5.18:1 reduction, so 8000/5.18 ≈ 1544
+// RPM at the output shaft at nominal voltage.
+// motor_constant = 6000 / output_RPM (see DifferentialDriveController.cpp).
+constexpr float left_motor_constant = 3.886;
+constexpr float right_motor_constant = 3.886;
 
 constexpr float min_motor_speed_percent = 10;
 constexpr float max_motor_speed_percent = 100;
@@ -134,16 +136,29 @@ inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
     max_speed_deg_per_s / tracker_angular_speed_pid_ki.get()};
 
 // ============================================================================
-// Localization (encoder-based differential odometry)
+// Localization (OTOS optical tracking sensor)
 // ============================================================================
 
-static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
-                                                encoder_wheels_resolution_pulses.get());
-static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
-                                                 encoder_wheels_resolution_pulses.get());
+// OTOS I2C configuration
+constexpr uint8_t otos_i2c_dev = 0;
+constexpr uint8_t otos_i2c_addr = 0x17;
 
-static cogip::localization::LocalizationDifferentialParameters
-    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
-                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
-static cogip::localization::LocalizationDifferential
-    robot_localization(localization_params, left_encoder, right_encoder);
+// OTOS calibration scalars (range 0.872 to 1.127)
+constexpr float otos_linear_scalar = 1.0f;
+constexpr float otos_angular_scalar = 1.0f;
+
+// OTOS mounting offset relative to robot center (mm, degrees)
+constexpr float otos_offset_x_mm = 0.0f;
+constexpr float otos_offset_y_mm = 0.0f;
+constexpr float otos_offset_h_deg = 0.0f;
+
+static constexpr cogip::localization::LocalizationOTOS::Parameters otos_params = {
+    .linear_scalar = otos_linear_scalar,
+    .angular_scalar = otos_angular_scalar,
+    .offset_x_mm = otos_offset_x_mm,
+    .offset_y_mm = otos_offset_y_mm,
+    .offset_h_deg = otos_offset_h_deg,
+};
+
+static cogip::otos::OTOS otos_sensor(I2C_DEV(otos_i2c_dev), otos_i2c_addr);
+static cogip::localization::LocalizationOTOS robot_localization(otos_sensor, otos_params);

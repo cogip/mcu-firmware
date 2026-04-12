@@ -1,7 +1,10 @@
 #pragma once
 
 // Project includes
+#include "board.h"
+#include "encoder/EncoderQDEC.hpp"
 #include "etl/numeric.h"
+#include "localization/LocalizationDifferential.hpp"
 #include "parameter/Parameter.hpp"
 
 using namespace cogip::parameter;
@@ -125,3 +128,18 @@ inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
 constexpr bool platform_linear_antiblocking = false;
 // Angular antiblocking
 constexpr bool angular_antiblocking = false;
+
+// ============================================================================
+// Localization (encoder-based differential odometry)
+// ============================================================================
+
+static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
+                                                encoder_wheels_resolution_pulses.get());
+static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
+                                                 encoder_wheels_resolution_pulses.get());
+
+static cogip::localization::LocalizationDifferentialParameters
+    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
+                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
+static cogip::localization::LocalizationDifferential
+    robot_localization(localization_params, left_encoder, right_encoder);
