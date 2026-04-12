@@ -57,6 +57,12 @@ class BaseControllerEngine
         mutex_unlock(&mutex_);
     };
 
+    /// Return whether the engine is enabled
+    bool is_enabled() const
+    {
+        return enable_;
+    };
+
     /// Get controller
     BaseController* controller() const
     {

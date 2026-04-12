@@ -122,8 +122,7 @@ void Lift::at_lower_limit()
     if (gpio_read(params_.lower_limit_switch_pin)) {
         LOG_INFO("Lower limit switch pressed\n");
         set_current_distance(params_.lower_limit_mm);
-        actuate(params_.lower_limit_mm);
-        motor_engine_.set_timeout_enable(false);
+        disable();
     } else {
         LOG_INFO("Lower limit switch released\n");
     }
