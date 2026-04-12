@@ -13,19 +13,20 @@
 
 #include "otos/OTOSRegisters.hpp"
 
-#include <periph/i2c.h>
+#include "soft_i2c/soft_i2c.h"
 
 namespace cogip {
 namespace otos {
 
-/// @brief Low-level I2C driver for the SparkFun OTOS sensor (PAA5160E1 + IMU)
+/// @brief Low-level driver for the SparkFun OTOS sensor (PAA5160E1 + IMU)
+/// @details Communicates via software I2C (GPIO bitbanging)
 class OTOS
 {
   public:
     /// @brief Constructor
-    /// @param i2c_dev I2C bus index (e.g., I2C_DEV(0))
+    /// @param i2c_dev Software I2C bus index (e.g., SOFT_I2C_DEV(0))
     /// @param i2c_addr 7-bit I2C address (default 0x17)
-    explicit OTOS(i2c_t i2c_dev, uint8_t i2c_addr = OTOS_DEFAULT_ADDR);
+    explicit OTOS(soft_i2c_t i2c_dev, uint8_t i2c_addr = OTOS_DEFAULT_ADDR);
 
     /// @brief Initialize the sensor (verify product ID, soft reset, configure)
     /// @return 0 on success, negative on error
@@ -84,7 +85,7 @@ class OTOS
     int calibrate_imu(uint8_t num_samples = 255);
 
   private:
-    i2c_t i2c_dev_;
+    soft_i2c_t i2c_dev_;
     uint8_t i2c_addr_;
     Pose2D pose_;
     Pose2D velocity_;

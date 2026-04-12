@@ -1,5 +1,9 @@
 #pragma once
 
+// Software I2C pin configuration for OTOS (must be before soft_i2c_params.h)
+#define SOFT_I2C_PARAM_SCL GPIO_PIN(PORT_A, 6)
+#define SOFT_I2C_PARAM_SDA GPIO_PIN(PORT_A, 4)
+
 // Project includes
 #include "etl/numeric.h"
 #include "localization/LocalizationOTOS.hpp"
@@ -139,8 +143,8 @@ inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
 // Localization (OTOS optical tracking sensor)
 // ============================================================================
 
-// OTOS I2C configuration
-constexpr uint8_t otos_i2c_dev = 0;
+// OTOS software I2C configuration (PB6=SCL, PB7=SDA)
+// Pins defined in board config via SOFT_I2C_PARAM_SCL/SDA
 constexpr uint8_t otos_i2c_addr = 0x17;
 
 // OTOS calibration scalars (range 0.872 to 1.127)
@@ -160,5 +164,5 @@ static constexpr cogip::localization::LocalizationOTOS::Parameters otos_params =
     .offset_h_deg = otos_offset_h_deg,
 };
 
-static cogip::otos::OTOS otos_sensor(I2C_DEV(otos_i2c_dev), otos_i2c_addr);
+static cogip::otos::OTOS otos_sensor(SOFT_I2C_DEV(0), otos_i2c_addr);
 static cogip::localization::LocalizationOTOS robot_localization(otos_sensor, otos_params);

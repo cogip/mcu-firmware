@@ -32,13 +32,16 @@ static constexpr float HEADING_LSB_TO_DEG = HEADING_LSB_TO_RAD * RAD_TO_DEG;
 static constexpr float MM_TO_POS_LSB = 1.0f / POS_LSB_TO_MM;
 static constexpr float DEG_TO_HEADING_LSB = 1.0f / HEADING_LSB_TO_DEG;
 
-OTOS::OTOS(i2c_t i2c_dev, uint8_t i2c_addr)
+OTOS::OTOS(soft_i2c_t i2c_dev, uint8_t i2c_addr)
     : i2c_dev_(i2c_dev), i2c_addr_(i2c_addr), pose_{}, velocity_{}, acceleration_{}
 {
 }
 
 int OTOS::init()
 {
+    // Initialize software I2C bus
+    soft_i2c_init(i2c_dev_);
+
     // Verify product ID
     uint8_t product_id = 0;
     int ret = read_reg(REG_PRODUCT_ID, &product_id);
@@ -149,17 +152,17 @@ int OTOS::calibrate_imu(uint8_t num_samples)
 
 int OTOS::read_regs(uint8_t reg, uint8_t* buf, size_t len)
 {
-    i2c_acquire(i2c_dev_);
-    int ret = i2c_read_regs(i2c_dev_, i2c_addr_, reg, buf, len, 0);
-    i2c_release(i2c_dev_);
+    soft_i2c_acquire(i2c_dev_);
+    int ret = soft_i2c_read_regs(i2c_dev_, i2c_addr_, reg, buf, len);
+    soft_i2c_release(i2c_dev_);
     return ret;
 }
 
 int OTOS::write_regs(uint8_t reg, const uint8_t* buf, size_t len)
 {
-    i2c_acquire(i2c_dev_);
-    int ret = i2c_write_regs(i2c_dev_, i2c_addr_, reg, buf, len, 0);
-    i2c_release(i2c_dev_);
+    soft_i2c_acquire(i2c_dev_);
+    int ret = soft_i2c_write_regs(i2c_dev_, i2c_addr_, reg, buf, len);
+    soft_i2c_release(i2c_dev_);
     return ret;
 }
 

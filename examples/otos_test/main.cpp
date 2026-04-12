@@ -12,7 +12,7 @@
 #include "otos/OTOS.hpp"
 #include "ztimer.h"
 
-static cogip::otos::OTOS otos(I2C_DEV(0), 0x17);
+static cogip::otos::OTOS otos(SOFT_I2C_DEV(0), 0x17);
 
 int main(void)
 {

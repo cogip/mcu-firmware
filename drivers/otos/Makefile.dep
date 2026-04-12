@@ -1,1 +1,1 @@
-FEATURES_REQUIRED += periph_i2c
+USEMODULE += soft_i2c
