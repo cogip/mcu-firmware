@@ -50,9 +50,19 @@ class LocalizationInterface
     /// reference
     virtual const cogip::cogip_defs::Polar& delta_polar_pose() = 0;
 
+    /// @brief Initialize the localization sensors
+    /// @return 0 on success, negative on failure.
+    virtual int init() = 0;
+
+    /// @brief Reset localization sensors (e.g., encoder counters)
+    virtual void reset() = 0;
+
     /// @brief update new robot pose (x, y, O)
     /// @return int 0 on success, negative on failure.
     virtual int update() = 0;
+
+    /// @brief Send localization-specific telemetry data (optional)
+    virtual void send_telemetry() {};
 };
 
 } // namespace localization

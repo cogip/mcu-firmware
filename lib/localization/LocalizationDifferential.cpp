@@ -4,14 +4,38 @@
 // directory for more details.
 
 #include <cmath>
+#include <inttypes.h>
 
 #include "localization/LocalizationDifferential.hpp"
+#include "log.h"
+#ifdef MODULE_TELEMETRY
+#include "telemetry/Telemetry.hpp"
+#endif
 #include "trigonometry.h"
 #include "utils.hpp"
 
 namespace cogip {
 
 namespace localization {
+
+int LocalizationDifferential::init()
+{
+    int error = left_encoder_.init();
+    if (error) {
+        LOG_ERROR("Left encoder init failed, error=%d\n", error);
+    }
+    int error_right = right_encoder_.init();
+    if (error_right) {
+        LOG_ERROR("Right encoder init failed, error=%d\n", error_right);
+    }
+    return error ? error : error_right;
+}
+
+void LocalizationDifferential::reset()
+{
+    left_encoder_.reset();
+    right_encoder_.reset();
+}
 
 void LocalizationDifferential::set_pose(float x, float y, float O)
 {
@@ -55,6 +79,15 @@ int LocalizationDifferential::update()
     polar_.set_angle(RAD2DEG(delta_angular_pose));
 
     return 0;
+}
+
+void LocalizationDifferential::send_telemetry()
+{
+#ifdef MODULE_TELEMETRY
+    using cogip::utils::operator"" _key_hash;
+    cogip::telemetry::Telemetry::send<int64_t>("encoder_left"_key_hash, left_encoder_.counter());
+    cogip::telemetry::Telemetry::send<int64_t>("encoder_right"_key_hash, right_encoder_.counter());
+#endif
 }
 
 } // namespace localization
