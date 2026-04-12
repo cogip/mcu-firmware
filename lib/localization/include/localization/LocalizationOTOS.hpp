@@ -25,9 +25,20 @@ namespace localization {
 class LocalizationOTOS : public LocalizationInterface
 {
   public:
+    /// @brief OTOS configuration parameters
+    struct Parameters
+    {
+        float linear_scalar = 1.0f;  ///< Calibration scalar (0.872 to 1.127)
+        float angular_scalar = 1.0f; ///< Calibration scalar (0.872 to 1.127)
+        float offset_x_mm = 0.0f;    ///< Mounting offset X (mm)
+        float offset_y_mm = 0.0f;    ///< Mounting offset Y (mm)
+        float offset_h_deg = 0.0f;   ///< Mounting offset heading (deg)
+    };
+
     /// @brief Constructor
     /// @param otos Reference to the OTOS driver instance
-    explicit LocalizationOTOS(cogip::otos::OTOS& otos);
+    /// @param params OTOS configuration parameters
+    explicit LocalizationOTOS(cogip::otos::OTOS& otos, const Parameters& params);
 
     /// @brief Set the current pose (resets OTOS tracking)
     void set_pose(float x, float y, float O) override;
@@ -41,12 +52,20 @@ class LocalizationOTOS : public LocalizationInterface
     /// @brief Get the polar delta since last update
     const cogip::cogip_defs::Polar& delta_polar_pose() override;
 
+    /// @brief Initialize the OTOS sensor and run IMU calibration
+    /// @return 0 on success, negative on error
+    int init() override;
+
+    /// @brief No-op for OTOS (tracks absolute position)
+    void reset() override;
+
     /// @brief Read fresh data from the OTOS sensor
     /// @return 0 on success, negative on error
     int update() override;
 
   private:
     cogip::otos::OTOS& otos_;
+    Parameters params_;
     cogip::cogip_defs::Pose pose_;
     cogip::cogip_defs::Pose prev_pose_;
     cogip::cogip_defs::Polar polar_;

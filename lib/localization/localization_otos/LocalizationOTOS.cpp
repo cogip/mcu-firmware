@@ -17,9 +17,26 @@
 namespace cogip {
 namespace localization {
 
-LocalizationOTOS::LocalizationOTOS(cogip::otos::OTOS& otos)
-    : otos_(otos), pose_(), prev_pose_(), polar_(), first_update_(true)
+LocalizationOTOS::LocalizationOTOS(cogip::otos::OTOS& otos, const Parameters& params)
+    : otos_(otos), params_(params), pose_(), prev_pose_(), polar_(), first_update_(true)
 {
+}
+
+int LocalizationOTOS::init()
+{
+    int ret = otos_.init();
+    if (ret < 0) {
+        return ret;
+    }
+    otos_.set_linear_scalar(params_.linear_scalar);
+    otos_.set_angular_scalar(params_.angular_scalar);
+    otos_.set_offset(params_.offset_x_mm, params_.offset_y_mm, params_.offset_h_deg);
+    return otos_.calibrate_imu();
+}
+
+void LocalizationOTOS::reset()
+{
+    // OTOS tracks absolute position, no counters to reset
 }
 
 void LocalizationOTOS::set_pose(float x, float y, float O)

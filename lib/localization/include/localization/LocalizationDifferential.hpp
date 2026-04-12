@@ -67,9 +67,19 @@ class LocalizationDifferential : public LocalizationInterface
         return polar_;
     }
 
+    /// @brief Initialize encoders
+    /// @return 0 on success, negative on failure.
+    int init() override;
+
+    /// @brief Reset encoder counters
+    void reset() override;
+
     /// @brief update new robot pose (x, y, O)
     /// @return int 0 on success, negative on failure.
     int update() override;
+
+    /// @brief Send encoder telemetry data
+    void send_telemetry() override;
 
   private:
     const LocalizationDifferentialParameters& parameters_;
