@@ -133,8 +133,14 @@ void Lift::at_upper_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
-        motor_engine_.set_target_speed(0);
         motor_engine_.set_timeout_enable(false);
+        // Hold the current position. A hardware brake alone would only short
+        // the stator (dynamic braking) and cannot hold the lift against
+        // gravity, so freeze the target at the current distance and let the
+        // PID actively compensate.
+        const float current = motor_engine_.get_current_distance_from_odometer();
+        motor_engine_.set_target_distance(current);
+        last_command_ = static_cast<int32_t>(current);
     } else {
         LOG_INFO("Upper limit switch released\n");
     }
