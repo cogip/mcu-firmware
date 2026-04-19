@@ -24,6 +24,7 @@
 #include "platform.hpp"
 #include "platform_engine/PlatformEngine.hpp"
 
+#include "brake_chain.hpp"
 #include "quadpid_chain.hpp"
 #include "quadpid_tracker_chain.hpp"
 #include "tracker_speed_tuning_chain.hpp"
@@ -643,6 +644,8 @@ void pf_init_motion_control(void)
     quadpid_chain::init();
     quadpid_tracker_chain::init();
     tracker_speed_tuning_chain::init();
+    brake_chain::init();
+    pf_motion_control_platform_engine.set_brake_controller(&brake_chain::brake_meta_controller);
 
     // Associate default controller (QUADPID_TRACKER) to the engine
     pf_motion_control_platform_engine.set_controller(
