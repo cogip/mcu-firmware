@@ -83,15 +83,36 @@ static void _handle_command(cogip::canpb::ReadBuffer& buffer)
     }
 }
 
-/// Actuators initialization message handler
-static void _handle_actuators_init([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+/// Actuators initialization message handler.
+/// Without a PB_ActuatorInit payload, or with one whose id field is
+/// unset, every positional actuator is initialised (legacy behaviour).
+/// When the id field is set, only that actuator is initialised.
+static void _handle_actuators_init(cogip::canpb::ReadBuffer& buffer)
 {
     cogip::pf_common::clear_emergency_stop();
     if (cogip::pf_common::is_emergency_stop_latched()) {
         LOG_WARNING("Actuator init rejected: emergency stop button still engaged\n");
         return;
     }
-    positional_actuators::init_sequence();
+
+    static PB_ActuatorInit pb_init;
+    pb_init.clear();
+    if (buffer.get_size() > 0) {
+        pb_init.deserialize(buffer);
+    }
+
+    if (!pb_init.has_id()) {
+        positional_actuators::init_sequence();
+        return;
+    }
+
+    cogip::actuators::Enum id = cogip::actuators::Enum{static_cast<uint8_t>(pb_init.get_id())};
+    if (!positional_actuators::contains(id)) {
+        LOG_WARNING("Actuator init: id=%" PRIu8 " not found\n", static_cast<uint8_t>(id));
+        return;
+    }
+    LOG_INFO("Actuator init: id=%" PRIu8 "\n", static_cast<uint8_t>(id));
+    positional_actuators::get(id).init();
 }
 
 void init()
