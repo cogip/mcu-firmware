@@ -63,10 +63,41 @@ class BaseControllerEngine
         return enable_;
     };
 
+    /// Latch or clear the brake state. When latched, the engine executes
+    /// the brake controller chain instead of the normal one; it stays
+    /// latched until an explicit set_brake(false) is issued.
+    void set_brake(bool brake)
+    {
+        mutex_lock(&mutex_);
+        brake_ = brake;
+        mutex_unlock(&mutex_);
+    };
+
+    /// Return whether the brake is currently latched
+    bool is_braking() const
+    {
+        return brake_;
+    };
+
+    /// Register the controller chain to execute while brake is latched.
+    /// Intended to be a minimal chain writing speed_order = 0 followed
+    /// by the speed loop, so that process_outputs drives the motor(s)
+    /// toward zero speed via closed-loop control.
+    void set_brake_controller(BaseController* brake_controller)
+    {
+        brake_controller_ = brake_controller;
+    };
+
     /// Get controller
     BaseController* controller() const
     {
         return controller_;
+    };
+
+    /// Get brake controller
+    BaseController* brake_controller() const
+    {
+        return brake_controller_;
     };
 
     /// Get pose reached flag
@@ -192,6 +223,14 @@ class BaseControllerEngine
 
     /// Controllers input/output datas shared accross controllers
     ControllersIO io_;
+
+    /// Brake latch flag. When true, the engine runs brake_controller_ each
+    /// cycle instead of controller_. Cleared only by an explicit
+    /// set_brake(false) call.
+    bool brake_;
+
+    /// Controller chain executed while brake_ is latched.
+    BaseController* brake_controller_;
 };
 
 } // namespace motion_control
