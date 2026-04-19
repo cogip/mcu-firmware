@@ -139,21 +139,28 @@ inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
 // Localization (OTOS optical tracking sensor)
 // ============================================================================
 
+/// @brief Marker macro used by the parameter handler to decide whether to
+/// register the OTOS calibration scalars in the CAN parameter registry.
+#define ROBOT_HAS_OTOS 1
+
 // OTOS I2C address
 constexpr uint8_t otos_i2c_addr = 0x17;
 
-// OTOS calibration scalars (range 0.872 to 1.127)
-constexpr float otos_linear_scalar = 0.969f;
-constexpr float otos_angular_scalar = 0.994f;
+// OTOS calibration scalars (range 0.872 to 1.127). Exposed as live
+// Parameter<float> so they can be calibrated and updated at runtime via
+// the CAN parameter handler.
+inline Parameter<float> otos_linear_scalar{0.969f};
+inline Parameter<float> otos_angular_scalar{0.994f};
 
-// OTOS mounting offset relative to robot center (mm, degrees)
+// OTOS mounting offset relative to robot center (mm, degrees). Physical
+// mounting geometry, calibrated at assembly, no runtime tuning.
 constexpr float otos_offset_x_mm = 0.0f;
 constexpr float otos_offset_y_mm = 0.0f;
 constexpr float otos_offset_h_deg = 0.0f;
 
-static constexpr cogip::localization::LocalizationOTOS::Parameters otos_params = {
-    .linear_scalar = otos_linear_scalar,
-    .angular_scalar = otos_angular_scalar,
+static cogip::localization::LocalizationOTOS::Parameters otos_params = {
+    .linear_scalar = otos_linear_scalar.get(),
+    .angular_scalar = otos_angular_scalar.get(),
     .offset_x_mm = otos_offset_x_mm,
     .offset_y_mm = otos_offset_y_mm,
     .offset_h_deg = otos_offset_h_deg,
