@@ -57,6 +57,10 @@ Motor::Motor(const MotorParameters& motor_parameters, MotorControlMode mode)
                                 motor_parameters.speed_controller_parameters),
       tracker_motor_distance_filter_(actuators::motor_tracker_pose_filter_io_keys,
                                      motor_parameters.motor_pose_filter_parameters),
+      // Brake chain: zero speed_order + dedicated speed PID
+      brake_zero_speed_order_controller_({{"speed_order", 0.0f}}),
+      brake_speed_controller_(actuators::motor_speed_pid_io_keys,
+                              motor_parameters.speed_controller_parameters),
       // Motor engine
       motor_engine_(motor_parameters.motor, motor_parameters.odometer,
                     motor_parameters.engine_thread_period_ms)
@@ -106,6 +110,13 @@ Motor::Motor(const MotorParameters& motor_parameters, MotorControlMode mode)
 
         LOG_INFO("Motor using DUALPID control mode\n");
     }
+
+    // Brake chain: ZeroSpeedOrder -> SpeedPID. Runs only when engine.brake_
+    // is set; writes to the same speed_order/speed_command IO keys as the
+    // normal chain, which is fine because only one chain runs per cycle.
+    brake_meta_controller_.add_controller(&brake_zero_speed_order_controller_);
+    brake_meta_controller_.add_controller(&brake_speed_controller_);
+    motor_engine_.set_brake_controller(&brake_meta_controller_);
 
     // Init motor
     int ret = params_.motor.init();
@@ -188,6 +199,11 @@ void Motor::actuate(int32_t command)
 
     // Timeout security is setup, set target distance to reach
     motor_engine_.set_target_distance(command_);
+
+    // An explicit actuate() is a deliberate motion request: release any
+    // latched brake. EMS gates actuator commands upstream (handler-level),
+    // so this cannot silently revert an emergency stop.
+    motor_engine_.set_brake(false);
 
     // Enable engine in case it has been previously disabled by timeout
     motor_engine_.enable();
