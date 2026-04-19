@@ -53,6 +53,12 @@ constexpr uint32_t ANGULAR_SPEED_PID_KP_KEY = "angular_speed_pid_kp"_key_hash;
 constexpr uint32_t ANGULAR_SPEED_PID_KI_KEY = "angular_speed_pid_ki"_key_hash;
 constexpr uint32_t ANGULAR_SPEED_PID_KD_KEY = "angular_speed_pid_kd"_key_hash;
 
+#ifdef ROBOT_HAS_OTOS
+// OTOS localization calibration scalars
+constexpr uint32_t OTOS_LINEAR_SCALAR_KEY = "otos_linear_scalar"_key_hash;
+constexpr uint32_t OTOS_ANGULAR_SCALAR_KEY = "otos_angular_scalar"_key_hash;
+#endif
+
 // Parameter handler type
 using ParameterHandlerType = parameter_handler::ParameterHandler<MAX_PARAMETERS_NUMBER>;
 
@@ -84,6 +90,11 @@ static const ParameterHandlerType::Registry registry = {
     {ANGULAR_SPEED_PID_KP_KEY, tracker_angular_speed_pid_kp},
     {ANGULAR_SPEED_PID_KI_KEY, tracker_angular_speed_pid_ki},
     {ANGULAR_SPEED_PID_KD_KEY, tracker_angular_speed_pid_kd},
+#ifdef ROBOT_HAS_OTOS
+    /// OTOS localization calibration scalars
+    {OTOS_LINEAR_SCALAR_KEY, otos_linear_scalar},
+    {OTOS_ANGULAR_SCALAR_KEY, otos_angular_scalar},
+#endif
 };
 
 static ParameterHandlerType parameter_handler(registry);
