@@ -63,7 +63,7 @@ inline Parameter<float, NonNegative> tracker_linear_speed_pid_kp{10};
 inline Parameter<float, NonNegative> tracker_linear_speed_pid_ki{1};
 inline Parameter<float, NonNegative> tracker_linear_speed_pid_kd{0};
 // Tracker angular speed PID
-inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{13};
+inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{10};
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_ki{1};
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_kd{0};
 
