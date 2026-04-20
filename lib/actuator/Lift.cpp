@@ -26,6 +26,13 @@ Lift::Lift(const LiftParameters& params)
 
 void Lift::init()
 {
+    // Invalidate any stale command from a previous run: init can be
+    // re-triggered over CAN, and the "else" branch below (already at
+    // lower limit) never calls actuate(), so last_command_ would
+    // otherwise keep a value from a previous session and cause the
+    // next matching actuate() to be wrongly skipped.
+    last_command_ = INT32_MIN;
+
     int ret =
         LiftsLimitSwitchesManager::instance().register_gpio(params_.lower_limit_switch_pin, this);
     if (ret) {
@@ -123,6 +130,9 @@ void Lift::at_lower_limit()
         LOG_INFO("Lower limit switch pressed\n");
         set_current_distance(params_.lower_limit_mm);
         disable();
+        // Invalidate last_command_ so the next actuate() with the same
+        // target is not skipped and can re-enable the motor.
+        last_command_ = INT32_MIN;
     } else {
         LOG_INFO("Lower limit switch released\n");
     }
