@@ -8,7 +8,7 @@
 
 // Should be set on build command line
 #ifndef ROBOT_ID
-#error "You should build this application with ROBOT_ID=<1-5>. e.g., make ROBOT_ID=1"
+#error "You should build this application with ROBOT_ID=<1-6>. e.g., make ROBOT_ID=1"
 #endif
 
 #include EXPAND_AND_STRINGIFY(ROBOT_CONF_FILE(ROBOT_ID))
