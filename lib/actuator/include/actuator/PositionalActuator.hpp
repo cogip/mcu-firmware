@@ -87,6 +87,15 @@ class PositionalActuator : public Actuator
         state_ = state;
     }
 
+    /// @brief Return the value reported as the actuator position over CAN.
+    /// @details Defaults to the last commanded value. Subclasses with a real
+    /// measurement (e.g. encoder) should override to report the actual
+    /// current position.
+    virtual int32_t get_position() const
+    {
+        return command_;
+    }
+
   protected:
     /// Current actuator command as a duty cycle percentage.
     int32_t command_;

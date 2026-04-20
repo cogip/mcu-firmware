@@ -100,6 +100,12 @@ class Motor : public PositionalActuator
     /// @return Current distance in mm.
     float get_current_distance() const;
 
+    /// @brief Report the current measured distance as the CAN position.
+    int32_t get_position() const override
+    {
+        return static_cast<int32_t>(get_current_distance());
+    }
+
     /// @brief Manually override the current distance reading.
     /// @param distance New distance in mm.
     void set_current_distance(float distance);

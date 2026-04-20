@@ -28,7 +28,7 @@ void PositionalActuator::pb_copy(PB_PositionalActuator& pb_positional_actuator) 
 {
     pb_positional_actuator.set_id(static_cast<PB_PositionalActuatorEnum>(id_));
     pb_positional_actuator.set_state(static_cast<PB_PositionalActuatorStateEnum>(state_));
-    pb_positional_actuator.set_position(command_);
+    pb_positional_actuator.set_position(get_position());
 }
 
 } // namespace positional_actuators
