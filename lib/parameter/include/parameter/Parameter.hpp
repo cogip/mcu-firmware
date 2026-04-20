@@ -58,7 +58,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
 
   public:
     /// @brief Default constructor - initializes with invalid state
-    Parameter() : value_{}, valid_(false), mutex_(MUTEX_INIT)
+    Parameter() : value_{}, valid_(false), changed_(true), mutex_(MUTEX_INIT)
     {
         mutex_init(&mutex_);
     }
@@ -66,7 +66,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     /// @brief Constructor with initial value
     /// @param initial_value The initial value (will be processed through all policies)
     explicit Parameter(const T& initial_value)
-        : value_(initial_value), valid_(false), mutex_(MUTEX_INIT)
+        : value_(initial_value), valid_(false), changed_(true), mutex_(MUTEX_INIT)
     {
         mutex_init(&mutex_);
         valid_ = combined_on_set<T, Policies...>(value_);
@@ -82,9 +82,27 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         valid_ = combined_on_set<T, Policies...>(temp);
         if (valid_) {
             value_ = temp;
+            changed_ = true;
         }
         mutex_unlock(&mutex_);
         return valid_;
+    }
+
+    /// @brief Check whether the value has changed since the last clear_changed().
+    bool has_changed() const override
+    {
+        mutex_lock(&mutex_);
+        bool result = changed_;
+        mutex_unlock(&mutex_);
+        return result;
+    }
+
+    /// @brief Reset the changed flag after a consumer has handled the new value.
+    void clear_changed() const override
+    {
+        mutex_lock(&mutex_);
+        changed_ = false;
+        mutex_unlock(&mutex_);
     }
 
     /// @brief Get the current parameter value
@@ -197,6 +215,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
   private:
     T value_;               ///< Parameter value
     bool valid_;            ///< Validity flag
+    mutable bool changed_;  ///< True if value was (re)set since the last clear_changed()
     mutable mutex_t mutex_; ///< Mutex for thread-safe access
 };
 

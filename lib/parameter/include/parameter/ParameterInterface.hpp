@@ -39,6 +39,21 @@ class ParameterBase
     /// @brief Check if parameter holds valid value
     /// @return Status depending on the validation policy
     virtual bool isValid() const = 0;
+
+    /// @brief Check whether the parameter value has changed since the last
+    /// clear_changed() call.
+    /// @return true if the value has been (re)set since the last clear.
+    ///
+    /// @details Intended for consumers that need to react to runtime updates
+    /// (e.g. re-program a hardware register when a calibration scalar is
+    /// changed). Newly constructed parameters are considered changed so the
+    /// first poll picks up the initial value.
+    virtual bool has_changed() const = 0;
+
+    /// @brief Clear the "changed" flag. Call after handling a new value.
+    /// Declared const because consumers typically keep read-only
+    /// references to parameters they poll.
+    virtual void clear_changed() const = 0;
 };
 
 /// @brief Typed interface for polymorphic parameter manipulation
