@@ -158,13 +158,9 @@ constexpr float otos_offset_x_mm = 0.0f;
 constexpr float otos_offset_y_mm = 0.0f;
 constexpr float otos_offset_h_deg = 0.0f;
 
-static cogip::localization::LocalizationOTOS::Parameters otos_params = {
-    .linear_scalar = otos_linear_scalar.get(),
-    .angular_scalar = otos_angular_scalar.get(),
-    .offset_x_mm = otos_offset_x_mm,
-    .offset_y_mm = otos_offset_y_mm,
-    .offset_h_deg = otos_offset_h_deg,
-};
+static cogip::localization::LocalizationOTOS::Parameters
+    otos_params(otos_linear_scalar, otos_angular_scalar, otos_offset_x_mm, otos_offset_y_mm,
+                otos_offset_h_deg);
 
 static cogip::otos::OTOS otos_sensor(SOFT_I2C_DEV(0), otos_i2c_addr);
 static cogip::localization::LocalizationOTOS robot_localization(otos_sensor, otos_params);

@@ -13,6 +13,7 @@
 
 #include "localization/LocalizationInterface.hpp"
 #include "otos/OTOS.hpp"
+#include "parameter/ParameterInterface.hpp"
 
 namespace cogip {
 namespace localization {
@@ -25,14 +26,27 @@ namespace localization {
 class LocalizationOTOS : public LocalizationInterface
 {
   public:
-    /// @brief OTOS configuration parameters
+    /// @brief OTOS configuration parameters.
+    /// @details Holds references to the live linear / angular calibration
+    /// scalars; any runtime change to these parameters is picked up by
+    /// update() through the ParameterInterface::has_changed() poll. Offsets
+    /// describe the sensor-to-robot mounting geometry and stay as plain
+    /// floats (measured once at assembly).
     struct Parameters
     {
-        float linear_scalar = 1.0f;  ///< Calibration scalar (0.872 to 1.127)
-        float angular_scalar = 1.0f; ///< Calibration scalar (0.872 to 1.127)
-        float offset_x_mm = 0.0f;    ///< Mounting offset X (mm)
-        float offset_y_mm = 0.0f;    ///< Mounting offset Y (mm)
-        float offset_h_deg = 0.0f;   ///< Mounting offset heading (deg)
+        Parameters(const cogip::parameter::ParameterInterface<float>& linear_scalar_,
+                   const cogip::parameter::ParameterInterface<float>& angular_scalar_,
+                   float offset_x_mm_ = 0.0f, float offset_y_mm_ = 0.0f, float offset_h_deg_ = 0.0f)
+            : linear_scalar(linear_scalar_), angular_scalar(angular_scalar_),
+              offset_x_mm(offset_x_mm_), offset_y_mm(offset_y_mm_), offset_h_deg(offset_h_deg_)
+        {
+        }
+
+        const cogip::parameter::ParameterInterface<float>& linear_scalar;
+        const cogip::parameter::ParameterInterface<float>& angular_scalar;
+        float offset_x_mm;
+        float offset_y_mm;
+        float offset_h_deg;
     };
 
     /// @brief Constructor
@@ -59,13 +73,19 @@ class LocalizationOTOS : public LocalizationInterface
     /// @brief No-op for OTOS (tracks absolute position)
     void reset() override;
 
-    /// @brief Read fresh data from the OTOS sensor
+    /// @brief Read fresh data from the OTOS sensor. Also polls the
+    /// calibration scalars and re-programs the chip if they were changed
+    /// by the parameter handler since the last cycle.
     /// @return 0 on success, negative on error
     int update() override;
 
   private:
+    /// @brief Push the current calibration scalars to the sensor chip if
+    /// either parameter was changed since the last poll.
+    void poll_scalar_changes();
+
     cogip::otos::OTOS& otos_;
-    Parameters params_;
+    const Parameters params_;
     cogip::cogip_defs::Pose pose_;
     cogip::cogip_defs::Pose prev_pose_;
     cogip::cogip_defs::Polar polar_;
