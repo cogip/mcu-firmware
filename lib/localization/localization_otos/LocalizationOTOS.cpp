@@ -28,8 +28,13 @@ int LocalizationOTOS::init()
     if (ret < 0) {
         return ret;
     }
-    otos_.set_linear_scalar(params_.linear_scalar);
-    otos_.set_angular_scalar(params_.angular_scalar);
+    // Push the initial calibration scalars to the chip and mark them as
+    // handled so subsequent update() cycles only react to runtime changes.
+    otos_.set_linear_scalar(params_.linear_scalar.get());
+    otos_.set_angular_scalar(params_.angular_scalar.get());
+    params_.linear_scalar.clear_changed();
+    params_.angular_scalar.clear_changed();
+
     otos_.set_offset(params_.offset_x_mm, params_.offset_y_mm, params_.offset_h_deg);
     return otos_.calibrate_imu();
 }
@@ -37,6 +42,18 @@ int LocalizationOTOS::init()
 void LocalizationOTOS::reset()
 {
     // OTOS tracks absolute position, no counters to reset
+}
+
+void LocalizationOTOS::poll_scalar_changes()
+{
+    if (params_.linear_scalar.has_changed()) {
+        otos_.set_linear_scalar(params_.linear_scalar.get());
+        params_.linear_scalar.clear_changed();
+    }
+    if (params_.angular_scalar.has_changed()) {
+        otos_.set_angular_scalar(params_.angular_scalar.get());
+        params_.angular_scalar.clear_changed();
+    }
 }
 
 void LocalizationOTOS::set_pose(float x, float y, float O)
@@ -65,6 +82,10 @@ const cogip::cogip_defs::Polar& LocalizationOTOS::delta_polar_pose()
 
 int LocalizationOTOS::update()
 {
+    // Check whether the host updated the calibration scalars since the
+    // last cycle and re-program the chip if needed.
+    poll_scalar_changes();
+
     int ret = otos_.update();
     if (ret < 0) {
         return ret;
