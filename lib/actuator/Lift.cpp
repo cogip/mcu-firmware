@@ -129,6 +129,14 @@ void Lift::at_lower_limit()
     if (gpio_read(params_.lower_limit_switch_pin)) {
         LOG_INFO("Lower limit switch pressed\n");
         set_current_distance(params_.lower_limit_mm);
+        // If the current command targets the lower limit, the switch
+        // pressing IS the definitive "reached" signal. Emit it before
+        // disable() cuts the engine, otherwise the engine will never
+        // run another tick to fire pose_reached_cb and the host would
+        // never hear that the target was reached.
+        if (last_command_ == params_.lower_limit_mm) {
+            on_state_change(motion_control::target_pose_status_t::reached);
+        }
         disable();
         // Invalidate last_command_ so the next actuate() with the same
         // target is not skipped and can re-enable the motor.
@@ -144,6 +152,14 @@ void Lift::at_upper_limit()
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
         motor_engine_.set_timeout_enable(false);
+        // If the current command targets the upper limit, the switch
+        // pressing IS the definitive "reached" signal. Emit it now: the
+        // brake chain takes over and does not drive the pose loop, so
+        // MotorEngine::process_outputs() cannot fire pose_reached_cb on
+        // its own from here on.
+        if (last_command_ == params_.upper_limit_mm) {
+            on_state_change(motion_control::target_pose_status_t::reached);
+        }
         // Latch the engine brake chain: the zero-speed-order + speed PID
         // chain actively drives the motor toward zero speed, holding the
         // lift against gravity without needing the full pose loop.
