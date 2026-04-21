@@ -1,7 +1,10 @@
 #pragma once
 
 // Project includes
+#include "board.h"
+#include "encoder/EncoderQDEC.hpp"
 #include "etl/numeric.h"
+#include "localization/LocalizationDifferential.hpp"
 #include "parameter/Parameter.hpp"
 
 using namespace cogip::parameter;
@@ -63,7 +66,7 @@ inline Parameter<float, NonNegative> tracker_linear_speed_pid_kp{10};
 inline Parameter<float, NonNegative> tracker_linear_speed_pid_ki{1};
 inline Parameter<float, NonNegative> tracker_linear_speed_pid_kd{0};
 // Tracker angular speed PID
-inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{10};
+inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{13};
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_ki{1};
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_kd{0};
 
@@ -81,8 +84,8 @@ constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
 
 constexpr float min_speed_mm_per_s = 0;      ///< Minimum speed (mm/s)
 constexpr float max_speed_mm_per_s = 1000.0; ///< Maximum speed (mm/s)
-constexpr float max_acc_mm_per_s2 = 250.0;   ///< Maximum acceleration (mm/s²)
-constexpr float max_dec_mm_per_s2 = 250.0;   ///< Maximum deceleration (mm/s²)
+constexpr float max_acc_mm_per_s2 = 750.0;   ///< Maximum acceleration (mm/s²)
+constexpr float max_dec_mm_per_s2 = 1000.0;  ///< Maximum deceleration (mm/s²)
 
 constexpr float min_speed_deg_per_s = 20;  ///< Maximum speed (deg/s)
 constexpr float max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
@@ -97,10 +100,10 @@ constexpr float acceleration_clamp_ratio = 1.2f;
 
 // Linear pose PID integral limit
 inline Parameter<float, NonNegative> linear_pose_pid_integral_limit{
-    etl::numeric_limits<float>::max()};
+    etl::numeric_limits<uint16_t>::max()};
 // Angular pose PID integral limit
 inline Parameter<float, NonNegative> angular_pose_pid_integral_limit{
-    etl::numeric_limits<float>::max()};
+    etl::numeric_limits<uint16_t>::max()};
 // Linear speed PID integral limit
 inline Parameter<float, NonNegative> linear_speed_pid_integral_limit{max_speed_mm_per_s /
                                                                      linear_speed_pid_ki.get()};
@@ -110,10 +113,10 @@ inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_
 
 // Tracker linear pose PID integral limit
 inline Parameter<float, NonNegative> tracker_linear_pose_pid_integral_limit{
-    etl::numeric_limits<float>::max()};
+    etl::numeric_limits<uint16_t>::max()};
 // Tracker angular pose PID integral limit
 inline Parameter<float, NonNegative> tracker_angular_pose_pid_integral_limit{
-    etl::numeric_limits<float>::max()};
+    etl::numeric_limits<uint16_t>::max()};
 // Tracker linear speed PID integral limit
 inline Parameter<float, NonNegative> tracker_linear_speed_pid_integral_limit{
     max_speed_mm_per_s / tracker_linear_speed_pid_ki.get()};
@@ -125,3 +128,18 @@ inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
 constexpr bool platform_linear_antiblocking = false;
 // Angular antiblocking
 constexpr bool angular_antiblocking = false;
+
+// ============================================================================
+// Localization (encoder-based differential odometry)
+// ============================================================================
+
+static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
+                                                encoder_wheels_resolution_pulses.get());
+static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
+                                                 encoder_wheels_resolution_pulses.get());
+
+static cogip::localization::LocalizationDifferentialParameters
+    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
+                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
+static cogip::localization::LocalizationDifferential
+    robot_localization(localization_params, left_encoder, right_encoder);

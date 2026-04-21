@@ -1,6 +1,5 @@
 // RIOT includes
 #include "log.h"
-#include "periph/qdec.h"
 #include <inttypes.h>
 
 #define ENABLE_DEBUG 0
@@ -12,8 +11,6 @@
 #include "board.h"
 #include "drive_controller/DifferentialDriveController.hpp"
 #include "drive_controller/DifferentialDriveControllerParameters.hpp"
-#include "encoder/EncoderQDEC.hpp"
-#include "localization/LocalizationDifferential.hpp"
 #include "motion_control.hpp"
 #include "motion_control_common/MetaController.hpp"
 #include "motion_motors_params.hpp"
@@ -41,8 +38,6 @@ namespace pf {
 
 namespace motion_control {
 
-using cogip::utils::operator"" _key_hash;
-
 // Current controller
 static uint32_t current_controller_id = 0;
 
@@ -58,19 +53,6 @@ constexpr uint16_t motion_control_pid_tuning_period_ms = 1500;
 static cogip::path::Pose target_pose;
 // Target speed
 static cogip::cogip_defs::Polar target_speed;
-
-/// Encoders
-static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
-                                                encoder_wheels_resolution_pulses.get());
-static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
-                                                 encoder_wheels_resolution_pulses.get());
-
-/// Odometry
-static cogip::localization::LocalizationDifferentialParameters
-    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
-                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
-static cogip::localization::LocalizationDifferential localization(localization_params, left_encoder,
-                                                                  right_encoder);
 
 /// Motor driver
 static cogip::motor::MotorDriverDRV8873 motor_driver(motion_motors_params);
@@ -90,7 +72,7 @@ static cogip::drive_controller::DifferentialDriveController
 static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t state);
 // Motion control engine
 static cogip::motion_control::PlatformEngine pf_motion_control_platform_engine(
-    localization, drive_controller, motion_control_path,
+    robot_localization, drive_controller, motion_control_path,
     cogip::motion_control::pose_reached_cb_t::create<pf_pose_reached_cb>(),
     motion_control_thread_period_ms);
 
@@ -301,8 +283,7 @@ void pf_send_pb_state(void)
 
 void pf_send_encoder_telemetry(void)
 {
-    cogip::telemetry::Telemetry::send<int64_t>("encoder_left"_key_hash, left_encoder.counter());
-    cogip::telemetry::Telemetry::send<int64_t>("encoder_right"_key_hash, right_encoder.counter());
+    robot_localization.send_telemetry();
 }
 
 void pf_handle_brake([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
@@ -569,7 +550,7 @@ void pf_start_motion_control(void)
 void pf_motion_control_reset_controllers(void)
 {
     // Log pose before reset
-    const auto& pose_before = localization.pose();
+    const auto& pose_before = robot_localization.pose();
     LOG_INFO("[RESET] Pose BEFORE reset: x=%.1f y=%.1f O=%.1f\n",
              static_cast<double>(pose_before.x()), static_cast<double>(pose_before.y()),
              static_cast<double>(pose_before.O()));
@@ -592,29 +573,22 @@ void pf_motion_control_reset_controllers(void)
     }
 
     // Log pose after reset
-    const auto& pose_after = localization.pose();
+    const auto& pose_after = robot_localization.pose();
     LOG_INFO("[RESET] Pose AFTER reset: x=%.1f y=%.1f O=%.1f\n",
              static_cast<double>(pose_after.x()), static_cast<double>(pose_after.y()),
              static_cast<double>(pose_after.O()));
 }
 
-static void pf_encoder_reset(void)
-{
-    left_encoder.reset();
-    right_encoder.reset();
-}
-
 void pf_disable_motion_control()
 {
-    LOG_INFO("[DISABLE] Disabling motion control and resetting encoders\n");
+    LOG_INFO("[DISABLE] Disabling motion control\n");
     pf_motion_control_platform_engine.disable();
 
     // Disable motors
     left_motor.disable();
     right_motor.disable();
 
-    pf_encoder_reset();
-    LOG_INFO("[DISABLE] Encoders reset to zero\n");
+    robot_localization.reset();
 }
 
 void pf_enable_motion_control()
@@ -628,17 +602,8 @@ void pf_init_motion_control(void)
     left_motor.init();
     right_motor.init();
 
-    // Init encoders
-    int error = left_encoder.init();
-    if (error) {
-        LOG_ERROR("QDEC %" PRIu32 " not initialized, error=%d\n", static_cast<uint32_t>(MOTOR_LEFT),
-                  error);
-    }
-    error = right_encoder.init();
-    if (error) {
-        LOG_ERROR("QDEC %" PRIu32 " not initialized, error=%d\n",
-                  static_cast<uint32_t>(MOTOR_RIGHT), error);
-    }
+    // Init localization (encoder or OTOS depending on robot config)
+    robot_localization.init();
 
     // Init controllers
     quadpid_chain::init();
@@ -659,7 +624,7 @@ void pf_init_motion_control(void)
     pf_get_canpb().register_message_handler(
         controller_uuid, cogip::canpb::message_handler_t::create<_handle_set_controller>());
 
-    pf_encoder_reset();
+    robot_localization.reset();
     pf_disable_motion_control();
 }
 

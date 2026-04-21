@@ -33,6 +33,8 @@ ifneq ($(REMOTE_TARGET),)
 endif
 
 MCUFW_MODULE_DIRS = " \
+					drivers \
+					lib/localization \
 					motion_control \
 					motion_control/controllers \
 					motion_control/engines \
