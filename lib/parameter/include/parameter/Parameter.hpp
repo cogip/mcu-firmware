@@ -245,6 +245,23 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     mutable mutex_t mutex_; ///< Mutex for thread-safe access
 };
 
+/// @brief Compile-time introspection of a `Parameter<T, Policies...>`.
+///
+/// @details Specialized on Parameter so callers (ParameterDescriptor / DECLARE_PARAM
+///          macros) can auto-derive PB type, read-only flag, and optional
+///          bounds without re-declaring them at each registration site.
+template <typename P> struct parameter_traits;
+
+template <typename T, typename... Policies> struct parameter_traits<Parameter<T, Policies...>>
+{
+    using value_type = T;
+    static constexpr PB_ParameterType pb_type = pb_type_of<T>();
+    static constexpr bool read_only = is_read_only_v<Policies...>;
+    static constexpr bool has_bounds = has_bounds_v<Policies...>;
+    static constexpr auto min_value = bounds_min_v<Policies...>;
+    static constexpr auto max_value = bounds_max_v<Policies...>;
+};
+
 } // namespace parameter
 } // namespace cogip
 

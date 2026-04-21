@@ -13,6 +13,7 @@
 #include <cstdint>
 
 // Project includes
+#include "parameter/Parameter.hpp"
 #include "parameter/ParameterInterface.hpp"
 
 // Protobuf messages (for PB_ParameterType / PB_ParameterTag enums)
@@ -88,6 +89,73 @@ constexpr uint32_t param_tag_bits(Tags... tags)
 {
     return (0u | ... | (1u << static_cast<uint32_t>(tags)));
 }
+
+namespace detail {
+
+/// @brief Build a ParameterBoundValue from the scalar bound of a Parameter<T, ...>.
+///
+/// @note `BoundValue` is the compile-time NTTP extracted by
+///       `bounds_min_v` / `bounds_max_v`; `ValueT` is the underlying C++ type
+///       (float, int32_t, ...) so we pick the right union slot.
+template <typename ValueT, auto BoundValue> constexpr ParameterBoundValue make_bound()
+{
+    ParameterBoundValue bound{};
+    bound.type = parameter::pb_type_of<ValueT>();
+    if constexpr (std::is_same_v<ValueT, float>) {
+        bound.float_value = static_cast<float>(BoundValue);
+    } else if constexpr (std::is_same_v<ValueT, double>) {
+        bound.double_value = static_cast<double>(BoundValue);
+    } else if constexpr (std::is_same_v<ValueT, int32_t>) {
+        bound.int32_value = static_cast<int32_t>(BoundValue);
+    } else if constexpr (std::is_same_v<ValueT, uint32_t>) {
+        bound.uint32_value = static_cast<uint32_t>(BoundValue);
+    } else if constexpr (std::is_same_v<ValueT, int64_t>) {
+        bound.int64_value = static_cast<int64_t>(BoundValue);
+    } else if constexpr (std::is_same_v<ValueT, uint64_t>) {
+        bound.uint64_value = static_cast<uint64_t>(BoundValue);
+    } else if constexpr (std::is_same_v<ValueT, bool>) {
+        bound.bool_value = static_cast<bool>(BoundValue);
+    }
+    return bound;
+}
+
+} // namespace detail
+
+/// @brief Build a ParameterDescriptor from a Parameter<T, Policies...>.
+///
+/// @details All fields except `key_hash`, `name` and `tags_bitmask` are
+///          derived from the parameter's policy pack via `parameter_traits`:
+///          the PB type comes from `T`, `read_only` from the presence of
+///          `ReadOnly`, and bounds from the first `Clamp` / `WithBounds` in
+///          the pack.
+template <typename ParameterT>
+constexpr ParameterDescriptor make_descriptor(uint32_t key_hash, const char* name,
+                                              uint32_t tags_bitmask, ParameterT& param)
+{
+    using traits = parameter::parameter_traits<ParameterT>;
+    using value_type = typename traits::value_type;
+
+    ParameterDescriptor desc{};
+    desc.key_hash = key_hash;
+    desc.name = name;
+    desc.type = traits::pb_type;
+    desc.tags_bitmask = tags_bitmask;
+    desc.read_only = traits::read_only;
+    desc.has_bounds = traits::has_bounds;
+    if constexpr (traits::has_bounds) {
+        desc.min_value = detail::make_bound<value_type, traits::min_value>();
+        desc.max_value = detail::make_bound<value_type, traits::max_value>();
+    }
+    desc.param = &param;
+    return desc;
+}
+
+/// @brief Shorthand used at registration sites.
+///
+/// @note Usage: `DECLARE_PARAM(key_hash, "name", tags_bitmask, param_object)`
+///       All metadata except tags is deduced from the Parameter<> policy pack.
+#define DECLARE_PARAM(key_hash, name, tags_bitmask, param_ref)                                     \
+    ::cogip::parameter_handler::make_descriptor((key_hash), (name), (tags_bitmask), (param_ref))
 
 } // namespace parameter_handler
 } // namespace cogip

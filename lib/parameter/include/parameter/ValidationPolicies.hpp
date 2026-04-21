@@ -25,6 +25,13 @@ template <auto MinVal, auto MaxVal> struct WithBounds
 {
     static_assert(MinVal <= MaxVal, "MinVal must be less than or equal to MaxVal");
 
+    /// @brief Marker consumed by policy traits (has_bounds / bounds_min / bounds_max)
+    static constexpr bool is_bounds_policy = true;
+    /// @brief Lower bound, accessible at compile time by traits
+    static constexpr auto min_bound = MinVal;
+    /// @brief Upper bound, accessible at compile time by traits
+    static constexpr auto max_bound = MaxVal;
+
     /// @brief Validate value against specified bounds
     /// @tparam T The parameter value type
     /// @param value The value to validate (not modified)
@@ -42,6 +49,13 @@ template <auto MinVal, auto MaxVal> struct WithBounds
 template <auto MinVal, auto MaxVal> struct Clamp
 {
     static_assert(MinVal <= MaxVal, "MinVal must be less than or equal to MaxVal");
+
+    /// @brief Marker consumed by policy traits (has_bounds / bounds_min / bounds_max)
+    static constexpr bool is_bounds_policy = true;
+    /// @brief Lower bound, accessible at compile time by traits
+    static constexpr auto min_bound = MinVal;
+    /// @brief Upper bound, accessible at compile time by traits
+    static constexpr auto max_bound = MaxVal;
 
     /// @brief Clamp value to specified bounds
     /// @tparam T The parameter value type

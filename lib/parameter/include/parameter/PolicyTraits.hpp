@@ -11,7 +11,12 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "etl/type_traits.h"
+
+#include "AccessPolicies.hpp"
+#include "PB_ParameterCommands.hpp"
 
 namespace cogip {
 namespace parameter {
@@ -189,6 +194,94 @@ template <typename T, typename... Policies> void combined_on_pb_copy(T& value)
 {
     (detail::invoke_on_pb_copy<Policies, T>(value), ...);
 }
+
+// ---------------------------------------------------------------------------
+// Descriptor traits
+// ---------------------------------------------------------------------------
+// Compile-time helpers that let the parameter handler registry auto-derive
+// the per-parameter metadata (PB type, read-only flag, bounds presence and
+// values) from a Parameter<T, Policies...>, so the registration site only
+// has to name the parameter, attach tags, and keep the symbol reference.
+
+/// @brief Map a C++ scalar type to its PB_ParameterType enum value.
+template <typename T> constexpr PB_ParameterType pb_type_of()
+{
+    if constexpr (etl::is_same<T, float>::value) {
+        return PB_ParameterType::PARAM_TYPE_FLOAT;
+    } else if constexpr (etl::is_same<T, double>::value) {
+        return PB_ParameterType::PARAM_TYPE_DOUBLE;
+    } else if constexpr (etl::is_same<T, int32_t>::value) {
+        return PB_ParameterType::PARAM_TYPE_INT32;
+    } else if constexpr (etl::is_same<T, uint32_t>::value) {
+        return PB_ParameterType::PARAM_TYPE_UINT32;
+    } else if constexpr (etl::is_same<T, int64_t>::value) {
+        return PB_ParameterType::PARAM_TYPE_INT64;
+    } else if constexpr (etl::is_same<T, uint64_t>::value) {
+        return PB_ParameterType::PARAM_TYPE_UINT64;
+    } else if constexpr (etl::is_same<T, bool>::value) {
+        return PB_ParameterType::PARAM_TYPE_BOOL;
+    } else {
+        static_assert(etl::is_same<T, void>::value, "Unsupported parameter scalar type");
+        return PB_ParameterType::PARAM_TYPE_FLOAT;
+    }
+}
+
+/// @brief True iff at least one policy in the pack is `ReadOnly`.
+template <typename... Policies>
+constexpr bool is_read_only_v = (etl::is_same<Policies, ReadOnly>::value || ...);
+
+namespace detail {
+
+/// @brief Detects the `is_bounds_policy` static marker on Clamp / WithBounds.
+template <typename Policy, typename = void> struct policy_is_bounds : etl::false_type
+{
+};
+
+template <typename Policy>
+struct policy_is_bounds<Policy, etl::void_t<decltype(Policy::is_bounds_policy)>>
+    : etl::bool_constant<Policy::is_bounds_policy>
+{
+};
+
+/// @brief Pick the first bounds-carrying policy in the pack, or `void` if none.
+template <typename... Policies> struct first_bounds_policy;
+
+template <> struct first_bounds_policy<>
+{
+    using type = void;
+};
+
+template <typename Head, typename... Tail> struct first_bounds_policy<Head, Tail...>
+{
+    using type =
+        etl::conditional_t<policy_is_bounds<Head>::value, Head, typename first_bounds_policy<Tail...>::type>;
+};
+
+} // namespace detail
+
+/// @brief True iff any policy in the pack declares compile-time bounds.
+template <typename... Policies>
+constexpr bool has_bounds_v = (detail::policy_is_bounds<Policies>::value || ...);
+
+/// @brief Compile-time lower bound across the pack (0 when has_bounds_v is false).
+template <typename... Policies> constexpr auto bounds_min_v = []() {
+    using BoundsPolicy = typename detail::first_bounds_policy<Policies...>::type;
+    if constexpr (etl::is_same<BoundsPolicy, void>::value) {
+        return 0;
+    } else {
+        return BoundsPolicy::min_bound;
+    }
+}();
+
+/// @brief Compile-time upper bound across the pack (0 when has_bounds_v is false).
+template <typename... Policies> constexpr auto bounds_max_v = []() {
+    using BoundsPolicy = typename detail::first_bounds_policy<Policies...>::type;
+    if constexpr (etl::is_same<BoundsPolicy, void>::value) {
+        return 0;
+    } else {
+        return BoundsPolicy::max_bound;
+    }
+}();
 
 } // namespace parameter
 } // namespace cogip
