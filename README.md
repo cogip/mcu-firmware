@@ -36,7 +36,7 @@ To install toolchain and development on ubuntu 20.04:
 ```bash
 $ sudo apt install build-essential gcc-multilib g++-multilib openocd
 ```
-Minimal gcc version: 8.1
+Minimal gcc version: 10 (11+ recommended for full C++20 support)
 
 To manually install arm-none-eabi toolchain:
 ```bash

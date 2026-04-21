@@ -129,7 +129,7 @@ make -j$(nproc) -C examples/motion_control_robot_test
 
 ## Important Notes
 - Always ensure RIOT patches are applied before building
-- The project uses C++17 standard
+- The project uses C++20 standard
 - Default log level is set to LOG_ERROR
 - Main thread stack size is 8192 bytes
 - ISR stack size is 2048 bytes (increased for libstdc++)
