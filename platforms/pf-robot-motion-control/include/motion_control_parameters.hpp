@@ -84,6 +84,15 @@ constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KP_KEY = "tracker_angular_speed_pid
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KI_KEY = "tracker_angular_speed_pid_ki"_key_hash;
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KD_KEY = "tracker_angular_speed_pid_kd"_key_hash;
 
+// OTOS localization calibration scalars
+// ROBOT_HAS_OTOS is defined by the OTOS robot configuration (robot2_conf.hpp)
+// and gates the registration of the scalars in the CAN parameter registry so
+// encoder-based robots are not polluted with keys they do not own.
+#ifdef ROBOT_HAS_OTOS
+constexpr uint32_t OTOS_LINEAR_SCALAR_KEY = "otos_linear_scalar"_key_hash;
+constexpr uint32_t OTOS_ANGULAR_SCALAR_KEY = "otos_angular_scalar"_key_hash;
+#endif
+
 // ============================================================================
 // Unit conversion macros and control loop period
 // ============================================================================
@@ -217,6 +226,18 @@ inline Parameter<float, NonNegative, AccelerationConversion<motion_control_threa
 inline Parameter<float, NonNegative, AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_linear{platform_max_dec_linear_mm_per_period2};
 inline Parameter<float, NonNegative, AccelerationConversion<motion_control_thread_period_ms>> param_max_acc_angular{platform_max_acc_angular_deg_per_period2};
 inline Parameter<float, NonNegative, AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_angular{platform_max_dec_angular_deg_per_period2};
+
+// OTOS localization calibration scalars
+// Persisted in flash so the scalars survive a reboot. Range [0.872, 1.127]
+// is enforced by the host calibration tool (cogip-otos-calibration) rather
+// than by a compile-time Clamp policy because C++17 does not accept float
+// NTTPs; NonNegative is kept as a minimal guard against pathological values.
+#ifdef ROBOT_HAS_OTOS
+inline Parameter<float, NonNegative, WithFlashStorage<OTOS_LINEAR_SCALAR_KEY>>
+    otos_linear_scalar{default_otos_linear_scalar};
+inline Parameter<float, NonNegative, WithFlashStorage<OTOS_ANGULAR_SCALAR_KEY>>
+    otos_angular_scalar{default_otos_angular_scalar};
+#endif
 // clang-format on
 // ============================================================================
 // Parameter registry handlers (canpb)

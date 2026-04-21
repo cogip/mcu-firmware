@@ -82,6 +82,11 @@ static const ParameterHandlerType::Registry registry = {
     {MAX_SPEED_ANGULAR_KEY, param_max_speed_angular},
     {MAX_ACC_ANGULAR_KEY, param_max_acc_angular},
     {MAX_DEC_ANGULAR_KEY, param_max_dec_angular},
+#ifdef ROBOT_HAS_OTOS
+    /// OTOS localization calibration scalars
+    {OTOS_LINEAR_SCALAR_KEY, otos_linear_scalar},
+    {OTOS_ANGULAR_SCALAR_KEY, otos_angular_scalar},
+#endif
 };
 
 static ParameterHandlerType parameter_handler(registry);
