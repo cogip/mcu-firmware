@@ -71,11 +71,22 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
     /// @param io Shared ControllersIO containing inputs and receiving outputs.
     void execute(ControllersIO& io) override;
 
-    /// @brief Reset all internal state for new target.
-    /// Called when changing target to reinitialize state machine and tracking variables.
+    /// @brief Clear transient internal state without touching the state machine.
+    ///
+    /// @note `current_state_` is deliberately left untouched. Re-arming to
+    ///       ROTATE_TO_DIRECTION is the TargetChangeDetector's job: when a
+    ///       real new pose order (x/y/O or flags) arrives, it raises
+    ///       `new_target` and the filter's internal new-target block puts
+    ///       the machine back at ROTATE_TO_DIRECTION with the proper reverse
+    ///       lock and PID reset.
+    ///
+    /// @note Called by the engine's status-change handler (moving -> reached /
+    ///       blocked / timeout) to flush PID / profile tracking state. Before,
+    ///       this also snapped the state machine back to ROTATE_TO_DIRECTION,
+    ///       triggering a cosmetic ROTATE_TO_DIRECTION -> MOVE_TO_POSITION
+    ///       cycle on the same target just to settle a couple of mm of drift.
     void reset() override
     {
-        current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
         start_pose_ = cogip_defs::Pose(etl::numeric_limits<int32_t>::max(),
                                        etl::numeric_limits<int32_t>::max(),
                                        etl::numeric_limits<int32_t>::max());
