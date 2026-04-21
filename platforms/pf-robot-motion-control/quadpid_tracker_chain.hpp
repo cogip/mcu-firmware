@@ -337,13 +337,17 @@ inline cogip::motion_control::PolarParallelMetaController speed_loop_polar_paral
 // TargetChangeDetector
 // ============================================================================
 
-inline cogip::motion_control::TargetChangeDetectorIOKeys<3> target_change_detector_io_keys = {
-    .watched_keys = {"target_pose_x", "target_pose_y", "target_pose_O"},
+// Watch every IO key that defines the identity of a pose order from the
+// filter's point of view: changing any of them must re-arm the state machine.
+// See quadpid_chain.hpp for the rationale on why flags are included.
+inline cogip::motion_control::TargetChangeDetectorIOKeys<5> target_change_detector_io_keys = {
+    .watched_keys = {"target_pose_x", "target_pose_y", "target_pose_O", "motion_direction",
+                     "bypass_final_orientation"},
     .new_target = "new_target"};
 
 inline cogip::motion_control::TargetChangeDetectorParameters target_change_detector_parameters;
 
-inline cogip::motion_control::TargetChangeDetector<3>
+inline cogip::motion_control::TargetChangeDetector<5>
     target_change_detector(target_change_detector_io_keys, target_change_detector_parameters);
 
 // ============================================================================

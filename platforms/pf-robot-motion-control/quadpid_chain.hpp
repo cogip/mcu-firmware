@@ -102,13 +102,20 @@ inline cogip::motion_control::PathManagerFilter path_manager_filter(path_manager
 // TargetChangeDetector
 // ============================================================================
 
-inline cogip::motion_control::TargetChangeDetectorIOKeys<3> target_change_detector_io_keys = {
-    .watched_keys = {"target_pose_x", "target_pose_y", "target_pose_O"},
+// Watch every IO key that defines the identity of a pose order from the
+// filter's point of view: changing any of them must re-arm the state machine.
+// Keeping motion_direction and bypass_final_orientation in the watched set
+// means a pose order that only differs from the previous one on a flag (e.g.
+// same x/y/O but a different bypass_final_orientation) correctly triggers a
+// full reset, instead of being silently ignored.
+inline cogip::motion_control::TargetChangeDetectorIOKeys<5> target_change_detector_io_keys = {
+    .watched_keys = {"target_pose_x", "target_pose_y", "target_pose_O", "motion_direction",
+                     "bypass_final_orientation"},
     .new_target = "new_target"};
 
 inline cogip::motion_control::TargetChangeDetectorParameters target_change_detector_parameters;
 
-inline cogip::motion_control::TargetChangeDetector<3>
+inline cogip::motion_control::TargetChangeDetector<5>
     target_change_detector(target_change_detector_io_keys, target_change_detector_parameters);
 
 // ============================================================================
