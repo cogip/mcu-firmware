@@ -55,3 +55,7 @@ message PB_ActuatorCommand {
         PB_PositionalActuatorCommand positional_actuator = 1;
     }
 }
+
+message PB_ActuatorInit {
+    optional PB_PositionalActuatorEnum id = 1;
+}

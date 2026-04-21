@@ -26,6 +26,13 @@ Lift::Lift(const LiftParameters& params)
 
 void Lift::init()
 {
+    // Invalidate any stale command from a previous run: init can be
+    // re-triggered over CAN, and the "else" branch below (already at
+    // lower limit) never calls actuate(), so last_command_ would
+    // otherwise keep a value from a previous session and cause the
+    // next matching actuate() to be wrongly skipped.
+    last_command_ = INT32_MIN;
+
     int ret =
         LiftsLimitSwitchesManager::instance().register_gpio(params_.lower_limit_switch_pin, this);
     if (ret) {
@@ -121,11 +128,19 @@ void Lift::at_lower_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.lower_limit_switch_pin)) {
         LOG_INFO("Lower limit switch pressed\n");
-        if (initializing_) {
-            set_current_distance(params_.lower_limit_mm);
+        set_current_distance(params_.lower_limit_mm);
+        // If the current command targets the lower limit, the switch
+        // pressing IS the definitive "reached" signal. Emit it before
+        // disable() cuts the engine, otherwise the engine will never
+        // run another tick to fire pose_reached_cb and the host would
+        // never hear that the target was reached.
+        if (last_command_ == params_.lower_limit_mm) {
+            on_state_change(motion_control::target_pose_status_t::reached);
         }
-        actuate(params_.lower_limit_mm);
-        motor_engine_.set_timeout_enable(false);
+        disable();
+        // Invalidate last_command_ so the next actuate() with the same
+        // target is not skipped and can re-enable the motor.
+        last_command_ = INT32_MIN;
     } else {
         LOG_INFO("Lower limit switch released\n");
     }
@@ -136,8 +151,24 @@ void Lift::at_upper_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
-        motor_engine_.set_target_speed(0);
         motor_engine_.set_timeout_enable(false);
+        // If the current command targets the upper limit, the switch
+        // pressing IS the definitive "reached" signal. Emit it now: the
+        // brake chain takes over and does not drive the pose loop, so
+        // MotorEngine::process_outputs() cannot fire pose_reached_cb on
+        // its own from here on.
+        if (last_command_ == params_.upper_limit_mm) {
+            on_state_change(motion_control::target_pose_status_t::reached);
+        }
+        // Latch the engine brake chain: the zero-speed-order + speed PID
+        // chain actively drives the motor toward zero speed, holding the
+        // lift against gravity without needing the full pose loop.
+        // Motor::actuate() releases the brake explicitly on a new motion
+        // request.
+        motor_engine_.set_brake(true);
+        // Invalidate last_command_ so the next actuate() with the same
+        // target is not skipped and can release the brake.
+        last_command_ = INT32_MIN;
     } else {
         LOG_INFO("Upper limit switch released\n");
     }

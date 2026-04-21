@@ -20,7 +20,7 @@ namespace motion_control {
 BaseControllerEngine::BaseControllerEngine(uint32_t engine_thread_period_ms)
     : enable_(true), controller_(nullptr), current_cycle_(0), pose_reached_(moving),
       timeout_cycle_counter_(0), timeout_ms_(0), timeout_enable_(false),
-      engine_thread_period_ms_(engine_thread_period_ms)
+      engine_thread_period_ms_(engine_thread_period_ms), brake_(false), brake_controller_(nullptr)
 {
     memset(engine_thread_stack_, 0, sizeof(engine_thread_stack_));
     mutex_init(&mutex_);
@@ -58,24 +58,29 @@ void BaseControllerEngine::thread_loop()
         // Clear modified flags
         io_.clear_modified();
 
-        if ((enable_) && (controller_)) {
+        if (enable_) {
+            if (brake_ && brake_controller_) {
+                // Brake latched: run the minimal brake chain and let
+                // process_outputs drive the motor(s) toward zero speed.
+                brake_controller_->execute(io_);
+            } else if (controller_) {
+                // Execute controller
+                controller_->execute(io_);
 
-            // Execute controller
-            controller_->execute(io_);
+                // Next cycle
+                current_cycle_++;
 
-            // Next cycle
-            current_cycle_++;
+                // Consider pose reached on timeout
+                if ((timeout_enable_) && (--timeout_cycle_counter_ <= 0)) {
+                    // Reset timeout cycles counter
+                    timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
+                    // Force target pose status to notify the platform the timeout is over
+                    pose_reached_ = target_pose_status_t::timeout;
 
-            // Consider pose reached on timeout
-            if ((timeout_enable_) && (--timeout_cycle_counter_ <= 0)) {
-                // Reset timeout cycles counter
-                timeout_cycle_counter_ = timeout_ms_ / engine_thread_period_ms_;
-                // Force target pose status to notify the platform the timeout is over
-                pose_reached_ = target_pose_status_t::timeout;
+                    LOG_ERROR("Engine timed out\n");
 
-                LOG_ERROR("Engine timed out\n");
-
-                enable_ = false;
+                    enable_ = false;
+                }
             }
 
             // Process controller outputs

@@ -22,6 +22,7 @@
 #include "motor_pose_filter/MotorPoseFilterParameters.hpp"
 #include "pose_pid_controller/PosePIDController.hpp"
 #include "pose_pid_controller/PosePIDControllerParameters.hpp"
+#include "reset_controller/ResetController.hpp"
 #include "speed_filter/SpeedFilter.hpp"
 #include "speed_filter/SpeedFilterParameters.hpp"
 #include "speed_pid_controller/SpeedPIDController.hpp"
@@ -99,6 +100,12 @@ class Motor : public PositionalActuator
     /// @return Current distance in mm.
     float get_current_distance() const;
 
+    /// @brief Report the current measured distance as the CAN position.
+    int32_t get_position() const override
+    {
+        return static_cast<int32_t>(get_current_distance());
+    }
+
     /// @brief Manually override the current distance reading.
     /// @param distance New distance in mm.
     void set_current_distance(float distance);
@@ -172,6 +179,20 @@ class Motor : public PositionalActuator
 
     /// Anti-blocking controller - detects motor stall (optional).
     etl::optional<motion_control::AntiBlockingController> anti_blocking_controller_;
+
+    // =========================================================================
+    // Brake chain (minimal active-stop chain, runs while engine.brake_ is set)
+    // =========================================================================
+
+    /// Forces speed_order = 0 at the head of the brake chain.
+    motion_control::ResetController brake_zero_speed_order_controller_;
+
+    /// Dedicated speed PID for the brake chain (cannot reuse the normal one
+    /// because a controller can belong to only one meta-controller).
+    motion_control::SpeedPIDController brake_speed_controller_;
+
+    /// Meta controller chaining the zero-speed-order reset and the speed PID.
+    motion_control::DualPIDMetaController brake_meta_controller_;
 
     // =========================================================================
     // Common components
