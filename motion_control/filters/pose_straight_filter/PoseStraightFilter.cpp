@@ -114,25 +114,34 @@ void PoseStraightFilter::execute(ControllersIO& io)
                     keys_.motion_direction.data());
     }
 
-    // Read bypass_final_orientation from IO (set by PathManagerFilter)
-    // Fall back to parameters if key is empty or not set in IO
+    // Read bypass_final_orientation fresh from IO every tick so the state
+    // machine always sees the current flag. No sticky cache: if the IO key is
+    // not configured for this chain, fall back to the static parameter.
+    bool bypass_final_orientation = parameters_.bypass_final_orientation();
     if (!keys_.bypass_final_orientation.empty()) {
         if (auto opt = io.get_as<bool>(keys_.bypass_final_orientation)) {
-            bypass_final_orientation_ = *opt;
+            bypass_final_orientation = *opt;
         }
-        // If not in IO yet, keep previous value (default false)
-    } else {
-        // If no IO key configured, fall back to parameters
-        bypass_final_orientation_ = parameters_.bypass_final_orientation();
     }
 
     // Recompute profile signals - set to true only on specific state transitions
     bool linear_recompute_profile = false;
     bool angular_recompute_profile = false;
 
-    if ((target_pose_x != prev_target_.x()) || (target_pose_y != prev_target_.y()) ||
-        (target_pose_O != prev_target_.O())) {
-        prev_target_ = target_pose;
+    // "New target" is now authoritatively decided by a TargetChangeDetector
+    // upstream, which watches every pose-order component that matters for the
+    // filter (x, y, O, motion_direction, bypass_final_orientation). We consume
+    // that flag instead of rolling our own (x, y, O)-only comparison, so that
+    // pose orders that differ only by a flag (e.g. same coordinates but a
+    // different bypass_final_orientation) correctly reset the state machine.
+    bool new_target = false;
+    if (!keys_.new_target.empty()) {
+        if (auto opt = io.get_as<bool>(keys_.new_target)) {
+            new_target = *opt;
+        }
+    }
+
+    if (new_target) {
         start_pose_ = current_pose;
         // Reset state machine to initial state on new target
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
@@ -223,11 +232,11 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     if (current_state_ == PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE) {
         rotate_to_final_angle(io, pos_err, current_pose, target_pose, linear_recompute_profile,
-                              angular_recompute_profile);
+                              angular_recompute_profile, bypass_final_orientation);
     }
 
     if (current_state_ == PoseStraightFilterState::FINISHED) {
-        finished(pos_err, current_pose, target_pose);
+        finished(pos_err, current_pose, target_pose, bypass_final_orientation);
     }
 
     // Write linear pose error
@@ -387,7 +396,8 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
                                                const cogip_defs::Pose& current_pose,
                                                const cogip_defs::Pose& target_pose,
                                                bool& linear_recompute_profile,
-                                               bool& angular_recompute_profile)
+                                               bool& angular_recompute_profile,
+                                               bool bypass_final_orientation)
 {
     if (previous_logged_state_ != PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE) {
         LOG_INFO("PoseStraightFilter: ROTATE_TO_FINAL_ANGLE\n");
@@ -398,7 +408,7 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
 
     // Compute final angle error (to target orientation, not travel direction)
     float final_angle_error;
-    if (!bypass_final_orientation_) {
+    if (!bypass_final_orientation) {
         float raw_error = limit_angle_deg(target_pose.O() - current_pose.O());
         if (parameters_.use_angle_continuity()) {
             // Use continuity enforcement to avoid 360° jumps (for ProfileTracker)
@@ -436,7 +446,7 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
 }
 
 void PoseStraightFilter::finished(cogip_defs::Polar& pos_err, const cogip_defs::Pose& current_pose,
-                                  cogip_defs::Pose& target_pose)
+                                  cogip_defs::Pose& target_pose, bool bypass_final_orientation)
 {
     if (previous_logged_state_ != PoseStraightFilterState::FINISHED) {
         LOG_INFO("PoseStraightFilter: FINISHED\n");
@@ -450,7 +460,7 @@ void PoseStraightFilter::finished(cogip_defs::Polar& pos_err, const cogip_defs::
 
     // Maintain final orientation
     float final_angle_error;
-    if (!bypass_final_orientation_) {
+    if (!bypass_final_orientation) {
         final_angle_error = limit_angle_deg(target_pose.O() - current_pose.O());
     } else {
         final_angle_error = 0.0f;

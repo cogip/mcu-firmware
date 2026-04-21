@@ -54,8 +54,6 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
         : Controller<PoseStraightFilterIOKeys, PoseStraightFilterParameters>(keys, parameters,
                                                                              name),
           current_state_(PoseStraightFilterState::FINISHED),
-          prev_target_(etl::numeric_limits<int32_t>::max(), etl::numeric_limits<int32_t>::max(),
-                       etl::numeric_limits<int32_t>::max()),
           start_pose_(etl::numeric_limits<int32_t>::max(), etl::numeric_limits<int32_t>::max(),
                       etl::numeric_limits<int32_t>::max()),
           logged_finished_(false), prev_angular_error_rotate_(0.0f), prev_angular_error_final_(0.0f)
@@ -78,9 +76,6 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
     void reset() override
     {
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
-        prev_target_ = cogip_defs::Pose(etl::numeric_limits<int32_t>::max(),
-                                        etl::numeric_limits<int32_t>::max(),
-                                        etl::numeric_limits<int32_t>::max());
         start_pose_ = cogip_defs::Pose(etl::numeric_limits<int32_t>::max(),
                                        etl::numeric_limits<int32_t>::max(),
                                        etl::numeric_limits<int32_t>::max());
@@ -105,13 +100,11 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
   private:
     PoseStraightFilterState current_state_;
     PoseStraightFilterState previous_logged_state_ = PoseStraightFilterState::FINISHED;
-    cogip_defs::Pose prev_target_;          ///< Previous target for change detection
-    cogip_defs::Pose start_pose_;           ///< Start pose for anti-drift correction
-    bool logged_finished_;                  ///< Flag to log FINISHED only once per target
-    float prev_angular_error_rotate_;       ///< Previous angular error in ROTATE_TO_DIRECTION
-    float prev_angular_error_final_;        ///< Previous angular error in ROTATE_TO_FINAL_ANGLE
-    bool bypass_final_orientation_ = false; ///< Cached bypass_final_orientation from IO
-    bool locked_reverse_ = false;           ///< Locked reverse decision for current waypoint
+    cogip_defs::Pose start_pose_;     ///< Start pose for anti-drift correction
+    bool logged_finished_;            ///< Flag to log FINISHED only once per target
+    float prev_angular_error_rotate_; ///< Previous angular error in ROTATE_TO_DIRECTION
+    float prev_angular_error_final_;  ///< Previous angular error in ROTATE_TO_FINAL_ANGLE
+    bool locked_reverse_ = false;     ///< Locked reverse decision for current waypoint
 
     /// @brief Handle ROTATE_TO_DIRECTION state
     void rotate_to_direction(ControllersIO& io, cogip_defs::Polar& pos_err,
@@ -128,11 +121,11 @@ class PoseStraightFilter : public Controller<PoseStraightFilterIOKeys, PoseStrai
     void rotate_to_final_angle(ControllersIO& io, cogip_defs::Polar& pos_err,
                                const cogip_defs::Pose& current_pose,
                                const cogip_defs::Pose& target_pose, bool& linear_recompute_profile,
-                               bool& angular_recompute_profile);
+                               bool& angular_recompute_profile, bool bypass_final_orientation);
 
     /// @brief Handle FINISHED state
     void finished(cogip_defs::Polar& pos_err, const cogip_defs::Pose& current_pose,
-                  cogip_defs::Pose& target_pose);
+                  cogip_defs::Pose& target_pose, bool bypass_final_orientation);
 
     /// @brief Calculate longitudinal position error projected onto robot's axis
     /// @param current_x Current X position
