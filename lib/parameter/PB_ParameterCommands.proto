@@ -15,6 +15,41 @@ enum PB_ParameterStatus {
 	NOT_FOUND = 2;         ///< Parameter not found
 }
 
+/// @brief Scalar type of a parameter value (mirrors the PB_ParameterValue oneof)
+enum PB_ParameterType {
+	PARAM_TYPE_FLOAT = 0;
+	PARAM_TYPE_DOUBLE = 1;
+	PARAM_TYPE_INT32 = 2;
+	PARAM_TYPE_UINT32 = 3;
+	PARAM_TYPE_INT64 = 4;
+	PARAM_TYPE_UINT64 = 5;
+	PARAM_TYPE_BOOL = 6;
+}
+
+/// @brief Semantic tags attached to a parameter at registration
+///
+/// @note The enum value is used as a bit index in PB_ParameterAnnounceHeader.tags_bitmask:
+///       a parameter owns tag X iff (tags_bitmask & (1u << X)) != 0. Up to 32 tags.
+enum PB_ParameterTag {
+	PARAM_TAG_NONE = 0;                ///< Sentinel used as filter "all parameters"
+	PARAM_TAG_PID = 1;
+	PARAM_TAG_TRACKER = 2;             ///< QuadPID tracker chain
+	PARAM_TAG_QUADPID = 3;             ///< Classic QuadPID chain
+	PARAM_TAG_LINEAR = 4;
+	PARAM_TAG_ANGULAR = 5;
+	PARAM_TAG_POSE = 6;
+	PARAM_TAG_SPEED = 7;
+	PARAM_TAG_INTEGRAL_LIMIT = 8;
+	PARAM_TAG_LOCALIZATION = 9;
+	PARAM_TAG_ENCODER = 10;
+	PARAM_TAG_OTOS = 11;
+	PARAM_TAG_POLARITY = 12;
+	PARAM_TAG_WHEEL_GEOMETRY = 13;
+	PARAM_TAG_SPEED_LIMIT = 14;
+	PARAM_TAG_ACCELERATION_LIMIT = 15;
+	PARAM_TAG_POSE_THRESHOLD = 16;
+}
+
 /// @brief Parameter value with type variants
 message PB_ParameterValue
 {
@@ -55,4 +90,51 @@ message PB_ParameterSetResponse
 {
 	uint32 key_hash = 1;           ///< Parameter key hash
 	PB_ParameterStatus status = 2; ///< Operation status
+}
+
+/// @brief Host -> firmware(s): "announce your parameters (optionally filtered by tag)"
+///
+/// @note A request with tag_filter == PARAM_TAG_NONE asks for every registered
+///       parameter. Each firmware board replies with one AnnounceHeader per
+///       matching parameter, plus one AnnounceName, plus one AnnounceBounds if
+///       the parameter has bounds attached. The host reassembles by
+///       (board_id, key_hash).
+message PB_ParameterAnnounceRequest
+{
+	PB_ParameterTag tag_filter = 1;
+}
+
+/// @brief Firmware -> host: header frame for one announced parameter.
+///
+/// @note Fits in a single canpb/CAN-FD frame (~24 B binary / ~32 B base64).
+///       The full parameter name is streamed separately in
+///       PB_ParameterAnnounceName because it does not fit alongside.
+message PB_ParameterAnnounceHeader
+{
+	uint32 board_id = 1;       ///< FNV-1a hash of the platform name (stable per board)
+	uint32 key_hash = 2;       ///< Parameter key hash (matches get/set flows)
+	PB_ParameterType type = 3; ///< Scalar type
+	uint32 tags_bitmask = 4;   ///< OR of (1u << PB_ParameterTag::X)
+	uint32 flags = 5;          ///< bit 0: read_only, bit 1: has_bounds
+	uint32 total_count = 6;    ///< # parameters this board will announce for the active request
+	uint32 index = 7;          ///< 0-based index within this board's stream
+}
+
+/// @brief Firmware -> host: parameter name, keyed by its hash.
+///
+/// @note Separate from the header because the name string does not fit in the
+///       same canpb frame. Names MUST stay ≤ 36 characters so the PB fits in a
+///       single CAN-FD frame after base64 encoding.
+message PB_ParameterAnnounceName
+{
+	uint32 key_hash = 1;
+	string name = 2;
+}
+
+/// @brief Firmware -> host: bounds for a parameter (only sent when has_bounds).
+message PB_ParameterAnnounceBounds
+{
+	uint32 key_hash = 1;
+	PB_ParameterValue min_value = 2;
+	PB_ParameterValue max_value = 3;
 }
