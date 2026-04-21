@@ -358,17 +358,13 @@ void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer)
 ///       2 B + 36 B payload ≈ 43 B → base64 ≈ 60 B).
 constexpr uint32_t PARAMETER_NAME_MAX_LENGTH = 36;
 
-void pf_handle_parameter_announce(cogip::canpb::ReadBuffer& buffer)
+/// @brief Stream every parameter matching `tag_filter` as announce frames.
+///
+/// @note Factored out of pf_handle_parameter_announce so the
+///       copilot-connected hook (and unit tests) can trigger an announce
+///       without a canpb request buffer.
+static void _announce_parameters(PB_ParameterTag tag_filter)
 {
-    PB_ParameterAnnounceRequest request;
-    EmbeddedProto::Error error = request.deserialize(buffer);
-    if (error != EmbeddedProto::Error::NO_ERRORS) {
-        LOG_ERROR("Parameter announce: Protobuf deserialization error: %d\n",
-                  static_cast<int>(error));
-        return;
-    }
-
-    const PB_ParameterTag tag_filter = request.get_tag_filter();
     const size_t total_count = parameter_handler.count_matching(tag_filter);
 
     // No matching parameter on this board: stay silent so other boards can answer.
@@ -416,6 +412,24 @@ void pf_handle_parameter_announce(cogip::canpb::ReadBuffer& buffer)
                 canpb.send_message(parameter_announce_bounds_uuid, &bounds_msg);
             }
         });
+}
+
+void pf_handle_parameter_announce(cogip::canpb::ReadBuffer& buffer)
+{
+    PB_ParameterAnnounceRequest request;
+    EmbeddedProto::Error error = request.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Parameter announce: Protobuf deserialization error: %d\n",
+                  static_cast<int>(error));
+        return;
+    }
+
+    _announce_parameters(request.get_tag_filter());
+}
+
+void pf_auto_announce_parameters()
+{
+    _announce_parameters(PB_ParameterTag::PARAM_TAG_NONE);
 }
 
 } // namespace motion_control

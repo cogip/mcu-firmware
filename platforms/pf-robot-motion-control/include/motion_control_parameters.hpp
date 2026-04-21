@@ -263,6 +263,13 @@ void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer);
 ///          descriptor matching the requested tag filter.
 void pf_handle_parameter_announce(cogip::canpb::ReadBuffer& buffer);
 
+/// @brief Announce every registered parameter (tag filter = NONE).
+///
+/// @note Intended to be called once from the copilot-connected hook so the
+///       host can warm its parameter cache without having to send an
+///       explicit announce request on startup.
+void pf_auto_announce_parameters();
+
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip

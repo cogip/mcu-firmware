@@ -25,6 +25,7 @@ static void _handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer
 static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_announce([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _on_copilot_connected([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _on_emergency_stop();
@@ -38,7 +39,9 @@ void pf_init(void)
 {
     /* Initialize common platform (CAN, heartbeat, copilot handlers) */
     int ret = cogip::pf_common::pf_init(
-        {}, {}, cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
+        cogip::pf_common::copilot_callback_t::create<_on_copilot_connected>(),
+        {},
+        cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
     if (ret) {
         LOG_ERROR("Common platform initialization failed, error: %d\n", ret);
     } else {
@@ -207,6 +210,15 @@ static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& 
 static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     cogip::telemetry::Telemetry::disable();
+}
+
+/// Copilot-connected callback: pushes every registered parameter upstream so
+/// the host can populate its cache without having to send an announce
+/// request at startup. The request-driven path
+/// (parameter_announce_request_uuid) remains available for targeted queries.
+static void _on_copilot_connected([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_auto_announce_parameters();
 }
 
 /// Emergency stop callback
