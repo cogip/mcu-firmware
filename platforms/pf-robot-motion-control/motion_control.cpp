@@ -31,6 +31,32 @@
 #include "PB_State.hpp"
 #include "telemetry/Telemetry.hpp"
 
+// Odometry: select the localization implementation at compile time.
+// robot2_conf.hpp defines ROBOT_HAS_OTOS; every other robot falls back
+// to encoder-based LocalizationDifferential. Kept at file scope so the
+// nested namespace resolution stays clean in the per-robot headers.
+#ifdef ROBOT_HAS_OTOS
+#include "localization/LocalizationOTOS.hpp"
+#include "otos/OTOS.hpp"
+static cogip::localization::LocalizationOTOS::Parameters
+    otos_params(otos_linear_scalar, otos_angular_scalar, otos_offset_x_mm, otos_offset_y_mm,
+                otos_offset_h_deg);
+static cogip::otos::OTOS otos_sensor(SOFT_I2C_DEV(0), otos_i2c_addr);
+static cogip::localization::LocalizationOTOS robot_localization(otos_sensor, otos_params);
+#else
+#include "encoder/EncoderQDEC.hpp"
+#include "localization/LocalizationDifferential.hpp"
+static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
+                                                encoder_wheels_resolution_pulses.get());
+static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
+                                                 encoder_wheels_resolution_pulses.get());
+static cogip::localization::LocalizationDifferentialParameters
+    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
+                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
+static cogip::localization::LocalizationDifferential
+    robot_localization(localization_params, left_encoder, right_encoder);
+#endif
+
 namespace cogip {
 
 namespace pf {

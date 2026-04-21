@@ -2,8 +2,6 @@
 
 // Project includes
 #include "etl/numeric.h"
-#include "localization/LocalizationOTOS.hpp"
-#include "otos/OTOS.hpp"
 
 /* Motion motors */
 #define MOTOR_LEFT 1
@@ -133,17 +131,17 @@ constexpr float default_tracker_angular_speed_pid_integral_limit =
 // Localization (OTOS optical tracking sensor)
 // ============================================================================
 
-/// @brief Marker macro used by the parameter handler to decide whether to
-/// register the OTOS calibration scalars in the CAN parameter registry.
+/// @brief Marker macro picked up by motion_control_parameters.hpp and
+/// motion_control.cpp to select the OTOS localization path at build time.
 #define ROBOT_HAS_OTOS 1
 
 // OTOS I2C address
 constexpr uint8_t otos_i2c_addr = 0x17;
 
-// OTOS calibration scalars (range 0.872 to 1.127). The centralized
+// OTOS calibration scalar defaults (range [0.872, 1.127]). The central
 // Parameter<> instances live in motion_control_parameters.hpp (with
-// WithFlashStorage so the scalars survive a reboot); they pick up these
-// defaults and can be calibrated at runtime via the CAN parameter handler.
+// WithFlashStorage so the scalars survive a reboot) and pick these up; the
+// host calibration tool enforces the [0.872, 1.127] range.
 constexpr float default_otos_linear_scalar = 0.969f;
 constexpr float default_otos_angular_scalar = 0.994f;
 
@@ -152,11 +150,3 @@ constexpr float default_otos_angular_scalar = 0.994f;
 constexpr float otos_offset_x_mm = 0.0f;
 constexpr float otos_offset_y_mm = 0.0f;
 constexpr float otos_offset_h_deg = 0.0f;
-
-static cogip::localization::LocalizationOTOS::Parameters
-    otos_params(cogip::pf::motion_control::otos_linear_scalar,
-                cogip::pf::motion_control::otos_angular_scalar, otos_offset_x_mm,
-                otos_offset_y_mm, otos_offset_h_deg);
-
-static cogip::otos::OTOS otos_sensor(SOFT_I2C_DEV(0), otos_i2c_addr);
-static cogip::localization::LocalizationOTOS robot_localization(otos_sensor, otos_params);
