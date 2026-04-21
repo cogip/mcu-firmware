@@ -351,6 +351,73 @@ void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer)
     }
 }
 
+/// @brief Maximum length of a parameter name on the wire.
+///
+/// @note 36 chars keeps PB_ParameterAnnounceName under the 48 B binary / 64 B
+///       base64 single-frame budget of canpb (key_hash 5 B + string overhead
+///       2 B + 36 B payload ≈ 43 B → base64 ≈ 60 B).
+constexpr uint32_t PARAMETER_NAME_MAX_LENGTH = 36;
+
+void pf_handle_parameter_announce(cogip::canpb::ReadBuffer& buffer)
+{
+    PB_ParameterAnnounceRequest request;
+    EmbeddedProto::Error error = request.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Parameter announce: Protobuf deserialization error: %d\n",
+                  static_cast<int>(error));
+        return;
+    }
+
+    const PB_ParameterTag tag_filter = request.get_tag_filter();
+    const size_t total_count = parameter_handler.count_matching(tag_filter);
+
+    // No matching parameter on this board: stay silent so other boards can answer.
+    if (total_count == 0) {
+        return;
+    }
+
+    cogip::canpb::CanProtobuf& canpb = pf_get_canpb();
+
+    parameter_handler.for_each_matching(
+        tag_filter,
+        [&canpb, total_count](const parameter_handler::ParameterDescriptor& entry, size_t index) {
+            uint32_t flags = 0;
+            if (entry.read_only) {
+                flags |= 0x1u;
+            }
+            if (entry.has_bounds) {
+                flags |= 0x2u;
+            }
+
+            // Header frame
+            PB_ParameterAnnounceHeader header;
+            header.set_board_id(platform_board_id);
+            header.set_key_hash(entry.key_hash);
+            header.set_type(entry.type);
+            header.set_tags_bitmask(entry.tags_bitmask);
+            header.set_flags(flags);
+            header.set_total_count(static_cast<uint32_t>(total_count));
+            header.set_index(static_cast<uint32_t>(index));
+            canpb.send_message(parameter_announce_header_uuid, &header);
+
+            // Name frame (separate message because the string does not fit in the
+            // header frame budget).
+            PB_ParameterAnnounceName<PARAMETER_NAME_MAX_LENGTH> name_msg;
+            name_msg.set_key_hash(entry.key_hash);
+            name_msg.mutable_name() = entry.name;
+            canpb.send_message(parameter_announce_name_uuid, &name_msg);
+
+            // Bounds frame (only when the parameter has a closed range).
+            if (entry.has_bounds) {
+                PB_ParameterAnnounceBounds bounds_msg;
+                bounds_msg.set_key_hash(entry.key_hash);
+                entry.min_value.pb_copy(bounds_msg.mutable_min_value());
+                entry.max_value.pb_copy(bounds_msg.mutable_max_value());
+                canpb.send_message(parameter_announce_bounds_uuid, &bounds_msg);
+            }
+        });
+}
+
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip

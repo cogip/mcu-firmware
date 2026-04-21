@@ -47,6 +47,10 @@ using cogip::pf_common::pose_start_uuid;
 using cogip::pf_common::speed_order_uuid;
 using cogip::pf_common::state_uuid;
 // Service: 0x3000 - 0x3FFF
+using cogip::pf_common::parameter_announce_bounds_uuid;
+using cogip::pf_common::parameter_announce_header_uuid;
+using cogip::pf_common::parameter_announce_name_uuid;
+using cogip::pf_common::parameter_announce_request_uuid;
 using cogip::pf_common::parameter_get_response_uuid;
 using cogip::pf_common::parameter_get_uuid;
 using cogip::pf_common::parameter_set_response_uuid;

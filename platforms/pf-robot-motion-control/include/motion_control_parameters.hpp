@@ -256,6 +256,13 @@ void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer);
 /// @brief Handle parameter set request from CAN bus
 void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer);
 
+/// @brief Handle parameter announce request from CAN bus
+///
+/// @details Streams PB_ParameterAnnounceHeader + PB_ParameterAnnounceName
+///          (+ PB_ParameterAnnounceBounds when applicable) for every
+///          descriptor matching the requested tag filter.
+void pf_handle_parameter_announce(cogip::canpb::ReadBuffer& buffer);
+
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip
