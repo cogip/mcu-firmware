@@ -220,9 +220,16 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         break;
     }
 
-    // Reset filters and PIDs if state changed and is not moving
+    // Reset filters and PIDs when motion is aborted (blocked / timeout).
+    // Do NOT reset on 'reached' / 'intermediate_reached': PoseStraightFilter is
+    // already in FINISHED state and manages its own transitions. Resetting here
+    // wipes prev_target_ and causes a spurious "new waypoint" detection on the
+    // next cycle, which also recomputes locked_reverse_ on noisy near-zero
+    // position error.
     if (previous_target_pose_status != state &&
-        state != cogip::motion_control::target_pose_status_t::moving) {
+        state != cogip::motion_control::target_pose_status_t::moving &&
+        state != cogip::motion_control::target_pose_status_t::reached &&
+        state != cogip::motion_control::target_pose_status_t::intermediate_reached) {
         switch (current_controller_id) {
         case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
             quadpid_chain::reset();
