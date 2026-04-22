@@ -132,6 +132,15 @@ void PoseStraightFilter::execute(ControllersIO& io)
 
     if ((target_pose_x != prev_target_.x()) || (target_pose_y != prev_target_.y()) ||
         (target_pose_O != prev_target_.O())) {
+        LOG_INFO("Recompute triggered: target=(%.2f, %.2f, %.2f) prev=(%.2f, %.2f, %.2f) "
+              "dx=%.4f dy=%.4f dO=%.4f\n",
+              static_cast<double>(target_pose_x), static_cast<double>(target_pose_y),
+              static_cast<double>(target_pose_O),
+              static_cast<double>(prev_target_.x()), static_cast<double>(prev_target_.y()),
+              static_cast<double>(prev_target_.O()),
+              static_cast<double>(target_pose_x - prev_target_.x()),
+              static_cast<double>(target_pose_y - prev_target_.y()),
+              static_cast<double>(target_pose_O - prev_target_.O()));
         prev_target_ = target_pose;
         start_pose_ = current_pose;
         // Reset state machine to initial state on new target
