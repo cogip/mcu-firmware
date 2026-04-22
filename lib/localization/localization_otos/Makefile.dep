@@ -1,0 +1,3 @@
+USEMODULE += otos
+USEMODULE += localization
+USEMODULE += parameter

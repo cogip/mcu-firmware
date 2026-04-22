@@ -1,7 +1,10 @@
 #pragma once
 
 // Project includes
+#include "board.h"
+#include "encoder/EncoderQDEC.hpp"
 #include "etl/numeric.h"
+#include "localization/LocalizationDifferential.hpp"
 #include "parameter/Parameter.hpp"
 
 using namespace cogip::parameter;
@@ -47,20 +50,21 @@ inline Parameter<float, NonNegative> angular_speed_pid_ki{1};
 inline Parameter<float, NonNegative> angular_speed_pid_kd{0.0};
 
 // ============================================================================
-// Tracker chain PID gains (QUADPID_TRACKER)
+// Tracker pose PID gains (QUADPID_TRACKER - tracker branch)
+// Used to track the motion profile in real-time (closed-loop tracking)
 // ============================================================================
 
-// Tracker linear pose PID (tracker during MOVE_TO_POSITION)
-inline Parameter<float, NonNegative> tracker_linear_pose_pid_kp{0.1};
-inline Parameter<float, NonNegative> tracker_linear_pose_pid_ki{0.0};
+// Tracker linear pose PID (tracker, uses Ki for steady-state error elimination)
+inline Parameter<float, NonNegative> tracker_linear_pose_pid_kp{0.09};
+inline Parameter<float, NonNegative> tracker_linear_pose_pid_ki{0.05};
 inline Parameter<float, NonNegative> tracker_linear_pose_pid_kd{0};
-// Tracker angular pose PID (tracker during ROTATE states)
+// Tracker angular pose PID (tracker)
 inline Parameter<float, NonNegative> tracker_angular_pose_pid_kp{0.2};
 inline Parameter<float, NonNegative> tracker_angular_pose_pid_ki{0};
 inline Parameter<float, NonNegative> tracker_angular_pose_pid_kd{0};
 // Tracker linear speed PID
-inline Parameter<float, NonNegative> tracker_linear_speed_pid_kp{10};
-inline Parameter<float, NonNegative> tracker_linear_speed_pid_ki{1};
+inline Parameter<float, NonNegative> tracker_linear_speed_pid_kp{5};
+inline Parameter<float, NonNegative> tracker_linear_speed_pid_ki{0.3};
 inline Parameter<float, NonNegative> tracker_linear_speed_pid_kd{0};
 // Tracker angular speed PID
 inline Parameter<float, NonNegative> tracker_angular_speed_pid_kp{10};
@@ -109,8 +113,9 @@ inline Parameter<float, NonNegative> angular_speed_pid_integral_limit{max_speed_
                                                                       angular_speed_pid_ki.get()};
 
 // Tracker linear pose PID integral limit
+// Limit = max_speed / ki to prevent integral windup
 inline Parameter<float, NonNegative> tracker_linear_pose_pid_integral_limit{
-    etl::numeric_limits<uint16_t>::max()};
+    max_speed_mm_per_s / tracker_linear_pose_pid_ki.get()};
 // Tracker angular pose PID integral limit
 inline Parameter<float, NonNegative> tracker_angular_pose_pid_integral_limit{
     etl::numeric_limits<uint16_t>::max()};
@@ -125,3 +130,18 @@ inline Parameter<float, NonNegative> tracker_angular_speed_pid_integral_limit{
 constexpr bool platform_linear_antiblocking = false;
 // Angular antiblocking
 constexpr bool angular_antiblocking = false;
+
+// ============================================================================
+// Localization (encoder-based differential odometry)
+// ============================================================================
+
+static cogip::encoder::EncoderQDEC left_encoder(MOTOR_LEFT, COGIP_BOARD_ENCODER_MODE,
+                                                encoder_wheels_resolution_pulses.get());
+static cogip::encoder::EncoderQDEC right_encoder(MOTOR_RIGHT, COGIP_BOARD_ENCODER_MODE,
+                                                 encoder_wheels_resolution_pulses.get());
+
+static cogip::localization::LocalizationDifferentialParameters
+    localization_params(left_encoder_wheels_diameter_mm, right_encoder_wheels_diameter_mm,
+                        encoder_wheels_distance_mm, qdec_left_polarity, qdec_right_polarity);
+static cogip::localization::LocalizationDifferential
+    robot_localization(localization_params, left_encoder, right_encoder);
