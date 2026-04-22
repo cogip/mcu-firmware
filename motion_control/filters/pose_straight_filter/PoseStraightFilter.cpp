@@ -142,6 +142,9 @@ void PoseStraightFilter::execute(ControllersIO& io)
     }
 
     if (new_target) {
+        LOG_INFO("Recompute triggered: target=(%.2f, %.2f, %.2f)",
+                 static_cast<double>(target_pose_x), static_cast<double>(target_pose_y),
+                 static_cast<double>(target_pose_O));
         start_pose_ = current_pose;
         // Reset state machine to initial state on new target
         current_state_ = PoseStraightFilterState::ROTATE_TO_DIRECTION;
