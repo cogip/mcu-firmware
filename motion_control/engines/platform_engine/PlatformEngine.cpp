@@ -65,6 +65,7 @@ void PlatformEngine::prepare_inputs()
     if (!path.is_started() || path.empty()) {
         io_.set("motion_direction", target_pose_.get_motion_direction());
         io_.set("is_intermediate", target_pose_.is_intermediate());
+        io_.set("bypass_final_orientation", target_pose_.bypass_final_orientation());
     }
 
     // Initialize path_complete to false (will be set by PathManagerFilter or PurePursuit)
