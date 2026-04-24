@@ -101,6 +101,16 @@ void PathManagerFilter::execute(ControllersIO& io)
     // Emit bypass_final_orientation from current waypoint
     if (!keys_.bypass_final_orientation.empty()) {
         io.set(keys_.bypass_final_orientation, current->bypass_final_orientation());
+        // [DEBUG bypass_final_orientation] what is being written to IO
+        static bool prev_bypass = false;
+        bool cur_bypass = current->bypass_final_orientation();
+        if (cur_bypass != prev_bypass) {
+            LOG_INFO("PMF: bypass_final_orientation -> %d (wp=%u/%u)\n",
+                     static_cast<int>(cur_bypass),
+                     static_cast<unsigned>(path.current_index() + 1),
+                     static_cast<unsigned>(path.size()));
+            prev_bypass = cur_bypass;
+        }
     }
 
     // Emit motion_direction from current waypoint

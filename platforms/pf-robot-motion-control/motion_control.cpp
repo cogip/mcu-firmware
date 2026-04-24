@@ -345,6 +345,11 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     target_pose.pb_read(pb_path_target_pose);
     LOG_INFO("New target pose: x=%.2f, y=%.2f, O=%.2f\n", static_cast<double>(target_pose.x()),
              static_cast<double>(target_pose.y()), static_cast<double>(target_pose.O()));
+    // [DEBUG bypass_final_orientation] what was actually decoded from protobuf
+    LOG_INFO("PB: bypass=%d is_intermediate=%d motion_dir=%d\n",
+             static_cast<int>(target_pose.bypass_final_orientation()),
+             static_cast<int>(target_pose.is_intermediate()),
+             static_cast<int>(target_pose.get_motion_direction()));
 
     // Use path manager for backward compatibility: reset + add + start
     motion_control_path.reset();

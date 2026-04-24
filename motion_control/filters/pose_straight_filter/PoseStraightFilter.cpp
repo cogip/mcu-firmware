@@ -411,8 +411,9 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
 
     // Compute final angle error (to target orientation, not travel direction)
     float final_angle_error;
+    float raw_error_dbg = limit_angle_deg(target_pose.O() - current_pose.O());
     if (!bypass_final_orientation) {
-        float raw_error = limit_angle_deg(target_pose.O() - current_pose.O());
+        float raw_error = raw_error_dbg;
         if (parameters_.use_angle_continuity()) {
             // Use continuity enforcement to avoid 360° jumps (for ProfileTracker)
             if (angular_recompute_profile) {
@@ -426,6 +427,14 @@ void PoseStraightFilter::rotate_to_final_angle(ControllersIO& io, cogip_defs::Po
     } else {
         final_angle_error = 0.0f;
     }
+    // [DEBUG bypass_final_orientation] log every tick in ROTATE_TO_FINAL_ANGLE
+    LOG_INFO("RTF: bypass=%d cur_O=%.2f tgt_O=%.2f raw=%.2f final_err=%.2f thr=%.2f "
+             "recompute=%d prev_err=%.2f\n",
+             static_cast<int>(bypass_final_orientation), static_cast<double>(current_pose.O()),
+             static_cast<double>(target_pose.O()), static_cast<double>(raw_error_dbg),
+             static_cast<double>(final_angle_error), static_cast<double>(angular_threshold),
+             static_cast<int>(angular_recompute_profile),
+             static_cast<double>(prev_angular_error_final_));
     pos_err.set_angle(final_angle_error);
 
     // Anti-drift correction during final rotation
