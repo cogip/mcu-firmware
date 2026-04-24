@@ -488,15 +488,22 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
              static_cast<double>(pose.O()));
 
     pf_motion_control_platform_engine.set_current_pose(pose);
-    pf_motion_control_platform_engine.set_target_pose(pose);
 
-    // Setting a new start pose invalidates any current path
-    motion_control_path.stop();
+    // Setting a new start pose invalidates any current path. Replace it
+    // with a single hold-in-place waypoint at the new pose so the motion
+    // chain sees target == current and the filter converges to FINISHED on
+    // the next cycle without trying to move. This also ensures the IO keys
+    // written by PathManagerFilter (target_pose_x/y/O, motion_direction,
+    // bypass_final_orientation, is_intermediate) are refreshed instead of
+    // carrying over stale values from the previous motion.
+    motion_control_path.reset();
+    motion_control_path.add_point(pose);
+    motion_control_path.start();
 
     pf_motion_control_platform_engine.reset_pose_reached();
     pf_motion_control_platform_engine.set_current_cycle(0);
 
-    LOG_INFO("[START_POSE] Localization updated, path stopped\n");
+    LOG_INFO("[START_POSE] Localization updated, path reset to hold-in-place at new pose\n");
 }
 
 void pf_handle_path_reset([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
