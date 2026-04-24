@@ -77,7 +77,7 @@ constexpr float linear_threshold = 2;
 constexpr float angular_threshold = 1;
 // Angular intermediate threshold (when the robot turns on itself to go straight
 // to its destination)
-constexpr float angular_intermediate_threshold = 1;
+constexpr float angular_intermediate_threshold = 3;
 
 // Linear anti-blocking
 constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 12.5;
