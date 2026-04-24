@@ -158,13 +158,25 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         }
         break;
 
-    case cogip::motion_control::target_pose_status_t::blocked:
-        if (pf_motion_control_platform_engine.target_pose().bypass_anti_blocking()) {
-            // Set current robot pose as target pose to avoid robot moving
-            target_pose.set_x(pf_motion_control_platform_engine.current_pose().x());
-            target_pose.set_y(pf_motion_control_platform_engine.current_pose().y());
-            target_pose.set_O(pf_motion_control_platform_engine.current_pose().O());
-            pf_motion_control_platform_engine.set_target_pose(target_pose);
+    case cogip::motion_control::target_pose_status_t::blocked: {
+        const cogip::path::Pose* current_waypoint = motion_control_path.current_pose();
+        const bool bypass_anti_blocking =
+            current_waypoint && current_waypoint->bypass_anti_blocking();
+        if (bypass_anti_blocking) {
+            // Replace the current waypoint with a hold-in-place one at the
+            // current robot pose, preserving every flag (motion_direction,
+            // bypass_final_orientation, is_intermediate...) of the original
+            // waypoint. Feeding the path manager with a target equal to
+            // current position lets PathManagerFilter → PoseStraightFilter
+            // converge immediately to FINISHED without trying to push the
+            // robot back against whatever is blocking it.
+            cogip::path::Pose hold = *current_waypoint;
+            hold.set_x(pf_motion_control_platform_engine.current_pose().x());
+            hold.set_y(pf_motion_control_platform_engine.current_pose().y());
+            hold.set_O(pf_motion_control_platform_engine.current_pose().O());
+            motion_control_path.reset();
+            motion_control_path.add_point(hold);
+            motion_control_path.start();
 
             // Consider pose_reached as anti blocking is bypassed
             pf_motion_control_platform_engine.set_pose_reached(
@@ -188,16 +200,23 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
                 pf_get_canpb().send_message(blocked_uuid);
             }
         }
-
         break;
+    }
 
     default:
         break;
     }
 
-    // Reset filters and PIDs if state changed and is not moving
+    // Reset filters and PIDs when motion is aborted (blocked / timeout).
+    // Do NOT reset on 'reached' / 'intermediate_reached': PoseStraightFilter is
+    // already in FINISHED state and manages its own transitions. Resetting here
+    // wipes prev_target_ and causes a spurious "new waypoint" detection on the
+    // next cycle, which also recomputes locked_reverse_ on noisy near-zero
+    // position error.
     if (previous_target_pose_status != state &&
-        state != cogip::motion_control::target_pose_status_t::moving) {
+        state != cogip::motion_control::target_pose_status_t::moving &&
+        state != cogip::motion_control::target_pose_status_t::reached &&
+        state != cogip::motion_control::target_pose_status_t::intermediate_reached) {
         switch (current_controller_id) {
         case static_cast<uint32_t>(PB_ControllerEnum::QUADPID):
             quadpid_chain::reset();
@@ -338,6 +357,11 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     target_pose.pb_read(pb_path_target_pose);
     LOG_INFO("New target pose: x=%.2f, y=%.2f, O=%.2f\n", static_cast<double>(target_pose.x()),
              static_cast<double>(target_pose.y()), static_cast<double>(target_pose.O()));
+    // [DEBUG bypass_final_orientation] what was actually decoded from protobuf
+    LOG_INFO("PB: bypass=%d is_intermediate=%d motion_dir=%d\n",
+             static_cast<int>(target_pose.bypass_final_orientation()),
+             static_cast<int>(target_pose.is_intermediate()),
+             static_cast<int>(target_pose.get_motion_direction()));
 
     // Use path manager for backward compatibility: reset + add + start
     motion_control_path.reset();
@@ -366,9 +390,6 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
     } else {
         pf_motion_control_platform_engine.set_timeout_enable(false);
     }
-
-    // Deal with the first pose in the list
-    pf_motion_control_platform_engine.set_target_pose(target_pose);
 
     pf_motion_control_platform_engine.set_pose_reached(
         cogip::motion_control::target_pose_status_t::moving);
@@ -444,15 +465,22 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
              static_cast<double>(pose.O()));
 
     pf_motion_control_platform_engine.set_current_pose(pose);
-    pf_motion_control_platform_engine.set_target_pose(pose);
 
-    // Setting a new start pose invalidates any current path
-    motion_control_path.stop();
+    // Setting a new start pose invalidates any current path. Replace it
+    // with a single hold-in-place waypoint at the new pose so the motion
+    // chain sees target == current and the filter converges to FINISHED on
+    // the next cycle without trying to move. This also ensures the IO keys
+    // written by PathManagerFilter (target_pose_x/y/O, motion_direction,
+    // bypass_final_orientation, is_intermediate) are refreshed instead of
+    // carrying over stale values from the previous motion.
+    motion_control_path.reset();
+    motion_control_path.add_point(pose);
+    motion_control_path.start();
 
     pf_motion_control_platform_engine.reset_pose_reached();
     pf_motion_control_platform_engine.set_current_cycle(0);
 
-    LOG_INFO("[START_POSE] Localization updated, path stopped\n");
+    LOG_INFO("[START_POSE] Localization updated, path reset to hold-in-place at new pose\n");
 }
 
 void pf_handle_path_reset([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
@@ -529,9 +557,6 @@ void pf_handle_path_start([[maybe_unused]] const cogip::canpb::ReadBuffer& buffe
         } else {
             pf_motion_control_platform_engine.set_timeout_enable(false);
         }
-
-        // Set target pose on engine
-        pf_motion_control_platform_engine.set_target_pose(target_pose);
 
         // Reset controllers for new path
         pf_motion_control_reset_controllers();
