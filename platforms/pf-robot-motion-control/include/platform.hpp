@@ -49,6 +49,8 @@ using cogip::pf_common::state_uuid;
 // Service: 0x3000 - 0x3FFF
 using cogip::pf_common::parameter_get_response_uuid;
 using cogip::pf_common::parameter_get_uuid;
+using cogip::pf_common::parameter_reset_response_uuid;
+using cogip::pf_common::parameter_reset_uuid;
 using cogip::pf_common::parameter_set_response_uuid;
 using cogip::pf_common::parameter_set_uuid;
 using cogip::pf_common::reset_uuid;

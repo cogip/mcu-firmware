@@ -118,6 +118,42 @@ template <size_t MaxParams> class ParameterHandler
         return response;
     }
 
+    /// @brief Handle parameter reset request
+    /// @param buffer CAN read buffer containing serialized PB_ParameterResetRequest
+    /// @return Optional response with operation status, empty if parameter not found locally
+    /// @note Returns empty optional if parameter not in this board's registry, allowing other
+    ///       boards on the CAN bus to respond instead. Only the board that owns the parameter
+    ///       should send a response.
+    etl::optional<PB_ParameterResetResponse> handle_reset(canpb::ReadBuffer& buffer)
+    {
+        PB_ParameterResetRequest request;
+
+        // Deserialize request
+        EmbeddedProto::Error error = request.deserialize(buffer);
+        if (error != EmbeddedProto::Error::NO_ERRORS) {
+            LOG_ERROR("Parameter reset: Protobuf deserialization error: %d\n",
+                      static_cast<int>(error));
+            return etl::nullopt;
+        }
+
+        // Check if parameter exists in the registry
+        auto it = registry_.find(request.get_key_hash());
+        if (it == registry_.end()) {
+            // Parameter not in this board's registry - don't respond
+            return etl::nullopt;
+        }
+
+        // Parameter found - erase persisted value and restore compile-time default
+        it->second.reset();
+
+        PB_ParameterResetResponse response;
+        response.set_key_hash(request.get_key_hash());
+        response.set_status(PB_ParameterStatus::SUCCESS);
+        LOG_INFO("- key_hash: 0x%08" PRIx32 ", parameter reset to default\n", it->first);
+
+        return response;
+    }
+
   private:
     const Registry& registry_;
 };

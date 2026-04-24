@@ -24,6 +24,7 @@ static void _handle_path_add_point([[maybe_unused]] cogip::canpb::ReadBuffer& bu
 static void _handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_parameter_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _on_emergency_stop();
@@ -69,6 +70,8 @@ void pf_init(void)
                                        cogip::canpb::message_handler_t::create<_handle_parameter_get>());
         canpb.register_message_handler(parameter_set_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_parameter_set>());
+        canpb.register_message_handler(parameter_reset_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_parameter_reset>());
         canpb.register_message_handler(telemetry_enable_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_telemetry_enable>());
         canpb.register_message_handler(telemetry_disable_uuid,
@@ -186,6 +189,12 @@ static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buf
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     cogip::pf::motion_control::pf_handle_parameter_set(buffer);
+}
+
+/// Parameter reset message handler
+static void _handle_parameter_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_handle_parameter_reset(buffer);
 }
 
 /// Telemetry enable message handler

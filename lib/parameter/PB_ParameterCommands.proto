@@ -56,3 +56,16 @@ message PB_ParameterSetResponse
 	uint32 key_hash = 1;           ///< Parameter key hash
 	PB_ParameterStatus status = 2; ///< Operation status
 }
+
+/// @brief Reset parameter request
+message PB_ParameterResetRequest
+{
+	uint32 key_hash = 1; ///< Parameter key hash
+}
+
+/// @brief Reset parameter response
+message PB_ParameterResetResponse
+{
+	uint32 key_hash = 1;           ///< Parameter key hash
+	PB_ParameterStatus status = 2; ///< Operation status
+}

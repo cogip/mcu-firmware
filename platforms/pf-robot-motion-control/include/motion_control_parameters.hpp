@@ -253,6 +253,10 @@ void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer);
 /// @brief Handle parameter set request from CAN bus
 void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer);
 
+/// @brief Handle parameter reset request from CAN bus
+/// @note Erases the persisted value and restores the compile-time default
+void pf_handle_parameter_reset(cogip::canpb::ReadBuffer& buffer);
+
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip

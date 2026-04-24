@@ -120,6 +120,15 @@ void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer)
     }
 }
 
+void pf_handle_parameter_reset(cogip::canpb::ReadBuffer& buffer)
+{
+    auto response = parameter_handler.handle_reset(buffer);
+    // Only respond if this board owns the parameter
+    if (response.has_value()) {
+        pf_get_canpb().send_message(parameter_reset_response_uuid, &response.value());
+    }
+}
+
 } // namespace motion_control
 } // namespace pf
 } // namespace cogip
