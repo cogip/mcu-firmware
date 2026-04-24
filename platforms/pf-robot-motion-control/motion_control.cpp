@@ -158,13 +158,25 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         }
         break;
 
-    case cogip::motion_control::target_pose_status_t::blocked:
-        if (pf_motion_control_platform_engine.target_pose().bypass_anti_blocking()) {
-            // Set current robot pose as target pose to avoid robot moving
-            target_pose.set_x(pf_motion_control_platform_engine.current_pose().x());
-            target_pose.set_y(pf_motion_control_platform_engine.current_pose().y());
-            target_pose.set_O(pf_motion_control_platform_engine.current_pose().O());
-            pf_motion_control_platform_engine.set_target_pose(target_pose);
+    case cogip::motion_control::target_pose_status_t::blocked: {
+        const cogip::path::Pose* current_waypoint = motion_control_path.current_pose();
+        const bool bypass_anti_blocking =
+            current_waypoint && current_waypoint->bypass_anti_blocking();
+        if (bypass_anti_blocking) {
+            // Replace the current waypoint with a hold-in-place one at the
+            // current robot pose, preserving every flag (motion_direction,
+            // bypass_final_orientation, is_intermediate...) of the original
+            // waypoint. Feeding the path manager with a target equal to
+            // current position lets PathManagerFilter → PoseStraightFilter
+            // converge immediately to FINISHED without trying to push the
+            // robot back against whatever is blocking it.
+            cogip::path::Pose hold = *current_waypoint;
+            hold.set_x(pf_motion_control_platform_engine.current_pose().x());
+            hold.set_y(pf_motion_control_platform_engine.current_pose().y());
+            hold.set_O(pf_motion_control_platform_engine.current_pose().O());
+            motion_control_path.reset();
+            motion_control_path.add_point(hold);
+            motion_control_path.start();
 
             // Consider pose_reached as anti blocking is bypassed
             pf_motion_control_platform_engine.set_pose_reached(
@@ -188,8 +200,8 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
                 pf_get_canpb().send_message(blocked_uuid);
             }
         }
-
         break;
+    }
 
     default:
         break;

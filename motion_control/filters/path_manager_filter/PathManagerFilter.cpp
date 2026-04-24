@@ -106,8 +106,7 @@ void PathManagerFilter::execute(ControllersIO& io)
         bool cur_bypass = current->bypass_final_orientation();
         if (cur_bypass != prev_bypass) {
             LOG_INFO("PMF: bypass_final_orientation -> %d (wp=%u/%u)\n",
-                     static_cast<int>(cur_bypass),
-                     static_cast<unsigned>(path.current_index() + 1),
+                     static_cast<int>(cur_bypass), static_cast<unsigned>(path.current_index() + 1),
                      static_cast<unsigned>(path.size()));
             prev_bypass = cur_bypass;
         }
