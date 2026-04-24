@@ -41,17 +41,6 @@ void PlatformEngine::prepare_inputs()
     io_.set("current_pose_y", localization_.pose().y());
     io_.set("current_pose_O", localization_.pose().O());
 
-    // Get path singleton reference once
-    const path::Path& path = path_;
-
-    // Target pose - only set from target_pose_ when path is not active
-    // When path is active, PathManagerFilter sets target_pose from current waypoint
-    if (!path.is_started() || path.empty()) {
-        io_.set("target_pose_x", target_pose_.x());
-        io_.set("target_pose_y", target_pose_.y());
-        io_.set("target_pose_O", target_pose_.O());
-    }
-
     // Current speed
     io_.set("linear_current_speed", localization_.delta_polar_pose().distance());
     io_.set("angular_current_speed", localization_.delta_polar_pose().angle());
@@ -60,13 +49,11 @@ void PlatformEngine::prepare_inputs()
     io_.set("linear_target_speed", target_speed_.distance());
     io_.set("angular_target_speed", target_speed_.angle());
 
-    // Motion direction - only set from target_pose_ when path is not active
-    // When path is active, PathManagerFilter sets motion_direction from current waypoint
-    if (!path.is_started() || path.empty()) {
-        io_.set("motion_direction", target_pose_.get_motion_direction());
-        io_.set("is_intermediate", target_pose_.is_intermediate());
-        io_.set("bypass_final_orientation", target_pose_.bypass_final_orientation());
-    }
+    // target_pose_x/y/O, motion_direction, is_intermediate and
+    // bypass_final_orientation are all written by PathManagerFilter from the
+    // current waypoint of motion_control_path. This engine no longer mirrors
+    // them here: every motion request goes through the path abstraction, so
+    // there is no "single-target mode" where we would need a fallback.
 
     // Initialize path_complete to false (will be set by PathManagerFilter or PurePursuit)
     io_.set("path_complete", false);
@@ -101,16 +88,6 @@ void PlatformEngine::process_outputs()
         return;
     }
 
-    // Sync target_pose_ with current path waypoint to keep it up-to-date
-    // This ensures target_pose_ reflects the current target including is_intermediate flag
-    const path::Path& path = path_;
-    if (path.is_started() && !path.empty()) {
-        const path::Pose* current_waypoint = path.current_pose();
-        if (current_waypoint) {
-            target_pose_ = *current_waypoint;
-        }
-    }
-
     // Check pose_reached from IO (set by controllers like PoseErrorFilter or PoseStraightFilter)
     auto io_pose_reached = io_.get_as<target_pose_status_t>("pose_reached");
     auto prev_pose_reached = pose_reached_;
@@ -142,11 +119,14 @@ void PlatformEngine::process_outputs()
     // Log pose_reached transitions
     if (pose_reached_ != prev_pose_reached || force_moving_transition) {
         const auto& cur = localization_.pose();
+        const path::Pose* wp = path_.current_pose();
+        const float tx = wp ? wp->x() : 0.0f;
+        const float ty = wp ? wp->y() : 0.0f;
+        const float tO = wp ? wp->O() : 0.0f;
         LOG_INFO("pose_reached=%d cur=(%.1f,%.1f,%.1f) tgt=(%.1f,%.1f,%.1f)\n",
                  static_cast<int>(pose_reached_), static_cast<double>(cur.x()),
                  static_cast<double>(cur.y()), static_cast<double>(cur.O()),
-                 static_cast<double>(target_pose_.x()), static_cast<double>(target_pose_.y()),
-                 static_cast<double>(target_pose_.O()));
+                 static_cast<double>(tx), static_cast<double>(ty), static_cast<double>(tO));
     }
 
     cogip_defs::Polar command(0, 0);

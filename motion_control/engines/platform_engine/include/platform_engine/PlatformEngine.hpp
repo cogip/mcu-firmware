@@ -66,13 +66,6 @@ class PlatformEngine : public BaseControllerEngine
         return localization_.pose();
     };
 
-    /// Get target pose
-    /// return     target pose
-    const path::Pose& target_pose() const
-    {
-        return target_pose_;
-    };
-
     /// Set target speed
     void set_target_speed(const cogip_defs::Polar& target_speed ///< [in]   new target speed
     )
@@ -87,13 +80,6 @@ class PlatformEngine : public BaseControllerEngine
         localization_.set_pose(current_pose);
     };
 
-    /// Set target pose
-    void set_target_pose(const path::Pose& target_pose ///< [in]   new target pose
-    )
-    {
-        target_pose_ = target_pose;
-    };
-
   private:
     /// Prepare controller inputs from platform functions.
     void prepare_inputs();
@@ -103,9 +89,6 @@ class PlatformEngine : public BaseControllerEngine
 
     /// Robot polar target speed
     cogip_defs::Polar target_speed_;
-
-    /// Robot target pose
-    path::Pose target_pose_;
 
     /// Robot localization
     localization::LocalizationInterface& localization_;
