@@ -411,9 +411,6 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_timeout_enable(false);
     }
 
-    // Deal with the first pose in the list
-    pf_motion_control_platform_engine.set_target_pose(target_pose);
-
     pf_motion_control_platform_engine.set_pose_reached(
         cogip::motion_control::target_pose_status_t::moving);
 
@@ -580,9 +577,6 @@ void pf_handle_path_start([[maybe_unused]] const cogip::canpb::ReadBuffer& buffe
         } else {
             pf_motion_control_platform_engine.set_timeout_enable(false);
         }
-
-        // Set target pose on engine
-        pf_motion_control_platform_engine.set_target_pose(target_pose);
 
         // Reset controllers for new path
         pf_motion_control_reset_controllers();
