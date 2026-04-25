@@ -14,6 +14,9 @@
 // System includes
 #include <climits>
 
+// RIOT includes
+#include "mutex.h"
+
 // Project includes
 #include "actuator/LiftParameters.hpp"
 #include "actuator/Motor.hpp"
@@ -57,8 +60,14 @@ class Lift : public Motor
     /// Reference to the static configuration parameters for this lift actuator.
     const LiftParameters& params_;
 
-    /// True while the homing sequence is running (init only).
-    bool initializing_ = false;
+    /// @brief Synchronisation primitive for the homing sequence.
+    /// @details Locked by init() while waiting for the descent to physically
+    ///          reach the lower limit. at_lower_limit() unlocks it on the
+    ///          rising edge of the lower switch, so init() exits its wait
+    ///          the moment the homing is done instead of always sleeping
+    ///          for the full timeout. RIOT mutexes are unlock-no-op when
+    ///          unlocked, so a stray ISR firing outside an init is safe.
+    mutex_t initializing_ = MUTEX_INIT;
 
     /// Last commanded position (after clamping), used to skip redundant actuate calls.
     int32_t last_command_ = INT32_MIN;

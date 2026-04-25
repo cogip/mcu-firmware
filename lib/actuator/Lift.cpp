@@ -6,6 +6,7 @@
 #include "log.h"
 #include <inttypes.h>
 #include <periph/gpio.h>
+#include <ztimer.h>
 
 #include "actuator/Lift.hpp"
 #include "actuator/LiftsLimitSwitchesManager.hpp"
@@ -46,7 +47,6 @@ void Lift::init()
     }
 
     // Homing: move down to calibrate zero position
-    initializing_ = true;
     set_target_speed_percent(params_.init_speed_percentage);
 
     int lower_state = gpio_read(params_.lower_limit_switch_pin);
@@ -55,17 +55,33 @@ void Lift::init()
     constexpr uint32_t init_timeout_ms = 2000;
 
     if (!lower_state) {
+        // Lock the homing mutex up front; at_lower_limit() unlocks it on the
+        // rising edge of the lower switch, so the wait below exits the
+        // moment the descent is physically done.
+        mutex_lock(&initializing_);
+
         // Force current position to upper limit so the motor moves down
         set_current_distance(params_.upper_limit_mm);
         LOG_INFO("Moving to lower limit (%d mm)...\n", static_cast<int>(params_.lower_limit_mm));
         actuate_timeout(params_.lower_limit_mm, init_timeout_ms);
-        ztimer_sleep(ZTIMER_MSEC, init_timeout_ms);
-        // If lower limit was not reached, disable motor to prevent
-        // violent movement on power restore (e.g. after emergency stop)
-        if (!gpio_read(params_.lower_limit_switch_pin)) {
+
+        // Block until the ISR signals that the switch was hit, with a hard
+        // cap of init_timeout_ms so a stuck lift never wedges the CAN
+        // handler thread for longer than the homing timeout.
+        int wait_ret = ztimer_mutex_lock_timeout(ZTIMER_MSEC, &initializing_, init_timeout_ms);
+        if (wait_ret < 0) {
+            // Lower limit was not reached: cut the motor to prevent
+            // violent movement on power restore (e.g. after emergency
+            // stop). initializing_ is still locked from the up-front
+            // mutex_lock; release it below.
             LOG_INFO("Init timeout, disabling motor\n");
             disable();
         }
+        // On success, the ISR's mutex_unlock + our lock_timeout dance left
+        // the mutex re-locked on our side; on timeout, it is still locked
+        // from the up-front lock. Either way, leave it unlocked so the
+        // next init() can lock it again.
+        mutex_unlock(&initializing_);
         LOG_INFO("Lower limit reached or timeout\n");
     } else {
         LOG_INFO("Already at lower limit, setting distance to %d mm\n",
@@ -73,7 +89,6 @@ void Lift::init()
         set_current_distance(params_.lower_limit_mm);
     }
 
-    initializing_ = false;
     LOG_INFO("Lift init complete\n");
 }
 
@@ -141,6 +156,10 @@ void Lift::at_lower_limit()
         // Invalidate last_command_ so the next actuate() with the same
         // target is not skipped and can re-enable the motor.
         last_command_ = INT32_MIN;
+        // Wake init() out of its homing wait. Safe to call when no init
+        // is in flight: unlocking an already-unlocked RIOT mutex is a
+        // no-op.
+        mutex_unlock(&initializing_);
     } else {
         LOG_INFO("Lower limit switch released\n");
     }
