@@ -143,23 +143,40 @@ void Lift::at_lower_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.lower_limit_switch_pin)) {
         LOG_INFO("Lower limit switch pressed\n");
+        // Always wake init() out of its homing wait, even on a spurious
+        // press, so the homing path never wedges on a glitch. Safe to
+        // call when no init is in flight: unlocking an already-unlocked
+        // RIOT mutex is a no-op.
+        mutex_unlock(&initializing_);
+
+        // The switch pressing is a definitive mechanical reference: zero
+        // the odometer against it unconditionally. This corrects any
+        // drift from controller overshoot, belt slip, or accumulated
+        // encoder error, regardless of what the host had asked for.
         set_current_distance(params_.lower_limit_mm);
-        // If the current command targets the lower limit, the switch
-        // pressing IS the definitive "reached" signal. Emit it before
-        // disable() cuts the engine, otherwise the engine will never
-        // run another tick to fire pose_reached_cb and the host would
-        // never hear that the target was reached.
-        if (last_command_ == params_.lower_limit_mm) {
-            on_state_change(motion_control::target_pose_status_t::reached);
+
+        // We just zeroed current to lower_limit_mm, so the test
+        // collapses to a pure intent check on last_command_: if the
+        // host commanded a target above the switch, the press is a
+        // glitch on our way up (mechanical bounce on departure) or a
+        // belt-slip detection, and we must not interrupt the motion.
+        // Otherwise the host wanted to be at the switch and we treat
+        // the press as genuine end-of-travel.
+        if (last_command_ > params_.lower_limit_mm) {
+            LOG_INFO("Lower switch pressed with target above (last_cmd=%" PRIi32 "), resync only\n",
+                     last_command_);
+            return;
         }
+
+        // The switch pressing IS the definitive "reached" signal. Emit
+        // it before disable() cuts the engine, otherwise the engine
+        // will never run another tick to fire pose_reached_cb and the
+        // host would never hear that the target was reached.
+        on_state_change(motion_control::target_pose_status_t::reached);
         disable();
         // Invalidate last_command_ so the next actuate() with the same
         // target is not skipped and can re-enable the motor.
         last_command_ = INT32_MIN;
-        // Wake init() out of its homing wait. Safe to call when no init
-        // is in flight: unlocking an already-unlocked RIOT mutex is a
-        // no-op.
-        mutex_unlock(&initializing_);
     } else {
         LOG_INFO("Lower limit switch released\n");
     }
@@ -170,15 +187,30 @@ void Lift::at_upper_limit()
     // Only react when switch is pressed (reads 1 with active-high logic)
     if (gpio_read(params_.upper_limit_switch_pin)) {
         LOG_INFO("Upper limit switch pressed\n");
-        motor_engine_.set_timeout_enable(false);
-        // If the current command targets the upper limit, the switch
-        // pressing IS the definitive "reached" signal. Emit it now: the
-        // brake chain takes over and does not drive the pose loop, so
-        // MotorEngine::process_outputs() cannot fire pose_reached_cb on
-        // its own from here on.
-        if (last_command_ == params_.upper_limit_mm) {
-            on_state_change(motion_control::target_pose_status_t::reached);
+
+        // Decide based on motion direction, not on the exact target. A
+        // belt slip can overshoot us into the upper switch even when
+        // the requested command was below upper_limit_mm: in that case
+        // the switch press is still a genuine end-of-travel event we
+        // must honor (mechanical safety wins).
+        const float current = get_current_distance();
+        const bool moving_down = static_cast<float>(last_command_) < current;
+        if (moving_down) {
+            // Switch press while we are descending: spurious
+            // (mechanical bounce, manual interaction). Latching the
+            // brake chain here would silently freeze the in-flight
+            // downward motion.
+            LOG_WARNING("Upper limit pressed while descending (cur=%.1f, "
+                        "last_cmd=%" PRIi32 "), ignoring\n",
+                        static_cast<double>(current), last_command_);
+            return;
         }
+        motor_engine_.set_timeout_enable(false);
+        // The switch pressing IS the definitive "reached" signal. Emit
+        // it now: the brake chain takes over and does not drive the
+        // pose loop, so MotorEngine::process_outputs() cannot fire
+        // pose_reached_cb on its own from here on.
+        on_state_change(motion_control::target_pose_status_t::reached);
         // Latch the engine brake chain: the zero-speed-order + speed PID
         // chain actively drives the motor toward zero speed, holding the
         // lift against gravity without needing the full pose loop.
