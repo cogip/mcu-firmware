@@ -76,9 +76,9 @@ static void _handle_command(cogip::canpb::ReadBuffer& buffer)
                 positional_actuators::get(id).actuate(pb_positional_actuator_command.command());
             }
 
-            LOG_INFO("Target distance: %" PRIi32, pb_positional_actuator_command.command());
-            LOG_INFO("Target speed: %" PRIi32, pb_positional_actuator_command.speed());
-            LOG_INFO("Timeout: %" PRIi32, timeout_ms);
+            LOG_INFO("Target distance: %" PRIi32 "\n", pb_positional_actuator_command.command());
+            LOG_INFO("Target speed: %" PRIi32 "\n", pb_positional_actuator_command.speed());
+            LOG_INFO("Timeout: %" PRIi32 "\n", timeout_ms);
         }
     }
 }
