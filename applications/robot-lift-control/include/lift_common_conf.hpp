@@ -50,6 +50,20 @@ inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_l
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
     motor_lift_speed_pid_integral_limit{static_cast<float>(etl::numeric_limits<int16_t>::max())};
 
+// Motor lift brake speed PID (used only by the brake chain to actively hold
+// the lift against gravity once a limit is reached). Higher Ki than the
+// tracking PID so the integrator builds up fast enough to counter the
+// constant gravity disturbance before the lift drifts more than a few mm.
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
+    motor_lift_brake_speed_pid_kp{10.0f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
+    motor_lift_brake_speed_pid_ki{2.0f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
+    motor_lift_brake_speed_pid_kd{0.f};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
+    motor_lift_brake_speed_pid_integral_limit{
+        static_cast<float>(etl::numeric_limits<int16_t>::max())};
+
 // Motor lift threshold
 constexpr float motor_lift_threshold = 1.0;
 
@@ -138,6 +152,17 @@ inline cogip::pid::PIDParameters motor_lift_speed_pid_params(motor_lift_speed_pi
 /// @brief Motor Lift speed PID controller
 inline cogip::pid::PID motor_lift_speed_pid(motor_lift_speed_pid_params);
 
+/// @brief Motor Lift brake speed PID parameters (dedicated to the brake chain)
+inline cogip::pid::PIDParameters
+    motor_lift_brake_speed_pid_params(motor_lift_brake_speed_pid_kp,
+                                      motor_lift_brake_speed_pid_ki,
+                                      motor_lift_brake_speed_pid_kd,
+                                      motor_lift_brake_speed_pid_integral_limit);
+
+/// @brief Motor Lift brake speed PID controller (separate instance so its
+/// integrator state does not interfere with the tracking PID).
+inline cogip::pid::PID motor_lift_brake_speed_pid(motor_lift_brake_speed_pid_params);
+
 /// @brief Motor Lift MotorPoseFilterParameters
 static cogip::motion_control::MotorPoseFilterParameters
     motor_lift_pose_filter_parameters(motor_lift_threshold,
@@ -155,6 +180,10 @@ static cogip::motion_control::SpeedFilterParameters motor_lift_speed_filter_para
 /// @brief Motor Lift SpeedPIDControllerParameters.
 static cogip::motion_control::SpeedPIDControllerParameters
     motor_lift_speed_pid_parameters(&motor_lift_speed_pid);
+
+/// @brief Motor Lift brake SpeedPIDControllerParameters (dedicated to brake chain).
+static cogip::motion_control::SpeedPIDControllerParameters
+    motor_lift_brake_speed_pid_parameters(&motor_lift_brake_speed_pid);
 
 /// @brief Motor Lift ProfileTrackerControllerParameters (for DUALPID_TRACKER mode).
 /// @details Defines the trapezoidal velocity profile limits for smooth motion control.
@@ -239,6 +268,7 @@ make_lift_motor_params(cogip::actuators::Enum actuator_id, bool use_tracker_chai
         /* speed_limit_filter_params    */ &motor_lift_speed_limit_parameters,
         /* deceleration_filter_params   */ &motor_lift_deceleration_filter_parameters,
         /* anti_blocking_params         */ &motor_lift_anti_blocking_parameters,
+        /* brake_speed_controller_params*/ motor_lift_brake_speed_pid_parameters,
     };
 }
 

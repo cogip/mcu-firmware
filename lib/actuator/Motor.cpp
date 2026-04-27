@@ -57,10 +57,13 @@ Motor::Motor(const MotorParameters& motor_parameters, MotorControlMode mode)
                                 motor_parameters.speed_controller_parameters),
       tracker_motor_distance_filter_(actuators::motor_tracker_pose_filter_io_keys,
                                      motor_parameters.motor_pose_filter_parameters),
-      // Brake chain: zero speed_order + dedicated speed PID
+      // Brake chain: zero speed_order + dedicated speed PID. Separate PID
+      // instance from the tracking loop so the static-hold gains (typically a
+      // higher Ki to counter constant disturbances like gravity) do not couple
+      // their integrator state with trajectory tracking.
       brake_zero_speed_order_controller_({{"speed_order", 0.0f}}),
       brake_speed_controller_(actuators::motor_speed_pid_io_keys,
-                              motor_parameters.speed_controller_parameters),
+                              motor_parameters.brake_speed_controller_parameters),
       // Motor engine
       motor_engine_(motor_parameters.motor, motor_parameters.odometer,
                     motor_parameters.engine_thread_period_ms)
