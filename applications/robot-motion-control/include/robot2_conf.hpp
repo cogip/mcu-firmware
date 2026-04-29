@@ -171,7 +171,7 @@ constexpr float default_brake_angular_speed_pid_integral_limit =
 constexpr uint8_t otos_i2c_addr = 0x17;
 
 // OTOS calibration scalar defaults (range [0.872, 1.127]).
-constexpr float default_otos_linear_scalar = 0.969f;
+constexpr float default_otos_linear_scalar = 0.976080f;
 constexpr float default_otos_angular_scalar = 0.994f;
 
 // OTOS mounting offset relative to robot center (mm, degrees). Physical
