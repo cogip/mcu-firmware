@@ -14,11 +14,13 @@ constexpr float default_qdec_right_polarity = -1.0;
 /// Motors properties
 constexpr float motor_wheels_diameter_mm = 60.0;
 constexpr float motor_wheels_distance_mm = 131;
-// GA32Y-31ZY: 8000 RPM no-load motor, 5.18:1 reduction, so 8000/5.18 ≈ 1544
-// RPM at the output shaft at nominal voltage.
+// 25GA-370 12V/500RPM-rated: 5952 RPM no-load on the motor shaft, 9.6:1
+// internal gearbox, then a 20T (motor) / 44T (wheel) timing belt adding a
+// 2.2:1 reduction. Net no-load speed at the wheel is 5952 / 9.6 / 2.2 ≈
+// 281.8 RPM at nominal voltage.
 // motor_constant = 6000 / output_RPM (see DifferentialDriveController.cpp).
-constexpr float left_motor_constant = 3.886;
-constexpr float right_motor_constant = 3.886;
+constexpr float left_motor_constant = 21.29;
+constexpr float right_motor_constant = 21.29;
 
 constexpr float min_motor_speed_percent = 7.5;
 constexpr float max_motor_speed_percent = 100;
@@ -38,12 +40,12 @@ constexpr float default_angular_pose_pid_kp = 0.2;
 constexpr float default_angular_pose_pid_ki = 0;
 constexpr float default_angular_pose_pid_kd = 0;
 // Linear speed PID (QUADPID chain)
-constexpr float default_linear_speed_pid_kp = 7;
-constexpr float default_linear_speed_pid_ki = 0.4;
+constexpr float default_linear_speed_pid_kp = 1;
+constexpr float default_linear_speed_pid_ki = 0.1;
 constexpr float default_linear_speed_pid_kd = 0;
 // Angular speed PID (QUADPID chain)
-constexpr float default_angular_speed_pid_kp = 4.5;
-constexpr float default_angular_speed_pid_ki = 0.125;
+constexpr float default_angular_speed_pid_kp = 1;
+constexpr float default_angular_speed_pid_ki = 0.1;
 constexpr float default_angular_speed_pid_kd = 0;
 
 // ============================================================================
@@ -52,20 +54,20 @@ constexpr float default_angular_speed_pid_kd = 0;
 
 // Tracker linear pose PID (tracker during MOVE_TO_POSITION)
 // Ki helps eliminate steady-state error when tracker profile ends
-constexpr float default_tracker_linear_pose_pid_kp = 0.15;
+constexpr float default_tracker_linear_pose_pid_kp = 0.25;
 constexpr float default_tracker_linear_pose_pid_ki = 0.0;
 constexpr float default_tracker_linear_pose_pid_kd = 0;
 // Tracker angular pose PID (tracker during ROTATE states)
-constexpr float default_tracker_angular_pose_pid_kp = 0.125;
+constexpr float default_tracker_angular_pose_pid_kp = 0.15;
 constexpr float default_tracker_angular_pose_pid_ki = 0;
 constexpr float default_tracker_angular_pose_pid_kd = 0;
 // Tracker linear speed PID
-constexpr float default_tracker_linear_speed_pid_kp = 7;
-constexpr float default_tracker_linear_speed_pid_ki = 0.4;
+constexpr float default_tracker_linear_speed_pid_kp = 1;
+constexpr float default_tracker_linear_speed_pid_ki = 0.1;
 constexpr float default_tracker_linear_speed_pid_kd = 0;
 // Tracker angular speed PID
-constexpr float default_tracker_angular_speed_pid_kp = 4.5;
-constexpr float default_tracker_angular_speed_pid_ki = 0.125;
+constexpr float default_tracker_angular_speed_pid_kp = 1;
+constexpr float default_tracker_angular_speed_pid_ki = 0.1;
 constexpr float default_tracker_angular_speed_pid_kd = 0;
 
 // ============================================================================
@@ -75,12 +77,12 @@ constexpr float default_tracker_angular_speed_pid_kd = 0;
 // ============================================================================
 
 // Linear speed PID (brake chain)
-constexpr float default_brake_linear_speed_pid_kp = 7;
-constexpr float default_brake_linear_speed_pid_ki = 0.4;
+constexpr float default_brake_linear_speed_pid_kp = 1;
+constexpr float default_brake_linear_speed_pid_ki = 0.1;
 constexpr float default_brake_linear_speed_pid_kd = 0;
 // Angular speed PID (brake chain)
-constexpr float default_brake_angular_speed_pid_kp = 4.5;
-constexpr float default_brake_angular_speed_pid_ki = 0.125;
+constexpr float default_brake_angular_speed_pid_kp = 1;
+constexpr float default_brake_angular_speed_pid_ki = 0.1;
 constexpr float default_brake_angular_speed_pid_kd = 0;
 
 // Linear threshold
@@ -96,14 +98,19 @@ constexpr double platform_linear_anti_blocking_speed_threshold_mm_per_s = 0;
 constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 65535;
 
-// Speeds and accelerations/decelerations limits
+// Speeds and accelerations/decelerations limits.
+// Wheel no-load velocity with the 25GA-370 + 9.6:1 gearbox + 2.2:1 belt is
+// ~885 mm/s. The 500 mm/s linear cap leaves ~45% PWM headroom for the speed
+// PID; the 360 deg/s angular cap matches a wheel velocity of ~410 mm/s in
+// pure rotation, which stays inside the linear budget when combined with
+// translation.
 constexpr float min_speed_mm_per_s = 0;    ///< Minimum speed (mm/s)
-constexpr float max_speed_mm_per_s = 2000; ///< Maximum speed (mm/s)
-constexpr float max_acc_mm_per_s2 = 250.0; ///< Maximum acceleration (mm/s²)
+constexpr float max_speed_mm_per_s = 500;  ///< Maximum speed (mm/s)
+constexpr float max_acc_mm_per_s2 = 500.0; ///< Maximum acceleration (mm/s²)
 constexpr float max_dec_mm_per_s2 = 250.0; ///< Maximum deceleration (mm/s²)
 
 constexpr float min_speed_deg_per_s = 0;   ///< Minimum speed (deg/s)
-constexpr float max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
+constexpr float max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
 constexpr float max_acc_deg_per_s2 = 360;  ///< Maximum acceleration (deg/s²)
 constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
 
