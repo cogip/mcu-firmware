@@ -6,7 +6,11 @@
 /// @file motion_control_parameters.cpp
 /// @brief Motion control parameters registry and handlers implementation.
 
+// Set to 1 to dump every registered parameter and its post-load value at boot.
+#define ENABLE_DEBUG 0
+
 // RIOT includes
+#include "debug.h"
 #include "log.h"
 
 // Project includes
@@ -94,10 +98,59 @@ static ParameterHandlerType parameter_handler(registry);
 void pf_load_parameters()
 {
     for (auto& entry : registry) {
+#if ENABLE_DEBUG
+        // Snapshot the default before load(): at construction value_ == default_value_.
+        PB_ParameterValue pb_default;
+        entry.second.pb_copy(pb_default);
+#endif
         if (!entry.second.load()) {
             LOG_WARNING("Parameter 0x%08" PRIx32 ": flash load failed, using default\n",
                         entry.first);
         }
+#if ENABLE_DEBUG
+        PB_ParameterValue pb_value;
+        if (!entry.second.pb_copy(pb_value)) {
+            DEBUG("Parameter 0x%08" PRIx32 ": pb_copy failed\n", entry.first);
+            continue;
+        }
+        using FN = PB_ParameterValue::FieldNumber;
+        switch (pb_value.get_which_value()) {
+        case FN::FLOAT_VALUE:
+            DEBUG("Parameter 0x%08" PRIx32 " = %f (default=%f) (float)\n", entry.first,
+                  static_cast<double>(pb_value.float_value()),
+                  static_cast<double>(pb_default.float_value()));
+            break;
+        case FN::DOUBLE_VALUE:
+            DEBUG("Parameter 0x%08" PRIx32 " = %f (default=%f) (double)\n", entry.first,
+                  pb_value.double_value(), pb_default.double_value());
+            break;
+        case FN::INT32_VALUE:
+            DEBUG("Parameter 0x%08" PRIx32 " = %" PRId32 " (default=%" PRId32 ") (int32)\n",
+                  entry.first, pb_value.int32_value(), pb_default.int32_value());
+            break;
+        case FN::UINT32_VALUE:
+            DEBUG("Parameter 0x%08" PRIx32 " = %" PRIu32 " (default=%" PRIu32 ") (uint32)\n",
+                  entry.first, pb_value.uint32_value(), pb_default.uint32_value());
+            break;
+        case FN::INT64_VALUE:
+            DEBUG("Parameter 0x%08" PRIx32 " = %" PRId64 " (default=%" PRId64 ") (int64)\n",
+                  entry.first, pb_value.int64_value(), pb_default.int64_value());
+            break;
+        case FN::UINT64_VALUE:
+            DEBUG("Parameter 0x%08" PRIx32 " = %" PRIu64 " (default=%" PRIu64 ") (uint64)\n",
+                  entry.first, pb_value.uint64_value(), pb_default.uint64_value());
+            break;
+        case FN::BOOL_VALUE:
+            DEBUG("Parameter 0x%08" PRIx32 " = %s (default=%s) (bool)\n", entry.first,
+                  pb_value.bool_value() ? "true" : "false",
+                  pb_default.bool_value() ? "true" : "false");
+            break;
+        case FN::NOT_SET:
+        default:
+            DEBUG("Parameter 0x%08" PRIx32 " = <unset>\n", entry.first);
+            break;
+        }
+#endif
     }
     LOG_INFO("All parameters loaded (%u entries)\n", static_cast<unsigned>(registry.size()));
 }
