@@ -411,6 +411,10 @@ void pf_handle_target_pose(cogip::canpb::ReadBuffer& buffer)
         pf_motion_control_platform_engine.set_timeout_enable(false);
     }
 
+    // Release any latched brake from a previous reached arrival so the
+    // normal control chain runs again on this new motion.
+    pf_motion_control_platform_engine.set_brake(false);
+
     pf_motion_control_platform_engine.set_pose_reached(
         cogip::motion_control::target_pose_status_t::moving);
 
@@ -452,6 +456,9 @@ void pf_handle_speed_order(cogip::canpb::ReadBuffer& buffer)
         X_SEC_TO_X_PERIOD(linear_speed_mm_s, motion_control_thread_period_ms));
     target_speed.set_angle(X_SEC_TO_X_PERIOD(angular_speed_deg_s, motion_control_thread_period_ms));
     pf_motion_control_platform_engine.set_target_speed(target_speed);
+
+    // Release any latched brake from a previous reached arrival.
+    pf_motion_control_platform_engine.set_brake(false);
 
     pf_motion_control_platform_engine.set_pose_reached(
         cogip::motion_control::target_pose_status_t::moving);
@@ -496,6 +503,10 @@ void pf_handle_start_pose(cogip::canpb::ReadBuffer& buffer)
     motion_control_path.reset();
     motion_control_path.add_point(pose);
     motion_control_path.start();
+
+    // Release any latched brake from a previous reached arrival so the
+    // engine starts cleanly from the new localization.
+    pf_motion_control_platform_engine.set_brake(false);
 
     pf_motion_control_platform_engine.reset_pose_reached();
     pf_motion_control_platform_engine.set_current_cycle(0);
@@ -546,6 +557,10 @@ void pf_handle_path_start([[maybe_unused]] const cogip::canpb::ReadBuffer& buffe
     // run between path start and pose_reached reset, see the stale 'reached'
     // value, and skip the first waypoint via PathManagerFilter.
     pf_motion_control_platform_engine.disable();
+
+    // Release any latched brake from a previous reached arrival so the new
+    // path runs the normal control chain instead of holding at zero speed.
+    pf_motion_control_platform_engine.set_brake(false);
 
     // Reset pose_reached before starting the path to avoid stale 'reached'
     pf_motion_control_platform_engine.reset_pose_reached();
