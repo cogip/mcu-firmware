@@ -13,8 +13,8 @@
 
 #pragma once
 
-#include "app_conf.hpp"
 #include "motion_control_common/MetaController.hpp"
+#include "motion_control_parameters.hpp"
 #include "pid/PID.hpp"
 #include "polar_parallel_meta_controller/PolarParallelMetaController.hpp"
 #include "reset_controller/ResetController.hpp"
@@ -22,22 +22,33 @@
 #include "speed_pid_controller/SpeedPIDControllerIOKeysDefault.hpp"
 #include "speed_pid_controller/SpeedPIDControllerParameters.hpp"
 
-// Pull in the shared PID parameter instances used by the normal speed loop;
-// the brake chain starts with the same gains, tuning can be done later.
-#include "quadpid_chain.hpp"
-
 namespace cogip {
 namespace pf {
 namespace motion_control {
 
 namespace brake_chain {
 
-// Dedicated PID state for the brake speed loop. Gains come from the same
-// parameters as the normal speed loop, but the integrator / previous-error
-// state must not be shared so that activating the brake does not pollute
+// Dedicated PIDParameters for the brake speed loop. Gains live in their own
+// Parameter<float> instances (declared in motion_control_parameters.hpp) so
+// the brake can be tuned independently from the tracking PIDs; same for the
+// PID state (integrator, previous error) thanks to the dedicated PID
+// instances below. The brake chain typically wants higher Ki than the
+// tracking loop to absorb static disturbances on hold (slope, friction,
+// push from another robot) which the cascaded Ki=0 pose loop cannot.
+inline cogip::pid::PIDParameters
+    brake_linear_speed_pid_parameters(brake_linear_speed_pid_kp, brake_linear_speed_pid_ki,
+                                      brake_linear_speed_pid_kd,
+                                      brake_linear_speed_pid_integral_limit);
+inline cogip::pid::PIDParameters
+    brake_angular_speed_pid_parameters(brake_angular_speed_pid_kp, brake_angular_speed_pid_ki,
+                                       brake_angular_speed_pid_kd,
+                                       brake_angular_speed_pid_integral_limit);
+
+// Dedicated PID instances. Their integrator / previous-error state stays
+// isolated from the tracking PIDs so latching the brake does not pollute
 // (or get polluted by) the running chain.
-inline cogip::pid::PID brake_linear_speed_pid(quadpid_chain::linear_speed_pid_parameters);
-inline cogip::pid::PID brake_angular_speed_pid(quadpid_chain::angular_speed_pid_parameters);
+inline cogip::pid::PID brake_linear_speed_pid(brake_linear_speed_pid_parameters);
+inline cogip::pid::PID brake_angular_speed_pid(brake_angular_speed_pid_parameters);
 
 inline cogip::motion_control::SpeedPIDControllerParameters
     brake_linear_speed_controller_parameters(&brake_linear_speed_pid);
