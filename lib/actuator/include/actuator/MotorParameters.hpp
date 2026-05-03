@@ -118,6 +118,14 @@ struct MotorParameters
     /// @details If non-null, an AntiBlockingController is appended after SpeedPID
     ///          to detect motor stalls and set pose_reached to blocked.
     motion_control::AntiBlockingControllerParameters* anti_blocking_parameters = nullptr;
+
+    /// @brief Parameters for the SpeedPIDController used by the brake chain.
+    /// @details The brake chain (ZeroSpeedOrder + SpeedPID) actively holds the
+    ///          motor against a constant disturbance (e.g. gravity on a lift).
+    ///          Must use a PID instance distinct from `speed_controller_parameters`
+    ///          so the static-hold gains can be tuned independently from the
+    ///          tracking gains and the integrator states do not interfere.
+    motion_control::SpeedPIDControllerParameters& brake_speed_controller_parameters;
 };
 
 } // namespace positional_actuators
