@@ -1,2 +1,3 @@
 # Dependencies for pf-common module
 USEMODULE += canpb
+USEMODULE += flash_kv_storage

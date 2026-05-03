@@ -9,3 +9,25 @@ include $(RIOTMAKE)/boards/stm32.inc.mk
 
 # Set onboard transceiver loop delay
 CFLAGS += -DCONFIG_FDCAN_DEVICE_TRANSCEIVER_LOOP_DELAY=130
+
+# FlashDB configuration
+# STM32G474RE has 64-bit (doubleword) flash write granularity
+CFLAGS += -DFDB_WRITE_GRAN=64
+
+# Reserve the last 8 flash pages (16 KiB) for the FlashDB KV settings region.
+# Value = 8 pages * 2048 B (FLASHPAGE_SIZE on STM32G474RE). Must stay in sync
+# with MTD_SETTINGS_SECTOR_COUNT * FLASHPAGE_SIZE in include/mtd_conf.h.
+MTD_SETTINGS_LEN := 16384
+
+# FAL (Flash Abstraction Layer) partition configuration for KVDB storage
+CFLAGS += -DFAL_PART0_LABEL=\"settings\"
+CFLAGS += -DFAL_PART0_LENGTH=$(MTD_SETTINGS_LEN)
+
+# Cap the firmware image so .text/.rodata/.data cannot grow into the KV
+# settings region at the top of flash. The cortexm linker script defines
+# the rom region as LENGTH = _fw_rom_length, so an oversized image fails
+# the link with "region rom overflowed". Without this cap, the flasher
+# would happily overwrite the settings pages and the first
+# FlashKVStorage::store() after boot would erase a sector containing
+# firmware code.
+FW_ROM_LEN = $$(( $(ROM_LEN_K) * 1024 - $(MTD_SETTINGS_LEN) ))
