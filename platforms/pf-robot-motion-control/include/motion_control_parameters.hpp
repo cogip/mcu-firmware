@@ -91,6 +91,14 @@ constexpr uint32_t TRACKER_LINEAR_SPEED_PID_KD_KEY = "tracker_linear_speed_pid_k
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KP_KEY = "tracker_angular_speed_pid_kp"_key_hash;
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KI_KEY = "tracker_angular_speed_pid_ki"_key_hash;
 constexpr uint32_t TRACKER_ANGULAR_SPEED_PID_KD_KEY = "tracker_angular_speed_pid_kd"_key_hash;
+// Brake linear speed PID
+constexpr uint32_t BRAKE_LINEAR_SPEED_PID_KP_KEY = "brake_linear_speed_pid_kp"_key_hash;
+constexpr uint32_t BRAKE_LINEAR_SPEED_PID_KI_KEY = "brake_linear_speed_pid_ki"_key_hash;
+constexpr uint32_t BRAKE_LINEAR_SPEED_PID_KD_KEY = "brake_linear_speed_pid_kd"_key_hash;
+// Brake angular speed PID
+constexpr uint32_t BRAKE_ANGULAR_SPEED_PID_KP_KEY = "brake_angular_speed_pid_kp"_key_hash;
+constexpr uint32_t BRAKE_ANGULAR_SPEED_PID_KI_KEY = "brake_angular_speed_pid_ki"_key_hash;
+constexpr uint32_t BRAKE_ANGULAR_SPEED_PID_KD_KEY = "brake_angular_speed_pid_kd"_key_hash;
 
 // ============================================================================
 // Unit conversion macros and control loop period
@@ -207,6 +215,15 @@ inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<TRACKER_ANGULAR_SPEED_PID_KI_KEY>> tracker_angular_speed_pid_ki{default_tracker_angular_speed_pid_ki};
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<TRACKER_ANGULAR_SPEED_PID_KD_KEY>> tracker_angular_speed_pid_kd{default_tracker_angular_speed_pid_kd};
 
+// Brake linear speed PID
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<BRAKE_LINEAR_SPEED_PID_KP_KEY>> brake_linear_speed_pid_kp{default_brake_linear_speed_pid_kp};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<BRAKE_LINEAR_SPEED_PID_KI_KEY>> brake_linear_speed_pid_ki{default_brake_linear_speed_pid_ki};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<BRAKE_LINEAR_SPEED_PID_KD_KEY>> brake_linear_speed_pid_kd{default_brake_linear_speed_pid_kd};
+// Brake angular speed PID
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<BRAKE_ANGULAR_SPEED_PID_KP_KEY>> brake_angular_speed_pid_kp{default_brake_angular_speed_pid_kp};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<BRAKE_ANGULAR_SPEED_PID_KI_KEY>> brake_angular_speed_pid_ki{default_brake_angular_speed_pid_ki};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<BRAKE_ANGULAR_SPEED_PID_KD_KEY>> brake_angular_speed_pid_kd{default_brake_angular_speed_pid_kd};
+
 // PID integral limits
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_pose_pid_integral_limit{default_linear_pose_pid_integral_limit};
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_pose_pid_integral_limit{default_angular_pose_pid_integral_limit};
@@ -218,6 +235,10 @@ inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> tracker
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> tracker_angular_pose_pid_integral_limit{default_tracker_angular_pose_pid_integral_limit};
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> tracker_linear_speed_pid_integral_limit{default_tracker_linear_speed_pid_integral_limit};
 inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> tracker_angular_speed_pid_integral_limit{default_tracker_angular_speed_pid_integral_limit};
+
+// Brake speed PID integral limits
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> brake_linear_speed_pid_integral_limit{default_brake_linear_speed_pid_integral_limit};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> brake_angular_speed_pid_integral_limit{default_brake_angular_speed_pid_integral_limit};
 
 // Pose straight filter thresholds (absolute units: mm, deg)
 inline cogip::parameter::Parameter<float, cogip::parameter::Clamp<1, 10>, cogip::parameter::WithFlashStorage<LINEAR_THRESHOLD_KEY>> param_linear_threshold{linear_threshold};

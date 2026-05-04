@@ -88,64 +88,131 @@ void PlatformEngine::process_outputs()
         return;
     }
 
-    // Check pose_reached from IO (set by controllers like PoseErrorFilter or PoseStraightFilter)
-    auto io_pose_reached = io_.get_as<target_pose_status_t>("pose_reached");
-    auto prev_pose_reached = pose_reached_;
+    // While the brake is latched, the engine runs the brake chain only:
+    // pose_reached_ stays sticky at the value that triggered the latch (so
+    // we do not refire the reached callback every cycle), no IO read, no
+    // logging, no transition detection. Just forward the speed command
+    // produced by the brake chain to the drive controller. set_brake(false)
+    // is the only way out and is issued by the motion-control API
+    // (pf_handle_target_pose, pf_handle_path_start, etc.) on a new motion
+    // request.
+    if (!brake_) {
+        // Check pose_reached from IO (set by controllers like PoseErrorFilter or
+        // PoseStraightFilter)
+        auto io_pose_reached = io_.get_as<target_pose_status_t>("pose_reached");
+        auto prev_pose_reached = pose_reached_;
 
-    if (io_pose_reached && (*io_pose_reached == target_pose_status_t::reached ||
-                            *io_pose_reached == target_pose_status_t::intermediate_reached ||
-                            *io_pose_reached == target_pose_status_t::blocked)) {
-        pose_reached_ = *io_pose_reached;
-    } else if (!timeout_enable_) {
-        // No timeout mode: use IO value directly
-        pose_reached_ = io_pose_reached.value_or(target_pose_status_t::moving);
-    }
-    // If timeout is enabled and not reached: pose_reached_ keeps its current value
-    // (either 'moving' or 'timeout' set by the engine)
-
-    // Detect case where a new target was processed and immediately reached FINISHED
-    // in the same cycle (pose_reached_ stays 'reached' with no visible transition).
-    // Force a moving→reached transition so the planner sees the new reached event.
-    bool force_moving_transition = false;
-    if (pose_reached_ == prev_pose_reached &&
-        (pose_reached_ == target_pose_status_t::reached ||
-         pose_reached_ == target_pose_status_t::intermediate_reached)) {
-        auto new_target = io_.get_as<bool>("new_target");
-        if (new_target && *new_target) {
-            force_moving_transition = true;
+        if (io_pose_reached && (*io_pose_reached == target_pose_status_t::reached ||
+                                *io_pose_reached == target_pose_status_t::intermediate_reached ||
+                                *io_pose_reached == target_pose_status_t::blocked)) {
+            pose_reached_ = *io_pose_reached;
+        } else if (!timeout_enable_) {
+            // No timeout mode: use IO value directly
+            pose_reached_ = io_pose_reached.value_or(target_pose_status_t::moving);
         }
+        // If timeout is enabled and not reached: pose_reached_ keeps its current value
+        // (either 'moving' or 'timeout' set by the engine)
+
+        // Anti-blocking bypass: if the current waypoint declares
+        // bypass_anti_blocking, treat a 'blocked' status as 'reached' instead
+        // of forwarding it to the platform callback. This is the standard
+        // semantic for moves that are expected to push against something
+        // (e.g. docking) and where the abrupt stop IS the success criterion.
+        // The conversion is done here so the platform callback only ever
+        // sees the resolved state and does not have to re-implement the
+        // logic. We also replace the current waypoint with a hold pose at
+        // the robot's actual position so any subsequent path operation has
+        // a consistent state; the brake chain then takes over via the
+        // rising-edge logic below.
+        if (pose_reached_ == target_pose_status_t::blocked) {
+            const path::Pose* wp = path_.current_pose();
+            if (wp && wp->bypass_anti_blocking()) {
+                path::Pose hold = *wp;
+                hold.set_x(localization_.pose().x());
+                hold.set_y(localization_.pose().y());
+                hold.set_O(localization_.pose().O());
+                path_.reset();
+                path_.add_point(hold);
+                path_.start();
+                pose_reached_ = target_pose_status_t::reached;
+                LOG_INFO("Anti-blocking bypassed: blocked converted to reached\n");
+            }
+        }
+
+        // Detect case where a new target was processed and immediately reached FINISHED
+        // in the same cycle (pose_reached_ stays 'reached' with no visible transition).
+        // Force a moving→reached transition so the planner sees the new reached event.
+        bool force_moving_transition = false;
+        if (pose_reached_ == prev_pose_reached &&
+            (pose_reached_ == target_pose_status_t::reached ||
+             pose_reached_ == target_pose_status_t::intermediate_reached)) {
+            auto new_target = io_.get_as<bool>("new_target");
+            if (new_target && *new_target) {
+                force_moving_transition = true;
+            }
+        }
+
+        // Log pose_reached transitions
+        if (pose_reached_ != prev_pose_reached || force_moving_transition) {
+            const auto& cur = localization_.pose();
+            const path::Pose* wp = path_.current_pose();
+            const float tx = wp ? wp->x() : 0.0f;
+            const float ty = wp ? wp->y() : 0.0f;
+            const float tO = wp ? wp->O() : 0.0f;
+            LOG_INFO("pose_reached=%d cur=(%.1f,%.1f,%.1f) tgt=(%.1f,%.1f,%.1f)\n",
+                     static_cast<int>(pose_reached_), static_cast<double>(cur.x()),
+                     static_cast<double>(cur.y()), static_cast<double>(cur.O()),
+                     static_cast<double>(tx), static_cast<double>(ty), static_cast<double>(tO));
+        }
+
+        // Engage the brake chain on the rising edge of the final 'reached'
+        // status. We do not latch on 'intermediate_reached' (path waypoints
+        // expect motion to continue) nor on 'blocked' (host-level handling).
+        // From the next cycle on, the brake chain takes over and holds the
+        // robot at zero speed.
+        // We are already running under the engine mutex (taken at the top of
+        // BaseControllerEngine::thread_loop), so we cannot call set_brake()
+        // here: it would re-lock the same non-recursive mutex and deadlock.
+        // Assign brake_ directly instead.
+        if (pose_reached_ != prev_pose_reached && pose_reached_ == target_pose_status_t::reached) {
+            brake_ = true;
+            // Reset the brake controller (cascades to its PIDs) so it starts
+            // from a clean state. Without this, the residual robot speed at
+            // the moment of latch is integrated for one or two cycles, then
+            // current_speed drops to 0 but the accumulated integral keeps
+            // producing a constant non-zero command, dragging the robot
+            // off-target during hold.
+            if (brake_controller_) {
+                brake_controller_->reset();
+            }
+            LOG_INFO("Engaging brake chain on reached\n");
+        }
+
+        cogip_defs::Polar command(0, 0);
+
+        DEBUG("Start process_outputs()\n");
+        command.set_distance(io_.get_as<float>("linear_speed_command").value());
+        command.set_angle(io_.get_as<float>("angular_speed_command").value());
+        DEBUG("End process_outputs()\n");
+
+        // Set robot polar velocity order
+        drive_contoller_.set_polar_velocity(command);
+
+        // If new target reached immediately, dispatch moving first then reached
+        if (force_moving_transition) {
+            pose_reached_cb_(target_pose_status_t::moving);
+        }
+
+        // Dispatch pose reached state
+        pose_reached_cb_(pose_reached_);
+    } else {
+        // Brake-only path: still drive the motors with the brake chain's
+        // speed command so the closed-loop hold actually runs.
+        cogip_defs::Polar command(0, 0);
+        command.set_distance(io_.get_as<float>("linear_speed_command").value());
+        command.set_angle(io_.get_as<float>("angular_speed_command").value());
+        drive_contoller_.set_polar_velocity(command);
     }
-
-    // Log pose_reached transitions
-    if (pose_reached_ != prev_pose_reached || force_moving_transition) {
-        const auto& cur = localization_.pose();
-        const path::Pose* wp = path_.current_pose();
-        const float tx = wp ? wp->x() : 0.0f;
-        const float ty = wp ? wp->y() : 0.0f;
-        const float tO = wp ? wp->O() : 0.0f;
-        LOG_INFO("pose_reached=%d cur=(%.1f,%.1f,%.1f) tgt=(%.1f,%.1f,%.1f)\n",
-                 static_cast<int>(pose_reached_), static_cast<double>(cur.x()),
-                 static_cast<double>(cur.y()), static_cast<double>(cur.O()),
-                 static_cast<double>(tx), static_cast<double>(ty), static_cast<double>(tO));
-    }
-
-    cogip_defs::Polar command(0, 0);
-
-    DEBUG("Start process_outputs()\n");
-    command.set_distance(io_.get_as<float>("linear_speed_command").value());
-    command.set_angle(io_.get_as<float>("angular_speed_command").value());
-    DEBUG("End process_outputs()\n");
-
-    // Set robot polar velocity order
-    drive_contoller_.set_polar_velocity(command);
-
-    // If new target reached immediately, dispatch moving first then reached
-    if (force_moving_transition) {
-        pose_reached_cb_(target_pose_status_t::moving);
-    }
-
-    // Dispatch pose reached state
-    pose_reached_cb_(pose_reached_);
 };
 
 } // namespace motion_control
