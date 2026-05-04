@@ -113,6 +113,32 @@ void PlatformEngine::process_outputs()
         // If timeout is enabled and not reached: pose_reached_ keeps its current value
         // (either 'moving' or 'timeout' set by the engine)
 
+        // Anti-blocking bypass: if the current waypoint declares
+        // bypass_anti_blocking, treat a 'blocked' status as 'reached' instead
+        // of forwarding it to the platform callback. This is the standard
+        // semantic for moves that are expected to push against something
+        // (e.g. docking) and where the abrupt stop IS the success criterion.
+        // The conversion is done here so the platform callback only ever
+        // sees the resolved state and does not have to re-implement the
+        // logic. We also replace the current waypoint with a hold pose at
+        // the robot's actual position so any subsequent path operation has
+        // a consistent state; the brake chain then takes over via the
+        // rising-edge logic below.
+        if (pose_reached_ == target_pose_status_t::blocked) {
+            const path::Pose* wp = path_.current_pose();
+            if (wp && wp->bypass_anti_blocking()) {
+                path::Pose hold = *wp;
+                hold.set_x(localization_.pose().x());
+                hold.set_y(localization_.pose().y());
+                hold.set_O(localization_.pose().O());
+                path_.reset();
+                path_.add_point(hold);
+                path_.start();
+                pose_reached_ = target_pose_status_t::reached;
+                LOG_INFO("Anti-blocking bypassed: blocked converted to reached\n");
+            }
+        }
+
         // Detect case where a new target was processed and immediately reached FINISHED
         // in the same cycle (pose_reached_ stays 'reached' with no visible transition).
         // Force a moving→reached transition so the planner sees the new reached event.
@@ -150,13 +176,15 @@ void PlatformEngine::process_outputs()
         // Assign brake_ directly instead.
         if (pose_reached_ != prev_pose_reached && pose_reached_ == target_pose_status_t::reached) {
             brake_ = true;
-            // Reset brake speed PID integrators so they start clean. Without
-            // this, the residual speed at the moment of latch is integrated
-            // for one or two cycles, then current_speed drops to 0 but the
-            // accumulated integral keeps producing a constant non-zero
-            // command, dragging the robot off-target during hold.
-            io_.set("linear_speed_pid_reset", true);
-            io_.set("angular_speed_pid_reset", true);
+            // Reset the brake controller (cascades to its PIDs) so it starts
+            // from a clean state. Without this, the residual robot speed at
+            // the moment of latch is integrated for one or two cycles, then
+            // current_speed drops to 0 but the accumulated integral keeps
+            // producing a constant non-zero command, dragging the robot
+            // off-target during hold.
+            if (brake_controller_) {
+                brake_controller_->reset();
+            }
             LOG_INFO("Engaging brake chain on reached\n");
         }
 

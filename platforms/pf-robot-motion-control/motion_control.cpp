@@ -183,50 +183,26 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         }
         break;
 
-    case cogip::motion_control::target_pose_status_t::blocked: {
-        const cogip::path::Pose* current_waypoint = motion_control_path.current_pose();
-        const bool bypass_anti_blocking =
-            current_waypoint && current_waypoint->bypass_anti_blocking();
-        if (bypass_anti_blocking) {
-            // Replace the current waypoint with a hold-in-place one at the
-            // current robot pose, preserving every flag (motion_direction,
-            // bypass_final_orientation, is_intermediate...) of the original
-            // waypoint. Feeding the path manager with a target equal to
-            // current position lets PathManagerFilter → PoseStraightFilter
-            // converge immediately to FINISHED without trying to push the
-            // robot back against whatever is blocking it.
-            cogip::path::Pose hold = *current_waypoint;
-            hold.set_x(pf_motion_control_platform_engine.current_pose().x());
-            hold.set_y(pf_motion_control_platform_engine.current_pose().y());
-            hold.set_O(pf_motion_control_platform_engine.current_pose().O());
-            motion_control_path.reset();
-            motion_control_path.add_point(hold);
-            motion_control_path.start();
+    case cogip::motion_control::target_pose_status_t::blocked:
+        // The engine has already filtered out the bypass_anti_blocking case
+        // (it converts blocked to reached and replaces the current waypoint
+        // with a hold-in-place pose), so reaching this branch means a real
+        // blocked state with no bypass requested.
+        left_motor.set_speed(0);
+        right_motor.set_speed(0);
 
-            // Consider pose_reached as anti blocking is bypassed
-            pf_motion_control_platform_engine.set_pose_reached(
-                cogip::motion_control::target_pose_status_t::reached);
+        // As motors are stopped, pose straight filter state machine is in
+        // finished state (reset both chains as only one is active at a time)
+        quadpid_chain::pose_straight_filter.force_finished_state();
+        quadpid_tracker_chain::pose_straight_filter.force_finished_state();
 
-            LOG_WARNING("BLOCKED bypassed\n");
-        } else {
-            // Stop motors
-            left_motor.set_speed(0);
-            right_motor.set_speed(0);
+        LOG_WARNING("BLOCKED\n");
 
-            // As motors are stopped, pose straight filter state machine is in
-            // finished state (reset both chains as only one is active at a time)
-            quadpid_chain::pose_straight_filter.force_finished_state();
-            quadpid_tracker_chain::pose_straight_filter.force_finished_state();
-
-            LOG_WARNING("BLOCKED\n");
-
-            if (previous_target_pose_status !=
-                cogip::motion_control::target_pose_status_t::blocked) {
-                pf_get_canpb().send_message(blocked_uuid);
-            }
+        if (previous_target_pose_status !=
+            cogip::motion_control::target_pose_status_t::blocked) {
+            pf_get_canpb().send_message(blocked_uuid);
         }
         break;
-    }
 
     default:
         break;
