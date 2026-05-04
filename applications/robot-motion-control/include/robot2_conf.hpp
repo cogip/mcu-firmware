@@ -82,10 +82,10 @@ constexpr double platform_linear_anti_blocking_error_threshold_mm_per_s = 50;
 constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 65535;
 
 // Speeds and accelerations/decelerations limits
-constexpr float min_speed_mm_per_s = 0;     ///< Minimum speed (mm/s)
-constexpr float max_speed_mm_per_s = 2000;  ///< Maximum speed (mm/s)
-constexpr float max_acc_mm_per_s2 = 1000.0; ///< Maximum acceleration (mm/s²)
-constexpr float max_dec_mm_per_s2 = 1000.0; ///< Maximum deceleration (mm/s²)
+constexpr float min_speed_mm_per_s = 0;    ///< Minimum speed (mm/s)
+constexpr float max_speed_mm_per_s = 2000; ///< Maximum speed (mm/s)
+constexpr float max_acc_mm_per_s2 = 250.0; ///< Maximum acceleration (mm/s²)
+constexpr float max_dec_mm_per_s2 = 250.0; ///< Maximum deceleration (mm/s²)
 
 constexpr float min_speed_deg_per_s = 0;   ///< Minimum speed (deg/s)
 constexpr float max_speed_deg_per_s = 720; ///< Maximum speed (deg/s)
