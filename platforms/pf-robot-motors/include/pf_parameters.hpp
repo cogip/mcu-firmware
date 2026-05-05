@@ -30,6 +30,20 @@ void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer);
 /// @param[in] buffer CAN protocol buffer containing the serialized parameter set request
 void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer);
 
+/// @brief Handle parameter reset request from CAN bus
+///
+/// @note Erases the persisted value from flash and restores the compile-time default.
+///
+/// @param[in] buffer CAN protocol buffer containing the serialized parameter reset request
+void pf_handle_parameter_reset(cogip::canpb::ReadBuffer& buffer);
+
+/// @brief Load all parameters from flash persistent storage
+///
+/// @note Iterates the registry and reloads each parameter from flash. Must be called
+///       after FlashKVStorage is initialized (i.e. after `cogip::pf_common::pf_init()`)
+///       and before any consumer reads the parameters.
+void pf_load_parameters();
+
 /// @brief Initialize parameter handlers
 void init();
 

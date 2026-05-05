@@ -54,6 +54,11 @@ void pf_init(void)
             game_start_uuid, cogip::canpb::message_handler_t::create<_handle_game_start>());
         canpb.register_message_handler(game_end_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_game_end>());
+
+        // Load persisted parameter values from flash before any consumer reads them.
+        // Safe to call only when pf_common::pf_init() succeeded (FlashKVStorage was
+        // initialized inside it).
+        cogip::pf::parameters::pf_load_parameters();
     }
 
     cogip::pf::actuators::init();

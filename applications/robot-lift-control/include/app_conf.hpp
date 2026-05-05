@@ -17,43 +17,60 @@
 // Include the appropriate lift configuration based on LIFT_ID
 #include EXPAND_AND_STRINGIFY(LIFT_CONF_FILE(LIFT_ID))
 
+#include "KeyHash.hpp"
+#include "parameter/StoragePolicies.hpp"
+
 namespace cogip {
 namespace app {
 namespace actuators {
 
+using cogip::utils::operator"" _key_hash;
+
+/// @brief Parameter key hashes for flash persistence
+///
+/// @note Each parameter is identified by a unique 32-bit hash computed from its string key.
+///       The lift index (`LIFT_ID`, 1 or 2) is folded into the key prefix at preprocessing
+///       time so that lift1 and lift2 boards expose distinct hashes matching the physical
+///       board naming (e.g. `lift1_pose_pid_kp` vs `lift2_pose_pid_kp`).
+#define LIFT_KEY_PREFIX "lift" EXPAND_AND_STRINGIFY(LIFT_ID)
+
+// Lift pose PID
+constexpr uint32_t LIFT_POSE_PID_KP_KEY = LIFT_KEY_PREFIX "_pose_pid_kp"_key_hash;
+constexpr uint32_t LIFT_POSE_PID_KI_KEY = LIFT_KEY_PREFIX "_pose_pid_ki"_key_hash;
+constexpr uint32_t LIFT_POSE_PID_KD_KEY = LIFT_KEY_PREFIX "_pose_pid_kd"_key_hash;
+// Lift speed PID
+constexpr uint32_t LIFT_SPEED_PID_KP_KEY = LIFT_KEY_PREFIX "_speed_pid_kp"_key_hash;
+constexpr uint32_t LIFT_SPEED_PID_KI_KEY = LIFT_KEY_PREFIX "_speed_pid_ki"_key_hash;
+constexpr uint32_t LIFT_SPEED_PID_KD_KEY = LIFT_KEY_PREFIX "_speed_pid_kd"_key_hash;
+// Lift brake speed PID
+constexpr uint32_t LIFT_BRAKE_SPEED_PID_KP_KEY = LIFT_KEY_PREFIX "_brake_speed_pid_kp"_key_hash;
+constexpr uint32_t LIFT_BRAKE_SPEED_PID_KI_KEY = LIFT_KEY_PREFIX "_brake_speed_pid_ki"_key_hash;
+constexpr uint32_t LIFT_BRAKE_SPEED_PID_KD_KEY = LIFT_KEY_PREFIX "_brake_speed_pid_kd"_key_hash;
+
+#undef LIFT_KEY_PREFIX
+
 /// @name Lift motor parameter definitions
 /// @{
 
+// clang-format off
 // Motor lift pose PID
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kp{
-    lift_pid_defaults::motor_lift_pose_pid_kp};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_ki{
-    lift_pid_defaults::motor_lift_pose_pid_ki};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kd{
-    lift_pid_defaults::motor_lift_pose_pid_kd};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_pose_pid_integral_limit{lift_pid_defaults::motor_lift_pose_pid_integral_limit};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_POSE_PID_KP_KEY>> motor_lift_pose_pid_kp{lift_pid_defaults::motor_lift_pose_pid_kp};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_POSE_PID_KI_KEY>> motor_lift_pose_pid_ki{lift_pid_defaults::motor_lift_pose_pid_ki};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_POSE_PID_KD_KEY>> motor_lift_pose_pid_kd{lift_pid_defaults::motor_lift_pose_pid_kd};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_integral_limit{lift_pid_defaults::motor_lift_pose_pid_integral_limit};
 
 // Motor lift speed PID
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_kp{
-    lift_pid_defaults::motor_lift_speed_pid_kp};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_ki{
-    lift_pid_defaults::motor_lift_speed_pid_ki};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_kd{
-    lift_pid_defaults::motor_lift_speed_pid_kd};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_speed_pid_integral_limit{lift_pid_defaults::motor_lift_speed_pid_integral_limit};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_SPEED_PID_KP_KEY>> motor_lift_speed_pid_kp{lift_pid_defaults::motor_lift_speed_pid_kp};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_SPEED_PID_KI_KEY>> motor_lift_speed_pid_ki{lift_pid_defaults::motor_lift_speed_pid_ki};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_SPEED_PID_KD_KEY>> motor_lift_speed_pid_kd{lift_pid_defaults::motor_lift_speed_pid_kd};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_integral_limit{lift_pid_defaults::motor_lift_speed_pid_integral_limit};
 
 // Motor lift brake speed PID
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_kp{lift_pid_defaults::motor_lift_brake_speed_pid_kp};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_ki{lift_pid_defaults::motor_lift_brake_speed_pid_ki};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_kd{lift_pid_defaults::motor_lift_brake_speed_pid_kd};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_integral_limit{
-        lift_pid_defaults::motor_lift_brake_speed_pid_integral_limit};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_BRAKE_SPEED_PID_KP_KEY>> motor_lift_brake_speed_pid_kp{lift_pid_defaults::motor_lift_brake_speed_pid_kp};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_BRAKE_SPEED_PID_KI_KEY>> motor_lift_brake_speed_pid_ki{lift_pid_defaults::motor_lift_brake_speed_pid_ki};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative, cogip::parameter::WithFlashStorage<LIFT_BRAKE_SPEED_PID_KD_KEY>> motor_lift_brake_speed_pid_kd{lift_pid_defaults::motor_lift_brake_speed_pid_kd};
+inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_brake_speed_pid_integral_limit{lift_pid_defaults::motor_lift_brake_speed_pid_integral_limit};
+// clang-format on
 
 /// @brief Motor Lift pose PID parameters
 inline cogip::pid::PIDParameters motor_lift_pose_pid_params(motor_lift_pose_pid_kp,
