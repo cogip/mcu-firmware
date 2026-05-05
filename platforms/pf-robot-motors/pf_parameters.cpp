@@ -9,7 +9,7 @@
 // Project includes
 #include "pf_parameters.hpp"
 #include "KeyHash.hpp"
-#include "lift_common_conf.hpp"
+#include "app_conf.hpp"
 #include "parameter_handler/ParameterHandler.hpp"
 #include "pf_common/platform_common.hpp"
 #include "pf_common/uuids.hpp"
