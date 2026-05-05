@@ -24,18 +24,25 @@ using cogip::utils::operator"" _key_hash;
 /// @brief Parameter key hashes for identification
 ///
 /// @note Each parameter is identified by a unique 32-bit hash computed from its string key.
+///       The lift index (`LIFT_ID`, 1 or 2) is folded into the key prefix at preprocessing
+///       time so that lift1 and lift2 boards expose distinct hashes matching the physical
+///       board naming (e.g. `lift1_pose_pid_kp` vs `lift2_pose_pid_kp`).
 
 /// Maximum number of parameters in the registry
 constexpr size_t MAX_PARAMETERS_NUMBER = 16;
 
+#define LIFT_KEY_PREFIX "lift" EXPAND_AND_STRINGIFY(LIFT_ID)
+
 // Lift pose PID
-constexpr uint32_t LIFT_POSE_PID_KP_KEY = "lift_pose_pid_kp"_key_hash;
-constexpr uint32_t LIFT_POSE_PID_KI_KEY = "lift_pose_pid_ki"_key_hash;
-constexpr uint32_t LIFT_POSE_PID_KD_KEY = "lift_pose_pid_kd"_key_hash;
+constexpr uint32_t LIFT_POSE_PID_KP_KEY = LIFT_KEY_PREFIX "_pose_pid_kp"_key_hash;
+constexpr uint32_t LIFT_POSE_PID_KI_KEY = LIFT_KEY_PREFIX "_pose_pid_ki"_key_hash;
+constexpr uint32_t LIFT_POSE_PID_KD_KEY = LIFT_KEY_PREFIX "_pose_pid_kd"_key_hash;
 // Lift speed PID
-constexpr uint32_t LIFT_SPEED_PID_KP_KEY = "lift_speed_pid_kp"_key_hash;
-constexpr uint32_t LIFT_SPEED_PID_KI_KEY = "lift_speed_pid_ki"_key_hash;
-constexpr uint32_t LIFT_SPEED_PID_KD_KEY = "lift_speed_pid_kd"_key_hash;
+constexpr uint32_t LIFT_SPEED_PID_KP_KEY = LIFT_KEY_PREFIX "_speed_pid_kp"_key_hash;
+constexpr uint32_t LIFT_SPEED_PID_KI_KEY = LIFT_KEY_PREFIX "_speed_pid_ki"_key_hash;
+constexpr uint32_t LIFT_SPEED_PID_KD_KEY = LIFT_KEY_PREFIX "_speed_pid_kd"_key_hash;
+
+#undef LIFT_KEY_PREFIX
 
 // Parameter handler type
 using ParameterHandlerType = parameter_handler::ParameterHandler<MAX_PARAMETERS_NUMBER>;
