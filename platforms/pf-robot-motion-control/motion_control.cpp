@@ -198,8 +198,7 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
 
         LOG_WARNING("BLOCKED\n");
 
-        if (previous_target_pose_status !=
-            cogip::motion_control::target_pose_status_t::blocked) {
+        if (previous_target_pose_status != cogip::motion_control::target_pose_status_t::blocked) {
             pf_get_canpb().send_message(blocked_uuid);
         }
         break;
