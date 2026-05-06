@@ -78,6 +78,14 @@ static const ParameterHandlerType::Registry registry = {
     {TRACKER_ANGULAR_SPEED_PID_KP_KEY, tracker_angular_speed_pid_kp},
     {TRACKER_ANGULAR_SPEED_PID_KI_KEY, tracker_angular_speed_pid_ki},
     {TRACKER_ANGULAR_SPEED_PID_KD_KEY, tracker_angular_speed_pid_kd},
+    // Brake linear speed PID
+    {BRAKE_LINEAR_SPEED_PID_KP_KEY, brake_linear_speed_pid_kp},
+    {BRAKE_LINEAR_SPEED_PID_KI_KEY, brake_linear_speed_pid_ki},
+    {BRAKE_LINEAR_SPEED_PID_KD_KEY, brake_linear_speed_pid_kd},
+    // Brake angular speed PID
+    {BRAKE_ANGULAR_SPEED_PID_KP_KEY, brake_angular_speed_pid_kp},
+    {BRAKE_ANGULAR_SPEED_PID_KI_KEY, brake_angular_speed_pid_ki},
+    {BRAKE_ANGULAR_SPEED_PID_KD_KEY, brake_angular_speed_pid_kd},
     /// Pose straight filter thresholds
     {LINEAR_THRESHOLD_KEY, param_linear_threshold},
     {ANGULAR_THRESHOLD_KEY, param_angular_threshold},

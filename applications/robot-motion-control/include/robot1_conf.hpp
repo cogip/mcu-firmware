@@ -64,6 +64,21 @@ constexpr float default_tracker_angular_speed_pid_kp = 5.5;
 constexpr float default_tracker_angular_speed_pid_ki = 0.6;
 constexpr float default_tracker_angular_speed_pid_kd = 0;
 
+// ============================================================================
+// Brake chain PID gains (dedicated, runs while engine.brake_ is latched).
+// Initialised to the tracking values so behaviour is unchanged out of the
+// box; tuneable independently to fight static disturbances on hold.
+// ============================================================================
+
+// Linear speed PID (brake chain)
+constexpr float default_brake_linear_speed_pid_kp = 3.;
+constexpr float default_brake_linear_speed_pid_ki = 0.8;
+constexpr float default_brake_linear_speed_pid_kd = 0;
+// Angular speed PID (brake chain)
+constexpr float default_brake_angular_speed_pid_kp = 5.5;
+constexpr float default_brake_angular_speed_pid_ki = 0.6;
+constexpr float default_brake_angular_speed_pid_kd = 0;
+
 // Linear threshold
 constexpr float linear_threshold = 2;
 // Angular threshold
@@ -123,4 +138,14 @@ constexpr float default_tracker_linear_speed_pid_integral_limit =
 constexpr float default_tracker_angular_speed_pid_integral_limit =
     (default_tracker_angular_speed_pid_ki != 0)
         ? (max_speed_deg_per_s / default_tracker_angular_speed_pid_ki)
+        : (etl::numeric_limits<float>::max());
+
+// Brake speed PID integral limits
+constexpr float default_brake_linear_speed_pid_integral_limit =
+    (default_brake_linear_speed_pid_ki != 0)
+        ? (max_speed_mm_per_s / default_brake_linear_speed_pid_ki)
+        : (etl::numeric_limits<float>::max());
+constexpr float default_brake_angular_speed_pid_integral_limit =
+    (default_brake_angular_speed_pid_ki != 0)
+        ? (max_speed_deg_per_s / default_brake_angular_speed_pid_ki)
         : (etl::numeric_limits<float>::max());
