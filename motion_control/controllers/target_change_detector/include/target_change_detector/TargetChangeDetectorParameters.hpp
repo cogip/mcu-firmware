@@ -15,12 +15,29 @@ namespace cogip {
 
 namespace motion_control {
 
-/// Target Change Detector parameters (empty, no parameters needed)
+/// @brief Target Change Detector parameters
+///
+/// Carries the epsilon used when comparing floating-point watched keys via
+/// `areFloatsEqual`. Integer and boolean keys are compared exactly regardless
+/// of this value.
 class TargetChangeDetectorParameters
 {
   public:
-    /// Constructor
-    TargetChangeDetectorParameters() = default;
+    /// @brief Constructor
+    /// @param epsilon Tolerance for float comparison (default 1e-3).
+    ///                For mm/deg targets this filters serialisation noise
+    ///                (e.g. -400.00000000000006 vs -400.0) while staying
+    ///                well below any meaningful motion.
+    explicit TargetChangeDetectorParameters(float epsilon = 1e-3f) : epsilon_(epsilon) {}
+
+    /// @brief Tolerance used for float comparison.
+    float epsilon() const
+    {
+        return epsilon_;
+    }
+
+  private:
+    float epsilon_; ///< Epsilon used by areFloatsEqual
 };
 
 } // namespace motion_control

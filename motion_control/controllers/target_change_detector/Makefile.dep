@@ -1,1 +1,2 @@
 USEMODULE += motion_control_common
+USEMODULE += utils

@@ -3,7 +3,7 @@
 /**
  * @brief Compare two floating-point numbers (float) with a specified tolerance.
  *
- * This function checks if the absolute difference between two doubles is less
+ * This function checks if the absolute difference between two floats is less
  * than a given tolerance (epsilon), which helps to address the imprecision of
  * floating-point calculations.
  *
@@ -14,4 +14,4 @@
  * epsilon.
  * @return false        Otherwise.
  */
-bool areDoublesEqual(float a, float b, float epsilon = 1e-3);
+bool areFloatsEqual(float a, float b, float epsilon = 1e-3);

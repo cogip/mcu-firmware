@@ -102,10 +102,10 @@ class Pose : public cogip_defs::Pose
     /// Override operator ==
     bool operator==(const Pose& other)
     {
-        return (areDoublesEqual(x(), other.x()) && areDoublesEqual(y(), other.y()) &&
-                areDoublesEqual(O(), other.O()) &&
-                areDoublesEqual(max_speed_ratio_linear(), other.max_speed_ratio_linear()) &&
-                areDoublesEqual(max_speed_ratio_angular(), other.max_speed_ratio_angular()) &&
+        return (areFloatsEqual(x(), other.x()) && areFloatsEqual(y(), other.y()) &&
+                areFloatsEqual(O(), other.O()) &&
+                areFloatsEqual(max_speed_ratio_linear(), other.max_speed_ratio_linear()) &&
+                areFloatsEqual(max_speed_ratio_angular(), other.max_speed_ratio_angular()) &&
                 get_motion_direction() == other.get_motion_direction() &&
                 bypass_anti_blocking() == other.bypass_anti_blocking() &&
                 timeout_ms() == other.timeout_ms() &&

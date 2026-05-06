@@ -34,6 +34,10 @@ struct PoseStraightFilterIOKeys
     etl::string_view motion_direction;         ///< key for motion direction mode
     etl::string_view bypass_final_orientation; ///< key for bypass final orientation flag (from
                                                ///< PathManagerFilter)
+    etl::string_view new_target;               ///< key emitted by TargetChangeDetector when any
+                                               ///< pose-order component changes (x/y/O,
+                                               ///< motion_direction, bypass_final_orientation…).
+                                               ///< Consumed here to reset the state machine.
 
     // Output keys
     etl::string_view linear_pose_error;         ///< key for linear distance to target
