@@ -77,6 +77,19 @@ class ConditionalSwitchMetaController : public BaseController
         return "ConditionalSwitchMetaController";
     }
 
+    /// @brief Reset both child controllers.
+    /// Both branches must be reset because either one may be selected on the
+    /// next execute(), and we cannot know in advance which.
+    void reset() override
+    {
+        if (controller_when_true_) {
+            controller_when_true_->reset();
+        }
+        if (controller_when_false_) {
+            controller_when_false_->reset();
+        }
+    }
+
     /// @brief Dump the controller hierarchy to stdout as ASCII tree
     /// @param indent Current indentation level
     /// @param is_last Whether this is the last child at current level
