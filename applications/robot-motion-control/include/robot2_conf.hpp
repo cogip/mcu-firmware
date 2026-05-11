@@ -133,30 +133,52 @@ constexpr float default_linear_speed_pid_integral_limit =
 constexpr float default_angular_speed_pid_integral_limit =
     static_cast<float>(etl::numeric_limits<int16_t>::max());
 
+// Anti-windup caps for the tracker and brake chains.
+// The PID consumes errors in *_per_period (loop runs every motion_control_thread_period_ms
+// = 20 ms), and produces a speed contribution in the same unit. We size each integral
+// limit so the integral term alone can contribute up to 50% of the platform's max speed
+// at saturation:
+//
+//     I_contribution_max = integral_limit * ki = anti_windup_ratio * max_speed_per_period
+//
+// hence integral_limit = anti_windup_ratio * max_speed_per_period / ki, with
+// max_speed_per_period = max_speed_per_s * (loop_period_ms / 1000).
+constexpr float anti_windup_ratio = 0.5f;
+constexpr float loop_period_ms_for_iwindup = 20.f; // must match motion_control_thread_period_ms
+constexpr float max_speed_mm_per_period_for_iwindup =
+    max_speed_mm_per_s * loop_period_ms_for_iwindup / 1000.f;
+constexpr float max_speed_deg_per_period_for_iwindup =
+    max_speed_deg_per_s * loop_period_ms_for_iwindup / 1000.f;
+
 // Tracker PID integral limits
 constexpr float default_tracker_linear_pose_pid_integral_limit =
     (default_tracker_linear_pose_pid_ki != 0)
-        ? (max_speed_mm_per_s / default_tracker_linear_pose_pid_ki)
+        ? (anti_windup_ratio * max_speed_mm_per_period_for_iwindup /
+           default_tracker_linear_pose_pid_ki)
         : (etl::numeric_limits<float>::max());
 constexpr float default_tracker_angular_pose_pid_integral_limit =
     etl::numeric_limits<uint16_t>::max();
 constexpr float default_tracker_linear_speed_pid_integral_limit =
     (default_tracker_linear_speed_pid_ki != 0)
-        ? (max_speed_mm_per_s / default_tracker_linear_speed_pid_ki)
+        ? (anti_windup_ratio * max_speed_mm_per_period_for_iwindup /
+           default_tracker_linear_speed_pid_ki)
         : (etl::numeric_limits<float>::max());
 constexpr float default_tracker_angular_speed_pid_integral_limit =
     (default_tracker_angular_speed_pid_ki != 0)
-        ? (max_speed_deg_per_s / default_tracker_angular_speed_pid_ki)
+        ? (anti_windup_ratio * max_speed_deg_per_period_for_iwindup /
+           default_tracker_angular_speed_pid_ki)
         : (etl::numeric_limits<float>::max());
 
 // Brake speed PID integral limits
 constexpr float default_brake_linear_speed_pid_integral_limit =
     (default_brake_linear_speed_pid_ki != 0)
-        ? (max_speed_mm_per_s / default_brake_linear_speed_pid_ki)
+        ? (anti_windup_ratio * max_speed_mm_per_period_for_iwindup /
+           default_brake_linear_speed_pid_ki)
         : (etl::numeric_limits<float>::max());
 constexpr float default_brake_angular_speed_pid_integral_limit =
     (default_brake_angular_speed_pid_ki != 0)
-        ? (max_speed_deg_per_s / default_brake_angular_speed_pid_ki)
+        ? (anti_windup_ratio * max_speed_deg_per_period_for_iwindup /
+           default_brake_angular_speed_pid_ki)
         : (etl::numeric_limits<float>::max());
 
 // ============================================================================
