@@ -191,10 +191,7 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         left_motor.set_speed(0);
         right_motor.set_speed(0);
 
-        // As motors are stopped, pose straight filter state machine is in
-        // finished state (reset both chains as only one is active at a time)
-        quadpid_chain::pose_straight_filter.force_finished_state();
-        quadpid_tracker_chain::pose_straight_filter.force_finished_state();
+        pf_motion_control_platform_engine.set_brake(true);
 
         LOG_WARNING("BLOCKED\n");
 
@@ -307,11 +304,7 @@ void pf_send_encoder_telemetry(void)
 
 void pf_handle_brake([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
 {
-    pf_motion_control_platform_engine.set_target_speed(cogip::cogip_defs::Polar(0, 0));
-
-    // Reset both chains as only one is active at a time
-    quadpid_chain::pose_straight_filter.force_finished_state();
-    quadpid_tracker_chain::pose_straight_filter.force_finished_state();
+    pf_motion_control_platform_engine.set_brake(true);
 }
 
 void pf_handle_game_end([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
@@ -332,10 +325,6 @@ void pf_handle_game_end([[maybe_unused]] const cogip::canpb::ReadBuffer& buffer)
     default:
         break;
     }
-
-    // Force position filter finished state (reset both chains as only one is active at a time)
-    quadpid_chain::pose_straight_filter.force_finished_state();
-    quadpid_tracker_chain::pose_straight_filter.force_finished_state();
 
     // Disable motion control to avoid new motion
     pf_disable_motion_control();
