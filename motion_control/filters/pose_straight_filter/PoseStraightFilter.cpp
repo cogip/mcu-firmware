@@ -212,6 +212,13 @@ void PoseStraightFilter::execute(ControllersIO& io)
     if ((current_state_ == PoseStraightFilterState::ROTATE_TO_DIRECTION) &&
         (absolute_linear_pose_error <= linear_threshold)) {
         current_state_ = PoseStraightFilterState::ROTATE_TO_FINAL_ANGLE;
+        // Reset speed and pose PIDs so the integral charged by the
+        // anti-drift longitudinal correction during ROTATE_TO_DIRECTION
+        // does not leak into the final orientation phase.
+        io.set(keys_.linear_speed_pid_reset, true);
+        io.set(keys_.angular_speed_pid_reset, true);
+        io.set(keys_.linear_pose_pid_reset, true);
+        io.set(keys_.angular_pose_pid_reset, true);
         angular_recompute_profile = true;
         linear_recompute_profile = true;
         DEBUG("Early transition to ROTATE_TO_FINAL_ANGLE (already at position, linear_err=%.2f "
