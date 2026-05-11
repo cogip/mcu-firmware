@@ -43,24 +43,25 @@ constexpr float default_angular_speed_pid_ki = 1;
 constexpr float default_angular_speed_pid_kd = 0.0;
 
 // ============================================================================
-// Tracker chain PID gains (QUADPID_TRACKER)
+// Tracker pose PID gains (QUADPID_TRACKER - tracker branch)
+// Used to track the motion profile in real-time (closed-loop tracking)
 // ============================================================================
 
 // Tracker linear pose PID (tracker during MOVE_TO_POSITION)
-constexpr float default_tracker_linear_pose_pid_kp = 0.1;
+constexpr float default_tracker_linear_pose_pid_kp = 0.2;
 constexpr float default_tracker_linear_pose_pid_ki = 0.0;
 constexpr float default_tracker_linear_pose_pid_kd = 0;
 // Tracker angular pose PID (tracker during ROTATE states)
-constexpr float default_tracker_angular_pose_pid_kp = 0.2;
+constexpr float default_tracker_angular_pose_pid_kp = 0.15;
 constexpr float default_tracker_angular_pose_pid_ki = 0;
 constexpr float default_tracker_angular_pose_pid_kd = 0;
 // Tracker linear speed PID
-constexpr float default_tracker_linear_speed_pid_kp = 10;
+constexpr float default_tracker_linear_speed_pid_kp = 8;
 constexpr float default_tracker_linear_speed_pid_ki = 1;
 constexpr float default_tracker_linear_speed_pid_kd = 0;
 // Tracker angular speed PID
-constexpr float default_tracker_angular_speed_pid_kp = 13;
-constexpr float default_tracker_angular_speed_pid_ki = 1;
+constexpr float default_tracker_angular_speed_pid_kp = 9;
+constexpr float default_tracker_angular_speed_pid_ki = 5;
 constexpr float default_tracker_angular_speed_pid_kd = 0;
 
 // ============================================================================
@@ -70,12 +71,12 @@ constexpr float default_tracker_angular_speed_pid_kd = 0;
 // ============================================================================
 
 // Linear speed PID (brake chain)
-constexpr float default_brake_linear_speed_pid_kp = 10;
+constexpr float default_brake_linear_speed_pid_kp = 8;
 constexpr float default_brake_linear_speed_pid_ki = 1;
 constexpr float default_brake_linear_speed_pid_kd = 0;
 // Angular speed PID (brake chain)
-constexpr float default_brake_angular_speed_pid_kp = 13;
-constexpr float default_brake_angular_speed_pid_ki = 1;
+constexpr float default_brake_angular_speed_pid_kp = 9;
+constexpr float default_brake_angular_speed_pid_ki = 5;
 constexpr float default_brake_angular_speed_pid_kd = 0;
 
 // Linear threshold
@@ -93,12 +94,12 @@ constexpr double platform_linear_anti_blocking_blocked_cycles_nb_threshold = 10;
 constexpr float min_speed_mm_per_s = 0;      ///< Minimum speed (mm/s)
 constexpr float max_speed_mm_per_s = 1000.0; ///< Maximum speed (mm/s)
 constexpr float max_acc_mm_per_s2 = 750.0;   ///< Maximum acceleration (mm/s²)
-constexpr float max_dec_mm_per_s2 = 1000.0;  ///< Maximum deceleration (mm/s²)
+constexpr float max_dec_mm_per_s2 = 750.0;   ///< Maximum deceleration (mm/s²)
 
-constexpr float min_speed_deg_per_s = 20;  ///< Maximum speed (deg/s)
-constexpr float max_speed_deg_per_s = 360; ///< Maximum speed (deg/s)
-constexpr float max_acc_deg_per_s2 = 180;  ///< Maximum acceleration (deg/s²)
-constexpr float max_dec_deg_per_s2 = 360;  ///< Maximum deceleration (deg/s²)
+constexpr float min_speed_deg_per_s = 0;   ///< Maximum speed (deg/s)
+constexpr float max_speed_deg_per_s = 180; ///< Maximum speed (deg/s)
+constexpr float max_acc_deg_per_s2 = 270;  ///< Maximum acceleration (deg/s²)
+constexpr float max_dec_deg_per_s2 = 270;  ///< Maximum deceleration (deg/s²)
 
 /// Safety clamp ratio for speed/acceleration filters
 /// The filters clamp at ratio × nominal max to catch runaway values
@@ -126,21 +127,9 @@ constexpr float default_tracker_linear_pose_pid_integral_limit =
     etl::numeric_limits<uint16_t>::max();
 constexpr float default_tracker_angular_pose_pid_integral_limit =
     etl::numeric_limits<uint16_t>::max();
-constexpr float default_tracker_linear_speed_pid_integral_limit =
-    (default_tracker_linear_speed_pid_ki != 0)
-        ? (max_speed_mm_per_s / default_tracker_linear_speed_pid_ki)
-        : (etl::numeric_limits<float>::max());
-constexpr float default_tracker_angular_speed_pid_integral_limit =
-    (default_tracker_angular_speed_pid_ki != 0)
-        ? (max_speed_deg_per_s / default_tracker_angular_speed_pid_ki)
-        : (etl::numeric_limits<float>::max());
+constexpr float default_tracker_linear_speed_pid_integral_limit = 17.5;
+constexpr float default_tracker_angular_speed_pid_integral_limit = 8;
 
 // Brake speed PID integral limits
-constexpr float default_brake_linear_speed_pid_integral_limit =
-    (default_brake_linear_speed_pid_ki != 0)
-        ? (max_speed_mm_per_s / default_brake_linear_speed_pid_ki)
-        : (etl::numeric_limits<float>::max());
-constexpr float default_brake_angular_speed_pid_integral_limit =
-    (default_brake_angular_speed_pid_ki != 0)
-        ? (max_speed_deg_per_s / default_brake_angular_speed_pid_ki)
-        : (etl::numeric_limits<float>::max());
+constexpr float default_brake_linear_speed_pid_integral_limit = 17.5;
+constexpr float default_brake_angular_speed_pid_integral_limit = 8;
