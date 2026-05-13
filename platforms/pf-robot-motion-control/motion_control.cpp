@@ -191,7 +191,10 @@ static void pf_pose_reached_cb(const cogip::motion_control::target_pose_status_t
         left_motor.set_speed(0);
         right_motor.set_speed(0);
 
-        pf_motion_control_platform_engine.set_brake(true);
+        // This callback runs under the engine mutex (taken by thread_loop),
+        // so we cannot call set_brake() here — that would re-lock the same
+        // non-recursive mutex and deadlock the engine thread.
+        pf_motion_control_platform_engine.set_brake_locked(true);
 
         LOG_WARNING("BLOCKED\n");
 
@@ -607,6 +610,17 @@ void pf_disable_motion_control()
 {
     LOG_INFO("[DISABLE] Disabling motion control\n");
     pf_motion_control_platform_engine.disable();
+
+    // Release any latched brake so re-enabling the engine resumes the
+    // normal control chain instead of staying on the brake chain.
+    pf_motion_control_platform_engine.set_brake(false);
+
+    // PoseStraightFilter::reset() leaves current_state_ untouched (only
+    // TargetChangeDetector re-arms it on a new_target). Without a forced
+    // FINISHED here, re-enabling without a new pose order would resume the
+    // previous stale state machine.
+    quadpid_chain::pose_straight_filter.force_finished_state();
+    quadpid_tracker_chain::pose_straight_filter.force_finished_state();
 
     // Disable motors
     left_motor.disable();
