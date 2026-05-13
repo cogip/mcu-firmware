@@ -611,6 +611,17 @@ void pf_disable_motion_control()
     LOG_INFO("[DISABLE] Disabling motion control\n");
     pf_motion_control_platform_engine.disable();
 
+    // Release any latched brake so re-enabling the engine resumes the
+    // normal control chain instead of staying on the brake chain.
+    pf_motion_control_platform_engine.set_brake(false);
+
+    // PoseStraightFilter::reset() leaves current_state_ untouched (only
+    // TargetChangeDetector re-arms it on a new_target). Without a forced
+    // FINISHED here, re-enabling without a new pose order would resume the
+    // previous stale state machine.
+    quadpid_chain::pose_straight_filter.force_finished_state();
+    quadpid_tracker_chain::pose_straight_filter.force_finished_state();
+
     // Disable motors
     left_motor.disable();
     right_motor.disable();
