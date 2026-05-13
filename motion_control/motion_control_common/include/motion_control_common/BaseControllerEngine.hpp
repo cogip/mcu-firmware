@@ -69,8 +69,17 @@ class BaseControllerEngine
     void set_brake(bool brake)
     {
         mutex_lock(&mutex_);
-        brake_ = brake;
+        set_brake_locked(brake);
         mutex_unlock(&mutex_);
+    };
+
+    /// Same as set_brake(), but assumes the engine mutex is already held by
+    /// the caller. Use from callbacks invoked under the engine loop (e.g.
+    /// pose_reached_cb_ from PlatformEngine::process_outputs), where calling
+    /// set_brake() would re-lock the non-recursive mutex and deadlock.
+    void set_brake_locked(bool brake)
+    {
+        brake_ = brake;
     };
 
     /// Return whether the brake is currently latched
