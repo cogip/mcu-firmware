@@ -78,7 +78,10 @@ class TargetChangeDetector
     /// Keep previous_values_ and first_run_ unchanged so that a reset
     /// does not spuriously trigger new_target on the next execute().
     /// Only a real change in watched keys should trigger new_target.
-    void reset() override {}
+    void reset() override
+    {
+        first_run_ = true;
+    }
 
     /// @brief Execute target change detection
     void execute(ControllersIO& io) override
