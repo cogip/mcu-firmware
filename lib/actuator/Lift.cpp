@@ -112,6 +112,15 @@ void Lift::actuate(int32_t command)
 
     LOG_INFO("Move lift to clamped command %" PRIi32 "\n", clamped);
 
+    // Disable anti-blocking when going up: lifting weight against gravity
+    // makes legitimate stalls hard to distinguish from extra load, and we
+    // would rather let the motion finish on its own than trigger a false
+    // BLOCKED on every ascent. Descents stay protected.
+    if (params_.motor_params.anti_blocking_parameters) {
+        const bool going_up = static_cast<float>(clamped) > get_current_distance();
+        params_.motor_params.anti_blocking_parameters->set_enabled(!going_up);
+    }
+
     last_command_ = clamped;
     Motor::actuate(clamped);
 }
