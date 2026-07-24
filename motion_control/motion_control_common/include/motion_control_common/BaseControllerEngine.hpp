@@ -65,12 +65,28 @@ class BaseControllerEngine
 
     /// Latch or clear the brake state. When latched, the engine executes
     /// the brake controller chain instead of the normal one; it stays
-    /// latched until an explicit set_brake(false) is issued.
+    /// latched until an explicit set_brake(false) is issued. On the
+    /// false→true edge the brake controller is reset so any controller
+    /// with internal state (e.g. a speed ramp capturing the current
+    /// measured speed) re-arms from scratch.
     void set_brake(bool brake)
     {
         mutex_lock(&mutex_);
-        brake_ = brake;
+        set_brake_locked(brake);
         mutex_unlock(&mutex_);
+    };
+
+    /// Same as set_brake(), but assumes the engine mutex is already held by
+    /// the caller. Use from callbacks invoked under the engine loop (e.g.
+    /// pose_reached_cb_ from PlatformEngine::process_outputs), where calling
+    /// set_brake() would re-lock the non-recursive mutex and deadlock.
+    void set_brake_locked(bool brake)
+    {
+        const bool rising_edge = !brake_ && brake;
+        brake_ = brake;
+        if (rising_edge && brake_controller_) {
+            brake_controller_->reset();
+        }
     };
 
     /// Return whether the brake is currently latched

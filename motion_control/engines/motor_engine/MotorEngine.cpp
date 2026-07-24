@@ -94,40 +94,45 @@ void MotorEngine::process_outputs()
         gpio_clear(clear_overload_pin_);
     }
 
-    // If timeout is enabled, pose_reached_ has been set by the engine itself, do
-    // not override it.
-    if (pose_reached_ != target_pose_status_t::timeout) {
+    // Once a terminal state (timeout or blocked) is latched, freeze
+    // pose_reached_ on it until the next set_target_distance() clears the
+    // latch. Otherwise the downstream pose loop, which sees target ==
+    // current after the hold-in-place reset below, would write `reached`
+    // to IO on the very next cycle and trigger a spurious `reached`
+    // callback right after the failure notification.
+    if (pose_reached_ != target_pose_status_t::timeout &&
+        pose_reached_ != target_pose_status_t::blocked) {
         pose_reached_ = io_.get_as<target_pose_status_t>("pose_reached").value();
-    } else {
-        LOG_ERROR("MotorEngine timed out, hold. current=%.2f target=%.2f\n",
-                  static_cast<double>(odometer_.distance_mm()),
-                  static_cast<double>(target_distance_));
+    }
 
-        if (previous_pose_reached_ != target_pose_status_t::timeout &&
-            pose_reached_cb_.is_valid()) {
-            pose_reached_cb_(target_pose_status_t::timeout);
+    if (pose_reached_ == target_pose_status_t::timeout) {
+        if (previous_pose_reached_ != target_pose_status_t::timeout) {
+            LOG_ERROR("MotorEngine timed out, hold. current=%.2f target=%.2f\n",
+                      static_cast<double>(odometer_.distance_mm()),
+                      static_cast<double>(target_distance_));
+            if (pose_reached_cb_.is_valid()) {
+                pose_reached_cb_(target_pose_status_t::timeout);
+            }
         }
 
         // Hold current position: set target to where we are and let the control loop maintain it
         target_distance_ = odometer_.distance_mm();
         timeout_enable_ = false;
-        pose_reached_ = target_pose_status_t::moving;
     }
 
     if (pose_reached_ == target_pose_status_t::blocked) {
-        LOG_ERROR("MotorEngine blocked, hold. current=%.2f target=%.2f\n",
-                  static_cast<double>(odometer_.distance_mm()),
-                  static_cast<double>(target_distance_));
-
-        if (previous_pose_reached_ != target_pose_status_t::blocked &&
-            pose_reached_cb_.is_valid()) {
-            pose_reached_cb_(target_pose_status_t::blocked);
+        if (previous_pose_reached_ != target_pose_status_t::blocked) {
+            LOG_ERROR("MotorEngine blocked, hold. current=%.2f target=%.2f\n",
+                      static_cast<double>(odometer_.distance_mm()),
+                      static_cast<double>(target_distance_));
+            if (pose_reached_cb_.is_valid()) {
+                pose_reached_cb_(target_pose_status_t::blocked);
+            }
         }
 
         // Hold current position: set target to where we are and let the control loop maintain it
         target_distance_ = odometer_.distance_mm();
         timeout_enable_ = false;
-        pose_reached_ = target_pose_status_t::moving;
     }
 
     // Notify once per target when pose is first reached
