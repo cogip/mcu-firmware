@@ -7,7 +7,7 @@
 #define MOTOR_RIGHT 0
 
 /* Quadrature decoding polarity */
-constexpr float default_qdec_left_polarity = 1.0;
+constexpr float default_qdec_left_polarity = -1.0;
 constexpr float default_qdec_right_polarity = -1.0;
 
 /// Motors properties
