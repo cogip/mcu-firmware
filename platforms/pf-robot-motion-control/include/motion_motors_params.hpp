@@ -13,6 +13,21 @@ namespace motion_control {
 #define MOTION_MOTORS_POST_CB nullptr
 #endif
 
+/*
+ * Motor brake pins are board hardware: the J8/J9 connector pinout was
+ * reassigned between the G474 module (cogip-board) and the STM32H563 module
+ * (cogip-board-h5), so a brake can land on a different MCU pin per board. The
+ * defaults below match cogip-board (G4); a board that routes a brake elsewhere
+ * overrides the matching macro in its own board.h (included above), e.g.
+ * cogip-board-h5 defines MOTION_MOTOR0_BRAKE_PIN = PB3.
+ */
+#ifndef MOTION_MOTOR0_BRAKE_PIN
+#define MOTION_MOTOR0_BRAKE_PIN GPIO_PIN(PORT_C, 8)
+#endif
+#ifndef MOTION_MOTOR1_BRAKE_PIN
+#define MOTION_MOTOR1_BRAKE_PIN GPIO_PIN(PORT_B, 2)
+#endif
+
 /**
  * @brief Simulate QDEC on motor_set() calls
  *
@@ -43,7 +58,7 @@ static const motor_driver_params_t motion_motors_params = {
                 .pwm_channel = 0,
                 .gpio_enable = GPIO_PIN(PORT_A, 10),
                 .gpio_dir0 = GPIO_PIN(PORT_C, 6),
-                .gpio_brake = GPIO_PIN(PORT_C, 8),
+                .gpio_brake = MOTION_MOTOR0_BRAKE_PIN,
                 .gpio_dir_reverse = 1,
             },
             // Right motor
@@ -51,7 +66,7 @@ static const motor_driver_params_t motion_motors_params = {
                 .pwm_channel = 1,
                 .gpio_enable = GPIO_PIN(PORT_B, 1),
                 .gpio_dir0 = GPIO_PIN(PORT_B, 10),
-                .gpio_brake = GPIO_PIN(PORT_B, 2),
+                .gpio_brake = MOTION_MOTOR1_BRAKE_PIN,
                 .gpio_dir_reverse = 0,
             },
         },
