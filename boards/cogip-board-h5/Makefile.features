@@ -1,0 +1,19 @@
+# define the cpu used by the cogip-board-h5 (STM32H563RITx, LQFP64)
+CPU = stm32
+CPU_MODEL = stm32h563ri
+
+# Put defined MCU peripherals here (in alphabetical order)
+FEATURES_PROVIDED += periph_can
+FEATURES_PROVIDED += periph_eth
+FEATURES_PROVIDED += periph_gpio
+FEATURES_PROVIDED += periph_pwm
+FEATURES_PROVIDED += periph_qdec
+FEATURES_PROVIDED += periph_timer
+FEATURES_PROVIDED += periph_uart
+
+# Not yet wired for this board (deferred, see include/periph_conf.h):
+# - periph_adc  : no STM32H5 ADC driver in RIOT yet (PA0/PC2 reserved on connectors)
+# - periph_i2c  : OTOS I2C1 shares PB6/PB7 with the left encoder (runtime-selectable)
+# - periph_flashpage / FlashDB : needs H5 flash geometry (8 KiB sectors, 16 B write)
+
+-include $(RIOTCPU)/stm32/Makefile.features
