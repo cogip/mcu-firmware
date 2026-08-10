@@ -75,6 +75,10 @@ include $(MCUFIRMWAREBASE)/Makefile.dep
 # RIOT Makefile include
 include $(RIOTBASE)/Makefile.include
 
+# Network firmware update (make flash-net); needs RIOT's riotboot slot vars,
+# so include after RIOT's Makefile.include.
+include $(MCUFIRMWAREBASE)/makefiles/flash-net.mk.inc
+
 ifneq ($(wildcard $(APPDIR)/include/.*),)
 	INCLUDES += -I$(APPDIR)/include/
 
