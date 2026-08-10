@@ -42,6 +42,10 @@
 
 static riotboot_flashwrite_t _writer;
 
+/* Distinct, non-NULL handle returned for a slot-number query (TFTP GET). */
+static char _query_handle;
+static bool _query_served;
+
 static struct
 {
     bool failed;         /* transfer errored: leave slot invalid */
@@ -54,9 +58,11 @@ static void* _open(const char* fname, const char* mode, u8_t write)
     (void)fname;
     (void)mode;
 
-    /* Only accept a client PUT (the host pushing an image); reject GET. */
+    /* A GET exposes the inactive slot number as a one-byte file, so the host
+     * (make flash-net) can push the image matching that slot. */
     if (!write) {
-        return NULL;
+        _query_served = false;
+        return &_query_handle;
     }
     if (riotboot_slot_numof < 2) {
         LOG_ERROR(LOG_PREFIX "no second slot (not a riotboot build)\n");
@@ -122,10 +128,15 @@ static int _write(void* handle, struct pbuf* p)
 
 static int _read(void* handle, void* buf, int bytes)
 {
+    /* _open() only ever returns a handle for the slot-number query on a GET
+     * (PUTs go to _write), so serve that one ASCII digit once. */
     (void)handle;
-    (void)buf;
-    (void)bytes;
-    return -1; /* server is write-only */
+    if (_query_served || bytes < 1) {
+        return 0; /* EOF */
+    }
+    ((char*)buf)[0] = (char)('0' + riotboot_slot_other());
+    _query_served = true;
+    return 1;
 }
 
 static void _error(void* handle, int err, const char* msg, int size)
@@ -137,6 +148,10 @@ static void _error(void* handle, int err, const char* msg, int size)
 
 static void _close(void* handle)
 {
+    if (handle == &_query_handle) {
+        return; /* slot-number query, nothing to finalize */
+    }
+
     riotboot_flashwrite_t* w = handle;
 
     if (_st.failed) {
@@ -144,10 +159,15 @@ static void _close(void* handle)
         return; /* magic never written -> bootloader falls back */
     }
 
-    uint32_t expected = riotboot_slot_get_image_startaddr(w->target_slot);
-    if (_st.start_addr != expected) {
-        LOG_ERROR(LOG_PREFIX "start_addr 0x%08" PRIx32 " != slot 0x%08" PRIx32 ", rejecting\n",
-                  _st.start_addr, expected);
+    /* Reject an image built for another slot: its header start_addr must fall
+     * within this slot's flash region. (Cannot compare to the slot's stored
+     * start_addr: the slot header is still erased at this point.) */
+    uint32_t slot_base = (uint32_t)(uintptr_t)riotboot_slot_get_hdr(w->target_slot);
+    uint32_t slot_end = slot_base + riotboot_slot_size(w->target_slot);
+    if (_st.start_addr < slot_base || _st.start_addr >= slot_end) {
+        LOG_ERROR(LOG_PREFIX "start_addr 0x%08" PRIx32 " outside slot %d "
+                             "[0x%08" PRIx32 "..0x%08" PRIx32 "), rejecting\n",
+                  _st.start_addr, w->target_slot, slot_base, slot_end);
         return;
     }
 
@@ -177,14 +197,19 @@ static const struct tftp_context _tftp_ctx = {
 
 void fw_update_tftp_init(void)
 {
+    /* lwIP is built with LWIP_TCPIP_CORE_LOCKING: every raw-API call
+     * (netif_set_addr, and udp_bind inside tftp_init_server) asserts the
+     * core lock is held, so do both under the lock. */
     sys_lock_tcpip_core();
     struct netif* iface = netif_find(FW_UPDATE_NETIF);
+    err_t err = ERR_IF;
     if (iface != NULL) {
         ip4_addr_t ip, mask, gw;
         IP4_ADDR(&ip, 192, 168, 0, FW_UPDATE_IP_LAST_OCTET);
         IP4_ADDR(&mask, 255, 255, 255, 0);
         IP4_ADDR(&gw, 192, 168, 0, 1);
         netif_set_addr(iface, &ip, &mask, &gw);
+        err = tftp_init_server(&_tftp_ctx);
     }
     sys_unlock_tcpip_core();
 
@@ -193,7 +218,7 @@ void fw_update_tftp_init(void)
         return;
     }
 
-    if (tftp_init_server(&_tftp_ctx) != ERR_OK) {
+    if (err != ERR_OK) {
         LOG_ERROR(LOG_PREFIX "tftp server init failed\n");
         return;
     }
