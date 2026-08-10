@@ -12,6 +12,10 @@
 /* Platform includes */
 #include "trace_utils.hpp"
 
+#ifdef MODULE_FW_UPDATE_TFTP
+#include "fw_update_tftp.h"
+#endif
+
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
@@ -92,6 +96,10 @@ void pf_init_tasks(void)
     cogip::pf_common::pf_init_tasks();
 
     trace_start();
+
+#ifdef MODULE_FW_UPDATE_TFTP
+    fw_update_tftp_init();
+#endif
 
     cogip::pf::motion_control::pf_start_motion_control();
 }

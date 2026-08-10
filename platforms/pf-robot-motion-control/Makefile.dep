@@ -40,6 +40,19 @@ USEMODULE += speed_filter
 USEMODULE += target_change_detector
 USEMODULE += telemetry_controller
 
+# Ethernet firmware update over TFTP into the inactive riotboot slot. Only
+# pulled in on boards that provide Ethernet; the flashwrite targets the other
+# slot, so this is only meaningful in a riotboot build.
+ifneq (,$(filter periph_eth,$(FEATURES_PROVIDED)))
+  FEATURES_REQUIRED += riotboot
+  USEMODULE += fw_update_tftp
+  USEMODULE += lwip lwip_ipv4 lwip_arp lwip_udp lwip_app_tftp
+  USEMODULE += ipv4_addr
+  USEMODULE += netdev_default
+  USEMODULE += riotboot_flashwrite
+  USEMODULE += riotboot_slot
+endif
+
 # Board features required
 FEATURES_REQUIRED += periph_pwm
 
