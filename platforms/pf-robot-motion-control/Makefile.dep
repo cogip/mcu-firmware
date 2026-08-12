@@ -59,7 +59,8 @@ ifneq (,$(filter periph_eth,$(FEATURES_PROVIDED)))
   USEMODULE += log_syslog
   CFLAGS += -DCONFIG_SYSLOG_SERVER=\"$(NET_SYSLOG_IP)\"
   CFLAGS += -DCONFIG_SYSLOG_HOSTNAME=\"robot$(ROBOT_ID)\"
-  CFLAGS += -DCONFIG_SYSLOG_APPNAME=\"robot-motion-control\"
+  # CONFIG_SYSLOG_APPNAME is set per application (defaults to $(APPLICATION)),
+  # so each firmware tags its own syslog identifier (journalctl -t <app>).
   # Queue packets while the syslog server's MAC is being ARP-resolved instead
   # of dropping them (lwIP default ARP_QUEUEING=0 keeps only the one packet
   # that triggers the request, losing the leading burst of the boot dump).
