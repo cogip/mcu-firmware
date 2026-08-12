@@ -16,6 +16,10 @@
 #include "fw_update_tftp.h"
 #endif
 
+#ifdef MODULE_STDIO_SYSLOG
+#include "stdio_syslog.h"
+#endif
+
 static void _handle_game_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_game_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
@@ -40,6 +44,18 @@ bool pf_trace_on(void)
 
 void pf_init(void)
 {
+    /* Bring the network up first (static IP + syslog forwarder) so the rest of
+     * the boot, including the motion pipeline dump, is shipped to the syslog
+     * collector live. Non-blocking: if no link/collector is present the robot
+     * still boots and runs normally. The stdio backend buffers the very first
+     * lines (printed before this point) and flushes them once syslog starts. */
+#ifdef MODULE_FW_UPDATE_TFTP
+    fw_update_tftp_init();
+#endif
+#ifdef MODULE_STDIO_SYSLOG
+    stdio_syslog_init();
+#endif
+
     /* Initialize common platform (CAN, heartbeat, copilot handlers) */
     int ret = cogip::pf_common::pf_init(
         {}, {}, cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
@@ -96,10 +112,6 @@ void pf_init_tasks(void)
     cogip::pf_common::pf_init_tasks();
 
     trace_start();
-
-#ifdef MODULE_FW_UPDATE_TFTP
-    fw_update_tftp_init();
-#endif
 
     cogip::pf::motion_control::pf_start_motion_control();
 }
