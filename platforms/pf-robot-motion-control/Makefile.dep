@@ -51,6 +51,21 @@ ifneq (,$(filter periph_eth,$(FEATURES_PROVIDED)))
   USEMODULE += netdev_default
   USEMODULE += riotboot_flashwrite
   USEMODULE += riotboot_slot
+  # Tee the whole console to a syslog collector over the network (RFC 5424),
+  # keeping the local console. log_syslog adds per-severity tagging and pulls
+  # in the stdio_syslog backend that does the forwarding.
+  # Server address defaults to the gateway; override with NET_SYSLOG_IP=<ip>.
+  NET_SYSLOG_IP ?= 192.168.0.1
+  USEMODULE += log_syslog
+  CFLAGS += -DCONFIG_SYSLOG_SERVER=\"$(NET_SYSLOG_IP)\"
+  CFLAGS += -DCONFIG_SYSLOG_HOSTNAME=\"robot$(ROBOT_ID)\"
+  # CONFIG_SYSLOG_APPNAME is set per application (defaults to $(APPLICATION)),
+  # so each firmware tags its own syslog identifier (journalctl -t <app>).
+  # Queue packets while the syslog server's MAC is being ARP-resolved instead
+  # of dropping them (lwIP default ARP_QUEUEING=0 keeps only the one packet
+  # that triggers the request, losing the leading burst of the boot dump).
+  CFLAGS += -DARP_QUEUEING=1
+  CFLAGS += -DARP_QUEUE_LEN=16
 endif
 
 # Board features required

@@ -66,6 +66,12 @@ CFLAGS += -DMCU_FIRMWARE_BUILD_VERSION_STRING=\"$(MCU_FW_BUILD_VERSION)\"
 print-build-fw-version:
 	@echo "$(MCU_FW_BUILD_VERSION)"
 
+# Default syslog identifier = the application name, so each firmware tags its
+# own journald stream (journalctl -t <application>). Overridable per app.
+# Only consumed when the network syslog backend (log_syslog) is enabled.
+CONFIG_SYSLOG_APPNAME ?= $(APPLICATION)
+CFLAGS += -DCONFIG_SYSLOG_APPNAME=\"$(CONFIG_SYSLOG_APPNAME)\"
+
 # Export mcu-firmware global variables
 include $(MCUFIRMWAREBASE)/makefiles/global_vars.mk.inc
 
