@@ -51,6 +51,10 @@ ifneq (,$(filter periph_eth,$(FEATURES_PROVIDED)))
   USEMODULE += netdev_default
   USEMODULE += riotboot_flashwrite
   USEMODULE += riotboot_slot
+  # Confirmed-boot watchdog + automatic rollback to the other slot, so a
+  # firmware pushed over flash-net that boots but crashes cannot brick the
+  # network channel indefinitely.
+  USEMODULE += boot_guard
 endif
 
 # Board features required
