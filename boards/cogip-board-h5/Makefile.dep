@@ -1,0 +1,14 @@
+# Pull in the STM32 Ethernet MAC driver when a network device is requested
+ifneq (,$(filter netdev_default,$(USEMODULE)))
+  USEMODULE += stm32_eth
+endif
+
+# NOTE: no mpu_stack_guard here. The STM32H563 is a Cortex-M33 with an
+# ARMv8-M MPU, which RIOT's cortexm_mpu driver (ARMv7-M PMSA) does not
+# provide, so the cpu does not advertise the cortexm_mpu feature.
+
+# Settings storage: persistent FlashDB backend on internal flash. board.c
+# instantiates a mtd_flashpage device (= MTD_0) over the last 4 sectors, so
+# the flashpage MTD driver must always be linked (pulls periph_flashpage,
+# now supported on STM32H5).
+USEMODULE += mtd_flashpage

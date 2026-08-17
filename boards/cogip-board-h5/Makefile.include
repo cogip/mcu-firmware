@@ -1,0 +1,52 @@
+# We use shared STM32 configuration snippets
+INCLUDES += -I$(RIOTBOARD)/common/stm32/include
+
+# Default console port on host (USB-UART adapter on the DBG_UART header)
+PORT ?= /dev/ttyUSB0
+
+# SWD via openocd with an ST-Link. The STM32H5 requires the native SWD
+# transport (dapdirect_swd) instead of the HLA shortcut, so use the
+# stlink-dap adapter. These must be set BEFORE stm32.inc.mk is included,
+# because that pulls in openocd.inc.mk which reads OPENOCD_DEBUG_ADAPTER.
+PROGRAMMER ?= openocd
+OPENOCD_DEBUG_ADAPTER ?= stlink-dap
+PROGRAMMERS_SUPPORTED += openocd
+
+# SEGGER J-Link alternative (flash with `PROGRAMMER=jlink`). jlink.sh
+# defaults the interface to SWD; only the SEGGER device name is needed.
+PROGRAMMERS_SUPPORTED += jlink
+JLINK_DEVICE ?= STM32H563RI
+
+# Setup of programmer and serial is shared between STM32 based boards.
+# With no board-local dist/openocd.cfg, OPENOCD_CONFIG falls back to the
+# shared boards/common/stm32/dist/stm32h5.cfg (target/stm32h5x.cfg).
+include $(RIOTMAKE)/boards/stm32.inc.mk
+
+# FDCAN1 / PA11(RX) / PA12(TX) pinout is provided by the board-local
+# include/can_params.h, which shadows the cpu-level default.
+
+# On-board TCAN332 FDCAN transceiver loop delay.
+ifneq (,$(filter periph_can,$(FEATURES_USED)))
+  CFLAGS += -DCONFIG_FDCAN_DEVICE_TRANSCEIVER_LOOP_DELAY=130
+endif
+
+# FlashDB settings partition. Backed by the internal-flash mtd_flashpage
+# device in board.c (last 4 sectors). The STM32H5 programs 128-bit (16 byte)
+# quadwords, so FlashDB records are aligned to that granularity.
+#
+# These are set UNCONDITIONALLY (not gated on $(filter flashdb,$(USEMODULE))):
+# USEMODULE is not yet resolved when this board Makefile.include is parsed, so
+# a flashdb filter here silently fails and FAL_PART0_LENGTH falls back to the
+# fal_cfg.h default of one sector, which then fails FlashDB's ">= 2 sectors"
+# check (fdb_err 8 / FDB_INIT_FAILED).
+# 4 sectors x 8192 B = 32 KiB, must match MTD_SETTINGS_* in include/mtd_conf.h
+MTD_SETTINGS_LEN := 32768
+CFLAGS += -DFDB_WRITE_GRAN=128
+CFLAGS += -DFAL_PART0_LABEL=\"settings\"
+CFLAGS += -DFAL_PART0_LENGTH=$(MTD_SETTINGS_LEN)
+
+# Cap the firmware image so .text/.rodata/.data cannot grow into the KV
+# settings region at the top of flash. The cortexm linker script sets the
+# rom region LENGTH = _fw_rom_length, so an oversized image fails the link
+# with "region rom overflowed" instead of silently overwriting settings.
+FW_ROM_LEN = $$(( $(ROM_LEN_K) * 1024 - $(MTD_SETTINGS_LEN) ))
