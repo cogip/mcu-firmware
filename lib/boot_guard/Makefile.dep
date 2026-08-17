@@ -1,0 +1,7 @@
+# Watchdog for the liveness kicker; riotboot slot query + flashpage erase of
+# the slot header for the rollback.
+FEATURES_REQUIRED += periph_wdt
+FEATURES_REQUIRED += periph_flashpage
+FEATURES_REQUIRED += riotboot
+USEMODULE += riotboot_slot
+USEMODULE += ztimer_msec

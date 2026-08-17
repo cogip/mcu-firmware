@@ -3,6 +3,10 @@
 #include "motion_control_common/Controller.hpp"
 #include "thread/thread.hpp"
 
+#ifdef MODULE_BOOT_GUARD
+#include "boot_guard.h"
+#endif
+
 #define ENABLE_DEBUG 0
 #include <debug.h>
 
@@ -46,6 +50,12 @@ void BaseControllerEngine::thread_loop()
     while (true) {
         // Protect engine loop
         mutex_lock(&mutex_);
+
+#ifdef MODULE_BOOT_GUARD
+        // Feed the confirmed-boot watchdog: this loop running is what marks the
+        // firmware healthy; if it stalls, the board is reset (and rolled back).
+        boot_guard_beat();
+#endif
 
         DEBUG("Engine loop\n");
 
