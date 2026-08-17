@@ -17,6 +17,13 @@ PROGRAMMERS_SUPPORTED += openocd
 PROGRAMMERS_SUPPORTED += jlink
 JLINK_DEVICE ?= STM32H563RI
 
+# Flash base address for binary (.bin) flashing, e.g. riotboot slot images.
+# openocd.sh otherwise derives this from `flash list` via openocd_flashinfo.py,
+# which does not parse the STM32CubeIDE OpenOCD build's output (fails on '=').
+# The STM32H5 flash is always at 0x08000000, so provide it directly.
+FLASH_ADDR ?= 0x08000000
+export FLASH_ADDR
+
 # Setup of programmer and serial is shared between STM32 based boards.
 # With no board-local dist/openocd.cfg, OPENOCD_CONFIG falls back to the
 # shared boards/common/stm32/dist/stm32h5.cfg (target/stm32h5x.cfg).
@@ -49,4 +56,19 @@ CFLAGS += -DFAL_PART0_LENGTH=$(MTD_SETTINGS_LEN)
 # settings region at the top of flash. The cortexm linker script sets the
 # rom region LENGTH = _fw_rom_length, so an oversized image fails the link
 # with "region rom overflowed" instead of silently overwriting settings.
+# NOTE: only used by the plain (non-riotboot) build; under riotboot,
+# riotboot.mk overrides FW_ROM_LEN per-slot with the slot length.
 FW_ROM_LEN = $$(( $(ROM_LEN_K) * 1024 - $(MTD_SETTINGS_LEN) ))
+
+# --- riotboot A/B slots (network firmware update) ---
+# Reserve the top 32 KiB of flash so neither slot overlaps it. This is the
+# SAME region as the FlashDB settings above (last 4 x 8 KiB sectors =
+# ROM_LEN - 0x8000), so the existing mtd_flashpage settings device keeps
+# working unchanged; SLOT_AUX_LEN just keeps the riotboot slots below it.
+# The STM32H5 is not special-cased in cpu/stm32/stm32_riotboot.mk, so the
+# generic sys/riotboot slot formula applies and honours SLOT_AUX_LEN.
+SLOT_AUX_LEN ?= 0x8000
+# Bootloader region: must be a multiple of the 8 KiB erase sector (the generic
+# default 0x1000 is sub-sector). 16 KiB (2 sectors) leaves room for the H5
+# clock + flashpage bring-up in the riotboot bootloader.
+RIOTBOOT_LEN ?= 0x4000
