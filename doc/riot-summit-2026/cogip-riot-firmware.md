@@ -52,6 +52,15 @@ style: |
   }
   .cols > div { flex: 1; }
   .small { font-size: 0.8em; }
+  /* sponsor / employer logo row, thank-you slide */
+  .logos {
+    display: flex; align-items: center; justify-content: center;
+    gap: 3.5rem; margin-top: 1.4rem;
+  }
+  .logos img { height: 74px; width: auto; }
+  .logos img.tall { height: 148px; }
+  /* logo shipped on a black square (JPG, no transparency): keep it as a tile */
+  .logos img.tile { height: 148px; border-radius: 10px; }
   footer { color: #8a8a8a; }
   /* avoid single-word orphan on the last line of wrapped paragraphs */
   p, li { text-wrap: pretty; }
@@ -74,6 +83,9 @@ Gilles DOFFE & Mathis LECRIVAIN
 <!--
 Presenter: Gilles DOFFE & Mathis LECRIVAIN.
 Each introduces themselves and their company in one sentence.
+
+Mathis: embedded software engineer at Rtone, specialised in real-time systems.
+Robotics enthusiast, competing in the Coupe de France de Robotique since 2015.
 -->
 
 ---
@@ -145,6 +157,9 @@ Set cursor, grab, sort and put down crates in given areas while avoiding the opp
 Presenters: Gilles DOFFE & Mathis LECRIVAIN.
 Gilles: briefly the rules and the game actions.
 Mathis: the robots and where they go on the table.
+
+Mathis: six robots. The big one doing the main actions. One medium one
+working a dedicated zone. Four small ones playing the last 15 seconds. Same constraints for all of them: accurate motion control, and avoid the opponent.
 -->
 
 ---
@@ -230,6 +245,12 @@ virtual CAN), no hardware.
 <!--
 Presenters: Gilles DOFFE & Mathis LECRIVAIN.
 Gilles: the cogip-board targets. Mathis: cogip-native, bridging to the next slide.
+
+Mathis: native is not a demo target, it is part of the product and we use it
+every day. Same firmware on a host, and it must behave identically. One docker
+compose stack = native firmware + all the host tools, so we test strategy and
+game logic with no hardware: work remotely without the robot, develop faster,
+catch bugs before power-up. Happy to demo it off-stage.
 -->
 
 ---
@@ -250,6 +271,12 @@ virtual bus, mocked GPIO, emulated flash. Dev and **CI** with **zero hardware**.
 
 <!--
 Presenter: Mathis LECRIVAIN.
+
+So how does it work? Peripherals are not stubbed, apart from a few IOs. CAN runs
+for real, on the host's virtual CAN bus, so the whole robot communication
+architecture behaves as on the real thing. Parameters work too, FlashDB backed
+by RAM. The firmware behaves identically, just in a perfect world: no physical
+disturbance on the motion control.
 -->
 
 ---
@@ -347,6 +374,14 @@ logs, telemetry, firmware images. We move **one subsystem at a time**.
 <!--
 Presenters: Gilles DOFFE & Mathis LECRIVAIN.
 Ping-pong across the boxes: Gilles takes the first box, Mathis the next, alternating.
+
+Mathis, "New features": when I joined the team we started building proper
+diagnostic tools, essential to get a robot well tuned. Telemetry, real-time log
+streaming. All of it wants the bus, next to the control loop. (Hand over to
+Gilles for the ceiling.)
+
+Mathis, "STM32H5": this year's new board. We redid the G4 board with Ethernet
+added and CAN kept (show both small PCBs). That unlocks everything listed here.
 
 Background: the honest trigger was not raw bandwidth but the missing MAC. On the
 G4 every new feature had to be squeezed onto the bus already carrying the control
@@ -453,6 +488,12 @@ The watchdog checks exactly this (later).
 
 <!--
 Presenter: Mathis LECRIVAIN.
+
+With everything described so far, the goal is one thing: a motion control loop
+accurate enough for smooth moves. Encoder-derived data plus a target go into the
+controller chain Gilles just described; out comes a duty cycle, straight to the
+motors. The strength of this design: any controller can be dropped into the
+chain, polar navigation, natural navigation, whatever we need.
 -->
 
 ---
@@ -518,10 +559,11 @@ a link. The deadline is hard.
 
 <!--
 Presenter: Mathis LECRIVAIN.
+
 One hundred seconds, fully autonomous, and the loop closes five thousand times.
-There is no operator to catch a bad cycle and no rerun to fix it. A robot that has
-to be right every 20 ms for 100 seconds cannot depend on a general-purpose
-scheduler, or on a link to another board staying up.
+No operator to catch a bad cycle, no rerun. Accuracy comes from deterministic
+execution: every cycle has to land in its 20 ms. That rules out a general-purpose
+scheduler, or depending on a link to another board staying up.
 -->
 
 ---
@@ -646,6 +688,7 @@ Presenter: Gilles DOFFE.
 - `parameter_handler`
 - change PID gains over CAN/Protobuf, no reflash
 - QUADPID and tracker gains tuned **independently**
+- persisted in a **FlashDB** key-value store, survives reboots
 
 </div>
 <div>
@@ -653,8 +696,8 @@ Presenter: Gilles DOFFE.
 **Observe**
 
 - `telemetry` streams robot state
-- persisted with **FlashDB** key-value store in flash
-- survives reboots
+- pose, speed, controller internals
+- live, on a dev PC on the network
 
 </div>
 </div>
@@ -663,6 +706,14 @@ Presenter: Gilles DOFFE.
 
 <!--
 Presenter: Mathis LECRIVAIN.
+
+At a competition, tuning the robots matters a lot and eats a lot of time. So we
+built two things. `parameter_handler`: PID gains changed over CAN/Protobuf, no
+reflash, QUADPID and tracker tuned independently, values persisted in a FlashDB
+key-value store so they survive a reboot. `telemetry`: the robot state streamed
+back live. The goal: tune from a dev PC on the network, no rebuild, no reflash.
+Run, watch telemetry, retune, repeat. And it opens the door to more advanced,
+more integrated tuning tools.
 -->
 
 ---
@@ -683,6 +734,10 @@ Field debugging over the network, no serial cable, no J-Link.
 <!--
 Presenters: Gilles DOFFE & Mathis LECRIVAIN.
 Mathis: telemetry. Gilles: the rest (sysmon, syslog, boot logs).
+
+Mathis, transition only: as just said, observing the robot's behaviour in detail
+is key. That is what telemetry does for the application side, over CAN, and soon
+over Ethernet. (Hand over to Gilles for the system side.)
 -->
 
 ---
@@ -769,6 +824,13 @@ graph TB
 
 <!--
 Presenter: Mathis LECRIVAIN.
+
+RIOT abstracts the hardware away, and we reuse that philosophy in our own stack
+with platforms. A common part: CAN, and the parameter and telemetry backends. A
+platform part: one board plus its initialised peripherals. Then one or more apps
+on top of a platform, with build-time config variants when the same firmware has
+to live on several boards at once, the two lifts inside one robot, or motion
+control across robots.
 -->
 
 ---
@@ -857,8 +919,18 @@ Presenter: Gilles DOFFE.
 
 **Questions?**
 
+<div class="logos">
+  <img src="webotics.png" alt="WeBotics" />
+  <img src="rtone.png" alt="Rtone" />
+  <img src="omirion-stacked-baseline-color.png" alt="Omirion" class="tall" />
+  <img src="MaenSkill_logo_logo_8k.jpg" alt="MaenSkill" class="tile" />
+</div>
+
 <!--
 Presenters: Gilles DOFFE & Mathis LECRIVAIN.
+
+Mathis: come and see it off-stage, we can run the native stack live and show the
+real robot in action. Happy to talk about any of it.
 -->
 
 <script type="module">
