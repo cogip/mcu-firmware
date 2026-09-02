@@ -309,15 +309,15 @@ disturbance on the motion control.
     <line x1="624" y1="48" x2="773" y2="48" stroke="#d98b86"/>
     <line x1="822" y1="48" x2="971" y2="48" stroke="#efd6d4"/>
   </g>
-  <!-- bullet dots -->
+  <!-- bullet at the start of each idea -->
   <g fill="#b23c37">
-    <circle cx="26"  cy="66" r="3"/><circle cx="26"  cy="96" r="3"/><circle cx="26"  cy="126" r="3"/>
-    <circle cx="224" cy="66" r="3"/><circle cx="224" cy="96" r="3"/><circle cx="224" cy="126" r="3"/>
-    <circle cx="422" cy="66" r="3"/><circle cx="422" cy="96" r="3"/><circle cx="422" cy="126" r="3"/>
-    <circle cx="818" cy="66" r="3"/><circle cx="818" cy="96" r="3"/><circle cx="818" cy="126" r="3"/>
+    <circle cx="26"  cy="66" r="3"/><circle cx="26"  cy="126" r="3"/>
+    <circle cx="224" cy="66" r="3"/><circle cx="224" cy="126" r="3"/>
+    <circle cx="422" cy="66" r="3"/>
+    <circle cx="818" cy="66" r="3"/>
   </g>
   <g fill="#ffffff">
-    <circle cx="620" cy="66" r="3"/><circle cx="620" cy="96" r="3"/><circle cx="620" cy="126" r="3"/>
+    <circle cx="620" cy="66" r="3"/>
   </g>
   <!-- bullet text, left-aligned, full readable phrases -->
   <g font-size="11" fill="#1b1b1f">
@@ -893,13 +893,13 @@ Ping-pong across the items, Gilles starts.
 The whole **STM32H5 support** we integrated (CPU family + peripherals), plus:
 
 - **RAM-function flash erase** for STM32H5 (dual-bank read-while-write).
-- **`lwip_app_tftp`** module, TFTP over lwIP, a mirror of `lwip_app_lwiperf`.
+- **`lwip_app_tftp`** module, TFTP over lwIP.
 - **`stdio_syslog`**, console tee to RFC 5424 UDP.
-- **confirmed-boot / rollback** pattern (`.noinit` + watchdog + slot invalidate).
+- **confirmed-boot / rollback** pattern (`.noinit` + watchdog + slot validation).
 
 <div class="left">
 
-Code generated with **Claude**: six months on a single driver is not an option when you compete. We do **robotics, not a micro-OS**. PRs go up only after full **review and tests**, so we keep control of the **what** and the **how**.
+Code generated with **Claude**: six months on a single driver is not an option when you compete. PRs go up in batches only after full **review and tests**, so we keep control of the **what** and the **how**.
 
 </div>
 
