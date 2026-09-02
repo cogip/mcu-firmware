@@ -1162,13 +1162,13 @@ p, li { text-wrap: pretty; }
   </g>
   
   <g fill="#b23c37">
-    <circle cx="26"  cy="66" r="3" /><circle cx="26"  cy="96" r="3" /><circle cx="26"  cy="126" r="3" />
-    <circle cx="224" cy="66" r="3" /><circle cx="224" cy="96" r="3" /><circle cx="224" cy="126" r="3" />
-    <circle cx="422" cy="66" r="3" /><circle cx="422" cy="96" r="3" /><circle cx="422" cy="126" r="3" />
-    <circle cx="818" cy="66" r="3" /><circle cx="818" cy="96" r="3" /><circle cx="818" cy="126" r="3" />
+    <circle cx="26"  cy="66" r="3" /><circle cx="26"  cy="126" r="3" />
+    <circle cx="224" cy="66" r="3" /><circle cx="224" cy="126" r="3" />
+    <circle cx="422" cy="66" r="3" />
+    <circle cx="818" cy="66" r="3" />
   </g>
   <g fill="#ffffff">
-    <circle cx="620" cy="66" r="3" /><circle cx="620" cy="96" r="3" /><circle cx="620" cy="126" r="3" />
+    <circle cx="620" cy="66" r="3" />
   </g>
   
   <g font-size="11" fill="#1b1b1f">
@@ -3265,12 +3265,12 @@ p, li { text-wrap: pretty; }
 <p>The whole <strong>STM32H5 support</strong> we integrated (CPU family + peripherals), plus:</p>
 <ul>
 <li><strong>RAM-function flash erase</strong> for STM32H5 (dual-bank read-while-write).</li>
-<li><strong><code>lwip_app_tftp</code></strong> module, TFTP over lwIP, a mirror of <code>lwip_app_lwiperf</code>.</li>
+<li><strong><code>lwip_app_tftp</code></strong> module, TFTP over lwIP.</li>
 <li><strong><code>stdio_syslog</code></strong>, console tee to RFC 5424 UDP.</li>
-<li><strong>confirmed-boot / rollback</strong> pattern (<code>.noinit</code> + watchdog + slot invalidate).</li>
+<li><strong>confirmed-boot / rollback</strong> pattern (<code>.noinit</code> + watchdog + slot validation).</li>
 </ul>
 <div class="left">
-<p>Code generated with <strong>Claude</strong>: six months on a single driver is not an option when you compete. We do <strong>robotics, not a micro-OS</strong>. PRs go up only after full <strong>review and tests</strong>, so we keep control of the <strong>what</strong> and the <strong>how</strong>.</p>
+<p>Code generated with <strong>Claude</strong>: six months on a single driver is not an option when you compete. PRs go up in batches only after full <strong>review and tests</strong>, so we keep control of the <strong>what</strong> and the <strong>how</strong>.</p>
 </div>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" data-paginate="true" data-class="lead" data-theme="uncover" data-style="/* COGIP brand: black + red, industrial. */
