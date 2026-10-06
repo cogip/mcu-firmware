@@ -1,0 +1,12 @@
+USEPKG += embedded-proto
+
+# RIOT modules
+# The MAX1161X variant (e.g. max11615) must be selected by the user of this module
+USEMODULE += max1161x
+USEMODULE += ztimer_msec
+
+# Firmware modules
+USEMODULE += gpio
+
+# Board features required
+FEATURES_REQUIRED += periph_gpio
