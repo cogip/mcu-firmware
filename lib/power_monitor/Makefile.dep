@@ -1,0 +1,8 @@
+USEPKG += embedded-proto
+
+# The MAX1161X variant (e.g. max11615) must be selected by the user of this module
+USEMODULE += max1161x
+USEMODULE += ztimer_msec
+
+# Board features required
+FEATURES_REQUIRED += periph_gpio
