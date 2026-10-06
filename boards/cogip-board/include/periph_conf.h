@@ -26,7 +26,7 @@
 /* By default, configure a 80MHz SYSCLK with PLL using HSE as input clock */
 #define CONFIG_CLOCK_PLL_M (6)
 
-#include "cfg_i2c2_pa9_pa8.h"
+#include "cfg_i2c1_pa15_pb7.h"
 #include "cfg_rtt_default.h"
 #include "cfg_timer_tim2.h"
 #include "clk_conf.h"
