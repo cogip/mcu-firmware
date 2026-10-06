@@ -95,6 +95,7 @@ constexpr canpb::uuid_t game_reset_uuid = 0x4003;
 constexpr canpb::uuid_t emergency_stop_status_uuid = 0x5001;
 constexpr canpb::uuid_t power_source_status_uuid = 0x5002;
 constexpr canpb::uuid_t power_rails_status_uuid = 0x5003;
+constexpr canpb::uuid_t power_rails_measures_uuid = 0x5004;
 /** @} */
 
 } // namespace pf_common

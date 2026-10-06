@@ -1,5 +1,6 @@
 # RIOT modules
 USEMODULE += event
+USEMODULE += max11615
 USEMODULE += printf_float
 USEMODULE += schedstatistics
 USEMODULE += shell
@@ -10,3 +11,4 @@ USEMODULE += cogip_defs
 USEMODULE += pf-common
 USEMODULE += utils
 USEMODULE += gpio
+USEMODULE += power_monitor

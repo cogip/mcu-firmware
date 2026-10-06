@@ -28,6 +28,7 @@
 // Import common UUIDs into global namespace for compatibility
 // Power Supply: 0x5000 - 0x5FFF
 using cogip::pf_common::emergency_stop_status_uuid;
+using cogip::pf_common::power_rails_measures_uuid;
 using cogip::pf_common::power_rails_status_uuid;
 using cogip::pf_common::power_source_status_uuid;
 /// @}

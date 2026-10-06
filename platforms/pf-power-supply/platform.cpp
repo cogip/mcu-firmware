@@ -27,6 +27,7 @@ static void _on_copilot_connected(cogip::canpb::ReadBuffer&)
 {
     cogip::pf::power_supply::send_emergency_stop_status();
     cogip::pf::power_supply::send_power_rails_status();
+    cogip::pf::power_supply::send_power_rails_measures();
     cogip::pf::power_supply::send_power_source_status();
 }
 

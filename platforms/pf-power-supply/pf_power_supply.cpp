@@ -11,8 +11,11 @@
 
 // RIOT includes
 #include "log.h"
+#include "max1161x_params.h"
+#include <inttypes.h>
 #include <msg.h>
 #include <mutex.h>
+#include <periph/i2c.h>
 #include <thread.h>
 #include <ztimer.h>
 
@@ -22,6 +25,7 @@
 
 // Libraries includes
 #include "gpio/gpio.hpp"
+#include "power_monitor/PowerMonitor.hpp"
 
 // CAN protobuf includes
 #include "canpb/ReadBuffer.hpp"
@@ -45,6 +49,15 @@ enum gpio_index_t {
     GPIO_INDEX_DC_SUPPLY_VALID_N
 };
 
+/// Power rails indices in the power monitor
+enum rail_index_t {
+    RAIL_INDEX_P3V3 = 0,
+    RAIL_INDEX_P5V0,
+    RAIL_INDEX_P7V5,
+    RAIL_INDEX_PxVx,
+    RAIL_INDEX_P12V0
+};
+
 /// @brief GPIO info structure for factorized handling
 /// @details Contains all necessary information to manage a GPIO in a unified way
 struct gpio_info_t
@@ -58,11 +71,63 @@ struct gpio_info_t
 static constexpr uint32_t _emergency_stop_send_period_msec =
     CONFIG_POWER_SUPPLY_EMERGENCY_STOP_SEND_PERIOD_MSEC;
 
+/// Power rails measures period in milliseconds (configured via Kconfig)
+static constexpr uint32_t _rails_measures_period_msec =
+    CONFIG_POWER_SUPPLY_RAILS_MEASURES_PERIOD_MSEC;
+
+/// Current shunt resistor of the power rails in milliohm
+static constexpr uint32_t _rails_shunt_mohm = 10;
+
+/// MAX44284F current sense amplifier gain of the power rails in V/V
+static constexpr uint32_t _rails_current_sense_gain = 50;
+
 /// GPIOs handler thread stack
 static char _gpio_handling_thread_stack[THREAD_STACKSIZE_DEFAULT];
 
 /// Thread for GPIO handling
 static kernel_pid_t _gpio_thread_pid = KERNEL_PID_UNDEF;
+
+/// Power rails monitoring thread stack
+static char _power_rails_thread_stack[THREAD_STACKSIZE_DEFAULT];
+
+/// Power monitor parameters: MAX11615 ADC referenced to 3.3V VDD
+static const power_monitor::PowerMonitorParameters _power_monitor_parameters = {
+    .adc_params = max1161x_params[0],
+    .adc_vref_mv = 3300,
+    .mode_pin = ADC_V_I_EN_PIN,
+    .mode_settling_time_ms = 10,
+};
+
+/// Power rails measurement chains, indexed by rail_index_t
+static const power_monitor::RailParameters _rails_parameters[] = {
+    [RAIL_INDEX_P3V3] = {MAX1161X_CHANNEL_CH3, 10000, 10000, _rails_shunt_mohm,
+                         _rails_current_sense_gain},
+    [RAIL_INDEX_P5V0] = {MAX1161X_CHANNEL_CH2, 10000, 10000, _rails_shunt_mohm,
+                         _rails_current_sense_gain},
+    [RAIL_INDEX_P7V5] = {MAX1161X_CHANNEL_CH1, 10000, 10000, _rails_shunt_mohm,
+                         _rails_current_sense_gain},
+    [RAIL_INDEX_PxVx] = {MAX1161X_CHANNEL_CH0, 10000, 10000, _rails_shunt_mohm,
+                         _rails_current_sense_gain},
+    [RAIL_INDEX_P12V0] = {MAX1161X_CHANNEL_CH4, 10000, 3900, _rails_shunt_mohm,
+                          _rails_current_sense_gain},
+};
+
+/// Power rails human-readable names for logging, indexed by rail_index_t
+// clang-format off
+static const char* const _rails_names[] = {
+    [RAIL_INDEX_P3V3] = "P3V3 rail",
+    [RAIL_INDEX_P5V0] = "P5V0 rail",
+    [RAIL_INDEX_P7V5] = "P7V5 rail",
+    [RAIL_INDEX_PxVx] = "PxVx rail",
+    [RAIL_INDEX_P12V0] = "P12V0 rail",
+};
+// clang-format on
+
+/// Power rails voltage and current monitor
+static power_monitor::PowerMonitor _power_monitor(_power_monitor_parameters, _rails_parameters);
+
+/// Power monitor initialization status
+static bool _power_monitor_ready = false;
 
 /// Mutex for protecting gpio_states_ access from multiple threads (internal task + canpb task)
 static mutex_t _gpio_states_mutex = MUTEX_INIT;
@@ -135,6 +200,9 @@ static constexpr size_t _gpio_infos_count = sizeof(_gpio_infos) / sizeof(_gpio_i
 /// @param name Name of the GPIO for display
 static void display_gpio_state(gpio_index_t gpio_index, bool state, const char* name);
 
+/// @brief Display the last voltage and current measures of every power rail
+static void display_power_rails_measures(void);
+
 /// @brief Generic GPIO callback for all pin changes (called from ISR)
 /// @param arg GPIO info index (gpio_index_t)
 static void gpio_change_cb_(void* arg);
@@ -146,7 +214,26 @@ static void gpio_change_cb_(void* arg);
 ///          monitors for GPIO change messages from ISR callbacks and updates states accordingly
 static void* _gpio_handling_thread(void* args);
 
-void pf_init_power_supply(void) {}
+/// @brief Power rails monitoring thread function
+/// @param args Unused thread arguments
+/// @return nullptr (thread never exits)
+/// @details This thread periodically samples the voltage and current of the power rails
+///          and sends the measures over CAN
+static void* _power_rails_thread(void* args);
+
+void pf_init_power_supply(void)
+{
+    // I2C is not initialized automatically on cogip-board
+    i2c_init(_power_monitor_parameters.adc_params.i2c);
+
+    int ret = _power_monitor.init();
+    if (ret) {
+        LOG_ERROR("Power monitor initialization failed (%d), power rails not measured\n", ret);
+        return;
+    }
+
+    _power_monitor_ready = true;
+}
 
 void pf_init_power_supply_tasks(void)
 {
@@ -154,6 +241,13 @@ void pf_init_power_supply_tasks(void)
     _gpio_thread_pid = thread_create(
         _gpio_handling_thread_stack, sizeof(_gpio_handling_thread_stack), THREAD_PRIORITY_MAIN - 1,
         THREAD_CREATE_STACKTEST, _gpio_handling_thread, NULL, "GPIO handling thread");
+
+    // Create power rails monitoring thread
+    if (_power_monitor_ready) {
+        thread_create(_power_rails_thread_stack, sizeof(_power_rails_thread_stack),
+                      THREAD_PRIORITY_MAIN, THREAD_CREATE_STACKTEST, _power_rails_thread, NULL,
+                      "Power rails thread");
+    }
 }
 
 void send_emergency_stop_status(void)
@@ -211,6 +305,29 @@ void send_power_rails_status(void)
     }
 }
 
+void send_power_rails_measures(void)
+{
+    if (!_power_monitor_ready) {
+        return;
+    }
+
+    cogip::canpb::CanProtobuf& canpb = pf_get_canpb();
+
+    // Create protobuf message
+    PB_PowerRailsMeasures pb_measures;
+
+    _power_monitor.measure(RAIL_INDEX_P3V3).pb_copy(pb_measures.mutable_p3V3());
+    _power_monitor.measure(RAIL_INDEX_P5V0).pb_copy(pb_measures.mutable_p5V0());
+    _power_monitor.measure(RAIL_INDEX_P7V5).pb_copy(pb_measures.mutable_p7V5());
+    _power_monitor.measure(RAIL_INDEX_PxVx).pb_copy(pb_measures.mutable_pxVx());
+    _power_monitor.measure(RAIL_INDEX_P12V0).pb_copy(pb_measures.mutable_p12V0());
+
+    // Send message
+    if (!canpb.send_message(power_rails_measures_uuid, &pb_measures)) {
+        LOG_ERROR("Error: power_rails_measures_uuid message not sent\n");
+    }
+}
+
 static void display_gpio_state(gpio_index_t gpio_index, bool state, const char* name)
 {
     switch (gpio_index) {
@@ -225,6 +342,15 @@ static void display_gpio_state(gpio_index_t gpio_index, bool state, const char* 
         // Power rails GPIO
         LOG_INFO("%s: %s\n", name, (state ? "true" : "false"));
         break;
+    }
+}
+
+static void display_power_rails_measures(void)
+{
+    for (size_t i = 0; i < _power_monitor.rails_count(); i++) {
+        power_monitor::RailMeasure measure = _power_monitor.measure(i);
+        LOG_INFO("%s:\t %" PRIu32 " mV,\t %" PRIu32 " mA\n", _rails_names[i], measure.voltage_mv,
+                 measure.current_ma);
     }
 }
 
@@ -310,6 +436,28 @@ static void* _gpio_handling_thread([[maybe_unused]] void* args)
         if (power_rail_fault) {
             send_power_rails_status();
         }
+    }
+
+    // Should never get here
+    return nullptr;
+}
+
+static void* _power_rails_thread([[maybe_unused]] void* args)
+{
+    // Init loop iteration start time
+    ztimer_now_t loop_start_time = ztimer_now(ZTIMER_MSEC);
+
+    while (true) {
+        int ret = _power_monitor.update();
+        if (ret) {
+            LOG_ERROR("Power rails sampling failed (%d)\n", ret);
+        } else {
+            send_power_rails_measures();
+            display_power_rails_measures();
+        }
+
+        // Wait thread period to end
+        ztimer_periodic_wakeup(ZTIMER_MSEC, &loop_start_time, _rails_measures_period_msec);
     }
 
     // Should never get here
