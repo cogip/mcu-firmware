@@ -43,6 +43,9 @@ constexpr gpio_t DC_SUPPLY_VALID_N_PIN = GPIO_PIN(PORT_B, 12);
 
 /// @}
 
+/// Power rails measurement mode selection pin (high = voltage, low = current)
+constexpr gpio_t ADC_V_I_EN_PIN = GPIO_PIN(PORT_C, 13);
+
 /// @brief Initialize power supply GPIO platform
 void pf_init_power_supply(void);
 
@@ -53,6 +56,9 @@ void pf_init_power_supply_tasks(void);
 
 /// @brief Send power rails status over CAN
 void send_power_rails_status(void);
+
+/// @brief Send power rails voltage and current measures over CAN
+void send_power_rails_measures(void);
 
 /// @brief Send power source status over CAN
 void send_power_source_status(void);
