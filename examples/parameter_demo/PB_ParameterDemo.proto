@@ -1,0 +1,41 @@
+// Copyright (C) 2026 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
+/// @file PB_ParameterDemo.proto
+/// @brief Parameter schema of the parameter_demo example, for host tools.
+
+syntax = "proto3";
+
+import "PB_ParameterOptions.proto";
+
+/// @brief Parameters of the parameter_demo example
+message PB_ParameterDemo
+{
+	option (parameter_schema) = { version: 1 };
+
+	float left_wheel_diameter = 1 [(parameter_meta) = {
+		unit: "mm" description: "Left encoder wheel diameter"
+	}];
+
+	float right_wheel_diameter = 2 [(parameter_meta) = {
+		unit: "mm" description: "Right encoder wheel diameter"
+	}];
+
+	float wheels_distance = 3 [(parameter_meta) = {
+		unit: "mm" description: "Distance between the encoder wheels"
+	}];
+
+	float wheels_resolution = 4 [(parameter_meta) = {
+		unit: "pulses" description: "Encoder pulses per wheel turn"
+	}];
+
+	float max_angular_velocity = 5 [(parameter_meta) = {
+		unit: "deg/s" description: "Maximum angular velocity"
+	}];
+
+	bool enable_logging = 6 [(parameter_meta) = {
+		description: "Enable debug logs"
+	}];
+}

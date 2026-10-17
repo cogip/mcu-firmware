@@ -11,27 +11,31 @@
 
 #include "log.h"
 
-#include "KeyHash.hpp"
 #include "PB_ParameterCommands.hpp"
+#include "PB_ParameterDemo_parameters.hpp"
 #include "etl/array.h"
 #include "etl/map.h"
 #include "etl/string.h"
 #include "flash_kv_storage/FlashKVStorage.hpp"
 #include "parameter/Parameter.hpp"
+#include "parameter/ParameterSchema.hpp"
 #include "parameter/StoragePolicies.hpp"
 
 using namespace cogip::parameter;
-using cogip::utils::operator"" _key_hash;
+
+/// @brief Parameter schema described in PB_ParameterDemo.proto, read by host tools
+using DemoSchema = ParameterSchema<PB_ParameterDemo>;
 
 /// @brief Parameter key hashes for identification
 ///
-/// @note Each parameter is identified by a unique 32-bit hash computed from its string key.
-constexpr uint32_t KEY_LEFT_WHEEL_DIAMETER = "left_wheel_diameter"_key_hash;
-constexpr uint32_t KEY_RIGHT_WHEEL_DIAMETER = "right_wheel_diameter"_key_hash;
-constexpr uint32_t KEY_WHEELS_DISTANCE = "wheels_distance"_key_hash;
-constexpr uint32_t KEY_WHEELS_RESOLUTION = "wheels_resolution"_key_hash;
-constexpr uint32_t KEY_MAX_ANGULAR_VELOCITY = "max_angular_velocity"_key_hash;
-constexpr uint32_t KEY_ENABLE_LOGGING = "enable_logging"_key_hash;
+/// @note Each parameter is identified by the 32-bit hash of its field name in
+///       PB_ParameterDemo.proto, as host tools compute it from the schema.
+constexpr uint32_t KEY_LEFT_WHEEL_DIAMETER = DemoSchema::Keys::LEFT_WHEEL_DIAMETER;
+constexpr uint32_t KEY_RIGHT_WHEEL_DIAMETER = DemoSchema::Keys::RIGHT_WHEEL_DIAMETER;
+constexpr uint32_t KEY_WHEELS_DISTANCE = DemoSchema::Keys::WHEELS_DISTANCE;
+constexpr uint32_t KEY_WHEELS_RESOLUTION = DemoSchema::Keys::WHEELS_RESOLUTION;
+constexpr uint32_t KEY_MAX_ANGULAR_VELOCITY = DemoSchema::Keys::MAX_ANGULAR_VELOCITY;
+constexpr uint32_t KEY_ENABLE_LOGGING = DemoSchema::Keys::ENABLE_LOGGING;
 
 // clang-format off
 
@@ -97,6 +101,13 @@ localizationParameters parameters(left_encoder_wheels_diameter_mm, right_encoder
 /// @return Always returns 0
 int main(void)
 {
+    // Schema identity: what the firmware exposes so that host tools find the matching schema
+    LOG_INFO("=== Schema identity ===\n");
+    PB_ParameterSchema schema;
+    fill_schema(schema_info<PB_ParameterDemo>(), schema);
+    LOG_INFO("- id: 0x%08" PRIx32 ", version: %" PRIu32 "\n", schema.id(), schema.version());
+    LOG_INFO("\n");
+
     // Initialize persistent storage (must happen before load() calls)
     LOG_INFO("max_angular_velocity before load: %.1f\n", max_angular_velocity_deg_s.get());
     if (cogip::flash_kv_storage::FlashKVStorage::instance().init() == 0) {
@@ -110,7 +121,7 @@ int main(void)
     LOG_INFO("\n");
 
     // clang-format off
-    LOG_INFO("=== Compile-time Key Hashing ===\n");
+    LOG_INFO("=== Compile-time Key Hashing (generated from PB_ParameterDemo.proto) ===\n");
     LOG_INFO("- 'left_wheel_diameter'_key_hash:  0x%08" PRIx32 "\n", KEY_LEFT_WHEEL_DIAMETER);
     LOG_INFO("- 'right_wheel_diameter'_key_hash: 0x%08" PRIx32 "\n", KEY_RIGHT_WHEEL_DIAMETER);
     LOG_INFO("- 'wheels_distance'_key_hash:      0x%08" PRIx32 "\n", KEY_WHEELS_DISTANCE);
