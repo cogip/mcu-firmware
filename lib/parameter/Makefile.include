@@ -3,3 +3,7 @@ USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_parameter)
 
 PROTOBUF_PATH_parameter := $(LAST_MAKEFILEDIR)
 PROTOBUF_PATH += $(PROTOBUF_PATH_parameter)
+
+# Generate ParameterSchema identities and keys from parameter schema messages
+PROTOC_PLUGINS_parameter := $(LAST_MAKEFILEDIR)/generator/protoc-gen-cogip-param
+PROTOC_PLUGINS += $(PROTOC_PLUGINS_parameter)

@@ -69,3 +69,12 @@ message PB_ParameterResetResponse
 	uint32 key_hash = 1;           ///< Parameter key hash
 	PB_ParameterStatus status = 2; ///< Operation status
 }
+
+/// @brief Identity of a parameter schema exposed by a firmware, one message per schema
+/// @note Host tools find the schema message (PB_ParameterOptions.proto) from its id and compute
+///       the key hash of each parameter from the field names.
+message PB_ParameterSchema
+{
+	fixed32 id = 1;     ///< FNV-1a hash of the schema message full name
+	uint32 version = 2; ///< Schema version (parameter_schema option)
+}

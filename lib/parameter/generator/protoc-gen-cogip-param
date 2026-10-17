@@ -1,0 +1,4 @@
+#!/bin/sh
+# protoc plugin entry point: run the generator with the python of the active venv,
+# like protoc-gen-eams (pkg/embedded-proto/patches/0001).
+exec python "$(dirname "$0")/cogip_param_generator.py"

@@ -1,0 +1,47 @@
+// Copyright (C) 2026 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
+/// @file PB_ParameterOptions.proto
+/// @brief Custom options describing the parameters of a firmware to host tools.
+///
+/// A parameter schema message carries the `parameter_schema` option and declares one field per
+/// parameter of the firmware, optionally described by `parameter_meta`:
+///   - the field name is the parameter key: `key_hash` is the FNV-1a hash of the name
+///     (PB_ParameterCommands.proto);
+///   - the field type is the value type, one of the PB_ParameterValue types.
+///
+/// The schema message itself is never sent: the firmware sends the id and version of each schema
+/// it exposes (PB_ParameterSchema), and host tools read the matching descriptor, so its field
+/// numbers have no constraint across applications. A firmware can expose several schemas, e.g.,
+/// one for an optional set of parameters.
+/// The firmware keeps its own parameter definitions (default value, validation, storage).
+
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+/// @brief Description of a parameter
+message PB_ParameterMeta
+{
+	string unit = 1;        ///< Display unit
+	string description = 2; ///< Free text description
+}
+
+/// @brief Description of a parameter schema message
+message PB_ParameterSchemaMeta
+{
+	uint32 version = 1; ///< Schema version, to bump on any incompatible change
+}
+
+// 50000-99999: range reserved for in-house options (1141 is used by EmbeddedProto)
+extend google.protobuf.FieldOptions
+{
+	PB_ParameterMeta parameter_meta = 50000; ///< Parameter description
+}
+
+extend google.protobuf.MessageOptions
+{
+	PB_ParameterSchemaMeta parameter_schema = 50000; ///< Marks a parameter schema message
+}
