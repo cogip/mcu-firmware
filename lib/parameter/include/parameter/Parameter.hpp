@@ -219,7 +219,8 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
 
     /// @brief Convert parameter from protobuf PB_ParameterValue message
     /// @param message The PB_ParameterValue message to convert from
-    /// @return true if conversion succeeded
+    /// @return true if conversion succeeded, false if the message holds another value type or
+    ///         a policy rejects the value
     ///
     /// @note Uses compile-time type dispatch to get the correct oneof field from PB_ParameterValue
     /// message. All policies are applied to the converted value via set().
@@ -229,26 +230,26 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         bool success = false;
 
         if constexpr (etl::is_same<T, float>::value) {
+            success = message.has_float_value();
             new_value = message.float_value();
-            success = true;
         } else if constexpr (etl::is_same<T, double>::value) {
+            success = message.has_double_value();
             new_value = message.double_value();
-            success = true;
         } else if constexpr (etl::is_same<T, int32_t>::value) {
+            success = message.has_int32_value();
             new_value = message.int32_value();
-            success = true;
         } else if constexpr (etl::is_same<T, uint32_t>::value) {
+            success = message.has_uint32_value();
             new_value = message.uint32_value();
-            success = true;
         } else if constexpr (etl::is_same<T, int64_t>::value) {
+            success = message.has_int64_value();
             new_value = message.int64_value();
-            success = true;
         } else if constexpr (etl::is_same<T, uint64_t>::value) {
+            success = message.has_uint64_value();
             new_value = message.uint64_value();
-            success = true;
         } else if constexpr (etl::is_same<T, bool>::value) {
+            success = message.has_bool_value();
             new_value = message.bool_value();
-            success = true;
         }
 
         if (success) {
