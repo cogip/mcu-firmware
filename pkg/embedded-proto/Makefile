@@ -17,10 +17,16 @@ PROTO_INCLUDES += $(PROTOBUF_PATH:%=-I%) -I$(APPDIR)
 embedded_proto_options:
 	@cd $(PKG_SOURCE_DIR)/generator; $(PROTOC) -I . --python_out=EmbeddedProto embedded_proto_options.proto
 
-%/protoc_cpp: $(PROTOC_FILES) $(PKG_PATCHED) $(BINDIR)/$(PKG_NAME)
+# Extra protoc plugins (paths to protoc-gen-<name> executables, set by modules in
+# PROTOC_PLUGINS) run along with the C++ generation, output next to EmbeddedProto headers
+PROTOC_PLUGINS_ARGS = $(foreach p,$(PROTOC_PLUGINS),--plugin=$(p) \
+	--$(patsubst protoc-gen-%,%,$(notdir $(p)))_out="$(BINDIR)/$(APPLICATION_MODULE)")
+PROTOC_PLUGINS_DEPS = $(foreach p,$(PROTOC_PLUGINS),$(p) $(wildcard $(dir $(p))*.py))
+
+%/protoc_cpp: $(PROTOC_FILES) $(PKG_PATCHED) $(PROTOC_PLUGINS_DEPS) $(BINDIR)/$(PKG_NAME)
 	$(PROTOC) --plugin=protoc-gen-eams=$(PROTOC_GEN_EAMS) \
-		--eams_out="$(BINDIR)/$(APPLICATION_MODULE)" $(PROTO_INCLUDES) \
-		$(PROTOC_FILES)
+		--eams_out="$(BINDIR)/$(APPLICATION_MODULE)" $(PROTOC_PLUGINS_ARGS) \
+		$(PROTO_INCLUDES) $(PROTOC_FILES)
 	@touch $@
 
 %/protoc_py: $(PROTOC_FILES) $(PKG_PATCHED) $(BINDIR)/$(PKG_NAME)
