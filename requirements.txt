@@ -2,9 +2,9 @@
 pyserial==3.5
 
 # For embedded-proto package
-# See https://github.com/Embedded-AMS/EmbeddedProto/blob/master/requirements.txt
+# See https://github.com/Embedded-AMS/EmbeddedProto/blob/master/generator/pyproject.toml
 Jinja2==3.0.3
 MarkupSafe==2.0.1
-protobuf==5.29.5
+protobuf==6.33.6
 six==1.16.0
 toposort==1.7

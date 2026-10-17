@@ -1,8 +1,8 @@
-From 11eef260bb926aeaa75e5b1c5fed33957396028f Mon Sep 17 00:00:00 2001
+From a22a3a96c267920e99f3e2b691babef02fb05fc6 Mon Sep 17 00:00:00 2001
 From: Gilles DOFFE <g.doffe@gmail.com>
 Date: Wed, 24 Apr 2024 23:10:11 +0200
-Subject: [PATCH 2/5] protoc plugin: use .hpp extension for include files
- instead of .h
+Subject: [PATCH] protoc plugin: use .hpp extension for include files instead
+ of .h
 
 Signed-off-by: Eric Courtois <eric.courtois@gmail.com>
 ---
@@ -11,23 +11,23 @@ Signed-off-by: Eric Courtois <eric.courtois@gmail.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/generator/EmbeddedProto/ProtoFile.py b/generator/EmbeddedProto/ProtoFile.py
-index ad61918..4b37eb6 100644
+index 4d0b493..6ddef8b 100644
 --- a/generator/EmbeddedProto/ProtoFile.py
 +++ b/generator/EmbeddedProto/ProtoFile.py
-@@ -138,7 +138,7 @@ class ProtoFile:
+@@ -150,7 +150,7 @@ class ProtoFile:
      def get_dependencies(self):
          imported_dependencies = []
          if self.descriptor.dependency:
 -            imported_dependencies = [os.path.splitext(dependency)[0] + ".h" for dependency in
 +            imported_dependencies = [os.path.splitext(dependency)[0] + ".hpp" for dependency in
-                                      self.descriptor.dependency if "embedded_proto_options.proto" not in dependency]
+                                      self.descriptor.dependency if not is_excluded_proto_file(dependency)]
          return imported_dependencies
  
 diff --git a/generator/EmbeddedProto/main.py b/generator/EmbeddedProto/main.py
-index fd005a4..94e0268 100644
+index 670ebc0..394231f 100644
 --- a/generator/EmbeddedProto/main.py
 +++ b/generator/EmbeddedProto/main.py
-@@ -94,7 +94,7 @@ def generate_code(request, respones):
+@@ -79,7 +79,7 @@ def generate_code(request, respones):
          file_str = fd.render(template_env)
          if file_str:
              f = respones.file.add()
@@ -37,5 +37,5 @@ index fd005a4..94e0268 100644
          else:
              break
 -- 
-2.37.0
+2.50.1 (Apple Git-155)
 

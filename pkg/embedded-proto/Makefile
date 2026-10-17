@@ -1,6 +1,7 @@
 PKG_NAME=embedded-proto
 PKG_URL=https://github.com/Embedded-AMS/EmbeddedProto.git
-PKG_VERSION=3.4.2
+# Version 3.6.2
+PKG_VERSION=62b2fee2c810e80d25dfb8c48e97dd230b6d527a
 PKG_LICENSE=GPL
 
 include $(RIOTBASE)/pkg/pkg.mk
@@ -14,15 +15,15 @@ PROTOC_FILES = $(sort $(PROTOBUF_FILES) $(foreach d, $(PROTOBUF_PATH), $(wildcar
 PROTO_INCLUDES += $(PROTOBUF_PATH:%=-I%) -I$(APPDIR)
 
 embedded_proto_options:
-	@cd $(PKG_SOURCE_DIR)/generator; protoc -I . --python_out=EmbeddedProto embedded_proto_options.proto
+	@cd $(PKG_SOURCE_DIR)/generator; $(PROTOC) -I . --python_out=EmbeddedProto embedded_proto_options.proto
 
-%/protoc_cpp: $(PROTOC_FILES) $(BINDIR)/$(PKG_NAME)
+%/protoc_cpp: $(PROTOC_FILES) $(PKG_PATCHED) $(BINDIR)/$(PKG_NAME)
 	$(PROTOC) --plugin=protoc-gen-eams=$(PROTOC_GEN_EAMS) \
 		--eams_out="$(BINDIR)/$(APPLICATION_MODULE)" $(PROTO_INCLUDES) \
 		$(PROTOC_FILES)
 	@touch $@
 
-%/protoc_py: $(PROTOC_FILES) $(BINDIR)/$(PKG_NAME)
+%/protoc_py: $(PROTOC_FILES) $(PKG_PATCHED) $(BINDIR)/$(PKG_NAME)
 	$(PROTOC) --python_out="$(APPDIR)" $(PROTO_INCLUDES) \
 		$(PROTOC_FILES)
 	@touch $@
