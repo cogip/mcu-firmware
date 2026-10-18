@@ -12,6 +12,7 @@
 
 #include <cstdint>
 
+#include "etl/type_list.h"
 #include "etl/type_traits.h"
 #include "mutex.h"
 
@@ -25,8 +26,12 @@ namespace cogip {
 
 namespace parameter {
 
+/// @brief Value types a parameter can hold, in the order of the PB_ParameterValue oneof fields
+using ParameterValueTypes =
+    etl::type_list<float, double, int32_t, uint32_t, int64_t, uint64_t, bool>;
+
 /// @brief Policy-based parameter class template with variadic composable policies
-/// @tparam T The C++ value type (arithmetic types or bool)
+/// @tparam T The C++ value type, one of ParameterValueTypes
 /// @tparam Policies... Zero or more policies implementing on_set(const T&) -> bool
 ///
 /// @details Accepted range is given at construction, every value of T by default.
@@ -51,9 +56,9 @@ namespace parameter {
 /// @endcode
 template <typename T, typename... Policies> class Parameter : public ParameterInterface<T>
 {
-    /// Compile-time type checking: only arithmetic types (integers, floats) and bool are supported
-    static_assert(etl::is_arithmetic<T>::value || etl::is_same<T, bool>::value,
-                  "Parameter<T> only supports arithmetic types (int, float, double) and bool");
+    /// Compile-time type checking: only the types PB_ParameterValue can carry are supported
+    static_assert(etl::type_list_contains_v<ParameterValueTypes, T>,
+                  "Parameter<T> only supports float, double, (u)int32_t, (u)int64_t and bool");
 
   public:
     /// @brief Constructor with initial value and range
