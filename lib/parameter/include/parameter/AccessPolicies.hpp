@@ -23,7 +23,7 @@ struct ReadOnly
     /// @tparam T The parameter value type
     /// @param value The value (ignored)
     /// @return false Always returns false
-    template <typename T> static bool on_set([[maybe_unused]] T& value)
+    template <typename T> static bool on_set([[maybe_unused]] const T& value)
     {
         return false;
     }

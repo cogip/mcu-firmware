@@ -37,7 +37,7 @@ class ParameterBase
     virtual bool pb_read(const PB_ParameterValue& message) = 0;
 
     /// @brief Check if parameter holds valid value
-    /// @return Status depending on the validation policy
+    /// @return Status depending on the range and the validation policies
     virtual bool isValid() const = 0;
 
     /// @brief Check whether the parameter value has changed since the last

@@ -18,8 +18,8 @@
 #include "AccessPolicies.hpp"
 #include "PB_ParameterCommands.hpp"
 #include "ParameterInterface.hpp"
+#include "ParameterRange.hpp"
 #include "PolicyTraits.hpp"
-#include "ValidationPolicies.hpp"
 
 namespace cogip {
 
@@ -27,28 +27,27 @@ namespace parameter {
 
 /// @brief Policy-based parameter class template with variadic composable policies
 /// @tparam T The C++ value type (arithmetic types or bool)
-/// @tparam Policies... Zero or more policies implementing on_set(T&) -> bool
+/// @tparam Policies... Zero or more policies implementing on_set(const T&) -> bool
 ///
-/// @details Policies implement a single optional hook:
-///   - `static bool on_set(T& value)` - Called on set, can validate or modify value
+/// @details Accepted range is given at construction, every value of T by default.
+///          Values outside are rejected.
+///          Policies implement a single optional hook:
+///   - `static bool on_set(const T& value)` - Called on set, validates value without modifying it
 ///     Return false to reject, true to accept. Policies are chained with AND semantics.
 ///
 /// @example
 /// @code
-/// // Simple parameter (read/write, no validation)
+/// // Any value of T (NaN and infinities rejected)
 /// Parameter<float> speed{100.0f};
+///
+/// // Rejects values outside [0, 500]
+/// Parameter<float> max_speed{250.0f, {0.0f, 500.0f}};
+///
+/// // Rejects negative values
+/// Parameter<float> kp{1.0f, non_negative<float>};
 ///
 /// // Read-only parameter
 /// Parameter<float, ReadOnly> firmware_version{1.0f};
-///
-/// // Bounded parameter (rejects out-of-range values)
-/// Parameter<float, WithBounds<0, 500>> max_speed{250.0f};
-///
-/// // Clamping parameter (modifies out-of-range values)
-/// Parameter<float, Clamp<0, 100>> percentage{150.0f}; // becomes 100.0f
-///
-/// // Composed: read-only AND bounded
-/// Parameter<float, ReadOnly, WithBounds<0, 500>> calibration{123.0f};
 /// @endcode
 template <typename T, typename... Policies> class Parameter : public ParameterInterface<T>
 {
@@ -57,20 +56,15 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
                   "Parameter<T> only supports arithmetic types (int, float, double) and bool");
 
   public:
-    /// @brief Default constructor - initializes with invalid state
-    Parameter() : value_{}, default_value_{}, valid_(false), changed_(true), mutex_(MUTEX_INIT)
+    /// @brief Constructor with initial value and range
+    /// @param initial_value The initial value (checked against the range and all policies)
+    /// @param range Accepted range, every value of T by default
+    explicit Parameter(const T& initial_value, const ParameterRange<T>& range = ParameterRange<T>{})
+        : value_(initial_value), default_value_(initial_value), range_(range), valid_(false),
+          changed_(true), mutex_(MUTEX_INIT)
     {
         mutex_init(&mutex_);
-    }
-
-    /// @brief Constructor with initial value
-    /// @param initial_value The initial value (will be processed through all policies)
-    explicit Parameter(const T& initial_value)
-        : value_(initial_value), default_value_(initial_value), valid_(false), changed_(true),
-          mutex_(MUTEX_INIT)
-    {
-        mutex_init(&mutex_);
-        valid_ = combined_on_set<T, Policies...>(value_);
+        valid_ = accepts(value_);
     }
 
     /// @brief Set the parameter value with combined policy enforcement
@@ -78,19 +72,17 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     /// @return true if value was set successfully (all policies returned true)
     bool set(const T& value) override
     {
-        T temp = value;
-
         mutex_lock(&mutex_);
-        valid_ = combined_on_set<T, Policies...>(temp);
+        valid_ = accepts(value);
         if (valid_) {
-            value_ = temp;
+            value_ = value;
             changed_ = true;
         }
         const bool result = valid_;
         mutex_unlock(&mutex_);
 
         if (result) {
-            combined_on_commit<T, Policies...>(temp);
+            combined_on_commit<T, Policies...>(value);
         }
         return result;
     }
@@ -124,7 +116,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         bool result = true;
         if (combined_on_init<T, Policies...>(temp)) {
             // A value was read from flash — validate it
-            if (combined_on_set<T, Policies...>(temp)) {
+            if (accepts(temp)) {
                 value_ = temp;
                 valid_ = true;
             } else {
@@ -146,7 +138,7 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         mutex_lock(&mutex_);
         combined_on_clear<Policies...>();
         value_ = default_value_;
-        valid_ = combined_on_set<T, Policies...>(value_);
+        valid_ = accepts(value_);
         changed_ = true;
         mutex_unlock(&mutex_);
     }
@@ -175,6 +167,13 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         mutex_unlock(&mutex_);
 
         return result;
+    }
+
+    /// @brief Get the accepted range
+    /// @return The range given at construction
+    const ParameterRange<T>& range() const
+    {
+        return range_;
     }
 
     /// @brief Convert parameter to protobuf PB_ParameterValue message
@@ -260,11 +259,20 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     }
 
   private:
-    T value_;               ///< Parameter value
-    const T default_value_; ///< Compile-time default captured at construction, used by reset()
-    bool valid_;            ///< Validity flag
-    mutable bool changed_;  ///< True if value was (re)set since the last clear_changed()
-    mutable mutex_t mutex_; ///< Mutex for thread-safe access
+    /// @brief Check a value against the range, then all policies
+    /// @param value The value to check
+    /// @return true if the value is accepted
+    bool accepts(const T& value) const
+    {
+        return range_.contains(value) && combined_on_set<T, Policies...>(value);
+    }
+
+    T value_;                       ///< Parameter value
+    const T default_value_;         ///< Default captured at construction, used by reset()
+    const ParameterRange<T> range_; ///< Accepted range
+    bool valid_;                    ///< Validity flag
+    mutable bool changed_;          ///< True if value was (re)set since the last clear_changed()
+    mutable mutex_t mutex_;         ///< Mutex for thread-safe access
 };
 
 } // namespace parameter
