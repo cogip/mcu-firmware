@@ -22,11 +22,14 @@ static void _handle_pose_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer
 static void _handle_path_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_path_add_point([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_parameter_list([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _handle_parameter_definition([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_set([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_parameter_reset([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
+static void _on_copilot_connected([[maybe_unused]] cogip::canpb::ReadBuffer& buffer);
 static void _on_emergency_stop();
 
 bool pf_trace_on(void)
@@ -38,7 +41,8 @@ void pf_init(void)
 {
     /* Initialize common platform (CAN, heartbeat, copilot handlers) */
     int ret = cogip::pf_common::pf_init(
-        {}, {}, cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
+        cogip::pf_common::copilot_callback_t::create<_on_copilot_connected>(), {},
+        cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
     if (ret) {
         LOG_ERROR("Common platform initialization failed, error: %d\n", ret);
     } else {
@@ -66,6 +70,10 @@ void pf_init(void)
                                        cogip::canpb::message_handler_t::create<_handle_path_add_point>());
         canpb.register_message_handler(path_start_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_path_start>());
+        canpb.register_message_handler(parameter_list_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_parameter_list>());
+        canpb.register_message_handler(parameter_definition_uuid,
+                                       cogip::canpb::message_handler_t::create<_handle_parameter_definition>());
         canpb.register_message_handler(parameter_get_uuid,
                                        cogip::canpb::message_handler_t::create<_handle_parameter_get>());
         canpb.register_message_handler(parameter_set_uuid,
@@ -179,6 +187,18 @@ static void _handle_path_start([[maybe_unused]] cogip::canpb::ReadBuffer& buffer
     cogip::pf::motion_control::pf_handle_path_start(buffer);
 }
 
+/// Parameter list message handler
+static void _handle_parameter_list([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_handle_parameter_list(buffer);
+}
+
+/// Parameter definition message handler
+static void _handle_parameter_definition([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_handle_parameter_definition(buffer);
+}
+
 /// Parameter get message handler
 static void _handle_parameter_get([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
@@ -207,6 +227,12 @@ static void _handle_telemetry_enable([[maybe_unused]] cogip::canpb::ReadBuffer& 
 static void _handle_telemetry_disable([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
 {
     cogip::telemetry::Telemetry::disable();
+}
+
+/// Copilot connected callback
+static void _on_copilot_connected([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::motion_control::pf_announce_parameters();
 }
 
 /// Emergency stop callback

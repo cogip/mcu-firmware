@@ -32,7 +32,7 @@ static const ParameterEntry registry[] = {
     {"left_wheel_diameter_mm", left_encoder_wheels_diameter_mm, true},
     {"right_wheel_diameter_mm", right_encoder_wheels_diameter_mm, true},
     {"encoder_wheels_distance_mm", encoder_wheels_distance_mm, true},
-    {"encoder_wheels_resolution_pulses", encoder_wheels_resolution_pulses},
+    {"encoder_resolution_pulses", encoder_wheels_resolution_pulses},
 #ifdef ROBOT_HAS_OTOS
     /// OTOS localization calibration scalars
     {"otos_linear_scalar", otos_linear_scalar, true},
@@ -83,7 +83,7 @@ static const ParameterEntry registry[] = {
     /// Pose straight filter thresholds
     {"linear_threshold", param_linear_threshold, true},
     {"angular_threshold", param_angular_threshold, true},
-    {"angular_intermediate_threshold", param_angular_intermediate_threshold, true},
+    {"angular_inter_threshold", param_angular_intermediate_threshold, true},
     /// Speed and acceleration limits
     {"min_speed_linear", param_min_speed_linear},
     {"max_speed_linear", param_max_speed_linear},
@@ -95,11 +95,39 @@ static const ParameterEntry registry[] = {
     {"max_dec_angular", param_max_dec_angular},
 };
 
-static parameter_handler::ParameterHandler parameter_handler(registry);
+static parameter_handler::ParameterHandler parameter_handler("motion_control", registry);
 
 void pf_load_parameters()
 {
     parameter_handler.load();
+}
+
+void pf_announce_parameters()
+{
+    auto group = parameter_handler.announce();
+    pf_get_canpb().send_message(parameter_group_uuid, &group);
+}
+
+void pf_handle_parameter_list(cogip::canpb::ReadBuffer& buffer)
+{
+    // Only respond if the request targets this registry
+    if (!parameter_handler.handle_list(buffer)) {
+        return;
+    }
+
+    for (size_t i = 0; i < parameter_handler.size(); i++) {
+        auto response = parameter_handler.list_response(i);
+        pf_get_canpb().send_message(parameter_list_response_uuid, &response);
+    }
+}
+
+void pf_handle_parameter_definition(cogip::canpb::ReadBuffer& buffer)
+{
+    auto response = parameter_handler.handle_definition(buffer);
+    // Only respond if this board owns the parameter
+    if (response.has_value()) {
+        pf_get_canpb().send_message(parameter_definition_response_uuid, &response.value());
+    }
 }
 
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer)

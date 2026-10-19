@@ -77,6 +77,11 @@ constexpr canpb::uuid_t telemetry_disable_uuid = 0x3009;
 constexpr canpb::uuid_t telemetry_data_uuid = 0x300A;
 constexpr canpb::uuid_t parameter_reset_uuid = 0x300B;
 constexpr canpb::uuid_t parameter_reset_response_uuid = 0x300C;
+constexpr canpb::uuid_t parameter_group_uuid = 0x300D;
+constexpr canpb::uuid_t parameter_list_uuid = 0x300E;
+constexpr canpb::uuid_t parameter_list_response_uuid = 0x300F;
+constexpr canpb::uuid_t parameter_definition_uuid = 0x3010;
+constexpr canpb::uuid_t parameter_definition_response_uuid = 0x3011;
 /** @} */
 
 /**

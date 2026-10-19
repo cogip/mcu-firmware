@@ -188,6 +188,16 @@ namespace motion_control {
 /// @brief Load all parameters from flash persistent storage
 void pf_load_parameters();
 
+/// @brief Announce the parameter registry on canpb
+void pf_announce_parameters();
+
+/// @brief Handle parameter list request from CAN bus
+/// @note Sends the key hash of each parameter if the request targets this registry
+void pf_handle_parameter_list(cogip::canpb::ReadBuffer& buffer);
+
+/// @brief Handle parameter definition request from CAN bus
+void pf_handle_parameter_definition(cogip::canpb::ReadBuffer& buffer);
+
 /// @brief Handle parameter get request from canpb
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer);
 
