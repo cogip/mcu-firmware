@@ -6,11 +6,7 @@
 /// @file motion_control_parameters.cpp
 /// @brief Motion control parameters registry and handlers implementation.
 
-// Set to 1 to dump every registered parameter and its post-load value at boot.
-#define ENABLE_DEBUG 0
-
 // RIOT includes
-#include "debug.h"
 #include "log.h"
 
 // Project includes
@@ -22,145 +18,88 @@ namespace cogip {
 namespace pf {
 namespace motion_control {
 
-/// Maximum number of parameters in the registry
-constexpr size_t MAX_PARAMETERS_NUMBER = 64;
+using parameter_handler::ParameterEntry;
 
-// Parameter handler type
-using ParameterHandlerType = parameter_handler::ParameterHandler<MAX_PARAMETERS_NUMBER>;
-
-/// @brief Registry mapping parameter key hashes to parameters object references
+/// @brief Parameters of the board, identified by their name
+///
+/// @note Persistent parameters are stored in flash under the hash of their name.
 ///
 /// @warning The registry should only contains parameters available for read/write through canpb
-static const ParameterHandlerType::Registry registry = {
+static const ParameterEntry registry[] = {
     /// Odometry parameters
-    {QDEC_LEFT_POLARITY_KEY, qdec_left_polarity},
-    {QDEC_RIGHT_POLARITY_KEY, qdec_right_polarity},
-    {LEFT_WHEEL_DIAMETER_KEY, left_encoder_wheels_diameter_mm},
-    {RIGHT_WHEEL_DIAMETER_KEY, right_encoder_wheels_diameter_mm},
-    {ENCODER_WHEELS_DISTANCE_KEY, encoder_wheels_distance_mm},
-    {ENCODER_WHEELS_RESOLUTION_KEY, encoder_wheels_resolution_pulses},
+    {"qdec_left_polarity", qdec_left_polarity},
+    {"qdec_right_polarity", qdec_right_polarity},
+    {"left_wheel_diameter_mm", left_encoder_wheels_diameter_mm, true},
+    {"right_wheel_diameter_mm", right_encoder_wheels_diameter_mm, true},
+    {"encoder_wheels_distance_mm", encoder_wheels_distance_mm, true},
+    {"encoder_wheels_resolution_pulses", encoder_wheels_resolution_pulses},
 #ifdef ROBOT_HAS_OTOS
     /// OTOS localization calibration scalars
-    {OTOS_LINEAR_SCALAR_KEY, otos_linear_scalar},
-    {OTOS_ANGULAR_SCALAR_KEY, otos_angular_scalar},
+    {"otos_linear_scalar", otos_linear_scalar, true},
+    {"otos_angular_scalar", otos_angular_scalar, true},
 #endif
     /// QuadPID chain PID parameters
     // Linear pose PID
-    {LINEAR_POSE_PID_KP_KEY, linear_pose_pid_kp},
-    {LINEAR_POSE_PID_KI_KEY, linear_pose_pid_ki},
-    {LINEAR_POSE_PID_KD_KEY, linear_pose_pid_kd},
+    {"linear_pose_pid_kp", linear_pose_pid_kp, true},
+    {"linear_pose_pid_ki", linear_pose_pid_ki, true},
+    {"linear_pose_pid_kd", linear_pose_pid_kd, true},
     // Angular pose PID
-    {ANGULAR_POSE_PID_KP_KEY, angular_pose_pid_kp},
-    {ANGULAR_POSE_PID_KI_KEY, angular_pose_pid_ki},
-    {ANGULAR_POSE_PID_KD_KEY, angular_pose_pid_kd},
+    {"angular_pose_pid_kp", angular_pose_pid_kp, true},
+    {"angular_pose_pid_ki", angular_pose_pid_ki, true},
+    {"angular_pose_pid_kd", angular_pose_pid_kd, true},
     // Linear speed PID
-    {LINEAR_SPEED_PID_KP_KEY, linear_speed_pid_kp},
-    {LINEAR_SPEED_PID_KI_KEY, linear_speed_pid_ki},
-    {LINEAR_SPEED_PID_KD_KEY, linear_speed_pid_kd},
+    {"linear_speed_pid_kp", linear_speed_pid_kp, true},
+    {"linear_speed_pid_ki", linear_speed_pid_ki, true},
+    {"linear_speed_pid_kd", linear_speed_pid_kd, true},
     // Angular speed PID
-    {ANGULAR_SPEED_PID_KP_KEY, angular_speed_pid_kp},
-    {ANGULAR_SPEED_PID_KI_KEY, angular_speed_pid_ki},
-    {ANGULAR_SPEED_PID_KD_KEY, angular_speed_pid_kd},
+    {"angular_speed_pid_kp", angular_speed_pid_kp, true},
+    {"angular_speed_pid_ki", angular_speed_pid_ki, true},
+    {"angular_speed_pid_kd", angular_speed_pid_kd, true},
     /// Tracker chain PID parameters
     // Tracker linear pose PID
-    {TRACKER_LINEAR_POSE_PID_KP_KEY, tracker_linear_pose_pid_kp},
-    {TRACKER_LINEAR_POSE_PID_KI_KEY, tracker_linear_pose_pid_ki},
-    {TRACKER_LINEAR_POSE_PID_KD_KEY, tracker_linear_pose_pid_kd},
+    {"tracker_linear_pose_pid_kp", tracker_linear_pose_pid_kp, true},
+    {"tracker_linear_pose_pid_ki", tracker_linear_pose_pid_ki, true},
+    {"tracker_linear_pose_pid_kd", tracker_linear_pose_pid_kd, true},
     // Tracker angular pose PID
-    {TRACKER_ANGULAR_POSE_PID_KP_KEY, tracker_angular_pose_pid_kp},
-    {TRACKER_ANGULAR_POSE_PID_KI_KEY, tracker_angular_pose_pid_ki},
-    {TRACKER_ANGULAR_POSE_PID_KD_KEY, tracker_angular_pose_pid_kd},
+    {"tracker_angular_pose_pid_kp", tracker_angular_pose_pid_kp, true},
+    {"tracker_angular_pose_pid_ki", tracker_angular_pose_pid_ki, true},
+    {"tracker_angular_pose_pid_kd", tracker_angular_pose_pid_kd, true},
     // Tracker linear speed PID
-    {TRACKER_LINEAR_SPEED_PID_KP_KEY, tracker_linear_speed_pid_kp},
-    {TRACKER_LINEAR_SPEED_PID_KI_KEY, tracker_linear_speed_pid_ki},
-    {TRACKER_LINEAR_SPEED_PID_KD_KEY, tracker_linear_speed_pid_kd},
+    {"tracker_linear_speed_pid_kp", tracker_linear_speed_pid_kp, true},
+    {"tracker_linear_speed_pid_ki", tracker_linear_speed_pid_ki, true},
+    {"tracker_linear_speed_pid_kd", tracker_linear_speed_pid_kd, true},
     // Tracker angular speed PID
-    {TRACKER_ANGULAR_SPEED_PID_KP_KEY, tracker_angular_speed_pid_kp},
-    {TRACKER_ANGULAR_SPEED_PID_KI_KEY, tracker_angular_speed_pid_ki},
-    {TRACKER_ANGULAR_SPEED_PID_KD_KEY, tracker_angular_speed_pid_kd},
+    {"tracker_angular_speed_pid_kp", tracker_angular_speed_pid_kp, true},
+    {"tracker_angular_speed_pid_ki", tracker_angular_speed_pid_ki, true},
+    {"tracker_angular_speed_pid_kd", tracker_angular_speed_pid_kd, true},
     // Brake linear speed PID
-    {BRAKE_LINEAR_SPEED_PID_KP_KEY, brake_linear_speed_pid_kp},
-    {BRAKE_LINEAR_SPEED_PID_KI_KEY, brake_linear_speed_pid_ki},
-    {BRAKE_LINEAR_SPEED_PID_KD_KEY, brake_linear_speed_pid_kd},
+    {"brake_linear_speed_pid_kp", brake_linear_speed_pid_kp, true},
+    {"brake_linear_speed_pid_ki", brake_linear_speed_pid_ki, true},
+    {"brake_linear_speed_pid_kd", brake_linear_speed_pid_kd, true},
     // Brake angular speed PID
-    {BRAKE_ANGULAR_SPEED_PID_KP_KEY, brake_angular_speed_pid_kp},
-    {BRAKE_ANGULAR_SPEED_PID_KI_KEY, brake_angular_speed_pid_ki},
-    {BRAKE_ANGULAR_SPEED_PID_KD_KEY, brake_angular_speed_pid_kd},
+    {"brake_angular_speed_pid_kp", brake_angular_speed_pid_kp, true},
+    {"brake_angular_speed_pid_ki", brake_angular_speed_pid_ki, true},
+    {"brake_angular_speed_pid_kd", brake_angular_speed_pid_kd, true},
     /// Pose straight filter thresholds
-    {LINEAR_THRESHOLD_KEY, param_linear_threshold},
-    {ANGULAR_THRESHOLD_KEY, param_angular_threshold},
-    {ANGULAR_INTERMEDIATE_THRESHOLD_KEY, param_angular_intermediate_threshold},
+    {"linear_threshold", param_linear_threshold, true},
+    {"angular_threshold", param_angular_threshold, true},
+    {"angular_intermediate_threshold", param_angular_intermediate_threshold, true},
     /// Speed and acceleration limits
-    {MIN_SPEED_LINEAR_KEY, param_min_speed_linear},
-    {MAX_SPEED_LINEAR_KEY, param_max_speed_linear},
-    {MAX_ACC_LINEAR_KEY, param_max_acc_linear},
-    {MAX_DEC_LINEAR_KEY, param_max_dec_linear},
-    {MIN_SPEED_ANGULAR_KEY, param_min_speed_angular},
-    {MAX_SPEED_ANGULAR_KEY, param_max_speed_angular},
-    {MAX_ACC_ANGULAR_KEY, param_max_acc_angular},
-    {MAX_DEC_ANGULAR_KEY, param_max_dec_angular},
+    {"min_speed_linear", param_min_speed_linear},
+    {"max_speed_linear", param_max_speed_linear},
+    {"max_acc_linear", param_max_acc_linear},
+    {"max_dec_linear", param_max_dec_linear},
+    {"min_speed_angular", param_min_speed_angular},
+    {"max_speed_angular", param_max_speed_angular},
+    {"max_acc_angular", param_max_acc_angular},
+    {"max_dec_angular", param_max_dec_angular},
 };
 
-static ParameterHandlerType parameter_handler(registry);
+static parameter_handler::ParameterHandler parameter_handler(registry);
 
 void pf_load_parameters()
 {
-    for (auto& entry : registry) {
-#if ENABLE_DEBUG
-        // Snapshot the default before load(): at construction value_ == default_value_.
-        PB_ParameterValue pb_default;
-        entry.second.pb_copy(pb_default);
-#endif
-        if (!entry.second.load()) {
-            LOG_WARNING("Parameter 0x%08" PRIx32 ": flash load failed, using default\n",
-                        entry.first);
-        }
-#if ENABLE_DEBUG
-        PB_ParameterValue pb_value;
-        if (!entry.second.pb_copy(pb_value)) {
-            DEBUG("Parameter 0x%08" PRIx32 ": pb_copy failed\n", entry.first);
-            continue;
-        }
-        using FN = PB_ParameterValue::FieldNumber;
-        switch (pb_value.get_which_value()) {
-        case FN::FLOAT_VALUE:
-            DEBUG("Parameter 0x%08" PRIx32 " = %f (default=%f) (float)\n", entry.first,
-                  static_cast<double>(pb_value.float_value()),
-                  static_cast<double>(pb_default.float_value()));
-            break;
-        case FN::DOUBLE_VALUE:
-            DEBUG("Parameter 0x%08" PRIx32 " = %f (default=%f) (double)\n", entry.first,
-                  pb_value.double_value(), pb_default.double_value());
-            break;
-        case FN::INT32_VALUE:
-            DEBUG("Parameter 0x%08" PRIx32 " = %" PRId32 " (default=%" PRId32 ") (int32)\n",
-                  entry.first, pb_value.int32_value(), pb_default.int32_value());
-            break;
-        case FN::UINT32_VALUE:
-            DEBUG("Parameter 0x%08" PRIx32 " = %" PRIu32 " (default=%" PRIu32 ") (uint32)\n",
-                  entry.first, pb_value.uint32_value(), pb_default.uint32_value());
-            break;
-        case FN::INT64_VALUE:
-            DEBUG("Parameter 0x%08" PRIx32 " = %" PRId64 " (default=%" PRId64 ") (int64)\n",
-                  entry.first, pb_value.int64_value(), pb_default.int64_value());
-            break;
-        case FN::UINT64_VALUE:
-            DEBUG("Parameter 0x%08" PRIx32 " = %" PRIu64 " (default=%" PRIu64 ") (uint64)\n",
-                  entry.first, pb_value.uint64_value(), pb_default.uint64_value());
-            break;
-        case FN::BOOL_VALUE:
-            DEBUG("Parameter 0x%08" PRIx32 " = %s (default=%s) (bool)\n", entry.first,
-                  pb_value.bool_value() ? "true" : "false",
-                  pb_default.bool_value() ? "true" : "false");
-            break;
-        case FN::NOT_SET:
-        default:
-            DEBUG("Parameter 0x%08" PRIx32 " = <unset>\n", entry.first);
-            break;
-        }
-#endif
-    }
-    LOG_INFO("All parameters loaded (%u entries)\n", static_cast<unsigned>(registry.size()));
+    parameter_handler.load();
 }
 
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer)
