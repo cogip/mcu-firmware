@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 // Forward declaration
 class PB_ParameterValue;
 
@@ -19,7 +21,7 @@ namespace parameter {
 
 /// @brief Type-erased base class for all parameters
 ///
-/// @note Provides conversion interface without type information.
+/// @note Provides conversion and flash persistence without type information.
 ///       Allows storing parameters of different types in heterogeneous collections.
 class ParameterBase
 {
@@ -55,20 +57,26 @@ class ParameterBase
     /// references to parameters they poll.
     virtual void clear_changed() const = 0;
 
-    /// @brief Load value from persistent storage (if a storage policy is present)
-    /// @return true if a value was successfully loaded and passed validation
-    /// @note Default implementation returns true (no storage means nothing to load).
-    virtual bool load()
-    {
-        return true;
-    }
-
-    /// @brief Erase persisted value and restore the compile-time default in memory
-    /// @note Clears the persisted storage (if a storage policy is present), then restores
-    ///       the initial value captured at construction, re-applies validation/commit
+    /// @brief Restore the compile-time default in memory
+    /// @note Restores the initial value captured at construction, re-applies validation
     ///       policies and marks the parameter as changed so consumers pick it up.
     ///       Default implementation is a no-op (parameters without a default cannot reset).
     virtual void reset() {}
+
+    /// @brief Load the value stored in flash under a key
+    /// @note Without stored value, the current value is kept.
+    ///
+    /// @param key_hash Flash storage key
+    /// @return false if the stored value is rejected (current value kept), true otherwise
+    virtual bool load(uint32_t key_hash) = 0;
+
+    /// @brief Store the current value in flash under a key
+    /// @param key_hash Flash storage key
+    virtual void store(uint32_t key_hash) const = 0;
+
+    /// @brief Erase current value in flash under a key
+    /// @param key_hash Flash storage key
+    virtual void erase(uint32_t key_hash) const = 0;
 };
 
 /// @brief Typed interface for polymorphic parameter manipulation

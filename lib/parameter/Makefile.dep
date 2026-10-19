@@ -1,4 +1,5 @@
 USEPKG += embedded-proto
 
 USEMODULE += core_mutex
+USEMODULE += flash_kv_storage
 USEMODULE += utils

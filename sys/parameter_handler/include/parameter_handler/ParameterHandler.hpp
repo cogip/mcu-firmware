@@ -1,26 +1,22 @@
-// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// Copyright (C) 2026 COGIP Robotics association <cogip35@gmail.com>
 // This file is subject to the terms and conditions of the GNU Lesser
 // General Public License v2.1. See the file LICENSE in the top level
 // directory for more details.
 
 /// @file ParameterHandler.hpp
-/// @brief Generic parameter handler for CAN protobuf get/set requests
+/// @brief Generic parameter handler for CAN protobuf get/set/reset requests
 
 #pragma once
 
 // Standard includes
-#include <cinttypes>
-
-// RIOT includes
-#include "log.h"
+#include <cstdint>
 
 // ETL includes
-#include "etl/map.h"
 #include "etl/optional.h"
 
 // Project includes
 #include "canpb/ReadBuffer.hpp"
-#include "parameter/ParameterInterface.hpp"
+#include "parameter_handler/ParameterEntry.hpp"
 
 // Protobuf messages
 #include "PB_ParameterCommands.hpp"
@@ -28,16 +24,20 @@
 namespace cogip {
 namespace parameter_handler {
 
-/// @brief Generic parameter handler for CAN protobuf get/set requests
-/// @tparam MaxParams Maximum number of parameters in the registry
-template <size_t MaxParams> class ParameterHandler
+/// @brief Parameters of a board, read, written and reset through CAN protobuf requests
+/// @details Answers only for the parameters of its registry, so that each board on the CAN bus
+///          answers for its own. For a Storage::Flash parameter, load() restores the stored
+///          value, a set request stores the new value and a reset request erases it.
+class ParameterHandler
 {
   public:
-    using Registry = etl::map<uint32_t, parameter::ParameterBase&, MaxParams>;
+    /// @brief Construct handler with registry
+    /// @param registry Parameters of the board
+    explicit ParameterHandler(ParameterRegistry registry) : registry_(registry) {}
 
-    /// @brief Construct handler with registry reference
-    /// @param registry Reference to the parameter registry
-    explicit ParameterHandler(const Registry& registry) : registry_(registry) {}
+    /// @brief Load the parameters stored in flash
+    /// @note A parameter whose stored value is rejected keeps its default value.
+    void load();
 
     /// @brief Handle parameter get request
     /// @param buffer CAN read buffer containing serialized PB_ParameterGetRequest
@@ -45,36 +45,7 @@ template <size_t MaxParams> class ParameterHandler
     /// @note Returns empty optional if parameter not in this board's registry, allowing other
     ///       boards on the CAN bus to respond instead. Only the board that owns the parameter
     ///       should send a response.
-    etl::optional<PB_ParameterGetResponse> handle_get(canpb::ReadBuffer& buffer)
-    {
-        PB_ParameterGetRequest request;
-
-        // Deserialize request
-        EmbeddedProto::Error error = request.deserialize(buffer);
-        if (error != EmbeddedProto::Error::NO_ERRORS) {
-            LOG_ERROR("Parameter get: Protobuf deserialization error: %d\n",
-                      static_cast<int>(error));
-            return etl::nullopt;
-        }
-
-        // Check if parameter exists in the registry
-        auto it = registry_.find(request.get_key_hash());
-        if (it == registry_.end()) {
-            // Parameter not in this board's registry - don't respond
-            return etl::nullopt;
-        }
-
-        // Parameter found - prepare response
-        PB_ParameterGetResponse response;
-        response.set_key_hash(request.get_key_hash());
-
-        // Convert parameter value to protobuf message
-        if (!it->second.pb_copy(response.mutable_value())) {
-            LOG_ERROR("Fail to copy parameter value\n");
-        }
-
-        return response;
-    }
+    etl::optional<PB_ParameterGetResponse> handle_get(canpb::ReadBuffer& buffer);
 
     /// @brief Handle parameter set request
     /// @param buffer CAN read buffer containing serialized PB_ParameterSetRequest
@@ -83,40 +54,7 @@ template <size_t MaxParams> class ParameterHandler
     /// @note Returns empty optional if parameter not in this board's registry, allowing other
     ///       boards on the CAN bus to respond instead. Only the board that owns the parameter
     ///       should send a response.
-    etl::optional<PB_ParameterSetResponse> handle_set(canpb::ReadBuffer& buffer)
-    {
-        PB_ParameterSetRequest request;
-
-        // Deserialize request
-        EmbeddedProto::Error error = request.deserialize(buffer);
-        if (error != EmbeddedProto::Error::NO_ERRORS) {
-            LOG_ERROR("Parameter set: Protobuf deserialization error: %d\n",
-                      static_cast<int>(error));
-            return etl::nullopt;
-        }
-
-        // Check if parameter exists in the registry
-        auto it = registry_.find(request.get_key_hash());
-        if (it == registry_.end()) {
-            // Parameter not in this board's registry - don't respond
-            return etl::nullopt;
-        }
-
-        // Parameter found - prepare response
-        PB_ParameterSetResponse response;
-        response.set_key_hash(request.get_key_hash());
-
-        // Try to set parameter value - pb_read() will fail if policy rejects (e.g., ReadOnly)
-        if (it->second.pb_read(request.mutable_value())) {
-            LOG_INFO("- key_hash: 0x%08" PRIx32 ", parameter updated successfully\n", it->first);
-            response.set_status(PB_ParameterStatus::SUCCESS);
-        } else {
-            LOG_INFO("- key_hash: 0x%08" PRIx32 ", parameter update failed\n", it->first);
-            response.set_status(PB_ParameterStatus::VALIDATION_FAILED);
-        }
-
-        return response;
-    }
+    etl::optional<PB_ParameterSetResponse> handle_set(canpb::ReadBuffer& buffer);
 
     /// @brief Handle parameter reset request
     /// @param buffer CAN read buffer containing serialized PB_ParameterResetRequest
@@ -124,38 +62,15 @@ template <size_t MaxParams> class ParameterHandler
     /// @note Returns empty optional if parameter not in this board's registry, allowing other
     ///       boards on the CAN bus to respond instead. Only the board that owns the parameter
     ///       should send a response.
-    etl::optional<PB_ParameterResetResponse> handle_reset(canpb::ReadBuffer& buffer)
-    {
-        PB_ParameterResetRequest request;
-
-        // Deserialize request
-        EmbeddedProto::Error error = request.deserialize(buffer);
-        if (error != EmbeddedProto::Error::NO_ERRORS) {
-            LOG_ERROR("Parameter reset: Protobuf deserialization error: %d\n",
-                      static_cast<int>(error));
-            return etl::nullopt;
-        }
-
-        // Check if parameter exists in the registry
-        auto it = registry_.find(request.get_key_hash());
-        if (it == registry_.end()) {
-            // Parameter not in this board's registry - don't respond
-            return etl::nullopt;
-        }
-
-        // Parameter found - erase persisted value and restore compile-time default
-        it->second.reset();
-
-        PB_ParameterResetResponse response;
-        response.set_key_hash(request.get_key_hash());
-        response.set_status(PB_ParameterStatus::SUCCESS);
-        LOG_INFO("- key_hash: 0x%08" PRIx32 ", parameter reset to default\n", it->first);
-
-        return response;
-    }
+    etl::optional<PB_ParameterResetResponse> handle_reset(canpb::ReadBuffer& buffer);
 
   private:
-    const Registry& registry_;
+    /// @brief Find a parameter by key hash
+    /// @param key_hash FNV-1a hash of the parameter name
+    /// @return Registry entry, nullptr if the parameter is not in the registry
+    const ParameterEntry* find(uint32_t key_hash) const;
+
+    ParameterRegistry registry_; ///< Parameters of the board
 };
 
 } // namespace parameter_handler

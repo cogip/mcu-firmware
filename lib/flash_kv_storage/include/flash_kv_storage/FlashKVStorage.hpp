@@ -27,8 +27,8 @@ namespace flash_kv_storage {
 ///          derived from 32-bit parameter key hashes.
 ///
 /// @note Initialization is explicit: call `init()` from `main()` after hardware is ready.
-///       Before `init()`, all operations silently return failure — this is safe for static
-///       `Parameter` objects that attempt `on_init` during construction before `main()`.
+///       Before `init()`, all operations silently return failure, so loading parameters
+///       before `init()` keeps their default values.
 class FlashKVStorage
 {
   public:

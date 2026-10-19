@@ -16,7 +16,8 @@
 #include "etl/type_traits.h"
 #include "mutex.h"
 
-#include "AccessPolicies.hpp"
+#include "flash_kv_storage/FlashKVStorage.hpp"
+
 #include "PB_ParameterCommands.hpp"
 #include "ParameterInterface.hpp"
 #include "ParameterRange.hpp"
@@ -32,13 +33,15 @@ using ParameterValueTypes =
 
 /// @brief Policy-based parameter class template with variadic composable policies
 /// @tparam T The C++ value type, one of ParameterValueTypes
-/// @tparam Policies... Zero or more policies implementing on_set(const T&) -> bool
+/// @tparam Policies... Zero or more policies implementing the optional hooks below
 ///
 /// @details Accepted range is given at construction, every value of T by default.
 ///          Values outside are rejected.
-///          Policies implement a single optional hook:
+///          Policies implement optional hooks:
 ///   - `static bool on_set(const T& value)` - Called on set, validates value without modifying it
 ///     Return false to reject, true to accept. Policies are chained with AND semantics.
+///   - `static void on_pb_read(T& value)` - Converts a value read from protobuf to internal units
+///   - `static void on_pb_copy(T& value)` - Converts a value copied to protobuf to user units
 ///
 /// @example
 /// @code
@@ -86,9 +89,6 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         const bool result = valid_;
         mutex_unlock(&mutex_);
 
-        if (result) {
-            combined_on_commit<T, Policies...>(value);
-        }
         return result;
     }
 
@@ -109,43 +109,55 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         mutex_unlock(&mutex_);
     }
 
-    /// @brief Load value from persistent storage and re-validate
-    /// @return true if load succeeded (or no storage policy exists)
-    /// @note If flash contains a value that fails validation, the default is kept
-    ///       and load returns false. If no storage policy or no stored value,
-    ///       the default is kept and load returns true.
-    bool load() override
-    {
-        mutex_lock(&mutex_);
-        T temp = value_;
-        bool result = true;
-        if (combined_on_init<T, Policies...>(temp)) {
-            // A value was read from flash — validate it
-            if (accepts(temp)) {
-                value_ = temp;
-                valid_ = true;
-            } else {
-                // Flash value rejected by validation, keep default
-                result = false;
-            }
-        }
-        // No storage policy or no stored value → keep default (success)
-        mutex_unlock(&mutex_);
-        return result;
-    }
-
-    /// @brief Erase persisted value and restore the compile-time default in memory
-    /// @note Fires the storage policy's on_clear hook (erases the flash entry),
-    ///       restores the value captured at construction, re-applies validation /
-    ///       commit policies and marks the parameter as changed.
+    /// @brief Restore the compile-time default in memory
+    /// @note Restores the value captured at construction, re-applies the range and validation
+    ///       policies and marks the parameter as changed.
     void reset() override
     {
         mutex_lock(&mutex_);
-        combined_on_clear<Policies...>();
         value_ = default_value_;
         valid_ = accepts(value_);
         changed_ = true;
         mutex_unlock(&mutex_);
+    }
+
+    /// @brief Load the value stored in flash under a key
+    /// @param key_hash Flash storage key
+    /// @return false if the stored value is rejected (current value kept), true otherwise
+    bool load(uint32_t key_hash) override
+    {
+        T stored_value{};
+        bool result = false;
+
+        if (flash_kv_storage::FlashKVStorage::instance().load(key_hash, stored_value) != 0) {
+            // No stored value, keep the current one
+            return true;
+        }
+
+        mutex_lock(&mutex_);
+        result = accepts(stored_value);
+        if (result) {
+            value_ = stored_value;
+            valid_ = true;
+            changed_ = true;
+        }
+        mutex_unlock(&mutex_);
+
+        return result;
+    }
+
+    /// @brief Store the current value in flash under a key
+    /// @param key_hash Flash storage key
+    void store(uint32_t key_hash) const override
+    {
+        flash_kv_storage::FlashKVStorage::instance().store(key_hash, get());
+    }
+
+    /// @brief Store the current value in flash under a key
+    /// @param key_hash Flash storage key
+    void erase(uint32_t key_hash) const override
+    {
+        flash_kv_storage::FlashKVStorage::instance().del(key_hash);
     }
 
     /// @brief Get the current parameter value
