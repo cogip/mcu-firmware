@@ -1,2 +1,5 @@
 USEMODULE_INCLUDES_parameter_handler := $(LAST_MAKEFILEDIR)/include
 USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_parameter_handler)
+
+PROTOBUF_PATH_parameter_handler := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_parameter_handler)

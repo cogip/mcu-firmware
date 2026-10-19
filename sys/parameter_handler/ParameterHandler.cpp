@@ -6,6 +6,10 @@
 /// @file ParameterHandler.cpp
 /// @brief Generic parameter handler implementation
 
+// Standard includes
+#include <cassert>
+
+// RIOT includes
 #include "log.h"
 
 // Project includes
@@ -22,6 +26,80 @@ void ParameterHandler::load()
         }
     }
     LOG_INFO("All parameters loaded (%u entries)\n", static_cast<unsigned>(registry_.size()));
+}
+
+ParameterGroup ParameterHandler::announce() const
+{
+    uint32_t registry_hash = utils::fnv1a_offset_basis;
+
+    for (const auto& entry : registry_) {
+        // Little-endian bytes, so that the receiver hashes the same bytes on any host
+        const char key_hash_bytes[] = {
+            static_cast<char>(entry.key_hash), static_cast<char>(entry.key_hash >> 8),
+            static_cast<char>(entry.key_hash >> 16), static_cast<char>(entry.key_hash >> 24)};
+        registry_hash =
+            utils::fnv1a_hash_bytes(key_hash_bytes, sizeof(key_hash_bytes), registry_hash);
+    }
+
+    ParameterGroup group;
+    group.mutable_name() = name_;
+    group.set_count(static_cast<uint32_t>(registry_.size()));
+    group.set_registry_hash(registry_hash);
+
+    return group;
+}
+
+bool ParameterHandler::handle_list(canpb::ReadBuffer& buffer) const
+{
+    PB_ParameterListRequest request;
+
+    // Deserialize request
+    EmbeddedProto::Error error = request.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Parameter list: Protobuf deserialization error: %d\n", static_cast<int>(error));
+        return false;
+    }
+
+    // Registry of another board - don't respond
+    return request.get_group_hash() == name_hash_;
+}
+
+PB_ParameterListResponse ParameterHandler::list_response(size_t index) const
+{
+    assert(index < registry_.size());
+
+    PB_ParameterListResponse response;
+    response.set_key_hash(registry_[index].key_hash);
+
+    return response;
+}
+
+etl::optional<ParameterDefinition>
+ParameterHandler::handle_definition(canpb::ReadBuffer& buffer) const
+{
+    PB_ParameterDefinitionRequest request;
+
+    // Deserialize request
+    EmbeddedProto::Error error = request.deserialize(buffer);
+    if (error != EmbeddedProto::Error::NO_ERRORS) {
+        LOG_ERROR("Parameter definition: Protobuf deserialization error: %d\n",
+                  static_cast<int>(error));
+        return etl::nullopt;
+    }
+
+    // Check if parameter exists in the registry
+    const ParameterEntry* entry = find(request.get_key_hash());
+    if (entry == nullptr) {
+        // Parameter not in this board's registry - don't respond
+        return etl::nullopt;
+    }
+
+    // Parameter found - prepare response
+    ParameterDefinition response;
+    response.mutable_name() = entry->name;
+    entry->parameter.pb_copy_range(response.mutable_min(), response.mutable_max());
+
+    return response;
 }
 
 etl::optional<PB_ParameterGetResponse> ParameterHandler::handle_get(canpb::ReadBuffer& buffer)

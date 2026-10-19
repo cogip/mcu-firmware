@@ -1,0 +1,85 @@
+// Copyright (C) 2025 COGIP Robotics association <cogip35@gmail.com>
+// This file is subject to the terms and conditions of the GNU Lesser
+// General Public License v2.1. See the file LICENSE in the top level
+// directory for more details.
+
+/// @file PB_ParameterRegistry.proto
+/// @brief Parameter registry of a board, announced and accessed by key hash.
+
+syntax = "proto3";
+
+import "PB_ParameterCommands.proto";
+
+/// @brief Announce of a parameter registry, sent on copilot connection
+message PB_ParameterGroup
+{
+	string name = 1;          ///< Registry name, its FNV-1a hash addresses the list request
+	uint32 count = 2;         ///< Number of parameters
+	uint32 registry_hash = 3; ///< FNV-1a of the key hashes (little-endian), in registry order
+}
+
+/// @brief List request, answered by one PB_ParameterListResponse per parameter
+message PB_ParameterListRequest
+{
+	uint32 group_hash = 1; ///< FNV-1a hash of the registry name
+}
+
+/// @brief List response
+message PB_ParameterListResponse
+{
+	uint32 key_hash = 1; ///< Parameter key hash
+}
+
+/// @brief Definition request
+message PB_ParameterDefinitionRequest
+{
+	uint32 key_hash = 1; ///< Parameter key hash
+}
+
+/// @brief Definition response, the key hash is the FNV-1a hash of the name
+message PB_ParameterDefinition
+{
+	string name = 1;           ///< Parameter name
+	PB_ParameterValue min = 2; ///< Lowest accepted value, its oneof field gives the value type
+	PB_ParameterValue max = 3; ///< Highest accepted value
+}
+
+/// @brief Get parameter request
+message PB_ParameterGetRequest
+{
+	uint32 key_hash = 1; ///< Parameter key hash
+}
+
+/// @brief Get parameter response
+message PB_ParameterGetResponse
+{
+	uint32 key_hash = 1;         ///< Parameter key hash
+	PB_ParameterValue value = 2; ///< Parameter value (absent if not found)
+}
+
+/// @brief Set parameter request
+message PB_ParameterSetRequest
+{
+	uint32 key_hash = 1;         ///< Parameter key hash
+	PB_ParameterValue value = 2; ///< Value to set
+}
+
+/// @brief Set parameter response
+message PB_ParameterSetResponse
+{
+	uint32 key_hash = 1;           ///< Parameter key hash
+	PB_ParameterStatus status = 2; ///< Operation status
+}
+
+/// @brief Reset parameter request
+message PB_ParameterResetRequest
+{
+	uint32 key_hash = 1; ///< Parameter key hash
+}
+
+/// @brief Reset parameter response
+message PB_ParameterResetResponse
+{
+	uint32 key_hash = 1;           ///< Parameter key hash
+	PB_ParameterStatus status = 2; ///< Operation status
+}

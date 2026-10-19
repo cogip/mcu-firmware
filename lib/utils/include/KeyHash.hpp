@@ -17,10 +17,13 @@ namespace cogip {
 
 namespace utils {
 
+/// FNV-1a offset basis, the hash of an empty input
+constexpr uint32_t fnv1a_offset_basis = 0x811C9DC5;
+
 /// @brief Constexpr FNV-1a hash implementation
 /// @param str Pointer to current character
 /// @param len Remaining length
-/// @param hash Current hash value (FNV-1a offset basis: 0x811C9DC5)
+/// @param hash Current hash value, chains hashes over several inputs
 /// @return The 32-bit hash value
 ///
 /// @note This is a compile-time re-implementation of etl::fnv_1a_32.
@@ -33,7 +36,7 @@ namespace utils {
 ///
 ///       This ensures compatibility: hash_key() produces the same results as etl::fnv_1a_32
 ///       but can be evaluated at compile-time for key hashing.
-constexpr uint32_t fnv1a_hash_bytes(const char* str, size_t len, uint32_t hash = 0x811C9DC5)
+constexpr uint32_t fnv1a_hash_bytes(const char* str, size_t len, uint32_t hash = fnv1a_offset_basis)
 {
     return (len == 0) ? hash
                       : fnv1a_hash_bytes(str + 1, len - 1,

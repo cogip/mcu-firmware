@@ -4,7 +4,7 @@
 // directory for more details.
 
 /// @file PB_ParameterCommands.proto
-/// @brief Parameter Generic interface for reading and writing parameters using key hash addressing.
+/// @brief Parameter value and status of the parameter requests.
 
 syntax = "proto3";
 
@@ -28,44 +28,4 @@ message PB_ParameterValue
 		uint64 uint64_value = 6; ///< Unsigned 64-bit integer
 		bool bool_value = 7;     ///< Boolean
 	}
-}
-
-/// @brief Get parameter request
-message PB_ParameterGetRequest
-{
-	uint32 key_hash = 1; ///< Parameter key hash
-}
-
-/// @brief Get parameter response
-message PB_ParameterGetResponse
-{
-	uint32 key_hash = 1;         ///< Parameter key hash
-	PB_ParameterValue value = 2; ///< Parameter value (absent if not found)
-}
-
-/// @brief Set parameter request
-message PB_ParameterSetRequest
-{
-	uint32 key_hash = 1;         ///< Parameter key hash
-	PB_ParameterValue value = 2; ///< Value to set
-}
-
-/// @brief Set parameter response
-message PB_ParameterSetResponse
-{
-	uint32 key_hash = 1;           ///< Parameter key hash
-	PB_ParameterStatus status = 2; ///< Operation status
-}
-
-/// @brief Reset parameter request
-message PB_ParameterResetRequest
-{
-	uint32 key_hash = 1; ///< Parameter key hash
-}
-
-/// @brief Reset parameter response
-message PB_ParameterResetResponse
-{
-	uint32 key_hash = 1;           ///< Parameter key hash
-	PB_ParameterStatus status = 2; ///< Operation status
 }
