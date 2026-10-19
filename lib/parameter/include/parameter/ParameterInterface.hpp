@@ -38,6 +38,11 @@ class ParameterBase
     /// @return true if conversion succeeded
     virtual bool pb_read(const PB_ParameterValue& message) = 0;
 
+    /// @brief Copy the accepted range to protobuf PB_ParameterValue messages
+    /// @param min The PB_ParameterValue message to copy the lowest accepted value to
+    /// @param max The PB_ParameterValue message to copy the highest accepted value to
+    virtual void pb_copy_range(PB_ParameterValue& min, PB_ParameterValue& max) const = 0;
+
     /// @brief Check if parameter holds valid value
     /// @return Status depending on the range and the validation policies
     virtual bool isValid() const = 0;

@@ -206,31 +206,26 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
         mutex_unlock(&mutex_);
 
         combined_on_pb_copy<T, Policies...>(copy);
+        pb_set_value(message, copy);
 
-        if constexpr (etl::is_same<T, float>::value) {
-            message.set_float_value(copy);
-            return true;
-        } else if constexpr (etl::is_same<T, double>::value) {
-            message.set_double_value(copy);
-            return true;
-        } else if constexpr (etl::is_same<T, int32_t>::value) {
-            message.set_int32_value(copy);
-            return true;
-        } else if constexpr (etl::is_same<T, uint32_t>::value) {
-            message.set_uint32_value(copy);
-            return true;
-        } else if constexpr (etl::is_same<T, int64_t>::value) {
-            message.set_int64_value(copy);
-            return true;
-        } else if constexpr (etl::is_same<T, uint64_t>::value) {
-            message.set_uint64_value(copy);
-            return true;
-        } else if constexpr (etl::is_same<T, bool>::value) {
-            message.set_bool_value(copy);
-            return true;
-        } else {
-            return false;
-        }
+        return true;
+    }
+
+    /// @brief Copy the accepted range to protobuf PB_ParameterValue messages
+    /// @param min The PB_ParameterValue message to copy the lowest accepted value to
+    /// @param max The PB_ParameterValue message to copy the highest accepted value to
+    ///
+    /// @note Bounds are converted like the value in pb_copy(): a conversion of the whole range
+    ///       of a float gives infinite bounds.
+    void pb_copy_range(PB_ParameterValue& min, PB_ParameterValue& max) const override
+    {
+        T min_value = range_.min();
+        T max_value = range_.max();
+
+        combined_on_pb_copy<T, Policies...>(min_value);
+        combined_on_pb_copy<T, Policies...>(max_value);
+        pb_set_value(min, min_value);
+        pb_set_value(max, max_value);
     }
 
     /// @brief Convert parameter from protobuf PB_ParameterValue message
@@ -276,6 +271,28 @@ template <typename T, typename... Policies> class Parameter : public ParameterIn
     }
 
   private:
+    /// @brief Set the oneof field of PB_ParameterValue matching T
+    /// @param message The PB_ParameterValue message to set
+    /// @param value The value to set
+    static void pb_set_value(PB_ParameterValue& message, const T& value)
+    {
+        if constexpr (etl::is_same<T, float>::value) {
+            message.set_float_value(value);
+        } else if constexpr (etl::is_same<T, double>::value) {
+            message.set_double_value(value);
+        } else if constexpr (etl::is_same<T, int32_t>::value) {
+            message.set_int32_value(value);
+        } else if constexpr (etl::is_same<T, uint32_t>::value) {
+            message.set_uint32_value(value);
+        } else if constexpr (etl::is_same<T, int64_t>::value) {
+            message.set_int64_value(value);
+        } else if constexpr (etl::is_same<T, uint64_t>::value) {
+            message.set_uint64_value(value);
+        } else if constexpr (etl::is_same<T, bool>::value) {
+            message.set_bool_value(value);
+        }
+    }
+
     /// @brief Check a value against the range, then all policies
     /// @param value The value to check
     /// @return true if the value is accepted
