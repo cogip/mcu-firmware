@@ -31,39 +31,38 @@ namespace app {
 namespace actuators {
 
 // Motor lift pose PID
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kp{
-    0.5f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_ki{
-    0.f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_pose_pid_kd{
-    0.f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_pose_pid_integral_limit{static_cast<float>(etl::numeric_limits<int16_t>::max())};
+inline cogip::parameter::Parameter<float> motor_lift_pose_pid_kp{
+    0.5f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_pose_pid_ki{
+    0.f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_pose_pid_kd{
+    0.f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_pose_pid_integral_limit{
+    static_cast<float>(etl::numeric_limits<int16_t>::max()), cogip::parameter::non_negative<float>};
 
 // Motor lift speed PID
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_kp{
-    10.0f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_ki{
-    0.4f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative> motor_lift_speed_pid_kd{
-    0.f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_speed_pid_integral_limit{static_cast<float>(etl::numeric_limits<int16_t>::max())};
+inline cogip::parameter::Parameter<float> motor_lift_speed_pid_kp{
+    10.0f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_speed_pid_ki{
+    0.4f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_speed_pid_kd{
+    0.f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_speed_pid_integral_limit{
+    static_cast<float>(etl::numeric_limits<int16_t>::max()), cogip::parameter::non_negative<float>};
 
 // Motor lift brake speed PID (used only by the brake chain to actively hold
 // the lift against gravity once a limit is reached). Higher Ki than the
 // tracking PID so the integrator builds up fast enough to absorb the
 // constant gravity load and keep the residual drop in the few-mm range
 // on brake engagement (bench-tuned).
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_kp{10.0f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_ki{3.0f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_kd{0.f};
-inline cogip::parameter::Parameter<float, cogip::parameter::NonNegative>
-    motor_lift_brake_speed_pid_integral_limit{
-        static_cast<float>(etl::numeric_limits<int16_t>::max())};
+inline cogip::parameter::Parameter<float> motor_lift_brake_speed_pid_kp{
+    10.0f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_brake_speed_pid_ki{
+    3.0f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_brake_speed_pid_kd{
+    0.f, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> motor_lift_brake_speed_pid_integral_limit{
+    static_cast<float>(etl::numeric_limits<int16_t>::max()), cogip::parameter::non_negative<float>};
 
 // Motor lift threshold
 constexpr float motor_lift_threshold = 1.0;

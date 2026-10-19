@@ -8,7 +8,6 @@
 
 // Project includes
 #include "pf_parameters.hpp"
-#include "KeyHash.hpp"
 #include "lift_common_conf.hpp"
 #include "parameter_handler/ParameterHandler.hpp"
 #include "pf_common/platform_common.hpp"
@@ -18,44 +17,24 @@ namespace cogip {
 namespace pf {
 namespace parameters {
 
-using namespace cogip::parameter;
-using cogip::utils::operator"" _key_hash;
+using parameter_handler::ParameterEntry;
 
-/// @brief Parameter key hashes for identification
-///
-/// @note Each parameter is identified by a unique 32-bit hash computed from its string key.
-
-/// Maximum number of parameters in the registry
-constexpr size_t MAX_PARAMETERS_NUMBER = 16;
-
-// Lift pose PID
-constexpr uint32_t LIFT_POSE_PID_KP_KEY = "lift_pose_pid_kp"_key_hash;
-constexpr uint32_t LIFT_POSE_PID_KI_KEY = "lift_pose_pid_ki"_key_hash;
-constexpr uint32_t LIFT_POSE_PID_KD_KEY = "lift_pose_pid_kd"_key_hash;
-// Lift speed PID
-constexpr uint32_t LIFT_SPEED_PID_KP_KEY = "lift_speed_pid_kp"_key_hash;
-constexpr uint32_t LIFT_SPEED_PID_KI_KEY = "lift_speed_pid_ki"_key_hash;
-constexpr uint32_t LIFT_SPEED_PID_KD_KEY = "lift_speed_pid_kd"_key_hash;
-
-// Parameter handler type
-using ParameterHandlerType = parameter_handler::ParameterHandler<MAX_PARAMETERS_NUMBER>;
-
-/// @brief Registry mapping parameter key hashes to parameters object references
+/// @brief Parameters of the board, identified by their name
 ///
 /// @warning The registry should only contain parameters available for read/write through canpb
-static const ParameterHandlerType::Registry registry = {
+static const ParameterEntry registry[] = {
     /// Lift PID parameters
     // Pose PID
-    {LIFT_POSE_PID_KP_KEY, cogip::app::actuators::motor_lift_pose_pid_kp},
-    {LIFT_POSE_PID_KI_KEY, cogip::app::actuators::motor_lift_pose_pid_ki},
-    {LIFT_POSE_PID_KD_KEY, cogip::app::actuators::motor_lift_pose_pid_kd},
+    {"lift_pose_pid_kp", cogip::app::actuators::motor_lift_pose_pid_kp},
+    {"lift_pose_pid_ki", cogip::app::actuators::motor_lift_pose_pid_ki},
+    {"lift_pose_pid_kd", cogip::app::actuators::motor_lift_pose_pid_kd},
     // Speed PID
-    {LIFT_SPEED_PID_KP_KEY, cogip::app::actuators::motor_lift_speed_pid_kp},
-    {LIFT_SPEED_PID_KI_KEY, cogip::app::actuators::motor_lift_speed_pid_ki},
-    {LIFT_SPEED_PID_KD_KEY, cogip::app::actuators::motor_lift_speed_pid_kd},
+    {"lift_speed_pid_kp", cogip::app::actuators::motor_lift_speed_pid_kp},
+    {"lift_speed_pid_ki", cogip::app::actuators::motor_lift_speed_pid_ki},
+    {"lift_speed_pid_kd", cogip::app::actuators::motor_lift_speed_pid_kd},
 };
 
-static ParameterHandlerType parameter_handler(registry);
+static parameter_handler::ParameterHandler parameter_handler(registry);
 
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer)
 {
