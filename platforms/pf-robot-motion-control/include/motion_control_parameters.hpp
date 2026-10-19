@@ -16,6 +16,7 @@
 
 #include "app_conf.hpp"
 #include "canpb/ReadBuffer.hpp"
+#include "parameter/AccessPolicies.hpp"
 #include "parameter/ConversionPolicies.hpp"
 #include "parameter/Parameter.hpp"
 
@@ -101,63 +102,63 @@ inline cogip::parameter::Parameter<float> otos_angular_scalar{default_otos_angul
 #endif
 
 // Linear pose PID (QUADPID chain)
-inline cogip::parameter::Parameter<float> linear_pose_pid_kp{default_linear_pose_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> linear_pose_pid_ki{default_linear_pose_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> linear_pose_pid_kd{default_linear_pose_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> linear_pose_pid_kp{default_linear_pose_pid_kp};
+inline cogip::parameter::Parameter<float> linear_pose_pid_ki{default_linear_pose_pid_ki};
+inline cogip::parameter::Parameter<float> linear_pose_pid_kd{default_linear_pose_pid_kd};
 // Angular pose PID (QUADPID chain)
-inline cogip::parameter::Parameter<float> angular_pose_pid_kp{default_angular_pose_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> angular_pose_pid_ki{default_angular_pose_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> angular_pose_pid_kd{default_angular_pose_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> angular_pose_pid_kp{default_angular_pose_pid_kp};
+inline cogip::parameter::Parameter<float> angular_pose_pid_ki{default_angular_pose_pid_ki};
+inline cogip::parameter::Parameter<float> angular_pose_pid_kd{default_angular_pose_pid_kd};
 // Linear speed PID (QUADPID chain)
-inline cogip::parameter::Parameter<float> linear_speed_pid_kp{default_linear_speed_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> linear_speed_pid_ki{default_linear_speed_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> linear_speed_pid_kd{default_linear_speed_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> linear_speed_pid_kp{default_linear_speed_pid_kp};
+inline cogip::parameter::Parameter<float> linear_speed_pid_ki{default_linear_speed_pid_ki};
+inline cogip::parameter::Parameter<float> linear_speed_pid_kd{default_linear_speed_pid_kd};
 // Angular speed PID (QUADPID chain)
-inline cogip::parameter::Parameter<float> angular_speed_pid_kp{default_angular_speed_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> angular_speed_pid_ki{default_angular_speed_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> angular_speed_pid_kd{default_angular_speed_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> angular_speed_pid_kp{default_angular_speed_pid_kp};
+inline cogip::parameter::Parameter<float> angular_speed_pid_ki{default_angular_speed_pid_ki};
+inline cogip::parameter::Parameter<float> angular_speed_pid_kd{default_angular_speed_pid_kd};
 
 // Tracker linear pose PID
-inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_kp{default_tracker_linear_pose_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_ki{default_tracker_linear_pose_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_kd{default_tracker_linear_pose_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_kp{default_tracker_linear_pose_pid_kp};
+inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_ki{default_tracker_linear_pose_pid_ki};
+inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_kd{default_tracker_linear_pose_pid_kd};
 // Tracker angular pose PID
-inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_kp{default_tracker_angular_pose_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_ki{default_tracker_angular_pose_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_kd{default_tracker_angular_pose_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_kp{default_tracker_angular_pose_pid_kp};
+inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_ki{default_tracker_angular_pose_pid_ki};
+inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_kd{default_tracker_angular_pose_pid_kd};
 // Tracker linear speed PID
-inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_kp{default_tracker_linear_speed_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_ki{default_tracker_linear_speed_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_kd{default_tracker_linear_speed_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_kp{default_tracker_linear_speed_pid_kp};
+inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_ki{default_tracker_linear_speed_pid_ki};
+inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_kd{default_tracker_linear_speed_pid_kd};
 // Tracker angular speed PID
-inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_kp{default_tracker_angular_speed_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_ki{default_tracker_angular_speed_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_kd{default_tracker_angular_speed_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_kp{default_tracker_angular_speed_pid_kp};
+inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_ki{default_tracker_angular_speed_pid_ki};
+inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_kd{default_tracker_angular_speed_pid_kd};
 
 // Brake linear speed PID
-inline cogip::parameter::Parameter<float> brake_linear_speed_pid_kp{default_brake_linear_speed_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> brake_linear_speed_pid_ki{default_brake_linear_speed_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> brake_linear_speed_pid_kd{default_brake_linear_speed_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> brake_linear_speed_pid_kp{default_brake_linear_speed_pid_kp};
+inline cogip::parameter::Parameter<float> brake_linear_speed_pid_ki{default_brake_linear_speed_pid_ki};
+inline cogip::parameter::Parameter<float> brake_linear_speed_pid_kd{default_brake_linear_speed_pid_kd};
 // Brake angular speed PID
-inline cogip::parameter::Parameter<float> brake_angular_speed_pid_kp{default_brake_angular_speed_pid_kp, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> brake_angular_speed_pid_ki{default_brake_angular_speed_pid_ki, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> brake_angular_speed_pid_kd{default_brake_angular_speed_pid_kd, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> brake_angular_speed_pid_kp{default_brake_angular_speed_pid_kp};
+inline cogip::parameter::Parameter<float> brake_angular_speed_pid_ki{default_brake_angular_speed_pid_ki};
+inline cogip::parameter::Parameter<float> brake_angular_speed_pid_kd{default_brake_angular_speed_pid_kd};
 
 // PID integral limits
-inline cogip::parameter::Parameter<float> linear_pose_pid_integral_limit{default_linear_pose_pid_integral_limit, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> angular_pose_pid_integral_limit{default_angular_pose_pid_integral_limit, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> linear_speed_pid_integral_limit{default_linear_speed_pid_integral_limit, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> angular_speed_pid_integral_limit{default_angular_speed_pid_integral_limit, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> linear_pose_pid_integral_limit{default_linear_pose_pid_integral_limit};
+inline cogip::parameter::Parameter<float> angular_pose_pid_integral_limit{default_angular_pose_pid_integral_limit};
+inline cogip::parameter::Parameter<float> linear_speed_pid_integral_limit{default_linear_speed_pid_integral_limit};
+inline cogip::parameter::Parameter<float> angular_speed_pid_integral_limit{default_angular_speed_pid_integral_limit};
 
 // Tracker PID integral limits
-inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_integral_limit{default_tracker_linear_pose_pid_integral_limit, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_integral_limit{default_tracker_angular_pose_pid_integral_limit, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_integral_limit{default_tracker_linear_speed_pid_integral_limit, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_integral_limit{default_tracker_angular_speed_pid_integral_limit, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> tracker_linear_pose_pid_integral_limit{default_tracker_linear_pose_pid_integral_limit};
+inline cogip::parameter::Parameter<float> tracker_angular_pose_pid_integral_limit{default_tracker_angular_pose_pid_integral_limit};
+inline cogip::parameter::Parameter<float> tracker_linear_speed_pid_integral_limit{default_tracker_linear_speed_pid_integral_limit};
+inline cogip::parameter::Parameter<float> tracker_angular_speed_pid_integral_limit{default_tracker_angular_speed_pid_integral_limit};
 
 // Brake speed PID integral limits
-inline cogip::parameter::Parameter<float> brake_linear_speed_pid_integral_limit{default_brake_linear_speed_pid_integral_limit, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float> brake_angular_speed_pid_integral_limit{default_brake_angular_speed_pid_integral_limit, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float> brake_linear_speed_pid_integral_limit{default_brake_linear_speed_pid_integral_limit};
+inline cogip::parameter::Parameter<float> brake_angular_speed_pid_integral_limit{default_brake_angular_speed_pid_integral_limit};
 
 // Pose straight filter thresholds (absolute units: mm, deg)
 inline cogip::parameter::Parameter<float> param_linear_threshold{linear_threshold, {1.0f, 10.0f}};
@@ -165,16 +166,16 @@ inline cogip::parameter::Parameter<float> param_angular_threshold{angular_thresh
 inline cogip::parameter::Parameter<float> param_angular_intermediate_threshold{angular_intermediate_threshold, {1.0f, 5.0f}};
 
 // Speed limits (internal: /period, protobuf: /s)
-inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_min_speed_linear{platform_min_speed_linear_mm_per_period, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_max_speed_linear{platform_max_speed_linear_mm_per_period, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_min_speed_angular{platform_min_speed_angular_deg_per_period, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_max_speed_angular{platform_max_speed_angular_deg_per_period, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_min_speed_linear{platform_min_speed_linear_mm_per_period};
+inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_max_speed_linear{platform_max_speed_linear_mm_per_period};
+inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_min_speed_angular{platform_min_speed_angular_deg_per_period};
+inline cogip::parameter::Parameter<float, cogip::parameter::SpeedConversion<motion_control_thread_period_ms>> param_max_speed_angular{platform_max_speed_angular_deg_per_period};
 
 // Acceleration/deceleration limits (internal: /period², protobuf: /s²)
-inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_acc_linear{platform_max_acc_linear_mm_per_period2, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_linear{platform_max_dec_linear_mm_per_period2, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_acc_angular{platform_max_acc_angular_deg_per_period2, cogip::parameter::non_negative<float>};
-inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_angular{platform_max_dec_angular_deg_per_period2, cogip::parameter::non_negative<float>};
+inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_acc_linear{platform_max_acc_linear_mm_per_period2};
+inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_linear{platform_max_dec_linear_mm_per_period2};
+inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_acc_angular{platform_max_acc_angular_deg_per_period2};
+inline cogip::parameter::Parameter<float, cogip::parameter::AccelerationConversion<motion_control_thread_period_ms>> param_max_dec_angular{platform_max_dec_angular_deg_per_period2};
 // clang-format on
 // ============================================================================
 // Parameter registry handlers (canpb)
