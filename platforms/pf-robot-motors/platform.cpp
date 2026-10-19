@@ -31,6 +31,12 @@ static void _handle_game_end([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
     cogip::pf::actuators::disable_all();
 }
 
+/// Copilot connected callback
+static void _on_copilot_connected([[maybe_unused]] cogip::canpb::ReadBuffer& buffer)
+{
+    cogip::pf::parameters::pf_announce_parameters();
+}
+
 /// Emergency stop callback
 static void _on_emergency_stop()
 {
@@ -41,7 +47,8 @@ void pf_init(void)
 {
     /* Initialize common platform (CAN, heartbeat, copilot handlers) */
     int ret = cogip::pf_common::pf_init(
-        {}, {}, cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
+        cogip::pf_common::copilot_callback_t::create<_on_copilot_connected>(), {},
+        cogip::pf_common::emergency_stop_callback_t::create<_on_emergency_stop>());
     if (ret) {
         LOG_ERROR("Common platform initialization failed, error: %d\n", ret);
     } else {

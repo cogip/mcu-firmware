@@ -14,6 +14,23 @@ namespace cogip {
 namespace pf {
 namespace parameters {
 
+/// @brief Announce the parameter registry on canpb
+void pf_announce_parameters();
+
+/// @brief Handle parameter list request from CAN bus
+///
+/// @note Sends the key hash of each parameter if the request targets this registry.
+///
+/// @param[in] buffer CAN protocol buffer containing the serialized parameter list request
+void pf_handle_parameter_list(cogip::canpb::ReadBuffer& buffer);
+
+/// @brief Handle parameter definition request from CAN bus
+///
+/// @note Sends back the name and accepted range of the parameter if this board owns it.
+///
+/// @param[in] buffer CAN protocol buffer containing the serialized parameter definition request
+void pf_handle_parameter_definition(cogip::canpb::ReadBuffer& buffer);
+
 /// @brief Handle parameter get request from CAN bus
 ///
 /// @note Processes a parameter get request received via CAN bus, retrieves the requested

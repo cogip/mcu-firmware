@@ -34,7 +34,36 @@ static const ParameterEntry registry[] = {
     {"lift_speed_pid_kd", cogip::app::actuators::motor_lift_speed_pid_kd},
 };
 
-static parameter_handler::ParameterHandler parameter_handler(registry);
+static parameter_handler::ParameterHandler parameter_handler("motors", registry);
+
+void pf_announce_parameters()
+{
+    auto group = parameter_handler.announce();
+    pf_get_canpb().send_message(pf_common::parameter_group_uuid, &group);
+}
+
+void pf_handle_parameter_list(cogip::canpb::ReadBuffer& buffer)
+{
+    // Only respond if the request targets this registry
+    if (!parameter_handler.handle_list(buffer)) {
+        return;
+    }
+
+    for (size_t i = 0; i < parameter_handler.size(); i++) {
+        auto response = parameter_handler.list_response(i);
+        pf_get_canpb().send_message(pf_common::parameter_list_response_uuid, &response);
+    }
+}
+
+void pf_handle_parameter_definition(cogip::canpb::ReadBuffer& buffer)
+{
+    auto response = parameter_handler.handle_definition(buffer);
+    // Only respond if this board owns the parameter
+    if (response.has_value()) {
+        pf_get_canpb().send_message(pf_common::parameter_definition_response_uuid,
+                                    &response.value());
+    }
+}
 
 void pf_handle_parameter_get(cogip::canpb::ReadBuffer& buffer)
 {
@@ -57,6 +86,11 @@ void pf_handle_parameter_set(cogip::canpb::ReadBuffer& buffer)
 void init()
 {
     cogip::canpb::CanProtobuf& canpb = pf_get_canpb();
+    canpb.register_message_handler(pf_common::parameter_list_uuid,
+                                   canpb::message_handler_t::create<pf_handle_parameter_list>());
+    canpb.register_message_handler(
+        pf_common::parameter_definition_uuid,
+        canpb::message_handler_t::create<pf_handle_parameter_definition>());
     canpb.register_message_handler(pf_common::parameter_get_uuid,
                                    canpb::message_handler_t::create<pf_handle_parameter_get>());
     canpb.register_message_handler(pf_common::parameter_set_uuid,
