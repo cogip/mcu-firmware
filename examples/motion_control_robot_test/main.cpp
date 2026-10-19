@@ -137,11 +137,15 @@ int main(void)
     LOG_INFO("LinearDualPIDMetaController created and added to "
              "PolarParallelMetaController\n");
     // Linear pose PID controller
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_pos_kp{1.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_pos_ki{0.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_pos_kd{0.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_pos_limit{
-        static_cast<float>(etl::numeric_limits<uint16_t>::max())};
+    static cogip::parameter::Parameter<float> linear_pos_kp{1.f,
+                                                            cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> linear_pos_ki{0.f,
+                                                            cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> linear_pos_kd{0.f,
+                                                            cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> linear_pos_limit{
+        static_cast<float>(etl::numeric_limits<uint16_t>::max()),
+        cogip::parameter::non_negative<float>};
     cogip::pid::PIDParameters linear_position_pid_params(linear_pos_kp, linear_pos_ki,
                                                          linear_pos_kd, linear_pos_limit);
     cogip::pid::PID linear_position_pid(linear_position_pid_params);
@@ -159,11 +163,15 @@ int main(void)
     linear_dualpid_meta_controller.add_controller(&linear_speed_filter);
     LOG_INFO("SpeedFilter created and added to LinearDualPIDMetaController\n");
     // Linear speed PID controller
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_spd_kp{1.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_spd_ki{0.1f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_spd_kd{0.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> linear_spd_limit{
-        static_cast<float>(etl::numeric_limits<uint16_t>::max())};
+    static cogip::parameter::Parameter<float> linear_spd_kp{1.f,
+                                                            cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> linear_spd_ki{0.1f,
+                                                            cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> linear_spd_kd{0.f,
+                                                            cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> linear_spd_limit{
+        static_cast<float>(etl::numeric_limits<uint16_t>::max()),
+        cogip::parameter::non_negative<float>};
     cogip::pid::PIDParameters linear_speed_pid_params(linear_spd_kp, linear_spd_ki, linear_spd_kd,
                                                       linear_spd_limit);
     cogip::pid::PID linear_speed_pid(linear_speed_pid_params);
@@ -181,11 +189,15 @@ int main(void)
     LOG_INFO("AngularDualPIDMetaController created and added to "
              "PolarParallelMetaController\n");
     // Angular pose PID controller
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_pos_kp{1.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_pos_ki{0.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_pos_kd{0.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_pos_limit{
-        static_cast<float>(etl::numeric_limits<uint16_t>::max())};
+    static cogip::parameter::Parameter<float> angular_pos_kp{1.f,
+                                                             cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> angular_pos_ki{0.f,
+                                                             cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> angular_pos_kd{0.f,
+                                                             cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> angular_pos_limit{
+        static_cast<float>(etl::numeric_limits<uint16_t>::max()),
+        cogip::parameter::non_negative<float>};
     cogip::pid::PIDParameters angular_position_pid_params(angular_pos_kp, angular_pos_ki,
                                                           angular_pos_kd, angular_pos_limit);
     cogip::pid::PID angular_position_pid(angular_position_pid_params);
@@ -204,11 +216,15 @@ int main(void)
     angular_dualpid_meta_controller.add_controller(&angular_speed_filter);
     LOG_INFO("SpeedFilter created and added to AngularDualPIDMetaController\n");
     // Angular speed PID controller
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_spd_kp{1.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_spd_ki{0.1f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_spd_kd{0.f};
-    static cogip::parameter::Parameter<float, cogip::parameter::NonNegative> angular_spd_limit{
-        static_cast<float>(etl::numeric_limits<uint16_t>::max())};
+    static cogip::parameter::Parameter<float> angular_spd_kp{1.f,
+                                                             cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> angular_spd_ki{0.1f,
+                                                             cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> angular_spd_kd{0.f,
+                                                             cogip::parameter::non_negative<float>};
+    static cogip::parameter::Parameter<float> angular_spd_limit{
+        static_cast<float>(etl::numeric_limits<uint16_t>::max()),
+        cogip::parameter::non_negative<float>};
     cogip::pid::PIDParameters angular_speed_pid_params(angular_spd_kp, angular_spd_ki,
                                                        angular_spd_kd, angular_spd_limit);
     cogip::pid::PID angular_speed_pid(angular_speed_pid_params);
