@@ -6,8 +6,8 @@
 /// @file main.cpp
 /// @brief Simple example demonstrating the parameter library features
 ///
-/// @note Parameters are only accessed through the parameter handler, with canpb get, set and
-///       reset requests, as they would be from the CAN bus.
+/// @note Parameters are only accessed through the parameter handler, with canpb announce, list,
+///       definition, get, set and reset requests, as they would be from the CAN bus.
 
 #include <cinttypes>
 #include <cmath>
@@ -18,7 +18,7 @@
 #include "log.h"
 
 #include "KeyHash.hpp"
-#include "PB_ParameterCommands.hpp"
+#include "PB_ParameterRegistry.hpp"
 #include "canpb/ReadBuffer.hpp"
 #include "canpb/WriteBuffer.hpp"
 #include "flash_kv_storage/FlashKVStorage.hpp"
@@ -54,7 +54,7 @@ static const ParameterEntry parameter_registry[] = {
     {"enable_logging", enable_logging}};
 
 /// @brief Handler of canpb requests on the registry
-static ParameterHandler parameter_handler(parameter_registry);
+static ParameterHandler parameter_handler("parameter_demo", parameter_registry);
 
 /// @brief Read buffer of the requests, as received from the CAN bus
 static cogip::canpb::ReadBuffer buffer;
@@ -80,6 +80,67 @@ template <typename Message> static void to_read_buffer(const Message& message)
 static uint32_t key_hash(const char* name)
 {
     return cogip::utils::fnv1a_hash_bytes(name, strlen(name));
+}
+
+/// @brief Size of a message once serialized, as sent on the CAN bus
+/// @tparam Message Protobuf message type
+/// @param message Message to serialize
+/// @return Size in bytes, at most 45 to fit a CAN FD frame once base64 encoded
+template <typename Message> static uint32_t serialized_size(const Message& message)
+{
+    cogip::canpb::WriteBuffer write_buffer;
+    message.serialize(write_buffer);
+    return write_buffer.get_size();
+}
+
+/// @brief Value of a float or bool parameter, as a float
+/// @param value Protobuf value
+/// @return The value, 0 or 1 for a bool
+static float to_float(const PB_ParameterValue& value)
+{
+    if (value.has_bool_value()) {
+        return value.bool_value() ? 1.0f : 0.0f;
+    }
+    return value.float_value();
+}
+
+/// @brief Send a list request through the handler and log the key hashes
+/// @param group Registry name
+static void list(const char* group)
+{
+    PB_ParameterListRequest request;
+    request.set_group_hash(key_hash(group));
+    to_read_buffer(request);
+
+    if (!parameter_handler.handle_list(buffer)) {
+        LOG_INFO("- List %s: NOT FOUND\n", group);
+        return;
+    }
+
+    LOG_INFO("- List %s:", group);
+    for (size_t i = 0; i < parameter_handler.size(); i++) {
+        LOG_INFO(" 0x%08" PRIx32, parameter_handler.list_response(i).key_hash());
+    }
+    LOG_INFO("\n");
+}
+
+/// @brief Send a definition request through the handler and log the definition
+/// @param name Parameter name
+static void define(const char* name)
+{
+    PB_ParameterDefinitionRequest request;
+    request.set_key_hash(key_hash(name));
+    to_read_buffer(request);
+
+    const auto response = parameter_handler.handle_definition(buffer);
+    if (!response.has_value()) {
+        LOG_INFO("- Definition %s: NOT FOUND\n", name);
+        return;
+    }
+
+    LOG_INFO("- Definition %s: %s [%g, %g] (%" PRIu32 " bytes)\n", response->name(),
+             response->min().has_bool_value() ? "bool" : "float", to_float(response->min()),
+             to_float(response->max()), serialized_size(response.value()));
 }
 
 /// @brief Status of a set or reset response
@@ -186,6 +247,18 @@ int main(void)
     LOG_INFO("- ParameterEntry:                       %zu bytes\n", sizeof(ParameterEntry));
     LOG_INFO("\n");
     // clang-format on
+
+    LOG_INFO("=== Announce, List and Definition ===\n");
+    const auto group = parameter_handler.announce();
+    LOG_INFO("- Announce %s: %" PRIu32 " parameters, registry hash 0x%08" PRIx32 "\n", group.name(),
+             group.count(), group.registry_hash());
+    list("parameter_demo");
+    list("unknown_group");
+    for (const auto& entry : parameter_registry) {
+        define(entry.name);
+    }
+    define("unknown_parameter");
+    LOG_INFO("\n");
 
     LOG_INFO("=== Get ===\n");
     for (const auto& entry : parameter_registry) {
