@@ -7,4 +7,11 @@ config POWER_SUPPLY_EMERGENCY_STOP_SEND_PERIOD_MSEC
       Period in milliseconds for periodically sending the emergency stop
       status message over CAN when the emergency stop is engaged.
 
+config POWER_SUPPLY_RAILS_MEASURES_PERIOD_MSEC
+    int "Power rails measures period in milliseconds"
+    default 1000
+    help
+      Period in milliseconds for sampling the voltage and current of the
+      power rails and sending the measures over CAN.
+
 endmenu
