@@ -1,0 +1,12 @@
+USEMODULE_INCLUDES_pf-robot-actuators := $(LAST_MAKEFILEDIR)/include
+USEMODULE_INCLUDES += $(USEMODULE_INCLUDES_pf-robot-actuators)
+
+PROTOBUF_PATH_pf-robot-actuators := $(LAST_MAKEFILEDIR)
+PROTOBUF_PATH += $(PROTOBUF_PATH_pf-robot-actuators)
+
+ifeq ($(CPU),native)
+	CFLAGS += -DUART_NUMOF=2
+endif
+
+# Actuators protobuf messages (without pulling the actuator module)
+PROTOBUF_PATH += $(MCUFIRMWAREBASE)/lib/actuator
