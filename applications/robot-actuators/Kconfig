@@ -1,0 +1,3 @@
+# Robot Actuators Application Kconfig
+# Empty but mandatory to trigger RIOT Kconfig system and generate autoconf.h
+# for external module Kconfig symbols (e.g. pf-robot-actuators).
