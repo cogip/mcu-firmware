@@ -17,6 +17,16 @@ enum PB_BoolSensorEnum
     NONE = 0;
 }
 
+enum PB_OnOffActuatorEnum
+{
+    PUMP_BOTTOM = 0;
+    PUMP_MIDDLE = 1;
+    PUMP_TOP = 2;
+    EV_BOTTOM = 3;
+    EV_MIDDLE = 4;
+    EV_TOP = 5;
+}
+
 enum PB_PositionalActuatorStateEnum
 {
     REACHED = 0;
@@ -50,9 +60,15 @@ message PB_PositionalActuatorCommand {
     int32 timeout = 4;
 }
 
+message PB_OnOffActuatorCommand {
+    PB_OnOffActuatorEnum id = 1;
+    bool command = 2;
+}
+
 message PB_ActuatorCommand {
     oneof command {
         PB_PositionalActuatorCommand positional_actuator = 1;
+        PB_OnOffActuatorCommand onoff_actuator = 2;
     }
 }
 
